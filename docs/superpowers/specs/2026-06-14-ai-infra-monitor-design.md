@@ -46,8 +46,8 @@ The scheduled Codex job performs semantic work:
 - `ai-infra-state.json`: ignored local cursor, HTTP cache metadata, pending records and run history.
 - `ai-infra-state.example.json`: tracked empty-state schema.
 - `ai-infra-candidates.md`: review queue for B/C and unresolved A-level items.
-- `scripts/ai-infra-monitor/monitor.py`: CLI entry point.
-- `scripts/ai-infra-monitor/ai_infra_monitor/`: focused discovery, parsing, storage, validation and Git modules.
+- `scripts/ai_infra_monitor/monitor.py`: CLI entry point.
+- `scripts/ai_infra_monitor/ai_infra_monitor/`: focused discovery, parsing, storage, validation and Git modules.
 - `tests/ai_infra_monitor/`: stdlib `unittest` coverage and fixtures.
 - `reports/weekly/`: tracked weekly summaries.
 - `docs/ai-infra-monitor-workflow.md`: operating procedure and recovery rules.
@@ -90,4 +90,3 @@ The semantic worker may edit only:
 - Markdown validation detects malformed rows, duplicate records and empty links.
 - Finalization creates no commit when nothing changed.
 - Two Codex cron automations exist with the agreed schedules and local workspace.
-

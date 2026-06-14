@@ -26,8 +26,8 @@
 ### Task 2: Core models and normalization
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/models.py`
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/identity.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/models.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/identity.py`
 - Test: `tests/ai_infra_monitor/test_identity.py`
 
 - [ ] Write tests for DOI, arXiv, URL and normalized-title identities.
@@ -37,8 +37,8 @@
 ### Task 3: Source fetchers and parsers
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/fetch.py`
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/parsers.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/fetch.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/parsers.py`
 - Test: `tests/ai_infra_monitor/test_parsers.py`
 - Create: `tests/ai_infra_monitor/fixtures/feed.xml`
 - Create: `tests/ai_infra_monitor/fixtures/index.html`
@@ -51,8 +51,8 @@
 ### Task 4: State and discovery pipeline
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/state.py`
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/discovery.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/state.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/discovery.py`
 - Test: `tests/ai_infra_monitor/test_discovery.py`
 
 - [ ] Test pending-candidate persistence and second-run deduplication.
@@ -63,7 +63,7 @@
 ### Task 5: Markdown quality gates
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/validation.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/validation.py`
 - Test: `tests/ai_infra_monitor/test_validation.py`
 
 - [ ] Test malformed table rows, duplicate paper titles, duplicate solution names, empty links and conflict markers.
@@ -73,8 +73,8 @@
 ### Task 6: Candidate pool, reports and Git finalization
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/output.py`
-- Create: `scripts/ai-infra-monitor/ai_infra_monitor/git_ops.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/output.py`
+- Create: `scripts/ai_infra_monitor/ai_infra_monitor/git_ops.py`
 - Test: `tests/ai_infra_monitor/test_output.py`
 
 - [ ] Test candidate Markdown generation and stable ordering.
@@ -84,8 +84,8 @@
 ### Task 7: CLI and end-to-end tests
 
 **Files:**
-- Create: `scripts/ai-infra-monitor/monitor.py`
-- Create: `scripts/ai-infra-monitor/README.md`
+- Create: `scripts/ai_infra_monitor/monitor.py`
+- Create: `scripts/ai_infra_monitor/README.md`
 - Create: `tests/ai_infra_monitor/test_cli.py`
 
 - [ ] Expose `init`, `discover`, `validate`, `report`, `finalize` and `status`.
@@ -102,4 +102,3 @@
 - [ ] Create weekly local automation for Saturday at 22:00 Asia/Shanghai.
 - [ ] Include primary-source verification, candidate routing, validation and local commit instructions.
 - [ ] View both automations and verify active status, workspace and schedule.
-

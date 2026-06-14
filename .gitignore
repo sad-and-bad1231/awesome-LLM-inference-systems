@@ -6,4 +6,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 ai-infra-state.json
+long-cot-kv-retention-literature.md
 

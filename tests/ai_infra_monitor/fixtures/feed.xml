@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Fixture Feed</title>
+  <entry>
+    <id>http://arxiv.org/abs/2606.12345v1</id>
+    <updated>2026-06-14T10:00:00Z</updated>
+    <published>2026-06-14T10:00:00Z</published>
+    <title>Efficient LLM Serving with KV Cache Transfer</title>
+    <summary>A system for disaggregated inference and RDMA KV cache movement.</summary>
+    <link href="https://arxiv.org/abs/2606.12345v1" rel="alternate" type="text/html"/>
+  </entry>
+</feed>
+

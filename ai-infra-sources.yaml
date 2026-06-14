@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "settings": {
+    "daily_limit": 24,
+    "weekly_limit": 80,
+    "request_timeout_seconds": 25,
+    "user_agent": "ai-infra-monitor/1.0 (local research index)",
+    "paper_file": "paper-list.md",
+    "industry_file": "industrial-llm-inference-systems.md",
+    "candidate_file": "ai-infra-candidates.md",
+    "state_file": "ai-infra-state.json",
+    "runs_dir": "runs",
+    "weekly_reports_dir": "reports/weekly"
+  },
+  "topics": [
+    {
+      "id": "runtime-serving",
+      "keywords": ["llm serving", "inference serving", "inference engine", "continuous batching", "scheduler", "goodput", "prefill", "decode", "serverless inference"]
+    },
+    {
+      "id": "state-kv",
+      "keywords": ["kv cache", "prefix cache", "context cache", "state restoration", "long context", "context memory", "cache reuse"]
+    },
+    {
+      "id": "compression-cost",
+      "keywords": ["quantization", "low-bit", "fp4", "fp8", "int4", "compression", "sparse", "energy efficient", "cost efficient"]
+    },
+    {
+      "id": "kernel-compiler",
+      "keywords": ["kernel", "compiler", "triton", "attention", "gemm", "operator fusion", "cuda", "rocm", "tpu"]
+    },
+    {
+      "id": "network-disaggregation",
+      "keywords": ["disaggregated", "rdma", "collective", "all-to-all", "nixl", "cxl", "smartnic", "fabric"]
+    },
+    {
+      "id": "moe",
+      "keywords": ["mixture-of-experts", "mixture of experts", "moe inference", "expert parallel", "expert cache"]
+    },
+    {
+      "id": "agent-rag",
+      "keywords": ["agent serving", "agentic", "rag", "retrieval augmented", "vector database", "structured generation", "tool calling"]
+    },
+    {
+      "id": "multimodal-diffusion",
+      "keywords": ["multimodal serving", "diffusion serving", "dit serving", "video generation", "speech generation"]
+    },
+    {
+      "id": "hardware-edge",
+      "keywords": ["inference accelerator", "on-device llm", "edge llm", "pim", "near-memory", "near-storage", "wafer-scale", "npu"]
+    },
+    {
+      "id": "reliability-evaluation",
+      "keywords": ["checkpoint restore", "fault tolerant", "reliability", "benchmark", "workload trace", "slo", "tco"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "arxiv-ai-infra",
+      "name": "arXiv AI infrastructure query",
+      "type": "feed",
+      "url": "https://export.arxiv.org/api/query?search_query=%28all%3A%22LLM%20serving%22%20OR%20all%3A%22LLM%20inference%22%20OR%20all%3A%22KV%20cache%22%20OR%20all%3A%22speculative%20decoding%22%29&sortBy=submittedDate&sortOrder=descending&max_results=60",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "arxiv-systems-infra",
+      "name": "arXiv systems and accelerator query",
+      "type": "feed",
+      "url": "https://export.arxiv.org/api/query?search_query=%28all%3A%22inference%20accelerator%22%20OR%20all%3A%22MoE%20inference%22%20OR%20all%3A%22agent%20serving%22%20OR%20all%3A%22disaggregated%20inference%22%29&sortBy=submittedDate&sortOrder=descending&max_results=60",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "nvidia-technical-blog",
+      "name": "NVIDIA Technical Blog",
+      "type": "feed",
+      "url": "https://developer.nvidia.com/blog/feed/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "aws-ml-blog",
+      "name": "AWS Machine Learning Blog",
+      "type": "feed",
+      "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "microsoft-research-feed",
+      "name": "Microsoft Research Blog",
+      "type": "feed",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "vllm-releases",
+      "name": "vLLM releases",
+      "type": "feed",
+      "url": "https://github.com/vllm-project/vllm/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "sglang-releases",
+      "name": "SGLang releases",
+      "type": "feed",
+      "url": "https://github.com/sgl-project/sglang/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "tensorrt-llm-releases",
+      "name": "TensorRT-LLM releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/TensorRT-LLM/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "dynamo-releases",
+      "name": "NVIDIA Dynamo releases",
+      "type": "feed",
+      "url": "https://github.com/ai-dynamo/dynamo/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "network-disaggregation"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "flashinfer-releases",
+      "name": "FlashInfer releases",
+      "type": "feed",
+      "url": "https://github.com/flashinfer-ai/flashinfer/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "lmcache-releases",
+      "name": "LMCache releases",
+      "type": "feed",
+      "url": "https://github.com/LMCache/LMCache/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["state-kv"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "usenix-nsdi26",
+      "name": "USENIX NSDI 2026 technical sessions",
+      "type": "html_index",
+      "url": "https://www.usenix.org/conference/nsdi26/technical-sessions",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "usenix-fast26",
+      "name": "USENIX FAST 2026 technical sessions",
+      "type": "html_index",
+      "url": "https://www.usenix.org/conference/fast26/technical-sessions",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "asplos26",
+      "name": "ASPLOS 2026 program",
+      "type": "html_index",
+      "url": "https://www.asplos-conference.org/asplos2026/program/",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "mlsys25",
+      "name": "MLSys proceedings",
+      "type": "html_index",
+      "url": "https://proceedings.mlsys.org/paper_files/paper/2025",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sosp25-dblp",
+      "name": "SOSP 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/sosp/sosp2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sigcomm25-dblp",
+      "name": "SIGCOMM 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/sigcomm/sigcomm2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    }
+  ]
+}
