@@ -1,5 +1,13 @@
 # AI Infra Monitor Workflow
 
+This repository has three working documents:
+
+- `paper-list.md`: verified papers only.
+- `industrial-llm-inference-systems.md`: verified industrial systems, projects, official reports and engineering material.
+- `ai-infra-candidates.md`: discovery queue and review backlog.
+
+The default workflow is conservative: discover broadly, confirm in small batches, and write only verified items to the main documents.
+
 ## Commands
 
 Run from `D:\ResearchWork`:
@@ -8,61 +16,69 @@ Run from `D:\ResearchWork`:
 python scripts/ai_infra_monitor/monitor.py init
 python scripts/ai_infra_monitor/monitor.py discover --mode daily
 python scripts/ai_infra_monitor/monitor.py discover --mode weekly
-python scripts/ai_infra_monitor/monitor.py status
-python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers B C
+python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
 python scripts/ai_infra_monitor/monitor.py report --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py validate
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id>
 ```
 
-## Daily Run
+## Daily Increment
 
-1. Execute `discover --mode daily`.
-2. Read only the generated `runs/<run-id>/candidates.json`.
-3. Verify new A-level candidates from their primary URLs.
-4. Add qualifying papers or projects to the main documents.
-5. Route B/C and unresolved A-level candidates to `ai-infra-candidates.md`.
-6. Execute `validate`.
-7. Execute `finalize --run-id <run-id>`.
+Goal: collect signals, not rewrite the index.
 
-Daily runs do not rescan conference indexes. The default cap is 24 candidates.
-The active Codex automation runs Sunday through Friday at 22:00 Beijing time.
+1. Run `init`.
+2. Run `discover --mode daily`.
+3. Add useful candidates to `ai-infra-candidates.md`.
+4. Do not update `paper-list.md` or `industrial-llm-inference-systems.md` unless the change is a trivial correction.
+5. Run `validate`.
+6. Run `finalize --run-id <run-id>`.
 
-## Weekly Run
+Daily automation runs Sunday through Friday at 22:00 Beijing time. The daily cap is 8 candidates.
 
-1. Execute `discover --mode weekly`.
-2. Check conference programs for new acceptance lists and status changes.
-3. Reconcile preprints with formal publication status.
-4. Verify major release notes and enterprise engineering announcements.
-5. Update both main documents and the candidate pool.
-6. Execute `report --run-id <run-id>`.
-7. Execute `validate`.
-8. Execute `finalize --run-id <run-id>`.
+## Weekly Confirmation
 
-Weekly runs scan all configured sources and cap semantic review at 80 candidates.
-The active Codex automation runs Saturday at 22:00 Beijing time.
+Goal: make a small number of high-confidence changes.
+
+1. Run `init`.
+2. Run `discover --mode weekly`.
+3. Review the candidate pool and new manifest together.
+4. Promote at most 5 items unless the user explicitly asks for a larger sweep.
+5. Drop obvious duplicates, off-topic records and weak sources from the candidate pool.
+6. Write a weekly report if there are meaningful status changes.
+7. Run `validate`.
+8. Run `finalize --run-id <run-id>`.
+
+Weekly automation runs Saturday at 22:00 Beijing time. The weekly cap is 24 candidates.
+
+## Quality Gate
+
+Before a main-document edit, confirm:
+
+- Primary source is available: official proceedings, paper PDF, official docs, official repository, or company technical post.
+- Title and venue/status are copied from the source, not guessed.
+- Main author organizations come from the paper or official page. If absent, write `作者公开稿未列单位`.
+- The summary is one sentence and describes the mechanism, not marketing claims.
+- The item fits one of the current AI infra themes: runtime, long context/state, compression/cost, kernels/compiler, disaggregation/network, MoE, agent/RAG, multimodal serving, hardware/edge, reliability/evaluation.
+- The item is not already covered in either main document.
+
+If any point is uncertain, keep the item in `ai-infra-candidates.md`.
+
+## Change Size
+
+- Daily: candidate-pool updates only by default.
+- Weekly: up to 5 promotions or removals by default.
+- Main documents: prefer append-only additions and clear status corrections.
+- Deletions: only duplicate, off-topic, broken-source, or superseded entries.
 
 ## Automation Boundaries
 
-- `AI Infra Daily Increment` handles incremental discovery and review.
-- `AI Infra Weekly Deep Scan` handles conference/status reconciliation and the weekly report.
-- Both automations run in the local `D:\ResearchWork` workspace with high reasoning effort.
-- Both automations may create local Git commits but must never push.
-- Runtime state, run manifests and temporary files remain ignored by Git.
-
-## Promotion Rules
-
-- A-level evidence may enter a main document after title, venue/status, organization and mechanism are verified.
-- Official repositories and releases enter the industrial document, not the paper list, unless an accompanying paper exists.
-- B/C-level records remain in the candidate pool.
-- Uncertain author affiliation is written as `作者公开稿未列单位` or the relevant official-directory wording.
-- A formal proceedings record replaces an arXiv-only venue field.
-- Existing summaries are not regenerated when only a release version changes.
+- Automations may create local Git commits.
+- Automations must never push.
+- Automations must not modify `long-cot-kv-retention-literature.md`.
+- Runtime state, run manifests, reports and temporary files are local unless intentionally promoted.
 
 ## Recovery
 
-- Network errors are listed in the run manifest. Re-run discovery later; do not delete state.
-- If validation fails, fix the reported rows and rerun `validate`. Do not finalize.
-- If a run was semantically reviewed but should not be committed, use `finalize --run-id <run-id> --no-commit`.
-- Runtime state and manifests are local and ignored by Git.
-- The monitor contains no push command.
+- Network errors stay in the run manifest. Re-run discovery later; do not delete state to hide the error.
+- If validation fails, fix the reported rows and rerun `validate`.
+- If a run should not be committed, use `finalize --run-id <run-id> --no-commit`.

@@ -41,7 +41,7 @@ def append_candidates(path: Path, candidates: list[Candidate]) -> int:
             or normalize_title(item.title) in existing_titles
         ):
             continue
-        status = "needs verification" if item.tier == "A" else "candidate"
+        status = "new"
         rows.append(
             "| {date} | {tier} | {kind} | {source} | {title} | {topics} | "
             "[primary]({url}) | {status} |".format(

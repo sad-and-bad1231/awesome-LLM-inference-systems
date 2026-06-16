@@ -1,8 +1,8 @@
 {
   "version": 1,
   "settings": {
-    "daily_limit": 24,
-    "weekly_limit": 80,
+    "daily_limit": 8,
+    "weekly_limit": 24,
     "request_timeout_seconds": 25,
     "user_agent": "ai-infra-monitor/1.0 (local research index)",
     "paper_file": "paper-list.md",

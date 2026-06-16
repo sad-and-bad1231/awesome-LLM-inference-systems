@@ -28,9 +28,10 @@ class OutputTests(unittest.TestCase):
             )
             self.assertEqual(append_candidates(path, [item]), 1)
             self.assertEqual(append_candidates(path, [item]), 0)
-            self.assertEqual(path.read_text(encoding="utf-8").count("New Runtime"), 1)
+            text = path.read_text(encoding="utf-8")
+            self.assertEqual(text.count("New Runtime"), 1)
+            self.assertIn("| new |", text)
 
 
 if __name__ == "__main__":
     unittest.main()
-

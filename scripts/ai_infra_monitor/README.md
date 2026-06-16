@@ -11,4 +11,5 @@ python scripts/ai_infra_monitor/monitor.py validate
 ```
 
 Discovery is deterministic. Semantic verification and concise summaries are
-performed by the scheduled Codex task from the generated run manifest.
+performed from the generated run manifest. Daily automation should queue
+candidates first; main-document edits are reserved for small verified batches.
