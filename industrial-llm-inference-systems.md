@@ -1,6 +1,6 @@
 # 工业界 LLM 推理系统方案追踪
 
-更新时间：2026-06-12
+更新时间：2026-06-18
 时间口径：2024-2026，优先收企业论文、官方博客、技术报告、开源 runtime、工程文档和顶会系统论文。
 
 ## 来源等级
@@ -382,6 +382,14 @@
 | Microsoft Research + academia | VBASE | 2023 | ANN + relational query | 将向量近邻搜索、关系过滤和查询 optimizer 放在同一数据库执行模型中。 | [A：OSDI 2023](https://www.usenix.org/conference/osdi23/presentation/zhang-qianxi) |
 | Spotify | Annoy | 2013-2026 | 只读 ANN；内存映射 | 用随机投影树和 mmap 提供简单稳定的静态向量索引，适合中小规模只读检索服务。 | [A：GitHub](https://github.com/spotify/annoy) |
 | NMSLIB community | HNSW / hnswlib | 2016-2026 | 图 ANN；内存索引 | HNSW 成为多数向量数据库的默认高召回内存索引，也决定 RAG 的内存成本和更新行为。 | [A：GitHub](https://github.com/nmslib/hnswlib) |
+
+## 2026-06-18 追加：AMD 与 NVIDIA 最新工程更新
+
+| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |
+|---|---|---:|---|---|---|
+| AMD ROCm | ATOM inference engine | 2026 | 运行时；算子；MoE 通信 | 以 ROCm-first 的独立推理引擎整合 AITER kernel、MoRI 通信、KV block/prefix cache、speculative decoding 与 TP/DP/EP 策略，面向 AMD Instinct 生产 serving。 | [AMD ROCm Blog](https://rocm.blogs.amd.com/software-tools-optimization/atom-inference-engine/README.html) |
+| AMD ROCm + vLLM | Productionizing TurboQuant on AMD GPUs | 2026 | 压缩；状态管理；成本 | 在 AMD GPU 上把 TurboQuant 的 KV cache 压缩做成 vLLM 可部署路径，并通过 Triton/HIP/FlyDSL kernel 优化提升长上下文 agent workload 的 TTFT、吞吐与 cache 命中。 | [AMD ROCm Blog](https://rocm.blogs.amd.com/artificial-intelligence/turboquant-vllm-agentic/README.html) |
+| NVIDIA | BlueField-4 + DOCA in-silicon security for AI factories | 2026 | AI 集群 OS 与 SRE；可靠性与安全 | 用 BlueField-4 DPU 和 DOCA Argus / Vault / Flow 在基础设施层做运行时威胁检测、零信任文件访问和高速网络策略 enforcement，保护 agentic AI factory 的模型、上下文内存和数据。 | [NVIDIA Technical Blog](https://developer.nvidia.com/blog/advancing-ai-infrastructure-for-agentic-ai-with-nvidia-doca-in-silicon-security/) |
 
 ### 新一轮工业趋势判断
 
