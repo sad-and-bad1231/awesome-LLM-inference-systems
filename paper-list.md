@@ -553,3 +553,14 @@
 | Observation, Not Prediction: Conversation-Level Disaggregated Scheduling for Agentic Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | ConServe 将调度单位从单 turn 提升到整段 conversation，用首轮输入长度和 KV 占用等可观测量替代 decode-side 预测。 |
 | Parallel Context Compaction for Long-Horizon LLM Agent Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把长程 agent 的上下文压缩拆成并行 block compaction，在相同压缩输出量下缩短阻塞式 summarization 带来的端到端时延。 |
 | Pythia: Exploiting Workflow Predictability for Efficient Agent-Native LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | Pythia 在 serving 层显式编码多 agent workflow 语义，用可预测拓扑结构改善 prefix cache、扩缩容与长上下文调度。 |
+| ReMP: Low-Downtime Runtime Model-Parallelism Reconfiguration for LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | ReMP 将模型并行拓扑与运行时状态解耦，并用二维 KV 迁移在 TP/PP 重配置时尽量保留可复用缓存。 |
+| RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | RouteBalance 把模型路由和实例负载均衡合并成一个在线分配问题，联合优化质量、延迟和成本。 |
+| SMEPilot: Characterizing and Optimizing LLM Inference with Scalable Matrix Extensions | arXiv 预印本, 2026 | 作者公开稿未列单位 | SMEPilot 用 roofline 驱动的算子级选择，在 CPU-only、SME-only 与 SME+CPU 协作执行之间动态切换。 |
+| STREAM: Multi-Tier LLM Inference Middleware with Dual-Channel HPC Token Streaming | arXiv 预印本, 2026 | 作者公开稿未列单位 | STREAM 通过本地、HPC、云三层路由和控制面/数据面分离的 HPC token streaming，把高校 HPC 资源变成低时延推理后端。 |
+| Service-Induced Congestion in Memory-Constrained LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把持续增长的 KV memory pressure 建模为服务自身诱发的拥塞过程，并分析 eviction-free 平衡与极限环失稳。 |
+| ShuntServe: Cost-Efficient LLM Serving on Heterogeneous Spot GPU Clusters | arXiv 预印本, 2026 | 作者公开稿未列单位 | ShuntServe 面向异构 spot GPU 集群联合做模型放置、负载分流和抢占恢复，以降低满足 SLO 的 serving 成本。 |
+| SwiftCache: Efficient LLM Serving for Multi-turn Conversations with Heterogeneous KV Cache Sharing | arXiv 预印本, 2026 | 作者公开稿未列单位 | SwiftCache 在异构会话间共享 KV cache 并协调多轮对话的缓存放置与复用，降低重复 prefill 和内存占用。 |
+| The Price of Anarchy in Disaggregated Inference | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作从博弈角度分析分离式推理中的自利资源选择如何恶化全局效率，并给出调度设计的效率边界。 |
+| Tropical: Enhancing SLO Attainment in Disaggregated LLM Serving via SLO-Aware Multiplexing | arXiv 预印本, 2026 | 作者公开稿未列单位 | Tropical 用 SLO-aware multiplexing 在非分离与分离 serving 之间折中排队时间和干扰，提升 TTFT/TPOT 的联合达标率。 |
+| TurboServe: Serving Streaming Video Generation Efficiently and Economically | arXiv 预印本, 2026 | 作者公开稿未列单位 | TurboServe 为流式视频生成设计在线放置与 GPU provisioning，并结合 chunk batching、offload 与 GPU-GPU 迁移降低时延与成本。 |
+| AAFLOW: Scalable Patterns for Agentic AI Workflows | arXiv 预印本, 2026 | 作者公开稿未列单位 | AAFLOW 将 agent workflow 建模为算子图，并用 Arrow/Cylon 的零拷贝数据平面与异步批处理降低 embedding、upsert 与 orchestration 开销。 |
