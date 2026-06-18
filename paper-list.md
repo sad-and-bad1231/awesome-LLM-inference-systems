@@ -540,3 +540,7 @@
 | Latency Prediction for LLM Inference on NPU Systems | arXiv 预印本, 2026 | 作者公开稿未列单位 | LENS 只用少量端到端 profile 即可建模 NPU 上由 compiler 和 bucketing 引起的非线性推理时延。 |
 | AGENTSERVESIM: A Hardware-aware Simulator for Multi-Turn LLM Agent Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | AGENTSERVESIM 用 program orchestration、tool gap 模拟、session-aware routing 和 KV residency 模型，在 CPU 上逼真评估多轮 agent serving 策略。 |
 | Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用 stream-loading prefill、SmallEP、零拷贝 prefill/decode 分离和 CPU FP8 kernel，把本地 CPU-GPU 平台上的 MoE serving 拉近云端 SLO。 |
+| Accelerating Speculative Diffusions via Block Verification | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把 LLM speculative decoding 的 block verification 扩展到 diffusion 采样，在无需额外训练的前提下提升 draft acceptance 和生成速度。 |
+| ConSA: Controllable Sparsity in Hybrid Attention via Learnable Allocation | arXiv 预印本, 2026 | 作者公开稿未列单位 | ConSA 通过可学习的 FA/SWA 分配和稀疏度约束，为混合注意力模型学习层级或 KV-head 级的推理友好稀疏布局。 |
+| Functional Cache Grafting: Robust and Rapid Code-Policy Synthesis for Embodied Agents | arXiv 预印本, 2026 | 作者公开稿未列单位 | FCGraft 复用函数级代码骨架及其 KV cache，通过 stitching 和 patching 减少 embodied agent 代码策略生成中的重复 prefill。 |
+| Image Prompt Reconstruction Attacks on Distributed MLLM Inference Frameworks | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作揭示分布式 MLLM 推理中间 embedding 可泄露图像提示，并通过黑盒重建攻击量化多模态推理框架的隐私风险。 |
