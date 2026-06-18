@@ -530,3 +530,11 @@
 | OTRO: Oblivious Tokenization Path with Square-Root ORAM | arXiv 预印本, 2026 | 作者公开稿未列单位 | OTRO 用 square-root ORAM 副本池、epoch 轮转和 KV-aware 重建重叠，把 tokenizer 侧信道防护开销压到接近生产可用。 |
 | PolyKV: Heterogeneous Retention and Allocation for KV Cache Compression | arXiv 预印本, 2026 | 作者公开稿未列单位 | PolyKV 在层级粒度上联合选择 KV 压缩策略和预算分配，用异构保留方案替代统一 cache budget。 |
 | Prefill/Decode-Aware Evaluation of LLM Inference on Emerging AI Accelerators | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作按 Prefill/Decode 两阶段分别测 TTFT、TPOT 和批量吞吐，比较 GPU 与新型 AI 加速器的相位优势。 |
+| A Spatio-Temporal Expert Prefetching Framework for Efficient MoE-based LLM Inference | arXiv 预印本, 2026 | 作者公开稿未列单位 | ST-MoE 利用跨层和跨 token 的 expert 激活相关性做时空联合预取，以重叠 expert 加载和 MoE 推理计算。 |
+| AnchorKV: Safety-Aware KV Cache Compression via Soft Penalty with a Refusal Anchor | arXiv 预印本, 2026 | 作者公开稿未列单位 | AnchorKV 在 KV 压缩保留分数中引入 refusal anchor 的软惩罚，使压缩后的长上下文推理兼顾内存节省与安全对齐。 |
+| Dual Dimensionality for Local and Global Attention | arXiv 预印本, 2026 | 作者公开稿未列单位 | Dual Dimensionality 用近邻 token 全维、远距 token 低维的 DAR 表示降低长程 KV 容量，同时保持局部预测精度。 |
+| Efficient On-Device Diffusion LLM Inference with Mobile NPU | arXiv 预印本, 2026 | 作者公开稿未列单位 | llada.cpp 通过多块推测解码、渐进式修正与 swap 优化运行时，把 diffusion LLM 对齐到手机 NPU 的执行特性。 |
+| EfficientRollout: System-Aware Self-Speculative Decoding for RL Rollouts | arXiv 预印本, 2026 | 作者公开稿未列单位 | EfficientRollout 为 RL rollout 设计自推测解码和系统感知开关策略，在活跃 batch 缩小时继续利用并行验证加速。 |
+| From Tokens to Energy Flexibility: Quantization-Enabled Demand Response for Data Centers with LLM Inference Workloads | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把量化配置映射为可调度功率参数，并将 routing、实例切换与精度选择纳入推理数据中心的需求响应优化。 |
+| JetFlow: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting | arXiv 预印本, 2026 | 作者公开稿未列单位 | JetFlow 用单次前向的并行 draft head 生成具因果一致性的候选树，突破 speculative decoding 在更大 draft budget 下的扩展瓶颈。 |
+| Latency Prediction for LLM Inference on NPU Systems | arXiv 预印本, 2026 | 作者公开稿未列单位 | LENS 只用少量端到端 profile 即可建模 NPU 上由 compiler 和 bucketing 引起的非线性推理时延。 |
