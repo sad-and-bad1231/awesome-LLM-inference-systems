@@ -545,8 +545,11 @@
 | Functional Cache Grafting: Robust and Rapid Code-Policy Synthesis for Embodied Agents | arXiv 预印本, 2026 | 作者公开稿未列单位 | FCGraft 复用函数级代码骨架及其 KV cache，通过 stitching 和 patching 减少 embodied agent 代码策略生成中的重复 prefill。 |
 | Image Prompt Reconstruction Attacks on Distributed MLLM Inference Frameworks | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作揭示分布式 MLLM 推理中间 embedding 可泄露图像提示，并通过黑盒重建攻击量化多模态推理框架的隐私风险。 |
 | Agentic AI Workload Characteristics | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用端到端 tracing 刻画 ReAct 类 agent workload，指出有效上下文缓存会让执行转向 decode-dominated 且依赖长寿命 KV 状态。 |
+| Beyond FLOPs: Benchmarking Real Inference Acceleration of LLM Pruning under a GEMM-Centric Taxonomy | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用 GEMM 维度统一重组 LLM pruning 设计空间，比较不同剪枝族在真实内核与硬件上的实际推理加速边界。 |
 | Fast MoE Inference via Predictive Prefetching and Expert Replication | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作预测热点 expert 并做动态复制和预取，以减少稀疏激活造成的等待和 GPU 空转。 |
+| KAIROS: Stateful, Context-Aware Power-Efficient Agentic Inference Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | KAIROS 以 agent 上下文为控制信号，联合调节 GPU 频率、并发度与跨实例放置，在避免 thrashing 的前提下降低 agentic serving 功耗。 |
 | MemExplorer: Navigating the Heterogeneous Memory Design Space for Agentic Inference NPUs | arXiv 预印本, 2026 | 作者公开稿未列单位 | MemExplorer 联合搜索异构 NPU 与多级内存配置，在 agentic inference 的 prefill/decode 场景下平衡吞吐与功耗。 |
 | Multi-Segment Attention: Enabling Efficient KV-Cache Management for Faster Large Language Model Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | AsymCache 通过 Multi-Segment Attention、位置感知驱逐与自适应 chunking，让 lossless KV 管理与 GPU attention kernel 的效率目标对齐。 |
 | Observation, Not Prediction: Conversation-Level Disaggregated Scheduling for Agentic Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | ConServe 将调度单位从单 turn 提升到整段 conversation，用首轮输入长度和 KV 占用等可观测量替代 decode-side 预测。 |
 | Parallel Context Compaction for Long-Horizon LLM Agent Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把长程 agent 的上下文压缩拆成并行 block compaction，在相同压缩输出量下缩短阻塞式 summarization 带来的端到端时延。 |
+| Pythia: Exploiting Workflow Predictability for Efficient Agent-Native LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | Pythia 在 serving 层显式编码多 agent workflow 语义，用可预测拓扑结构改善 prefix cache、扩缩容与长上下文调度。 |
