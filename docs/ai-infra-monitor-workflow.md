@@ -8,6 +8,12 @@ This repository has three working documents:
 
 The default workflow is conservative: discover broadly, confirm in small batches, and write only verified items to the main documents.
 
+## Source Strategy
+
+- Daily sources: arXiv queries, stable enterprise RSS feeds and core project releases.
+- Weekly sources: top-conference indexes, OpenReview/DBLP pages and enterprise HTML indexes.
+- Main-document promotion still requires primary-source verification; source discovery alone is not evidence.
+
 ## Commands
 
 Run from `D:\ResearchWork`:

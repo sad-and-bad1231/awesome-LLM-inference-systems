@@ -101,6 +101,168 @@
       "modes": ["daily", "weekly"]
     },
     {
+      "id": "google-research-blog",
+      "name": "Google Research Blog",
+      "type": "feed",
+      "url": "https://research.google/blog/rss/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "type": "feed",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "together-ai-blog",
+      "name": "Together AI Blog",
+      "type": "feed",
+      "url": "https://www.together.ai/blog/rss.xml",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "cloudflare-ai-blog",
+      "name": "Cloudflare AI Blog",
+      "type": "feed",
+      "url": "https://blog.cloudflare.com/tag/ai/rss/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "apple-ml-research",
+      "name": "Apple Machine Learning Research",
+      "type": "html_index",
+      "url": "https://machinelearning.apple.com/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "meta-ai-blog",
+      "name": "Meta AI Blog",
+      "type": "html_index",
+      "url": "https://ai.meta.com/blog/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "deepmind-blog",
+      "name": "Google DeepMind Blog",
+      "type": "html_index",
+      "url": "https://deepmind.google/discover/blog/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "anthropic-news",
+      "name": "Anthropic News",
+      "type": "html_index",
+      "url": "https://www.anthropic.com/news",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "databricks-engineering-blog",
+      "name": "Databricks Engineering Blog",
+      "type": "html_index",
+      "url": "https://www.databricks.com/blog/category/engineering",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "amd-rocm-blog",
+      "name": "AMD ROCm Blog",
+      "type": "html_index",
+      "url": "https://rocm.blogs.amd.com/index.html",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "cerebras-blog",
+      "name": "Cerebras Blog",
+      "type": "html_index",
+      "url": "https://www.cerebras.ai/blog",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "fireworks-ai-blog",
+      "name": "Fireworks AI Blog",
+      "type": "html_index",
+      "url": "https://fireworks.ai/blog",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "anyscale-blog",
+      "name": "Anyscale Blog",
+      "type": "html_index",
+      "url": "https://www.anyscale.com/blog",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "groq-blog",
+      "name": "Groq Blog",
+      "type": "html_index",
+      "url": "https://groq.com/blog/",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "alibaba-cloud-ai-blog",
+      "name": "Alibaba Cloud AI Blog",
+      "type": "html_index",
+      "url": "https://www.alibabacloud.com/blog/ai-machine-learning",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "tencent-cloud-blog",
+      "name": "Tencent Cloud Blog",
+      "type": "html_index",
+      "url": "https://www.tencentcloud.com/blog",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "byteplus-blog",
+      "name": "BytePlus Blog",
+      "type": "html_index",
+      "url": "https://www.byteplus.com/en/blog",
+      "tier": "B",
+      "kind": "industry",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "bytedance-seed-papers",
+      "name": "ByteDance Seed papers",
+      "type": "html_index",
+      "url": "https://seed.bytedance.com/en/public_papers",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
       "id": "vllm-releases",
       "name": "vLLM releases",
       "type": "feed",
@@ -161,6 +323,81 @@
       "modes": ["daily", "weekly"]
     },
     {
+      "id": "triton-releases",
+      "name": "Triton releases",
+      "type": "feed",
+      "url": "https://github.com/triton-lang/triton/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "cutlass-releases",
+      "name": "NVIDIA CUTLASS releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/cutlass/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "ray-releases",
+      "name": "Ray releases",
+      "type": "feed",
+      "url": "https://github.com/ray-project/ray/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "iclr26-openreview",
+      "name": "ICLR 2026 OpenReview",
+      "type": "openreview",
+      "url": "https://api2.openreview.net/notes?content.venueid=ICLR.cc/2026/Conference&limit=1000",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "iclr25-dblp",
+      "name": "ICLR 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/iclr/iclr2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icml25-dblp",
+      "name": "ICML 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/icml/icml2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "neurips-dblp-index",
+      "name": "NeurIPS DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/neurips/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "osdi25-dblp",
+      "name": "OSDI 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/osdi/osdi2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
       "id": "usenix-nsdi26",
       "name": "USENIX NSDI 2026 technical sessions",
       "type": "html_index",
@@ -180,9 +417,9 @@
     },
     {
       "id": "asplos26",
-      "name": "ASPLOS 2026 program",
+      "name": "ASPLOS DBLP index",
       "type": "html_index",
-      "url": "https://www.asplos-conference.org/asplos2026/program/",
+      "url": "https://dblp.org/db/conf/asplos/index.html",
       "tier": "A",
       "kind": "paper",
       "modes": ["weekly"]
@@ -210,6 +447,78 @@
       "name": "SIGCOMM 2025 DBLP index",
       "type": "html_index",
       "url": "https://dblp.org/db/conf/sigcomm/sigcomm2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "eurosys-dblp-index",
+      "name": "EuroSys DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/eurosys/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "isca-dblp-index",
+      "name": "ISCA DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/isca/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "hpca26-dblp",
+      "name": "HPCA 2026 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/hpca/hpca2026.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sc-dblp-index",
+      "name": "SC DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/sc/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "micro25-dblp",
+      "name": "MICRO 2025 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/micro/micro2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ppopp26-dblp",
+      "name": "PPoPP 2026 DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/ppopp/ppopp2026.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sigmod-dblp-index",
+      "name": "SIGMOD DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/sigmod/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "vldb-dblp-index",
+      "name": "VLDB DBLP index",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/vldb/index.html",
       "tier": "A",
       "kind": "paper",
       "modes": ["weekly"]
