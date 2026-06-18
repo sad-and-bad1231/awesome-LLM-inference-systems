@@ -511,3 +511,22 @@
 | VBASE: Unifying Online Vector Similarity Search and Relational Queries via Relaxed Monotonicity | OSDI 2023 | University of Wisconsin-Madison; Microsoft Research 等 | VBASE 通过 relaxed monotonicity 将 ANN 与关系过滤和查询优化统一，减少 RAG 检索与数据库查询的割裂。 |
 | SPFresh: Incremental In-Place Update for Billion-Scale Vector Search | SOSP 2023 | Microsoft Research | SPFresh 以 LIRE 和增量原地更新维持动态向量索引，避免频繁全量重建。 |
 | CAGRA: Highly Parallel Graph Construction and Approximate Nearest Neighbor Search for GPUs | ICDE 2024 | NVIDIA | CAGRA 以 GPU 并行图构建和搜索支撑高吞吐 ANN，并进入 RAPIDS cuVS 向量检索栈。 |
+
+## 2026-06-18 追加：最新 KV、调度与容错系统
+
+| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
+|---|---|---|---|
+| CacheWise: Understanding Workloads and Optimizing KVCache Management for Efficiently Serving LLM Coding Agents | arXiv 预印本, 2026 | 作者公开稿未列单位 | CacheWise 将 coding agent 的前缀复用与 tool-call 元数据结合做复用感知驱逐和前缀感知调度，显著降低 KV eviction 并缩短会话完成时间。 |
+| Beyond Prediction: Tail-Aware Scheduling for LLM Inference | arXiv 预印本, 2026 | 作者公开稿未列单位 | Beyond Prediction 用分布感知而非长度预测的调度与 cache-aware preemption 联合优化在线 LLM serving 的 TTFT 和尾延迟。 |
+| Bifrost: Hybrid TEE-FHE Inference for Privacy-Preserving Transformer and LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | Bifrost 将线性层密文卸载到加速器、把非线性与 KV 状态更新留在 CPU TEE 中，构建 TEE 加 FHE 的混合隐私推理路径。 |
+| Can I Buy Your KV Cache? | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把热门文档的预填充 KV 视作可交易的 provider-side 资产，用服务端复用替代重复 prefill。 |
+| Communication-Efficient Verifiable Attention for LLM Inference | arXiv 预印本, 2026 | 作者公开稿未列单位 | VeriAttn 用 TEE 验证、GPU 执行 attention，并按 prefill/decode 两阶段减少验证与 KV 传输开销。 |
+| Coordinated Scheduling for MoE LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | Gimbal 联合前端 DP-engine 调度与后端 expert 放置，按 KV 压力、prefill 余量和 expert 热点协调 MoE serving。 |
+| ITME: Inference Tiered Memory Expansion with Disaggregated CXL-Hybrid Memories | arXiv 预印本, 2026 | 作者公开稿未列单位 | ITME 用 CXL 混合远端内存把 TB 级共享上下文层做成字节寻址扩展，并主动分层搬运权重与 prefix cache。 |
+| KVEraser: Learning to Steer KV Cache for Efficient Localized Context Erasing | arXiv 预印本, 2026 | 作者公开稿未列单位 | KVEraser 用学习式 steering state 只改被删除跨度的 KV 区间，在不重算整段 suffix 的前提下做局部上下文擦除。 |
+| LUMEN: Coordinated Failure Recovery for Distributed LLM Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | LUMEN 把分布式 LLM serving 的故障恢复建模为 checkpoint 放置、请求重分配和 reload 期间容量恢复的联合负载协调问题。 |
+| MiniPIC: Flexible Position-Independent Caching in <100LOC | arXiv 预印本, 2026 | 作者公开稿未列单位 | MiniPIC 在 vLLM 中以未旋转 K cache 和少量用户侧 primitive 实现位置无关缓存，并与 CPU offload 共存。 |
+| Models Take Notes at Prefill: KV Cache Can Be Editable and Composable | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把 KV cache 视作可编辑、可组合的“笔记本”，支持附加勘误与 RoPE 重定位拼接来复用预填充结果。 |
+| OTRO: Oblivious Tokenization Path with Square-Root ORAM | arXiv 预印本, 2026 | 作者公开稿未列单位 | OTRO 用 square-root ORAM 副本池、epoch 轮转和 KV-aware 重建重叠，把 tokenizer 侧信道防护开销压到接近生产可用。 |
+| PolyKV: Heterogeneous Retention and Allocation for KV Cache Compression | arXiv 预印本, 2026 | 作者公开稿未列单位 | PolyKV 在层级粒度上联合选择 KV 压缩策略和预算分配，用异构保留方案替代统一 cache budget。 |
+| Prefill/Decode-Aware Evaluation of LLM Inference on Emerging AI Accelerators | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作按 Prefill/Decode 两阶段分别测 TTFT、TPOT 和批量吞吐，比较 GPU 与新型 AI 加速器的相位优势。 |
