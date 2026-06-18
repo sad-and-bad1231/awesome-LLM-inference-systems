@@ -538,3 +538,5 @@
 | From Tokens to Energy Flexibility: Quantization-Enabled Demand Response for Data Centers with LLM Inference Workloads | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把量化配置映射为可调度功率参数，并将 routing、实例切换与精度选择纳入推理数据中心的需求响应优化。 |
 | JetFlow: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting | arXiv 预印本, 2026 | 作者公开稿未列单位 | JetFlow 用单次前向的并行 draft head 生成具因果一致性的候选树，突破 speculative decoding 在更大 draft budget 下的扩展瓶颈。 |
 | Latency Prediction for LLM Inference on NPU Systems | arXiv 预印本, 2026 | 作者公开稿未列单位 | LENS 只用少量端到端 profile 即可建模 NPU 上由 compiler 和 bucketing 引起的非线性推理时延。 |
+| AGENTSERVESIM: A Hardware-aware Simulator for Multi-Turn LLM Agent Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | AGENTSERVESIM 用 program orchestration、tool gap 模拟、session-aware routing 和 KV residency 模型，在 CPU 上逼真评估多轮 agent serving 策略。 |
+| Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用 stream-loading prefill、SmallEP、零拷贝 prefill/decode 分离和 CPU FP8 kernel，把本地 CPU-GPU 平台上的 MoE serving 拉近云端 SLO。 |
