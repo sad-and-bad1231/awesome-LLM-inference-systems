@@ -564,3 +564,13 @@
 | Tropical: Enhancing SLO Attainment in Disaggregated LLM Serving via SLO-Aware Multiplexing | arXiv 预印本, 2026 | 作者公开稿未列单位 | Tropical 用 SLO-aware multiplexing 在非分离与分离 serving 之间折中排队时间和干扰，提升 TTFT/TPOT 的联合达标率。 |
 | TurboServe: Serving Streaming Video Generation Efficiently and Economically | arXiv 预印本, 2026 | 作者公开稿未列单位 | TurboServe 为流式视频生成设计在线放置与 GPU provisioning，并结合 chunk batching、offload 与 GPU-GPU 迁移降低时延与成本。 |
 | AAFLOW: Scalable Patterns for Agentic AI Workflows | arXiv 预印本, 2026 | 作者公开稿未列单位 | AAFLOW 将 agent workflow 建模为算子图，并用 Arrow/Cylon 的零拷贝数据平面与异步批处理降低 embedding、upsert 与 orchestration 开销。 |
+
+## 2026-06-23 追加：KV、调度与 MoE serving 新增论文
+
+| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
+|---|---|---|---|
+| UltraQuant: 4-bit KV Caching for Context-Heavy Agents | arXiv 预印本, 2026 | Advanced Micro Devices; University of California, Los Angeles; Purdue University | UltraQuant 以 TurboQuant 风格 4-bit KV 表示为质量锚点，并结合 AMD GPU 的 FP4/FP8 decode kernel 路径压缩多轮 agent workload 的 KV cache。 |
+| HERALD: High-Throughput Block Diffusion LLM Serving via CPU-GPU Cooperative KV Cache Retrieval | arXiv 预印本, 2026 | Seoul National University; University of California, Berkeley | HERALD 利用 block diffusion 每个 block 内 top-k KV 选择可复用的性质，只选一次并与 denoising 重叠，以 CPU-GPU 协同稀疏召回 host DRAM 中的 KV。 |
+| Geometry-Aware Online Scheduling for LLM Serving: From Theoretical Bound to System Practice | arXiv 预印本, 2026 | Renmin University of China; Stanford University; Hong Kong University of Science and Technology | 该工作提出按 KV 占用几何体积增长而非仅按时长排序的 SVF/1-bit SVF 在线调度，并将其作为 vLLM 可插拔层降低平均与尾部时延。 |
+| WiSP: A Working-Set View of Mixture-of-Experts Serving on Extremely Low-Resource Hardware | arXiv 预印本, 2026 | Nokia | WiSP 将 expert 权重与 KV cache 统一建模为 GPU working set，并用 MV-WSA 在两者之间动态分配 VRAM 以提升低资源 MoE serving 吞吐。 |
+| CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution | DAC 2026 | KAIST | CoX-MoE 用合并式 expert 执行、静态 expert 分层与选择性 attention offload 协调 CPU-GPU 协作，避免 micro-batch 导致的 MoE 推理低效。 |
