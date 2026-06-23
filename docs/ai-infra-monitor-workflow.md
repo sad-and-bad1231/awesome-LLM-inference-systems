@@ -13,6 +13,7 @@ The default workflow is conservative: discover broadly, confirm in small batches
 - Daily sources: arXiv queries, stable enterprise RSS feeds and core project releases.
 - Weekly sources: top-conference indexes, OpenReview/DBLP pages and enterprise HTML indexes.
 - Main-document promotion still requires primary-source verification; source discovery alone is not evidence.
+- New papers in `paper-list.md` must be inserted into the existing topic category; do not create date-based append sections.
 
 ## Commands
 
@@ -74,6 +75,7 @@ If any point is uncertain, keep the item in `ai-infra-candidates.md`.
 - Daily: candidate-pool updates only by default.
 - Weekly: up to 5 promotions or removals by default.
 - Main documents: prefer append-only additions and clear status corrections.
+- `paper-list.md`: keep category sections stable and add rows under the best matching category.
 - Deletions: only duplicate, off-topic, broken-source, or superseded entries.
 
 ## Automation Boundaries
