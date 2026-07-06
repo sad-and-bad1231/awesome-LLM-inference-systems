@@ -20,6 +20,15 @@ The queue is intentionally small after the weekly-quality pass. These entries ar
 | Variable-Width Transformers | Potential inference efficiency implications, but it is primarily a model-architecture direction until systems evaluation is clearer. | Re-check for serving/runtime benchmarks or adoption by an inference engine. |
 | CompressKV: Semantic-Retrieval-Guided KV-Cache Compression for Resource-Efficient Long-Context LLM Inference | KV compression is on-topic, but the arXiv page currently carries an admin note about text overlap, so promotion should wait. | Re-check arXiv status or an independent venue/source before promotion. |
 
+## Daily Notes（2026-07-06, run 20260706T005509666159Z）
+
+- `new`, likely P1: `Lynx` is a concrete disaggregated long-context serving mechanism centered on progressive KV transfer and speculative decode overlap.
+- `new`, likely P1: `Moebius` is a strong MoE serving systems paper with runtime TP/EP switching and concrete H200 evaluation.
+- `new`, likely P1: `MosaicKV` is a direct long-context inference systems contribution with two-dimensional KV compression and serving benchmarks.
+- `new`, likely P1: `Omni-Flow` is a useful multimodal inference orchestration and distributed KV sharing system, though it is broader than text-only LLM serving.
+- `new`, likely P2: `MxGLUT` is relevant as inference hardware support, but it is accelerator-centric rather than a serving/runtime system.
+- `new`, likely P2: `OmniPilot` is useful cluster-level inference configuration work, but closer to advisor/evaluation infrastructure than core serving runtime.
+
 | Discovered | Tier | Kind | Source | Title | Topics | URL | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-06-18 | A | paper | arXiv AI infrastructure query | Towards Scalable Customization and Deployment of Multi-Agent Systems for Enterprise Applications | compression-cost, agent-rag | [primary](https://arxiv.org/abs/2606.18502v1) | keep |
@@ -56,3 +65,9 @@ The queue is intentionally small after the weekly-quality pass. These entries ar
 | 2026-07-05 | A | paper | arXiv AI infrastructure query | KernelFlume: Elastic Core-Attention Scaling for Agentic Long-Context Decoding | runtime-serving, kernel-compiler, agent-rag | [primary](https://arxiv.org/abs/2606.29207v1) | promote |
 | 2026-07-05 | A | paper | arXiv AI infrastructure query | KernelSight-LM: A Kernel-Level LLM Inference Simulator | runtime-serving, kernel-compiler, reliability-evaluation | [primary](https://arxiv.org/abs/2606.28565v2) | promote |
 | 2026-07-05 | A | paper | arXiv AI infrastructure query | Labeling Training Data for Entity Matching Using Large Language Models | reliability-evaluation | [primary](https://arxiv.org/abs/2606.28823v1) | drop |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | Lynx: Progressive Speculative Quantization for accelerating KV Transfer in Long-Context Inference | state-kv, compression-cost, kernel-compiler, network-disaggregation, agent-rag | [primary](https://arxiv.org/abs/2607.01831v1) | new |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | Moebius: Serving Mixture-of-Expert Models with Seamless Runtime Parallelism Switch | runtime-serving, state-kv, kernel-compiler, moe, agent-rag | [primary](https://arxiv.org/abs/2606.26607v1) | new |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | MosaicKV: Serving Long-Context LLM with Dynamic Two-D KV Cache Compression | runtime-serving, state-kv, compression-cost, kernel-compiler, agent-rag | [primary](https://arxiv.org/abs/2607.00760v1) | new |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | MxGLUT: A Reconfigurable LUT-Centric Broadcast Dataflow Accelerator for Mixed-Precision GEMM | runtime-serving, compression-cost, kernel-compiler | [primary](https://arxiv.org/abs/2607.01607v1) | new |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | Omni-Flow: A Unified Workflow Orchestration and Distributed KV Cache Sharing Framework for Multimodal Inference | runtime-serving, state-kv, agent-rag | [primary](https://arxiv.org/abs/2606.31093v1) | new |
+| 2026-07-06 | A | paper | arXiv AI infrastructure query | OmniPilot: An Uncertainty-Aware LLM Inference Advisor for Heterogeneous GPU Clusters | compression-cost, reliability-evaluation | [primary](https://arxiv.org/abs/2607.01579v1) | new |
