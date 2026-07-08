@@ -29,6 +29,15 @@ The queue is intentionally small after the weekly-quality pass. These entries ar
 - `new`, likely P2: `MxGLUT` is relevant as inference hardware support, but it is accelerator-centric rather than a serving/runtime system.
 - `new`, likely P2: `OmniPilot` is useful cluster-level inference configuration work, but closer to advisor/evaluation infrastructure than core serving runtime.
 
+## Daily Notes（2026-07-08, run 20260708T070634655306Z）
+
+- `new`, likely P1: `CoCoScale` is a concrete online LLM serving mechanism that elastically expands hot layers onto reclaimed idle resources under production traces.
+- `new`, likely P1: `DSpark` is a strong speculative decoding systems paper with confidence-scheduled verification and deployment claims inside the DeepSeek-V4 serving stack.
+- `new`, likely P1: `DepthWeave-KV` is a direct long-context inference contribution combining token-adaptive cross-layer KV compression with a fused CUDA decode path.
+- `new`, likely P2: `AdaptiveSD` is a CPU-constrained speculative decoding framework with runtime policy orchestration and explicit KV-cache coordination.
+- `new`, likely P2: `Akashic` is relevant as an agent-memory serving system, though it sits closer to external memory orchestration than core LLM runtime design.
+- `new`, likely P2: `Elastic Gang` is a useful on-device OS scheduling paper for per-token CPU inference gangs, but it is edge/runtime-adjacent rather than mainstream datacenter serving.
+
 | Discovered | Tier | Kind | Source | Title | Topics | URL | Status |
 |---|---|---|---|---|---|---|---|
 | 2026-06-18 | A | paper | arXiv AI infrastructure query | Towards Scalable Customization and Deployment of Multi-Agent Systems for Enterprise Applications | compression-cost, agent-rag | [primary](https://arxiv.org/abs/2606.18502v1) | keep |
@@ -71,3 +80,9 @@ The queue is intentionally small after the weekly-quality pass. These entries ar
 | 2026-07-06 | A | paper | arXiv AI infrastructure query | MxGLUT: A Reconfigurable LUT-Centric Broadcast Dataflow Accelerator for Mixed-Precision GEMM | runtime-serving, compression-cost, kernel-compiler | [primary](https://arxiv.org/abs/2607.01607v1) | new |
 | 2026-07-06 | A | paper | arXiv AI infrastructure query | Omni-Flow: A Unified Workflow Orchestration and Distributed KV Cache Sharing Framework for Multimodal Inference | runtime-serving, state-kv, agent-rag | [primary](https://arxiv.org/abs/2606.31093v1) | new |
 | 2026-07-06 | A | paper | arXiv AI infrastructure query | OmniPilot: An Uncertainty-Aware LLM Inference Advisor for Heterogeneous GPU Clusters | compression-cost, reliability-evaluation | [primary](https://arxiv.org/abs/2607.01579v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | AdaptiveSD A Stability-Aware, Runtime-Adaptive Speculative Decoding Framework with Multi-Policy Orchestration for CPU-Constrained LLM Inference | state-kv | [primary](https://arxiv.org/abs/2607.03876v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | Akashic: A Low-Overhead LLM Inference Service with MemAttention | runtime-serving, state-kv, kernel-compiler, agent-rag | [primary](https://arxiv.org/abs/2607.05708v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | CoCoScale: Leveraging Layer-wise Scaling to Unlock the Potential of Online LLM Serving | runtime-serving, agent-rag, reliability-evaluation | [primary](https://arxiv.org/abs/2607.04181v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | DSpark: Confidence-Scheduled Speculative Decoding with Semi-Autoregressive Generation | reliability-evaluation | [primary](https://arxiv.org/abs/2607.05147v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | DepthWeave-KV: Token-Adaptive Cross-Layer Residual Factorization for Long-Context KV Cache Compression | runtime-serving, state-kv, compression-cost, kernel-compiler, agent-rag, reliability-evaluation | [primary](https://arxiv.org/abs/2607.06523v1) | new |
+| 2026-07-08 | A | paper | arXiv AI infrastructure query | Elastic Gang: Per-Token Membership Change for a Hard-Barriered LLM Inference Gang Co-Scheduled with OS Processes | runtime-serving, kernel-compiler, hardware-edge | [primary](https://arxiv.org/abs/2607.04668v1) | new |
