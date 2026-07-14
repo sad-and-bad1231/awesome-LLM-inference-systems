@@ -1,13 +1,21 @@
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository
+from scripts.ai_infra_monitor.ai_infra_monitor.publication import GENERATED_NOTICE, render_public_repository
+from scripts.ai_infra_monitor.ai_infra_monitor.validation import validate_workspace
 
 
-def _record(record_type: str, title: str, category: str, status: str = "verified") -> dict:
-    return {
+def _record(
+    record_type: str,
+    title: str,
+    category: str,
+    status: str = "verified",
+    presentation: dict | None = None,
+) -> dict:
+    record = {
         "id": f"{record_type}-{title.lower().replace(' ', '-')}",
         "canonical_id": f"{record_type}:{title.lower().replace(' ', '-')}",
         "aliases": [],
@@ -50,6 +58,9 @@ def _record(record_type: str, title: str, category: str, status: str = "verified
         "topics": [],
         "discovered": "",
     }
+    if presentation is not None:
+        record["presentation"] = presentation
+    return record
 
 
 class PublicationTests(unittest.TestCase):
@@ -94,6 +105,79 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("Formal Conference", papers_view)
             self.assertIn("Serving Project", industry_view)
             self.assertIn("generated from data/papers.jsonl", papers_view)
+
+    def test_presentation_metadata_controls_featured_order(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            papers.write_text(
+                "\n".join(
+                    json.dumps(item)
+                    for item in [
+                        _record("paper", "Later Featured", "Runtime、调度与服务架构", presentation={"featured": True, "order": 20}),
+                        _record("paper", "First Featured", "Runtime、调度与服务架构", presentation={"featured": True, "order": 10}),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            industry.write_text("", encoding="utf-8")
+
+            render_public_repository(papers, industry, root)
+
+            readme = (root / "README.md").read_text(encoding="utf-8")
+            self.assertLess(readme.index("First Featured"), readme.index("Later Featured"))
+            self.assertIn("Academic Papers", readme)
+            self.assertIn("TTFT under Drift", readme)
+
+    def test_public_views_validate_assets_links_and_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            candidates = root / "data" / "candidates.jsonl"
+            papers.parent.mkdir(parents=True)
+            papers.write_text(json.dumps(_record("paper", "Serving Paper", "Runtime、调度与服务架构")) + "\n", encoding="utf-8")
+            industry.write_text(json.dumps(_record("project", "Serving Project", "Runtime、调度与服务架构")) + "\n", encoding="utf-8")
+            candidates.write_text("", encoding="utf-8")
+            render_public_repository(papers, industry, root)
+
+            (root / "figs").mkdir()
+            source_figs = Path(__file__).parents[2] / "figs"
+            for name in ("ai-inference-systems-cover.png", "ai-inference-system-map.png"):
+                shutil.copyfile(source_figs / name, root / "figs" / name)
+            for name in ("ai-infra-system-abstractions.md", "CONTRIBUTING.md"):
+                shutil.copyfile(Path(__file__).parents[2] / name, root / name)
+            paper_view = root / "paper-list.md"
+            industry_view = root / "industrial.md"
+            candidate_view = root / "candidates.md"
+            for path in (paper_view, industry_view, candidate_view):
+                path.write_text(GENERATED_NOTICE + "\n", encoding="utf-8")
+
+            errors = validate_workspace(
+                paper_view,
+                industry_view,
+                candidate_view,
+                paper_db_path=papers,
+                industry_db_path=industry,
+                candidate_db_path=candidates,
+                public_root=root,
+            )
+            self.assertEqual(errors, [])
+
+            (root / "figs" / "ai-inference-system-map.png").unlink()
+            errors = validate_workspace(
+                paper_view,
+                industry_view,
+                candidate_view,
+                paper_db_path=papers,
+                industry_db_path=industry,
+                candidate_db_path=candidates,
+                public_root=root,
+            )
+            self.assertTrue(any("required public image" in error.message for error in errors))
 
 
 if __name__ == "__main__":

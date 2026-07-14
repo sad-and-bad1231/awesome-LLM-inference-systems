@@ -75,13 +75,15 @@ class RecordStoreTests(unittest.TestCase):
             db = Path(tmp) / "infra-db.jsonl"
             db.parent.mkdir(parents=True, exist_ok=True)
             db.write_text(
-                '{"id":"one","record_type":"candidate","title":"Same","venue_or_channel":"arXiv","year":"2026","orgs":"","summary":"x","source_tier":"A","primary_url":"https://example.org/one","artifact_url":"","source_ids":[],"status":"new","system_abstraction_primary":"Execution Compilation & Kernel Fusion","system_abstraction_secondary":[],"technical_tags":{"phase":[],"hardware":[],"optimization_layer":[],"workload":[],"framework_binding":[],"metrics":[]},"triage":{"verdict":"keep","priority":"normal","reasons":[],"repo_signals":{},"physical_eval":{},"llm_review":{}}}\n'
+                '{"id":"one","record_type":"candidate","title":"Same","venue_or_channel":"arXiv","year":"2026","orgs":"","summary":"x","source_tier":"A","primary_url":"https://example.org/one","artifact_url":"","source_ids":[],"status":"new","system_abstraction_primary":"Execution Compilation & Kernel Fusion","system_abstraction_secondary":[],"technical_tags":{"phase":[],"hardware":[],"optimization_layer":[],"workload":[],"framework_binding":[],"metrics":[]},"triage":{"verdict":"keep","priority":"normal","reasons":[],"repo_signals":{},"physical_eval":{},"llm_review":{}},"presentation":{"featured":"yes","order":-1}}\n'
                 '{"id":"two","record_type":"candidate","title":"Same","venue_or_channel":"arXiv","year":"2026","orgs":"","summary":"x","source_tier":"A","primary_url":"","artifact_url":"","source_ids":[],"status":"new","system_abstraction_primary":"Execution Compilation & Kernel Fusion","system_abstraction_secondary":[],"technical_tags":{"phase":[],"hardware":[],"optimization_layer":[],"workload":[],"framework_binding":[],"metrics":[]},"triage":{"verdict":"keep","priority":"normal","reasons":[],"repo_signals":{},"physical_eval":{},"llm_review":{}}}\n',
                 encoding="utf-8",
             )
             messages = "\n".join(error.message for error in validate_record_store(db))
             self.assertIn("duplicate title", messages)
             self.assertIn("missing primary_url", messages)
+            self.assertIn("presentation.featured must be boolean", messages)
+            self.assertIn("presentation.order must be a non-negative integer", messages)
 
     def test_triage_downranks_algorithm_only_and_promotes_framework_bindings(self):
         algorithmic = Candidate(

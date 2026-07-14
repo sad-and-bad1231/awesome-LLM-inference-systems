@@ -25,6 +25,10 @@ Add one JSONL record to the matching fact source:
 
 Every record must pass the local schema validator and include a primary URL, evidence metadata, canonical identity, technical tags, and a concise factual summary. Do not edit generated `README.md`, `papers/README.md`, or `industry/README.md` directly.
 
+For a small number of high-value public entry points, an optional `presentation` object may contain `featured`, a non-negative `order`, and a short `blurb`. These fields control display only and must not replace evidence or factual metadata.
+
+Public diagrams live under `figs/`. Keep the PNG files and their SVG source files in sync; the validator checks both required PNG assets and generated Markdown links.
+
 ## Local Checks
 
 ```powershell

@@ -13,6 +13,7 @@ python scripts/ai_infra_monitor/monitor.py publish
 
 `data/papers.jsonl` and `data/industry.jsonl` are the main fact sources; `data/candidates.jsonl` is discovery staging. Markdown files are generated views.
 `paper-list.md` and `industrial-llm-inference-systems.md` are separate reading lists. `ai-infra-system-abstractions.md` is only a concise navigation index.
+The public repository views also include `README.md`, `papers/README.md`, and `industry/README.md`, plus the local diagrams under `figs/`. Optional `presentation` metadata controls a small curated set of featured entries without changing the fact schema.
 
 One-time migration of a legacy unified JSONL export:
 

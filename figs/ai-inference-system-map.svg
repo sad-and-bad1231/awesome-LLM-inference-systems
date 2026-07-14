@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Inference System Abstractions</title>
+  <desc id="desc">Six layers of AI inference systems, from memory and transport through state compression, execution, scheduling, and reliability.</desc>
+  <rect width="1600" height="900" fill="#f7f8f6"/>
+  <text x="80" y="82" fill="#17232b" font-family="Arial, sans-serif" font-size="34" font-weight="700">AI inference system abstractions</text>
+  <text x="80" y="120" fill="#53636b" font-family="Arial, sans-serif" font-size="18">A practical map from request state to hardware execution and production operations.</text>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="80" y="180" width="430" height="172" rx="10" fill="#d9f0ed" stroke="#138a87" stroke-width="3"/>
+    <text x="112" y="222" fill="#0e6664" font-size="16" letter-spacing="2">01 / MEMORY</text>
+    <text x="112" y="260" fill="#17232b" font-size="25" font-weight="700">Memory Topology</text>
+    <text x="112" y="294" fill="#44565e" font-size="16">KV blocks, prefix cache, offload,</text><text x="112" y="320" fill="#44565e" font-size="16">remote and hierarchical memory.</text>
+
+    <rect x="585" y="180" width="430" height="172" rx="10" fill="#fff0c9" stroke="#c9901d" stroke-width="3"/>
+    <text x="617" y="222" fill="#8e6914" font-size="16" letter-spacing="2">02 / TRANSPORT</text>
+    <text x="617" y="260" fill="#17232b" font-size="25" font-weight="700">P/D Disaggregation</text>
+    <text x="617" y="294" fill="#5a5544" font-size="16">Prefill/decode split, KV transfer,</text><text x="617" y="320" fill="#5a5544" font-size="16">RDMA, routing, collective transport.</text>
+
+    <rect x="1090" y="180" width="430" height="172" rx="10" fill="#dbe8f4" stroke="#3979ad" stroke-width="3"/>
+    <text x="1122" y="222" fill="#2d6090" font-size="16" letter-spacing="2">03 / STATE CODING</text>
+    <text x="1122" y="260" fill="#17232b" font-size="25" font-weight="700">Compression &amp; Low-Bit</text>
+    <text x="1122" y="294" fill="#4e5e6d" font-size="16">KV quantization, MLA latent state,</text><text x="1122" y="320" fill="#4e5e6d" font-size="16">sparsity and quality-cost tradeoffs.</text>
+
+    <rect x="80" y="430" width="430" height="172" rx="10" fill="#e4e0f0" stroke="#7561a7" stroke-width="3"/>
+    <text x="112" y="472" fill="#5c4d8b" font-size="16" letter-spacing="2">04 / EXECUTION</text>
+    <text x="112" y="510" fill="#17232b" font-size="25" font-weight="700">Kernel &amp; Compiler</text>
+    <text x="112" y="544" fill="#5d5a68" font-size="16">CUDA, Triton, HIP, attention,</text><text x="112" y="570" fill="#5d5a68" font-size="16">GEMM, MoE and compiler backends.</text>
+
+    <rect x="585" y="430" width="430" height="172" rx="10" fill="#f6ded1" stroke="#ba6a45" stroke-width="3"/>
+    <text x="617" y="472" fill="#995337" font-size="16" letter-spacing="2">05 / PROGRAM CONTROL</text>
+    <text x="617" y="510" fill="#17232b" font-size="25" font-weight="700">Runtime &amp; Scheduling</text>
+    <text x="617" y="544" fill="#66534a" font-size="16">Agent graphs, structured generation,</text><text x="617" y="570" fill="#66534a" font-size="16">SLO-aware and program-aware dispatch.</text>
+
+    <rect x="1090" y="430" width="430" height="172" rx="10" fill="#dfe8df" stroke="#5e8863" stroke-width="3"/>
+    <text x="1122" y="472" fill="#48704d" font-size="16" letter-spacing="2">06 / OPERATIONS</text>
+    <text x="1122" y="510" fill="#17232b" font-size="25" font-weight="700">Reliability &amp; Sparing</text>
+    <text x="1122" y="544" fill="#526356" font-size="16">SLO, drift, recovery, migration,</text><text x="1122" y="570" fill="#526356" font-size="16">reproducibility and graceful degradation.</text>
+  </g>
+
+  <g fill="none" stroke="#17232b" stroke-width="3">
+    <path d="M510 266h75"/><path d="m568 254 18 12-18 12"/>
+    <path d="M1015 266h75"/><path d="m1073 254 18 12-18 12"/>
+    <path d="M300 352v78"/><path d="m288 412 12 18 12-18"/>
+    <path d="M800 352v78"/><path d="m788 412 12 18 12-18"/>
+    <path d="M1305 352v78"/><path d="m1293 412 12 18 12-18"/>
+    <path d="M510 516h75" stroke="#ba6a45"/><path d="m568 504 18 12-18 12" stroke="#ba6a45"/>
+    <path d="M1015 516h75" stroke="#5e8863"/><path d="m1073 504 18 12-18 12" stroke="#5e8863"/>
+  </g>
+  <rect x="80" y="720" width="1440" height="74" rx="10" fill="#17232b"/>
+  <text x="112" y="765" fill="#f4f7f8" font-family="Arial, sans-serif" font-size="20">Serving path: request state  →  transport  →  execution  →  program control  →  production feedback</text>
+</svg>

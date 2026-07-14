@@ -2,14 +2,25 @@
 
 <!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
 
-A curated, evidence-aware collection of LLM inference serving papers and industrial systems.
+[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-432-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-120-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-178-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
-This repository focuses on the serving mainline: runtime, P/D disaggregation, KV state, kernels, compilers, scheduling, reliability, and production infrastructure.
+![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
+
+A curated, evidence-aware collection of LLM inference serving papers, industrial systems, and open-source AI infrastructure.
+
+## Overview
+
+This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability.
+
+We prioritize work with system-level mechanisms, real hardware or production evidence, and clear connections to serving ecosystems such as vLLM, SGLang, TensorRT-LLM, Kubernetes, and LMCache.
+
+Out of scope by default: training-only methods, algorithm-only simulations without serving evidence, generic vector databases, and peripheral hardware work without an inference-system connection.
 
 ## Contents
 
 - [Academic Papers](papers/README.md)
 - [Industry & Open-Source Systems](industry/README.md)
+- [System Abstraction Overview](ai-infra-system-abstractions.md)
 - [Contribution Guide](CONTRIBUTING.md)
 
 ## Coverage
@@ -21,95 +32,125 @@ This repository focuses on the serving mainline: runtime, P/D disaggregation, KV
 
 ## Taxonomy
 
-- **KV State & Memory**: system-level techniques and evidence for the serving stack.
-- **P/D Disaggregation & KV Transfer**: system-level techniques and evidence for the serving stack.
-- **KV Compression & Low-Bit State**: system-level techniques and evidence for the serving stack.
-- **Kernel & Compiler**: system-level techniques and evidence for the serving stack.
-- **Runtime & Serving**: system-level techniques and evidence for the serving stack.
-- **Reliability & Benchmarks**: system-level techniques and evidence for the serving stack.
+| System abstraction | Records | Entry points |
+|---|---:|---|
+| **KV State & Memory** | 174 | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
+| **P/D Disaggregation & KV Transfer** | 51 | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
+| **KV Compression & Low-Bit State** | 87 | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
+| **Kernel & Compiler** | 76 | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
+| **Runtime & Serving** | 144 | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
+| **Reliability & Benchmarks** | 20 | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
+
+## System Map
+
+![AI inference system abstractions](figs/ai-inference-system-map.png)
 
 ## Featured Papers
 
-- **A Cost-Effective Near-Storage Processing Solution for Offline Inference of Long-Context LLMs**<br>
-  `ASPLOS 2026` · `Formal Conference · Legacy Import` · `long-context` `rag`<br>
-  该工作把长上下文离线推理的数据密集部分下沉到近存储处理器，降低主机内存和 I/O 成本。
-- **A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints**<br>
-  `ICML 2026` · `Formal Conference · Legacy Import` · `kv-cache` `memory`<br>
-  该工作把计算和 KV cache 显存同时纳入排队稳定性分析，给出 LLM inference 系统何时会因内存约束失稳的理论条件。
-- **ADS: AN AGENTIC DETECTION SYSTEM FOR ENTERPRISE AGENTIC AI SECURITY**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `serving` `agent` `rag`<br>
-  ADS 面向企业 agentic AI 安全构建检测系统，把 agent 行为、工具调用和安全策略纳入运行时监控。
-- **AIRS: Scaling Live Inference in Resource Constrained Environments**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · <br>
+- **FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference**
+  `NSDI 2026` · `2026` · `Formal Conference · Legacy Import`
+  FastServe 用 token 粒度抢占、skip-join MLFQ 和 KV 状态换入换出降低长请求造成的队头阻塞。
+- **HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds**
+  `NSDI 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `latency`
+  HydraServe 主动分发模型、重叠 worker 冷启动阶段并规避网络争用，以 pipeline consolidation 降低 serverless LLM 启动资源。
+- **QoServe: Breaking the Silos of LLM Inference Serving**
+  `ASPLOS 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving`
+  QoServe 统一管理原本割裂的 LLM serving 资源池，以减少不同服务等级和工作负载之间的资源孤岛。
+- **PLA-Serve: A Prefill-Length-Aware LLM Serving System**
+  `MLSys 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `prefill` `serving` `gpu`
+  PLA-Serve 将 prefill 长度显式纳入请求分组和批处理决策，减少长短 prompt 混合时的首 token 延迟和 GPU 空闲。
+- **MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing**
+  `MLSys 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `kv-cache`
+  MorphServe 在运行时联合调整层级量化换入和 KV cache 大小，使服务配置随负载和内存压力动态变化。
+- **AIRS: Scaling Live Inference in Resource Constrained Environments**
+  `MLSys 2026` · `2026` · `Formal Conference · Legacy Import`
   AIRS 面向资源受限的在线推理流水线动态分配加速器与任务优先级，提高多阶段 LLM 评估/预测服务的吞吐和延迟稳定性。
-- **Accelerating Large-Scale Reasoning Model Inference with Sparse Self-Speculative Decoding**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `kv-cache`<br>
-  SparseSpec 以稀疏注意力版本的同一模型充当 draft，并联合调度 drafting、verification 和动态 KV 管理以加速长 CoT。
-- **Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design**<br>
-  `OSDI 2026` · `Formal Conference · Legacy Import` · `decode` `prefill` `gpu` `kernel` `kv-cache` `moe`<br>
-  该工作用 stream-loading prefill、SmallEP、零拷贝 prefill/decode 分离和 CPU FP8 kernel，把本地 CPU-GPU 平台上的 MoE serving 拉近云端 SLO。
-- **AgenticCache: Cache-Driven Asynchronous Planning for Embodied AI Agents**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `serving` `agent` `rag`<br>
-  AgenticCache 用缓存命中和状态复用驱动 embodied agent 的异步规划，减少重复上下文构造和工具调用等待。
-- **Agentix: An Efficient Serving Engine for LLM Agents as General Programs**<br>
-  `NSDI 2026` · `Formal Conference · Legacy Import` · `serving` `agent` `rag`<br>
-  Agentix 把 agent program 而非单次请求作为调度对象，利用程序依赖和已完成调用对后续 LLM call 抢占与提权。
-- **BAT: Efficient Generative Recommender Serving with Bipartite Attention**<br>
-  `ASPLOS 2026` · `Formal Conference · Legacy Import` · `serving`<br>
-  BAT 为生成式推荐设计 bipartite attention 和相应 serving 路径，减少推荐上下文与生成阶段的冗余计算。
-- **BEAM: Joint Resource-Power Optimization for Energy-Efficient LLM Inference under SLO constraints**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `slo`<br>
-  BEAM 联合选择资源分配和功耗状态，在满足 SLO 的同时降低 LLM inference 的能耗。
-- **BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `decode` `prefill`<br>
-  BLASST 在 online softmax 中按阈值动态跳过低贡献 attention block，减少 Value block 加载和后续矩阵乘法以加速长上下文 prefill/decode。
-- **BOute: Cost-Efficient LLM Serving with Heterogeneous LLMs and GPUs via Multi-Objective Bayesian Optimization**<br>
-  `MLSys 2026` · `Formal Conference · Legacy Import` · `serving` `gpu`<br>
+- **Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration**
+  `OSDI 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `gpu`
+  该工作用跨实例编排减少 commodity GPU 集群中的重复数据搬运和状态开销，提高低成本 GPU 上的 serving 效率。
+- **SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems**
+  `NSDI 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `kv-cache` `memory`
+  SYMPHONY 将计算和 KV cache 存储解耦为 disaggregated memory management layer，以满足多轮会话状态的低延迟访问。
+- **SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading**
+  `NSDI 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `cuda` `rdma` `moe`
+  SwiftEP 用 buffer fusion 消除 MoE all-to-all staging copy，并以 TMA、RDMA scatter-gather 和 CUDA IPC 提高链路利用率。
+- **TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference**
+  `ASPLOS 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `decode` `prefill`
+  TPLA 将 latent attention 与 tensor parallel 结合，降低 PD 分离推理中的 KV 和跨卡通信压力。
+- **XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads**
+  `ASPLOS 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `kernel`
+  XY-Serve 用 token-wise P/D/V 调度、任务分解重排和 Ascend meta-kernel 平滑动态 shape 与混合阶段负载。
+- **BOute: Cost-Efficient LLM Serving with Heterogeneous LLMs and GPUs via Multi-Objective Bayesian Optimization**
+  `MLSys 2026` · `2026` · `Formal Conference · Legacy Import`
+  Tags: `serving` `gpu`
   BOute 用多目标贝叶斯优化在异构模型和 GPU 组合中选择 serving 配置，联合降低成本并满足质量和延迟目标。
 
 ## Featured Industry Systems
 
-- **[AI200 / AI250](https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm)**<br>
-  `Qualcomm` · `2026` · `Industrial Material · Legacy Import` · `npu` `memory`<br>
-  将 Hexagon NPU 扩展到数据中心，强调大容量 LPDDR、低比特格式、near-memory compute、机架扩展和 disaggregated inference。
-- **[ATOM inference engine](https://rocm.blogs.amd.com/software-tools-optimization/atom-inference-engine/README.html)**<br>
-  `AMD ROCm` · `2026` · `Industrial Material · Legacy Import` · `serving` `amd` `rocm` `kernel` `moe` `moe`<br>
-  以 ROCm-first 的独立推理引擎整合 AITER kernel、MoRI 通信、KV block/prefix cache、speculative decoding 与 TP/DP/EP 策略，面向 AMD Instinct 生产 serving。
-- **[ATOMesh distributed serving gateway](https://rocm.blogs.amd.com/software-tools-optimization/atomesh-inference/README.html)**<br>
-  `AMD ROCm` · `2026` · `Industrial Material · Legacy Import` · `decode` `prefill` `amd` `gpu` `routing` `sglang`<br>
-  作为 AMD GPU 集群的分布式推理控制面，统一 prefill/decode routing、KV-aware scheduling、worker lifecycle、retries、observability，并协调 ATOM、vLLM、SGLang 后端。
-- **[BlueField-4 STX / context memory storage](https://www.tomshardware.com/tech-industry/nvidia-launches-bluefield-4-stx-storage-architecture-for-agentic-ai)**<br>
-  `NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `kv-cache` `memory` `agent` `rag`<br>
-  用 DPU/加速存储绕过 host CPU，把长上下文 KV cache 放到近存储路径，面向 agentic AI 的大上下文状态。
-- **[DroidSpeak](https://www.microsoft.com/en-us/research/publication/droidspeak-kv-cache-sharing-for-efficient-multi-llm-serving/)**<br>
-  `Microsoft Research` · `2026` · `Industrial Material · Legacy Import` · `prefill` `serving` `kv-cache` `agent`<br>
-  在相同架构的 fine-tuned model variants 之间共享 KV cache，降低企业多模型/多 agent 的重复 prefill。
-- **[Dynamo 1.0 Production-Scale Multi-Node Inference](https://developer.nvidia.com/blog/?p=113961)**<br>
-  `NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `routing` `routing` `agent` `multimodal` `kubernetes`<br>
-  Dynamo 1.0 强化多节点部署、Kubernetes 编排、agentic/multimodal KV routing、ModelExpress 快速启动和 KV Block Manager。
-- **[Dynamo KVBM](https://docs.dynamo.nvidia.com/dynamo/components/kvbm)**<br>
-  `NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `memory` `tensorrt-llm` `vllm`<br>
+- **[Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/)**
+  `NVIDIA` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `routing` `serving` `kv-cache`
+  分布式/分离式推理框架，组合 disaggregated serving、KV cache-aware routing、KV offloading，并用 NIXL 做低延迟 KV 传输。
+- **[NIXL / KV cache transfer](https://docs.nvidia.com/dynamo/archive/0.8.0/backends/trtllm/kv-cache-transfer.html)**
+  `NVIDIA` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `decode` `prefill` `kv-cache`
+  面向推理数据移动的传输层，在 prefill/decode 分离时把 KV cache 从 prefill worker 传到 decode worker。
+- **[FlashMLA](https://github.com/deepseek-ai/FlashMLA)**
+  `DeepSeek` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `decode` `gpu` `hopper` `kernel` `kv-cache`
+  面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。
+- **[vLLM V1 + torch.compile](https://pytorch.org/projects/vllm/)**
+  `PyTorch Foundation / vLLM community` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `prefill` `vllm`
+  vLLM 作为 PyTorch Foundation 项目，集成 torch.compile、PagedAttention、prefix caching、chunked prefill 等。
+- **[llm-d + LMCache + vLLM](https://research.ibm.com/publications/kv-cache-wins-you-can-feel-building-ai-aware-llm-routing-on-kubernetes)**
+  `IBM / Red Hat / llm-d` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `kubernetes` `llm-d`
+  Kubernetes-native distributed LLM inference，把 vLLM、LMCache、Inference Gateway、KV-aware scheduling 组合起来。
+- **[LMCache](https://arxiv.org/abs/2510.09665)**
+  `LMCache 社区 / 企业采用` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `gpu` `kv-cache` `rag` `lmcache`
+  将 KV cache 抽成独立层，支持跨 engine/query 复用和 GPU/CPU/storage/network 多层编排。
+- **[Mooncake](https://www.usenix.org/conference/fast25/presentation/qin)**
+  `Moonshot AI + Tsinghua` · `2025` · `Industrial Material · Legacy Import`
+  Tags: `serving`
+  以 KVCache 为中心做分离式 LLM serving 架构，面向长上下文在线服务。
+- **[Dynamo KVBM](https://docs.dynamo.nvidia.com/dynamo/components/kvbm)**
+  `NVIDIA` · `2026` · `Industrial Material · Legacy Import`
+  Tags: `memory` `tensorrt-llm` `vllm`
   KVBM 作为统一 KV block memory layer，支持 vLLM/TensorRT-LLM 的远端共享、offload 和 write-through cache。
-- **[Dynamo Snapshot](https://developer.nvidia.com/blog/nvidia-dynamo-snapshot-fast-startup-for-inference-workloads-on-kubernetes/)**<br>
-  `NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `cuda` `kv-cache` `kubernetes`<br>
-  用 CRIU + cuda-checkpoint 做 Kubernetes 上推理 worker 快照恢复，并通过 KV cache unmap 减小 checkpoint 体积。
-- **[FlexKV](https://github.com/taco-project/FlexKV)**<br>
-  `Tencent Cloud TACO + NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `sglang` `vllm`<br>
-  分布式 KV store 和 multi-level cache manager，已进入 vLLM/Dynamo 生态，支持 TRT-LLM/SGLang/vLLM 的 KV offload。
-- **[Full-Stack Optimizations for Agentic Inference with Dynamo](https://developer.nvidia.com/blog/full-stack-optimizations-for-agentic-inference-with-nvidia-dynamo/)**<br>
-  `NVIDIA` · `2026` · `Industrial Material · Legacy Import` · `agent`<br>
-  针对 coding agent / multi-agent 的 write-once-read-many KV 模式，强调 router、cache pinning、ephemeral KV block 生命周期和 agent-native KV 管理。
-- **[Gemma 4 on vLLM-TPU](https://arxiv.org/abs/2605.25645)**<br>
-  `Google TPU ecosystem` · `2026` · `Industrial Material · Legacy Import` · `serving` `gpu` `tpu` `vllm`<br>
-  展示 Gemma 从 JAX/Tunix 微调、Orbax checkpoint 转换到 vLLM-TPU serving 的可复现部署路径。
-- **[KEEP](https://www.microsoft.com/en-us/research/publication/keep-a-kv-cache-centric-memory-management-system-for-efficient-embodied-planning/)**<br>
-  `Microsoft Research` · `2026` · `Industrial Material · Legacy Import` · `kv-cache` `memory`<br>
-  Embodied planning 中用 KV-cache-centric memory management 替代原始文本记忆，减少频繁 KV 更新和重算。
+- **[ROCm + vLLM/SGLang/TensorRT-LLM ecosystem](https://rocm.docs.amd.com/)**
+  `AMD` · `2024` · `Industrial Material · Legacy Import`
+  Tags: `amd` `gpu` `kernel` `sglang` `tensorrt-llm`
+  通过 ROCm/HIP、Composable Kernel、Triton 和主流 runtime 支持 MI300/MI350 推理，核心竞争点是大 HBM 容量和开放集群。
+- **[SGLang 商业化](https://github.com/sgl-project/sglang)**
+  `SGLang maintainers / RadixArk` · `2026` · `Industrial Material · Legacy Import`
+  Tags: `sglang`
+  围绕 RadixAttention、KV 复用和结构化生成提供企业化支持，显示 KV-aware runtime 正成为可独立商业化的软件层。
+
+## Evaluation Lens
+
+The collection tracks system behavior beyond isolated token throughput:
+
+| Metric | What to look for |
+|---|---|
+| **TTFT under Drift** | 首 token 延迟在网络抖动、Spot 切换和基础设施漂移下的恶化边界。 |
+| **Generation Stall Rate** | 由验证失败、专家拥塞或 tool-call 挂起造成的生成中断率。 |
+| **Numerical Reproducibility** | 混合精度、量化和大规模部署中的数值稳定性与可复现性。 |
 
 ## Evidence Policy
 
-Venue status and source type are factual metadata. Technical tags summarize the system surface. Internal triage priority is not a publication-quality ranking and is not shown here.
+Venue status and source type are factual metadata. Technical tags summarize the system surface. Legacy imports are marked explicitly. Internal triage priority is a discovery signal, not a publication-quality ranking.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Add facts to JSONL and regenerate the Markdown views; do not edit generated tables directly.

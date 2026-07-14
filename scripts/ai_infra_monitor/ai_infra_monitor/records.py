@@ -470,6 +470,8 @@ def _merge_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             | set(record.get("triage", {}).get("reasons", []))
             | {"merged records sharing canonical identity"}
         )
+        if not current.get("presentation") and record.get("presentation"):
+            current["presentation"] = record["presentation"]
     return list(merged.values())
 
 
@@ -571,6 +573,21 @@ def validate_record_store(path: Path) -> list[RecordValidationError]:
             errors.append(RecordValidationError(path, number, "invalid identity history fields"))
         if not isinstance(record.get("evidence"), dict):
             errors.append(RecordValidationError(path, number, "invalid evidence"))
+        presentation = record.get("presentation")
+        if presentation is not None:
+            if not isinstance(presentation, dict):
+                errors.append(RecordValidationError(path, number, "invalid presentation metadata"))
+            else:
+                if "featured" in presentation and not isinstance(presentation["featured"], bool):
+                    errors.append(RecordValidationError(path, number, "presentation.featured must be boolean"))
+                if "order" in presentation and (
+                    isinstance(presentation["order"], bool)
+                    or not isinstance(presentation["order"], int)
+                    or presentation["order"] < 0
+                ):
+                    errors.append(RecordValidationError(path, number, "presentation.order must be a non-negative integer"))
+                if "blurb" in presentation and not isinstance(presentation["blurb"], str):
+                    errors.append(RecordValidationError(path, number, "presentation.blurb must be a string"))
         if record.get("system_abstraction_primary") not in ABSTRACTIONS:
             errors.append(RecordValidationError(path, number, "invalid system_abstraction_primary"))
         tags = record.get("technical_tags", {})

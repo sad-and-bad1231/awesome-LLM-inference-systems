@@ -25,6 +25,8 @@ Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history
 
 `technical_tags` must contain `phase`, `hardware`, `optimization_layer`, `workload`, `framework_binding`, and `metrics`. The monitor uses these tags for views and for SRE metrics such as `TTFT under Drift`, `Generation Stall Rate`, and `Numerical Reproducibility`.
 
+Records may include an optional `presentation` object with `featured`, non-negative integer `order`, and display-only `blurb` fields. It controls a small set of public entry points and never changes evidence or triage semantics.
+
 ## Initial Migration
 
 Run from `D:\ResearchWork`:
@@ -43,6 +45,7 @@ For a legacy unified JSONL export, run `monitor.py migrate --source <legacy-json
 - Keep `ai-infra-system-abstractions.md` short enough to scan. It should show entry points, coverage counts, SRE metrics, and representative items rather than every row.
 - Keep full detail in `data/papers.jsonl` and `data/industry.jsonl`; the abstraction file is only a navigation index.
 - Keep dropped candidates available for audit, but do not mix them into the active candidate table.
+- Keep `figs/ai-inference-systems-cover.png` and `figs/ai-inference-system-map.png` tracked with their SVG sources; public README links must remain local and stable.
 - Do not add another top-level index file unless it replaces an existing view.
 
 ## Daily Automation
@@ -74,6 +77,7 @@ python scripts/ai_infra_monitor/monitor.py discover --mode weekly
 python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
 python scripts/ai_infra_monitor/monitor.py render
+python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate
 python scripts/ai_infra_monitor/monitor.py report --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit

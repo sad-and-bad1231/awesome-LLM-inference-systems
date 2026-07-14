@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import re
+import struct
 from dataclasses import dataclass
 from pathlib import Path
 
 from .identity import normalize_title
+from .publication import GENERATED_NOTICE
 from .records import validate_record_stores
 
 
@@ -69,6 +71,72 @@ def _duplicates(
     return errors
 
 
+def _public_view_errors(
+    public_root: Path,
+    paper_db_path: Path | None,
+    industry_db_path: Path | None,
+) -> list[ValidationError]:
+    errors: list[ValidationError] = []
+    required_views = (
+        public_root / "README.md",
+        public_root / "papers" / "README.md",
+        public_root / "industry" / "README.md",
+    )
+    for path in required_views:
+        errors.extend(_common_errors(path))
+        if path.exists() and GENERATED_NOTICE not in path.read_text(encoding="utf-8"):
+            errors.append(ValidationError(path, 1, "missing generated-view notice"))
+
+    required_assets = (
+        public_root / "figs" / "ai-inference-systems-cover.png",
+        public_root / "figs" / "ai-inference-system-map.png",
+    )
+    for path in required_assets:
+        if not path.exists():
+            errors.append(ValidationError(path, 0, "required public image does not exist"))
+            continue
+        header = path.read_bytes()
+        if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
+            errors.append(ValidationError(path, 0, "public image is not a valid PNG"))
+            continue
+        width, height = struct.unpack(">II", header[16:24])
+        if width < 640 or height < 200:
+            errors.append(ValidationError(path, 0, "public image dimensions are too small"))
+
+    markdown_link_pattern = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
+    for path in required_views:
+        if not path.exists():
+            continue
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            for target in markdown_link_pattern.findall(line):
+                target = target.split("#", 1)[0].strip()
+                if not target or re.match(r"(?:https?|mailto):", target):
+                    continue
+                target_path = (path.parent / target).resolve()
+                if not target_path.exists():
+                    errors.append(ValidationError(path, number, f"broken local link: {target}"))
+
+    root = public_root / "README.md"
+    if root.exists():
+        text = root.read_text(encoding="utf-8")
+        for section in ("## Overview", "## Contents", "## Coverage", "## Taxonomy", "## System Map", "## Evaluation Lens"):
+            if section not in text:
+                errors.append(ValidationError(root, 1, f"missing public README section: {section}"))
+        if paper_db_path and industry_db_path:
+            from .publication import _public_records
+
+            papers = _public_records(paper_db_path, {"paper"})
+            industry = _public_records(industry_db_path, {"industry", "project"})
+            expected = {
+                "Academic papers": len(papers),
+                "Industry / open-source systems": len(industry),
+            }
+            for label, count in expected.items():
+                if not re.search(rf"\| {re.escape(label)} \| {count} \|", text):
+                    errors.append(ValidationError(root, 1, f"public coverage count mismatch: {label}"))
+    return errors
+
+
 def validate_workspace(
     paper_path: Path,
     industry_path: Path,
@@ -95,9 +163,6 @@ def validate_workspace(
         _duplicates(industry_path, industry_rows, 1, "方案/论文", "industry solution")
     )
     errors.extend(_duplicates(candidate_path, candidate_rows, 4, "Title", "candidate"))
-    if public_root is not None and (public_root / "README.md").exists():
-        for path in (public_root / "README.md", public_root / "papers" / "README.md", public_root / "industry" / "README.md"):
-            errors.extend(_common_errors(path))
-            if path.exists() and "generated from data/papers.jsonl" not in path.read_text(encoding="utf-8"):
-                errors.append(ValidationError(path, 1, "missing generated-view notice"))
+    if public_root is not None:
+        errors.extend(_public_view_errors(public_root, paper_db_path, industry_db_path))
     return errors

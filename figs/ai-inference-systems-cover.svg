@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="500" viewBox="0 0 1600 500" role="img" aria-labelledby="title desc">
+  <title id="title">AI Inference Systems</title>
+  <desc id="desc">A systems diagram showing KV state, prefill and decode, kernels, runtime scheduling, and cluster operations.</desc>
+  <rect width="1600" height="500" fill="#101820"/>
+  <path d="M0 92H1600M0 410H1600" stroke="#2a3b45" stroke-width="2"/>
+  <path d="M86 118H1512" stroke="#28c7c4" stroke-width="3" opacity=".8"/>
+  <text x="86" y="72" fill="#f6c85f" font-family="Arial, sans-serif" font-size="18" letter-spacing="4">SYSTEMS RESEARCH MAP</text>
+  <text x="86" y="160" fill="#f4f7f8" font-family="Arial, sans-serif" font-size="42" font-weight="700" letter-spacing="2">AI INFERENCE SYSTEMS</text>
+  <text x="88" y="194" fill="#9eb4bd" font-family="Arial, sans-serif" font-size="18">Serving state, execution paths, distributed transport, and production control.</text>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="86" y="250" width="300" height="116" rx="8" fill="#182b36" stroke="#28c7c4" stroke-width="2"/>
+    <text x="112" y="282" fill="#28c7c4" font-size="15" letter-spacing="2">STATE</text>
+    <text x="112" y="315" fill="#f4f7f8" font-size="23" font-weight="700">KV CACHE</text>
+    <text x="112" y="344" fill="#9eb4bd" font-size="15">blocks / prefix / offload</text>
+    <circle cx="338" cy="308" r="13" fill="#f6c85f"/><circle cx="338" cy="344" r="13" fill="#28c7c4"/>
+
+    <rect x="430" y="250" width="300" height="116" rx="8" fill="#202a2a" stroke="#f6c85f" stroke-width="2"/>
+    <text x="456" y="282" fill="#f6c85f" font-size="15" letter-spacing="2">FLOW</text>
+    <text x="456" y="315" fill="#f4f7f8" font-size="23" font-weight="700">PREFILL / DECODE</text>
+    <text x="456" y="344" fill="#b9c2aa" font-size="15">PD split / transfer / route</text>
+    <path d="M650 308h44" stroke="#f6c85f" stroke-width="4"/><path d="m690 296 18 12-18 12" fill="none" stroke="#f6c85f" stroke-width="4"/>
+
+    <rect x="774" y="250" width="300" height="116" rx="8" fill="#1d2938" stroke="#4e9ed6" stroke-width="2"/>
+    <text x="800" y="282" fill="#4e9ed6" font-size="15" letter-spacing="2">EXECUTION</text>
+    <text x="800" y="315" fill="#f4f7f8" font-size="23" font-weight="700">KERNELS</text>
+    <text x="800" y="344" fill="#a9c1d4" font-size="15">CUDA / Triton / compiler</text>
+    <path d="M1032 308h20" stroke="#4e9ed6" stroke-width="4"/><path d="m1046 296 18 12-18 12" fill="none" stroke="#4e9ed6" stroke-width="4"/>
+
+    <rect x="1118" y="250" width="396" height="116" rx="8" fill="#25252b" stroke="#e58d5c" stroke-width="2"/>
+    <text x="1144" y="282" fill="#e58d5c" font-size="15" letter-spacing="2">CONTROL PLANE</text>
+    <text x="1144" y="315" fill="#f4f7f8" font-size="23" font-weight="700">RUNTIME + CLUSTER</text>
+    <text x="1144" y="344" fill="#d1b9ad" font-size="15">scheduler / SLO / Kubernetes</text>
+  </g>
+
+  <g fill="none" stroke-width="3">
+    <path d="M150 425h130" stroke="#28c7c4"/><path d="M420 425h130" stroke="#f6c85f"/><path d="M690 425h130" stroke="#4e9ed6"/><path d="M960 425h130" stroke="#e58d5c"/>
+  </g>
+  <g fill="#9eb4bd" font-family="Arial, sans-serif" font-size="14">
+    <text x="86" y="462">MEMORY TOPOLOGY</text><text x="430" y="462">DISAGGREGATED INTERCONNECTS</text><text x="810" y="462">EXECUTION COMPILATION</text><text x="1220" y="462">SRE / FAULT TOLERANCE</text>
+  </g>
+</svg>
