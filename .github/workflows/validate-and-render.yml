@@ -1,0 +1,25 @@
+name: Validate and Render
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run tests
+        run: python -m unittest discover -s tests -p "test_*.py"
+      - name: Render generated views
+        run: |
+          python scripts/ai_infra_monitor/monitor.py render
+          python scripts/ai_infra_monitor/monitor.py publish
+      - name: Validate data and generated files
+        run: python scripts/ai_infra_monitor/monitor.py validate
+      - name: Ensure generated views are committed
+        run: git diff --exit-code -- README.md papers/README.md industry/README.md paper-list.md industrial-llm-inference-systems.md ai-infra-candidates.md ai-infra-system-abstractions.md

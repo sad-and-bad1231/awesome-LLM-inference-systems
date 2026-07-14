@@ -10,7 +10,9 @@ from .fetch import HttpFetcher
 from .identity import candidate_fingerprint, candidate_identity, normalize_title
 from .models import Candidate
 from .parsers import parse_source
+from .records import load_records
 from .state import load_state, save_state
+from .triage import triage_candidate
 
 
 def load_config(path: Path) -> dict:
@@ -34,6 +36,14 @@ def _document_titles(path: Path) -> set[str]:
         title = cells[1] if len(cells) >= 6 else cells[0]
         titles.add(normalize_title(title))
     return titles
+
+
+def _record_titles(path: Path) -> set[str]:
+    return {
+        normalize_title(record.get("title", ""))
+        for record in load_records(path)
+        if record.get("title")
+    }
 
 
 def _matched_topics(text: str, topics: list[dict]) -> tuple[str, ...]:
@@ -65,6 +75,9 @@ class DiscoveryEngine:
         settings = self.config["settings"]
         state = load_state(self.state_path)
         existing_titles = set()
+        for key in ("paper_db_file", "industry_db_file", "candidate_db_file"):
+            if settings.get(key):
+                existing_titles.update(_record_titles(self.root / settings[key]))
         for key in ("paper_file", "industry_file"):
             existing_titles.update(_document_titles(self.root / settings[key]))
 
@@ -116,6 +129,15 @@ class DiscoveryEngine:
                         topics=topics,
                         summary=raw.get("summary", ""),
                         venue=raw.get("venue", ""),
+                    )
+                    candidate = replace(
+                        candidate,
+                        triage=triage_candidate(
+                            candidate,
+                            inspect_repo=bool(settings.get("github_repo_inspection", False)),
+                            repo_timeout_seconds=int(settings.get("github_repo_timeout_seconds", 6)),
+                            core_only=bool(settings.get("core_serving_only", False)),
+                        ).to_dict(),
                     )
                     identity = candidate_identity(candidate)
                     fingerprint = candidate_fingerprint(candidate)
@@ -176,7 +198,15 @@ class DiscoveryEngine:
                 )
 
         limit = int(settings[f"{mode}_limit"])
-        candidates.sort(key=lambda item: (item.tier != "A", item.source_id, item.title))
+        priority_rank = {"high": 0, "normal": 1, "low": 2}
+        candidates.sort(
+            key=lambda item: (
+                priority_rank.get(str(item.triage.get("priority", "normal")), 1),
+                item.tier != "A",
+                item.source_id,
+                item.title,
+            )
+        )
         candidates = candidates[:limit]
         selected_identities = {item.identity for item in candidates}
         for identity, record in state["records"].items():

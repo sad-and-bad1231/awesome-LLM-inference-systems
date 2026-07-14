@@ -18,7 +18,7 @@ class CliTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        for command in ("discover", "validate", "finalize", "status"):
+        for command in ("discover", "migrate", "triage", "queue", "render", "publish", "validate", "finalize", "status"):
             self.assertIn(command, result.stdout)
 
 

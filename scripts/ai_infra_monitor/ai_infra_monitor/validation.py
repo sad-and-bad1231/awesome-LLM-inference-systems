@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .identity import normalize_title
+from .records import validate_record_stores
 
 
 @dataclass(frozen=True)
@@ -69,9 +70,20 @@ def _duplicates(
 
 
 def validate_workspace(
-    paper_path: Path, industry_path: Path, candidate_path: Path
+    paper_path: Path,
+    industry_path: Path,
+    candidate_path: Path,
+    paper_db_path: Path | None = None,
+    industry_db_path: Path | None = None,
+    candidate_db_path: Path | None = None,
+    public_root: Path | None = None,
 ) -> list[ValidationError]:
     errors = []
+    if paper_db_path and industry_db_path and candidate_db_path:
+        errors.extend(
+            ValidationError(error.path, error.line, error.message)
+            for error in validate_record_stores(paper_db_path, industry_db_path, candidate_db_path)
+        )
     for path in (paper_path, industry_path, candidate_path):
         errors.extend(_common_errors(path))
 
@@ -83,4 +95,9 @@ def validate_workspace(
         _duplicates(industry_path, industry_rows, 1, "方案/论文", "industry solution")
     )
     errors.extend(_duplicates(candidate_path, candidate_rows, 4, "Title", "candidate"))
+    if public_root is not None and (public_root / "README.md").exists():
+        for path in (public_root / "README.md", public_root / "papers" / "README.md", public_root / "industry" / "README.md"):
+            errors.extend(_common_errors(path))
+            if path.exists() and "generated from data/papers.jsonl" not in path.read_text(encoding="utf-8"):
+                errors.append(ValidationError(path, 1, "missing generated-view notice"))
     return errors

@@ -4,10 +4,17 @@
     "daily_limit": 8,
     "weekly_limit": 24,
     "request_timeout_seconds": 25,
+    "github_repo_inspection": true,
+    "github_repo_timeout_seconds": 6,
     "user_agent": "ai-infra-monitor/1.0 (local research index)",
     "paper_file": "paper-list.md",
     "industry_file": "industrial-llm-inference-systems.md",
     "candidate_file": "ai-infra-candidates.md",
+    "paper_db_file": "data/papers.jsonl",
+    "industry_db_file": "data/industry.jsonl",
+    "candidate_db_file": "data/candidates.jsonl",
+    "core_serving_only": true,
+    "abstraction_file": "ai-infra-system-abstractions.md",
     "state_file": "ai-infra-state.json",
     "runs_dir": "runs",
     "weekly_reports_dir": "reports/weekly"
@@ -191,6 +198,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "amd-aiter-kernels",
+      "name": "AMD Instinct Inference Vector Kernels (AITER)",
+      "type": "html_index",
+      "url": "https://github.com/ROCm/AITER",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "runtime-serving", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "cerebras-blog",
       "name": "Cerebras Blog",
       "type": "html_index",
@@ -320,6 +337,26 @@
       "tier": "A",
       "kind": "project",
       "topics": ["state-kv"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "kserve-generative-inference",
+      "name": "KServe Generative Inference Stack",
+      "type": "html_index",
+      "url": "https://kserve.github.io/website/docs/model-serving/generative-inference/overview",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "llm-d-releases",
+      "name": "llm-d Kubernetes-native distributed inference",
+      "type": "feed",
+      "url": "https://github.com/llm-d/llm-d/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "network-disaggregation", "state-kv"],
       "modes": ["daily", "weekly"]
     },
     {

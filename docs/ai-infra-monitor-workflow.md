@@ -1,102 +1,111 @@
 # AI Infra Monitor Workflow
 
-This repository has three working documents:
+The JSONL stores are the fact sources. Markdown files are generated views and must not be edited by hand:
 
-- `paper-list.md`: verified papers only.
-- `industrial-llm-inference-systems.md`: verified industrial systems, projects, official reports and engineering material.
-- `ai-infra-candidates.md`: discovery queue and review backlog.
+- `ai-infra-system-abstractions.md`: concise primary navigation view with counts and representative records.
+- `data/papers.jsonl` -> `paper-list.md`: academic paper store and view.
+- `data/industry.jsonl` -> `industrial-llm-inference-systems.md`: industry/project store and view.
+- `data/candidates.jsonl` -> `ai-infra-candidates.md`: discovery staging and audit view.
+- `data/papers.jsonl` + `data/industry.jsonl` -> `README.md`, `papers/README.md`, `industry/README.md`: public Awesome-style views.
 
-The default workflow is conservative: discover broadly, confirm in small batches, and write only verified items to the main documents.
+The retired long-COT side list is no longer part of the active workflow.
 
-## Source Strategy
+## Schema Policy
 
-- Daily sources: arXiv queries, stable enterprise RSS feeds and core project releases.
-- Weekly sources: top-conference indexes, OpenReview/DBLP pages and enterprise HTML indexes.
-- Main-document promotion still requires primary-source verification; source discovery alone is not evidence.
-- New papers in `paper-list.md` must be inserted into the existing topic category; do not create date-based append sections.
+Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history`, `evidence`, `record_type`, `title`, `venue_or_channel`, `year`, `orgs`, `summary`, `source_tier`, `primary_url`, `artifact_url`, `source_ids`, `status`, `system_abstraction_primary`, `system_abstraction_secondary`, `technical_tags`, and `triage`.
 
-## Paper Priority
+`system_abstraction_primary` must be one of:
 
-`paper-list.md` is a cumulative high-quality index, not a short reading list. Do not remove existing entries only because they are lower priority.
+- `Memory Topology & Virtualization`
+- `Disaggregated Interconnects`
+- `State Compression & Signal Coding`
+- `Execution Compilation & Kernel Fusion`
+- `Program-Aware Scheduling`
+- `SRE/Fault-Tolerance/Sparing`
 
-- P0: CCF A systems/architecture/network/database/security conferences or widely recognized ML venues, with a clear LLM inference systems contribution.
-- P0: ICLR, ICML, NeurIPS, MLSys and similar high-signal ML systems papers from 2025 or 2026 that directly affect inference execution, runtime, state, compression, kernels, evaluation, or industrial serving.
-- P1: strong 2025 papers and 2026 new papers from arXiv, ARR, OpenReview, official company research pages, or top-company technical reports when the mechanism is concrete and inference-relevant.
-- P2: useful background, adjacent infrastructure, training-cluster, vector-database, privacy, or hardware papers. Keep them if already present, but do not prioritize them over P0/P1.
+`technical_tags` must contain `phase`, `hardware`, `optimization_layer`, `workload`, `framework_binding`, and `metrics`. The monitor uses these tags for views and for SRE metrics such as `TTFT under Drift`, `Generation Stall Rate`, and `Numerical Reproducibility`.
 
-## Commands
+## Initial Migration
 
 Run from `D:\ResearchWork`:
 
 ```powershell
 python scripts/ai_infra_monitor/monitor.py init
-python scripts/ai_infra_monitor/monitor.py discover --mode daily
-python scripts/ai_infra_monitor/monitor.py discover --mode weekly
-python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
-python scripts/ai_infra_monitor/monitor.py report --run-id <run-id>
+python scripts/ai_infra_monitor/monitor.py render
+python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate
-python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id>
 ```
 
-## Daily Increment
+For a legacy unified JSONL export, run `monitor.py migrate --source <legacy-jsonl>` once. After migration, agents should append or update the matching JSONL store only, then regenerate Markdown with `render`. Papers and industry solutions must not be merged into one reading file.
 
-Goal: collect signals, not rewrite the index.
+## Display Policy
 
-1. Run `init`.
-2. Run `discover --mode daily`.
-3. Add useful P0/P1/P2 candidates to `ai-infra-candidates.md`, marking likely P0/P1 in the status note when obvious.
-4. Do not update `paper-list.md` or `industrial-llm-inference-systems.md` unless the change is a trivial correction.
-5. Run `validate`.
-6. Run `finalize --run-id <run-id>`.
+- Keep `ai-infra-system-abstractions.md` short enough to scan. It should show entry points, coverage counts, SRE metrics, and representative items rather than every row.
+- Keep full detail in `data/papers.jsonl` and `data/industry.jsonl`; the abstraction file is only a navigation index.
+- Keep dropped candidates available for audit, but do not mix them into the active candidate table.
+- Do not add another top-level index file unless it replaces an existing view.
 
-Daily automation runs Sunday through Friday at 22:00 Beijing time. The daily cap is 8 candidates.
+## Daily Automation
 
-## Weekly Confirmation
+Goal: collect signals and queue high/normal-priority candidates without hand-editing generated Markdown.
 
-Goal: add verified high-quality papers and keep the queue clean.
+Model policy: use GPT-5.6 Luna with medium reasoning. Daily work is mostly scripted discovery, triage, render, and validation, so the cheapest GPT-5.6 model is the default.
 
-1. Run `init`.
-2. Run `discover --mode weekly`.
-3. Review the candidate pool and new manifest together.
-4. Promote every verified P0/P1 paper found in the reviewed batch.
-5. Keep P2 items in the candidate pool unless they are already verified and clearly useful to the index.
-6. Drop obvious duplicates, off-topic records and weak sources from the candidate pool.
-7. Write a weekly report if there are meaningful status changes.
-8. Run `validate`.
-9. Run `finalize --run-id <run-id>`.
+```powershell
+python scripts/ai_infra_monitor/monitor.py discover --mode daily
+python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
+python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py render
+python scripts/ai_infra_monitor/monitor.py publish
+python scripts/ai_infra_monitor/monitor.py validate
+python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit
+```
 
-Weekly automation runs Saturday at 22:00 Beijing time. The weekly cap is 24 candidates.
+Daily automation runs Sunday through Friday at 22:00 Beijing time. The daily cap is configured by `settings.daily_limit`; candidates are sorted by triage priority before the cap is applied.
 
-## Quality Gate
+## Weekly Automation
 
-Before a main-document edit, confirm:
+Goal: batch confirmation, reporting, and optional commit.
 
-- Primary source is available: official proceedings, paper PDF, official docs, official repository, or company technical post.
-- Title and venue/status are copied from the source, not guessed.
-- Main author organizations come from the paper or official page. If absent, write `作者公开稿未列单位`.
-- The summary is one sentence and describes the mechanism, not marketing claims.
-- The item fits one of the current AI infra themes: runtime, long context/state, compression/cost, kernels/compiler, disaggregation/network, MoE, agent/RAG, multimodal serving, hardware/edge, reliability/evaluation.
-- The item is not already covered in either main document.
+Model policy: use GPT-5.6 Terra with high reasoning. Weekly work includes more judgment-heavy confirmation and reporting, but still should not default to Sol unless explicitly requested for a deep review.
 
-If any point is uncertain, keep the item in `ai-infra-candidates.md`.
+```powershell
+python scripts/ai_infra_monitor/monitor.py discover --mode weekly
+python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
+python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py render
+python scripts/ai_infra_monitor/monitor.py validate
+python scripts/ai_infra_monitor/monitor.py report --run-id <run-id>
+python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit
+```
 
-## Change Size
+Weekly automation runs Saturday at 22:00 Beijing time. Omit `--no-commit` only when a local commit is explicitly intended.
 
-- Daily: candidate-pool updates only by default.
-- Weekly: promote verified P0/P1 papers from the reviewed batch; keep lower-confidence items queued.
-- Main documents: prefer append-only additions and clear status corrections.
-- `paper-list.md`: keep category sections stable and add rows under the best matching category.
-- Deletions: only duplicate, off-topic, broken-source, or superseded entries.
+## Triage Pipeline
 
-## Automation Boundaries
+The first version is deterministic and does not call an external LLM API.
 
-- Automations may create local Git commits.
-- Automations must never push.
-- Automations must not modify `long-cot-kv-retention-literature.md`.
-- Runtime state, run manifests, reports and temporary files are local unless intentionally promoted.
+- Metadata rules downrank algorithmic-only simulation/proof records when no hardware, kernel, runtime, serving, or framework signal appears.
+- GitHub repo inspection records language and root-path signals where available. If the API is unavailable or rate-limited, the candidate is kept and `triage.repo_signals.unavailable` is written.
+- Ecosystem bindings promote records mentioning vLLM, SGLang, TensorRT-LLM, KServe, llm-d, LMCache, Kubernetes, or Docker.
+- Low-priority records are not deleted by default; queueing only writes high/normal priority non-reject records into JSONL.
+- `triage.llm_review` is reserved for a future strict expert review step.
+
+## Finalize Gate
+
+`finalize` runs in this order:
+
+1. Validate JSONL schema, duplicates, enums, URLs, and candidate/verified conflicts.
+2. Render all internal Markdown views from JSONL.
+3. Render the public Awesome-style README views.
+4. Validate generated Markdown shape, links, and duplicate rows.
+5. Update run state.
+6. Optionally commit local changes.
+
+Automations must never push. Runtime state, run manifests, reports, and temporary files remain local unless intentionally committed.
 
 ## Recovery
 
-- Network errors stay in the run manifest. Re-run discovery later; do not delete state to hide the error.
-- If validation fails, fix the reported rows and rerun `validate`.
-- If a run should not be committed, use `finalize --run-id <run-id> --no-commit`.
+- Network and GitHub API errors stay in the run manifest or `triage.repo_signals`; do not delete state to hide the error.
+- If `validate` fails, fix the relevant JSONL store or renderer and rerun `render` plus `validate`.
+- Do not manually patch generated Markdown except as a temporary debugging step; the next render will overwrite it.

@@ -47,6 +47,24 @@ def candidate_identity(candidate: Candidate) -> str:
     return f"title:{normalize_title(candidate.title)}"
 
 
+def record_identity(title: str, url: str = "", source_ids: list[str] | None = None) -> str:
+    """Return a stable cross-store identity for a paper or project record."""
+    for source_id in source_ids or []:
+        normalized = str(source_id).strip().lower()
+        if normalized.startswith(("arxiv:", "doi:", "openreview:")):
+            return normalized
+    arxiv = _ARXIV_RE.search(url)
+    if arxiv:
+        return f"arxiv:{arxiv.group('id').lower()}"
+    doi = _DOI_RE.search(url)
+    if doi:
+        return f"doi:{doi.group(1).rstrip('.').lower()}"
+    normalized_url = canonical_url(url)
+    if normalized_url:
+        return f"url:{normalized_url}"
+    return f"title:{normalize_title(title)}"
+
+
 def candidate_fingerprint(candidate: Candidate) -> str:
     payload = {
         "title": candidate.title.strip(),

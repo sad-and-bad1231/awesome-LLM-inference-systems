@@ -20,6 +20,7 @@ class Candidate:
     identity: str = ""
     fingerprint: str = ""
     update: bool = False
+    triage: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)

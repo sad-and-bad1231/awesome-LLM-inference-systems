@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: "Awesome AI Inference Systems"
+message: "If this collection supports your research, please cite the repository."
+type: dataset
+version: 0.1.0
+date-released: 2026-07-14
+abstract: "An evidence-aware collection of academic papers and industrial systems for LLM inference serving."
+keywords:
+  - LLM inference
+  - LLM serving
+  - AI infrastructure
+  - KV cache
+  - disaggregated inference

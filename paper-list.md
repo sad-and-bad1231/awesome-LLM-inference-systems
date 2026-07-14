@@ -1,16 +1,14 @@
 # Paper List（按类别整理；会议栏为最新发表/审稿状态）
 
-核验口径：正式录用状态优先采用会议官方 program/proceedings；预印本采用 arXiv 当前版本；无法从公开稿可靠确认的作者单位明确标注为“官方目录/公开稿未列单位”，不根据作者姓名猜测。
+<!-- generated from data/papers.jsonl, data/industry.jsonl, or data/candidates.jsonl; do not edit directly -->
 
-分类口径：每篇论文按主要系统贡献归入一个类别；跨领域论文优先放入最能解释其核心机制的类别。
+核验口径：结构化事实源为 `data/papers.jsonl`；本文件由脚本生成，请勿直接编辑。
 
-## 当前覆盖概览（2026-07-05 整理）
-
-本表是已确认条目的主题索引，不是每日候选池；新增论文应先进入 `ai-infra-candidates.md`，经主源核验后再归入下列稳定分类。工业系统、项目发布和企业工程材料另见 `industrial-llm-inference-systems.md`。
+## 当前覆盖概览
 
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
-| Runtime、调度与服务架构 | 60 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
+| Runtime、调度与服务架构 | 59 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
 | 分离式推理、通信与 KV 传输 | 74 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 96 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
 | KV Cache 压缩、量化与淘汰 | 65 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
@@ -20,6 +18,17 @@
 | Agent、RAG、多模态与应用级 Serving | 45 | agent workflow、RAG pipeline、多模态 stage graph、程序级调度 |
 | Workload、评测、可靠性与方法论 | 40 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
 | AI 集群、向量数据库、安全与周边基础设施 | 51 | GPU 集群、向量数据库、TEE/FHE、侧信道、spot/geo routing |
+
+## Evidence Layers
+
+事实层与评价层分开：venue status/source type 来自来源材料；triage priority/verdict 只表示筛选意见，不等同于发表等级。
+
+| Venue Status | Count |
+|---|---:|
+| formal_conference | 300 |
+| poster_or_workshop | 43 |
+| preprint | 172 |
+| unclassified | 84 |
 
 ## Runtime、调度与服务架构
 
@@ -41,7 +50,7 @@
 | Niyama: Breaking the Silos of LLM Inference Serving | arXiv 预印本, 2025 | Microsoft Research | Niyama 以细粒度 QoS 分类、动态 chunking 和选择性请求降级在共享集群中混部交互式与批处理负载。 |
 | LeMix: Unified Scheduling for LLM Training and Inference on Multi-GPU Systems | arXiv 预印本, 2025 | University of California, Riverside 等 | LeMix 联合调度持续训练与在线推理，通过预测干扰和动态资源分配利用空闲 GPU 而不牺牲 serving 响应性。 |
 | Cascadia: A Cascade Serving System for Large Language Models | ICLR 2026 Poster | University of Cambridge; HKUST | Cascadia 联合优化大小模型 cascade 的查询路由、资源分配和并行部署，在回答质量约束下改善延迟与成本。 |
-| Prism: Unleashing GPU Sharing for Cost-Efficient Multi-LLM Serving | arXiv 预印本, 2025 | UCLA; UC Berkeley; Stanford University | Prism 用跨模型虚拟内存协调和两级调度动态调整 GPU 时空共享，以应对长尾模型流行度和流量波动。 |
+| Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning | OSDI 2026 | UCLA; UC Berkeley; Harvard; NVIDIA; ByteDance 等 | Chimera 用 GPU memory ballooning 在多个 LLM 服务间动态伸缩显存占用，降低长尾模型共置时的成本。 |
 | HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds | NSDI 2026 | Peking University; Alibaba Group | HydraServe 主动分发模型、重叠 worker 冷启动阶段并规避网络争用，以 pipeline consolidation 降低 serverless LLM 启动资源。 |
 | JITServe: SLO-aware LLM Serving with Imprecise Request Information | NSDI 2026 | UIUC; Google; Cisco Research | JITServe 在输出长度和调用依赖未知时逐步收紧估计，并只分配满足 SLO 所需的 just-in-time serving bandwidth。 |
 | FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees | NSDI 2026 | Carnegie Mellon University; Purdue University; Anthropic; Mistral AI; AWS | FlexLLM 在 token 粒度交错在线推理和 PEFT 微调，并用静态图裁剪与 hybrid scheduler 保持 inference SLO。 |
@@ -82,7 +91,6 @@
 | SchedFlow: Transparent and Flexible Intra-Device Parallelism via Programmable Operator Scheduling | MLSys 2026 | MLSys 2026 官方页面未列单位 | SchedFlow 将逻辑模型定义与物理执行 schedule 解耦，用可编程 operator scheduling 在 vLLM、SGLang 和 HuggingFace Transformer 中透明接入设备内并行。 |
 | Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration | OSDI 2026 | Sun Yat-Sen University | 该工作用跨实例编排减少 commodity GPU 集群中的重复数据搬运和状态开销，提高低成本 GPU 上的 serving 效率。 |
 | Revisiting Pipeline Parallelism for LLM Serving | OSDI 2026 | Korea University | 该工作重新分析 pipeline parallelism 在 LLM serving 中的阶段空泡、batch 形成和延迟权衡，为在线推理选择更稳健的流水配置。 |
-| Chimera: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning | OSDI 2026 | UCLA; UC Berkeley; Harvard; NVIDIA; ByteDance 等 | Chimera 用 GPU memory ballooning 在多个 LLM 服务间动态伸缩显存占用，降低长尾模型共置时的成本。 |
 | Simple is Better: Multiplication May Be All You Need for LLM Request Scheduling | OSDI 2026 | Shanghai Jiao Tong University; Alibaba Group | 该工作用更简单的乘法式请求调度指标协调排队、prefill/decode 负载和 KV 压力，避免过度复杂的在线策略。 |
 | Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing | OSDI 2026 | Sun Yat-sen University; HKUST; Pengcheng Laboratory; Qilu University of Technology | Kairox 在线平衡 GPU 与 CPU 上的 neuron 执行，把部分稀疏计算迁移到 CPU 以扩大本地和混合平台的可服务模型规模。 |
 
@@ -162,7 +170,7 @@
 | KVComm: Enabling Efficient LLM Communication through Selective KV Sharing | ICLR 2026 Poster | OpenReview 公开稿未列单位 | KVComm 让多个 LLM 通过选择性共享关键 KV pairs 进行通信，减少多智能体系统中自然语言转述带来的推理成本和信息损失。 |
 | Cache-to-Cache: Direct Semantic Communication Between Large Language Models | ICLR 2026 Poster | OpenReview 公开稿未列单位 | Cache-to-Cache 让 LLM 之间直接传递语义 cache 状态，减少多模型协作时反复自然语言编码和解码造成的通信开销。 |
 | See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用 dense latent state 在异构 agent 之间传递视觉和意图信息，减少多智能体协作中自然语言转写造成的信息损失和额外推理开销。 |
-| LLMFabric: Unifying Decentralized HPC Clusters for Heterogeneous LLM Serving | OSDI 2026 | ETH Zurich; University of Cambridge; EPFL; MIT; HKUST | LLMFabric 把去中心化 HPC 集群统一成异构 LLM serving 资源池，在不同网络和 GPU 条件下协调模型部署与请求路由。 |
+| OpenTela | OSDI 2026 | ETH Zurich; University of Cambridge; EPFL; MIT; HKUST | LLMFabric 把去中心化 HPC 集群统一成异构 LLM serving 资源池，在不同网络和 GPU 条件下协调模型部署与请求路由。 |
 | UEP: Portable Expert-Parallel Communication | OSDI 2026 | UC Berkeley; UC Davis; University of Wisconsin-Madison; AMD; Inferact; Tsinghua University; AWS; Broadcom | UEP 提供可移植 expert-parallel 通信层，降低 MoE serving 中专家并行对特定 collective 和网络栈的绑定。 |
 
 ## 长上下文、KV 状态与外部记忆
@@ -243,7 +251,7 @@
 | HERALD: High-Throughput Block Diffusion LLM Serving via CPU-GPU Cooperative KV Cache Retrieval | arXiv 预印本, 2026 | Seoul National University; University of California, Berkeley | HERALD 利用 block diffusion 每个 block 内 top-k KV 选择可复用的性质，只选一次并与 denoising 重叠，以 CPU-GPU 协同稀疏召回 host DRAM 中的 KV。 |
 | Recency/Frequency Adaptive KV Caching for Large Language Model Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作把 recency 和 frequency 信号合并为 KV cache 淘汰/保留策略，在多轮和长上下文 serving 中减少低价值 cache 占用。 |
 | CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution | DAC 2026 | KAIST | CoX-MoE 用合并式 expert 执行、静态 expert 分层与选择性 attention offload 协调 CPU-GPU 协作，避免 micro-batch 导致的 MoE 推理低效。 |
-| Contextra: Hierarchical Context Caching for Long Context Language Model Serving | OSDI 2026 | Stanford University; Shanghai Jiao Tong University; University of Colorado Boulder; Carnegie Mellon University; NVIDIA; University of Michigan | Contextra 构建分层 context cache，在长上下文服务中按复用粒度和存储层级管理 KV 状态，减少重复 prefill 和远端加载。 |
+| Strata | OSDI 2026 | Stanford University; Shanghai Jiao Tong University; University of Colorado Boulder; Carnegie Mellon University; NVIDIA; University of Michigan | Contextra 构建分层 context cache，在长上下文服务中按复用粒度和存储层级管理 KV 状态，减少重复 prefill 和远端加载。 |
 | ECHO: Efficient KV Cache Offloading with Lossless Prefetching for Serving Native Sparse Attention LLMs | OSDI 2026 | Shanghai Jiao Tong University; Huawei | ECHO 面向原生稀疏注意力模型做无损 KV 预取和 offload，使长上下文解码只把将被访问的 cache 及时拉回。 |
 | No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs | OSDI 2026 | University of Virginia | 该工作用 zero-copy KV offloading 移除长上下文服务中的中间缓冲和额外拷贝，降低 GPU 与主机存储间的 cache 搬运瓶颈。 |
 | Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token | MLSys 2026 | OpenReview 公开稿未列单位 | Stream2LLM 将上下文流式加载与 prefill 计算重叠，把长 prompt 的数据到达时间隐藏到首 token 前的执行流水中。 |

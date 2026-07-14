@@ -20,9 +20,21 @@ from scripts.ai_infra_monitor.ai_infra_monitor.git_ops import (  # noqa: E402
 )
 from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.output import (  # noqa: E402
-    append_candidates,
+    append_candidate_records,
     load_manifest,
     write_weekly_report,
+)
+from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository  # noqa: E402
+from scripts.ai_infra_monitor.ai_infra_monitor.records import (  # noqa: E402
+    append_records,
+    candidate_to_record,
+    migrate_jsonl_to_split_stores,
+    promote_candidates,
+    render_markdown_views,
+    validate_record_stores,
+    load_records,
+    normalize_record,
+    write_records,
 )
 from scripts.ai_infra_monitor.ai_infra_monitor.state import (  # noqa: E402
     load_state,
@@ -31,6 +43,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.state import (  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.validation import (  # noqa: E402
     validate_workspace,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.triage import triage_candidate  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -38,7 +51,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def paths(root: Path, config: dict) -> dict[str, Path]:
     settings = config["settings"]
-    return {
+    defaults = {
+        "paper_db_file": "data/papers.jsonl",
+        "industry_db_file": "data/industry.jsonl",
+        "candidate_db_file": "data/candidates.jsonl",
+        "abstraction_file": "ai-infra-system-abstractions.md",
+    }
+    resolved = {
         key: root / settings[key]
         for key in (
             "paper_file",
@@ -49,6 +68,9 @@ def paths(root: Path, config: dict) -> dict[str, Path]:
             "weekly_reports_dir",
         )
     }
+    for key, value in defaults.items():
+        resolved[key] = root / settings.get(key, value)
+    return resolved
 
 
 def manifest_path(root: Path, config: dict, run_id: str) -> Path:
@@ -60,6 +82,8 @@ def command_init(args) -> int:
     resolved = paths(args.root, config)
     resolved["runs_dir"].mkdir(parents=True, exist_ok=True)
     resolved["weekly_reports_dir"].mkdir(parents=True, exist_ok=True)
+    for key in ("paper_db_file", "industry_db_file", "candidate_db_file"):
+        resolved[key].parent.mkdir(parents=True, exist_ok=True)
     if not resolved["state_file"].exists():
         example = args.root / "ai-infra-state.example.json"
         if example.exists():
@@ -74,7 +98,13 @@ def command_init(args) -> int:
 
 
 def command_discover(args) -> int:
+    config = load_config(args.config)
     manifest = DiscoveryEngine(args.root, args.config).discover(args.mode)
+    candidate_path = paths(args.root, config)["candidate_db_file"]
+    append_records(
+        candidate_path,
+        [candidate_to_record(Candidate.from_dict(item)) for item in manifest.get("candidates", [])],
+    )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0
 
@@ -86,9 +116,104 @@ def command_queue(args) -> int:
         Candidate.from_dict(item)
         for item in manifest["candidates"]
         if item.get("tier") in set(args.tiers)
+        and str(item.get("triage", {}).get("priority", "normal")) in {"high", "normal"}
+        and str(item.get("triage", {}).get("verdict", "keep")) != "reject"
     ]
-    count = append_candidates(paths(args.root, config)["candidate_file"], selected)
-    print(json.dumps({"queued": count, "run_id": args.run_id}))
+    resolved = paths(args.root, config)
+    counts = promote_candidates(resolved["paper_db_file"], resolved["industry_db_file"], selected)
+    candidate_records = load_records(resolved["candidate_db_file"])
+    promoted_ids = {candidate_to_record(item)["canonical_id"] for item in selected}
+    for record in candidate_records:
+        if record.get("canonical_id") in promoted_ids:
+            record["status"] = "promote"
+            record = normalize_record(record)
+    write_records(resolved["candidate_db_file"], candidate_records)
+    print(json.dumps({"queued": sum(counts.values()), "counts": counts, "run_id": args.run_id}))
+    return 0
+
+
+def command_triage(args) -> int:
+    config = load_config(args.config)
+    path = manifest_path(args.root, config, args.run_id)
+    manifest = load_manifest(path)
+    candidates = []
+    for item in manifest.get("candidates", []):
+        candidate = Candidate.from_dict(item)
+        item["triage"] = triage_candidate(
+            candidate,
+            inspect_repo=bool(config["settings"].get("github_repo_inspection", False)),
+            repo_timeout_seconds=int(config["settings"].get("github_repo_timeout_seconds", 6)),
+        ).to_dict()
+        candidates.append(item)
+    priority_rank = {"high": 0, "normal": 1, "low": 2}
+    manifest["candidates"] = sorted(
+        candidates,
+        key=lambda item: (
+            priority_rank.get(str(item.get("triage", {}).get("priority", "normal")), 1),
+            item.get("tier") != "A",
+            item.get("source_id", ""),
+            item.get("title", ""),
+        ),
+    )
+    path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    candidate_records = load_records(paths(args.root, config)["candidate_db_file"])
+    by_identity = {candidate_to_record(Candidate.from_dict(item))["canonical_id"]: item for item in manifest.get("candidates", [])}
+    for record in candidate_records:
+        item = by_identity.get(record.get("canonical_id"))
+        if item:
+            record["triage"] = item["triage"]
+    write_records(paths(args.root, config)["candidate_db_file"], candidate_records)
+    print(json.dumps({"triaged": len(candidates), "run_id": args.run_id}))
+    return 0
+
+
+def command_migrate(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    source = args.source.resolve()
+    if not source.exists():
+        print(f"migration source does not exist: {source}", file=sys.stderr)
+        return 1
+    counts = migrate_jsonl_to_split_stores(
+        source,
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        resolved["candidate_db_file"],
+    )
+    print(json.dumps({"migrated": counts, "source": str(source)}))
+    return 0
+
+
+def command_render(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    render_markdown_views(
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        resolved["candidate_db_file"],
+        resolved["paper_file"],
+        resolved["industry_file"],
+        resolved["candidate_file"],
+        resolved["abstraction_file"],
+    )
+    render_public_repository(
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        args.root,
+    )
+    print(json.dumps({"rendered": True, "paper_db_file": str(resolved["paper_db_file"]), "industry_db_file": str(resolved["industry_db_file"])}))
+    return 0
+
+
+def command_publish(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    render_public_repository(
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        args.root,
+    )
+    print(json.dumps({"published_views": ["README.md", "papers/README.md", "industry/README.md"]}))
     return 0
 
 
@@ -108,7 +233,13 @@ def command_validate(args) -> int:
     config = load_config(args.config)
     resolved = paths(args.root, config)
     errors = validate_workspace(
-        resolved["paper_file"], resolved["industry_file"], resolved["candidate_file"]
+        resolved["paper_file"],
+        resolved["industry_file"],
+        resolved["candidate_file"],
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        resolved["candidate_db_file"],
+        args.root,
     )
     if errors:
         for error in errors:
@@ -119,10 +250,31 @@ def command_validate(args) -> int:
 
 
 def command_finalize(args) -> int:
-    if command_validate(args):
-        return 1
     config = load_config(args.config)
     resolved = paths(args.root, config)
+    jsonl_errors = validate_record_stores(
+        resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
+    )
+    if jsonl_errors:
+        for error in jsonl_errors:
+            print(f"{error.path}:{error.line}: {error.message}", file=sys.stderr)
+        return 1
+    render_markdown_views(
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        resolved["candidate_db_file"],
+        resolved["paper_file"],
+        resolved["industry_file"],
+        resolved["candidate_file"],
+        resolved["abstraction_file"],
+    )
+    render_public_repository(
+        resolved["paper_db_file"],
+        resolved["industry_db_file"],
+        args.root,
+    )
+    if command_validate(args):
+        return 1
     manifest = load_manifest(manifest_path(args.root, config, args.run_id))
     state = load_state(resolved["state_file"])
     for item in manifest.get("candidates", []):
@@ -140,9 +292,16 @@ def command_finalize(args) -> int:
             print("not a Git repository", file=sys.stderr)
             return 1
         tracked = [
+            resolved["paper_db_file"],
+            resolved["industry_db_file"],
+            resolved["candidate_db_file"],
+            resolved["abstraction_file"],
             resolved["paper_file"],
             resolved["industry_file"],
             resolved["candidate_file"],
+            args.root / "README.md",
+            args.root / "papers" / "README.md",
+            args.root / "industry" / "README.md",
         ]
         report_dir = resolved["weekly_reports_dir"]
         if report_dir.exists():
@@ -196,6 +355,16 @@ def build_parser() -> argparse.ArgumentParser:
     discover = subparsers.add_parser("discover")
     discover.add_argument("--mode", choices=("daily", "weekly"), required=True)
     discover.set_defaults(func=command_discover)
+    migrate = subparsers.add_parser("migrate")
+    migrate.add_argument("--source", type=Path, required=True, help="legacy unified JSONL source to split")
+    migrate.set_defaults(func=command_migrate)
+    render = subparsers.add_parser("render")
+    render.set_defaults(func=command_render)
+    publish = subparsers.add_parser("publish")
+    publish.set_defaults(func=command_publish)
+    triage = subparsers.add_parser("triage")
+    triage.add_argument("--run-id", required=True)
+    triage.set_defaults(func=command_triage)
     queue = subparsers.add_parser("queue")
     queue.add_argument("--run-id", required=True)
     queue.add_argument("--tiers", nargs="+", default=["B", "C"])

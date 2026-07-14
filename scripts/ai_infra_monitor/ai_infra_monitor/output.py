@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .identity import canonical_url, normalize_title
 from .models import Candidate
+from .records import append_records, candidate_to_record
 
 
 def _escape(value: str) -> str:
@@ -63,6 +64,16 @@ def append_candidates(path: Path, candidates: list[Candidate]) -> int:
                 stream.write("\n")
             stream.write("\n".join(rows) + "\n")
     return len(rows)
+
+
+def append_candidate_records(path: Path, candidates: list[Candidate]) -> int:
+    selected = [
+        item
+        for item in candidates
+        if str(item.triage.get("priority", "normal")) in {"high", "normal"}
+        and str(item.triage.get("verdict", "keep")) != "reject"
+    ]
+    return append_records(path, [candidate_to_record(item) for item in selected])
 
 
 def write_weekly_report(run_manifest: dict, path: Path) -> None:
