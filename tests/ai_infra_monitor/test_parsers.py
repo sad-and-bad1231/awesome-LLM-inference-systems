@@ -6,6 +6,8 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_feed,
     parse_github_releases,
     parse_html_bold_program,
+    parse_html_author_paragraph_program,
+    parse_html_classed_title_program,
     parse_html_heading_program,
     parse_html_embedded_full_papers,
     parse_html_paragraph_anchor_program,
@@ -114,6 +116,18 @@ class ParserTests(unittest.TestCase):
         body = br'<script>\u003cp\u003e[fp] \u003ci\u003eSRAG: A Lightweight RAG Serving System\u003c/i\u003e\u003cbr /\u003eAuthors\u003c/p\u003e</script>'
         items = parse_html_embedded_full_papers(body, "https://conference.example/accepted")
         self.assertEqual(items[0]["title"], "SRAG: A Lightweight RAG Serving System")
+
+    def test_parse_html_author_paragraph_program_strips_author_prefix(self):
+        body = b"<div><p>Jane Doe and John Smith. Efficient LLM Serving at the Edge</p></div>"
+        items = parse_html_author_paragraph_program(body, "https://conference.example/accepted/")
+        self.assertEqual(items[0]["title"], "Efficient LLM Serving at the Edge")
+
+    def test_parse_html_classed_title_program(self):
+        body = b'<li><span class="paper-title">Paged KV Cache Serving</span><span class="paper-authors">A. Author</span></li>'
+        items = parse_html_classed_title_program(
+            body, "https://conference.example/accepted/", "paper-title"
+        )
+        self.assertEqual(items[0]["title"], "Paged KV Cache Serving")
 
 
 if __name__ == "__main__":

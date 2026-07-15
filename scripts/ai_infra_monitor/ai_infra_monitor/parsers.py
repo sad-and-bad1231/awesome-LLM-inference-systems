@@ -281,6 +281,95 @@ class _ParagraphAnchorParser(HTMLParser):
             self.stack.pop()
 
 
+class _AuthorParagraphProgramParser(HTMLParser):
+    """Extract titles printed as author citations inside paragraph blocks."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.capture = False
+        self.capture_depth = 0
+        self.capture_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        if tag.lower() == "p":
+            self.capture = True
+            self.capture_depth = self.depth
+            self.capture_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture:
+            self.capture_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() == "p" and self.capture and self.depth == self.capture_depth:
+            text = " ".join("".join(self.capture_text).split()).lstrip()
+            if text.startswith("<br>"):
+                text = text[4:].lstrip()
+            if ". " in text:
+                title = text.rsplit(". ", 1)[-1].strip()
+                if title and title not in {item["title"] for item in self.items}:
+                    self.items.append(
+                        {
+                            "title": title,
+                            "url": f"{self.base_url}#{_program_slug(title)}",
+                            "published": "",
+                            "summary": "",
+                        }
+                    )
+            self.capture = False
+            self.capture_depth = 0
+            self.capture_text = []
+        self.depth = max(0, self.depth - 1)
+
+
+class _ClassedTitleParser(HTMLParser):
+    """Extract titles from elements carrying a configured CSS class."""
+
+    def __init__(self, base_url: str, class_name: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.class_name = class_name
+        self.depth = 0
+        self.capture = False
+        self.capture_depth = 0
+        self.capture_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        classes = set((values.get("class") or "").split())
+        if self.class_name in classes:
+            self.capture = True
+            self.capture_depth = self.depth
+            self.capture_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture:
+            self.capture_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.capture and self.depth == self.capture_depth:
+            title = " ".join("".join(self.capture_text).split())
+            if title and title not in {item["title"] for item in self.items}:
+                self.items.append(
+                    {
+                        "title": title,
+                        "url": f"{self.base_url}#{_program_slug(title)}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            self.capture = False
+            self.capture_depth = 0
+            self.capture_text = []
+        self.depth = max(0, self.depth - 1)
+
+
 def _program_slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")[:96] or "paper"
 
@@ -319,6 +408,18 @@ def parse_html_heading_program(body: bytes, base_url: str) -> list[dict[str, str
 
 def parse_html_paragraph_anchor_program(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _ParagraphAnchorParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_author_paragraph_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _AuthorParagraphProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_classed_title_program(body: bytes, base_url: str, class_name: str) -> list[dict[str, str]]:
+    parser = _ClassedTitleParser(base_url, class_name)
     parser.feed(body.decode("utf-8", errors="replace"))
     return parser.items
 
@@ -413,6 +514,10 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_heading_program(body, source["url"])
     if source_type == "html_paragraph_anchor_program":
         return parse_html_paragraph_anchor_program(body, source["url"])
+    if source_type == "html_author_paragraph_program":
+        return parse_html_author_paragraph_program(body, source["url"])
+    if source_type == "html_classed_title_program":
+        return parse_html_classed_title_program(body, source["url"], source.get("title_class", "paper-title"))
     if source_type == "html_embedded_full_papers":
         return parse_html_embedded_full_papers(body, source["url"])
     if source_type == "github_releases":

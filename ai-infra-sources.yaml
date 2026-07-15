@@ -395,6 +395,76 @@
       "modes": ["daily", "weekly"]
     },
     {
+      "id": "nixl-releases",
+      "name": "NVIDIA Inference Xfer Library (NIXL) releases",
+      "type": "feed",
+      "url": "https://github.com/ai-dynamo/nixl/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["network-disaggregation", "runtime-serving", "reliability-evaluation"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "vllm-production-stack-releases",
+      "name": "vLLM production stack releases",
+      "type": "feed",
+      "url": "https://github.com/vllm-project/production-stack/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "network-disaggregation", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "kvpress-releases",
+      "name": "NVIDIA KVPress releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/kvpress/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["state-kv", "compression-cost", "runtime-serving"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "transformer-engine-releases",
+      "name": "NVIDIA Transformer Engine releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/TransformerEngine/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "nccl-releases",
+      "name": "NVIDIA NCCL releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/nccl/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["network-disaggregation", "kernel-compiler", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "rocm-composable-kernel-releases",
+      "name": "ROCm Composable Kernel releases",
+      "type": "feed",
+      "url": "https://github.com/ROCm/composable_kernel/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "rocm-hipblaslt-releases",
+      "name": "ROCm hipBLASLt releases",
+      "type": "feed",
+      "url": "https://github.com/ROCm/hipBLASLt/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "iclr26-openreview",
       "name": "ICLR 2026 OpenReview",
       "type": "openreview",
@@ -420,6 +490,17 @@
       "url": "https://icml.cc/virtual/2026/papers.html",
       "tier": "A",
       "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "aistats26-virtual",
+      "name": "AISTATS 2026 official virtual papers",
+      "type": "html_index",
+      "url": "https://virtual.aistats.org/virtual/2026/papers.html?filter=titles",
+      "link_prefixes": ["https://virtual.aistats.org/virtual/2026/poster/"],
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "agent-rag", "reliability-evaluation"],
       "modes": ["weekly"]
     },
     {
@@ -471,6 +552,59 @@
       "tier": "A",
       "kind": "paper",
       "topics": ["runtime-serving", "state-kv", "compression-cost", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "wsdm26-accepted",
+      "name": "WSDM 2026 official accepted papers",
+      "type": "html_author_paragraph_program",
+      "url": "https://wsdm-conference.org/2026/index.php/accepted-papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "agent-rag", "compression-cost", "state-kv", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "emnlp26-accepted",
+      "name": "EMNLP 2026 official accepted main conference papers",
+      "type": "html_bold_program",
+      "url": "https://2026.emnlp.org/program/main_papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "agent-rag", "state-kv", "compression-cost", "multimodal-diffusion", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "eacl26-accepted",
+      "name": "EACL 2026 official accepted main conference papers",
+      "type": "html_classed_title_program",
+      "url": "https://2026.eacl.org/program/main-accepted/",
+      "title_class": "paper-title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "agent-rag", "state-kv", "compression-cost", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icde26-research-accepted",
+      "name": "ICDE 2026 official accepted research papers",
+      "type": "html_classed_title_program",
+      "url": "https://icde2026.github.io/accepted-papers.html",
+      "title_class": "title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "network-disaggregation", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icde26-industry-accepted",
+      "name": "ICDE 2026 official accepted industry and application papers",
+      "type": "html_classed_title_program",
+      "url": "https://icde2026.github.io/ia-papers.html",
+      "title_class": "title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "network-disaggregation", "agent-rag", "reliability-evaluation"],
       "modes": ["weekly"]
     },
     {

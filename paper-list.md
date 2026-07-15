@@ -9,9 +9,9 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 120 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 123 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 187 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 211 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 127 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
@@ -28,7 +28,7 @@
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 200 |
+| unclassified | 227 |
 
 ## Runtime、调度与服务架构
 
@@ -234,6 +234,9 @@
 | Going Beyond the Edge: Distributed Inference of Transformer Models on Ultra-Low-Power Wireless Devices | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | M-LoRA: Efficient Serving for Concurrent LoRA Adapters with Memory-Aware Speculative Scheduler on Single GPU | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SplitScaling: Adaptive Scaling for Disaggregated LLM Serving Against Traffic Bursts via DRL | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| An LLM-Guided Query-Aware Inference System for GNN Models on Large Knowledge Graphs | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Hexgen-Flow: Optimizing LLM Inference Request Scheduling for Agentic Text-to-SQL | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MatKV: Trading Compute for Flash Storage in LLM Inference | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -542,6 +545,30 @@
 | SPEED: Specialized Position Experts for Efficient Speculative Decoding | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Workloads | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SRAG: A Lightweight and Specialized Retrieval-augmented Generation System at the Edge | SIGIR 2026 official accepted full papers |  | SIGIR 2026 official accepted full papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DIVERSED: Relaxed Speculative Decoding via Dynamic Ensemble Verification | AISTATS 2026 official virtual papers |  | AISTATS 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| KQ-SVD: Compressing the KV Cache with Provable Guarantees on Attention Fidelity | AISTATS 2026 official virtual papers |  | AISTATS 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PowerSoftmax: Towards Secure LLM Inference Over Encrypted Data | AISTATS 2026 official virtual papers |  | AISTATS 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Alignment-Augmented Speculative Decoding with Alignment Sampling and Conditional Verification | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Cacheback: Speculative Decoding With Nothing But Cache | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Dovetail: A CPU/GPU Heterogeneous Speculative Decoding for LLM inference | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Draft Model Knows When to Stop: Self-Verification Speculative Decoding for Long-Form Generation | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FLRC: Fine-grained Low-Rank Compressor for Efficient LLM Inference | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Faster In-Context Learning for LLMs via N-Gram Trie Speculative Decoding | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| GraphKV: Breaking the Static Selection Paradigm with Graph-Based KV Cache Eviction | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HookMoE: A learnable performance compensation strategy of Mixture-of-Experts for LLM inference acceleration | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Lookahead Q-Cache: Achieving More Consistent KV Cache Eviction via Pseudo Query | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| QSpec: Speculative Decoding with Complementary Quantization Schemes | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Reasoning under Uncertainty: Efficient LLM Inference via Unsupervised Confidence Dilution and Convergent Adaptive Sampling | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Spec-VLA: Speculative Decoding for Vision-Language-Action Models with Relaxed Acceptance | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SpecVLM: Enhancing Speculative Decoding of Video LLMs via Verifier-Guided Token Pruning | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Speculative Streaming: Efficient and Scalable Speculative Decoding with Multi-Stream Attention | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SwiftKV: Fast Prefill-Optimized Inference with Knowledge-Preserving Model Transformation | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| TokenSelect: Efficient Long-Context Inference and Length Extrapolation for LLMs via Dynamic Token-Level KV Cache Selection | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| XQuant: Achieving Ultra-Low Bit KV Cache Quantization with Cross-Layer Compression | EMNLP 2026 official accepted main conference papers |  | EMNLP 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| An Empirical Study of Speculative Decoding for Small Language Models | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Look Before You Leap: A Lookahead Reasoning Quality Gate for Speculative Decoding | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Speculative Decoding Speed-of-Light: Optimal Lower Bounds via Branching Random Walks | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 
