@@ -1,8 +1,8 @@
 {
   "version": 1,
   "settings": {
-    "daily_limit": 20,
-    "weekly_limit": 160,
+    "daily_limit": 40,
+    "weekly_limit": 800,
     "request_timeout_seconds": 25,
     "github_repo_inspection": true,
     "discovery_repo_inspection": false,
@@ -404,6 +404,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "iclr26-virtual",
+      "name": "ICLR 2026 official virtual papers",
+      "type": "html_index",
+      "url": "https://iclr.cc/virtual/2026/papers.html",
+      "link_prefixes": ["https://iclr.cc/virtual/2026/poster/"],
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
       "id": "icml26-virtual",
       "name": "ICML 2026 official virtual papers",
       "type": "html_index",
@@ -505,6 +515,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "asplos26-program",
+      "name": "ASPLOS 2026 official detailed program",
+      "type": "html_program",
+      "url": "https://www.asplos-conference.org/asplos2026/program/index.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "network-disaggregation", "moe"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "mlsys25",
       "name": "MLSys proceedings",
       "type": "html_index",
@@ -583,6 +603,46 @@
       "url": "https://dblp.org/db/conf/hpca/hpca2026.html",
       "tier": "A",
       "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "hpca26-program",
+      "name": "HPCA 2026 official detailed program",
+      "type": "html_program",
+      "url": "https://2026.hpca-conf.org/program/program-hpca-2026/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "moe", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "cgo26-program",
+      "name": "CGO 2026 official detailed program",
+      "type": "html_program",
+      "url": "https://2026.cgo.org/program/program-cgo-2026/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["kernel-compiler", "compression-cost", "runtime-serving", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ppopp26-program",
+      "name": "PPoPP 2026 official detailed program",
+      "type": "html_program",
+      "url": "https://ppopp26.sigplan.org/program/program-PPoPP-2026/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["kernel-compiler", "compression-cost", "runtime-serving", "state-kv", "moe"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "micro26-program",
+      "name": "MICRO 2026 official program",
+      "type": "html_program",
+      "url": "https://microarch.org/micro59/program/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["kernel-compiler", "compression-cost", "runtime-serving", "state-kv", "moe", "hardware-edge"],
       "modes": ["weekly"]
     },
     {

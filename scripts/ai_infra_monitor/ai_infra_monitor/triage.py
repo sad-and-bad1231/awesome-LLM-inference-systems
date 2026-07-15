@@ -70,13 +70,23 @@ PERIPHERAL_TERMS = (
     "fully homomorphic",
     "pim",
     "wafer-scale",
+    "quantum error correction",
+    "quantum decoder",
+    "membership inference",
+    "side-channel",
+    "timing attack",
+    "security attack",
 )
 SERVING_TERMS = (
     "llm serving",
+    "llms serving",
     "llm inference",
+    "llms inference",
     "inference serving",
     "prefill",
-    "decode",
+    "speculative decoding",
+    "decode stage",
+    "token decoding",
     "kv cache",
     "vllm",
     "sglang",
@@ -84,8 +94,13 @@ SERVING_TERMS = (
 )
 MODEL_SYSTEM_TERMS = (
     "llm",
+    "llms",
     "language model",
+    "language models",
+    "vision-language model",
+    "vision-language models",
     "transformer",
+    "moe",
     "mixture-of-experts",
     "mixture of experts",
     "attention",
@@ -94,7 +109,9 @@ DIRECT_SYSTEM_TITLE_TERMS = (
     "serving",
     "inference",
     "prefill",
-    "decode",
+    "speculative decoding",
+    "decode stage",
+    "token decoding",
     "kv cache",
     "kvcache",
     "prefix cache",
@@ -156,7 +173,10 @@ class TriageResult:
 
 
 def _contains_any(text: str, terms: tuple[str, ...]) -> bool:
-    return any(term.lower() in text for term in terms)
+    return any(
+        re.search(rf"(?<!\w){re.escape(term.lower())}(?!\w)", text) is not None
+        for term in terms
+    )
 
 
 def _github_repo_from_url(url: str) -> str:
@@ -207,53 +227,69 @@ def triage_candidate(
     repo_timeout_seconds: int = 6,
     core_only: bool = False,
 ) -> TriageResult:
-    text = " ".join(
+    evidence_text = " ".join(
         (
             candidate.title,
             candidate.summary,
-            " ".join(candidate.topics),
             candidate.source_name,
             candidate.url,
         )
     ).lower()
+    topic_text = " ".join(candidate.topics).lower()
+    text = f"{evidence_text} {topic_text}".strip()
     reasons: list[str] = []
     priority = "normal"
     verdict = "keep"
 
-    has_physical_signal = _contains_any(text, PHYSICAL_TERMS)
-    algorithmic_only = _contains_any(text, ALGORITHMIC_ONLY_TERMS) and not has_physical_signal
-    bindings = [term for term in FRAMEWORK_BINDINGS if term in text]
+    has_physical_signal = _contains_any(evidence_text, PHYSICAL_TERMS)
+    algorithmic_only = _contains_any(evidence_text, ALGORITHMIC_ONLY_TERMS) and not has_physical_signal
+    bindings = [term for term in FRAMEWORK_BINDINGS if _contains_any(evidence_text, (term,))]
     if algorithmic_only:
         verdict = "downrank"
         priority = "low"
         reasons.append("algorithmic-only text without hardware/runtime/kernel signal")
 
     if core_only:
-        has_serving_signal = _contains_any(text, SERVING_TERMS)
-        model_system_signal = _contains_any(text, MODEL_SYSTEM_TERMS)
+        has_serving_signal = _contains_any(evidence_text, SERVING_TERMS)
+        model_system_signal = _contains_any(evidence_text, MODEL_SYSTEM_TERMS)
         model_serving_signal = _contains_any(
-            text,
+            evidence_text,
             (
                 "llm",
+                "llms",
                 "language model",
                 "transformer",
                 "mixture-of-experts",
                 "mixture of experts",
+                "moe",
             ),
         )
         core_topics = set(candidate.topics) & CORE_SERVING_TOPICS
         strong_core_topics = core_topics - {"kernel-compiler", "reliability-evaluation"}
-        has_core_topic = bool(strong_core_topics and model_system_signal)
+        has_core_topic = bool(
+            strong_core_topics
+            and model_serving_signal
+            and _contains_any(
+                evidence_text,
+                ("serving", "inference", "prefill", "kv cache", "speculative decoding"),
+            )
+        )
         kernel_system_signal = (
             "kernel-compiler" in core_topics
             and model_serving_signal
-            and _contains_any(text, ("cuda", "triton", "rocm", "gpu", "kernel", "compiler"))
+            and _contains_any(
+                evidence_text,
+                ("serving", "inference", "prefill", "kv cache", "speculative decoding"),
+            )
+            and _contains_any(evidence_text, ("cuda", "triton", "rocm", "gpu", "kernel", "compiler"))
         )
-        training_only = "training" in text and not has_serving_signal
+        training_only = "training" in evidence_text and not has_serving_signal
         title_system_signal = _contains_any(
             candidate.title.lower(), DIRECT_SYSTEM_TITLE_TERMS
         )
-        peripheral_only = _contains_any(text, PERIPHERAL_TERMS) and not has_serving_signal
+        peripheral_only = _contains_any(evidence_text, PERIPHERAL_TERMS) and (
+            not has_serving_signal or not model_system_signal
+        )
         if (
             peripheral_only
             or training_only

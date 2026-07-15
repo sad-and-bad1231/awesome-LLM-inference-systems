@@ -83,6 +83,79 @@ class _IndexParser(HTMLParser):
         self.current_text = []
 
 
+class _ProgramParser(HTMLParser):
+    """Extract paper cards and event anchors from conference program pages."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.capture_kind = ""
+        self.capture_depth = 0
+        self.capture_text: list[str] = []
+        self.pending_title = ""
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        if tag.lower() == "a" and values.get("data-event-modal"):
+            title = ""
+            self.capture_kind = "event"
+            self.capture_depth = self.depth
+            self.capture_text = []
+            self._event_id = values["data-event-modal"]
+            return
+        if tag.lower() != "div":
+            return
+        classes = set((values.get("class") or "").split())
+        if "paper-title" in classes:
+            self.capture_kind = "title"
+            self.capture_depth = self.depth
+            self.capture_text = []
+        elif "paper-authors" in classes:
+            self.capture_kind = "authors"
+            self.capture_depth = self.depth
+            self.capture_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture_kind:
+            self.capture_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.capture_kind and self.depth == self.capture_depth:
+            text = " ".join("".join(self.capture_text).split())
+            if self.capture_kind == "title" and text:
+                self.pending_title = text
+                self.items.append(
+                    {
+                        "title": text,
+                        "url": f"{self.base_url}#{_program_slug(text)}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            elif self.capture_kind == "authors" and text and self.items:
+                self.items[-1]["summary"] = f"Authors: {text}"
+            elif self.capture_kind == "event" and text:
+                self.items.append(
+                    {
+                        "title": text,
+                        "url": f"{self.base_url}#{self._event_id}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            self.capture_kind = ""
+            self.capture_depth = 0
+            self.capture_text = []
+        self.depth = max(0, self.depth - 1)
+
+
+def _program_slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")[:96] or "paper"
+
+
 def parse_html_index(
     body: bytes, base_url: str, link_prefixes: tuple[str, ...] = ()
 ) -> list[dict[str, str]]:
@@ -95,6 +168,12 @@ def parse_html_index(
         for item in parser.items
         if any(item["url"].split("#", 1)[0].startswith(prefix) for prefix in link_prefixes)
     ]
+
+
+def parse_html_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _ProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
 
 
 def parse_github_releases(body: bytes) -> list[dict[str, str]]:
@@ -155,6 +234,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
             source["url"],
             tuple(source.get("link_prefixes", ())),
         )
+    if source_type == "html_program":
+        return parse_html_program(body, source["url"])
     if source_type == "github_releases":
         return parse_github_releases(body)
     if source_type == "openreview":

@@ -124,6 +124,70 @@ class RecordStoreTests(unittest.TestCase):
         self.assertEqual(triage_candidate(generic_attention, core_only=True).priority, "low")
         self.assertEqual(triage_candidate(moe_training, core_only=True).priority, "low")
 
+    def test_triage_downranks_quantum_decoder_even_when_decoding_matches(self):
+        quantum_decoder = Candidate(
+            title="Quantum Error Correction Decoder",
+            url="https://example.org/quantum",
+            topics=("kernel-compiler",),
+        )
+        self.assertEqual(triage_candidate(quantum_decoder, core_only=True).priority, "low")
+
+    def test_triage_keeps_moe_serving_title(self):
+        moe_serving = Candidate(
+            title="System-Hardware Co-design for Efficient MoE Serving",
+            url="https://example.org/moe",
+            topics=("runtime-serving", "moe"),
+        )
+        self.assertEqual(triage_candidate(moe_serving, core_only=True).priority, "normal")
+
+    def test_triage_downranks_generic_moe_kernel_without_serving_evidence(self):
+        generic_moe = Candidate(
+            title="Understanding Mixture-of-Experts with a Kernel Method",
+            url="https://example.org/paper",
+            topics=("moe", "kernel-compiler"),
+        )
+        result = triage_candidate(generic_moe, core_only=True)
+        self.assertEqual(result.verdict, "downrank")
+        self.assertEqual(result.priority, "low")
+
+    def test_triage_downranks_security_attack_with_moe_inference_wording(self):
+        attack = Candidate(
+            title="A Membership Inference Attack on MoE Routing",
+            url="https://example.org/paper",
+            topics=("moe", "runtime-serving"),
+        )
+        result = triage_candidate(attack, core_only=True)
+        self.assertEqual(result.verdict, "downrank")
+        self.assertEqual(result.priority, "low")
+
+    def test_triage_does_not_treat_source_topics_as_physical_evidence(self):
+        generic_gpu = Candidate(
+            title="Adaptive GPU Memory Oversubscription",
+            url="https://example.org/gpu",
+            topics=("runtime-serving", "moe", "hardware-edge"),
+        )
+        self.assertEqual(triage_candidate(generic_gpu, core_only=True).priority, "low")
+
+    def test_decoder_word_does_not_trigger_decode_serving_signal(self):
+        candidate = Candidate(
+            title="Foundation Models with Traditional Decoders",
+            url="https://example.org/paper",
+            topics=("runtime-serving",),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.verdict, "downrank")
+        self.assertEqual(result.priority, "low")
+
+    def test_llm_driven_does_not_trigger_llm_d_binding(self):
+        candidate = Candidate(
+            title="LLM-Driven Agent Planning",
+            url="https://example.org/paper",
+            topics=("agent-rag",),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertFalse(result.physical_eval["has_framework_binding"])
+        self.assertEqual(result.priority, "low")
+
     def test_triage_records_unavailable_github_metadata_without_rejecting(self):
         candidate = Candidate(
             title="Kernel Project",

@@ -6,6 +6,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_feed,
     parse_github_releases,
     parse_html_index,
+    parse_html_program,
 )
 
 
@@ -35,6 +36,18 @@ class ParserTests(unittest.TestCase):
         )
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["title"], "Efficient Agent Serving with Program Scheduling")
+
+    def test_parse_html_program_extracts_unlinked_papers_and_event_titles(self):
+        body = b"""
+        <div class='paper'><div class='paper-title'>Program LLM Serving</div>
+        <div class='paper-authors'>A. Author (Example University)</div></div>
+        <strong><a href='#' data-event-modal='event-42'>HPCA LLM Inference</a></strong>
+        """
+        items = parse_html_program(body, "https://conference.example/program/")
+        self.assertEqual([item["title"] for item in items], ["Program LLM Serving", "HPCA LLM Inference"])
+        self.assertEqual(items[0]["url"], "https://conference.example/program/#program-llm-serving")
+        self.assertIn("Example University", items[0]["summary"])
+        self.assertEqual(items[1]["url"], "https://conference.example/program/#event-42")
 
     def test_parse_github_releases(self):
         payload = json.dumps(

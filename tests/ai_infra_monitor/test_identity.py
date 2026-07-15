@@ -27,7 +27,11 @@ class IdentityTests(unittest.TestCase):
         )
         self.assertEqual(candidate_identity(item), "doi:10.1145/1234.5678")
 
+    def test_program_anchors_are_distinct_identities(self):
+        first = Candidate(title="First", url="https://example.org/program/#event-one")
+        second = Candidate(title="Second", url="https://example.org/program/#event-two")
+        self.assertNotEqual(candidate_identity(first), candidate_identity(second))
+
 
 if __name__ == "__main__":
     unittest.main()
-

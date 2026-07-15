@@ -11,7 +11,7 @@
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
 | 分离式推理、通信与 KV 传输 | 82 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 103 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 126 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 127 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
@@ -25,10 +25,10 @@
 
 | Venue Status | Count |
 |---|---:|
-| formal_conference | 363 |
+| formal_conference | 365 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 84 |
+| unclassified | 105 |
 
 ## Runtime、调度与服务架构
 
@@ -418,8 +418,31 @@
 | MawForge: Memory-Bounded Expert Materialization for Local Mixture-of-Experts Inference | arXiv systems and accelerator query |  | Sparse Mixture-of-Experts (MoE) language models separate total parameter count from per-token active computation, but local inference systems often still require the full model, key-value cache, runtime buffers, and operatingsystem headroom to fit in fast memory. MawForge tests a different systems hypothesis: local MoE serving can be made practical on constrained unified-memory machines by storing the full model on disk, keeping common tensors resident, and materializing routed expert tensors into a bounded execution cache on demand. The central finding is that MawForge is effective as a bounded execution mechanism and measurement substrate for local MoE inference, but not as a cache-maximization policy. Performance depends on balancing expert reuse against resident footprint, KV-cache size, quantization, route locality, and macOS memory pressure. |
 | SpaceMoE: Towards Orbital General Intelligence with Distributed Mixture-of-Experts Inference | arXiv systems and accelerator query |  | As satellite networks evolve to support increasingly diverse services and artificial general intelligence (AGI), large language models (LLMs) are emerging as a critical foundation for future space systems. However, deploying LLMs on satellites is hindered by stringent constraints on onboard memory, computation, and energy. In this context, the mixture-of-experts (MoE) architecture emerges as a promising solution, leveraging sparse expert activation to enable scalable model inference. By harnessing the architectural advantages of MoE, this article provides a comprehensive overview of SpaceMoE, a new paradigm for distributed MoE inference in satellite networks. We first review recent industrial progress and emerging standardization trends that motivate the evolution toward space AGI systems. Then, we introduce the fundamentals and architectural evolution of SpaceMoE. Subsequently, we discuss three fundamental design problems in SpaceMoE, namely expert placement, expert selection, and hidden-state transmission and routing, highlighting how satellite-specific factors such as dynamic topology, battery degradation, and thermal limits fundamentally reshape their solutions. Finally, we outline promising research directions for realizing scalable, efficient, and sustainable on-orbit MoE inference in future satellite networks. |
 | SAS: Sparse Attention Synthesizer for Efficient Language Model Inference | EuroSys 2026 official accepted papers |  | EuroSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
-| A Case for Elastic Quantum Error Correction Decoders | EuroSys 2026 official accepted papers |  | EuroSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding | EuroSys 2026 official accepted papers |  | EuroSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AUM: Unleashing the Efficiency Potential of Shared Processors with Accelerator Units for LLM Serving | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| BitDecoding: Unlocking Tensor Cores for Long-Context LLMs with Low-Bit KV Cache | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Characterizing Cloud-Native LLM Inference at ByteDance and Exposing Optimization Challenges and Opportunities for Future AI Accelerators | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ELORA: Efficient LoRA and KV Cache Management for Multi-LoRA LLM Serving | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| GyRot: Leveraging Hidden Synergy between Rotation and Fine-grained Group Quantization for Low-bit LLM Inference | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LEGO: Supporting LLM-enhanced Games with One Gaming GPU | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LILo: Harnessing the On-chip Accelerators in Intel CPUs for Compressed LLM Inference Acceleration | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PASCAL: A Phase-Aware Scheduling Algorithm for Serving Reasoning-based Large Language Models | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PIMphony: Overcoming Bandwidth and Capacity Inefficiency in PIM-based Long-Context LLM Inference System | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Towards Compute-Aware In-Switch Computing for LLMs Tensor-Parallelism on Multi-GPU Systems | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Towards Resource-Efficient Serverless LLM Inference with SLINFER | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| V-Rex: Real-Time Streaming Video LLM Acceleration via Dynamic KV Cache Retrieval | HPCA 2026 official detailed program |  | HPCA 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Compiler-Runtime Co-operative Chain of Verification for LLM-Based Code Optimization | CGO 2026 official detailed program |  | CGO 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models | CGO 2026 official detailed program |  | CGO 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Accelerating Sparse Transformer Inference on GPU | PPoPP 2026 official detailed program |  | PPoPP 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| High-Throughput Non-Uniformly Quantized 3-bit LLM Inference | PPoPP 2026 official detailed program |  | PPoPP 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference | PPoPP 2026 official detailed program |  | PPoPP 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Laser: Unlocking Layer-Level Scheduling for Efficient Multi-SLO LLM Serving | PPoPP 2026 official detailed program |  | PPoPP 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AxCore: A Quantization-Aware Approximate GEMM Unit for LLM Inference | MICRO 2026 official program |  | Authors: Jiaxiang Zou, Yonghao Chen, Xingyu Chen, Chenxi Xu, Xinyu Chen (The Hong Kong Univ. of Science and Technology (Guangzhou)) |
+| Kelle: Co-design KV Caching and eDRAM for Efficient LLM Serving in Edge Computing | MICRO 2026 official program |  | Authors: Tianhua Xia, Sai Qian Zhang (New York Univ.) |
+| Stratum: System-Hardware Co-design with Tiered Monolithic 3D-DRAM for Efficient MoE Serving | MICRO 2026 official program |  | Authors: Yue Pan, Zihan Xia (Univ. of California, San Diego); Po-Kai Hsu (Georgia Inst. of Technology); Lanxiang Hu (Univ. of California, San Diego); Hyungyo Kim (Univ. of Illinois Urbana-Champaign); Janak Sharda (Georgia Inst. of Technology); Minxuan Zhou (Illinois Inst. of Technology); Nam Sung Kim (Univ. of Illinois at Urbana Champaign); Shimeng Yu (Georgia Inst. of Technology); Tajana Rosing, Mingu Kang (Univ. of California, San Diego) |
+| Scaling Up, Speeding Up: A Benchmark of Speculative Decoding for Efficient LLM Test-Time Scaling | ICLR 2026 official virtual papers |  | ICLR 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Mixing Importance with Diversity: Joint Optimization for KV Cache Compression in Large Vision-Language Models | ICLR 2026 official virtual papers |  | ICLR 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference | ICLR 2026 official virtual papers |  | ICLR 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 

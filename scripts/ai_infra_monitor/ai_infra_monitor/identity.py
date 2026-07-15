@@ -21,7 +21,7 @@ def normalize_title(title: str) -> str:
     return " ".join(word for word in words if word not in _STOPWORDS)
 
 
-def canonical_url(url: str) -> str:
+def canonical_url(url: str, preserve_fragment: bool = False) -> str:
     parsed = urlsplit(url.strip())
     query = [
         (key, value)
@@ -29,8 +29,9 @@ def canonical_url(url: str) -> str:
         if not key.lower().startswith("utm_")
     ]
     path = parsed.path.rstrip("/")
+    fragment = parsed.fragment if preserve_fragment else ""
     return urlunsplit(
-        (parsed.scheme.lower(), parsed.netloc.lower(), path, urlencode(query), "")
+        (parsed.scheme.lower(), parsed.netloc.lower(), path, urlencode(query), fragment)
     )
 
 
@@ -41,7 +42,7 @@ def candidate_identity(candidate: Candidate) -> str:
     doi = _DOI_RE.search(candidate.url)
     if doi:
         return f"doi:{doi.group(1).rstrip('.').lower()}"
-    url = canonical_url(candidate.url)
+    url = canonical_url(candidate.url, preserve_fragment=True)
     if url:
         return f"url:{url}"
     return f"title:{normalize_title(candidate.title)}"
@@ -59,7 +60,7 @@ def record_identity(title: str, url: str = "", source_ids: list[str] | None = No
     doi = _DOI_RE.search(url)
     if doi:
         return f"doi:{doi.group(1).rstrip('.').lower()}"
-    normalized_url = canonical_url(url)
+    normalized_url = canonical_url(url, preserve_fragment=True)
     if normalized_url:
         return f"url:{normalized_url}"
     return f"title:{normalize_title(title)}"
@@ -68,7 +69,7 @@ def record_identity(title: str, url: str = "", source_ids: list[str] | None = No
 def candidate_fingerprint(candidate: Candidate) -> str:
     payload = {
         "title": candidate.title.strip(),
-        "url": canonical_url(candidate.url),
+        "url": canonical_url(candidate.url, preserve_fragment=True),
         "published": candidate.published.strip(),
         "summary": candidate.summary.strip(),
     }
