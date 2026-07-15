@@ -92,9 +92,30 @@ SERVING_TERMS = (
     "sglang",
     "tensorrt-llm",
 )
+SYSTEM_OPERATION_TERMS = (
+    "serving",
+    "llm inference",
+    "llms inference",
+    "inference optimization",
+    "inference optimizations",
+    "efficient inference",
+    "inference engine",
+    "inference system",
+    "prefill",
+    "kv cache",
+    "prefix cache",
+    "context cache",
+    "speculative decoding",
+    "memory-efficient decoding",
+    "decoding optimization",
+    "runtime",
+)
 MODEL_SYSTEM_TERMS = (
     "llm",
     "llms",
+    "mllm",
+    "large language model",
+    "large language models",
     "language model",
     "language models",
     "vision-language model",
@@ -257,7 +278,11 @@ def triage_candidate(
             (
                 "llm",
                 "llms",
+                "mllm",
+                "large language model",
+                "large language models",
                 "language model",
+                "language models",
                 "transformer",
                 "mixture-of-experts",
                 "mixture of experts",
@@ -271,7 +296,7 @@ def triage_candidate(
             and model_serving_signal
             and _contains_any(
                 evidence_text,
-                ("serving", "inference", "prefill", "kv cache", "speculative decoding"),
+                SYSTEM_OPERATION_TERMS,
             )
         )
         kernel_system_signal = (
@@ -279,7 +304,7 @@ def triage_candidate(
             and model_serving_signal
             and _contains_any(
                 evidence_text,
-                ("serving", "inference", "prefill", "kv cache", "speculative decoding"),
+                SYSTEM_OPERATION_TERMS,
             )
             and _contains_any(evidence_text, ("cuda", "triton", "rocm", "gpu", "kernel", "compiler"))
         )

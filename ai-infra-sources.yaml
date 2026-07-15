@@ -3,7 +3,7 @@
   "settings": {
     "daily_limit": 40,
     "weekly_limit": 800,
-    "request_timeout_seconds": 25,
+    "request_timeout_seconds": 60,
     "github_repo_inspection": true,
     "discovery_repo_inspection": false,
     "github_repo_timeout_seconds": 6,
@@ -423,6 +423,17 @@
       "modes": ["weekly"]
     },
     {
+      "id": "cvpr26-openaccess",
+      "name": "CVPR 2026 official open access papers",
+      "type": "html_index",
+      "url": "https://openaccess.thecvf.com/CVPR2026?day=all",
+      "link_prefixes": ["https://openaccess.thecvf.com/content/CVPR2026/html/"],
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "compression-cost", "kernel-compiler", "hardware-edge", "agent-rag"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "iclr25-dblp",
       "name": "ICLR 2025 DBLP index",
       "type": "html_index",
@@ -570,6 +581,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "sigcomm26-accepted",
+      "name": "ACM SIGCOMM 2026 accepted papers",
+      "type": "html_bold_program",
+      "url": "https://conferences.sigcomm.org/sigcomm/2026/accepted/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["network-disaggregation", "runtime-serving", "reliability-evaluation", "kernel-compiler"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "eurosys26-official",
       "name": "EuroSys 2026 official accepted papers",
       "type": "html_index",
@@ -594,6 +615,16 @@
       "url": "https://dblp.org/db/conf/isca/index.html",
       "tier": "A",
       "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "isca26-program",
+      "name": "ISCA 2026 official conference program",
+      "type": "html_program",
+      "url": "https://www.iscaconf.org/isca2026/program/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "network-disaggregation", "moe", "hardware-edge"],
       "modes": ["weekly"]
     },
     {
@@ -633,6 +664,16 @@
       "tier": "A",
       "kind": "paper",
       "topics": ["kernel-compiler", "compression-cost", "runtime-serving", "state-kv", "moe"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "pldi26-program",
+      "name": "PLDI 2026 official program",
+      "type": "html_program",
+      "url": "https://pldi26.sigplan.org/program/program-pldi-2026/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["kernel-compiler", "runtime-serving", "compression-cost", "hardware-edge"],
       "modes": ["weekly"]
     },
     {
@@ -679,6 +720,16 @@
       "url": "https://dblp.org/db/conf/sigmod/index.html",
       "tier": "A",
       "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sigmod26-accepted",
+      "name": "SIGMOD 2026 accepted research papers",
+      "type": "html_bold_program",
+      "url": "https://2026.sigmod.org/sigmod_papers.shtml",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "agent-rag", "reliability-evaluation"],
       "modes": ["weekly"]
     },
     {

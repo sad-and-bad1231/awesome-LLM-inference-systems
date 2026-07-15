@@ -152,6 +152,48 @@ class _ProgramParser(HTMLParser):
         self.depth = max(0, self.depth - 1)
 
 
+class _BoldProgramParser(HTMLParser):
+    """Extract paper titles rendered as bold text inside table/list items."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.stack: list[str] = []
+        self.capture = False
+        self.capture_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag_name = tag.lower()
+        parent = self.stack[-1] if self.stack else ""
+        self.stack.append(tag_name)
+        if tag_name == "b" and parent in {"td", "li"}:
+            self.capture = True
+            self.capture_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture:
+            self.capture_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if tag_name == "b" and self.capture:
+            title = " ".join("".join(self.capture_text).split())
+            if title:
+                self.items.append(
+                    {
+                        "title": title,
+                        "url": f"{self.base_url}#{_program_slug(title)}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            self.capture = False
+            self.capture_text = []
+        if self.stack:
+            self.stack.pop()
+
+
 def _program_slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")[:96] or "paper"
 
@@ -172,6 +214,12 @@ def parse_html_index(
 
 def parse_html_program(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _ProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_bold_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _BoldProgramParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
     return parser.items
 
@@ -236,6 +284,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         )
     if source_type == "html_program":
         return parse_html_program(body, source["url"])
+    if source_type == "html_bold_program":
+        return parse_html_bold_program(body, source["url"])
     if source_type == "github_releases":
         return parse_github_releases(body)
     if source_type == "openreview":

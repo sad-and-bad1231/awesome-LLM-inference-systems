@@ -160,6 +160,24 @@ class RecordStoreTests(unittest.TestCase):
         self.assertEqual(result.verdict, "downrank")
         self.assertEqual(result.priority, "low")
 
+    def test_triage_downranks_inference_time_model_method(self):
+        candidate = Candidate(
+            title="Evolving Contextual Safety in Multi-Modal Large Language Models via Inference-Time Self-Reflective Memory",
+            url="https://example.org/paper",
+            topics=("runtime-serving", "compression-cost"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "low")
+
+    def test_triage_keeps_inference_optimization_title(self):
+        candidate = Candidate(
+            title="Attention-aware Inference Optimizations for Large Vision-Language Models with Memory-efficient Decoding",
+            url="https://example.org/paper",
+            topics=("runtime-serving", "compression-cost"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
     def test_triage_does_not_treat_source_topics_as_physical_evidence(self):
         generic_gpu = Candidate(
             title="Adaptive GPU Memory Oversubscription",

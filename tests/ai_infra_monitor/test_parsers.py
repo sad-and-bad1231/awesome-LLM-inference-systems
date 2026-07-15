@@ -5,6 +5,7 @@ from pathlib import Path
 from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_feed,
     parse_github_releases,
+    parse_html_bold_program,
     parse_html_index,
     parse_html_program,
 )
@@ -66,6 +67,22 @@ class ParserTests(unittest.TestCase):
         items = parse_github_releases(payload)
         self.assertEqual(items[0]["title"], "v1.2.0")
         self.assertIn("KV cache", items[0]["summary"])
+
+    def test_parse_html_bold_program_extracts_table_and_list_titles(self):
+        body = b"""
+        <table><tr><td><b>AIDA: LLM Root Cause Analysis</b><br>Authors</td></tr></table>
+        <ul><li><b>AI Query Approximation for Serving</b><br>Authors</li></ul>
+        <nav><a><b>Navigation</b></a></nav>
+        """
+        items = parse_html_bold_program(body, "https://conference.example/accepted/")
+        self.assertEqual(
+            [item["title"] for item in items],
+            ["AIDA: LLM Root Cause Analysis", "AI Query Approximation for Serving"],
+        )
+        self.assertEqual(
+            items[0]["url"],
+            "https://conference.example/accepted/#aida-llm-root-cause-analysis",
+        )
 
 
 if __name__ == "__main__":
