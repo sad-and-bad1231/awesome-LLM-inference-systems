@@ -134,7 +134,7 @@ class DiscoveryEngine:
                         candidate,
                         triage=triage_candidate(
                             candidate,
-                            inspect_repo=bool(settings.get("github_repo_inspection", False)),
+                            inspect_repo=bool(settings.get("discovery_repo_inspection", False)),
                             repo_timeout_seconds=int(settings.get("github_repo_timeout_seconds", 6)),
                             core_only=bool(settings.get("core_serving_only", False)),
                         ).to_dict(),

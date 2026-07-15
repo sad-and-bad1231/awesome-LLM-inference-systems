@@ -2,7 +2,7 @@
 
 <!-- generated from data/papers.jsonl, data/industry.jsonl, or data/candidates.jsonl; do not edit directly -->
 
-Active candidates: 67. Dropped audit items: 8.
+Active candidates: 75. Dropped audit items: 8.
 
 ## Active Candidates
 
@@ -75,6 +75,14 @@ Active candidates: 67. Dropped audit items: 8.
 | 2026-07-14 | A | candidate | dynamo-releases | v1.3.0-rc0: release: set version 1.3.0 | runtime-serving, network-disaggregation | [primary](https://github.com/ai-dynamo/dynamo/releases/tag/v1.3.0-rc0) | new |
 | 2026-07-14 | A | candidate | dynamo-releases | v1.3.0-rc1: release: set version 1.3.0 | runtime-serving, network-disaggregation | [primary](https://github.com/ai-dynamo/dynamo/releases/tag/v1.3.0-rc1) | new |
 | 2026-07-14 | A | candidate | flashinfer-releases | Nightly Release v0.6.15-20260711 | kernel-compiler | [primary](https://github.com/flashinfer-ai/flashinfer/releases/tag/nightly-v0.6.15-20260711) | new |
+| 2026-07-15 | A | candidate | lmcache-releases | Nightly 2026-07-15 · CUDA 12.9 | state-kv, kernel-compiler | [primary](https://github.com/LMCache/LMCache/releases/tag/nightly-cu129) | promote |
+| 2026-07-15 | A | candidate | lmcache-releases | Nightly 2026-07-15 · CUDA 13.0 | state-kv, kernel-compiler | [primary](https://github.com/LMCache/LMCache/releases/tag/nightly) | promote |
+| 2026-07-15 | A | candidate | lmcache-releases | operator-v0.5.0rc3 | state-kv | [primary](https://github.com/LMCache/LMCache/releases/tag/operator-v0.5.0rc3) | promote |
+| 2026-07-15 | A | candidate | lmcache-releases | v0.5.1 | state-kv, runtime-serving, kernel-compiler, network-disaggregation, agent-rag | [primary](https://github.com/LMCache/LMCache/releases/tag/v0.5.1) | promote |
+| 2026-07-15 | A | candidate | lmcache-releases | v0.5.1rc1 | state-kv | [primary](https://github.com/LMCache/LMCache/releases/tag/v0.5.1rc1) | promote |
+| 2026-07-15 | A | candidate | lmcache-releases | v0.5.1rc2 | state-kv, network-disaggregation | [primary](https://github.com/LMCache/LMCache/releases/tag/v0.5.1rc2) | promote |
+| 2026-07-15 | A | candidate | ray-releases | Ray-2.52.0 | runtime-serving, kernel-compiler, network-disaggregation, hardware-edge, reliability-evaluation | [primary](https://github.com/ray-project/ray/releases/tag/ray-2.52.0) | promote |
+| 2026-07-15 | A | candidate | ray-releases | Ray-2.53.0 | runtime-serving, kernel-compiler, agent-rag, reliability-evaluation | [primary](https://github.com/ray-project/ray/releases/tag/ray-2.53.0) | promote |
 
 <details>
 <summary>Dropped audit items</summary>

@@ -20,10 +20,10 @@
 
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
-| Memory Topology & Virtualization | 222 | 171 | 49 | 2 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 84 | 57 | 18 | 9 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 126 | 80 | 25 | 21 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
-| Execution Compilation & Kernel Fusion | 189 | 83 | 61 | 45 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
+| Memory Topology & Virtualization | 224 | 171 | 50 | 3 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
+| Disaggregated Interconnects | 87 | 57 | 21 | 9 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| State Compression & Signal Coding | 125 | 80 | 25 | 20 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| Execution Compilation & Kernel Fusion | 193 | 83 | 65 | 45 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 232 | 183 | 48 | 1 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
 | SRE/Fault-Tolerance/Sparing | 38 | 25 | 8 | 5 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
 
