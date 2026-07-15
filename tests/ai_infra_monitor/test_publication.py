@@ -104,6 +104,13 @@ class PublicationTests(unittest.TestCase):
             self.assertNotIn("Training Only", papers_view)
             self.assertIn("Formal Conference", papers_view)
             self.assertIn("Serving Project", industry_view)
+            self.assertIn("Collection Navigation", papers_view)
+            self.assertIn("How to read this page", papers_view)
+            self.assertIn("Start Here", readme)
+            self.assertIn("| 1 | 1 | 1 | 6 |", readme)
+            self.assertIn("Reading Paths", readme)
+            self.assertIn("Evidence Ladder", readme)
+            self.assertIn("Open-source project", industry_view)
             self.assertIn("generated from data/papers.jsonl", papers_view)
 
     def test_presentation_metadata_controls_featured_order(self):

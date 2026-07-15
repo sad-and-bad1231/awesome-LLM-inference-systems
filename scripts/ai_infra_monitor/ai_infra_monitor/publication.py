@@ -49,6 +49,19 @@ METRIC_DESCRIPTIONS = (
     ("Generation Stall Rate", "由验证失败、专家拥塞或 tool-call 挂起造成的生成中断率。"),
     ("Numerical Reproducibility", "混合精度、量化和大规模部署中的数值稳定性与可复现性。"),
 )
+READING_PATHS = (
+    ("Reduce first-token latency", "P/D disaggregation, KV transfer, prefix reuse", "papers/README.md#p-d-disaggregation-kv-transfer"),
+    ("Fit longer context", "KV state, offload, compression, and memory tiers", "papers/README.md#kv-state-memory"),
+    ("Raise decode goodput", "Kernels, compilation, MoE execution, and batching", "papers/README.md#kernel-compiler"),
+    ("Operate in production", "Runtime policy, SLOs, recovery, and ecosystem bindings", "industry/README.md#runtime-serving"),
+    ("Deploy beyond CUDA", "AMD, TPU, NPU, Apple, and heterogeneous serving stacks", "industry/README.md#hardware-ecosystem"),
+)
+EVIDENCE_LADDER = (
+    ("Formal venue", "Conference or journal identity confirmed; publication status is shown as metadata."),
+    ("Artifact / ecosystem", "A code, runtime, hardware, deployment, or production entry point is linked when available."),
+    ("Physical evaluation", "Real hardware or end-to-end serving evidence is preferred over algorithm-only simulation."),
+    ("Legacy import", "Imported during migration and retained for coverage; not an implicit quality ranking."),
+)
 
 
 def _escape(value: object) -> str:
@@ -69,6 +82,19 @@ def _evidence_label(record: dict[str, Any]) -> str:
     if record.get("evidence", {}).get("verification_level") == "legacy_import":
         return f"{label} · Legacy Import"
     return label
+
+
+def _format_label(record: dict[str, Any]) -> str:
+    if record.get("record_type") == "project":
+        return "Open-source project"
+    if record.get("record_type") == "industry":
+        return "Industry / engineering material"
+    source_type = record.get("evidence", {}).get("source_type")
+    return {
+        "conference_program": "Academic paper",
+        "journal_or_conference": "Academic paper",
+        "preprint": "Preprint",
+    }.get(source_type, "Research record")
 
 
 def _presentation(record: dict[str, Any]) -> dict[str, Any]:
@@ -178,9 +204,9 @@ def _entry(record: dict[str, Any], industry: bool = False, featured: bool = Fals
     headline = f"**Featured:** **{title}**" if featured else f"**{title}**"
     meta = []
     if industry:
-        meta.extend([_escape(record.get("orgs") or "Project"), _escape(record.get("year"))])
+        meta.extend([_escape(record.get("orgs") or "Project"), _escape(record.get("year")), _format_label(record)])
     else:
-        meta.extend([_escape(record.get("venue_or_channel")), _escape(record.get("year"))])
+        meta.extend([_escape(record.get("venue_or_channel")), _escape(record.get("year")), _format_label(record)])
     meta.append(_evidence_label(record))
     lines = [f"- {headline}", f"  {' · '.join(f'`{item}`' for item in meta if item)}"]
     tags = _tags(record)
@@ -248,24 +274,32 @@ def _render_collection(
     grouped = _group(records)
     counts = Counter(PUBLIC_CATEGORIES.get(record.get("system_abstraction_primary"), "Unclassified") for record in records)
     featured_ids = {record.get("canonical_id") or record.get("id") for record in _featured_records(records, 12)}
+    primary_status = "industrial_material" if industry else "formal_conference"
+    primary_count = sum(record.get("evidence", {}).get("venue_status") == primary_status for record in records)
+    artifact_count = sum(bool(record.get("artifact_url")) for record in records)
+    tagged_count = sum(any(values for values in record.get("technical_tags", {}).values()) for record in records)
+    primary_label = "Industrial material" if industry else "Formal venue"
     lines = [
         f"# {title}",
         "",
         GENERATED_NOTICE,
         "",
-        "[Back to the project overview](../README.md)",
+        "[Home](../README.md) · [System taxonomy](../ai-infra-system-abstractions.md) · "
+        f"[{('Industry systems' if not industry else 'Academic papers')}](../{('industry' if not industry else 'papers')}/README.md)",
         "",
         subtitle,
         "",
         f"![AI inference system map]({image})",
         "",
+        "> **How to read this page.** Start with the featured entry points, then use the abstraction sections to compare mechanism, artifact, hardware, and serving evidence.",
+        "",
         "## At a Glance",
         "",
-        "| Collection | Records |",
-        "|---|---:|",
-        f"| This view | {len(records)} |",
+        f"| Records | {primary_label} | With artifact | Tagged records |",
+        "|---:|---:|---:|---:|",
+        f"| {len(records)} | {primary_count} | {artifact_count} | {tagged_count} |",
         "",
-        "## Categories",
+        "## Collection Navigation",
         "",
     ]
     lines.extend(
@@ -279,6 +313,13 @@ def _render_collection(
             "",
             "Evidence labels describe the source material. Featured entries are editorial entry points, not a publication-quality ranking.",
             "",
+            "| Field | Reading rule |",
+            "|---|---|",
+            "| Venue / channel | What kind of source it is, not a quality score. |",
+            "| Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |",
+            "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
+            "| Featured | A small editorial starting set; all records remain below. |",
+            "",
             "## Resource List",
             "",
         ]
@@ -288,7 +329,7 @@ def _render_collection(
         rows = grouped.get(abstraction, [])
         featured = [record for record in rows if (record.get("canonical_id") or record.get("id")) in featured_ids]
         remaining = [record for record in rows if (record.get("canonical_id") or record.get("id")) not in featured_ids]
-        lines.extend([f"### {category}", "", PUBLIC_CATEGORY_DESCRIPTIONS[category], ""])
+        lines.extend([f"### {category} ({len(rows)})", "", PUBLIC_CATEGORY_DESCRIPTIONS[category], ""])
         if not rows:
             lines.append("_No verified records yet._")
         else:
@@ -306,8 +347,9 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
     paper_counts = Counter(_evidence_label(record) for record in papers)
     industry_counts = Counter(_evidence_label(record) for record in industry)
     category_counts = _category_counts(papers, industry)
-    featured_papers = _featured_records(papers, 12)
-    featured_industry = _featured_records(industry, 10)
+    featured_papers = _featured_records(papers, 8)
+    featured_industry = _featured_records(industry, 6)
+    formal_papers = sum(record.get("evidence", {}).get("venue_status") == "formal_conference" for record in papers)
     lines = [
         "# Awesome AI Inference Systems",
         "",
@@ -316,6 +358,8 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
         _render_badges(papers, industry),
         "",
         "![AI inference systems serving stack](figs/ai-inference-systems-cover.png)",
+        "",
+        "> **A serving-first research entrance.** Follow the request path from admission to output, then inspect where state lives, how it moves, how kernels execute, and how production systems recover.",
         "",
         "A curated, evidence-aware collection of LLM inference serving papers, industrial systems, and open-source AI infrastructure.",
         "",
@@ -327,30 +371,60 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
         "",
         "Out of scope by default: training-only methods, algorithm-only simulations without serving evidence, generic vector databases, and peripheral hardware work without an inference-system connection.",
         "",
+        "| In scope | Usually excluded unless they directly affect serving |",
+        "|---|---|",
+        "| LLM serving, KV state, P/D transport, kernels, runtimes, scheduling, SRE, and production infrastructure | Training-only optimization, pure model quality work, generic databases, and hardware papers without an inference path |",
+        "",
+        "## Start Here",
+        "",
+        "| Research entry point | What you get |",
+        "|---|---|",
+        "| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |",
+        "| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |",
+        "| [Industry systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [Machine facts](data/papers.jsonl) | The JSONL records used to regenerate every public view. |",
+        "",
         "## Contents",
         "",
-        "- [Academic Papers](papers/README.md)",
-        "- [Industry & Open-Source Systems](industry/README.md)",
-        "- [System Abstraction Overview](ai-infra-system-abstractions.md)",
-        "- [Contribution Guide](CONTRIBUTING.md)",
+        "| Start here | Purpose |",
+        "|---|---|",
+        "| [Academic Papers](papers/README.md) | Conference, poster, workshop, preprint, and legacy-import paper records. |",
+        "| [Industry & Open-Source Systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [System Abstraction Overview](ai-infra-system-abstractions.md) | Cross-collection taxonomy and full system map. |",
+        "| [Contribution Guide](CONTRIBUTING.md) | JSONL facts, evidence policy, and generated-view workflow. |",
         "",
         "## Coverage",
+        "",
+        "| Papers | Industry systems | Formal paper venues | System abstractions |",
+        "|---:|---:|---:|---:|",
+        f"| {len(papers)} | {len(industry)} | {formal_papers} | {len(ABSTRACTIONS)} |",
         "",
         "| Collection | Records | Evidence breakdown |",
         "|---|---:|---|",
         f"| Academic papers | {len(papers)} | {_escape(', '.join(f'{key}: {value}' for key, value in sorted(paper_counts.items())))} |",
         f"| Industry / open-source systems | {len(industry)} | {_escape(', '.join(f'{key}: {value}' for key, value in sorted(industry_counts.items())))} |",
         "",
+        "## Reading Paths",
+        "",
+        "| Research question | Follow this path |",
+        "|---|---|",
+    ]
+    for question, path, link in READING_PATHS:
+        lines.append(f"| **{question}** | {path} ([open](%s)) |" % link)
+    lines.extend(
+        [
+        "",
         "## Taxonomy",
         "",
-        "| System abstraction | Records | Entry points |",
-        "|---|---:|---|",
+        "| System abstraction | Records | What it covers | Entry points |",
+        "|---|---:|---|---|",
     ]
+    )
     for abstraction in ABSTRACTIONS:
         category = PUBLIC_CATEGORIES[abstraction]
         anchor = _anchor(category)
         lines.append(
-            f"| **{category}** | {category_counts.get(category, 0)} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
+            f"| **{category}** | {category_counts.get(category, 0)} | {_escape(PUBLIC_CATEGORY_DESCRIPTIONS[category])} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
         )
     lines.extend(
         [
@@ -384,6 +458,16 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
             "## Evidence Policy",
             "",
             "Venue status and source type are factual metadata. Technical tags summarize the system surface. Legacy imports are marked explicitly. Internal triage priority is a discovery signal, not a publication-quality ranking.",
+            "",
+            "### Evidence Ladder",
+            "",
+            "| Evidence layer | How it is used |",
+            "|---|---|",
+        ]
+    )
+    lines.extend(f"| **{name}** | {description} |" for name, description in EVIDENCE_LADDER)
+    lines.extend(
+        [
             "",
             "## Contributing",
             "",

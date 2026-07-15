@@ -2,15 +2,15 @@
 
 <!-- generated from data/papers.jsonl, data/industry.jsonl, or data/candidates.jsonl; do not edit directly -->
 
-主视图只保留结构、统计和代表条目；全量明细见 `paper-list.md`、`industrial-llm-inference-systems.md`、`ai-infra-candidates.md`、`data/papers.jsonl` 和 `data/industry.jsonl`。
+主视图只保留结构、统计和代表条目；公开全量入口见 `papers/README.md` 和 `industry/README.md`，机器事实源见 JSONL。
 
 ## Reading Entry Points
 
 | Need | File |
 |---|---|
 | 按系统抽象快速定位方向 | `ai-infra-system-abstractions.md` |
-| 查 verified 学术论文全量明细 | `paper-list.md` |
-| 查工业界/开源系统全量明细 | `industrial-llm-inference-systems.md` |
+| 查 verified 学术论文全量明细 | `papers/README.md` |
+| 查工业界/开源系统全量明细 | `industry/README.md` |
 | 查待处理候选 | `ai-infra-candidates.md` |
 | 机器可读论文事实源 | `data/papers.jsonl` |
 | 机器可读工业事实源 | `data/industry.jsonl` |
@@ -21,9 +21,9 @@
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 222 | 171 | 49 | 2 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 81 | 57 | 18 | 6 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 125 | 80 | 25 | 20 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
-| Execution Compilation & Kernel Fusion | 185 | 83 | 61 | 41 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
+| Disaggregated Interconnects | 84 | 57 | 18 | 9 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| State Compression & Signal Coding | 126 | 80 | 25 | 21 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| Execution Compilation & Kernel Fusion | 189 | 83 | 61 | 45 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 232 | 183 | 48 | 1 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
 | SRE/Fault-Tolerance/Sparing | 38 | 25 | 8 | 5 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
 

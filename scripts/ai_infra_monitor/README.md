@@ -15,6 +15,12 @@ python scripts/ai_infra_monitor/monitor.py publish
 `paper-list.md` and `industrial-llm-inference-systems.md` are separate reading lists. `ai-infra-system-abstractions.md` is only a concise navigation index.
 The public repository views also include `README.md`, `papers/README.md`, and `industry/README.md`, plus the local diagrams under `figs/`. Optional `presentation` metadata controls a small curated set of featured entries without changing the fact schema.
 
+The public figures use `figs/*.svg` as editable sources and committed PNGs for GitHub rendering. A local Chrome or Edge installation is required for deterministic SVG-to-PNG export. Regenerate them on Windows with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/render_public_figures.ps1
+```
+
 One-time migration of a legacy unified JSONL export:
 
 ```powershell

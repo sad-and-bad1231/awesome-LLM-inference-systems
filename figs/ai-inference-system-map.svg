@@ -1,51 +1,91 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">AI Inference System Abstractions</title>
-  <desc id="desc">Six layers of AI inference systems, from memory and transport through state compression, execution, scheduling, and reliability.</desc>
-  <rect width="1600" height="900" fill="#f7f8f6"/>
-  <text x="80" y="82" fill="#17232b" font-family="Arial, sans-serif" font-size="34" font-weight="700">AI inference system abstractions</text>
-  <text x="80" y="120" fill="#53636b" font-family="Arial, sans-serif" font-size="18">A practical map from request state to hardware execution and production operations.</text>
+  <title id="title">AI inference system map: six control surfaces around the serving lifecycle</title>
+  <desc id="desc">A layered systems diagram connecting six research abstractions to the request, prefill, KV, decode, and output lifecycle.</desc>
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#eaf0f5" stroke-width="1"/></pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#102b43" flood-opacity=".13"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#48647d"/></marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1769aa"/></marker>
+    <symbol id="memory" viewBox="0 0 64 64"><path d="M14 16h36v11H14zM14 34h36v11H14z" fill="#fff" stroke="#1769aa" stroke-width="3"/><path d="M20 21h18M20 39h24" stroke="#1769aa" stroke-width="3" stroke-linecap="round"/><path d="M50 21l7 3v11l-7 3" fill="#cbe3f2" stroke="#1769aa" stroke-width="2"/></symbol>
+    <symbol id="transport" viewBox="0 0 64 64"><circle cx="17" cy="32" r="7" fill="#fff" stroke="#2a8e86" stroke-width="3"/><circle cx="47" cy="16" r="7" fill="#fff" stroke="#2a8e86" stroke-width="3"/><circle cx="47" cy="48" r="7" fill="#fff" stroke="#2a8e86" stroke-width="3"/><path d="M23 29l17-10M23 35l17 10M47 23v18" fill="none" stroke="#2a8e86" stroke-width="3"/></symbol>
+    <symbol id="coding" viewBox="0 0 64 64"><path d="M22 10H10v44h12M42 10h12v44H42" fill="none" stroke="#ad6c1c" stroke-width="4" stroke-linecap="round"/><path d="M29 19l7 7-7 7 7 7-7 7" fill="none" stroke="#ef9e3e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="execution" viewBox="0 0 64 64"><rect x="9" y="14" width="46" height="36" rx="4" fill="#fff" stroke="#7659a6" stroke-width="3"/><rect x="17" y="21" width="30" height="22" rx="2" fill="#f0ebf9" stroke="#7659a6" stroke-width="2"/><circle cx="27" cy="32" r="6" fill="#d3c8ea" stroke="#7659a6" stroke-width="2"/><path d="M38 27h5M38 32h5M38 37h5" stroke="#7659a6" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="program" viewBox="0 0 64 64"><circle cx="32" cy="34" r="20" fill="#fff" stroke="#287e7d" stroke-width="3"/><path d="M32 23v12l8 5M20 10h24M24 6v8M40 6v8" fill="none" stroke="#287e7d" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="reliability" viewBox="0 0 64 64"><path d="M32 7l21 8v16c0 14-9 23-21 27C20 54 11 45 11 31V15z" fill="#fff" stroke="#a2573d" stroke-width="3"/><path d="M22 32l7 7 14-15" fill="none" stroke="#a2573d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
 
-  <g font-family="Arial, sans-serif">
-    <rect x="80" y="180" width="430" height="172" rx="10" fill="#d9f0ed" stroke="#138a87" stroke-width="3"/>
-    <text x="112" y="222" fill="#0e6664" font-size="16" letter-spacing="2">01 / MEMORY</text>
-    <text x="112" y="260" fill="#17232b" font-size="25" font-weight="700">Memory Topology</text>
-    <text x="112" y="294" fill="#44565e" font-size="16">KV blocks, prefix cache, offload,</text><text x="112" y="320" fill="#44565e" font-size="16">remote and hierarchical memory.</text>
+  <rect width="1600" height="900" fill="#f8fafc"/>
+  <rect x="46" y="30" width="1508" height="840" rx="14" fill="#fff" stroke="#d6e0e9" stroke-width="2"/>
+  <rect x="47" y="31" width="1506" height="838" rx="13" fill="url(#grid)" opacity=".45"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="88" y="78" fill="#1769aa" font-size="13" font-weight="700" letter-spacing="3">FIGURE 2  /  SYSTEM ABSTRACTION MAP</text>
+    <text x="88" y="123" fill="#11263d" font-size="38" font-weight="700">Six control surfaces shape one serving lifecycle</text>
+    <text x="88" y="153" fill="#5f7386" font-size="17">Each surface changes a different boundary between state, movement, execution, program control, and production feedback.</text>
+    <line x1="88" y1="181" x2="1512" y2="181" stroke="#cbd7e1" stroke-width="1.5"/>
 
-    <rect x="585" y="180" width="430" height="172" rx="10" fill="#fff0c9" stroke="#c9901d" stroke-width="3"/>
-    <text x="617" y="222" fill="#8e6914" font-size="16" letter-spacing="2">02 / TRANSPORT</text>
-    <text x="617" y="260" fill="#17232b" font-size="25" font-weight="700">P/D Disaggregation</text>
-    <text x="617" y="294" fill="#5a5544" font-size="16">Prefill/decode split, KV transfer,</text><text x="617" y="320" fill="#5a5544" font-size="16">RDMA, routing, collective transport.</text>
+    <!-- central lifecycle -->
+    <g transform="translate(602 210)" filter="url(#shadow)">
+      <rect width="396" height="512" rx="14" fill="#fff" stroke="#9fb4c5" stroke-width="2"/>
+      <path d="M26 76h344" stroke="#d7e1e9" stroke-width="1"/>
+      <text x="26" y="34" fill="#617487" font-size="12" font-weight="700" letter-spacing="2">THE ONLINE LIFECYCLE</text>
+      <text x="26" y="58" fill="#8a9aa8" font-size="12">state is created, moved, reused, and observed</text>
+      <g transform="translate(39 101)">
+        <g><rect width="318" height="57" rx="9" fill="#eef6fc" stroke="#1769aa" stroke-width="2"/><circle cx="30" cy="28" r="16" fill="#d6e9f6"/><text x="30" y="34" text-anchor="middle" fill="#1769aa" font-size="14" font-weight="700">01</text><text x="58" y="25" fill="#1769aa" font-size="16" font-weight="700">Request</text><text x="58" y="43" fill="#617487" font-size="11">admission / priority / tenant</text></g>
+        <path d="M159 57v22" stroke="#48647d" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(0 80)"><rect width="318" height="57" rx="9" fill="#eef7f2" stroke="#4e9b75" stroke-width="2"/><circle cx="30" cy="28" r="16" fill="#d9eee3"/><text x="30" y="34" text-anchor="middle" fill="#287e68" font-size="14" font-weight="700">02</text><text x="58" y="25" fill="#287e68" font-size="16" font-weight="700">Prefill</text><text x="58" y="43" fill="#617487" font-size="11">prompt compute / TTFT</text></g>
+        <path d="M159 137v22" stroke="#48647d" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(0 160)"><rect width="318" height="57" rx="9" fill="#fff5df" stroke="#ca7b25" stroke-width="2"/><circle cx="30" cy="28" r="16" fill="#f7dfad"/><text x="30" y="34" text-anchor="middle" fill="#ad6c1c" font-size="14" font-weight="700">03</text><text x="58" y="25" fill="#ad6c1c" font-size="16" font-weight="700">KV state</text><text x="58" y="43" fill="#806e51" font-size="11">retain / transfer / reuse</text></g>
+        <path d="M159 217v22" stroke="#48647d" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(0 240)"><rect width="318" height="57" rx="9" fill="#f2eef9" stroke="#7659a6" stroke-width="2"/><circle cx="30" cy="28" r="16" fill="#ddd5ed"/><text x="30" y="34" text-anchor="middle" fill="#7659a6" font-size="14" font-weight="700">04</text><text x="58" y="25" fill="#7659a6" font-size="16" font-weight="700">Decode</text><text x="58" y="43" fill="#706581" font-size="11">token loop / TPOT</text></g>
+        <path d="M159 297v22" stroke="#48647d" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(0 320)"><rect width="318" height="57" rx="9" fill="#eef8f7" stroke="#2a8e86" stroke-width="2"/><circle cx="30" cy="28" r="16" fill="#d9efed"/><text x="30" y="34" text-anchor="middle" fill="#287e7d" font-size="14" font-weight="700">05</text><text x="58" y="25" fill="#287e7d" font-size="16" font-weight="700">Output</text><text x="58" y="43" fill="#627889" font-size="11">stream / tool call / SLO</text></g>
+      </g>
+      <path d="M26 472h344" stroke="#d7e1e9" stroke-width="1"/><text x="26" y="493" fill="#1769aa" font-size="11" font-weight="700" letter-spacing="1.4">MEASURED ALONG THE PATH</text><text x="26" y="509" fill="#718292" font-size="11">TTFT · TPOT · goodput · stall · recovery time</text>
+    </g>
 
-    <rect x="1090" y="180" width="430" height="172" rx="10" fill="#dbe8f4" stroke="#3979ad" stroke-width="3"/>
-    <text x="1122" y="222" fill="#2d6090" font-size="16" letter-spacing="2">03 / STATE CODING</text>
-    <text x="1122" y="260" fill="#17232b" font-size="25" font-weight="700">Compression &amp; Low-Bit</text>
-    <text x="1122" y="294" fill="#4e5e6d" font-size="16">KV quantization, MLA latent state,</text><text x="1122" y="320" fill="#4e5e6d" font-size="16">sparsity and quality-cost tradeoffs.</text>
+    <!-- control surfaces -->
+    <g transform="translate(92 226)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#f1f7fc" stroke="#83afd2" stroke-width="2"/><rect width="8" height="144" fill="#1769aa"/>
+      <use href="#memory" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#1769aa" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 01</text><text x="112" y="69" fill="#112f4b" font-size="18" font-weight="700">Memory topology</text><text x="112" y="94" fill="#617487" font-size="12">paged blocks · prefix reuse</text><text x="112" y="116" fill="#617487" font-size="12">CPU / SSD / CXL tiers</text><text x="27" y="132" fill="#1769aa" font-size="11" font-weight="700">capacity · hit rate · residency</text>
+    </g>
+    <path d="M502 306h86" fill="none" stroke="#1769aa" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowBlue)"/><text x="503" y="292" fill="#1769aa" font-size="10" font-weight="700">STATE PLACEMENT</text>
 
-    <rect x="80" y="430" width="430" height="172" rx="10" fill="#e4e0f0" stroke="#7561a7" stroke-width="3"/>
-    <text x="112" y="472" fill="#5c4d8b" font-size="16" letter-spacing="2">04 / EXECUTION</text>
-    <text x="112" y="510" fill="#17232b" font-size="25" font-weight="700">Kernel &amp; Compiler</text>
-    <text x="112" y="544" fill="#5d5a68" font-size="16">CUDA, Triton, HIP, attention,</text><text x="112" y="570" fill="#5d5a68" font-size="16">GEMM, MoE and compiler backends.</text>
+    <g transform="translate(92 406)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#f0faf7" stroke="#87c3b2" stroke-width="2"/><rect width="8" height="144" fill="#2a8e86"/>
+      <use href="#transport" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#287e68" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 02</text><text x="112" y="69" fill="#123f40" font-size="18" font-weight="700">Disaggregated transport</text><text x="112" y="94" fill="#617487" font-size="12">P/D pools · RDMA / NIXL</text><text x="112" y="116" fill="#617487" font-size="12">KV-aware routing</text><text x="27" y="132" fill="#287e68" font-size="11" font-weight="700">bandwidth · TTFT · locality</text>
+    </g>
+    <path d="M502 486h86" fill="none" stroke="#2a8e86" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/><text x="503" y="472" fill="#287e68" font-size="10" font-weight="700">DATA MOVEMENT</text>
 
-    <rect x="585" y="430" width="430" height="172" rx="10" fill="#f6ded1" stroke="#ba6a45" stroke-width="3"/>
-    <text x="617" y="472" fill="#995337" font-size="16" letter-spacing="2">05 / PROGRAM CONTROL</text>
-    <text x="617" y="510" fill="#17232b" font-size="25" font-weight="700">Runtime &amp; Scheduling</text>
-    <text x="617" y="544" fill="#66534a" font-size="16">Agent graphs, structured generation,</text><text x="617" y="570" fill="#66534a" font-size="16">SLO-aware and program-aware dispatch.</text>
+    <g transform="translate(92 586)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#fff8eb" stroke="#e1b86f" stroke-width="2"/><rect width="8" height="144" fill="#ca7b25"/>
+      <use href="#coding" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#ad6c1c" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 03</text><text x="112" y="69" fill="#523b1e" font-size="18" font-weight="700">State compression</text><text x="112" y="94" fill="#617487" font-size="12">FP8 / INT4 KV · MLA latent</text><text x="112" y="116" fill="#617487" font-size="12">sparse retention · coding</text><text x="27" y="132" fill="#ad6c1c" font-size="11" font-weight="700">quality · bytes · error</text>
+    </g>
+    <path d="M502 666h86" fill="none" stroke="#ca7b25" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/><text x="503" y="652" fill="#ad6c1c" font-size="10" font-weight="700">STATE CODING</text>
 
-    <rect x="1090" y="430" width="430" height="172" rx="10" fill="#dfe8df" stroke="#5e8863" stroke-width="3"/>
-    <text x="1122" y="472" fill="#48704d" font-size="16" letter-spacing="2">06 / OPERATIONS</text>
-    <text x="1122" y="510" fill="#17232b" font-size="25" font-weight="700">Reliability &amp; Sparing</text>
-    <text x="1122" y="544" fill="#526356" font-size="16">SLO, drift, recovery, migration,</text><text x="1122" y="570" fill="#526356" font-size="16">reproducibility and graceful degradation.</text>
+    <g transform="translate(1090 226)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#f7f4fc" stroke="#b2a1d3" stroke-width="2"/><rect width="8" height="144" fill="#7659a6"/>
+      <use href="#execution" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#7659a6" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 04</text><text x="112" y="69" fill="#382a55" font-size="18" font-weight="700">Execution compilation</text><text x="112" y="94" fill="#617487" font-size="12">CUDA / Triton / HIP</text><text x="112" y="116" fill="#617487" font-size="12">fused attention / GEMM / MoE</text><text x="27" y="132" fill="#7659a6" font-size="11" font-weight="700">TPOT · goodput · occupancy</text>
+    </g>
+    <path d="M1010 306h-86" fill="none" stroke="#7659a6" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/><text x="935" y="292" text-anchor="end" fill="#7659a6" font-size="10" font-weight="700">EXECUTION</text>
+
+    <g transform="translate(1090 406)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#f0faf9" stroke="#89c8c4" stroke-width="2"/><rect width="8" height="144" fill="#287e7d"/>
+      <use href="#program" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#287e7d" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 05</text><text x="112" y="69" fill="#164b4b" font-size="18" font-weight="700">Program-aware runtime</text><text x="112" y="94" fill="#617487" font-size="12">scheduler · agent graph</text><text x="112" y="116" fill="#617487" font-size="12">structured generation · SLO</text><text x="27" y="132" fill="#287e7d" font-size="11" font-weight="700">fairness · stall · policy</text>
+    </g>
+    <path d="M1010 486h-86" fill="none" stroke="#287e7d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/><text x="935" y="472" text-anchor="end" fill="#287e7d" font-size="10" font-weight="700">PROGRAM CONTROL</text>
+
+    <g transform="translate(1090 586)" filter="url(#shadow)">
+      <path d="M0 16l18-16h392l18 16v144H0z" fill="#fff5f1" stroke="#dda18a" stroke-width="2"/><rect width="8" height="144" fill="#a2573d"/>
+      <use href="#reliability" x="27" y="35" width="64" height="64"/><text x="112" y="42" fill="#a2573d" font-size="11" font-weight="700" letter-spacing="1.5">SURFACE 06</text><text x="112" y="69" fill="#5a3027" font-size="18" font-weight="700">Reliability and sparing</text><text x="112" y="94" fill="#617487" font-size="12">drift · migration · checkpoint</text><text x="112" y="116" fill="#617487" font-size="12">reproducibility · fallback</text><text x="27" y="132" fill="#a2573d" font-size="11" font-weight="700">recovery · SLO · stability</text>
+    </g>
+    <path d="M1010 666h-86" fill="none" stroke="#a2573d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/><text x="935" y="652" text-anchor="end" fill="#a2573d" font-size="10" font-weight="700">PRODUCTION FEEDBACK</text>
+
+    <g transform="translate(560 754)">
+      <rect width="480" height="76" rx="10" fill="#f5f8fa" stroke="#c7d4df"/>
+      <text x="20" y="24" fill="#617487" font-size="11" font-weight="700" letter-spacing="1.6">EVIDENCE AXES</text>
+      <text x="20" y="48" fill="#1769aa" font-size="12" font-weight="700">venue</text><text x="72" y="48" fill="#617487" font-size="12">·</text><text x="88" y="48" fill="#287e68" font-size="12" font-weight="700">hardware</text><text x="164" y="48" fill="#617487" font-size="12">·</text><text x="180" y="48" fill="#ad6c1c" font-size="12" font-weight="700">artifact</text><text x="242" y="48" fill="#617487" font-size="12">·</text><text x="258" y="48" fill="#a2573d" font-size="12" font-weight="700">production</text>
+      <text x="20" y="66" fill="#8595a3" font-size="11">Facts describe what exists; evidence describes how much to trust it.</text>
+    </g>
+    <text x="88" y="845" fill="#1769aa" font-size="11" font-weight="700" letter-spacing="1.6">AWESOME AI INFERENCE SYSTEMS</text><text x="1512" y="845" text-anchor="end" fill="#8797a4" font-size="11">read by surface, then verify by evidence</text>
   </g>
-
-  <g fill="none" stroke="#17232b" stroke-width="3">
-    <path d="M510 266h75"/><path d="m568 254 18 12-18 12"/>
-    <path d="M1015 266h75"/><path d="m1073 254 18 12-18 12"/>
-    <path d="M300 352v78"/><path d="m288 412 12 18 12-18"/>
-    <path d="M800 352v78"/><path d="m788 412 12 18 12-18"/>
-    <path d="M1305 352v78"/><path d="m1293 412 12 18 12-18"/>
-    <path d="M510 516h75" stroke="#ba6a45"/><path d="m568 504 18 12-18 12" stroke="#ba6a45"/>
-    <path d="M1015 516h75" stroke="#5e8863"/><path d="m1073 504 18 12-18 12" stroke="#5e8863"/>
-  </g>
-  <rect x="80" y="720" width="1440" height="74" rx="10" fill="#17232b"/>
-  <text x="112" y="765" fill="#f4f7f8" font-family="Arial, sans-serif" font-size="20">Serving path: request state  →  transport  →  execution  →  program control  →  production feedback</text>
 </svg>

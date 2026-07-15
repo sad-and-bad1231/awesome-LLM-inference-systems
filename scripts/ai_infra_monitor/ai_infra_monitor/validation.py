@@ -103,12 +103,15 @@ def _public_view_errors(
         if width < 640 or height < 200:
             errors.append(ValidationError(path, 0, "public image dimensions are too small"))
 
-    markdown_link_pattern = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
+    markdown_link_pattern = re.compile(r"!?(?:\[([^\]]*)\])\(([^)]+)\)")
     for path in required_views:
         if not path.exists():
             continue
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-            for target in markdown_link_pattern.findall(line):
+            for alt_text, raw_target in markdown_link_pattern.findall(line):
+                if raw_target.startswith(("figs/", "../figs/")) and not alt_text.strip():
+                    errors.append(ValidationError(path, number, "local public image is missing alt text"))
+                target = raw_target
                 target = target.split("#", 1)[0].strip()
                 if not target or re.match(r"(?:https?|mailto):", target):
                     continue
@@ -119,7 +122,7 @@ def _public_view_errors(
     root = public_root / "README.md"
     if root.exists():
         text = root.read_text(encoding="utf-8")
-        for section in ("## Overview", "## Contents", "## Coverage", "## Taxonomy", "## System Map", "## Evaluation Lens"):
+        for section in ("## Overview", "## Start Here", "## Contents", "## Coverage", "## Reading Paths", "## Taxonomy", "## System Map", "## Evaluation Lens", "## Evidence Policy"):
             if section not in text:
                 errors.append(ValidationError(root, 1, f"missing public README section: {section}"))
         if paper_db_path and industry_db_path:
@@ -134,6 +137,13 @@ def _public_view_errors(
             for label, count in expected.items():
                 if not re.search(rf"\| {re.escape(label)} \| {count} \|", text):
                     errors.append(ValidationError(root, 1, f"public coverage count mismatch: {label}"))
+    for path in (public_root / "papers" / "README.md", public_root / "industry" / "README.md"):
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for section in ("## At a Glance", "## Collection Navigation", "## Evidence and Selection", "## Resource List"):
+            if section not in text:
+                errors.append(ValidationError(path, 1, f"missing public collection section: {section}"))
     return errors
 
 
