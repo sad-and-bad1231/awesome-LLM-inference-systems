@@ -83,10 +83,18 @@ class _IndexParser(HTMLParser):
         self.current_text = []
 
 
-def parse_html_index(body: bytes, base_url: str) -> list[dict[str, str]]:
+def parse_html_index(
+    body: bytes, base_url: str, link_prefixes: tuple[str, ...] = ()
+) -> list[dict[str, str]]:
     parser = _IndexParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
-    return parser.items
+    if not link_prefixes:
+        return parser.items
+    return [
+        item
+        for item in parser.items
+        if any(item["url"].split("#", 1)[0].startswith(prefix) for prefix in link_prefixes)
+    ]
 
 
 def parse_github_releases(body: bytes) -> list[dict[str, str]]:
@@ -142,7 +150,11 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
     if source_type == "feed":
         return parse_feed(body, source.get("id", ""))
     if source_type == "html_index":
-        return parse_html_index(body, source["url"])
+        return parse_html_index(
+            body,
+            source["url"],
+            tuple(source.get("link_prefixes", ())),
+        )
     if source_type == "github_releases":
         return parse_github_releases(body)
     if source_type == "openreview":

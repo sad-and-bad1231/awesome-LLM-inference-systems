@@ -15,6 +15,31 @@ from .state import load_state, save_state
 from .triage import triage_candidate
 
 
+DIRECT_SYSTEM_TERMS = (
+    "serving",
+    "inference",
+    "prefill",
+    "decode",
+    "kv cache",
+    "prefix cache",
+    "context cache",
+    "scheduler",
+    "scheduling",
+    "disaggregated",
+    "rdma",
+    "nixl",
+    "all-to-all",
+    "expert parallel",
+    "kernel",
+    "triton",
+    "cuda",
+    "rocm",
+    "gpu memory",
+    "memory management",
+    "runtime",
+)
+
+
 def load_config(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -55,6 +80,16 @@ def _matched_topics(text: str, topics: list[dict]) -> tuple[str, ...]:
     )
 
 
+def _candidate_relevance(candidate: Candidate) -> tuple[int, int, int]:
+    """Rank direct system evidence above generic model/algorithm matches."""
+    title = candidate.title.lower()
+    text = " ".join((candidate.title, candidate.summary, " ".join(candidate.topics))).lower()
+    direct_title = int(any(term in title for term in DIRECT_SYSTEM_TERMS))
+    direct_text = int(any(term in text for term in DIRECT_SYSTEM_TERMS))
+    physical = int(bool(candidate.triage.get("physical_eval", {}).get("has_physical_signal")))
+    return direct_title, direct_text, physical
+
+
 class DiscoveryEngine:
     def __init__(self, root: Path, config_path: Path, fetcher=None):
         self.root = Path(root)
@@ -67,7 +102,7 @@ class DiscoveryEngine:
             int(settings.get("request_timeout_seconds", 25)),
         )
 
-    def discover(self, mode: str) -> dict:
+    def discover(self, mode: str, source_ids: set[str] | None = None) -> dict:
         if mode not in {"daily", "weekly"}:
             raise ValueError("mode must be daily or weekly")
         now = datetime.now(timezone.utc)
@@ -82,10 +117,13 @@ class DiscoveryEngine:
             existing_titles.update(_document_titles(self.root / settings[key]))
 
         candidates: list[Candidate] = []
+        seen_identities: set[str] = set()
         errors: list[dict[str, str]] = []
         source_stats: list[dict[str, object]] = []
         for source in self.config["sources"]:
             if mode not in source.get("modes", []):
+                continue
+            if source_ids is not None and source["id"] not in source_ids:
                 continue
             has_deferred = any(
                 record.get("status") == "deferred"
@@ -141,6 +179,9 @@ class DiscoveryEngine:
                     )
                     identity = candidate_identity(candidate)
                     fingerprint = candidate_fingerprint(candidate)
+                    if identity in seen_identities:
+                        continue
+                    seen_identities.add(identity)
                     previous = state["records"].get(identity)
                     known_title = normalize_title(candidate.title) in existing_titles
                     if (
@@ -202,6 +243,9 @@ class DiscoveryEngine:
         candidates.sort(
             key=lambda item: (
                 priority_rank.get(str(item.triage.get("priority", "normal")), 1),
+                -_candidate_relevance(item)[0],
+                -_candidate_relevance(item)[1],
+                -_candidate_relevance(item)[2],
                 item.tier != "A",
                 item.source_id,
                 item.title,

@@ -201,8 +201,8 @@
     {
       "id": "amd-aiter-kernels",
       "name": "AMD Instinct Inference Vector Kernels (AITER)",
-      "type": "html_index",
-      "url": "https://github.com/ROCm/AITER",
+      "type": "github_releases",
+      "url": "https://api.github.com/repos/ROCm/aiter/releases",
       "tier": "A",
       "kind": "project",
       "topics": ["kernel-compiler", "runtime-serving", "hardware-edge"],
@@ -345,6 +345,10 @@
       "name": "KServe Generative Inference Stack",
       "type": "html_index",
       "url": "https://kserve.github.io/website/docs/model-serving/generative-inference/overview",
+      "link_prefixes": [
+        "https://kserve.github.io/website/docs/model-serving/generative-inference/",
+        "https://kserve.github.io/website/docs/model-serving/inferencegraph/"
+      ],
       "tier": "A",
       "kind": "project",
       "topics": ["runtime-serving", "reliability-evaluation"],
@@ -484,7 +488,18 @@
       "id": "asplos26",
       "name": "ASPLOS DBLP index",
       "type": "html_index",
-      "url": "https://dblp.org/db/conf/asplos/index.html",
+      "url": "https://dblp.org/db/conf/asplos/asplos2026-1.html",
+      "link_prefixes": ["https://dblp.org/rec/conf/asplos/"],
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "asplos26-v2",
+      "name": "ASPLOS 2026 DBLP Volume 2",
+      "type": "html_index",
+      "url": "https://dblp.org/db/conf/asplos/asplos2026-2.html",
+      "link_prefixes": ["https://dblp.org/rec/conf/asplos/"],
       "tier": "A",
       "kind": "paper",
       "modes": ["weekly"]
@@ -530,6 +545,15 @@
       "name": "SIGCOMM 2025 DBLP index",
       "type": "html_index",
       "url": "https://dblp.org/db/conf/sigcomm/sigcomm2025.html",
+      "tier": "A",
+      "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "eurosys26-official",
+      "name": "EuroSys 2026 official accepted papers",
+      "type": "html_index",
+      "url": "https://2026.eurosys.org/papers.html",
       "tier": "A",
       "kind": "paper",
       "modes": ["weekly"]

@@ -313,13 +313,16 @@ def append_records(path: Path, records: list[dict[str, Any]]) -> int:
 
 def candidate_to_record(candidate: Candidate, record_type: str = "candidate", status: str = "new") -> dict[str, Any]:
     triage = candidate.triage or triage_candidate(candidate).to_dict()
+    summary = candidate.summary
+    if not summary:
+        summary = f"{candidate.source_name or candidate.source_id} 官方页面条目；发现源未提供摘要，需进一步核对正文。"
     return _record(
         record_type=record_type,
         title=candidate.title,
         venue_or_channel=candidate.venue or candidate.source_name or candidate.source_id,
         year=_year_from_text(candidate.published or candidate.discovered),
         orgs="",
-        summary=candidate.summary,
+        summary=summary,
         source_tier=candidate.tier,
         primary_url=candidate.url,
         source_ids=[candidate.source_id] if candidate.source_id else [],

@@ -27,6 +27,15 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(items[0]["url"], "https://conference.example/paper/one")
         self.assertEqual(items[1]["url"], "https://conference.example/about")
 
+    def test_parse_html_index_can_filter_link_prefixes(self):
+        items = parse_html_index(
+            (FIXTURES / "index.html").read_bytes(),
+            "https://conference.example/program/",
+            ("https://conference.example/paper/",),
+        )
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["title"], "Efficient Agent Serving with Program Scheduling")
+
     def test_parse_github_releases(self):
         payload = json.dumps(
             [
@@ -48,4 +57,3 @@ class ParserTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

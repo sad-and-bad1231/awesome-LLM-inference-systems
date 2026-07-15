@@ -59,6 +59,53 @@ class BacklogFetcher:
 
 
 class DiscoveryTests(unittest.TestCase):
+    def test_source_filter_limits_discovery_without_changing_mode(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "paper-list.md").write_text("# Papers\n", encoding="utf-8")
+            (root / "industrial.md").write_text("# Industry\n", encoding="utf-8")
+            config = {
+                "version": 1,
+                "settings": {
+                    "daily_limit": 10,
+                    "weekly_limit": 20,
+                    "paper_file": "paper-list.md",
+                    "industry_file": "industrial.md",
+                    "candidate_file": "candidates.md",
+                    "state_file": "state.json",
+                    "runs_dir": "runs",
+                    "weekly_reports_dir": "reports",
+                },
+                "topics": [{"id": "serving", "keywords": ["llm serving"]}],
+                "sources": [
+                    {
+                        "id": "selected",
+                        "name": "Selected",
+                        "type": "feed",
+                        "url": "https://example.test/selected",
+                        "tier": "A",
+                        "kind": "paper",
+                        "modes": ["weekly"],
+                    },
+                    {
+                        "id": "skipped",
+                        "name": "Skipped",
+                        "type": "feed",
+                        "url": "https://example.test/skipped",
+                        "tier": "A",
+                        "kind": "paper",
+                        "modes": ["weekly"],
+                    },
+                ],
+            }
+            config_path = root / "config.yaml"
+            config_path.write_text(json.dumps(config), encoding="utf-8")
+            result = DiscoveryEngine(root, config_path, fetcher=FakeFetcher()).discover(
+                "weekly", source_ids={"selected"}
+            )
+            self.assertEqual([item["source_id"] for item in result["candidates"]], ["selected"])
+            self.assertEqual([item["source_id"] for item in result["sources"]], ["selected"])
+
     def test_second_run_does_not_emit_duplicate(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

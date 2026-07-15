@@ -15,6 +15,8 @@ python scripts/ai_infra_monitor/monitor.py publish
 `paper-list.md` and `industrial-llm-inference-systems.md` are separate reading lists. `ai-infra-system-abstractions.md` is only a concise navigation index.
 The public repository views also include `README.md`, `papers/README.md`, and `industry/README.md`, plus the local diagrams under `figs/`. Optional `presentation` metadata controls a small curated set of featured entries without changing the fact schema.
 
+Discovery is intentionally resumable and low-cost: source pages are scanned first, while repository inspection and core-serving triage happen in the explicit `triage` step. Use repeatable `--source-id` arguments to sweep a large conference or ecosystem source incrementally. Candidates are retained with a verdict; only `high` and `normal` priority records are queued into the fact stores.
+
 The public figures use `figs/*.svg` as editable sources and committed PNGs for GitHub rendering. A local Chrome or Edge installation is required for deterministic SVG-to-PNG export. Regenerate them on Windows with:
 
 ```powershell
@@ -39,6 +41,16 @@ python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py validate
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit
+```
+
+For a targeted or resumable weekly sweep:
+
+```powershell
+python scripts/ai_infra_monitor/monitor.py discover --mode weekly --source-id mlsys26-virtual --source-id icml26-virtual
+python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
+python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py render
+python scripts/ai_infra_monitor/monitor.py validate
 ```
 
 Weekly automation uses the same flow, with `--mode weekly`, followed by

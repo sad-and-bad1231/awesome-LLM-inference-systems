@@ -14,16 +14,16 @@ A complete collection of production systems, open-source runtimes, infrastructur
 
 | Records | Industrial material | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 120 | 120 | 120 | 113 |
+| 121 | 121 | 121 | 114 |
 
 ## Collection Navigation
 
-- [KV State & Memory](#kv-state-memory) (39)
+- [KV State & Memory](#kv-state-memory) (38)
 - [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (12)
-- [KV Compression & Low-Bit State](#kv-compression-low-bit-state) (21)
+- [KV Compression & Low-Bit State](#kv-compression-low-bit-state) (22)
 - [Kernel & Compiler](#kernel-compiler) (24)
 - [Runtime & Serving](#runtime-serving) (20)
-- [Reliability & Benchmarks](#reliability-benchmarks) (4)
+- [Reliability & Benchmarks](#reliability-benchmarks) (5)
 
 ## Evidence and Selection
 
@@ -38,7 +38,7 @@ Evidence labels describe the source material. Featured entries are editorial ent
 
 ## Resource List
 
-### KV State & Memory (39)
+### KV State & Memory (38)
 
 KV blocks, prefix state, offload, external memory, and memory-aware serving.
 
@@ -190,10 +190,6 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `Huawei Cloud + NUS + SJTU` · `2024` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `kv-cache` `scheduler` `ttft`
   用 DRAM/SSD 分层保存跨轮 KV，配合 layer-wise preload、异步保存和 scheduler-aware eviction 降低 TTFT。
-- **[Generative Inference](https://kserve.github.io/website/docs/model-serving/generative-inference/overview)**
-  `KServe` · `2024` · `Industry / engineering material` · `Industrial Material · Legacy Import`
-  Tags: `kserve` `kubernetes`
-  以 Kubernetes CRD、Gateway、autoscaling 和 ModelMesh 管理生成式服务，并接入 vLLM、Hugging Face、KV offload。
 - **[JetStream + MaxText](https://cloud.google.com/tpu/docs/tutorials/LLM/jetstream-maxtext-inference-v6e)**
   `Google Cloud` · `2024` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `serving` `tpu` `memory` `throughput`
@@ -209,10 +205,6 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
 
 #### Featured
 
-- **Featured:** **[AI200 / AI250](https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm)**
-  `Qualcomm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
-  Tags: `npu` `memory`
-  将 Hexagon NPU 扩展到数据中心，强调大容量 LPDDR、低比特格式、near-memory compute、机架扩展和 disaggregated inference。
 - **Featured:** **[Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/)**
   `NVIDIA` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `routing` `serving` `kv-cache`
@@ -223,6 +215,10 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   面向推理数据移动的传输层，在 prefill/decode 分离时把 KV cache 从 prefill worker 传到 decode worker。
 #### Full Resource List
 
+- **[AI200 / AI250](https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm)**
+  `Qualcomm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  Tags: `npu` `memory`
+  将 Hexagon NPU 扩展到数据中心，强调大容量 LPDDR、低比特格式、near-memory compute、机架扩展和 disaggregated inference。
 - **[NIXL / Inference Transfer Library](https://developer.nvidia.com/blog/?p=113426)**
   `NVIDIA` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `long-context` `rag`
@@ -260,22 +256,26 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   Tags: `decode` `blackwell` `moe`
   提供面向 Tensor Core 的可组合 GEMM、layout、pipeline 和 collective primitives；4.4/4.5 系列继续补充 Blackwell GQA decode、int4 KV、MX/NVFP4 block-scaled GEMM 和 MoE grouped GEMM 示例。
 
-### KV Compression & Low-Bit State (21)
+### KV Compression & Low-Bit State (22)
 
 KV quantization, latent state, sparsity, and quality-cost tradeoffs.
 
 #### Featured
 
-- **Featured:** **[ATOM inference engine](https://rocm.blogs.amd.com/software-tools-optimization/atom-inference-engine/README.html)**
-  `AMD ROCm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
-  Tags: `serving` `amd` `rocm` `kernel` `moe`
-  以 ROCm-first 的独立推理引擎整合 AITER kernel、MoRI 通信、KV block/prefix cache、speculative decoding 与 TP/DP/EP 策略，面向 AMD Instinct 生产 serving。
+- **Featured:** **[AITER: AI Tensor Engine for ROCm](https://github.com/ROCm/aiter)**
+  `AMD / ROCm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  Tags: `serving` `amd` `rocm` `compiler` `kernel` `moe` `sglang` `vllm`
+  AMD AITER (AI Tensor Engine for ROCm) provides C++/Python APIs and optimized Triton, Composable Kernel, and assembly operators for ROCm inference, including attention, MoE, GEMM, quantization, and communication kernels; it integrates with vLLM and SGLang.
 - **Featured:** **[FlashMLA](https://github.com/deepseek-ai/FlashMLA)**
   `DeepSeek` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `decode` `gpu` `hopper` `kernel` `kv-cache`
   面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。
 #### Full Resource List
 
+- **[ATOM inference engine](https://rocm.blogs.amd.com/software-tools-optimization/atom-inference-engine/README.html)**
+  `AMD ROCm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  Tags: `serving` `amd` `rocm` `kernel` `moe`
+  以 ROCm-first 的独立推理引擎整合 AITER kernel、MoRI 通信、KV block/prefix cache、speculative decoding 与 TP/DP/EP 策略，面向 AMD Instinct 生产 serving。
 - **[Full-Stack Optimizations for Agentic Inference with Dynamo](https://developer.nvidia.com/blog/full-stack-optimizations-for-agentic-inference-with-nvidia-dynamo/)**
   `NVIDIA` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `agent`
@@ -539,10 +539,17 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   Tags: `serving`
   以 DeepSpeed-Inference 为底座，用 Dynamic SplitFuse、模型并行、量化和持久部署服务长 prompt 与 generation 混合负载。
 
-### Reliability & Benchmarks (4)
+### Reliability & Benchmarks (5)
 
 SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.
 
+#### Featured
+
+- **Featured:** **[KServe Generative Inference Stack](https://kserve.github.io/website/docs/model-serving/generative-inference/overview)**
+  `KServe` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  Tags: `serving` `gpu` `kserve` `kubernetes`
+  Artifact: [source](https://github.com/kserve/kserve)
+  KServe official documentation covering LLMInferenceService, multi-node/multi-GPU inference, model caching, and AI Gateway integration for Kubernetes-based generative serving.
 #### Full Resource List
 
 - **[Gemma 4 on vLLM-TPU](https://arxiv.org/abs/2605.25645)**

@@ -99,7 +99,10 @@ def command_init(args) -> int:
 
 def command_discover(args) -> int:
     config = load_config(args.config)
-    manifest = DiscoveryEngine(args.root, args.config).discover(args.mode)
+    source_ids = set(args.source_id) if args.source_id else None
+    manifest = DiscoveryEngine(args.root, args.config).discover(
+        args.mode, source_ids=source_ids
+    )
     candidate_path = paths(args.root, config)["candidate_db_file"]
     append_records(
         candidate_path,
@@ -143,6 +146,7 @@ def command_triage(args) -> int:
             candidate,
             inspect_repo=bool(config["settings"].get("github_repo_inspection", False)),
             repo_timeout_seconds=int(config["settings"].get("github_repo_timeout_seconds", 6)),
+            core_only=bool(config["settings"].get("core_serving_only", False)),
         ).to_dict()
         candidates.append(item)
     priority_rank = {"high": 0, "normal": 1, "low": 2}
@@ -354,6 +358,11 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("init").set_defaults(func=command_init)
     discover = subparsers.add_parser("discover")
     discover.add_argument("--mode", choices=("daily", "weekly"), required=True)
+    discover.add_argument(
+        "--source-id",
+        action="append",
+        help="limit discovery to one or more configured source IDs; repeatable",
+    )
     discover.set_defaults(func=command_discover)
     migrate = subparsers.add_parser("migrate")
     migrate.add_argument("--source", type=Path, required=True, help="legacy unified JSONL source to split")
@@ -382,6 +391,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     parser = build_parser()
     args = parser.parse_args(argv)
     args.root = args.root.resolve()

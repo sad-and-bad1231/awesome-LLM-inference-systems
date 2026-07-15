@@ -82,6 +82,37 @@ SERVING_TERMS = (
     "sglang",
     "tensorrt-llm",
 )
+MODEL_SYSTEM_TERMS = (
+    "llm",
+    "language model",
+    "transformer",
+    "mixture-of-experts",
+    "mixture of experts",
+    "attention",
+)
+DIRECT_SYSTEM_TITLE_TERMS = (
+    "serving",
+    "inference",
+    "prefill",
+    "decode",
+    "kv cache",
+    "kvcache",
+    "prefix cache",
+    "context cache",
+    "scheduler",
+    "scheduling",
+    "disaggregated",
+    "rdma",
+    "nixl",
+    "all-to-all",
+    "expert parallel",
+    "kernel",
+    "triton",
+    "cuda",
+    "rocm",
+    "gpu",
+    "runtime",
+)
 
 REPO_STRUCTURE_TERMS = (
     "csrc",
@@ -191,22 +222,49 @@ def triage_candidate(
 
     has_physical_signal = _contains_any(text, PHYSICAL_TERMS)
     algorithmic_only = _contains_any(text, ALGORITHMIC_ONLY_TERMS) and not has_physical_signal
+    bindings = [term for term in FRAMEWORK_BINDINGS if term in text]
     if algorithmic_only:
         verdict = "downrank"
         priority = "low"
         reasons.append("algorithmic-only text without hardware/runtime/kernel signal")
 
     if core_only:
-        has_core_topic = bool(set(candidate.topics) & CORE_SERVING_TOPICS)
         has_serving_signal = _contains_any(text, SERVING_TERMS)
+        model_system_signal = _contains_any(text, MODEL_SYSTEM_TERMS)
+        model_serving_signal = _contains_any(
+            text,
+            (
+                "llm",
+                "language model",
+                "transformer",
+                "mixture-of-experts",
+                "mixture of experts",
+            ),
+        )
+        core_topics = set(candidate.topics) & CORE_SERVING_TOPICS
+        strong_core_topics = core_topics - {"kernel-compiler", "reliability-evaluation"}
+        has_core_topic = bool(strong_core_topics and model_system_signal)
+        kernel_system_signal = (
+            "kernel-compiler" in core_topics
+            and model_serving_signal
+            and _contains_any(text, ("cuda", "triton", "rocm", "gpu", "kernel", "compiler"))
+        )
+        training_only = "training" in text and not has_serving_signal
+        title_system_signal = _contains_any(
+            candidate.title.lower(), DIRECT_SYSTEM_TITLE_TERMS
+        )
         peripheral_only = _contains_any(text, PERIPHERAL_TERMS) and not has_serving_signal
-        if peripheral_only or (not has_core_topic and not has_serving_signal):
+        if (
+            peripheral_only
+            or training_only
+            or (not title_system_signal and not bindings)
+            or (not has_core_topic and not kernel_system_signal and not has_serving_signal)
+        ):
             priority = "low"
             if verdict == "keep":
                 verdict = "downrank"
             reasons.append("outside serving mainline without direct inference-serving signal")
 
-    bindings = [term for term in FRAMEWORK_BINDINGS if term in text]
     if bindings:
         priority = "high"
         verdict = "keep"

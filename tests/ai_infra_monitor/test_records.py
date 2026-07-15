@@ -110,6 +110,20 @@ class RecordStoreTests(unittest.TestCase):
         )
         self.assertEqual(triage_candidate(peripheral, core_only=True).priority, "low")
 
+    def test_triage_downranks_generic_attention_and_training_titles(self):
+        generic_attention = Candidate(
+            title="A Unified Sparse Attention Method",
+            url="https://example.org/attention",
+            topics=("kernel-compiler",),
+        )
+        moe_training = Candidate(
+            title="Load Balancing for Mixture-of-Experts Training",
+            url="https://example.org/moe-training",
+            topics=("moe",),
+        )
+        self.assertEqual(triage_candidate(generic_attention, core_only=True).priority, "low")
+        self.assertEqual(triage_candidate(moe_training, core_only=True).priority, "low")
+
     def test_triage_records_unavailable_github_metadata_without_rejecting(self):
         candidate = Candidate(
             title="Kernel Project",
