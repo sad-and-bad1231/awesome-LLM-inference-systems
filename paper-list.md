@@ -9,7 +9,7 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 127 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 135 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
 | KV Cache 压缩、量化与淘汰 | 238 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
@@ -28,7 +28,7 @@
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 291 |
+| unclassified | 299 |
 
 ## Runtime、调度与服务架构
 
@@ -241,6 +241,14 @@
 | LaTune: Lightweight and Adaptive Configuration Tuning for LLM Inference on Edge Devices | The Web Conference 2026 official research accepted papers |  | Authors: Siqi Zhong, Mugeng Liu, Haiyang Shen, Chongyang Pan and Yun Ma |
 | Self-Speculative Decoding for On-device MoE Acceleration | The Web Conference 2026 official research accepted papers |  | Authors: Peirong Zheng, Wenchao Xu and Haozhao Wang |
 | Task-Aware Cloud-End Offloading for Vision-Language Model Serving via Dynamic Modality-Specific Adapter Scheduling | The Web Conference 2026 official research accepted papers |  | Authors: Zian Wang, Ziyi Wang, Jie Xing, Yaya Wei, Ziyan Zhong and Lanshan Zhang |
+| Cost-Justified Multi-type Resource Fair Scheduling for Kubernetes | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| NL-CPS: Reinforcement Learning-Based Kubernetes Control Plane Placement in Multi-Region Clusters | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ARKV: Adaptive Resource-Efficient KV Cache Management for Long Context LLM Inference under Memory Constraints | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Characterizing LLM Inference Energy-Performance Tradeoffs across Workloads and GPU Scaling | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| EmbdC: Error-Bounded Lossy Video Embedding Compression For On-Device LLM Inference | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LLM-Pilot: SLO-Aware and Cost-Efficient LLM Serving on Public Cloud VM Clusters via Offloading | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LLMEdger: Phase-Aware Model Parallelism Scheduler for LLM Inference on Edge | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 

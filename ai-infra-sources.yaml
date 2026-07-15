@@ -1046,6 +1046,178 @@
       "kind": "paper",
       "topics": ["multimodal-diffusion", "runtime-serving", "hardware-edge", "agent-rag", "reliability-evaluation"],
       "modes": ["weekly"]
+    },
+    {
+      "id": "rss26-accepted",
+      "name": "RSS 2026 official accepted papers",
+      "type": "html_table_title_program",
+      "url": "https://roboticsconference.org/program/papers/",
+      "title_column": 2,
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "multimodal-diffusion", "program-scheduling", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ccgrid26-program",
+      "name": "CCGrid 2026 official program",
+      "type": "html_classed_title_program",
+      "url": "https://ccgrid2026.org/programs.html",
+      "title_class": "program-paper-title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "network-disaggregation", "program-scheduling", "hardware-edge", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "tensorrt-releases",
+      "name": "NVIDIA TensorRT official releases",
+      "type": "feed",
+      "url": "https://github.com/NVIDIA/TensorRT/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "runtime-serving", "compression-cost", "hardware-edge"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "deepspeed-releases",
+      "name": "DeepSpeed official releases",
+      "type": "feed",
+      "url": "https://github.com/deepspeedai/DeepSpeed/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "moe", "kernel-compiler", "compression-cost"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "deepspeed-mii-releases",
+      "name": "DeepSpeed-MII official releases",
+      "type": "feed",
+      "url": "https://github.com/microsoft/DeepSpeed-MII/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "state-kv", "kernel-compiler", "moe"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "tgi-releases",
+      "name": "Hugging Face Text Generation Inference official releases",
+      "type": "feed",
+      "url": "https://github.com/huggingface/text-generation-inference/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "state-kv", "kernel-compiler", "reliability-evaluation"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "torch-tensorrt-releases",
+      "name": "Torch-TensorRT official releases",
+      "type": "feed",
+      "url": "https://github.com/pytorch/TensorRT/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "runtime-serving", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "openvino-releases",
+      "name": "OpenVINO official releases",
+      "type": "feed",
+      "url": "https://github.com/openvinotoolkit/openvino/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "onnxruntime-releases",
+      "name": "ONNX Runtime official releases",
+      "type": "feed",
+      "url": "https://github.com/microsoft/onnxruntime/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "hardware-edge", "reliability-evaluation"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "executorch-releases",
+      "name": "ExecuTorch official releases",
+      "type": "feed",
+      "url": "https://github.com/pytorch/executorch/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "mlc-llm-releases",
+      "name": "MLC LLM official releases",
+      "type": "feed",
+      "url": "https://github.com/mlc-ai/mlc-llm/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "openvino-model-server-releases",
+      "name": "OpenVINO Model Server official releases",
+      "type": "feed",
+      "url": "https://github.com/openvinotoolkit/model_server/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "reliability-evaluation", "hardware-edge", "network-disaggregation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "llama-cpp-releases",
+      "name": "llama.cpp official releases",
+      "type": "feed",
+      "url": "https://github.com/ggml-org/llama.cpp/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "lmdeploy-releases",
+      "name": "LMDeploy official releases",
+      "type": "feed",
+      "url": "https://github.com/InternLM/lmdeploy/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "state-kv", "kernel-compiler", "moe", "compression-cost"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "ollama-releases",
+      "name": "Ollama official releases",
+      "type": "feed",
+      "url": "https://github.com/ollama/ollama/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "hardware-edge", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "mlx-releases",
+      "name": "Apple MLX official releases",
+      "type": "feed",
+      "url": "https://github.com/ml-explore/mlx/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["kernel-compiler", "runtime-serving", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "mlx-lm-releases",
+      "name": "MLX-LM official releases",
+      "type": "feed",
+      "url": "https://github.com/ml-explore/mlx-lm/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "compression-cost", "hardware-edge"],
+      "modes": ["daily", "weekly"]
     }
   ]
 }

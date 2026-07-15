@@ -487,16 +487,19 @@ class _PaperBlockProgramParser(HTMLParser):
 
 
 class _TableTitleProgramParser(HTMLParser):
-    """Extract titles from numbered two-column accepted-paper table rows."""
+    """Extract titles from numbered accepted-paper table rows."""
 
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str, title_column: int = 1):
         super().__init__(convert_charrefs=True)
         self.base_url = base_url
+        self.title_column = title_column
         self.depth = 0
         self.row_depth = 0
         self.cell_depth = 0
         self.cell_text: list[str] = []
+        self.cell_href = ""
         self.cells: list[str] = []
+        self.cell_links: list[str] = []
         self.items: list[dict[str, str]] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -505,9 +508,13 @@ class _TableTitleProgramParser(HTMLParser):
         if tag_name == "tr" and not self.row_depth:
             self.row_depth = self.depth
             self.cells = []
+            self.cell_links = []
         elif tag_name == "td" and self.row_depth and not self.cell_depth:
             self.cell_depth = self.depth
             self.cell_text = []
+            self.cell_href = ""
+        elif tag_name == "a" and self.cell_depth:
+            self.cell_href = dict(attrs).get("href") or ""
 
     def handle_data(self, data: str) -> None:
         if self.cell_depth:
@@ -517,22 +524,29 @@ class _TableTitleProgramParser(HTMLParser):
         tag_name = tag.lower()
         if self.cell_depth and tag_name == "td" and self.depth == self.cell_depth:
             self.cells.append(" ".join("".join(self.cell_text).split()))
+            self.cell_links.append(self.cell_href)
             self.cell_depth = 0
             self.cell_text = []
+            self.cell_href = ""
         if self.row_depth and tag_name == "tr" and self.depth == self.row_depth:
-            if len(self.cells) >= 2 and re.fullmatch(r"\d{2,}", self.cells[0]):
-                title = self.cells[1]
+            if (
+                len(self.cells) > self.title_column
+                and re.fullmatch(r"\d+", self.cells[0])
+            ):
+                title = self.cells[self.title_column]
                 if title and title not in {item["title"] for item in self.items}:
+                    href = self.cell_links[self.title_column] if len(self.cell_links) > self.title_column else ""
                     self.items.append(
                         {
                             "title": title,
-                            "url": f"{self.base_url}#{_program_slug(title)}",
+                            "url": urljoin(self.base_url, href) if href else f"{self.base_url}#{_program_slug(title)}",
                             "published": "",
                             "summary": "",
                         }
                     )
             self.row_depth = 0
             self.cells = []
+            self.cell_links = []
         self.depth = max(0, self.depth - 1)
 
 
@@ -640,8 +654,8 @@ def parse_html_paper_block_program(body: bytes, base_url: str) -> list[dict[str,
     return parser.items
 
 
-def parse_html_table_title_program(body: bytes, base_url: str) -> list[dict[str, str]]:
-    parser = _TableTitleProgramParser(base_url)
+def parse_html_table_title_program(body: bytes, base_url: str, title_column: int = 1) -> list[dict[str, str]]:
+    parser = _TableTitleProgramParser(base_url, title_column)
     parser.feed(body.decode("utf-8", errors="replace"))
     return parser.items
 
@@ -747,7 +761,7 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
     if source_type == "html_paper_block_program":
         return parse_html_paper_block_program(body, source["url"])
     if source_type == "html_table_title_program":
-        return parse_html_table_title_program(body, source["url"])
+        return parse_html_table_title_program(body, source["url"], int(source.get("title_column", 1)))
     if source_type == "html_embedded_full_papers":
         return parse_html_embedded_full_papers(body, source["url"])
     if source_type == "github_releases":

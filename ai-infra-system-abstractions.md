@@ -21,9 +21,9 @@
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 286 | 186 | 50 | 50 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 2471 | 110 | 68 | 2293 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 7308 | 253 | 51 | 7004 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
-| Execution Compilation & Kernel Fusion | 2508 | 129 | 61 | 2318 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
+| Disaggregated Interconnects | 2642 | 118 | 83 | 2441 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| State Compression & Signal Coding | 7481 | 253 | 134 | 7094 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| Execution Compilation & Kernel Fusion | 2785 | 129 | 95 | 2561 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 614 | 199 | 53 | 362 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
 | SRE/Fault-Tolerance/Sparing | 1620 | 29 | 10 | 1581 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
 
@@ -62,18 +62,18 @@ _Showing up to 12 representative records; full detail stays in generated compati
 
 | Title | Type | Year/Channel | Why it matters | Tags |
 |---|---|---|---|---|
+| ARKV: Adaptive Resource-Efficient KV Cache Management for Long Context LLM Inference under Memory Constraints | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:kv-cache,memory] [workload:edge,long-context] |
 | Accelerating Block Low-Rank Foundation Model Inference on Memory-Constrained GPUs | paper | 2026 | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Accelerating Masked Diffusion Large Language Models: A Survey of Efficient Inference Techniques | paper | 2026 | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
 | An LLM-Guided Query-Aware Inference System for GNN Models on Large Knowledge Graphs | paper | 2026 | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
 | Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding | paper | 2026 | Authors: Soongyu Choi (KAIST), Yuntae Kim (KAIST), Muyoung Son (KAIST), Joo-Young Kim (KAIST) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
+| Characterizing LLM Inference Energy-Performance Tradeoffs across Workloads and GPU Scaling | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [workload:edge] |
 | Combating the Memory Walls: Optimization Pathways for Long-Context Agentic LLM Inference | paper | 2026 | Authors: Haoran Wu (University of Cambridge), Can Xiao (Imperial College London), Jiayi Nie (University of Cambridge), Xuan Guo (Imperial College London), Binglei Lou (Imperial College London), Jeffrey T.H. Wong (Imperial College London), Zhiwen Mo (Imperial College London), Cheng Zhang (Imperial College London), Przemyslaw Forys (Imperial College London), Chengyang Ai (University of Edinburgh), Timi Adeniran (University of Cambridge), Wayne Luk (Imperial College London), Hongxiang Fan (Imperial College London), Jianyi Cheng (University of Edinburgh), Timothy M. Jones (University of Cambridge), Rika Antonova (University of Cambridge), Robert Mullins (University of Cambridge), Aaron Zhao (Imperial College London) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:agent,edge,long-context] |
 | ConServe: Contiguity-Preserving Memory Management for Multi-Turn LLM Serving | paper | 2026 | Authors: Bingyao Li (University of California, Riverside) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Connex: Endpoint Mobility Primitives for Dynamic LLM Serving | paper | 2026 | ACM SIGCOMM 2026 accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,kernel] |
+| Cost-Justified Multi-type Resource Fair Scheduling for Kubernetes | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:edge] [framework_binding:kubernetes] |
 | DIAMoND: Dynamic Inference for Adaptive Edge MoE with Heterogeneous In-NAND and Near-DRAM Compute Architecture | paper | 2026 | Authors: Ling Liang (Peking University), Tianyang Luo (Peking University), Shuzhang Zhong (Peking University), Dongxue Zhao (Peking University), Qichao Ma (Peking University), Renjie Wei (Peking University), Jingyu Wang (Xiaomi Corporation), Meng Li (Peking University), Guangyu Sun (Peking University), Zongwei Wang (Peking University), Yimao Cai (Peking University) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | DoMoE: Domain-Aware Semantic Expert Prediction for Efficient MoE Inference Under Expert Offloading | paper | 2026 | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression,moe] [workload:agent,edge,moe] |
-| DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O | paper | 2026 | ACM SIGCOMM 2026 accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,kernel,kv-cache] [workload:agent,rag] |
-| Dynamo-MoE: Accelerating Sparse Large Model Inference | paper | 2026 | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
-| DynoPipe: Heterogeneous Edge-Cloud LLM Serving with Dynamically Orchestrated Pipeline Boundaries | paper | 2026 | Authors: Yanying Lin (University of Chinese Academy of Sciences, UCSD), Baicheng Chen (University of California San Diego), Xinyu Zhang (University of California San Diego), Chengzhong Xu (University of Macau), Kejiang Ye (Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 
 ### State Compression & Signal Coding
 

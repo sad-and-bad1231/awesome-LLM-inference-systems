@@ -178,6 +178,17 @@ class ParserTests(unittest.TestCase):
         items = parse_html_table_title_program(body, "https://conference.example/accepted/")
         self.assertEqual([item["title"] for item in items], ["Multi-Agent Speech Workflow"])
 
+    def test_parse_html_table_title_program_supports_title_column_and_links(self):
+        body = b"""
+        <table><tr><th>ID</th><th>Session</th><th>Title</th><th>Authors</th></tr>
+        <tr><td>1</td><td>Agents</td><td><a href='/papers/1/'>RSS Agent Runtime</a></td><td>A. Author</td></tr></table>
+        """
+        items = parse_html_table_title_program(
+            body, "https://conference.example/accepted/", title_column=2
+        )
+        self.assertEqual(items[0]["title"], "RSS Agent Runtime")
+        self.assertEqual(items[0]["url"], "https://conference.example/papers/1/")
+
 
 if __name__ == "__main__":
     unittest.main()
