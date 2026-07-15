@@ -17,7 +17,7 @@ The public repository views also include `README.md`, `papers/README.md`, and `i
 
 Discovery is intentionally resumable and low-cost: source pages are scanned first, while repository inspection and core-serving triage happen in the explicit `triage` step. Use repeatable `--source-id` arguments to sweep a large conference or ecosystem source incrementally. Candidates are retained with a verdict; only `high` and `normal` priority records are queued into the fact stores.
 
-`html_program` sources handle conference programs whose paper titles are rendered as plain text blocks or event-modal anchors. `html_bold_program` handles accepted-paper lists rendered as bold titles inside table/list items or paragraphs. `html_heading_program` handles accepted lists using `h3` paper headings, and `html_paragraph_anchor_program` handles paper anchors nested in paragraph records, including pages with empty hrefs. URL fragments are preserved for stable per-paper identity.
+`html_program` sources handle conference programs whose paper titles are rendered as plain text blocks or event-modal anchors. `html_bold_program` handles accepted-paper lists rendered as bold titles inside table/list items or paragraphs. `html_heading_program` handles accepted lists using `h3` paper headings, `html_paragraph_anchor_program` handles paper anchors nested in paragraph records, including pages with empty hrefs, and `html_embedded_full_papers` extracts full-paper titles embedded as escaped HTML in Next.js pages. URL fragments are preserved for stable per-paper identity.
 
 The public figures use `figs/*.svg` as editable sources and committed PNGs for GitHub rendering. A local Chrome or Edge installation is required for deterministic SVG-to-PNG export. Regenerate them on Windows with:
 

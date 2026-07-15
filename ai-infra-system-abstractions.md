@@ -22,7 +22,7 @@
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 286 | 186 | 50 | 50 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
 | Disaggregated Interconnects | 1387 | 103 | 40 | 1244 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 4828 | 201 | 30 | 4597 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| State Compression & Signal Coding | 5062 | 202 | 30 | 4830 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
 | Execution Compilation & Kernel Fusion | 728 | 99 | 51 | 578 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 614 | 199 | 53 | 362 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
 | SRE/Fault-Tolerance/Sparing | 535 | 26 | 10 | 499 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |

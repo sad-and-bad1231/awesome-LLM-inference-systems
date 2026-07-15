@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import xml.etree.ElementTree as ET
+from html import unescape
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 
@@ -322,6 +323,30 @@ def parse_html_paragraph_anchor_program(body: bytes, base_url: str) -> list[dict
     return parser.items
 
 
+def parse_html_embedded_full_papers(body: bytes, base_url: str) -> list[dict[str, str]]:
+    """Extract full-paper titles embedded as escaped HTML in a Next.js page."""
+    text = body.decode("utf-8", errors="replace")
+    text = re.sub(r"\\u([0-9a-fA-F]{4})", lambda match: chr(int(match.group(1), 16)), text)
+    pattern = re.compile(r"<p>\s*\[fp\]\s*<i>(.*?)</i>\s*<br", re.IGNORECASE | re.DOTALL)
+    items: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for match in pattern.finditer(text):
+        title = re.sub(r"<[^>]+>", "", match.group(1))
+        title = unescape(" ".join(title.split()))
+        if not title or title in seen:
+            continue
+        seen.add(title)
+        items.append(
+            {
+                "title": title,
+                "url": f"{base_url}#{_program_slug(title)}",
+                "published": "",
+                "summary": "",
+            }
+        )
+    return items
+
+
 def parse_github_releases(body: bytes) -> list[dict[str, str]]:
     payload = json.loads(body.decode("utf-8"))
     items = []
@@ -388,6 +413,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_heading_program(body, source["url"])
     if source_type == "html_paragraph_anchor_program":
         return parse_html_paragraph_anchor_program(body, source["url"])
+    if source_type == "html_embedded_full_papers":
+        return parse_html_embedded_full_papers(body, source["url"])
     if source_type == "github_releases":
         return parse_github_releases(body)
     if source_type == "openreview":

@@ -103,6 +103,9 @@ SYSTEM_OPERATION_TERMS = (
     "moe inference",
     "expert offloading",
     "inference on",
+    "rag system",
+    "rag serving",
+    "retrieval-augmented generation system",
     "inference optimization",
     "inference optimizations",
     "efficient inference",
@@ -118,6 +121,8 @@ SYSTEM_OPERATION_TERMS = (
     "memory-efficient decoding",
     "decoding optimization",
     "runtime",
+    "rag system",
+    "retrieval-augmented generation system",
 )
 MODEL_SYSTEM_TERMS = (
     "llm",
@@ -139,6 +144,7 @@ MODEL_SYSTEM_TERMS = (
     "mixture of experts",
     "attention",
     "rag",
+    "retrieval-augmented generation",
     "kv cache",
     "kvcache",
 )
@@ -166,6 +172,8 @@ DIRECT_SYSTEM_TITLE_TERMS = (
     "rocm",
     "gpu",
     "runtime",
+    "rag system",
+    "retrieval-augmented generation system",
 )
 
 REPO_STRUCTURE_TERMS = (
@@ -308,6 +316,7 @@ def triage_candidate(
                 "mixture of experts",
                 "moe",
                 "rag",
+                "retrieval-augmented generation",
                 "kv cache",
                 "kvcache",
                 "lora",

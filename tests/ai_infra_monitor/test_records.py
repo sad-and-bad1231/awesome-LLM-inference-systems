@@ -205,6 +205,15 @@ class RecordStoreTests(unittest.TestCase):
         result = triage_candidate(candidate, core_only=True)
         self.assertEqual(result.priority, "normal")
 
+    def test_triage_keeps_edge_rag_system_title(self):
+        candidate = Candidate(
+            title="SRAG: A Lightweight and Specialized Retrieval-augmented Generation System at the Edge",
+            url="https://example.org/paper",
+            topics=("agent-rag", "runtime-serving", "hardware-edge"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
     def test_triage_does_not_treat_source_topics_as_physical_evidence(self):
         generic_gpu = Candidate(
             title="Adaptive GPU Memory Oversubscription",

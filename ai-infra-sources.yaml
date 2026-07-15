@@ -464,6 +464,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "sigir26-accepted",
+      "name": "SIGIR 2026 official accepted full papers",
+      "type": "html_embedded_full_papers",
+      "url": "https://sigir2026.org/en-AU/pages/program/accepted-papers",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "iclr25-dblp",
       "name": "ICLR 2025 DBLP index",
       "type": "html_index",

@@ -7,6 +7,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_github_releases,
     parse_html_bold_program,
     parse_html_heading_program,
+    parse_html_embedded_full_papers,
     parse_html_paragraph_anchor_program,
     parse_html_index,
     parse_html_program,
@@ -108,6 +109,11 @@ class ParserTests(unittest.TestCase):
         body = b"<nav><a>Navigation</a></nav><p><a href=''>PreMoE: Proactive Inference for Efficient MoE</a><br><em>A. Author</em></p>"
         items = parse_html_paragraph_anchor_program(body, "https://conference.example/accepted/")
         self.assertEqual(items[0]["title"], "PreMoE: Proactive Inference for Efficient MoE")
+
+    def test_parse_html_embedded_full_papers_decodes_nextjs_fragments(self):
+        body = br'<script>\u003cp\u003e[fp] \u003ci\u003eSRAG: A Lightweight RAG Serving System\u003c/i\u003e\u003cbr /\u003eAuthors\u003c/p\u003e</script>'
+        items = parse_html_embedded_full_papers(body, "https://conference.example/accepted")
+        self.assertEqual(items[0]["title"], "SRAG: A Lightweight RAG Serving System")
 
 
 if __name__ == "__main__":
