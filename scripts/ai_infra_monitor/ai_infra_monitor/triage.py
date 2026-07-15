@@ -99,6 +99,10 @@ SYSTEM_OPERATION_TERMS = (
     "model inference",
     "foundation model inference",
     "large model inference",
+    "distributed inference",
+    "moe inference",
+    "expert offloading",
+    "inference on",
     "inference optimization",
     "inference optimizations",
     "efficient inference",
@@ -107,6 +111,7 @@ SYSTEM_OPERATION_TERMS = (
     "prefill",
     "kv cache",
     "kvcache",
+    "lora",
     "prefix cache",
     "context cache",
     "speculative decoding",
@@ -305,6 +310,7 @@ def triage_candidate(
                 "rag",
                 "kv cache",
                 "kvcache",
+                "lora",
             ),
         )
         core_topics = set(candidate.topics) & CORE_SERVING_TOPICS

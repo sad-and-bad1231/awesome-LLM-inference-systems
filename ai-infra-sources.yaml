@@ -444,6 +444,26 @@
       "modes": ["weekly"]
     },
     {
+      "id": "ijcai26-accepted",
+      "name": "IJCAI-ECAI 2026 official accepted papers",
+      "type": "html_heading_program",
+      "url": "https://2026.ijcai.org/accepted-papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "network-disaggregation", "agent-rag", "hardware-edge", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "colm26-accepted",
+      "name": "COLM 2026 official accepted papers",
+      "type": "html_paragraph_anchor_program",
+      "url": "https://colmweb.org/AcceptedPapers.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "iclr25-dblp",
       "name": "ICLR 2025 DBLP index",
       "type": "html_index",

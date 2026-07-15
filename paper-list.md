@@ -9,9 +9,9 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 115 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 120 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 178 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 186 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 127 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
@@ -28,7 +28,7 @@
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 186 |
+| unclassified | 199 |
 
 ## Runtime、调度与服务架构
 
@@ -229,6 +229,11 @@
 | STAR: Decode-Phase Rescheduling for LLM Inference | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Scaling Attention Beyond GPUs for LLM Inference | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | PDTrim: Targeted Pruning for Prefill-Decode Disaggregation in Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Accelerating Masked Diffusion Large Language Models: A Survey of Efficient Inference Techniques | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DoMoE: Domain-Aware Semantic Expert Prediction for Efficient MoE Inference Under Expert Offloading | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Going Beyond the Edge: Distributed Inference of Transformer Models on Ultra-Low-Power Wireless Devices | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| M-LoRA: Efficient Serving for Concurrent LoRA Adapters with Memory-Aware Speculative Scheduler on Single GPU | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SplitScaling: Adaptive Scaling for Disaggregated LLM Serving Against Traffic Bursts via DRL | IJCAI-ECAI 2026 official accepted papers |  | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -528,6 +533,14 @@
 | ECHO: Elastic Speculative Decoding with Sparse Gating for High-Concurrency Scenarios | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ASPIRE: Asynchronous Batched Self-Speculative Decoding for Long-Context LLM Inference | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Accelerating Speculative Decoding with Block Diffusion Draft Trees | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Direct Multi-Token Decoding | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Goose: Anisotropic Speculation Trees for Training-Free Speculative Decoding | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LLM Router: Rethinking Routing with Prefill Activations | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MomentKV: Closing the Directional Gap in KV Cache Eviction for Long-Context Inference | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SPEED: Specialized Position Experts for Efficient Speculative Decoding | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Workloads | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 

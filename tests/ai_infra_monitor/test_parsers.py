@@ -6,6 +6,8 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_feed,
     parse_github_releases,
     parse_html_bold_program,
+    parse_html_heading_program,
+    parse_html_paragraph_anchor_program,
     parse_html_index,
     parse_html_program,
 )
@@ -96,6 +98,16 @@ class ParserTests(unittest.TestCase):
         body = b"<p><strong>LongSpec: Long-Context Lossless Speculative Decoding</strong><br><em>A. Author</em></p>"
         items = parse_html_bold_program(body, "https://conference.example/program/")
         self.assertEqual(items[0]["title"], "LongSpec: Long-Context Lossless Speculative Decoding")
+
+    def test_parse_html_heading_program_extracts_h3_titles(self):
+        body = b"<h2>Track</h2><h3>M-LoRA: Efficient Serving for Concurrent LoRA Adapters</h3><h4>Authors</h4>"
+        items = parse_html_heading_program(body, "https://conference.example/accepted/")
+        self.assertEqual(items[0]["title"], "M-LoRA: Efficient Serving for Concurrent LoRA Adapters")
+
+    def test_parse_html_paragraph_anchor_program_extracts_paper_links(self):
+        body = b"<nav><a>Navigation</a></nav><p><a href=''>PreMoE: Proactive Inference for Efficient MoE</a><br><em>A. Author</em></p>"
+        items = parse_html_paragraph_anchor_program(body, "https://conference.example/accepted/")
+        self.assertEqual(items[0]["title"], "PreMoE: Proactive Inference for Efficient MoE")
 
 
 if __name__ == "__main__":

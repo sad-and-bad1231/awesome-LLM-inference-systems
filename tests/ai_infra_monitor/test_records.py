@@ -196,6 +196,15 @@ class RecordStoreTests(unittest.TestCase):
         result = triage_candidate(candidate, core_only=True)
         self.assertEqual(result.priority, "normal")
 
+    def test_triage_keeps_lora_serving_title(self):
+        candidate = Candidate(
+            title="M-LoRA: Efficient Serving for Concurrent LoRA Adapters with Memory-Aware Speculative Scheduler",
+            url="https://example.org/paper",
+            topics=("runtime-serving", "state-kv"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
     def test_triage_does_not_treat_source_topics_as_physical_evidence(self):
         generic_gpu = Candidate(
             title="Adaptive GPU Memory Oversubscription",
