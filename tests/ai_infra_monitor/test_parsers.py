@@ -84,6 +84,19 @@ class ParserTests(unittest.TestCase):
             "https://conference.example/accepted/#aida-llm-root-cause-analysis",
         )
 
+    def test_parse_html_bold_program_extracts_paragraph_titles(self):
+        body = b"<td><p><b>STAR: Decode-Phase Rescheduling for LLM Inference</b></p><p><i><b>Authors:</b></i> A. Author</p></td>"
+        items = parse_html_bold_program(body, "https://conference.example/program/")
+        self.assertEqual(
+            [item["title"] for item in items],
+            ["STAR: Decode-Phase Rescheduling for LLM Inference"],
+        )
+
+    def test_parse_html_bold_program_extracts_strong_titles(self):
+        body = b"<p><strong>LongSpec: Long-Context Lossless Speculative Decoding</strong><br><em>A. Author</em></p>"
+        items = parse_html_bold_program(body, "https://conference.example/program/")
+        self.assertEqual(items[0]["title"], "LongSpec: Long-Context Lossless Speculative Decoding")
+
 
 if __name__ == "__main__":
     unittest.main()

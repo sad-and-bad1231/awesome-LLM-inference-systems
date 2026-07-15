@@ -153,7 +153,7 @@ class _ProgramParser(HTMLParser):
 
 
 class _BoldProgramParser(HTMLParser):
-    """Extract paper titles rendered as bold text inside table/list items."""
+    """Extract paper titles rendered as bold text inside program blocks."""
 
     def __init__(self, base_url: str):
         super().__init__(convert_charrefs=True)
@@ -167,7 +167,7 @@ class _BoldProgramParser(HTMLParser):
         tag_name = tag.lower()
         parent = self.stack[-1] if self.stack else ""
         self.stack.append(tag_name)
-        if tag_name == "b" and parent in {"td", "li"}:
+        if tag_name in {"b", "strong"} and parent in {"td", "li", "p"}:
             self.capture = True
             self.capture_text = []
 
@@ -177,7 +177,7 @@ class _BoldProgramParser(HTMLParser):
 
     def handle_endtag(self, tag: str) -> None:
         tag_name = tag.lower()
-        if tag_name == "b" and self.capture:
+        if tag_name in {"b", "strong"} and self.capture:
             title = " ".join("".join(self.capture_text).split())
             if title:
                 self.items.append(

@@ -9,9 +9,9 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 107 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 115 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 145 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 178 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 127 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
@@ -25,10 +25,10 @@
 
 | Venue Status | Count |
 |---|---:|
-| formal_conference | 365 |
+| formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 149 |
+| unclassified | 186 |
 
 ## Runtime、调度与服务架构
 
@@ -221,6 +221,14 @@
 | Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles | ISCA 2026 official conference program |  | Authors: Moiz Arif (Micron Technology, Inc.), Avinash Maurya (Argonne National Laboratory), Sudharshan Vazhkudai (Micron Technology, Inc.), Bogdan Nicolae (Argonne National Laboratory) |
 | UniCore: A Bit-Width Scalable GEMM Unit for Unified LLM Inference | ISCA 2026 official conference program |  | Authors: Yonghao Chen (The Hong Kong University of Science and Technology (Guangzhou)), Jiaxiang Zou (The Hong Kong University of Science and Technology (Guangzhou)), Xingyu Chen (The Hong Kong University of Science and Technology (Guangzhou)), Chenxi Xu (The Hong Kong University of Science and Technology (Guangzhou)), Jingyu Guo (The Hong Kong University of Science and Technology (Guangzhou)), Xinyu Chen (The Hong Kong University of Science and Technology (Guangzhou)) |
 | XtraMAC: An Efficient MAC Architecture for Mixed-Precision LLM Inference on FPGA | ISCA 2026 official conference program |  | Authors: Feng Yu (National University of Singapore), Hongshi Tan (National University of Singapore), Yao Chen (National University of Singapore), Weng-Fai Wong (National University of Singapore), Bingsheng He (National University of Singapore) |
+| Accelerating Block Low-Rank Foundation Model Inference on Memory-Constrained GPUs | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Dynamo-MoE: Accelerating Sparse Large Model Inference | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MoE-Lens: High-Throughput MoE LLM Inference at the Hardware Limit | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Omnia: RAG Serving through Speculative Scheduling | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PKAS: Predictive KVCache-Aware Scheduling | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| STAR: Decode-Phase Rescheduling for LLM Inference | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Scaling Attention Beyond GPUs for LLM Inference | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PDTrim: Targeted Pruning for Prefill-Decode Disaggregation in Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -487,6 +495,39 @@
 | Prefill-Time Intervention for Mitigating Hallucination in Large Vision-Language Models | CVPR 2026 official open access papers |  | CVPR 2026 official open access papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Revisiting Multimodal KV Cache Compression: A Frequency-Domain-Guided Outlier-KV-Aware Approach | CVPR 2026 official open access papers |  | CVPR 2026 official open access papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | VVS: Accelerating Speculative Decoding for Visual Autoregressive Generation via Partial Verification Skipping | CVPR 2026 official open access papers |  | CVPR 2026 official open access papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AdapShot: Adaptive Many-Shot In-Context Learning with Semantic-Aware KV Cache Reuse | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Calibrated Speculative Decoding: Frequency-Guided Candidate Selection for Efficient Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ContrastKV: Robust KV Cache Eviction via Contrastive Signal Fusion for Multi-Query Generalization | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DREAM-S: Speculative Decoding with Searchable Drafting and Target-Aware Refinement for Multimodal Generation | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Detecting RAG Extraction Attack via Dual-Path Runtime Integrity Game | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| EDSD: Entropy-Driven Design for Faster Speculative Decoding | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FLARE: Fine-Grained Length-Aware Routing for Resource-Efficient Heterogeneous LLM Serving | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Focus-dLLM: Accelerating Long-Context Diffusion LLM Inference via Confidence-Guided Context Focusing | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HCSpec: Two-Tier Horizontal Cascade Speculative Decoding for High-Efficiency Large Language Model Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HERMES: KV Cache as Hierarchical Memory for Efficient Streaming Video Understanding | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HeteroCache: A Dynamic Retrieval Approach to Heterogeneous KV Cache Compression for Long-Context LLM Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HeteroSpec: Leveraging Contextual Heterogeneity for Efficient Speculative Decoding | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| HybridKV: Hybrid KV Cache Compression for Efficient Multimodal Large Language Model Inference | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Jakiro: Boosting Speculative Decoding via Decoupled MoE | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LongSpec: Long-Context Lossless Speculative Decoding with Efficient Drafting and Verification | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MixKVQ: Query-Aware Mixed-Precision KV Cache Quantization for Long-Context Reasoning | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Question Tells You Where the Answer Is: Intention-aware Long-Context KV Cache Compression | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| REAL: REtrieval-reAsoning and Logic-constructed Attention Behaviors for Long-Context KV Cache Compression | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SSSD: Simply-Scalable Speculative Decoding | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| See the Forest for the Trees: Loosely Speculative Decoding via Visual-Semantic Guidance for Efficient Inference of Video LLMs | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Sparrow: Text-Anchored Window Attention with Visual-Semantic Glimpsing for Speculative Decoding in Video LLMs | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SpecCache: Speculative KV Cache Reuse for Efficient RAG Serving | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| The Pitfalls of KV Cache Compression | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| TokenTiming: A Dynamic Alignment Method for Universal Speculative Decoding Model Pairs | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Towards Efficient and Effective Diffusion Language Model Inference via Semantic-Aware Adaptive Denoising | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| UniSpec: Training-Free Speculative Decoding for Robust LLM Acceleration Across Languages and Hardware | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| VecInfer: Efficient LLM Inference with Low-Bit KV Cache via Outlier-Suppressed Vector Quantization | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| When Efficiency Meets Safety: A Benchmark Security Analysis of KV Cache Compression in Large Language Models | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| When KV Cache Reuse Fails in Multi-Agent Systems: Cross-Candidate Interaction is Crucial for LLM Judges | ACL 2026 official accepted main conference papers |  | ACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Dustin: Draft-Augmented Sparse Verification for Efficient Long-Context Generation with Speculative Decoding | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ECHO: Elastic Speculative Decoding with Sparse Gating for High-Concurrency Scenarios | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 

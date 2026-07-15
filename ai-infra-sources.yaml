@@ -434,6 +434,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "acl26-accepted",
+      "name": "ACL 2026 official accepted main conference papers",
+      "type": "html_bold_program",
+      "url": "https://2026.aclweb.org/program/accepted_papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "iclr25-dblp",
       "name": "ICLR 2025 DBLP index",
       "type": "html_index",
@@ -644,6 +654,16 @@
       "tier": "A",
       "kind": "paper",
       "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "moe", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "hpdc26-program",
+      "name": "HPDC 2026 official program",
+      "type": "html_bold_program",
+      "url": "https://hpdc.sci.utah.edu/2026/program.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "network-disaggregation", "moe", "hardware-edge"],
       "modes": ["weekly"]
     },
     {

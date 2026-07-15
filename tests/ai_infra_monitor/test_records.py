@@ -178,6 +178,24 @@ class RecordStoreTests(unittest.TestCase):
         result = triage_candidate(candidate, core_only=True)
         self.assertEqual(result.priority, "normal")
 
+    def test_triage_keeps_foundation_model_inference_title(self):
+        candidate = Candidate(
+            title="Accelerating Foundation Model Inference on Memory-Constrained GPUs",
+            url="https://example.org/paper",
+            topics=("runtime-serving", "hardware-edge"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
+    def test_triage_keeps_kv_cache_scheduler_title_without_llm_token(self):
+        candidate = Candidate(
+            title="PKAS: Predictive KVCache-Aware Scheduling",
+            url="https://example.org/paper",
+            topics=("state-kv", "runtime-serving"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
     def test_triage_does_not_treat_source_topics_as_physical_evidence(self):
         generic_gpu = Candidate(
             title="Adaptive GPU Memory Oversubscription",
