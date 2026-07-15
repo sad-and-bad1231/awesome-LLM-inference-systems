@@ -924,6 +924,128 @@
       "tier": "A",
       "kind": "paper",
       "modes": ["weekly"]
+    },
+    {
+      "id": "mobisys26-accepted",
+      "name": "MobiSys 2026 official accepted papers",
+      "type": "html_classed_title_program",
+      "url": "https://www.sigmobile.org/mobisys/2026/accepted_papers/",
+      "title_class": "paper-title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "hardware-edge", "kernel-compiler", "multimodal-diffusion", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "mobicom26-accepted",
+      "name": "MobiCom 2026 official accepted papers",
+      "type": "html_bold_program",
+      "url": "https://www.sigmobile.org/mobicom/2026/accepted.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "hardware-edge", "kernel-compiler", "network-disaggregation", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "acsos26-accepted",
+      "name": "ACSOS 2026 official accepted papers",
+      "type": "html_program",
+      "url": "https://2026.acsos.org/track/acsos-2026-papers",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "agent-rag", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "webconf26-research-accepted",
+      "name": "The Web Conference 2026 official research accepted papers",
+      "type": "html_paper_id_list",
+      "url": "https://www2026.thewebconf.org/accepted/research-tracks.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "reliability-evaluation", "network-disaggregation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "webconf26-industry-accepted",
+      "name": "The Web Conference 2026 official industry accepted papers",
+      "type": "html_paper_id_list",
+      "url": "https://www2026.thewebconf.org/accepted/industry.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "webconf26-short-accepted",
+      "name": "The Web Conference 2026 official short accepted papers",
+      "type": "html_paper_id_list",
+      "url": "https://www2026.thewebconf.org/accepted/short-papers.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "kdd26-dblp",
+      "name": "KDD 2026 DBLP proceedings",
+      "type": "html_dblp_titles",
+      "url": "https://dblp.org/db/conf/kdd/kdd2026-1.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "reliability-evaluation", "state-kv", "moe"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "aaai26-dblp",
+      "name": "AAAI 2026 DBLP proceedings",
+      "type": "html_dblp_titles",
+      "url": "https://dblp.org/db/conf/aaai/aaai2026.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "reliability-evaluation", "hardware-edge", "multimodal-diffusion"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "aamas26-proceedings",
+      "name": "AAMAS 2026 official proceedings",
+      "type": "html_index",
+      "url": "https://www.ifaamas.org/Proceedings/aamas2026/forms/contents.htm",
+      "link_prefixes": ["https://www.ifaamas.org/Proceedings/aamas2026/pdfs/"],
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "program-scheduling", "reliability-evaluation", "runtime-serving"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icaps26-accepted",
+      "name": "ICAPS 2026 official accepted papers",
+      "type": "html_paper_block_program",
+      "url": "https://icaps26.icaps-conference.org/program/accepted/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["program-scheduling", "agent-rag", "reliability-evaluation", "runtime-serving"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sensys26-main-program",
+      "name": "SenSys 2026 official main program",
+      "type": "html_bold_program",
+      "url": "https://sensys.acm.org/2026/main_program.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "hardware-edge", "kernel-compiler", "multimodal-diffusion", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icassp26-accepted",
+      "name": "ICASSP 2026 official accepted papers",
+      "type": "html_table_title_program",
+      "url": "https://cmsworkshops.com/ICASSP2026/papers/accepted_papers.php",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["multimodal-diffusion", "runtime-serving", "hardware-edge", "agent-rag", "reliability-evaluation"],
+      "modes": ["weekly"]
     }
   ]
 }

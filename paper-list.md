@@ -9,14 +9,14 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 123 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 127 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 211 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 238 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
-| 算子、编译与硬件加速 | 127 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
+| 算子、编译与硬件加速 | 157 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
 | Agent、RAG、多模态与应用级 Serving | 45 | agent workflow、RAG pipeline、多模态 stage graph、程序级调度 |
-| Workload、评测、可靠性与方法论 | 41 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
+| Workload、评测、可靠性与方法论 | 44 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
 | AI 集群、向量数据库、安全与周边基础设施 | 51 | GPU 集群、向量数据库、TEE/FHE、侧信道、spot/geo routing |
 
 ## Evidence Layers
@@ -28,7 +28,7 @@
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 203 |
-| unclassified | 227 |
+| unclassified | 291 |
 
 ## Runtime、调度与服务架构
 
@@ -237,6 +237,10 @@
 | An LLM-Guided Query-Aware Inference System for GNN Models on Large Knowledge Graphs | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Hexgen-Flow: Optimizing LLM Inference Request Scheduling for Agentic Text-to-SQL | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | MatKV: Trading Compute for Flash Storage in LLM Inference | ICDE 2026 official accepted research papers |  | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MetaKube: An Experience-Aware LLM Framework for Kubernetes Failure Diagnosis | The Web Conference 2026 official research accepted papers |  | Authors: Wei Sun, Ting Wang, Xinran Tian, Wanshun Lan, Xuhan Feng, Haoyue Li and Fangxin Wang |
+| LaTune: Lightweight and Adaptive Configuration Tuning for LLM Inference on Edge Devices | The Web Conference 2026 official research accepted papers |  | Authors: Siqi Zhong, Mugeng Liu, Haiyang Shen, Chongyang Pan and Yun Ma |
+| Self-Speculative Decoding for On-device MoE Acceleration | The Web Conference 2026 official research accepted papers |  | Authors: Peirong Zheng, Wenchao Xu and Haozhao Wang |
+| Task-Aware Cloud-End Offloading for Vision-Language Model Serving via Dynamic Modality-Specific Adapter Scheduling | The Web Conference 2026 official research accepted papers |  | Authors: Zian Wang, Ziyi Wang, Jie Xing, Yaya Wei, Ziyan Zhong and Lanshan Zhang |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -569,6 +573,33 @@
 | An Empirical Study of Speculative Decoding for Small Language Models | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Look Before You Leap: A Lookahead Reasoning Quality Gate for Speculative Decoding | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Speculative Decoding Speed-of-Light: Optimal Lower Bounds via Branching Random Walks | EACL 2026 official accepted main conference papers |  | EACL 2026 official accepted main conference papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices Best Paper Award Runner-Up | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Reinforcement Speculative Decoding for Fast Ranking | KDD 2026 DBLP proceedings |  | KDD 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AdaSpec: Adaptive Multilingual Speculative Decoding with Self-Synthesized Language-Aware Training and Vocabulary Simplification | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Algorithms for Context Engineering in LLM Inference: Optimization of Placement, Compression, and Scheduling | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Annealed Relaxation of Speculative Decoding for Faster Autoregressive Image Generation | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DIAA: A Decoding-Efficient Inference Acceleration Approach for On-Device Large Language Models | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DesireKV: Decoupling Sensitivity and Importance for Reasoning-Aware KV Cache Compression | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Efficient Multimodal Large Language Model via Dynamic KV Cache Quantization | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Head-Aware KV Cache Compression for Efficient Visual Autoregressive Modeling | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| KVmix: Gradient-Based Layer Importance-Aware Mixed-Precision Quantization for KV Cache | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| KeepKV: Achieving Periodic Lossless KV Cache Compression for Efficient LLM Inference | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Scaling LLM Speculative Decoding: Non-Autoregressive Forecasting in Large-Batch Scenarios | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Self-Indexing KVCache: Predicting Sparse Attention from Compressed Keys | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Sparse Attention Across Multiple-Context KV Cache | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Steering Pretrained Drafters During Speculative Decoding | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| StreamKV: Streaming Video Question-Answering with Segment-based KV Cache Retrieval and Compression | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Talon: Breaking the Synchronization Barrier in Speculative Decoding with Hybrid Model-based and Retrieve-based Drafting | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| RAC: Request-adaptive Configuration for Efficient Speculative Decoding | AAMAS 2026 official proceedings |  | AAMAS 2026 official proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PELM: Power Efficient On-Device LLM Inference with Speculative Decoding and Dynamic Voltage Frequency Scaling | SenSys 2026 official main program |  | SenSys 2026 official main program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ACCEPTANCE-GUIDED ADAPTIVE SPECULATIVE DECODING FOR EFFICIENT LARGE LANGUAGE MODEL INFERENCE | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Breaking Codebook Redundancy for Faster Autoregressive Image Generation with Retrieval-Augmented Speculative Decoding | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ENTROLLM: ENTROPY ENCODED WEIGHT COMPRESSION FOR EFFICIENT LARGE LANGUAGE MODEL INFERENCE ON EDGE DEVICES | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FASTEAGLE: CASCADED DRAFTING FOR ACCELERATING SPECULATIVE DECODING | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MTEDS: MEMORY AND TIME EFFICIENT SPECULATIVE DECODING WITH DYNAMIC SPARSITY AND BYPASS SCHEDULING | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PRINCIPLED COARSE-GRAINED ACCEPTANCE FOR SPECULATIVE DECODING IN SPEECH | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| RETRIEVAL-BASED SPECULATIVE DECODING FOR AUTOREGRESSIVE SPEECH SYNTHESIS | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SEMANTICACHE: EFFICIENT KV CACHE COMPRESSION VIA SEMANTIC CHUNKING AND CLUSTERED MERGING | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 
@@ -735,6 +766,36 @@
 | HCRMap: Pressure-Aware Hot-Expert Residency Mapping for 3.5D MoE Chiplet Inference | arXiv systems and accelerator query |  | Mixture-of-Experts (MoE) large language models (LLM) activate only a small number of experts during inference, but token routing introduces persistent expert hotness skew: a small set of hot experts continuously receives most tokens, while the remaining experts are lightly loaded. On 3.5D multi-chiplet systems, this skew not only causes compute imbalance but also amplifies pressure on communication, memory bandwidth, I/O, and execution queues. Therefore, the core problem is not simply to reduce token movement, but to dynamically place and reuse hot expert replicas across different memory tiers. This paper proposes HCRMap, a hot expert residency mapping framework for pressure-aware expert replica management in 3.5D MoE inference. Based on expert hotness, weight loading cost, migration overhead, and runtime resource pressure, HCRMap dynamically determines which experts should be promoted, retained, demoted, or evicted. It then maps routed token groups to suitable resident replicas, thereby jointly mitigating communication, memory, and queue bottlenecks. Experimental results show that HCRMap reduces end-to-end latency by 43.6% and 43.0% over Hydra in the prefill and decode stages, respectively; by 34.5% and 33.1% over MoEntwine; and by 46.7% and 46.0% over PIMoE. |
 | ViBE: Co-Optimizing Workload Skew and Hardware Variability for MoE Serving | arXiv systems and accelerator query |  | In distributed Mixture-of-Experts (MoE) inference, input-dependent token routing interacts with GPU performance variability to create persistent stragglers under synchronized execution, where the slowest GPU determines layer latency. This performance variability is inherent to modern accelerators: manufacturing variation, power limits, and thermal conditions introduce measurable execution-time differences across nominally identical GPUs. The core challenge is that MoE execution-time imbalance arises from the interaction of workload skew and hardware asymmetry. Token routing produces uneven and layer-varying expert loads, while GPU throughput depends on device-specific operating characteristics and workload intensity. Prior work mitigates routing skew but assumes homogeneous hardware, optimizing token balance rather than execution latency. As a result, even balanced token assignments can leave hardware-induced stragglers unaddressed. Thus, we propose Variability-Informed Binning of Experts (ViBE), a hardware-aware expert placement framework that minimizes execution-time imbalance across GPUs. ViBE combines per-GPU performance modeling with expert activation profiling to assign high-load experts to faster devices and low-load experts to slower ones, reducing layer-level stragglers without modifying model semantics or hardware. Because both workload characteristics and effective GPU throughput can shift across serving conditions, ViBE supports lightweight recalibration under workload/performance drift to refresh its routing and performance estimates when needed. Results show that ViBE consistently reduces execution-time imbalance and improves SLO attainment by 14%, while lowering P90 TTFT by up to 45%. We further show that the impact of hardware variability increases at scale, making variability-aware placement important for efficient, high-utilization LLM serving. |
 | SmoothAgent: Efficient Long-Horizon LLM-Based Agent Serving with Lookahead Context Engineering | arXiv systems and accelerator query |  | LLM-based agents execute multi-turn workflows with continuously growing contexts, where LLM calls are interleaved with tool invocations and environment feedback. To maintain model quality, modern agent frameworks rely on context engineering strategies such as offloading, reduction, and isolation to control the context length. However, these strategies introduce significant context transformation overhead: each transformation invalidates existing KV caches and triggers re-prefill, leading to increased time-to-first-token (TTFT). In this paper, we identify that context transformations are segment-decomposable, where the transformation of a prefix is independent of future tokens. This property enables transformations to be executed ahead of time. Based on this insight, we propose a lookahead programming model that allows agent frameworks to express context transformations as asynchronous operations without modifying their execution logic. The runtime proactively executes these transformations and prepares transformed KV caches in advance, enabling direct context replacement without blocking. We further design a lookahead-aware scheduler in LLM serving systems to support these asynchronous requests alongside latency-critical workloads with controlled interference. We implement our approach to support representative context engineering strategies and integrate it into existing agent frameworks and LLM serving systems. Experiments show that our approach effectively eliminates transformation overhead and reduces TTFT by up to 11.9x. |
+| Act Before It's Too Late: Power-Efficient LLM Inference on Mobile Device | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| KVSwap: Disk-aware KV Cache Offloading for Long-Context On-device Inference | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| TimelyLLM: Time-sensitive LLM Serving System for Physical-I/O Limited Agents Best Paper Award Runner-Up Best Artifact Award - Runner Up | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| VLMCache: Efficient On-Device Vision-Language Model Inference | MobiSys 2026 official accepted papers |  | MobiSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DyMerge-LoRA: On-GPU Post-Merge Fusion for High-Throughput Multi-Tenant Composite LoRA Serving | KDD 2026 DBLP proceedings |  | KDD 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AP2O-Coder: Adaptively Progressive Preference Optimization for Reducing Compilation and Runtime Errors in LLM-Generated Code | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AccKV: Towards Efficient Audio-Video LLMs Inference via Adaptive-Focusing and Cross-Calibration KV Cache Optimization | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Accelerating LLM Inference Throughput via Asynchronous KV Cache Prefetching | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| CasMoE: A Cascaded Framework for Efficient MoE Inference on Resource-constrained Devices | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| CommitMoE: Efficient Fallback-Free MoE Inference with Offloading Under GPU Memory Constraints | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| DAVID: Dual-stage Adaptive Vision-text Integrated Decoupling for Multimodal KV Cache Eviction | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FIRM-MoE: Fine-GrainedExpert Decomposition for Resource-Adaptive MoE Inference | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Judge Q: Trainable Queries for Optimized Information Retention in KV Cache Eviction | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Lethe: Layer- and Time-Adaptive KV Cache Pruning for Reasoning-Intensive LLM Serving | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Mixture-of-Trees: Learning to Select and Weigh Reasoning Paths for Efficient LLM Inference | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PRISM: Privacy-Aware Routing for Adaptive Cloud-Edge LLM Inference via Semantic Sketch Collaboration | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SecMoE: Communication-Efficient Secure MoE Inference via Select-Then-Compute | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SlimInfer: Accelerating Long-Context LLM Inference via Dynamic Token Pruning | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SparK: Query-Aware Unstructured Sparsity with Recoverable KV Cache Channel Pruning | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SubGCache: Accelerating Graph-based RAG with Subgraph-level KV Cache | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| TokenPowerBench: Benchmarking the Power Consumption of LLM Inference | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| iMAD: Intelligent Multi-Agent Debate for Efficient and Accurate LLM Inference | AAAI 2026 DBLP proceedings |  | AAAI 2026 DBLP proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| COMPRESSING KV CACHE FOR LONG-CONTEXT LLM INFERENCE WITH INTER-LAYER ATTENTION SIMILARITY | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| CORM: COARSE-TO-FINE-GRAINED OFFLOADING FOR SMOE LLM INFERENCE ON CONSUMER-GRADE GPU | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FASTAV: EFFICIENT TOKEN PRUNING FOR AUDIO-VISUAL LARGE LANGUAGE MODEL INFERENCE | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MIDAS: A Dynamic Cross-GPU KV Cache Offloading Framework For LLM On GPU Cluster Systems | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MotionFusion: Fusing Motion and Saliency for Fast Video Large Language Model Inference | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| TOKCOINFER: TOKEN-LEVEL MULTI-MODEL COLLABORATION FOR ENERGY-EFFICIENT LLM INFERENCE | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| UNILORA: A UNIFIED FRAMEWORK FOR EFFICIENT AND SECURE LORA MANAGEMENT IN MULTI-TENANT LLM INFERENCE | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## MoE、Adapter、多租户与模型服务
 
@@ -865,6 +926,9 @@
 | Reasoning Language Model Inference Serving Unveiled: An Empirical Study | ICLR 2026 Poster | OpenReview 公开稿未列单位 | 该实证研究刻画 reasoning LLM 在长输出、KV 增长和请求完成时间上的 serving 行为，为调度和容量规划提供基线。 |
 | A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints | ICML 2026 | 作者公开稿未列单位 | 该工作把计算和 KV cache 显存同时纳入排队稳定性分析，给出 LLM inference 系统何时会因内存约束失稳的理论条件。 |
 | BEAM: Joint Resource–Power Optimization for Energy-Efficient LLM Inference under SLO contraints | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Probe-and-Fetch: Dynamic KV Cache Pruning for Accelerated Long-Context Inference in Web-Scale AI Search | The Web Conference 2026 official industry accepted papers |  | Authors: Yuchen Li:Baidu Inc.,Shanghai Jiao Tong University;Rui Kong:Baidu Inc.;Xinran Chen:Baidu Inc.;Chengzhe Zhang:Baidu Inc.;Jiamin Chen:City University of Hong Kong;Cheng Deng:University of Edinburgh;Xinyu Ma:Baidu Inc.;Haojie Zhang:Baidu Inc.;Tianhao Peng:Baidu Inc.;Hengyi Cai:Baidu Inc.;Shuaiqiang Wang:Baidu Inc.;Jiashu Zhao:Wilfrid Laurier University;Yongqi Zhang:The Hong Kong University of Science and Technology (Guangzhou);Haoyi Xiong:Baidu Inc.;Jimmy Xiangji Huang:York University;Lei Chen:The Hong Kong University of Science and Technology (Guangzhou);Jun Wang:University College London;Dawei Yin:Baidu Inc. |
+| llm-tuna - Hyperparameter Optimization for LLM Inference | The Web Conference 2026 official short accepted papers |  | Authors: Thameem Abbas Ibrahim Bathusha:Red Hat LLC.;Aanya Sharma:Red Hat LLC.;Andy Huynh:Boston University;Rehan Samaratunga:Boston University;Ashish Kamra:Red Hat LLC. |
+| GAPS: Global-Aware Prediction-driven Scheduling for Large-Scale LLM Inference | AAMAS 2026 official proceedings |  | AAMAS 2026 official proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## AI 集群、向量数据库、安全与周边基础设施
 

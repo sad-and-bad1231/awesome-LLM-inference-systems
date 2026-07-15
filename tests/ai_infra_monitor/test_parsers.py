@@ -12,6 +12,10 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_html_embedded_full_papers,
     parse_html_paragraph_anchor_program,
     parse_html_index,
+    parse_html_paper_id_list,
+    parse_html_paper_block_program,
+    parse_html_table_title_program,
+    parse_html_dblp_titles,
     parse_html_program,
 )
 
@@ -128,6 +132,51 @@ class ParserTests(unittest.TestCase):
             body, "https://conference.example/accepted/", "paper-title"
         )
         self.assertEqual(items[0]["title"], "Paged KV Cache Serving")
+
+    def test_parse_html_paper_id_list_extracts_title_without_authors(self):
+        body = b"""
+        <ul>
+          <li><span class='paper-id'>(rfp0001)</span> DeepServe: Efficient LLM Serving
+          <span class='paper-authors'>A. Author and B. Author</span></li>
+        </ul>
+        """
+        items = parse_html_paper_id_list(body, "https://conference.example/accepted/")
+        self.assertEqual(items[0]["title"], "DeepServe: Efficient LLM Serving")
+        self.assertEqual(
+            items[0]["url"],
+            "https://conference.example/accepted/#deepserve-efficient-llm-serving",
+        )
+
+    def test_parse_html_dblp_titles_ignores_navigation(self):
+        body = b"""
+        <a href='/'>Navigation title</a>
+        <li class='entry inproceedings' id='conf/demo/Paper26'>
+          <cite><span class='title' itemprop='name'>Paged Serving Systems.</span></cite>
+        </li>
+        """
+        items = parse_html_dblp_titles(body, "https://dblp.org/db/conf/demo/demo2026.html")
+        self.assertEqual([item["title"] for item in items], ["Paged Serving Systems"])
+        self.assertEqual(
+            items[0]["url"],
+            "https://dblp.org/db/conf/demo/demo2026.html#conf-demo-Paper26",
+        )
+
+    def test_parse_html_paper_block_program_extracts_strong_title(self):
+        body = b"""
+        <div class='paper'><div><strong>AgentPlan: Planning with LLMs</strong></div>
+        <div>A. Author and B. Author</div></div>
+        """
+        items = parse_html_paper_block_program(body, "https://conference.example/accepted/")
+        self.assertEqual(items[0]["title"], "AgentPlan: Planning with LLMs")
+
+    def test_parse_html_table_title_program_extracts_numbered_rows(self):
+        body = b"""
+        <table><tr><th>Paper Number</th><th>Paper Title</th></tr>
+        <tr><td>10540</td><td>Multi-Agent Speech Workflow</td></tr>
+        <tr><td>bad</td><td>Navigation Row</td></tr></table>
+        """
+        items = parse_html_table_title_program(body, "https://conference.example/accepted/")
+        self.assertEqual([item["title"] for item in items], ["Multi-Agent Speech Workflow"])
 
 
 if __name__ == "__main__":

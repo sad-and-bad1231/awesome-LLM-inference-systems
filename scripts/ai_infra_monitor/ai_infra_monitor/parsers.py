@@ -370,6 +370,172 @@ class _ClassedTitleParser(HTMLParser):
         self.depth = max(0, self.depth - 1)
 
 
+class _PaperIdListParser(HTMLParser):
+    """Extract titles from list items marked with paper-id and paper-authors spans."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.li_depth = 0
+        self.paper_id_depth = 0
+        self.authors_depth = 0
+        self.saw_paper_id = False
+        self.title_text: list[str] = []
+        self.author_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        classes = set((values.get("class") or "").split())
+        if tag.lower() == "li" and not self.li_depth:
+            self.li_depth = self.depth
+            self.paper_id_depth = 0
+            self.authors_depth = 0
+            self.saw_paper_id = False
+            self.title_text = []
+            self.author_text = []
+        elif self.li_depth and "paper-id" in classes:
+            self.saw_paper_id = True
+            self.paper_id_depth = self.depth
+        elif self.li_depth and "paper-authors" in classes:
+            self.authors_depth = self.depth
+
+    def handle_data(self, data: str) -> None:
+        if not self.li_depth or not self.saw_paper_id:
+            return
+        if self.authors_depth:
+            self.author_text.append(data)
+        elif not self.paper_id_depth:
+            self.title_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if self.li_depth and tag_name == "span":
+            if self.paper_id_depth == self.depth:
+                self.paper_id_depth = 0
+            if self.authors_depth == self.depth:
+                self.authors_depth = 0
+        if self.li_depth and tag_name == "li" and self.depth == self.li_depth:
+            title = " ".join("".join(self.title_text).split())
+            title = re.sub(r"\s+\u2014\s*$", "", title)
+            if title and title not in {item["title"] for item in self.items}:
+                item = {
+                    "title": title,
+                    "url": f"{self.base_url}#{_program_slug(title)}",
+                    "published": "",
+                    "summary": "",
+                }
+                authors = " ".join("".join(self.author_text).split())
+                if authors:
+                    item["summary"] = f"Authors: {authors}"
+                self.items.append(item)
+            self.li_depth = 0
+            self.paper_id_depth = 0
+            self.authors_depth = 0
+            self.saw_paper_id = False
+            self.title_text = []
+            self.author_text = []
+        self.depth = max(0, self.depth - 1)
+
+
+class _PaperBlockProgramParser(HTMLParser):
+    """Extract strong titles from conference blocks carrying the ``paper`` class."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.paper_depth = 0
+        self.title_depth = 0
+        self.title_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        classes = set((values.get("class") or "").split())
+        if tag.lower() == "div" and "paper" in classes and not self.paper_depth:
+            self.paper_depth = self.depth
+        elif self.paper_depth and tag.lower() == "strong":
+            self.title_depth = self.depth
+            self.title_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.title_depth:
+            self.title_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if self.title_depth and tag_name == "strong" and self.depth == self.title_depth:
+            title = " ".join("".join(self.title_text).split())
+            if title and title not in {item["title"] for item in self.items}:
+                self.items.append(
+                    {
+                        "title": title,
+                        "url": f"{self.base_url}#{_program_slug(title)}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            self.title_depth = 0
+            self.title_text = []
+        if self.paper_depth and tag_name == "div" and self.depth == self.paper_depth:
+            self.paper_depth = 0
+        self.depth = max(0, self.depth - 1)
+
+
+class _TableTitleProgramParser(HTMLParser):
+    """Extract titles from numbered two-column accepted-paper table rows."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.row_depth = 0
+        self.cell_depth = 0
+        self.cell_text: list[str] = []
+        self.cells: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        tag_name = tag.lower()
+        if tag_name == "tr" and not self.row_depth:
+            self.row_depth = self.depth
+            self.cells = []
+        elif tag_name == "td" and self.row_depth and not self.cell_depth:
+            self.cell_depth = self.depth
+            self.cell_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.cell_depth:
+            self.cell_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if self.cell_depth and tag_name == "td" and self.depth == self.cell_depth:
+            self.cells.append(" ".join("".join(self.cell_text).split()))
+            self.cell_depth = 0
+            self.cell_text = []
+        if self.row_depth and tag_name == "tr" and self.depth == self.row_depth:
+            if len(self.cells) >= 2 and re.fullmatch(r"\d{2,}", self.cells[0]):
+                title = self.cells[1]
+                if title and title not in {item["title"] for item in self.items}:
+                    self.items.append(
+                        {
+                            "title": title,
+                            "url": f"{self.base_url}#{_program_slug(title)}",
+                            "published": "",
+                            "summary": "",
+                        }
+                    )
+            self.row_depth = 0
+            self.cells = []
+        self.depth = max(0, self.depth - 1)
+
+
 def _program_slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")[:96] or "paper"
 
@@ -420,6 +586,62 @@ def parse_html_author_paragraph_program(body: bytes, base_url: str) -> list[dict
 
 def parse_html_classed_title_program(body: bytes, base_url: str, class_name: str) -> list[dict[str, str]]:
     parser = _ClassedTitleParser(base_url, class_name)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_paper_id_list(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _PaperIdListParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_dblp_titles(body: bytes, base_url: str) -> list[dict[str, str]]:
+    """Extract DBLP titles without traversing the page's navigation lists."""
+    text = body.decode("utf-8", errors="replace")
+    entry_pattern = re.compile(
+        r'<li\b[^>]*class=["\']([^"\']*\bentry\b[^"\']*)["\'][^>]*\bid=["\']([^"\']+)["\'][^>]*>',
+        re.IGNORECASE,
+    )
+    title_pattern = re.compile(
+        r'<span\b[^>]*class=["\'][^"\']*\btitle\b[^"\']*["\'][^>]*>(.*?)</span>',
+        re.IGNORECASE | re.DOTALL,
+    )
+    entries = list(entry_pattern.finditer(text))
+    items: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for index, entry in enumerate(entries):
+        if not re.search(r"\b(?:inproceedings|incollection|article)\b", entry.group(1)):
+            continue
+        segment_end = entries[index + 1].start() if index + 1 < len(entries) else len(text)
+        title_match = title_pattern.search(text, entry.end(), segment_end)
+        if not title_match:
+            continue
+        title = re.sub(r"<[^>]+>", "", title_match.group(1))
+        title = " ".join(unescape(title).split()).rstrip(".")
+        if not title or title in seen:
+            continue
+        seen.add(title)
+        fragment = re.sub(r"[^A-Za-z0-9_-]+", "-", entry.group(2)).strip("-")
+        items.append(
+            {
+                "title": title,
+                "url": f"{base_url}#{fragment or _program_slug(title)}",
+                "published": "",
+                "summary": "",
+            }
+        )
+    return items
+
+
+def parse_html_paper_block_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _PaperBlockProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
+def parse_html_table_title_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _TableTitleProgramParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
     return parser.items
 
@@ -518,6 +740,14 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_author_paragraph_program(body, source["url"])
     if source_type == "html_classed_title_program":
         return parse_html_classed_title_program(body, source["url"], source.get("title_class", "paper-title"))
+    if source_type == "html_paper_id_list":
+        return parse_html_paper_id_list(body, source["url"])
+    if source_type == "html_dblp_titles":
+        return parse_html_dblp_titles(body, source["url"])
+    if source_type == "html_paper_block_program":
+        return parse_html_paper_block_program(body, source["url"])
+    if source_type == "html_table_title_program":
+        return parse_html_table_title_program(body, source["url"])
     if source_type == "html_embedded_full_papers":
         return parse_html_embedded_full_papers(body, source["url"])
     if source_type == "github_releases":

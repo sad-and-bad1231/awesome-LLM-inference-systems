@@ -1,3 +1,4 @@
+import errno
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,12 +10,31 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     render_markdown_views,
     validate_record_stores,
     validate_record_store,
+    write_records,
 )
 from scripts.ai_infra_monitor.ai_infra_monitor.triage import triage_candidate
 from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
+    def test_write_records_retries_transient_windows_file_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+            original = Path.write_text
+            calls = []
+
+            def flaky_write(*args, **kwargs):
+                calls.append(path)
+                if len(calls) < 3:
+                    raise OSError(errno.EINVAL, "transient file lock")
+                return original(path, *args, **kwargs)
+
+            with patch.object(Path, "write_text", side_effect=flaky_write):
+                write_records(path, [{"id": "one", "title": "One"}])
+
+            self.assertEqual(len(calls), 3)
+            self.assertIn('"id": "one"', path.read_text(encoding="utf-8"))
+
     def test_splits_existing_store_and_merges_known_title_aliases(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

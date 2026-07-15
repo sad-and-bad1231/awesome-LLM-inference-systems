@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import errno
 import hashlib
 import json
 import re
+import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -284,7 +286,16 @@ def load_records(path: Path) -> list[dict[str, Any]]:
 def write_records(path: Path, records: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = "\n".join(json.dumps(record, ensure_ascii=False, sort_keys=True) for record in records)
-    path.write_text(text + ("\n" if text else ""), encoding="utf-8", newline="\n")
+    payload = text + ("\n" if text else "")
+    for attempt in range(5):
+        try:
+            path.write_text(payload, encoding="utf-8", newline="\n")
+            return
+        except OSError as exc:
+            # Windows security scanners can briefly hold a freshly appended JSONL file.
+            if exc.errno not in {errno.EINVAL, errno.EACCES, errno.EBUSY} or attempt == 4:
+                raise
+            time.sleep(0.2 * (attempt + 1))
 
 
 def append_records(path: Path, records: list[dict[str, Any]]) -> int:
