@@ -21,11 +21,11 @@
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 286 | 186 | 50 | 50 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 2642 | 118 | 83 | 2441 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 7481 | 253 | 134 | 7094 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
-| Execution Compilation & Kernel Fusion | 2785 | 129 | 95 | 2561 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
+| Disaggregated Interconnects | 2823 | 135 | 84 | 2604 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| State Compression & Signal Coding | 7658 | 260 | 155 | 7243 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| Execution Compilation & Kernel Fusion | 3524 | 129 | 101 | 3294 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 614 | 199 | 53 | 362 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
-| SRE/Fault-Tolerance/Sparing | 1620 | 29 | 10 | 1581 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
+| SRE/Fault-Tolerance/Sparing | 1678 | 30 | 10 | 1638 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
 
 ## SRE Metrics To Track
 
@@ -62,18 +62,18 @@ _Showing up to 12 representative records; full detail stays in generated compati
 
 | Title | Type | Year/Channel | Why it matters | Tags |
 |---|---|---|---|---|
+| APEX: Asynchronous Parallel CPU-GPU Execution for Online LLM Inference on Constrained GPUs | paper | 2026 | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,compression,kernel] [workload:edge] |
 | ARKV: Adaptive Resource-Efficient KV Cache Management for Long Context LLM Inference under Memory Constraints | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:kv-cache,memory] [workload:edge,long-context] |
 | Accelerating Block Low-Rank Foundation Model Inference on Memory-Constrained GPUs | paper | 2026 | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Accelerating Masked Diffusion Large Language Models: A Survey of Efficient Inference Techniques | paper | 2026 | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
 | An LLM-Guided Query-Aware Inference System for GNN Models on Large Knowledge Graphs | paper | 2026 | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
+| Aurora: A Disaggregated GPU-PNM-PIM System for High-Throughput Mixed-Length LLM Inference | paper | 2026 | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,kernel] [workload:edge] |
+| Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators | paper | 2026 | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge] [metrics:throughput] |
 | Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding | paper | 2026 | Authors: Soongyu Choi (KAIST), Yuntae Kim (KAIST), Muyoung Son (KAIST), Joo-Young Kim (KAIST) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Characterizing LLM Inference Energy-Performance Tradeoffs across Workloads and GPU Scaling | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [workload:edge] |
 | Combating the Memory Walls: Optimization Pathways for Long-Context Agentic LLM Inference | paper | 2026 | Authors: Haoran Wu (University of Cambridge), Can Xiao (Imperial College London), Jiayi Nie (University of Cambridge), Xuan Guo (Imperial College London), Binglei Lou (Imperial College London), Jeffrey T.H. Wong (Imperial College London), Zhiwen Mo (Imperial College London), Cheng Zhang (Imperial College London), Przemyslaw Forys (Imperial College London), Chengyang Ai (University of Edinburgh), Timi Adeniran (University of Cambridge), Wayne Luk (Imperial College London), Hongxiang Fan (Imperial College London), Jianyi Cheng (University of Edinburgh), Timothy M. Jones (University of Cambridge), Rika Antonova (University of Cambridge), Robert Mullins (University of Cambridge), Aaron Zhao (Imperial College London) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:agent,edge,long-context] |
 | ConServe: Contiguity-Preserving Memory Management for Multi-Turn LLM Serving | paper | 2026 | Authors: Bingyao Li (University of California, Riverside) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Connex: Endpoint Mobility Primitives for Dynamic LLM Serving | paper | 2026 | ACM SIGCOMM 2026 accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,kernel] |
-| Cost-Justified Multi-type Resource Fair Scheduling for Kubernetes | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:edge] [framework_binding:kubernetes] |
-| DIAMoND: Dynamic Inference for Adaptive Edge MoE with Heterogeneous In-NAND and Near-DRAM Compute Architecture | paper | 2026 | Authors: Ling Liang (Peking University), Tianyang Luo (Peking University), Shuzhang Zhong (Peking University), Dongxue Zhao (Peking University), Qichao Ma (Peking University), Renjie Wei (Peking University), Jingyu Wang (Xiaomi Corporation), Meng Li (Peking University), Guangyu Sun (Peking University), Zongwei Wang (Peking University), Yimao Cai (Peking University) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
-| DoMoE: Domain-Aware Semantic Expert Prediction for Efficient MoE Inference Under Expert Offloading | paper | 2026 | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression,moe] [workload:agent,edge,moe] |
 
 ### State Compression & Signal Coding
 
@@ -141,6 +141,7 @@ _Showing up to 12 representative records; full detail stays in generated compati
 | BEAM: Joint Resource–Power Optimization for Energy-Efficient LLM Inference under SLO contraints | paper | 2026 | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [metrics:slo] |
 | GAPS: Global-Aware Prediction-driven Scheduling for Large-Scale LLM Inference | paper | 2026 | AAMAS 2026 official proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:agent,rag] |
 | Probe-and-Fetch: Dynamic KV Cache Pruning for Accelerated Long-Context Inference in Web-Scale AI Search | paper | 2026 | Authors: Yuchen Li:Baidu Inc.,Shanghai Jiao Tong University;Rui Kong:Baidu Inc.;Xinran Chen:Baidu Inc.;Chengzhe Zhang:Baidu Inc.;Jiamin Chen:City University of Hong Kong;Cheng Deng:University of Edinburgh;Xinyu Ma:Baidu Inc.;Haojie Zhang:Baidu Inc.;Tianhao Peng:Baidu Inc.;Hengyi Cai:Baidu Inc.;Shuaiqiang Wang:Baidu Inc.;Jiashu Zhao:Wilfrid Laurier University;Yongqi Zhang:The Hong Kong University of Science and Technology (Guangzhou);Haoyi Xiong:Baidu Inc.;Jimmy Xiangji Huang:York University;Lei Chen:The Hong Kong University of Science and Technology (Guangzhou);Jun Wang:University College London;Dawei Yin:Baidu Inc. | [phase:serving] [optimization_layer:kv-cache] [workload:agent,long-context,rag] |
+| Understanding and Improving Communication Performance in Multi-node LLM Inference | paper | 2026 | ACM CAIS 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:agent,rag] |
 | llm-tuna - Hyperparameter Optimization for LLM Inference | paper | 2026 | Authors: Thameem Abbas Ibrahim Bathusha:Red Hat LLC.;Aanya Sharma:Red Hat LLC.;Andy Huynh:Boston University;Rehan Samaratunga:Boston University;Ashish Kamra:Red Hat LLC. | [phase:serving] [workload:agent,rag] |
 | ADS: AN AGENTIC DETECTION SYSTEM FOR ENTERPRISE AGENTIC AI SECURITY | paper | 2026 | ADS 面向企业 agentic AI 安全构建检测系统，把 agent 行为、工具调用和安全策略纳入运行时监控。 | [phase:serving] [workload:agent,rag] |
 | Architecture-Aware LLM Inference Optimization on AMD Instinct GPUs: A Comprehensive Benchmark and Deployment Study | paper | 2026 | 该工作在 MI325X 上比较 MLA、GQA、MoE 和多模态模型，说明 AITER、KV offload 与 block size 必须按架构选择。 | [hardware:amd,gpu] [optimization_layer:moe] [workload:moe] |
@@ -149,4 +150,3 @@ _Showing up to 12 representative records; full detail stays in generated compati
 | CSLE: A Reinforcement Learning Platform for Autonomous Security Management | paper | 2026 | CSLE 提供自治安全管理的强化学习平台，可用于评估 AI 基础设施中的自动防御、响应和策略学习。 |  |
 | DriftBench: Measuring and Predicting Infrastructure Drift in LLM Serving Systems | paper | 2026 | DriftBench 用成体系的 prompt-response 集测量基础设施变化对 LLM serving 输出一致性的影响，并预测高风险变更。 | [phase:serving] |
 | Execution-State Capsules: Graph-Bound Execution-State Checkpoint and Restore for Low-Latency, Small-Batch, On-Device Physical-AI Serving | paper | 2026 | Execution-State Capsules 将 agent/physical-AI workflow 的执行状态绑定到图节点，用小批量 checkpoint/restore 降低端侧服务恢复延迟。 | [phase:serving] [workload:agent,rag] [metrics:latency] |
-| Fast Cloud Storage for AI Jobs via Grouped I/O API with Transparent Read/Write Optimizations | paper | 2026 | AITURBO 利用加速器互连和 grouped I/O API 自动生成存储层读写计划，覆盖 checkpoint 与 KV-cache I/O。 | [optimization_layer:kv-cache] [workload:rag] |

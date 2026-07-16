@@ -9,14 +9,14 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 135 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 152 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 238 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 245 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 157 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
 | Agent、RAG、多模态与应用级 Serving | 45 | agent workflow、RAG pipeline、多模态 stage graph、程序级调度 |
-| Workload、评测、可靠性与方法论 | 44 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
+| Workload、评测、可靠性与方法论 | 45 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
 | AI 集群、向量数据库、安全与周边基础设施 | 51 | GPU 集群、向量数据库、TEE/FHE、侧信道、spot/geo routing |
 
 ## Evidence Layers
@@ -27,8 +27,8 @@
 |---|---:|
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
-| preprint | 203 |
-| unclassified | 299 |
+| preprint | 204 |
+| unclassified | 323 |
 
 ## Runtime、调度与服务架构
 
@@ -249,6 +249,23 @@
 | LLM-Pilot: SLO-Aware and Cost-Efficient LLM Serving on Public Cloud VM Clusters via Offloading | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | LLMEdger: Phase-Aware Model Parallelism Scheduler for LLM Inference on Edge | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference | CCGrid 2026 official program |  | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| APEX: Asynchronous Parallel CPU-GPU Execution for Online LLM Inference on Constrained GPUs | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Efficient MoE Inference on Single GPU with Dynamic Expert Caching | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| I/O-Aware PIM Acceleration for Long-Sequence LLM Inference with Hybrid Sparse Attention | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Near-Zero Cost KV Cache Compression for Large Language Model Inference | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PEACE: Preemptive and Efficient Cluster Scheduling for LLM Inference with Mixed Prompts | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PackKV: Reducing KV Cache Memory Footprint through LLM-Aware Lossy Compression | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Aurora: A Disaggregated GPU-PNM-PIM System for High-Throughput Mixed-Length LLM Inference | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| FLYING SERVING: On-the-Fly Parallelism Switching for Large Language Model Serving | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Latency-SLO-Aware Memory Offloading for Large Language Model Inference | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| LayerScope: Predictive Cross-Layer Scheduling for Efficient Multi-Batch MoE Inference on Legacy Servers | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Not All Errors Are Equal: A Systematic Study of Error Propagation in Large Language Model Inference | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Phase-aware Peak Power Reduction for Minimizing the Capital Expense of LLM Inference | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SparseServe: Unlocking Parallelism for Dynamic Sparse Attention in Long-Context LLM Serving | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Taming Dynamic Diffusion LLM Inference through Virtual Static Execution | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| dLLM-Serve: Bridging the Memory Gap in Diffusion Language Model Serving | ACM ICS 2026 official program |  | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -608,6 +625,13 @@
 | PRINCIPLED COARSE-GRAINED ACCEPTANCE FOR SPECULATIVE DECODING IN SPEECH | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | RETRIEVAL-BASED SPECULATIVE DECODING FOR AUTOREGRESSIVE SPEECH SYNTHESIS | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SEMANTICACHE: EFFICIENT KV CACHE COMPRESSION VIA SEMANTIC CHUNKING AND CLUSTERED MERGING | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Gauge dependence and structured-output corruption in sign-branched repetition penalties: measurements across models, inference stacks, and alternative repetition controls | arXiv AI infrastructure query |  | The multiplicative repetition penalty shipped across the LLM inference ecosystem (HuggingFace, vLLM, llama$.$cpp, and a dozen further engines) branches on the sign of each raw logit (divide positives by theta, multiply negatives). But the softmax is unchanged by adding a constant to every logit, so a model's logit zero-point is arbitrary, and the sign-branch reads that arbitrary point. The sign-branch is itself the accepted fix for an earlier bug, so the accepted fix branches on a quantity the training objective leaves unconstrained. Two measurable consequences follow. (1) The penalty is not well-defined: re-centring a model's logits by a constant is a provable no-op at theta=1, yet at a routine theta=1.3 it changes 58-96% of greedy tokens, where subtractive and normalized penalties change none; real checkpoints sit at widely different zero-points, so a fixed repetition_penalty is a different operation on every model. (2) It corrupts structured output: on 200 real-world JSON schemas, theta=1.3 drops the rate of valid, schema-conformant output from 97% to 23%. In our measurements, applying the penalty to normalized log-probabilities instead of raw logits removes both effects. HuggingFace already ships that operator (LogitNormalization); today it is off by default and applied after the penalty. This note gives the mechanism, the measurements (five models up to 7B, base and RLHF, on WikiText-103 prefixes; two code models on HumanEval and JSONSchemaBench; both effects replicated inside vLLM and llama$.$cpp through their own samplers on the same inputs), and the normalized variant. |
+| Benchmarking and Characterization of Large Language Model Inference on Apple Silicon | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Cache Your Prompt When It's Green - Carbon-aware Caching for Large Language Model Serving | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Optimal Scheduling Algorithms for LLM Inference: Theory and Practice | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Pittacus: Optimizing LLM Serving on Cloud Data Centers with Forecast Aware Auto-Scaling | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 
@@ -937,6 +961,7 @@
 | Probe-and-Fetch: Dynamic KV Cache Pruning for Accelerated Long-Context Inference in Web-Scale AI Search | The Web Conference 2026 official industry accepted papers |  | Authors: Yuchen Li:Baidu Inc.,Shanghai Jiao Tong University;Rui Kong:Baidu Inc.;Xinran Chen:Baidu Inc.;Chengzhe Zhang:Baidu Inc.;Jiamin Chen:City University of Hong Kong;Cheng Deng:University of Edinburgh;Xinyu Ma:Baidu Inc.;Haojie Zhang:Baidu Inc.;Tianhao Peng:Baidu Inc.;Hengyi Cai:Baidu Inc.;Shuaiqiang Wang:Baidu Inc.;Jiashu Zhao:Wilfrid Laurier University;Yongqi Zhang:The Hong Kong University of Science and Technology (Guangzhou);Haoyi Xiong:Baidu Inc.;Jimmy Xiangji Huang:York University;Lei Chen:The Hong Kong University of Science and Technology (Guangzhou);Jun Wang:University College London;Dawei Yin:Baidu Inc. |
 | llm-tuna - Hyperparameter Optimization for LLM Inference | The Web Conference 2026 official short accepted papers |  | Authors: Thameem Abbas Ibrahim Bathusha:Red Hat LLC.;Aanya Sharma:Red Hat LLC.;Andy Huynh:Boston University;Rehan Samaratunga:Boston University;Ashish Kamra:Red Hat LLC. |
 | GAPS: Global-Aware Prediction-driven Scheduling for Large-Scale LLM Inference | AAMAS 2026 official proceedings |  | AAMAS 2026 official proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Understanding and Improving Communication Performance in Multi-node LLM Inference | ACM CAIS 2026 official accepted research papers |  | ACM CAIS 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## AI 集群、向量数据库、安全与周边基础设施
 

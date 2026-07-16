@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -120,6 +121,7 @@ class DiscoveryEngine:
         seen_identities: set[str] = set()
         errors: list[dict[str, str]] = []
         source_stats: list[dict[str, object]] = []
+        eligible_sources: list[tuple[dict, dict]] = []
         for source in self.config["sources"]:
             if mode not in source.get("modes", []):
                 continue
@@ -131,9 +133,42 @@ class DiscoveryEngine:
                 for record in state["records"].values()
             )
             cache = {} if has_deferred else state["sources"].get(source["id"], {})
+            eligible_sources.append((source, cache))
+
+        fetch_results: dict[str, dict] = {}
+        fetch_errors: dict[str, Exception] = {}
+        max_workers = max(1, int(settings.get("max_parallel_fetches", 1)))
+        with ThreadPoolExecutor(
+            max_workers=min(max_workers, max(1, len(eligible_sources)))
+        ) as pool:
+            futures = {
+                source["id"]: pool.submit(self.fetcher.fetch, source, cache)
+                for source, cache in eligible_sources
+            }
+            for source, _cache in eligible_sources:
+                source_id = source["id"]
+                try:
+                    fetch_results[source_id] = futures[source_id].result()
+                except Exception as error:
+                    fetch_errors[source_id] = error
+
+        for source, _cache in eligible_sources:
             emitted = 0
+            if source["id"] in fetch_errors:
+                error = fetch_errors[source["id"]]
+                errors.append(
+                    {
+                        "source_id": source["id"],
+                        "source_name": source["name"],
+                        "error": f"{type(error).__name__}: {error}",
+                    }
+                )
+                source_stats.append(
+                    {"source_id": source["id"], "status": "error", "emitted": 0}
+                )
+                continue
             try:
-                response = self.fetcher.fetch(source, cache)
+                response = fetch_results[source["id"]]
                 status = int(response.get("status", 200))
                 if status == 304:
                     source_stats.append(
@@ -238,10 +273,9 @@ class DiscoveryEngine:
                     {"source_id": source["id"], "status": "error", "emitted": 0}
                 )
 
-        limit = int(settings[f"{mode}_limit"])
         priority_rank = {"high": 0, "normal": 1, "low": 2}
-        candidates.sort(
-            key=lambda item: (
+        def rank_key(item: Candidate) -> tuple:
+            return (
                 priority_rank.get(str(item.triage.get("priority", "normal")), 1),
                 -_candidate_relevance(item)[0],
                 -_candidate_relevance(item)[1],
@@ -250,12 +284,61 @@ class DiscoveryEngine:
                 item.source_id,
                 item.title,
             )
-        )
-        candidates = candidates[:limit]
+
+        all_candidates = candidates
+        source_limit = int(settings.get("max_candidates_per_source", 0))
+        if source_limit > 0:
+            by_source: dict[str, list[Candidate]] = {}
+            for item in all_candidates:
+                by_source.setdefault(item.source_id, []).append(item)
+            selection_pool = []
+            for source_id in sorted(by_source):
+                selection_pool.extend(
+                    sorted(by_source[source_id], key=rank_key)[:source_limit]
+                )
+        else:
+            selection_pool = list(all_candidates)
+
+        limit = int(settings[f"{mode}_limit"])
+        candidates = sorted(selection_pool, key=rank_key)[:limit]
         selected_identities = {item.identity for item in candidates}
+        candidate_by_identity = {item.identity: item for item in all_candidates}
+        suppressed: list[dict[str, object]] = []
+        deferred_count = 0
+        suppressed_count = 0
         for identity, record in state["records"].items():
             if record.get("run_id") == run_id and identity not in selected_identities:
-                record["status"] = "deferred"
+                item = candidate_by_identity.get(identity)
+                priority = str(item.triage.get("priority", "normal")) if item else "normal"
+                if priority in {"high", "normal"}:
+                    record["status"] = "deferred"
+                    deferred_count += 1
+                else:
+                    record["status"] = "suppressed"
+                    suppressed_count += 1
+                    if item:
+                        suppressed.append(
+                            {
+                                "identity": item.identity,
+                                "title": item.title,
+                                "url": item.url,
+                                "source_id": item.source_id,
+                                "priority": priority,
+                                "triage_verdict": item.triage.get("verdict", ""),
+                            }
+                        )
+
+        selected_by_source: dict[str, int] = {}
+        suppressed_by_source: dict[str, int] = {}
+        for item in candidates:
+            selected_by_source[item.source_id] = selected_by_source.get(item.source_id, 0) + 1
+        for item in all_candidates:
+            if item.identity not in selected_identities:
+                suppressed_by_source[item.source_id] = suppressed_by_source.get(item.source_id, 0) + 1
+        for source_stat in source_stats:
+            source_id = str(source_stat["source_id"])
+            source_stat["selected"] = selected_by_source.get(source_id, 0)
+            source_stat["overflow"] = suppressed_by_source.get(source_id, 0)
 
         run_dir = self.root / settings["runs_dir"] / run_id
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -266,6 +349,9 @@ class DiscoveryEngine:
             "created_at": now.isoformat(),
             "candidate_count": len(candidates),
             "candidates": [item.to_dict() for item in candidates],
+            "suppressed_count": suppressed_count,
+            "suppressed": suppressed,
+            "deferred_count": deferred_count,
             "errors": errors,
             "sources": source_stats,
         }
@@ -279,6 +365,8 @@ class DiscoveryEngine:
                 "mode": mode,
                 "created_at": now.isoformat(),
                 "candidate_count": len(candidates),
+                "suppressed_count": suppressed_count,
+                "deferred_count": deferred_count,
                 "error_count": len(errors),
                 "status": "discovered",
             }

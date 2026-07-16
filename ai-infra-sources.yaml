@@ -3,7 +3,9 @@
   "settings": {
     "daily_limit": 40,
     "weekly_limit": 800,
+    "max_candidates_per_source": 80,
     "request_timeout_seconds": 60,
+    "max_parallel_fetches": 8,
     "github_repo_inspection": true,
     "discovery_repo_inspection": false,
     "github_repo_timeout_seconds": 6,
@@ -1067,6 +1069,46 @@
       "tier": "A",
       "kind": "paper",
       "topics": ["runtime-serving", "network-disaggregation", "program-scheduling", "hardware-edge", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "sigmetrics26-accepted",
+      "name": "ACM SIGMETRICS 2026 official accepted papers",
+      "type": "html_bold_program",
+      "url": "https://www.sigmetrics.org/sigmetrics2026/accepted.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "program-scheduling", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ipdps26-program",
+      "name": "IEEE IPDPS 2026 official detailed program",
+      "type": "html_linklings_program",
+      "url": "https://ssl.linklings.net/conferences/ipdps/ipdps2026_program/views/at_a_glance.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "network-disaggregation", "kernel-compiler", "hardware-edge", "compression-cost", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ics26-program",
+      "name": "ACM ICS 2026 official program",
+      "type": "html_bold_program",
+      "url": "https://dipsa-qub.github.io/ICS2026-webpage/program/program.html",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "kernel-compiler", "network-disaggregation", "program-scheduling", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "cais26-accepted",
+      "name": "ACM CAIS 2026 official accepted research papers",
+      "type": "html_heading_program",
+      "url": "https://www.caisconf.org/program/2026/papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["agent-rag", "runtime-serving", "program-scheduling", "reliability-evaluation"],
       "modes": ["weekly"]
     },
     {

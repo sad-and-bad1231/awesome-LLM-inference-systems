@@ -370,6 +370,52 @@ class _ClassedTitleParser(HTMLParser):
         self.depth = max(0, self.depth - 1)
 
 
+class _LinklingsProgramParser(HTMLParser):
+    """Extract presentation titles from Linklings ``ttip_object_info`` slots."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.capture_depth = 0
+        self.capture_text: list[str] = []
+        self.seen_titles: set[str] = set()
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        classes = set((values.get("class") or "").split())
+        if (
+            tag.lower() == "span"
+            and "ttip_object_info" in classes
+            and not self.capture_depth
+        ):
+            self.capture_depth = self.depth
+            self.capture_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture_depth:
+            self.capture_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.capture_depth and self.depth == self.capture_depth:
+            title = " ".join("".join(self.capture_text).split())
+            if title and title not in self.seen_titles:
+                self.seen_titles.add(title)
+                self.items.append(
+                    {
+                        "title": title,
+                        "url": f"{self.base_url}#{_program_slug(title)}",
+                        "published": "",
+                        "summary": "",
+                    }
+                )
+            self.capture_depth = 0
+            self.capture_text = []
+        self.depth = max(0, self.depth - 1)
+
+
 class _PaperIdListParser(HTMLParser):
     """Extract titles from list items marked with paper-id and paper-authors spans."""
 
@@ -604,6 +650,12 @@ def parse_html_classed_title_program(body: bytes, base_url: str, class_name: str
     return parser.items
 
 
+def parse_html_linklings_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _LinklingsProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
 def parse_html_paper_id_list(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _PaperIdListParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
@@ -754,6 +806,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_author_paragraph_program(body, source["url"])
     if source_type == "html_classed_title_program":
         return parse_html_classed_title_program(body, source["url"], source.get("title_class", "paper-title"))
+    if source_type == "html_linklings_program":
+        return parse_html_linklings_program(body, source["url"])
     if source_type == "html_paper_id_list":
         return parse_html_paper_id_list(body, source["url"])
     if source_type == "html_dblp_titles":

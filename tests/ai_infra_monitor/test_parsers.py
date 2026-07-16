@@ -17,6 +17,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_html_table_title_program,
     parse_html_dblp_titles,
     parse_html_program,
+    parse_html_linklings_program,
 )
 
 
@@ -188,6 +189,35 @@ class ParserTests(unittest.TestCase):
         )
         self.assertEqual(items[0]["title"], "RSS Agent Runtime")
         self.assertEqual(items[0]["url"], "https://conference.example/papers/1/")
+
+    def test_parse_html_linklings_program_extracts_slot_titles(self):
+        body = b"""
+        <div class='slot-wrapper'>
+          <span class='ttip_object_info' rel='#1_info' title='#1_title'>
+            PackKV: Reducing KV Cache Memory Footprint
+            <i class='fa fa-caret-right'></i>
+          </span>
+        </div>
+        <div class='slot-wrapper'>
+          <span class='ttip_object_info' rel='#2_info' title='#2_title'>
+            Distributed GPU Inference Runtime
+          </span>
+        </div>
+        """
+        items = parse_html_linklings_program(
+            body, "https://conference.example/program/"
+        )
+        self.assertEqual(
+            [item["title"] for item in items],
+            [
+                "PackKV: Reducing KV Cache Memory Footprint",
+                "Distributed GPU Inference Runtime",
+            ],
+        )
+        self.assertEqual(
+            items[0]["url"],
+            "https://conference.example/program/#packkv-reducing-kv-cache-memory-footprint",
+        )
 
 
 if __name__ == "__main__":
