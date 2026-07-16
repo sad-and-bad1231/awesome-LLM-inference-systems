@@ -14,14 +14,14 @@ A complete academic paper collection organized by serving-system abstraction. Fo
 
 | Records | Formal venue | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 440 | 216 | 7 | 410 |
+| 442 | 218 | 19 | 412 |
 
 ## Collection Navigation
 
 - [KV State & Memory](#kv-state-memory) (137)
-- [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (40)
+- [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (41)
 - [KV Compression & Low-Bit State](#kv-compression-low-bit-state) (70)
-- [Kernel & Compiler](#kernel-compiler) (53)
+- [Kernel & Compiler](#kernel-compiler) (54)
 - [Runtime & Serving](#runtime-serving) (124)
 - [Reliability & Benchmarks](#reliability-benchmarks) (16)
 
@@ -47,7 +47,8 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
 - **Featured:** **[FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `npu` `compiler` `kernel` `agent` `edge` `vllm`
-  Large language models (LLMs) power a new generation of interactive AI applications exemplified by ChatGPT. The interactive nature of these applications demands low latency for LLM inference. Existing LLM serving systems use run-tocompletion processing for inference jobs, which suffers from head-of-line blocking and long latency. We present FastServe, a distributed LLM serving system which exploits the autoregressive pattern of LLM inference to enable preemption at the granularity of each output token. FastServe uses preemptive scheduling to minimize latency with a novel skip-join Multi-Level Feedback Queue scheduler. Based on the new semi information-agnostic setting of LLM inference, the scheduler leverages the input length information to assign an appropriate initial queue for each arrival job to join. Queues with higher priority than the one the job joins are skipped to reduce demotions. We design an efficient GPU memory management mechanism that proactively offloads and uploads intermediate state between GPU memory and host memory for LLM inference. Evaluation shows that compared to the state-of-the-art solution vLLM, FastServe improves the throughput by up to 6.1×.
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-wu-bingyang.pdf)
+  以输出 token 为粒度实现可抢占的分布式 LLM serving，提出 skip-join 多级反馈队列，并主动在 GPU/主机内存间搬运中间状态；官方 NSDI 2026 页面报告相对 vLLM 吞吐最高提升 6.1 倍。
 #### Full Resource List
 
 - **A Cost-Effective Near-Storage Processing Solution for Offline Inference of Long-Context LLMs**
@@ -65,14 +66,23 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `npu` `kv-cache` `agent` `edge` `throughput`
   Compound AI systems, such as agentic systems, are an emerging trend in large-scale enterprise settings, with multiple LLMs specialized for different users, tasks, and/or roles working together. In these scenarios, different models often process inputs that share the same context prefix. Although much work was done in the past to enable the reuse of prefix KV caches across inputs for a single model, how to enable one model to reuse the prefix KV caches of a different model remains an open question. We introduce DroidSpeak, the first distributed LLM inference system that enables KV cache reuse across distributed nodes running inference of different LLMs, so long as the LLMs have the same architecture. We present the first study that aims at understanding the impact of sharing KV caches across different LLMs, and if/when such sharing affects quality. Inspired by the findings, we present DroidSpeak, which selectively recomputes a few layers of the KV cache produced by another LLM and reuses the remaining layers, with negligible quality loss. Moreover, carefully pipelining the layer-wise re-computation and the loading of reused KV cache further improves the inference performance. Experiments on diverse datasets and model pairs demonstrate that DroidSpeak achieves up to 4x throughput improvement and about 3.1× faster prefill (time to first token), with negligible loss of quality in F1 scores, Rouge-L or code similarity score, compared to the baseline which does not allow any sharing across models.
+- **[ECHO: Efficient KV Cache Offloading with Lossless Prefetching for Serving Native Sparse Attention LLMs](https://www.usenix.org/conference/osdi26/presentation/liu-guangda)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  Tags: `serving` `kv-cache`
+  针对 native sparse attention 下随上下文增长的 KV 容量瓶颈，设计 GPU graph-friendly cache manager、无损 decode/prefill prefetch 和融合 GPU kernel；官方 OSDI 2026 页面报告长上下文下相对 SGLang/vLLM generation throughput 最高提升 2.1 倍。
 - **[FlexiCache: Leveraging Temporal Stability of Attention Heads for Efficient KV Cache Management](https://openreview.net/forum?id=GgX6dPJx9M)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `compression` `kv-cache` `rag`
   FlexiCache 利用 attention head 重要性的时间稳定性动态管理 KV cache，减少长上下文生成中不必要的保留和加载。
+- **[Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  Tags: `memory`
+  分析移动设备前台应用与 LLM 推理之间不对称的内存带宽干扰，利用 speculative decoding 提供可抢占 yield points，让推理动态让出带宽；官方 OSDI 2026 页面报告前台 jank rate 平均降低 58.5%、LLM throughput 平均提升 26.4%。
 - **[Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads](https://www.usenix.org/conference/nsdi26/presentation/ruan-libra)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `decode` `prefill` `goodput` `slo`
-  Libra uses micro-request flexible partitioning and scheduling to maximize goodput under SLOs when prefill/decode workloads are imbalanced and dynamic.
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-ruan-libra.pdf)
+  提出 micro-request flexible partitioning and scheduling，将请求在 token 边界切分为协作片段，并用全局/本地两级调度与 chunked KV transfer 处理不均衡动态 workload；在 A100/H100 真实 trace 上，goodput 最高提升 1.91 倍、服务容量最高提升至 3.07 倍。
 - **[MFS: An Efficient Model Family Serving System for LLMs](https://doi.org/10.1145/3767295.3769355)**
   `EuroSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `kv-cache` `edge`
@@ -103,6 +113,10 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   Tags: `routing` `serving`
   Artifact: [source](https://arxiv.org/abs/2505.24095)
   面向多区域 LLM serving，结合 prefix/KV locality-aware routing 与基于待处理请求的 selective pushing，在跨区域流量协同下平衡负载、保持缓存局部性并降低容量冗余；公开评测报告吞吐提升 1.12–2.06 倍、延迟降低 1.74–6.30 倍、总服务成本降低 25%。
+- **[Strata](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  Tags: `prefill` `serving` `long-context`
+  面向百万 token 长上下文 serving，跨 GPU HBM、CPU 内存和 SSD 组织层次化 KV cache，采用 GPU-assisted I/O、cache-aware scheduler 和 delay-hit 缓解；基于 SGLang 并已部署，官方 OSDI 2026 页面报告相对 vLLM-LMCache 吞吐最高提升 5 倍、相对 TensorRT-LLM 提升 3.75 倍。
 - **[Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token](https://openreview.net/forum?id=FuRo7Ur5Ib)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving`
@@ -132,18 +146,10 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ICLR 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `kv-cache` `memory`
   TRIM-KV 在 token 生成时预测长期保留价值，并随时间衰减以在固定内存预算下保留最有用的 KV。
-- **ECHO: Efficient KV Cache Offloading with Lossless Prefetching for Serving Native Sparse Attention LLMs**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `kv-cache`
-  ECHO 面向原生稀疏注意力模型做无损 KV 预取和 offload，使长上下文解码只把将被访问的 cache 及时拉回。
 - **Hippocampus: An Efficient and Scalable Memory Module for Agentic AI**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `serving` `memory` `agent` `rag`
   Hippocampus 为 agentic AI 提供可扩展长期记忆模块，替代纯向量库或图遍历导致的高延迟记忆访问。
-- **Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `memory`
-  Sereno 针对移动端 LLM 推理中的内存带宽竞争设计缓解机制，降低本地部署在共享移动平台上的推理干扰。
 - **LMCache: An Efficient KV Cache Layer for Enterprise-Scale LLM Inference**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `kv-cache` `lmcache`
@@ -168,10 +174,6 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `kv-cache` `rag`
   SkipKV 在大推理模型中跳过部分不关键 KV 的生成与存储，减少长 CoT 输出带来的线性 cache 增长。
-- **Strata**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `prefill` `serving` `long-context`
-  Contextra 构建分层 context cache，在长上下文服务中按复用粒度和存储层级管理 KV 状态，减少重复 prefill 和远端加载。
 - **ByteScale: Communication-Efficient Scaling of LLM Training with a 2048K Context Length on 16384 GPUs**
   `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `prefill` `training` `gpu`
@@ -592,7 +594,7 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ISCA 2024` · `2024` · `Research record` · `Unclassified · Legacy Import`
   Splitwise 将 prompt computation 与 token generation 部署到不同机器池，在吞吐、成本和功耗之间做阶段化资源优化。
 
-### P/D Disaggregation & KV Transfer (40)
+### P/D Disaggregation & KV Transfer (41)
 
 Prefill/decode separation, KV transfer, routing, and distributed transport.
 
@@ -625,6 +627,10 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `gpu`
   MSCCL++ 以可编程通信抽象和优化 collective 支撑 tensor/expert parallel 与分离式 AI inference。
+- **[OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving](https://www.usenix.org/conference/osdi26/presentation/yao)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `rag`
+  以用户态 orchestration overlay 将异构、分散且由 Slurm 等管理的 HPC 集群统一为 serving 平台，提供 CRDT gossip 服务发现、统一 serving API、异构调度和容错；官方 OSDI 2026 页面报告已服务 13M 请求、15B tokens、142 个模型，并面向 1000+ 研究者部署。
 - **[TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `decode` `prefill` `multimodal`
@@ -1048,7 +1054,7 @@ KV quantization, latent state, sparsity, and quality-cost tradeoffs.
   Tags: `compression` `kv-cache`
   SmallKV 用小模型注意力补偿大模型 KV 压缩中的显著性漂移和边际信息过压缩。
 
-### Kernel & Compiler (53)
+### Kernel & Compiler (54)
 
 CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.
 
@@ -1068,6 +1074,11 @@ CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.
   `EuroSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `compiler` `kernel`
   从编译器 constant folding 视角重新审视 LLM 推理，将可预计算结构识别与模型推理执行结合，属于执行编译与模型服务交界的系统优化方向；正式收录于 EuroSys 2026，具体硬件与收益以论文实验章节为准。
+- **[MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs](https://www.usenix.org/conference/osdi26/presentation/cheng)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `compiler` `kernel` `rag` `latency`
+  Artifact: [source](https://github.com/mirage-project/mirage)
+  MPK 将多 GPU 模型推理从 kernel-per-operator 转换为 SM-level task graph 与 persistent mega-kernel，通过跨算子流水、计算通信重叠和去中心化 SM 调度实现端到端融合；官方 OSDI 2026 页面报告推理延迟最高降低 1.7 倍，并开源 Mirage。
 - **[ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `compiler` `kernel`
@@ -1278,11 +1289,13 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
 - **Featured:** **[Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration](https://www.usenix.org/conference/osdi26/presentation/du)**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `goodput`
-  EcoServe uses partially disaggregated macro-instances and adaptive scheduling for commodity GPU clusters; OSDI reports up to 2.51x goodput over representative serving baselines on NVIDIA L20 clusters.
+  Artifact: [source](https://github.com/MLSysU/EcoServe)
+  提出面向普通 GPU 集群的 partially disaggregated serving，通过时间维度 P/D 分离、跨实例循环协作、adaptive routing 和 mitosis scaling 缓解 prefill-decode 干扰；在 32 张 NVIDIA L20 以太网集群上，相比 vLLM、Sarathi、DistServe、MoonCake 等基线 goodput 最高提升 2.51 倍，并开源 EcoServe。
 - **Featured:** **[HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `agent` `rag` `latency`
-  With the proliferation of large language model (LLM) variants, developers are turning to serverless computing for cost-efficient LLM deployment. However, public cloud providers often struggle to provide performance guarantees for serverless LLM serving due to significant cold start latency caused by substantial model sizes and complex runtime dependencies. To address this problem, we present HydraServe, a serverless LLM serving system designed to minimize cold start latency in public clouds. HydraServe proactively distributes models across servers to quickly fetch them, and overlaps cold-start stages within workers to reduce startup latency. Additionally, HydraServe strategically places workers across GPUs to avoid network contention among cold-start instances. To minimize resource consumption during cold starts, HydraServe further introduces pipeline consolidation that can merge groups of workers into individual serving endpoints. Our comprehensive evaluations under diverse settings demonstrate that HydraServe reduces the cold start latency by 1.7×–4.7× and improves service level objective attainment by 1.43×–1.74× compared to baselines.
+  Artifact: [source](https://www.usenix.org/system/files/conference/nsdi26/nsdi26spring_lou_prepub.pdf)
+  通过跨服务器预分发模型、重叠 cold-start 阶段、GPU 间 worker 放置和 pipeline consolidation，降低公有云 serverless LLM serving 冷启动；官方 NSDI 2026 页面报告冷启动延迟降低 1.7–4.7 倍，SLO attainment 提升 1.43–1.74 倍。
 - **Featured:** **[PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `gpu`
@@ -1300,7 +1313,7 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
 - **[Agentix: An Efficient Serving Engine for LLM Agents as General Programs](https://www.usenix.org/conference/nsdi26/presentation/luo)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `tpu` `compiler` `kernel` `agent` `rag` `vllm` `latency`
-  Large language model (LLM) applications are evolving beyond simple chatbots into dynamic, general-purpose agentic programs, which scale LLM calls and output tokens to help AI agents reason, explore, and solve complex tasks. However, existing LLM serving systems ignore dependencies between programs and calls, missing significant opportunities for optimization. Our analysis reveals that programs submitted to LLM serving engines experience long cumulative wait times, primarily due to head-of-line blocking at both the individual LLM request and the program. To address this, we introduce Agentix, an LLM serving system that treats programs as first-class citizens to minimize their end-to-end latencies. Agentix intercepts LLM calls submitted by programs, enriching schedulers with program-level context. We propose two scheduling algorithms—for single-threaded and distributed programs—that preempt and prioritize LLM calls based on their programs' previously completed calls. Our evaluation demonstrates that across diverse LLMs and agentic workloads, Agentix improves throughput of programs by 4-15× at the same latency compared to state-of-the-art systems, such as vLLM.
+  把 agent 程序及其依赖的 LLM calls 作为 serving 调度的一等对象，利用已完成调用的程序级上下文进行抢占和优先级调度；官方 NSDI 2026 页面报告在相同延迟下，相比 vLLM 等系统程序吞吐提升 4–15 倍。
 - **BAT: Efficient Generative Recommender Serving with Bipartite Attention**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
@@ -1333,6 +1346,10 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `compression` `memory` `throughput`
   Kairox dynamically balances hot and cold neurons between GPU and CPU with activation prediction, live prefetching, and temporal-momentum caching; OSDI reports up to 7.57x throughput over llama.cpp.
+- **[Murakkab: Resource-Efficient Agentic Workflow Orchestration in Cloud Platforms](https://www.usenix.org/conference/osdi26/presentation/chaudhry)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  Tags: `serving` `agent` `rag`
+  以 declarative abstraction 解耦 agent workflow 规格与执行配置，结合 profile-guided optimizer 和 adaptive runtime 联合映射模型、硬件与工作流阶段；官方 OSDI 2026 页面报告在保持 SLO 下 GPU 使用最高降低 2.8 倍、能耗降低 3.7 倍、成本降低 4.3 倍。
 - **Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Neuralink 利用 neuron co-activation 关系减少端侧 LLM 推理中的无效权重访问与计算。
@@ -1343,7 +1360,8 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
 - **[Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning](https://www.usenix.org/conference/osdi26/presentation/yu-shan)**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu` `memory`
-  Prism uses elastic GPU memory ballooning to unify spatial and temporal sharing across bursty groups of models; its kvcached driver is open-sourced and deployed across more than 10K GPUs.
+  Artifact: [source](https://github.com/ovg-project/kvcached)
+  基于生产 trace 中动态 bursty model groups，使用 kvcached balloon driver 在多模型间弹性回收和分配 GPU memory，统一 spatial/time sharing；官方 OSDI 2026 页面称其已在 10K+ GPU 生产环境部署。
 - **[SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://openreview.net/forum?id=IZaXDwDtL1)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `compiler` `kernel`
@@ -1415,10 +1433,6 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `serving` `gpu` `slo`
   OptiKIT 自动化企业 LLM 压缩、调优和资源编排流程，让非专家团队在异构 GPU 集群上更稳定地满足 serving SLO。
-- **Murakkab: Resource-Efficient Agentic Workflow Orchestration in Cloud Platforms**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `agent` `rag`
-  Murakkab 将 agentic workflow 的依赖、暂停和资源需求暴露给云平台，在多步 LLM 应用中减少同步等待和过量配置。
 - **Optimizing Deployment Configurations for LLM Inference**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   该工作系统搜索 LLM inference 的部署配置，覆盖模型并行、batch、内存和硬件选择对延迟与成本的端到端影响。
@@ -1769,7 +1783,8 @@ SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.
 - **[ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `multimodal`
-  ServeGen characterizes production language, multimodal, and reasoning workloads and generates realistic per-client serving traces for benchmarking and design analysis; the project is open-sourced by Alibaba.
+  Artifact: [source](https://github.com/alibaba/ServeGen)
+  基于全球云端生产 serving 服务，刻画语言、多模态和 reasoning 模型 workload，并按 client 组合生成更真实的 serving traces；官方 NSDI 2026 页面明确提供开源实现 https://github.com/alibaba/ServeGen。
 - **ADS: AN AGENTIC DETECTION SYSTEM FOR ENTERPRISE AGENTIC AI SECURITY**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `serving` `agent` `rag`
