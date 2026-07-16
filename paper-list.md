@@ -9,9 +9,9 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 175 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 184 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
-| KV Cache 压缩、量化与淘汰 | 247 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
+| KV Cache 压缩、量化与淘汰 | 250 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
 | 算子、编译与硬件加速 | 158 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
@@ -25,7 +25,7 @@
 
 | Venue Status | Count |
 |---|---:|
-| formal_conference | 369 |
+| formal_conference | 381 |
 | poster_or_workshop | 43 |
 | preprint | 209 |
 | unclassified | 344 |
@@ -289,6 +289,15 @@
 | Dynamic Pipeline Inference Optimization for LLMs: Load-Aware Partitioning, Updating, and Migration | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Reducing Memory Requirements of LLM Inference Through Online rANS Decompression | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SneakPeek: Data-Aware Model Selection and Scheduling for Inference Serving on the Edge | ACM SoCC 2026 official schedule |  | ACM SoCC 2026 official schedule 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Constella: A Novel Framework for Cost-Efficient Distributed AI Inference in LEO Space Data Centers | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Coordinated Resource Management for Energy-Efficient DNN Inference on Heterogeneous Edge Devices | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Harmonia: QoS-Aware and High-Throughput Generative Inference with a Single GPU | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Layer-wise CPU-GPU Scheduling for LLM Inference on Memory-Limited Consumer GPUs | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Lyapunov-Guided KV Cache Control for Multi-Tenant Edge LLM Servicing | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| PTStore (Prefix Tensor Store): Distributed Prefix Caching and Replication for High Throughput Inference Serving | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Performance Characterization and Optimization of LLM Inference on Tenstorrent AI Accelerators | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Realizable N:M Sparse Transformer Inference via Search–Kernel Co-Design | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Throughput Optimization for Multi-level Speculative Decoding | Euro-Par 2026 official accepted papers |  | Euro-Par 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
@@ -657,6 +666,9 @@
 | WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching | ACM SIGMETRICS 2026 official accepted papers |  | ACM SIGMETRICS 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Efficient and Privacy Aware Edge Cloud Collaborative Inference for Large Language Models | arXiv AI infrastructure query |  | On-device LLM inference faces a trilemma of response latency, limited hardware resources and user privacy. Full cloud inference delivers strong computing power but exposes user prompts and dialogue data, while standalone on-device inference is unfeasible for most consumer and embedded edge devices. This paper presents a privacy-centric edge-cloud collaborative LLM inference framework built on endpoint-authenticated KV cache. Local endpoints handle input preprocessing, embedding computation, adaptive feature optimization, KV cache authentication, speculative decoding and low-dimensional model head calculation, while the cloud conducts authenticated decoder inference, KV cache management, token verification and high-dimensional vocabulary projection. Endpoints fuse partial outputs, apply language-adaptive masking and sample target tokens. All transmitted data and truncated logits are quantized and AES-GCM encrypted for privacy, with core lightweight modules, draft parameters and cache access policies kept local to avoid leakage. The framework supports heterogeneous devices including CPU-only, GPU-equipped and embedded devices via optimized streaming, batching and quantized ONNX deployment. Evaluations demonstrate that the framework reduces per-token latency by up to 46.1\% and downlink payloads by up to 67.4\% over baseline split inference, retaining comparable performance to full cloud inference. |
 | The Economics of AI Decoding Chips: Rebalancing Compute, Capacity, and Bandwidth for Efficient LLM Inference | arXiv AI infrastructure query |  | Every mainstream GPU is built compute-heavy and capacity-light: it pairs enormous arithmetic throughput with too little memory to hold a modern model. In contrast, large language model decoding requires little compute and a large amount of memory: a GPU's floating-point units run at single-digit-percent utilization during decoding, and the memory the workload does need is sold only bundled with yet more compute. The compute is recovered only at hyperscale, where Mixture-of-Experts (MoE) models are spread across 96--320-GPU expert-parallel clusters serving thousands of concurrent users, a scale available to a handful of operators. We formalize the inefficiency with two fixed per-chip constants. F/B, the roofline ridge point, determines whether the compute can be utilized; F/S, the compute bundled with each GB of memory, determines how much compute must be bought. We then argue for a rebalanced decode accelerator: less compute, far more commodity memory, and a deliberately lower and cheaper bandwidth. The Skymizer HTX-301, a purpose-built 28nm PCIe accelerator using commodity DDR5, occupies that design point. Its entry cost is low. A single eight-chip card holds DeepSeek-R1 671B for about \$19,000, and a 4U server of four four-chip cards serves two users at a deterministic 20.3 tokens per second each for about \$28,000. Either costs less than a single H100, while the minimum GPU deployment for the model is an eight-GPU node near \$350,000. Concurrency then scales out by adding hardware: eight 4U servers carry sixteen users for about \$224,000, two-thirds of the node's price, with the cost per token unchanged at about \$12 per million against the node's \$21. The HTX-301's decisive advantage is a supply chain free of every rationed input: it uses no high-bandwidth memory, no CoWoS, and no leading-edge logic. |
+| Evaluating Kubernetes Performance for GenAI Inference: From Automatic Speech Recognition to LLM Summarization | ACM/SPEC ICPE 2026 official accepted papers |  | ACM/SPEC ICPE 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SweetSpot: An Analytical Model for Predicting Energy Efficiency of LLM Inference | ACM/SPEC ICPE 2026 official accepted papers |  | ACM/SPEC ICPE 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SwiftSNNI: Optimized Scheduling for Secure Neural Network Inference (SNNI) on Multi-Core Systems | ACM/SPEC ICPE 2026 official accepted papers |  | ACM/SPEC ICPE 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 推测解码、Test-time Scaling 与生成加速
 

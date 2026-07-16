@@ -7,6 +7,7 @@ from time import sleep
 from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+    candidate_to_record,
     load_records,
     migrate_jsonl_to_split_stores,
     render_markdown_views,
@@ -211,6 +212,47 @@ class RecordStoreTests(unittest.TestCase):
         )
         result = triage_candidate(candidate, core_only=True)
         self.assertEqual(result.priority, "normal")
+
+    def test_triage_keeps_generative_inference_system_title(self):
+        candidate = Candidate(
+            title="Harmonia: QoS-Aware and High-Throughput Generative Inference with a Single GPU",
+            url="https://example.org/paper",
+            topics=("runtime-serving",),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
+    def test_triage_does_not_promote_generic_kubernetes_title(self):
+        candidate = Candidate(
+            title="Kubernetes Packing Heuristics for Multi-Tenant Clusters",
+            url="https://example.org/paper",
+            topics=("program-scheduling",),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "low")
+
+    def test_triage_promotes_kubernetes_llm_inference_title(self):
+        candidate = Candidate(
+            title="Kubernetes-Native Predictive Autoscaling for SLO-Aware AI Inference",
+            url="https://example.org/paper",
+            topics=("runtime-serving", "reliability-evaluation"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "high")
+
+    def test_candidate_record_preserves_official_source_evidence(self):
+        candidate = Candidate(
+            title="PTStore: Distributed Prefix Caching",
+            url="https://2026.euro-par.org/paper#ptstore",
+            source_id="europar26-accepted",
+            source_name="Euro-Par 2026 official accepted papers",
+            tier="A",
+            topics=("state-kv", "runtime-serving"),
+        )
+        record = candidate_to_record(candidate, "paper", "queued")
+        self.assertEqual(record["evidence"]["source_type"], "conference_program")
+        self.assertEqual(record["evidence"]["venue_status"], "formal_conference")
+        self.assertEqual(record["evidence"]["verification_level"], "official_source")
 
     def test_triage_keeps_kv_cache_scheduler_title_without_llm_token(self):
         candidate = Candidate(

@@ -76,7 +76,37 @@ def _evidence(record: dict[str, Any]) -> dict[str, str]:
     elif any(token in channel for token in ("poster", "workshop")):
         source_type = "conference_program"
         venue_status = "poster_or_workshop"
-    elif any(token in channel for token in ("osdi", "sosp", "icml", "iclr", "mlsys", "usenix", "nsdi", "asplos", "eurosys")):
+    elif any(
+        token in channel
+        for token in (
+            "osdi",
+            "sosp",
+            "icml",
+            "iclr",
+            "mlsys",
+            "usenix",
+            "nsdi",
+            "asplos",
+            "eurosys",
+            "euro-par",
+            "europar",
+            "icpe",
+            "socc",
+            "cloud",
+            "icdcs",
+            "hpca",
+            "hpdc",
+            "cgo",
+            "ppopp",
+            "pldi",
+            "micro",
+            "sigcomm",
+            "sigmetrics",
+            "ipdps",
+            "ics",
+            "acsos",
+        )
+    ):
         source_type = "conference_program"
         venue_status = "formal_conference"
     elif record.get("record_type") in {"industry", "project"}:
@@ -88,7 +118,11 @@ def _evidence(record: dict[str, Any]) -> dict[str, str]:
     return {
         "venue_status": venue_status,
         "source_type": source_type,
-        "verification_level": "legacy_import",
+        "verification_level": (
+            "official_source"
+            if record.get("source_ids") and record.get("source_tier") != "legacy"
+            else "legacy_import"
+        ),
         "verified_at": "",
     }
 
@@ -116,7 +150,14 @@ def _canonical_fields(record: dict[str, Any]) -> dict[str, Any]:
     if current not in history:
         history.append(current)
     record["status_history"] = history
-    record["evidence"] = {**_evidence(record), **record.get("evidence", {})}
+    existing_evidence = dict(record.get("evidence", {}))
+    computed_evidence = _evidence(record)
+    for key in ("source_type", "venue_status"):
+        if existing_evidence.get(key) in {None, "", "legacy_markdown", "unclassified"}:
+            existing_evidence[key] = computed_evidence[key]
+    if record.get("source_ids") and record.get("source_tier") != "legacy":
+        existing_evidence["verification_level"] = computed_evidence["verification_level"]
+    record["evidence"] = existing_evidence
     return record
 
 

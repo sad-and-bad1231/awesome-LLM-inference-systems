@@ -55,6 +55,15 @@ FRAMEWORK_BINDINGS = (
     "docker",
 )
 
+STRONG_FRAMEWORK_BINDINGS = (
+    "vllm",
+    "sglang",
+    "tensorrt-llm",
+    "kserve",
+    "llm-d",
+    "lmcache",
+)
+
 CORE_SERVING_TOPICS = {
     "runtime-serving",
     "state-kv",
@@ -151,7 +160,25 @@ MODEL_SYSTEM_TERMS = (
 )
 DIRECT_SYSTEM_TITLE_TERMS = (
     "serving",
-    "inference",
+    "llm inference",
+    "ai inference",
+    "genai inference",
+    "generative inference",
+    "model inference",
+    "foundation model inference",
+    "large model inference",
+    "distributed inference",
+    "moe inference",
+    "inference serving",
+    "inference system",
+    "inference engine",
+    "inference optimization",
+    "inference optimizations",
+    "inference on",
+    "inference via",
+    "transformer inference",
+    "dnn inference",
+    "neural network inference",
     "prefill",
     "speculative decoding",
     "decode stage",
@@ -160,19 +187,6 @@ DIRECT_SYSTEM_TITLE_TERMS = (
     "kvcache",
     "prefix cache",
     "context cache",
-    "scheduler",
-    "scheduling",
-    "disaggregated",
-    "rdma",
-    "nixl",
-    "all-to-all",
-    "expert parallel",
-    "kernel",
-    "triton",
-    "cuda",
-    "rocm",
-    "gpu",
-    "runtime",
     "rag system",
     "retrieval-augmented generation system",
 )
@@ -286,6 +300,8 @@ def triage_candidate(
     reasons: list[str] = []
     priority = "normal"
     verdict = "keep"
+    has_serving_signal = False
+    title_system_signal = False
 
     has_physical_signal = _contains_any(evidence_text, PHYSICAL_TERMS)
     algorithmic_only = _contains_any(evidence_text, ALGORITHMIC_ONLY_TERMS) and not has_physical_signal
@@ -353,7 +369,12 @@ def triage_candidate(
             peripheral_only
             or training_only
             or (not title_system_signal and not bindings)
-            or (not has_core_topic and not kernel_system_signal and not has_serving_signal)
+            or (
+                not has_core_topic
+                and not kernel_system_signal
+                and not has_serving_signal
+                and not title_system_signal
+            )
         ):
             priority = "low"
             if verdict == "keep":
@@ -361,9 +382,12 @@ def triage_candidate(
             reasons.append("outside serving mainline without direct inference-serving signal")
 
     if bindings:
-        priority = "high"
-        verdict = "keep"
-        reasons.append("ecosystem binding: " + ", ".join(sorted(set(bindings))))
+        strong_bindings = [term for term in bindings if term in STRONG_FRAMEWORK_BINDINGS]
+        deployment_bindings = [term for term in bindings if term in {"kubernetes", "docker"}]
+        if strong_bindings or (deployment_bindings and (has_serving_signal or title_system_signal)):
+            priority = "high"
+            verdict = "keep"
+            reasons.append("ecosystem binding: " + ", ".join(sorted(set(bindings))))
 
     repo = _github_repo_from_url(candidate.url)
     repo_signals: dict[str, object] = {}

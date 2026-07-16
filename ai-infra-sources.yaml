@@ -1136,6 +1136,27 @@
       "modes": ["weekly"]
     },
     {
+      "id": "europar26-accepted",
+      "name": "Euro-Par 2026 official accepted papers",
+      "type": "html_classed_title_program",
+      "url": "https://2026.euro-par.org/fileadmin/2026/images/program/Euro-Par26_accepted_papers.html",
+      "title_class": "paper-title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "network-disaggregation", "moe", "agent-rag", "multimodal-diffusion", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "icpe26-accepted",
+      "name": "ACM/SPEC ICPE 2026 official accepted papers",
+      "type": "html_bold_program",
+      "url": "https://icpe2026.spec.org/accepted-papers/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "program-scheduling", "agent-rag", "multimodal-diffusion", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "tensorrt-releases",
       "name": "NVIDIA TensorRT official releases",
       "type": "feed",

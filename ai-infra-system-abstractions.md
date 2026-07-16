@@ -21,8 +21,8 @@
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 287 | 186 | 50 | 51 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 3130 | 158 | 86 | 2886 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
-| State Compression & Signal Coding | 8032 | 262 | 186 | 7584 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
+| Disaggregated Interconnects | 3219 | 167 | 86 | 2966 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| State Compression & Signal Coding | 8097 | 265 | 186 | 7646 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
 | Execution Compilation & Kernel Fusion | 3732 | 130 | 115 | 3487 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 618 | 199 | 53 | 366 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
 | SRE/Fault-Tolerance/Sparing | 1690 | 30 | 11 | 1649 | trace/benchmark、SLO、故障恢复、漂移、数值稳定性和生产降级。 |
