@@ -1,4 +1,5 @@
 import http.client
+import time
 import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
@@ -17,6 +18,21 @@ def make_response(body=b"ok", status=200):
 
 
 class HttpFetcherTests(unittest.TestCase):
+    def test_hard_deadline_returns_when_transport_thread_stalls(self):
+        fetcher = HttpFetcher("test", retries=0, backoff_seconds=0)
+
+        def stalled(*args, **kwargs):
+            time.sleep(0.25)
+
+        with patch.object(fetcher, "_fetch_once", side_effect=stalled):
+            started = time.monotonic()
+            with self.assertRaises(TimeoutError):
+                fetcher.fetch(
+                    {"url": "https://example.test", "timeout_seconds": 0.1}, {}
+                )
+
+        self.assertLess(time.monotonic() - started, 0.2)
+
     @patch("scripts.ai_infra_monitor.ai_infra_monitor.fetch.urllib.request.urlopen")
     def test_source_can_override_timeout_and_retry_budget(self, urlopen):
         urlopen.return_value = make_response()

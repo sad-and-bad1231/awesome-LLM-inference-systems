@@ -65,3 +65,13 @@ python scripts/ai_infra_monitor/monitor.py validate
 
 `compact` is a one-time migration/maintenance command that marks legacy non-actionable candidate records as `drop` while preserving them for audit. Run it after upgrading an existing candidate store, not on every daily scan. Weekly automation uses the same flow, with `--mode weekly`, followed by
 `report` and `finalize` without `--no-commit` only when a commit is intended.
+
+For a reproducible bounded sweep that executes the complete lifecycle for every batch, use `sweep`. It stays local and non-committing by default:
+
+```powershell
+python scripts/ai_infra_monitor/monitor.py sweep --mode weekly --source-batch-count 6 --report
+```
+
+Resume only unfinished batches with `--start-batch-index` and `--end-batch-index`.
+
+MLSys 2026 has both the virtual-program source and the official OpenReview API source. The latter provides abstracts and paper-level identifiers when reachable; existing records remain valid when a source is temporarily blocked.

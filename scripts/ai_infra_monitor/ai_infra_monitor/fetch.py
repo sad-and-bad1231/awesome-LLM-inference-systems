@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import http.client
 import socket
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -24,8 +25,39 @@ class HttpFetcher:
     def _retryable_http_error(error: urllib.error.HTTPError) -> bool:
         return error.code in {408, 425, 429} or 500 <= error.code < 600
 
+    @staticmethod
+    def _fetch_once(request: urllib.request.Request, timeout: float, cache: dict) -> dict:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return {
+                "status": response.status,
+                "body": response.read(),
+                "etag": response.headers.get("ETag", ""),
+                "last_modified": response.headers.get("Last-Modified", ""),
+            }
+
+    def _fetch_with_deadline(
+        self, request: urllib.request.Request, timeout: float, cache: dict
+    ) -> dict:
+        result: list[dict] = []
+        errors: list[BaseException] = []
+
+        def worker() -> None:
+            try:
+                result.append(self._fetch_once(request, timeout, cache))
+            except BaseException as error:  # re-raise transport errors in caller thread
+                errors.append(error)
+
+        thread = threading.Thread(target=worker, daemon=True)
+        thread.start()
+        thread.join(timeout)
+        if thread.is_alive():
+            raise TimeoutError(f"fetch deadline exceeded for {request.full_url}")
+        if errors:
+            raise errors[0]
+        return result[0]
+
     def fetch(self, source: dict, cache: dict) -> dict:
-        timeout = max(1, int(source.get("timeout_seconds", self.timeout)))
+        timeout = max(0.1, float(source.get("timeout_seconds", self.timeout)))
         retries = max(0, int(source.get("fetch_retries", self.retries)))
         headers = {
             "User-Agent": self.user_agent,
@@ -39,14 +71,9 @@ class HttpFetcher:
         last_error = None
         for attempt in range(retries + 1):
             try:
-                with urllib.request.urlopen(request, timeout=timeout) as response:
-                    return {
-                        "status": response.status,
-                        "body": response.read(),
-                        "etag": response.headers.get("ETag", ""),
-                        "last_modified": response.headers.get("Last-Modified", ""),
-                        "attempts": attempt + 1,
-                    }
+                response = self._fetch_with_deadline(request, timeout, cache)
+                response["attempts"] = attempt + 1
+                return response
             except urllib.error.HTTPError as error:
                 if error.code == 304:
                     return {

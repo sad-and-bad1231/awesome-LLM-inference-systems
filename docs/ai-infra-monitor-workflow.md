@@ -87,6 +87,20 @@ python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commi
 
 Weekly automation runs Saturday at 22:00 Beijing time. The source pool is partitioned into bounded batches so one slow conference page cannot block the full sweep; each returned run ID is triaged and queued before rendering. Omit `--no-commit` only when a local commit is explicitly intended.
 
+The equivalent single-command lifecycle is:
+
+```powershell
+python scripts/ai_infra_monitor/monitor.py sweep --mode weekly --source-batch-count 6 --report
+```
+
+`sweep` performs discovery, triage, queue, optional report, render, validation, and finalize for every batch. It does not create a commit by default.
+
+When a long sweep is interrupted, resume a range without repeating completed batches:
+
+```powershell
+python scripts/ai_infra_monitor/monitor.py sweep --mode weekly --source-batch-count 6 --start-batch-index 2 --end-batch-index 5 --report
+```
+
 ## Triage Pipeline
 
 The first version is deterministic and does not call an external LLM API.

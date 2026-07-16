@@ -22,7 +22,7 @@ class CliTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        for command in ("discover", "migrate", "triage", "queue", "compact", "render", "publish", "validate", "finalize", "status"):
+        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "render", "publish", "validate", "finalize", "status"):
             self.assertIn(command, result.stdout)
 
     def test_discover_keeps_new_candidates_in_run_manifest_until_triage(self):
@@ -74,6 +74,69 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(command_discover(args), 0)
 
             self.assertFalse((root / "data" / "candidates.jsonl").exists())
+
+    def test_sweep_processes_every_source_batch_through_lifecycle(self):
+        from scripts.ai_infra_monitor import monitor
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            args = SimpleNamespace(
+                root=root,
+                config=root / "config.yaml",
+                mode="weekly",
+                source_id=[],
+                source_batch_count=2,
+                tiers=["A", "B", "C"],
+                report=True,
+                no_commit=True,
+            )
+            manifests = [{"run_id": "run-1"}, {"run_id": "run-2"}]
+            with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
+                monitor, "command_triage"
+            ) as triage, patch.object(monitor, "command_queue") as queue, patch.object(
+                monitor, "command_report"
+                ) as report, patch.object(monitor, "command_finalize") as finalize:
+                engine.return_value.discover.side_effect = manifests
+                for action in (triage, queue, report, finalize):
+                    action.return_value = 0
+
+                self.assertEqual(monitor.command_sweep(args), 0)
+
+            self.assertEqual(engine.return_value.discover.call_count, 2)
+            self.assertEqual([call.args[0].run_id for call in triage.call_args_list], ["run-1", "run-2"])
+            self.assertEqual([call.args[0].run_id for call in queue.call_args_list], ["run-1", "run-2"])
+            self.assertEqual([call.args[0].run_id for call in report.call_args_list], ["run-1", "run-2"])
+            self.assertEqual([call.args[0].run_id for call in finalize.call_args_list], ["run-1", "run-2"])
+
+    def test_sweep_can_resume_from_a_later_batch(self):
+        from scripts.ai_infra_monitor import monitor
+
+        args = SimpleNamespace(
+            root=Path("."),
+            config=Path("config.yaml"),
+            mode="weekly",
+            source_id=[],
+            source_batch_count=6,
+            start_batch_index=2,
+            end_batch_index=5,
+            tiers=["A"],
+            report=False,
+            no_commit=True,
+        )
+        manifests = [{"run_id": f"run-{index}"} for index in range(2, 6)]
+        with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
+            monitor, "command_triage", return_value=0
+        ), patch.object(monitor, "command_queue", return_value=0), patch.object(
+            monitor, "command_finalize", return_value=0
+        ):
+            engine.return_value.discover.side_effect = manifests
+            self.assertEqual(monitor.command_sweep(args), 0)
+
+        self.assertEqual(engine.return_value.discover.call_count, 4)
+        self.assertEqual(
+            [call.kwargs["source_batch_index"] for call in engine.return_value.discover.call_args_list],
+            [2, 3, 4, 5],
+        )
 
     def test_triage_persists_only_keep_candidates_with_actionable_priority(self):
         from scripts.ai_infra_monitor.monitor import command_triage

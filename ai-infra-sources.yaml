@@ -756,6 +756,18 @@
       "modes": ["weekly"]
     },
     {
+      "id": "mlsys26-openreview",
+      "name": "MLSys 2026 official OpenReview submissions",
+      "type": "openreview",
+      "url": "https://api2.openreview.net/notes?content.venueid=MLSys.org%2F2026%2FConference&limit=1000",
+      "timeout_seconds": 20,
+      "fetch_retries": 1,
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "kernel-compiler", "network-disaggregation", "moe", "reliability-evaluation"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "sosp25-dblp",
       "name": "SOSP 2025 DBLP index",
       "type": "html_index",

@@ -6,6 +6,7 @@ import shutil
 import sys
 from datetime import date
 from pathlib import Path
+from types import SimpleNamespace
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -109,6 +110,57 @@ def command_discover(args) -> int:
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0
+
+
+def command_sweep(args) -> int:
+    """Run bounded discovery batches through triage, queue, report, and finalize."""
+    source_ids = set(args.source_id) if args.source_id else None
+    batch_count = max(1, int(args.source_batch_count))
+    start_index = max(0, int(getattr(args, "start_batch_index", 0)))
+    end_index = int(getattr(args, "end_batch_index", batch_count - 1))
+    if start_index >= batch_count or end_index < start_index or end_index >= batch_count:
+        print("invalid sweep batch range", file=sys.stderr)
+        return 1
+    run_ids: list[str] = []
+    failures: list[dict[str, object]] = []
+    engine = DiscoveryEngine(args.root, args.config)
+    for batch_index in range(start_index, end_index + 1):
+        manifest = engine.discover(
+            args.mode,
+            source_ids=source_ids,
+            source_batch_index=batch_index,
+            source_batch_count=batch_count,
+        )
+        run_id = str(manifest["run_id"])
+        run_ids.append(run_id)
+        lifecycle = SimpleNamespace(root=args.root, config=args.config, run_id=run_id)
+        for name, command in (("triage", command_triage), ("queue", command_queue)):
+            if name == "queue":
+                lifecycle.tiers = args.tiers
+            if command(lifecycle) != 0:
+                failures.append({"run_id": run_id, "step": name})
+                continue
+        if args.report:
+            if command_report(lifecycle) != 0:
+                failures.append({"run_id": run_id, "step": "report"})
+        lifecycle.no_commit = args.no_commit
+        if command_finalize(lifecycle) != 0:
+            failures.append({"run_id": run_id, "step": "finalize"})
+    print(
+        json.dumps(
+            {
+                "mode": args.mode,
+                "batches": len(run_ids),
+                "source_batch_count": batch_count,
+                "start_batch_index": start_index,
+                "end_batch_index": end_index,
+                "run_ids": run_ids,
+                "failures": failures,
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 1 if failures else 0
 
 
 def command_queue(args) -> int:
@@ -426,6 +478,42 @@ def build_parser() -> argparse.ArgumentParser:
         help="number of deterministic source batches to run",
     )
     discover.set_defaults(func=command_discover)
+    sweep = subparsers.add_parser(
+        "sweep",
+        help="discover all source batches and process each through triage, queue, and finalize",
+    )
+    sweep.add_argument("--mode", choices=("daily", "weekly"), required=True)
+    sweep.add_argument(
+        "--source-id",
+        action="append",
+        help="limit discovery to one or more configured source IDs; repeatable",
+    )
+    sweep.add_argument(
+        "--source-batch-count",
+        type=int,
+        default=1,
+        help="number of deterministic source batches to process",
+    )
+    sweep.add_argument(
+        "--start-batch-index",
+        type=int,
+        default=0,
+        help="first batch index to process when resuming a sweep",
+    )
+    sweep.add_argument(
+        "--end-batch-index",
+        type=int,
+        help="last batch index to process when resuming a sweep",
+    )
+    sweep.add_argument("--tiers", nargs="+", default=["A", "B", "C"])
+    sweep.add_argument("--report", action="store_true", help="write a report for every batch")
+    sweep.add_argument(
+        "--no-commit",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="keep finalize local without creating a Git commit (default: true)",
+    )
+    sweep.set_defaults(func=command_sweep)
     migrate = subparsers.add_parser("migrate")
     migrate.add_argument("--source", type=Path, required=True, help="legacy unified JSONL source to split")
     migrate.set_defaults(func=command_migrate)
