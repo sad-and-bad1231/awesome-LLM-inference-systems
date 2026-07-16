@@ -86,6 +86,7 @@ class CliTests(unittest.TestCase):
                 mode="weekly",
                 source_id=[],
                 source_batch_count=2,
+                end_batch_index=None,
                 tiers=["A", "B", "C"],
                 report=True,
                 no_commit=True,
@@ -107,6 +108,7 @@ class CliTests(unittest.TestCase):
             self.assertEqual([call.args[0].run_id for call in queue.call_args_list], ["run-1", "run-2"])
             self.assertEqual([call.args[0].run_id for call in report.call_args_list], ["run-1", "run-2"])
             self.assertEqual([call.args[0].run_id for call in finalize.call_args_list], ["run-1", "run-2"])
+            self.assertEqual([call.args[0].skip_render for call in finalize.call_args_list], [True, False])
 
     def test_sweep_can_resume_from_a_later_batch(self):
         from scripts.ai_infra_monitor import monitor

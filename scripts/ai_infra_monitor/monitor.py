@@ -117,7 +117,8 @@ def command_sweep(args) -> int:
     source_ids = set(args.source_id) if args.source_id else None
     batch_count = max(1, int(args.source_batch_count))
     start_index = max(0, int(getattr(args, "start_batch_index", 0)))
-    end_index = int(getattr(args, "end_batch_index", batch_count - 1))
+    requested_end = getattr(args, "end_batch_index", None)
+    end_index = batch_count - 1 if requested_end is None else int(requested_end)
     if start_index >= batch_count or end_index < start_index or end_index >= batch_count:
         print("invalid sweep batch range", file=sys.stderr)
         return 1
@@ -144,6 +145,8 @@ def command_sweep(args) -> int:
             if command_report(lifecycle) != 0:
                 failures.append({"run_id": run_id, "step": "report"})
         lifecycle.no_commit = args.no_commit
+        # Rendering the whole public repository is global work; defer it until the last batch.
+        lifecycle.skip_render = batch_index != end_index
         if command_finalize(lifecycle) != 0:
             failures.append({"run_id": run_id, "step": "finalize"})
     print(
@@ -365,22 +368,24 @@ def command_finalize(args) -> int:
         for error in jsonl_errors:
             print(f"{error.path}:{error.line}: {error.message}", file=sys.stderr)
         return 1
-    render_markdown_views(
-        resolved["paper_db_file"],
-        resolved["industry_db_file"],
-        resolved["candidate_db_file"],
-        resolved["paper_file"],
-        resolved["industry_file"],
-        resolved["candidate_file"],
-        resolved["abstraction_file"],
-    )
-    render_public_repository(
-        resolved["paper_db_file"],
-        resolved["industry_db_file"],
-        args.root,
-    )
-    if command_validate(args):
-        return 1
+    skip_render = bool(getattr(args, "skip_render", False))
+    if not skip_render:
+        render_markdown_views(
+            resolved["paper_db_file"],
+            resolved["industry_db_file"],
+            resolved["candidate_db_file"],
+            resolved["paper_file"],
+            resolved["industry_file"],
+            resolved["candidate_file"],
+            resolved["abstraction_file"],
+        )
+        render_public_repository(
+            resolved["paper_db_file"],
+            resolved["industry_db_file"],
+            args.root,
+        )
+        if command_validate(args):
+            return 1
     manifest = load_manifest(manifest_path(args.root, config, args.run_id))
     state = load_state(resolved["state_file"])
     for item in manifest.get("candidates", []):
@@ -422,6 +427,7 @@ def command_finalize(args) -> int:
             {
                 "finalized": True,
                 "run_id": args.run_id,
+                "rendered": not skip_render,
                 "committed": bool(commit_output),
             }
         )

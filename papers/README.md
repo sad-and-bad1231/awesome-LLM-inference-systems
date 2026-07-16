@@ -14,11 +14,11 @@ A complete academic paper collection organized by serving-system abstraction. Fo
 
 | Records | Formal venue | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 442 | 218 | 19 | 412 |
+| 443 | 219 | 22 | 413 |
 
 ## Collection Navigation
 
-- [KV State & Memory](#kv-state-memory) (137)
+- [KV State & Memory](#kv-state-memory) (138)
 - [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (41)
 - [KV Compression & Low-Bit State](#kv-compression-low-bit-state) (70)
 - [Kernel & Compiler](#kernel-compiler) (54)
@@ -38,7 +38,7 @@ Evidence labels describe the source material. Featured entries are editorial ent
 
 ## Resource List
 
-### KV State & Memory (137)
+### KV State & Memory (138)
 
 KV blocks, prefix state, offload, external memory, and memory-aware serving.
 
@@ -62,6 +62,11 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `long-context`
   ContextPilot 识别可复用上下文片段并规划复用路径，把长上下文请求转化为更少的 prefill 和 cache 恢复操作。
+- **[Cortex: Achieving Low-Latency, Cost-Efficient Remote Data Access for LLM via Semantic-Aware Knowledge Caching](https://www.usenix.org/conference/nsdi26/presentation/ruan-cortex)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `kv-cache` `memory` `agent` `rag` `latency` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-ruan-cortex.pdf)
+  Cortex 为 LLM agent 构建跨区域语义知识缓存，以 Semantic Element 和 Semantic Retrieval Index 支持语义命中、成本感知淘汰与主动预取；在代表性搜索任务上吞吐最高提升 3.6x，代码任务最高提升 20x，同时保持近似非缓存基线的准确率。
 - **[DroidSpeak: KV Cache Sharing Across Fine-tuned Model Variants](https://www.usenix.org/conference/nsdi26/presentation/liu-yuhan)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `npu` `kv-cache` `agent` `edge` `throughput`
@@ -92,6 +97,11 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `moe`
   MoE-APEX 根据 expert 热度和执行需求自适应选择精度与卸载方式，缓解 MoE 权重容量和传输瓶颈。
+- **[No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs](https://www.usenix.org/conference/osdi26/presentation/luo)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `decode` `gpu` `cuda` `kernel` `kv-cache` `long-context` `latency`
+  Artifact: [source](https://github.com/shutianluo/DirectKV)
+  DirectKV 在 NVIDIA GH200/GB200 的 NVLink-C2C 平台上实现零拷贝 KV offloading：GPU kernel 直接访问 CPU-resident KV，结合 CPU-aware tiling、warp pipeline 与 kernel fusion；相较既有方案最多减少 50% CPU-GPU 传输、降低 43% GPU 内存并提升端到端性能 1.2x。
 - **[OPKV: A High-Throughput Plugin-Driven Framework for Recallable Sparsity in Paged KV Cache Systems](https://openreview.net/forum?id=EB5bgzv4qA)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `kv-cache` `throughput`
@@ -154,10 +164,6 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `kv-cache` `lmcache`
   LMCache 将 KV cache 抽象为独立可复用层，支持跨请求、跨 engine、跨存储层的 KV offload、传输和复用。
-- **No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `gpu` `kv-cache` `long-context`
-  该工作用 zero-copy KV offloading 移除长上下文服务中的中间缓冲和额外拷贝，降低 GPU 与主机存储间的 cache 搬运瓶颈。
 - **Ontology-Guided Long-Term Memory for Conversational RAG**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `serving` `memory` `agent` `rag`
@@ -1318,6 +1324,11 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
   BAT 为生成式推荐设计 bipartite attention 和相应 serving 路径，减少推荐上下文与生成阶段的冗余计算。
+- **[BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `scheduler` `memory` `moe` `heterogeneous` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/osdi26-xu-tairan.pdf)
+  BatchGen 以 sequence coroutine compute model 将每个序列表示为细粒度事件驱动 coroutine，使运行时能动态重组工作、扩大 expert-level batch、缓解 straggler 并跨设备重分配；在 128-GPU 集群上最多缩短批处理完成时间 2.3x，在受限内存加速器上相对最强 offloading baseline 最多提升 9.6x。
 - **Bullet: Boosting GPU Utilization for LLM Serving via Dynamic Spatial-Temporal Orchestration**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `gpu`
@@ -1385,10 +1396,6 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `decode` `prefill`
   BLASST 在 online softmax 中按阈值动态跳过低贡献 attention block，减少 Value block 加载和后续矩阵乘法以加速长上下文 prefill/decode。
-- **BatchGen: An Architecture for Scalable and Efficient Batch Inference**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `moe`
-  BatchGen 面向可扩展批量推理架构，优化大批请求在专家/混合推理负载中的组织与资源利用。
 - **BatchLLM: Optimizing Large Batched LLM Inference with Global Prefix Sharing and Throughput-oriented Token Batching**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `throughput`

@@ -2,7 +2,7 @@
 
 <!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
 
-[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-442-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-121-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-218-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
+[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-443-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-121-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-219-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
 ![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
 
@@ -44,11 +44,11 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Papers | Industry systems | Formal paper venues | System abstractions |
 |---:|---:|---:|---:|
-| 442 | 121 | 218 | 6 |
+| 443 | 121 | 219 | 6 |
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 442 | Formal Conference: 63, Formal Conference · Legacy Import: 155, Poster / Workshop: 9, Poster / Workshop · Legacy Import: 28, Preprint: 3, Preprint · Legacy Import: 156, Unclassified · Legacy Import: 28 |
+| Academic papers | 443 | Formal Conference: 66, Formal Conference · Legacy Import: 153, Poster / Workshop: 9, Poster / Workshop · Legacy Import: 28, Preprint: 3, Preprint · Legacy Import: 156, Unclassified · Legacy Import: 28 |
 | Industry / open-source systems | 121 | Industrial Material: 2, Industrial Material · Legacy Import: 119 |
 
 ## Reading Paths
@@ -65,7 +65,7 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | System abstraction | Records | What it covers | Entry points |
 |---|---:|---|---|
-| **KV State & Memory** | 175 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
+| **KV State & Memory** | 176 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
 | **P/D Disaggregation & KV Transfer** | 53 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
 | **KV Compression & Low-Bit State** | 92 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
 | **Kernel & Compiler** | 78 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
