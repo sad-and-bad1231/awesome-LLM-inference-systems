@@ -135,15 +135,20 @@ def command_sweep(args) -> int:
         run_id = str(manifest["run_id"])
         run_ids.append(run_id)
         lifecycle = SimpleNamespace(root=args.root, config=args.config, run_id=run_id)
+        batch_failed = False
         for name, command in (("triage", command_triage), ("queue", command_queue)):
             if name == "queue":
                 lifecycle.tiers = args.tiers
             if command(lifecycle) != 0:
                 failures.append({"run_id": run_id, "step": name})
-                continue
+                batch_failed = True
+                break
+        if batch_failed:
+            continue
         if args.report:
             if command_report(lifecycle) != 0:
                 failures.append({"run_id": run_id, "step": "report"})
+                continue
         lifecycle.no_commit = args.no_commit
         # Rendering the whole public repository is global work; defer it until the last batch.
         lifecycle.skip_render = batch_index != end_index
@@ -183,7 +188,9 @@ def command_queue(args) -> int:
     for record in candidate_records:
         if record.get("canonical_id") in promoted_ids:
             record["status"] = "promote"
-            record = normalize_record(record)
+            normalized = normalize_record(record)
+            record.clear()
+            record.update(normalized)
     write_records(resolved["candidate_db_file"], candidate_records)
     print(json.dumps({"queued": sum(counts.values()), "counts": counts, "run_id": args.run_id}))
     return 0

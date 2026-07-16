@@ -14,16 +14,16 @@ A complete academic paper collection organized by serving-system abstraction. Fo
 
 | Records | Formal venue | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 443 | 219 | 22 | 413 |
+| 447 | 223 | 39 | 417 |
 
 ## Collection Navigation
 
 - [KV State & Memory](#kv-state-memory) (138)
-- [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (41)
+- [P/D Disaggregation & KV Transfer](#p-d-disaggregation-kv-transfer) (42)
 - [KV Compression & Low-Bit State](#kv-compression-low-bit-state) (70)
-- [Kernel & Compiler](#kernel-compiler) (54)
+- [Kernel & Compiler](#kernel-compiler) (55)
 - [Runtime & Serving](#runtime-serving) (124)
-- [Reliability & Benchmarks](#reliability-benchmarks) (16)
+- [Reliability & Benchmarks](#reliability-benchmarks) (18)
 
 ## Evidence and Selection
 
@@ -72,7 +72,7 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   Tags: `prefill` `serving` `npu` `kv-cache` `agent` `edge` `throughput`
   Compound AI systems, such as agentic systems, are an emerging trend in large-scale enterprise settings, with multiple LLMs specialized for different users, tasks, and/or roles working together. In these scenarios, different models often process inputs that share the same context prefix. Although much work was done in the past to enable the reuse of prefix KV caches across inputs for a single model, how to enable one model to reuse the prefix KV caches of a different model remains an open question. We introduce DroidSpeak, the first distributed LLM inference system that enables KV cache reuse across distributed nodes running inference of different LLMs, so long as the LLMs have the same architecture. We present the first study that aims at understanding the impact of sharing KV caches across different LLMs, and if/when such sharing affects quality. Inspired by the findings, we present DroidSpeak, which selectively recomputes a few layers of the KV cache produced by another LLM and reuses the remaining layers, with negligible quality loss. Moreover, carefully pipelining the layer-wise re-computation and the loading of reused KV cache further improves the inference performance. Experiments on diverse datasets and model pairs demonstrate that DroidSpeak achieves up to 4x throughput improvement and about 3.1× faster prefill (time to first token), with negligible loss of quality in F1 scores, Rouge-L or code similarity score, compared to the baseline which does not allow any sharing across models.
 - **[ECHO: Efficient KV Cache Offloading with Lossless Prefetching for Serving Native Sparse Attention LLMs](https://www.usenix.org/conference/osdi26/presentation/liu-guangda)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `kv-cache`
   针对 native sparse attention 下随上下文增长的 KV 容量瓶颈，设计 GPU graph-friendly cache manager、无损 decode/prefill prefetch 和融合 GPU kernel；官方 OSDI 2026 页面报告长上下文下相对 SGLang/vLLM generation throughput 最高提升 2.1 倍。
 - **[FlexiCache: Leveraging Temporal Stability of Attention Heads for Efficient KV Cache Management](https://openreview.net/forum?id=GgX6dPJx9M)**
@@ -80,9 +80,14 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   Tags: `compression` `kv-cache` `rag`
   FlexiCache 利用 attention head 重要性的时间稳定性动态管理 KV cache，减少长上下文生成中不必要的保留和加载。
 - **[Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `memory`
   分析移动设备前台应用与 LLM 推理之间不对称的内存带宽干扰，利用 speculative decoding 提供可抢占 yield points，让推理动态让出带宽；官方 OSDI 2026 页面报告前台 jank rate 平均降低 58.5%、LLM throughput 平均提升 26.4%。
+- **[KVSwap: Disk-aware KV Cache Offloading for Long-Context On-device Inference](https://www.sigmobile.org/mobisys/2026/program/#kvswap-disk-aware-kv-cache-offloading-for-long-context-on-device-inference)**
+  `MobiSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `decode` `serving` `gpu` `edge` `kv-cache` `memory` `long-context` `throughput`
+  Artifact: [source](https://eprints.whiterose.ac.uk/id/eprint/240121/1/kvswap.pdf)
+  KVSwap 针对统一内存的移动/嵌入式设备，将完整 KV cache 放到磁盘，仅在 RAM 保留低秩 K 元数据预测下一层关键 token，并以连续磁盘访问和异步 I/O 与计算重叠；MobiSys 评审确认其在 NVIDIA Jetson 上相较既有 offloading 方案提升紧内存预算下吞吐。
 - **[Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads](https://www.usenix.org/conference/nsdi26/presentation/ruan-libra)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `decode` `prefill` `goodput` `slo`
@@ -114,17 +119,13 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `kv-cache`
   REPA 用可重构 PIM 同时加速 KV cache 的卸载传输与就地处理，减少长上下文推理的数据移动。
-- **[RaidServe: High-performance Resilient Serving](https://openreview.net/forum?id=5pl9fdbEkq)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving` `gpu`
-  RaidServe 针对 tensor-parallel LLM serving 的单 GPU 故障设计冗余和恢复路径，减少故障后的 KV 复制和模型重载停顿。
 - **[SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://doi.org/10.1145/3767295.3769353)**
   `EuroSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `routing` `serving`
   Artifact: [source](https://arxiv.org/abs/2505.24095)
   面向多区域 LLM serving，结合 prefix/KV locality-aware routing 与基于待处理请求的 selective pushing，在跨区域流量协同下平衡负载、保持缓存局部性并降低容量冗余；公开评测报告吞吐提升 1.12–2.06 倍、延迟降低 1.74–6.30 倍、总服务成本降低 25%。
 - **[Strata](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `long-context`
   面向百万 token 长上下文 serving，跨 GPU HBM、CPU 内存和 SSD 组织层次化 KV cache，采用 GPU-assisted I/O、cache-aware scheduler 和 delay-hit 缓解；基于 SGLang 并已部署，官方 OSDI 2026 页面报告相对 vLLM-LMCache 吞吐最高提升 5 倍、相对 TensorRT-LLM 提升 3.75 倍。
 - **[Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token](https://openreview.net/forum?id=FuRo7Ur5Ib)**
@@ -144,6 +145,11 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `decode` `prefill` `gpu` `goodput` `slo`
   MuxWise 在单 GPU 内对 prefill/decode 进行多路复用，并结合估计器和 SLO 调度提升 goodput。
+- **[VLMCache: Efficient On-Device Vision-Language Model Inference](https://www.sigmobile.org/mobisys/2026/program/#vlmcache-efficient-on-device-vision-language-model-inference)**
+  `MobiSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `prefill` `serving` `edge` `gpu` `kv-cache` `memory` `multimodal` `ttft`
+  Artifact: [source](https://doi.org/10.1145/3745756.3809243)
+  VLMCache 面向移动端 VLM 的重 prefill，将连续帧中的静态背景与动态前景语义分离，把稳定视觉块编码为可复用 KV prefix，仅对变化区域追加计算，再通过 isolate-then-fuse 恢复跨块 attention 和位置一致性；MobiSys 评审确认其显著降低 TTFT 且仅有很小精度损失。
 - **A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints**
   `ICML 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `kv-cache` `memory`
@@ -176,10 +182,6 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `decode` `prefill`
   该工作用更简单的乘法式请求调度指标协调排队、prefill/decode 负载和 KV 压力，避免过度复杂的在线策略。
-- **SkipKV: Selective Skipping of KV Generation and Storage for Efficient Inference with Large Reasoning Models**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `kv-cache` `rag`
-  SkipKV 在大推理模型中跳过部分不关键 KV 的生成与存储，减少长 CoT 输出带来的线性 cache 增长。
 - **ByteScale: Communication-Efficient Scaling of LLM Training with a 2048K Context Length on 16384 GPUs**
   `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `prefill` `training` `gpu`
@@ -600,24 +602,26 @@ KV blocks, prefix state, offload, external memory, and memory-aware serving.
   `ISCA 2024` · `2024` · `Research record` · `Unclassified · Legacy Import`
   Splitwise 将 prompt computation 与 token generation 部署到不同机器池，在吞吐、成本和功耗之间做阶段化资源优化。
 
-### P/D Disaggregation & KV Transfer (41)
+### P/D Disaggregation & KV Transfer (42)
 
 Prefill/decode separation, KV transfer, routing, and distributed transport.
 
 #### Featured
 
+- **Featured:** **[SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `kv-cache` `memory` `agent` `multi-turn` `vllm` `latency` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-agarwal.pdf)
+  SYMPHONY 将计算与 KV cache 存储解耦为面向多轮会话的 disaggregated memory layer，通过 advisory prefetch、priority-based KV 管理和 cooperative memory management 避开关键路径；在 LLaMA/ShareGPT/Burst-GPT 上相较 vLLM 将端到端延迟降低 2.4x，并在小幅延迟增加下服务 4x 请求。
+- **Featured:** **[SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading](https://www.usenix.org/conference/nsdi26/presentation/li-xingyi)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `prefill` `serving` `gpu` `cuda` `kernel` `moe` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-li-xingyi.pdf)
+  SwiftEP 面向 MoE prefill 的 all-to-all 通信，以 buffer fusion 消除 staging copy，并结合 TMA offloading、RDMA scatter-gather、QP 并行和 CUDA IPC 提升 NVLink/网络利用率；在 16/32 GPU 集群上相较 DeepEP，算法带宽最高提升 119.7%，SM 占用最高下降 66.7%，服务容量提升 21.2%。
 - **Featured:** **TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `decode` `prefill`
   TPLA 将 latent attention 与 tensor parallel 结合，降低 PD 分离推理中的 KV 和跨卡通信压力。
-- **Featured:** **SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `kv-cache` `memory`
-  SYMPHONY 将计算和 KV cache 存储解耦为 disaggregated memory management layer，以满足多轮会话状态的低延迟访问。
-- **Featured:** **SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `cuda` `rdma` `moe`
-  SwiftEP 用 buffer fusion 消除 MoE all-to-all staging copy，并以 TMA、RDMA scatter-gather 和 CUDA IPC 提高链路利用率。
 #### Full Resource List
 
 - **[Efficient Data Passing for Serverless Inference Workflows: A GPU-Centric Approach](https://doi.org/10.1145/3767295.3769336)**
@@ -625,6 +629,11 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   Tags: `serving` `gpu`
   Artifact: [source](https://qzweng.github.io/assets/pdf/2026.EuroSys-GRouter-Wu.pdf)
   提出 GRouter GPU-centric 数据平面，统一 CPU-GPU/GPU-GPU 数据传递，利用 PCIe、NVLink 与 NIC 多链路并行传输，并以弹性 GPU 存储适应动态工作流；在真实推理服务上将数据传递延迟最多降低 87%，吞吐最高提升 1.74 倍。
+- **[FaaScale: Unlocking Fast LLM Scaling for Serverless Inference](https://openreview.net/forum?id=jgL8LuOVyT)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `prefill` `serving` `gpu` `rdma` `memory` `scheduler` `heterogeneous` `ttft`
+  Artifact: [source](https://github.com/lambda-scale/lambda-scale)
+  FaaScale 以 PipeCast 将模型分块 multicast 与跨节点 pipeline-parallel inference 协同，在模型传输尚未完成时即开始执行，并结合 GPU/host memory 管理应对突发 serverless 负载；真实 LLM traces 上 P90 TTFT 改善 2.4x–5x、GPU 成本降低 17.8%–31.3%。
 - **KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving**
   `SIGCOMM 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `compression` `kv-cache` `slo`
@@ -639,8 +648,14 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   以用户态 orchestration overlay 将异构、分散且由 Slurm 等管理的 HPC 集群统一为 serving 平台，提供 CRDT gossip 服务发现、统一 serving API、异构调度和容错；官方 OSDI 2026 页面报告已服务 13M 请求、15B tokens、142 个模型，并面向 1000+ 研究者部署。
 - **[TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `decode` `prefill` `multimodal`
-  TriInfer 将 encode、prefill 和 decode 混合分离并按多模态阶段调度，减少 MLLM serving 中阶段异质性造成的资源浪费。
+  Tags: `prefill` `decode` `kv-cache` `scheduler` `multimodal` `slo`
+  Artifact: [source](https://mlsys.org/media/mlsys-2026/Slides/3756.pdf)
+  TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色；系统包含 stage-level batch scheduler、pull-based KV/image cache migration 和请求处理器，用混合 EPD disaggregation 适配文本与多模态请求的不同瓶颈。
+- **[UEP: Portable Expert-Parallel Communication](https://www.usenix.org/conference/osdi26/presentation/mao-ziming-uep)**
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `training` `gpu` `amd` `moe` `routing` `sglang` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/osdi26-mao-ziming-uep.pdf)
+  UEP 以 GPU-CPU 控制通道和 CPU proxy 代替强耦合的 GPU-initiated RDMA，使 expert-parallel 通信跨 NVIDIA/AMD GPU、AWS EFA 与 Broadcom NIC 保持可移植；在 EFA 上 dispatch/combine 吞吐提升 2.1x，SGLang token 吞吐提升最高 40%，16 节点 AMD+Broadcom DeepSeek-V3 训练吞吐提升最高 45%。
 - **Beyond the Buzz: A Pragmatic Take on Inference Disaggregation**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `rag`
@@ -649,10 +664,6 @@ Prefill/decode separation, KV transfer, routing, and distributed transport.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `routing` `serving` `rdma` `moe`
   TransferEngine 为分离式推理、MoE routing 和 RL 权重更新提供可移植 RDMA 点到点通信接口，避免 serving runtime 绑定单一 NIC 栈。
-- **UEP: Portable Expert-Parallel Communication**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `amd` `moe`
-  UEP 提供可移植 expert-parallel 通信层，降低 MoE serving 中专家并行对特定 collective 和网络栈的绑定。
 - **HACK: Homomorphic Acceleration via Compression of the Key-Value Cache for Disaggregated LLM Inference**
   `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `compression`
@@ -779,16 +790,18 @@ KV quantization, latent state, sparsity, and quality-cost tradeoffs.
 
 #### Featured
 
-- **Featured:** **[MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/pdf?id=1JyePezdlF)**
+- **Featured:** **[MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/forum?id=1JyePezdlF)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving` `compression` `kv-cache`
-  MorphServe 在运行时联合调整层级量化换入和 KV cache 大小，使服务配置随负载和内存压力动态变化。
+  Tags: `prefill` `decode` `gpu` `cuda` `compression` `kv-cache` `long-context` `vllm`
+  Artifact: [source](https://arxiv.org/abs/2506.02006)
+  MorphServe 以反馈控制方式在运行时联合调整量化层和 KV cache 容量：高压时异步换入低精度层并弹性扩缩 KVC，压力恢复后再切回；在 Vicuna/Llama 和真实 workload 上平均 SLO 违规降低 92.45%，P95 TTFT 相较全精度 serving 改善 2.2x–3.9x，并保持生成质量。
 #### Full Resource List
 
 - **[ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping](https://www.usenix.org/conference/osdi26/presentation/liu-yao)**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `decode` `serving` `compiler` `compression` `tensorrt-llm` `throughput` `ttft`
-  ADAngel generates a portfolio of mixed-precision GEMM kernels and dispatches them with an oracle policy map; OSDI reports up to 5.10x decode throughput over llama.cpp and 1.17x–2.38x TTFT speedups over TensorRT-LLM.
+  Tags: `prefill` `decode` `gpu` `compiler` `compression` `tensorrt-llm` `throughput` `ttft`
+  Artifact: [source](https://www.usenix.org/system/files/osdi26-liu-yao.pdf)
+  ADAngel 用 DPR 模型生成多种混合精度 GEMM kernel，并通过 Oracle Policy Map 在运行时为任意 bit-width/shape 任务选择策略；相较 llama.cpp decode 吞吐最高提升 5.10x，相较 TensorRT-LLM prefill TTFT 提升 1.17x–2.38x。
 - **[Cache Your Prompt When It's Green - Carbon-aware Caching for Large Language Model Serving](https://www.sigmetrics.org/sigmetrics2026/accepted.html#cache-your-prompt-when-it-s-green-carbon-aware-caching-for-large-language-model-serving)**
   `ACM SIGMETRICS 2026 official accepted papers` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `gpu` `ssd` `kv-cache` `scheduling` `sustainability` `latency`
@@ -798,14 +811,15 @@ KV quantization, latent state, sparsity, and quality-cost tradeoffs.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `gpu` `kv-cache`
   DFVG 将 draft 放在 FPGA、verify 放在 GPU，以异构流水降低推测解码的草稿成本并提高验证硬件利用率。
-- **[GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving](https://openreview.net/forum?id=xKjYiUgeOK)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving` `kv-cache`
-  GhostServe 在后台用 erasure coding 保护流式 KV cache，避免故障恢复时完整重算或复制全部 serving 状态。
 - **M2XFP: A Metadata-Augmented Microscaling Data Format for Efficient Low-bit Quantization**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `kv-cache` `quantization`
   M2XFP 用少量 metadata 扩展 microscaling 格式，在维持规则低比特硬件执行的同时恢复量化精度。
+- **[SkipKV: Selective Skipping of KV Generation and Storage for Efficient Inference with Large Reasoning Models](https://openreview.net/pdf/5e0864c3e29de15c640ef35b24e84acb5024c3af.pdf)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `prefill` `decode` `cuda` `gpu` `kv-cache` `compression` `long-cot` `reasoning`
+  Artifact: [source](https://github.com/TTTTTTris/SkipKV)
+  SkipKV 以句子级冗余评分进行 KV 存储淘汰，并用隐空间自适应 steering 跳过冗余句生成，再通过按 prefill 长度重排提升多 batch 的有效 KV 预算；在 A100 上报告相同准确率下 6.7x 更少 KV、9.6x 吞吐。
 - **[ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models](https://iclr.cc/virtual/2026/poster/10009980)**
   `ICLR 2026 Oral` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `compiler` `compression` `throughput`
@@ -1060,7 +1074,7 @@ KV quantization, latent state, sparsity, and quality-cost tradeoffs.
   Tags: `compression` `kv-cache`
   SmallKV 用小模型注意力补偿大模型 KV 压缩中的显著性漂移和边际信息过压缩。
 
-### Kernel & Compiler (54)
+### Kernel & Compiler (55)
 
 CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.
 
@@ -1085,10 +1099,16 @@ CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.
   Tags: `serving` `gpu` `compiler` `kernel` `rag` `latency`
   Artifact: [source](https://github.com/mirage-project/mirage)
   MPK 将多 GPU 模型推理从 kernel-per-operator 转换为 SM-level task graph 与 persistent mega-kernel，通过跨算子流水、计算通信重叠和去中心化 SM 调度实现端到端融合；官方 OSDI 2026 页面报告推理延迟最高降低 1.7 倍，并开源 Mirage。
-- **[ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof)**
+- **[SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://openreview.net/forum?id=IZaXDwDtL1)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `compiler` `kernel`
-  ProfInfer 用 eBPF 对 LLM inference engine 做低侵入细粒度 profiling，把 operator、kernel 和请求级瓶颈关联起来。
+  Tags: `prefill` `decode` `lpu` `sram` `compiler` `kernel` `long-context` `moe`
+  Artifact: [source](https://mlsys.org/media/mlsys-2026/Slides/3834_VmkjzHq.pdf)
+  SHIP 总结 Groq 基于 LPUv1 SRAM 的大规模 LLM serving：以低直径同步互联和静态编译 pipeline 扩展到数千芯片，并在受限 SRAM 中实现 PagedAttention、prefix caching、speculative decoding 及动态 chunked prefill，面向生产流量维持低延迟。
+- **[ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference](https://www.sigmobile.org/mobisys/2026/program/#shadownpu-system-and-algorithm-co-design-for-npu-centric-on-device-llm-inference)**
+  `MobiSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `prefill` `decode` `npu` `edge` `kernel` `quantization` `latency` `throughput`
+  Artifact: [source](https://www.sigmobile.org/mobisys/2026/program/)
+  ShadowNPU 将 attention 重要性估计放到 Qualcomm Hexagon NPU 上以 INT8 执行，再把重要 token 索引交给 CPU/GPU 做稀疏高精度 attention，并配合 NPU compute-graph bucketing、head-wise pipeline 和细粒度 sparsity；MobiSys 评审报告端到端最高 4.5x 加速、能耗最高降低 7.7x，精度损失 0.4 个百分点。
 - **[StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference](https://www.usenix.org/conference/osdi26/presentation/wu-haonan)**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `kernel`
@@ -1304,8 +1324,9 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   通过跨服务器预分发模型、重叠 cold-start 阶段、GPU 间 worker 放置和 pipeline consolidation，降低公有云 serverless LLM serving 冷启动；官方 NSDI 2026 页面报告冷启动延迟降低 1.7–4.7 倍，SLO attainment 提升 1.43–1.74 倍。
 - **Featured:** **[PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `prefill` `serving` `gpu`
-  PLA-Serve 将 prefill 长度显式纳入请求分组和批处理决策，减少长短 prompt 混合时的首 token 延迟和 GPU 空闲。
+  Tags: `prefill` `serving` `gpu` `scheduler` `scheduling` `multi-turn` `long-context` `sglang`
+  Artifact: [source](https://arxiv.org/abs/2601.11589)
+  PLA-Serve（预印本标题 LAPS）在 prefill 阶段按 prompt 长度做双队列与时空分离：长 prefill 与短 prefill 隔离，并对短请求采用 length-aware batching 与 CUDA Graph clustering；在真实多轮 workload 上，相较 vanilla SGLang prefill 延迟降低超过 30%，SLO 违规降低 28%，多 GPU 下进一步降低 12%，Qwen2.5-32B prefill 吞吐提升 35%。
 - **Featured:** **QoServe: Breaking the Silos of LLM Inference Serving**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
@@ -1337,10 +1358,6 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `training`
   Charon 提供细粒度仿真来评估大规模 LLM 训练和推理的并行策略、硬件配置和系统优化。
-- **[FaaScale: Unlocking Fast LLM Scaling for Serverless Inference](https://openreview.net/forum?id=jgL8LuOVyT)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving`
-  FaaScale 针对 serverless LLM 快速扩缩容优化模型加载、实例启动和请求切换路径，降低突发流量下的冷启动影响。
 - **[FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap](https://openreview.net/pdf?id=m14PPUfgEc)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `prefill` `serving` `agent` `rag`
@@ -1358,7 +1375,7 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   Tags: `serving` `gpu` `compression` `memory` `throughput`
   Kairox dynamically balances hot and cold neurons between GPU and CPU with activation prediction, live prefetching, and temporal-momentum caching; OSDI reports up to 7.57x throughput over llama.cpp.
 - **[Murakkab: Resource-Efficient Agentic Workflow Orchestration in Cloud Platforms](https://www.usenix.org/conference/osdi26/presentation/chaudhry)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `agent` `rag`
   以 declarative abstraction 解耦 agent workflow 规格与执行配置，结合 profile-guided optimizer 和 adaptive runtime 联合映射模型、硬件与工作流阶段；官方 OSDI 2026 页面报告在保持 SLO 下 GPU 使用最高降低 2.8 倍、能耗降低 3.7 倍、成本降低 4.3 倍。
 - **Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking**
@@ -1373,10 +1390,11 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   Tags: `serving` `gpu` `memory`
   Artifact: [source](https://github.com/ovg-project/kvcached)
   基于生产 trace 中动态 bursty model groups，使用 kvcached balloon driver 在多模型间弹性回收和分配 GPU memory，统一 spatial/time sharing；官方 OSDI 2026 页面称其已在 10K+ GPU 生产环境部署。
-- **[SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://openreview.net/forum?id=IZaXDwDtL1)**
+- **[ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving` `compiler` `kernel`
-  SHIP 用 SRAM-based huge inference pipeline 组织 LLM serving 数据流，减少生成阶段对外部内存带宽的依赖。
+  Tags: `prefill` `decode` `edge` `gpu` `memory` `scheduler` `moe` `latency`
+  Artifact: [source](https://arxiv.org/abs/2601.20755)
+  ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading；在线开销低于 4%，用于定位内存/计算瓶颈和支持资源感知调度。
 - **Shift Parallelism: Low-Latency, High-Throughput LLM Inference for Dynamic Workloads**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `latency` `throughput`
@@ -1385,6 +1403,11 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
   TetriServe 面向不同扩散 Transformer 请求联合做批处理和资源编排，提高混合 DiT workload 的服务效率。
+- **[TimelyLLM: Time-sensitive LLM Serving System for Physical-I/O Limited Agents](https://www.sigmobile.org/mobisys/2026/program/#timelyllm-time-sensitive-llm-serving-system-for-physical-i-o-limited-agents)**
+  `MobiSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `decode` `serving` `gpu` `scheduler` `kv-cache` `agent` `latency` `slo`
+  Artifact: [source](https://neawhen.github.io/neiwen.github.io/assets/pdf/timelyllm.pdf)
+  TimelyLLM 面向机器人、无人机和语音助手等物理 I/O 受限 agent，把连续生成拆成可执行 segment，并在 agent 执行期间暂停/恢复 decode，以 slack-aware priority scheduler 按时间效用重新分配资源；MobiSys 2026 program 报告其 time utility 最高提升 1.52x、agent waiting time 最多降低 84%。
 - **oFFN: Outlier and Neuron-aware Structured FFN for Fast yet Accurate LLM Inference**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
   oFFN 感知 outlier 与 neuron 重要性构造结构化 FFN，在保持精度的同时提高规则硬件上的推理效率。
@@ -1777,7 +1800,7 @@ Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.
   Tags: `serving` `gpu` `agent` `rag`
   该工作同时建模 GPU 运行能耗、电网碳强度和芯片 embodied carbon，分析硬件代际选择的碳排权衡。
 
-### Reliability & Benchmarks (16)
+### Reliability & Benchmarks (18)
 
 SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.
 
@@ -1787,6 +1810,16 @@ SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
   DriftBench 用成体系的 prompt-response 集测量基础设施变化对 LLM serving 输出一致性的影响，并预测高风险变更。
+- **[GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving](https://openreview.net/forum?id=xKjYiUgeOK)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `decode` `gpu` `compression` `kv-cache` `long-context` `agent` `latency`
+  Artifact: [source](https://arxiv.org/abs/2605.00831)
+  GhostServe 在 host memory 中以 erasure coding 为 streaming KV cache 生成 parity shards，故障时重建丢失 KV 状态并继续推理，避免完整重算或全量状态复制；单 batch checkpoint latency 最高降低 2.7x，recovery latency 降低 2.1x，中位响应延迟降低 1.2x。
+- **[RaidServe: High-performance Resilient Serving](https://openreview.net/forum?id=5pl9fdbEkq)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `hopper` `kv-cache` `memory` `throughput` `latency`
+  Artifact: [source](https://mast.stanford.edu/pubs/raidserve/)
+  RaidServe 面向 tensor-parallel serving 中的 GPU 故障，通过 cyclic KVCache placement 均衡显存、hybrid attention 消除 straggler、fine-grained load-aware routing 动态分配请求，并主动备份 KVCache、按需恢复权重；在 8xH100 DGX 上吞吐最高提升 2x，恢复速度比标准故障处理快两个数量级。
 - **[ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving` `multimodal`

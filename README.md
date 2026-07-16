@@ -2,7 +2,7 @@
 
 <!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
 
-[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-443-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-121-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-219-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
+[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-447-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-121-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-223-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
 ![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
 
@@ -44,11 +44,11 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Papers | Industry systems | Formal paper venues | System abstractions |
 |---:|---:|---:|---:|
-| 443 | 121 | 219 | 6 |
+| 447 | 121 | 223 | 6 |
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 443 | Formal Conference: 66, Formal Conference · Legacy Import: 153, Poster / Workshop: 9, Poster / Workshop · Legacy Import: 28, Preprint: 3, Preprint · Legacy Import: 156, Unclassified · Legacy Import: 28 |
+| Academic papers | 447 | Formal Conference: 78, Formal Conference · Legacy Import: 145, Poster / Workshop: 9, Poster / Workshop · Legacy Import: 28, Preprint: 3, Preprint · Legacy Import: 156, Unclassified · Legacy Import: 28 |
 | Industry / open-source systems | 121 | Industrial Material: 2, Industrial Material · Legacy Import: 119 |
 
 ## Reading Paths
@@ -66,11 +66,11 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 | System abstraction | Records | What it covers | Entry points |
 |---|---:|---|---|
 | **KV State & Memory** | 176 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
-| **P/D Disaggregation & KV Transfer** | 53 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
+| **P/D Disaggregation & KV Transfer** | 54 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
 | **KV Compression & Low-Bit State** | 92 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
-| **Kernel & Compiler** | 78 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
+| **Kernel & Compiler** | 79 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
 | **Runtime & Serving** | 144 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
-| **Reliability & Benchmarks** | 21 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
+| **Reliability & Benchmarks** | 23 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
 
 ## System Map
 
@@ -94,12 +94,14 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
   QoServe 统一管理原本割裂的 LLM serving 资源池，以减少不同服务等级和工作负载之间的资源孤岛。
 - **[PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `prefill` `serving` `gpu`
-  PLA-Serve 将 prefill 长度显式纳入请求分组和批处理决策，减少长短 prompt 混合时的首 token 延迟和 GPU 空闲。
-- **[MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/pdf?id=1JyePezdlF)**
+  Tags: `prefill` `serving` `gpu` `scheduler` `scheduling` `multi-turn` `long-context` `sglang`
+  Artifact: [source](https://arxiv.org/abs/2601.11589)
+  PLA-Serve（预印本标题 LAPS）在 prefill 阶段按 prompt 长度做双队列与时空分离：长 prefill 与短 prefill 隔离，并对短请求采用 length-aware batching 与 CUDA Graph clustering；在真实多轮 workload 上，相较 vanilla SGLang prefill 延迟降低超过 30%，SLO 违规降低 28%，多 GPU 下进一步降低 12%，Qwen2.5-32B prefill 吞吐提升 35%。
+- **[MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/forum?id=1JyePezdlF)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
-  Tags: `serving` `compression` `kv-cache`
-  MorphServe 在运行时联合调整层级量化换入和 KV cache 大小，使服务配置随负载和内存压力动态变化。
+  Tags: `prefill` `decode` `gpu` `cuda` `compression` `kv-cache` `long-context` `vllm`
+  Artifact: [source](https://arxiv.org/abs/2506.02006)
+  MorphServe 以反馈控制方式在运行时联合调整量化层和 KV cache 容量：高压时异步换入低精度层并弹性扩缩 KVC，压力恢复后再切回；在 Vicuna/Llama 和真实 workload 上平均 SLO 违规降低 92.45%，P95 TTFT 相较全精度 serving 改善 2.2x–3.9x，并保持生成质量。
 - **[AIRS: Scaling Live Inference in Resource Constrained Environments](https://openreview.net/forum?id=g1RWik4Gy1)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
   Tags: `serving`
@@ -109,10 +111,11 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
   Tags: `serving` `gpu` `goodput`
   Artifact: [source](https://github.com/MLSysU/EcoServe)
   提出面向普通 GPU 集群的 partially disaggregated serving，通过时间维度 P/D 分离、跨实例循环协作、adaptive routing 和 mitosis scaling 缓解 prefill-decode 干扰；在 32 张 NVIDIA L20 以太网集群上，相比 vLLM、Sarathi、DistServe、MoonCake 等基线 goodput 最高提升 2.51 倍，并开源 EcoServe。
-- **SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `kv-cache` `memory`
-  SYMPHONY 将计算和 KV cache 存储解耦为 disaggregated memory management layer，以满足多轮会话状态的低延迟访问。
+- **[SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `kv-cache` `memory` `agent` `multi-turn` `vllm` `latency` `throughput`
+  Artifact: [source](https://www.usenix.org/system/files/nsdi26-agarwal.pdf)
+  SYMPHONY 将计算与 KV cache 存储解耦为面向多轮会话的 disaggregated memory layer，通过 advisory prefetch、priority-based KV 管理和 cooperative memory management 避开关键路径；在 LLaMA/ShareGPT/Burst-GPT 上相较 vLLM 将端到端延迟降低 2.4x，并在小幅延迟增加下服务 4x 请求。
 
 ## Featured Industry Systems
 

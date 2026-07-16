@@ -93,7 +93,7 @@ The equivalent single-command lifecycle is:
 python scripts/ai_infra_monitor/monitor.py sweep --mode weekly --source-batch-count 6 --report
 ```
 
-`sweep` performs discovery, triage, queue, optional report, and finalize for every batch. Intermediate batches validate JSONL and update state without rebuilding the global Markdown/public views; the final batch performs the full render and Markdown validation. This avoids repeating repository-wide rendering six times in a bounded sweep. It does not create a commit by default.
+`sweep` performs discovery, triage, queue, optional report, and finalize for every batch. A triage or queue failure stops the current batch before later lifecycle steps, while later bounded batches can still run and be resumed independently. Intermediate batches validate JSONL and update state without rebuilding the global Markdown/public views; the final batch performs the full render and Markdown validation. This avoids repeating repository-wide rendering six times in a bounded sweep. It does not create a commit by default.
 
 When a long sweep is interrupted, resume a range without repeating completed batches:
 

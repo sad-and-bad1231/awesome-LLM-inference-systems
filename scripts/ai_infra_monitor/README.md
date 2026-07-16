@@ -66,7 +66,7 @@ python scripts/ai_infra_monitor/monitor.py validate
 `compact` is a one-time migration/maintenance command that marks legacy non-actionable candidate records as `drop` while preserving them for audit. Run it after upgrading an existing candidate store, not on every daily scan. Weekly automation uses the same flow, with `--mode weekly`, followed by
 `report` and `finalize` without `--no-commit` only when a commit is intended.
 
-For a reproducible bounded sweep, use `sweep`. It stays local and non-committing by default. Intermediate batches only validate JSONL and update state; the last batch renders and validates all Markdown/public views, so a six-batch sweep does not repeat global rendering six times:
+For a reproducible bounded sweep, use `sweep`. It stays local and non-committing by default. A triage or queue failure stops that batch before report/finalize, while later bounded batches remain resumable. Intermediate batches only validate JSONL and update state; the last batch renders and validates all Markdown/public views, so a six-batch sweep does not repeat global rendering six times:
 
 ```powershell
 python scripts/ai_infra_monitor/monitor.py sweep --mode weekly --source-batch-count 6 --report

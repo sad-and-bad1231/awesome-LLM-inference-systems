@@ -140,6 +140,126 @@ class CliTests(unittest.TestCase):
             [2, 3, 4, 5],
         )
 
+    def test_sweep_stops_batch_lifecycle_after_triage_failure(self):
+        from scripts.ai_infra_monitor import monitor
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            args = SimpleNamespace(
+                root=root,
+                config=root / "config.yaml",
+                mode="weekly",
+                source_id=[],
+                source_batch_count=1,
+                end_batch_index=None,
+                tiers=["A"],
+                report=True,
+                no_commit=True,
+            )
+            with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
+                monitor, "command_triage", return_value=1
+            ) as triage, patch.object(monitor, "command_queue") as queue, patch.object(
+                monitor, "command_report"
+            ) as report, patch.object(monitor, "command_finalize") as finalize:
+                engine.return_value.discover.return_value = {"run_id": "run-1"}
+                self.assertEqual(monitor.command_sweep(args), 1)
+
+            triage.assert_called_once()
+            queue.assert_not_called()
+            report.assert_not_called()
+            finalize.assert_not_called()
+
+    def test_queue_preserves_promote_status_history(self):
+        from scripts.ai_infra_monitor import monitor
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = root / "config.json"
+            config.write_text(
+                json.dumps(
+                    {
+                        "settings": {
+                            "paper_file": "paper-list.md",
+                            "industry_file": "industry.md",
+                            "candidate_file": "candidates.md",
+                            "state_file": "state.json",
+                            "runs_dir": "runs",
+                            "weekly_reports_dir": "reports",
+                            "candidate_db_file": "data/candidates.jsonl",
+                        },
+                        "sources": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_dir = root / "runs" / "run-1"
+            run_dir.mkdir(parents=True)
+            (run_dir / "candidates.json").write_text(
+                json.dumps(
+                    {
+                        "run_id": "run-1",
+                        "candidates": [
+                            {
+                                "title": "Queue Candidate",
+                                "url": "https://example.org/queue",
+                                "kind": "paper",
+                                "tier": "A",
+                                "triage": {"verdict": "keep", "priority": "high"},
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            candidate_path = root / "data" / "candidates.jsonl"
+            candidate_path.parent.mkdir(parents=True)
+            candidate_path.write_text(
+                json.dumps(
+                    {
+                        "id": "candidate_queue",
+                        "canonical_id": "url:https://example.org/queue",
+                        "record_type": "candidate",
+                        "title": "Queue Candidate",
+                        "venue_or_channel": "source",
+                        "year": 2026,
+                        "orgs": [],
+                        "summary": "candidate",
+                        "source_tier": "A",
+                        "primary_url": "https://example.org/queue",
+                        "artifact_url": "",
+                        "source_ids": [],
+                        "status": "new",
+                        "status_history": [],
+                        "system_abstraction_primary": "Execution Compilation & Kernel Fusion",
+                        "system_abstraction_secondary": [],
+                        "technical_tags": {
+                            "phase": "decode",
+                            "hardware": "cuda",
+                            "optimization_layer": "runtime",
+                            "workload": "llm-inference",
+                            "framework_binding": [],
+                            "metrics": [],
+                        },
+                        "triage": {
+                            "verdict": "keep",
+                            "priority": "high",
+                            "reasons": [],
+                            "repo_signals": {},
+                            "physical_eval": {},
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            args = SimpleNamespace(root=root, config=config, run_id="run-1", tiers=["A"])
+            with patch.object(monitor, "promote_candidates", return_value={"paper": 1, "industry": 0}):
+                self.assertEqual(monitor.command_queue(args), 0)
+
+            record = json.loads(candidate_path.read_text(encoding="utf-8").strip())
+            self.assertEqual(record["status"], "promote")
+            self.assertEqual(record["status_history"][-1]["status"], "promote")
+
     def test_triage_persists_only_keep_candidates_with_actionable_priority(self):
         from scripts.ai_infra_monitor.monitor import command_triage
         from scripts.ai_infra_monitor.ai_infra_monitor.triage import TriageResult
