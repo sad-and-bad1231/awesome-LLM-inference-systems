@@ -43,7 +43,9 @@ from scripts.ai_infra_monitor.ai_infra_monitor.state import (  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.validation import (  # noqa: E402
     validate_workspace,
 )
-from scripts.ai_infra_monitor.ai_infra_monitor.triage import triage_candidate  # noqa: E402
+from scripts.ai_infra_monitor.ai_infra_monitor.triage import (  # noqa: E402
+    triage_candidates,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -139,16 +141,16 @@ def command_triage(args) -> int:
     config = load_config(args.config)
     path = manifest_path(args.root, config, args.run_id)
     manifest = load_manifest(path)
-    candidates = []
-    for item in manifest.get("candidates", []):
-        candidate = Candidate.from_dict(item)
-        item["triage"] = triage_candidate(
-            candidate,
-            inspect_repo=bool(config["settings"].get("github_repo_inspection", False)),
-            repo_timeout_seconds=int(config["settings"].get("github_repo_timeout_seconds", 6)),
-            core_only=bool(config["settings"].get("core_serving_only", False)),
-        ).to_dict()
-        candidates.append(item)
+    candidates = manifest.get("candidates", [])
+    triage_results = triage_candidates(
+        [Candidate.from_dict(item) for item in candidates],
+        inspect_repo=bool(config["settings"].get("github_repo_inspection", False)),
+        repo_timeout_seconds=int(config["settings"].get("github_repo_timeout_seconds", 6)),
+        core_only=bool(config["settings"].get("core_serving_only", False)),
+        max_workers=int(config["settings"].get("max_parallel_triage", 1)),
+    )
+    for item, result in zip(candidates, triage_results):
+        item["triage"] = result.to_dict()
     priority_rank = {"high": 0, "normal": 1, "low": 2}
     manifest["candidates"] = sorted(
         candidates,

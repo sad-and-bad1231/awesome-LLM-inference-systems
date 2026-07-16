@@ -6,6 +6,7 @@
     "max_candidates_per_source": 80,
     "request_timeout_seconds": 60,
     "max_parallel_fetches": 8,
+    "max_parallel_triage": 16,
     "github_repo_inspection": true,
     "discovery_repo_inspection": false,
     "github_repo_timeout_seconds": 6,
@@ -464,15 +465,6 @@
       "tier": "A",
       "kind": "project",
       "topics": ["kernel-compiler", "compression-cost", "hardware-edge"],
-      "modes": ["weekly"]
-    },
-    {
-      "id": "iclr26-openreview",
-      "name": "ICLR 2026 OpenReview",
-      "type": "openreview",
-      "url": "https://api2.openreview.net/notes?content.venueid=ICLR.cc/2026/Conference&limit=1000",
-      "tier": "A",
-      "kind": "paper",
       "modes": ["weekly"]
     },
     {
@@ -1112,6 +1104,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "icdcs26-program",
+      "name": "IEEE ICDCS 2026 official main technical sessions",
+      "type": "html_icdcs_program",
+      "url": "https://icdcs2026.icdcs.org/program/main-technical-sessions/",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "network-disaggregation", "program-scheduling", "agent-rag", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "tensorrt-releases",
       "name": "NVIDIA TensorRT official releases",
       "type": "feed",
@@ -1260,6 +1262,56 @@
       "kind": "project",
       "topics": ["runtime-serving", "compression-cost", "hardware-edge"],
       "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "bentoml-releases",
+      "name": "BentoML official releases",
+      "type": "feed",
+      "url": "https://github.com/bentoml/BentoML/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "program-scheduling", "reliability-evaluation", "agent-rag"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "litellm-releases",
+      "name": "LiteLLM official releases",
+      "type": "feed",
+      "url": "https://github.com/BerriAI/litellm/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "program-scheduling", "reliability-evaluation", "agent-rag"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "ogx-releases",
+      "name": "OGX official releases (Llama Stack redirect target)",
+      "type": "feed",
+      "url": "https://github.com/ogx-ai/ogx/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["agent-rag", "runtime-serving", "program-scheduling", "reliability-evaluation"],
+      "modes": ["daily", "weekly"]
+    },
+    {
+      "id": "mistralrs-releases",
+      "name": "mistral.rs official releases",
+      "type": "feed",
+      "url": "https://github.com/EricLBuehler/mistral.rs/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "kernel-compiler", "compression-cost", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "ktransformers-releases",
+      "name": "KTransformers official releases",
+      "type": "feed",
+      "url": "https://github.com/kvcache-ai/ktransformers/releases.atom",
+      "tier": "A",
+      "kind": "project",
+      "topics": ["runtime-serving", "state-kv", "compression-cost", "hardware-edge"],
+      "modes": ["weekly"]
     }
   ]
 }

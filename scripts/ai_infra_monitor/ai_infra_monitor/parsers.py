@@ -416,6 +416,63 @@ class _LinklingsProgramParser(HTMLParser):
         self.depth = max(0, self.depth - 1)
 
 
+class _ICDCSProgramParser(HTMLParser):
+    """Extract numbered paper rows from the ICDCS 2026 HTML program tables."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.in_row = False
+        self.in_cell = False
+        self.cells: list[str] = []
+        self.cell_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+        self.seen_titles: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag_name = tag.lower()
+        if tag_name == "tr" and not self.in_row:
+            self.in_row = True
+            self.cells = []
+        elif self.in_row and tag_name in {"td", "th"} and not self.in_cell:
+            self.in_cell = True
+            self.cell_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.in_cell:
+            self.cell_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if self.in_cell and tag_name in {"td", "th"}:
+            self.cells.append(" ".join("".join(self.cell_text).split()))
+            self.in_cell = False
+            self.cell_text = []
+        if self.in_row and tag_name == "tr":
+            self._finish_row()
+            self.in_row = False
+            self.cells = []
+
+    def _finish_row(self) -> None:
+        if len(self.cells) < 3 or not self.cells[1].isdigit():
+            return
+        source_text = self.cells[2]
+        parts = source_text.rsplit(". ", maxsplit=1)
+        title = parts[1].strip() if len(parts) == 2 else source_text
+        if not title or title in self.seen_titles:
+            return
+        self.seen_titles.add(title)
+        item = {
+            "title": title,
+            "url": f"{self.base_url}#{_program_slug(title)}",
+            "published": "",
+            "summary": "",
+        }
+        if len(parts) == 2 and parts[0].strip():
+            item["summary"] = f"Authors: {parts[0].strip()}"
+        self.items.append(item)
+
+
 class _PaperIdListParser(HTMLParser):
     """Extract titles from list items marked with paper-id and paper-authors spans."""
 
@@ -656,6 +713,12 @@ def parse_html_linklings_program(body: bytes, base_url: str) -> list[dict[str, s
     return parser.items
 
 
+def parse_html_icdcs_program(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _ICDCSProgramParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
 def parse_html_paper_id_list(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _PaperIdListParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
@@ -808,6 +871,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_classed_title_program(body, source["url"], source.get("title_class", "paper-title"))
     if source_type == "html_linklings_program":
         return parse_html_linklings_program(body, source["url"])
+    if source_type == "html_icdcs_program":
+        return parse_html_icdcs_program(body, source["url"])
     if source_type == "html_paper_id_list":
         return parse_html_paper_id_list(body, source["url"])
     if source_type == "html_dblp_titles":

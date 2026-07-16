@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import re
 import json
+import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from urllib.error import URLError, HTTPError
 from urllib.parse import urlparse
@@ -400,3 +401,36 @@ def triage_candidate(
         repo_signals=repo_signals,
         physical_eval=physical_eval,
     )
+
+
+def triage_candidates(
+    candidates: list[Candidate],
+    inspect_repo: bool = False,
+    repo_timeout_seconds: int = 6,
+    core_only: bool = False,
+    max_workers: int = 1,
+) -> list[TriageResult]:
+    """Triage candidates concurrently while preserving input order."""
+    if len(candidates) <= 1 or max_workers <= 1:
+        return [
+            triage_candidate(
+                candidate,
+                inspect_repo=inspect_repo,
+                repo_timeout_seconds=repo_timeout_seconds,
+                core_only=core_only,
+            )
+            for candidate in candidates
+        ]
+
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(candidates))) as pool:
+        futures = [
+            pool.submit(
+                triage_candidate,
+                candidate,
+                inspect_repo=inspect_repo,
+                repo_timeout_seconds=repo_timeout_seconds,
+                core_only=core_only,
+            )
+            for candidate in candidates
+        ]
+        return [future.result() for future in futures]

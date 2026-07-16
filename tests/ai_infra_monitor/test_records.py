@@ -2,6 +2,8 @@ import errno
 import tempfile
 import unittest
 from pathlib import Path
+from threading import Lock
+from time import sleep
 from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
@@ -12,7 +14,10 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     validate_record_store,
     write_records,
 )
-from scripts.ai_infra_monitor.ai_infra_monitor.triage import triage_candidate
+from scripts.ai_infra_monitor.ai_infra_monitor.triage import (
+    triage_candidate,
+    triage_candidates,
+)
 from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
@@ -275,6 +280,32 @@ class RecordStoreTests(unittest.TestCase):
             result = triage_candidate(candidate, inspect_repo=True)
         self.assertEqual(result.verdict, "keep")
         self.assertIn("unavailable", result.repo_signals)
+
+    def test_triage_candidates_uses_bounded_parallelism_and_preserves_order(self):
+        candidates = [
+            Candidate(title=f"Serving Runtime {index}", url=f"https://example.org/{index}")
+            for index in range(6)
+        ]
+        lock = Lock()
+        state = {"active": 0, "maximum": 0}
+
+        def fake_triage(candidate, **_kwargs):
+            with lock:
+                state["active"] += 1
+                state["maximum"] = max(state["maximum"], state["active"])
+            sleep(0.02)
+            with lock:
+                state["active"] -= 1
+            return candidate.title
+
+        with patch(
+            "scripts.ai_infra_monitor.ai_infra_monitor.triage.triage_candidate",
+            side_effect=fake_triage,
+        ):
+            results = triage_candidates(candidates, max_workers=3)
+
+        self.assertGreaterEqual(state["maximum"], 2)
+        self.assertEqual(results, [candidate.title for candidate in candidates])
 
 
 if __name__ == "__main__":

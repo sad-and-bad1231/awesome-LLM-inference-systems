@@ -18,6 +18,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_html_dblp_titles,
     parse_html_program,
     parse_html_linklings_program,
+    parse_html_icdcs_program,
 )
 
 
@@ -217,6 +218,26 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(
             items[0]["url"],
             "https://conference.example/program/#packkv-reducing-kv-cache-memory-footprint",
+        )
+
+    def test_parse_html_icdcs_program_extracts_numbered_paper_rows(self):
+        body = b"""
+        <table>
+          <tr><td><strong>14:00-15:30</strong></td><td colspan='2'><strong>Session AI 1: Large Language Model in AI</strong></td></tr>
+          <tr><td>14:00-14:22</td><td>236</td><td>Chenxuan Hou, Tom H. Qiu and Xiaofei Wang. TurboInfer: Joint Model Inference in Edge Cloud Systems</td></tr>
+          <tr><td>14:22-14:44</td><td>717</td><td>Mingjin Zhang and Ne Wang. Efficient KV Cache Migration for Geo-Distributed LLM Inference</td></tr>
+          <tr><td>14:44-15:06</td><td>bad</td><td>Navigation Row</td></tr>
+        </table>
+        """
+        items = parse_html_icdcs_program(
+            body, "https://conference.example/program/main-technical-sessions/"
+        )
+        self.assertEqual(
+            [item["title"] for item in items],
+            [
+                "TurboInfer: Joint Model Inference in Edge Cloud Systems",
+                "Efficient KV Cache Migration for Geo-Distributed LLM Inference",
+            ],
         )
 
 
