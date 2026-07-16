@@ -84,6 +84,73 @@ class _IndexParser(HTMLParser):
         self.current_text = []
 
 
+class _UsenixAcceptedParser(HTMLParser):
+    """Extract USENIX accepted-paper articles without navigation links."""
+
+    def __init__(self, base_url: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.depth = 0
+        self.article_depth = 0
+        self.title_depth = 0
+        self.title_href = ""
+        self.title_text: list[str] = []
+        self.description_depth = 0
+        self.description_text: list[str] = []
+        self.items: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.depth += 1
+        values = dict(attrs)
+        tag_name = tag.lower()
+        if tag_name == "article" and "node-paper" in (values.get("class") or "").split():
+            self.article_depth = self.depth
+            self.title_text = []
+            self.title_href = ""
+            self.description_text = []
+        if not self.article_depth:
+            return
+        if tag_name == "h2" and not self.title_depth:
+            self.title_depth = self.depth
+            self.title_text = []
+        elif tag_name == "a" and self.title_depth and not self.title_href:
+            self.title_href = values.get("href") or ""
+        elif (
+            tag_name == "div"
+            and "field-name-field-paper-description-long"
+            in (values.get("class") or "").split()
+        ):
+            self.description_depth = self.depth
+            self.description_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.title_depth:
+            self.title_text.append(data)
+        if self.description_depth:
+            self.description_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_name = tag.lower()
+        if self.title_depth and tag_name == "h2" and self.depth == self.title_depth:
+            self.title_depth = 0
+        if self.description_depth and tag_name == "div" and self.depth == self.description_depth:
+            self.description_depth = 0
+        if self.article_depth and tag_name == "article" and self.depth == self.article_depth:
+            title = " ".join("".join(self.title_text).split())
+            if title:
+                self.items.append(
+                    {
+                        "title": title,
+                        "url": urljoin(self.base_url, self.title_href) if self.title_href else f"{self.base_url}#{_program_slug(title)}",
+                        "published": "",
+                        "summary": " ".join("".join(self.description_text).split()),
+                    }
+                )
+            self.article_depth = 0
+            self.title_depth = 0
+            self.description_depth = 0
+        self.depth = max(0, self.depth - 1)
+
 class _ProgramParser(HTMLParser):
     """Extract paper cards and event anchors from conference program pages."""
 
@@ -714,6 +781,12 @@ def parse_html_index(
     ]
 
 
+def parse_html_usenix_accepted(body: bytes, base_url: str) -> list[dict[str, str]]:
+    parser = _UsenixAcceptedParser(base_url)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
 def parse_html_program(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _ProgramParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
@@ -908,6 +981,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
             source["url"],
             tuple(source.get("link_prefixes", ())),
         )
+    if source_type == "html_usenix_accepted":
+        return parse_html_usenix_accepted(body, source["url"])
     if source_type == "html_program":
         return parse_html_program(body, source["url"])
     if source_type == "html_bold_program":

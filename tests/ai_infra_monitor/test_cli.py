@@ -132,6 +132,57 @@ class CliTests(unittest.TestCase):
             ]
             self.assertEqual([record["title"] for record in records], ["Keep Candidate"])
 
+    def test_triage_demotes_a_promoted_record_when_revalidation_rejects_it(self):
+        from scripts.ai_infra_monitor.monitor import command_triage
+        from scripts.ai_infra_monitor.ai_infra_monitor.records import candidate_to_record, load_records, write_records
+        from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
+        from scripts.ai_infra_monitor.ai_infra_monitor.triage import TriageResult
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = root / "config.json"
+            config.write_text(
+                json.dumps(
+                    {
+                        "settings": {
+                            "paper_file": "paper-list.md",
+                            "industry_file": "industry.md",
+                            "candidate_file": "candidates.md",
+                            "state_file": "state.json",
+                            "runs_dir": "runs",
+                            "weekly_reports_dir": "reports",
+                            "candidate_db_file": "data/candidates.jsonl",
+                            "paper_db_file": "data/papers.jsonl",
+                            "industry_db_file": "data/industry.jsonl",
+                        },
+                        "sources": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            candidate = Candidate(title="Revalidated Paper", url="https://example.org/revalidate", kind="paper")
+            paper = candidate_to_record(candidate, "paper", "queued")
+            write_records(root / "data" / "papers.jsonl", [paper])
+            candidate_record = candidate_to_record(candidate, "candidate", "promote")
+            write_records(root / "data" / "candidates.jsonl", [candidate_record])
+            run_dir = root / "runs" / "run-1"
+            run_dir.mkdir(parents=True)
+            (run_dir / "candidates.json").write_text(
+                json.dumps({"run_id": "run-1", "candidates": [candidate.to_dict()]}),
+                encoding="utf-8",
+            )
+            args = SimpleNamespace(root=root, config=config, run_id="run-1")
+            with patch(
+                "scripts.ai_infra_monitor.monitor.triage_candidates",
+                return_value=[TriageResult(verdict="downrank", priority="low")],
+            ):
+                self.assertEqual(command_triage(args), 0)
+
+            updated = load_records(root / "data" / "papers.jsonl")[0]
+            self.assertEqual(updated["status"], "drop")
+            self.assertEqual(updated["triage"]["verdict"], "downrank")
+            self.assertEqual(load_records(root / "data" / "candidates.jsonl")[0]["status"], "drop")
+
 
 if __name__ == "__main__":
     unittest.main()

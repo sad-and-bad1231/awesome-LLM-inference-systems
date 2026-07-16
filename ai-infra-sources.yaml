@@ -658,6 +658,16 @@
       "modes": ["weekly"]
     },
     {
+      "id": "usenix-nsdi26-spring-accepted",
+      "name": "USENIX NSDI 2026 spring accepted papers",
+      "type": "html_usenix_accepted",
+      "url": "https://www.usenix.org/conference/nsdi26/spring-accepted-papers",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "network-disaggregation", "reliability-evaluation", "agent-rag"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "usenix-nsdi26-posters",
       "name": "USENIX NSDI 2026 poster session",
       "type": "html_index",
@@ -673,6 +683,16 @@
       "url": "https://www.usenix.org/conference/fast26/technical-sessions",
       "tier": "A",
       "kind": "paper",
+      "modes": ["weekly"]
+    },
+    {
+      "id": "usenix-fast26-spring-accepted",
+      "name": "USENIX FAST 2026 spring accepted papers",
+      "type": "html_usenix_accepted",
+      "url": "https://www.usenix.org/conference/fast26/spring-accepted-papers",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["state-kv", "runtime-serving", "reliability-evaluation"],
       "modes": ["weekly"]
     },
     {

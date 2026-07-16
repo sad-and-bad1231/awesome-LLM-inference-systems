@@ -20,6 +20,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_html_linklings_program,
     parse_html_icdcs_program,
     parse_html_prefixed_program,
+    parse_html_usenix_accepted,
 )
 
 
@@ -49,6 +50,23 @@ class ParserTests(unittest.TestCase):
         )
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["title"], "Efficient Agent Serving with Program Scheduling")
+
+    def test_parse_usenix_accepted_extracts_papers_and_abstracts_only(self):
+        body = b"""
+        <a href='/conference/nsdi26/about'>About</a>
+        <article class='node node-paper view-mode-schedule'>
+          <h2><a href='/conference/nsdi26/presentation/fastserve'>FastServe: Iteration-Level Preemptive Scheduling</a></h2>
+          <div class='field-name-field-paper-description-long'>
+            <p>Large language models need low latency.</p>
+            <p>We evaluate against vLLM on GPUs.</p>
+          </div>
+        </article>
+        """
+        items = parse_html_usenix_accepted(body, "https://www.usenix.org/conference/nsdi26/spring-accepted-papers")
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["title"], "FastServe: Iteration-Level Preemptive Scheduling")
+        self.assertEqual(items[0]["url"], "https://www.usenix.org/conference/nsdi26/presentation/fastserve")
+        self.assertIn("We evaluate against vLLM on GPUs.", items[0]["summary"])
 
     def test_parse_html_program_extracts_unlinked_papers_and_event_titles(self):
         body = b"""

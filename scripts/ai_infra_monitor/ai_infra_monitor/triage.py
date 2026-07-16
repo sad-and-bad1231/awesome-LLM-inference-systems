@@ -190,6 +190,16 @@ DIRECT_SYSTEM_TITLE_TERMS = (
     "rag system",
     "retrieval-augmented generation system",
 )
+NON_LLM_MODEL_TERMS = (
+    "dnn",
+    "deep neural network",
+    "neural network",
+    "convolutional",
+    "cnn",
+    "image classification",
+    "object detection",
+    "computer vision",
+)
 
 REPO_STRUCTURE_TERMS = (
     "csrc",
@@ -362,12 +372,19 @@ def triage_candidate(
         title_system_signal = _contains_any(
             candidate.title.lower(), DIRECT_SYSTEM_TITLE_TERMS
         )
+        non_llm_system_signal = (
+            title_system_signal
+            and _contains_any(evidence_text, NON_LLM_MODEL_TERMS)
+            and not model_system_signal
+            and not bindings
+        )
         peripheral_only = _contains_any(evidence_text, PERIPHERAL_TERMS) and (
             not has_serving_signal or not model_system_signal
         )
         if (
             peripheral_only
             or training_only
+            or non_llm_system_signal
             or (not title_system_signal and not bindings)
             or (
                 not has_core_topic
@@ -379,7 +396,11 @@ def triage_candidate(
             priority = "low"
             if verdict == "keep":
                 verdict = "downrank"
-            reasons.append("outside serving mainline without direct inference-serving signal")
+            reasons.append(
+                "non-LLM inference or outside serving mainline"
+                if non_llm_system_signal
+                else "outside serving mainline without direct inference-serving signal"
+            )
 
     if bindings:
         strong_bindings = [term for term in bindings if term in STRONG_FRAMEWORK_BINDINGS]

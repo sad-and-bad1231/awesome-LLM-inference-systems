@@ -48,7 +48,7 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 432 | Formal Conference · Legacy Import: 178, Poster / Workshop · Legacy Import: 37, Preprint · Legacy Import: 160, Unclassified · Legacy Import: 57 |
+| Academic papers | 432 | Formal Conference: 5, Formal Conference · Legacy Import: 173, Poster / Workshop · Legacy Import: 37, Preprint · Legacy Import: 160, Unclassified · Legacy Import: 57 |
 | Industry / open-source systems | 121 | Industrial Material · Legacy Import: 121 |
 
 ## Reading Paths
@@ -78,13 +78,14 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 ## Featured Papers
 
-- **FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  FastServe 用 token 粒度抢占、skip-join MLFQ 和 KV 状态换入换出降低长请求造成的队头阻塞。
-- **HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
-  Tags: `serving` `latency`
-  HydraServe 主动分发模型、重叠 worker 冷启动阶段并规避网络争用，以 pipeline consolidation 降低 serverless LLM 启动资源。
+- **[FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `npu` `compiler` `kernel` `agent` `edge` `vllm`
+  Large language models (LLMs) power a new generation of interactive AI applications exemplified by ChatGPT. The interactive nature of these applications demands low latency for LLM inference. Existing LLM serving systems use run-tocompletion processing for inference jobs, which suffers from head-of-line blocking and long latency. We present FastServe, a distributed LLM serving system which exploits the autoregressive pattern of LLM inference to enable preemption at the granularity of each output token. FastServe uses preemptive scheduling to minimize latency with a novel skip-join Multi-Level Feedback Queue scheduler. Based on the new semi information-agnostic setting of LLM inference, the scheduler leverages the input length information to assign an appropriate initial queue for each arrival job to join. Queues with higher priority than the one the job joins are skipped to reduce demotions. We design an efficient GPU memory management mechanism that proactively offloads and uploads intermediate state between GPU memory and host memory for LLM inference. Evaluation shows that compared to the state-of-the-art solution vLLM, FastServe improves the throughput by up to 6.1×.
+- **[HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou)**
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  Tags: `serving` `gpu` `agent` `rag` `latency`
+  With the proliferation of large language model (LLM) variants, developers are turning to serverless computing for cost-efficient LLM deployment. However, public cloud providers often struggle to provide performance guarantees for serverless LLM serving due to significant cold start latency caused by substantial model sizes and complex runtime dependencies. To address this problem, we present HydraServe, a serverless LLM serving system designed to minimize cold start latency in public clouds. HydraServe proactively distributes models across servers to quickly fetch them, and overlaps cold-start stages within workers to reduce startup latency. Additionally, HydraServe strategically places workers across GPUs to avoid network contention among cold-start instances. To minimize resource consumption during cold starts, HydraServe further introduces pipeline consolidation that can merge groups of workers into individual serving endpoints. Our comprehensive evaluations under diverse settings demonstrate that HydraServe reduces the cold start latency by 1.7×–4.7× and improves service level objective attainment by 1.43×–1.74× compared to baselines.
 - **QoServe: Breaking the Silos of LLM Inference Serving**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import`
   Tags: `serving`

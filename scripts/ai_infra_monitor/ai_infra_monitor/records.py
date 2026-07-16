@@ -339,23 +339,71 @@ def write_records(path: Path, records: list[dict[str, Any]]) -> None:
             time.sleep(0.2 * (attempt + 1))
 
 
+def _merge_record_evidence(existing: dict[str, Any], incoming: dict[str, Any]) -> bool:
+    before = json.dumps(existing, ensure_ascii=False, sort_keys=True)
+    for field in ("primary_url", "artifact_url"):
+        if incoming.get(field) and not existing.get(field):
+            existing[field] = incoming[field]
+    if existing.get("source_tier") == "legacy" and incoming.get("source_tier") != "legacy":
+        existing["source_tier"] = incoming["source_tier"]
+    for source_id in incoming.get("source_ids", []):
+        if source_id and source_id not in existing.setdefault("source_ids", []):
+            existing["source_ids"].append(source_id)
+    incoming_summary = str(incoming.get("summary", ""))
+    existing_summary = str(existing.get("summary", ""))
+    if incoming_summary and (
+        not existing_summary
+        or existing_summary.startswith("migrated from")
+        or len(incoming_summary) > len(existing_summary)
+    ):
+        existing["summary"] = incoming_summary
+    for topic in incoming.get("topics", []):
+        if topic and topic not in existing.setdefault("topics", []):
+            existing["topics"].append(topic)
+    existing_tags = existing.setdefault("technical_tags", {})
+    for key, values in incoming.get("technical_tags", {}).items():
+        current = existing_tags.setdefault(key, [])
+        for value in values:
+            if value and value not in current:
+                current.append(value)
+        current.sort()
+    if incoming.get("status") in {"queued", "promote"} and incoming.get("triage"):
+        existing["triage"] = incoming["triage"]
+    normalized = normalize_record(existing)
+    existing.clear()
+    existing.update(normalized)
+    after = json.dumps(existing, ensure_ascii=False, sort_keys=True)
+    return before != after
+
+
 def append_records(path: Path, records: list[dict[str, Any]]) -> int:
     existing = load_records(path)
-    seen_canonicals = {record.get("canonical_id") for record in existing}
-    seen_titles = {normalize_title(record.get("title", "")) for record in existing}
+    lookup: dict[tuple[str, str], int] = {}
+    for index, record in enumerate(existing):
+        lookup[(str(record.get("canonical_id", "")), "canonical")] = index
+        lookup[(normalize_title(record.get("title", "")), "title")] = index
     seen_ids = {record.get("id") for record in existing}
     appended = []
+    changed_existing = False
     for record in records:
         record = normalize_record(record)
         title_key = normalize_title(record.get("title", ""))
         canonical_id = record.get("canonical_id")
-        if not title_key or canonical_id in seen_canonicals or title_key in seen_titles or record.get("id") in seen_ids:
+        existing_index = lookup.get((str(canonical_id), "canonical"))
+        if existing_index is None:
+            existing_index = lookup.get((title_key, "title"))
+        if existing_index is not None:
+            changed_existing = _merge_record_evidence(existing[existing_index], record) or changed_existing
+            continue
+        if not title_key or record.get("id") in seen_ids:
             continue
         appended.append(record)
-        seen_canonicals.add(canonical_id)
-        seen_titles.add(title_key)
         seen_ids.add(record.get("id"))
-    if appended:
+        lookup[(str(canonical_id), "canonical")] = len(existing) + len(appended) - 1
+        lookup[(title_key, "title")] = len(existing) + len(appended) - 1
+    if changed_existing:
+        write_records(path, existing + appended)
+    elif appended:
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8", newline="\n") as stream:
             for record in appended:

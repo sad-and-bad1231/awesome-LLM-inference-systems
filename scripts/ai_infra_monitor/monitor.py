@@ -170,11 +170,46 @@ def command_triage(args) -> int:
     for record in candidate_records:
         item = by_identity.get(record.get("canonical_id"))
         if item:
-            if record.get("triage") != item["triage"]:
-                record["triage"] = item["triage"]
+            new_triage = item["triage"]
+            if record.get("triage") != new_triage:
+                record["triage"] = new_triage
+                changed_existing = True
+            if (
+                record.get("status") in {"new", "keep", "promote"}
+                and not (
+                    new_triage.get("verdict") == "keep"
+                    and new_triage.get("priority") in {"high", "normal"}
+                )
+            ):
+                record["status"] = "drop"
+                normalize_record(record)
                 changed_existing = True
     if changed_existing:
         write_records(paths(args.root, config)["candidate_db_file"], candidate_records)
+    for store_key in ("paper_db_file", "industry_db_file"):
+        store_path = paths(args.root, config)[store_key]
+        main_records = load_records(store_path)
+        changed_main = False
+        for record in main_records:
+            item = by_identity.get(record.get("canonical_id"))
+            if not item:
+                continue
+            new_triage = item["triage"]
+            if record.get("triage") != new_triage:
+                record["triage"] = new_triage
+                changed_main = True
+            if (
+                record.get("status") in {"queued", "new", "keep", "promote"}
+                and not (
+                    new_triage.get("verdict") == "keep"
+                    and new_triage.get("priority") in {"high", "normal"}
+                )
+            ):
+                record["status"] = "drop"
+                normalize_record(record)
+                changed_main = True
+        if changed_main:
+            write_records(store_path, main_records)
     append_candidate_records(
         paths(args.root, config)["candidate_db_file"],
         [Candidate.from_dict(item) for item in candidates],

@@ -97,6 +97,35 @@ class RecordStoreTests(unittest.TestCase):
             self.assertEqual(load_records(papers)[0]["record_type"], "paper")
             self.assertEqual(load_records(industry)[0]["record_type"], "project")
 
+    def test_promotion_merges_official_evidence_into_legacy_record(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.records import promote_candidates
+
+        with tempfile.TemporaryDirectory() as tmp:
+            papers = Path(tmp) / "papers.jsonl"
+            industry = Path(tmp) / "industry.jsonl"
+            legacy = candidate_to_record(
+                Candidate(title="FastServe", url="", summary="Legacy summary"),
+                "paper",
+                "verified_legacy",
+            )
+            write_records(papers, [legacy])
+            incoming = Candidate(
+                title="FastServe",
+                url="https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang",
+                source_id="usenix-nsdi26-spring-accepted",
+                source_name="USENIX NSDI 2026 spring accepted papers",
+                tier="A",
+                summary="Official abstract with vLLM baseline and GPU evaluation.",
+                topics=("runtime-serving",),
+            )
+
+            self.assertEqual(promote_candidates(papers, industry, [incoming]), {"papers": 0, "industry": 0})
+            merged = load_records(papers)[0]
+            self.assertEqual(merged["primary_url"], incoming.url)
+            self.assertIn("usenix-nsdi26-spring-accepted", merged["source_ids"])
+            self.assertEqual(merged["summary"], incoming.summary)
+            self.assertEqual(merged["evidence"]["verification_level"], "official_source")
+
     def test_compact_candidate_records_marks_non_actionable_items_as_drop(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "candidates.jsonl"
@@ -209,6 +238,17 @@ class RecordStoreTests(unittest.TestCase):
             topics=("agent-rag",),
         )
         self.assertEqual(triage_candidate(peripheral, core_only=True).priority, "low")
+
+    def test_core_triage_downranks_non_llm_inference_systems(self):
+        candidate = Candidate(
+            title="FENIX: In-Network DNN Inference with FPGA-Enhanced Programmable Switches",
+            url="https://example.org/fenix",
+            summary="A programmable-switch system for low-latency DNN inference.",
+            topics=("runtime-serving", "kernel-compiler"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.verdict, "downrank")
+        self.assertEqual(result.priority, "low")
 
     def test_triage_downranks_generic_attention_and_training_titles(self):
         generic_attention = Candidate(
