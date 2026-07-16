@@ -73,7 +73,9 @@ Goal: batch confirmation, reporting, and optional commit.
 Model policy: use GPT-5.6 Terra with high reasoning. Weekly work includes more judgment-heavy confirmation and reporting, but still should not default to Sol unless explicitly requested for a deep review.
 
 ```powershell
-python scripts/ai_infra_monitor/monitor.py discover --mode weekly
+0..5 | ForEach-Object {
+  python scripts/ai_infra_monitor/monitor.py discover --mode weekly --source-batch-index $_ --source-batch-count 6
+}
 python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
 python scripts/ai_infra_monitor/monitor.py render
@@ -83,7 +85,7 @@ python scripts/ai_infra_monitor/monitor.py report --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit
 ```
 
-Weekly automation runs Saturday at 22:00 Beijing time. Omit `--no-commit` only when a local commit is explicitly intended.
+Weekly automation runs Saturday at 22:00 Beijing time. The source pool is partitioned into bounded batches so one slow conference page cannot block the full sweep; each returned run ID is triaged and queued before rendering. Omit `--no-commit` only when a local commit is explicitly intended.
 
 ## Triage Pipeline
 

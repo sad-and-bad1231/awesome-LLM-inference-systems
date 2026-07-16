@@ -97,6 +97,56 @@ class FairnessFetcher:
 
 
 class DiscoveryTests(unittest.TestCase):
+    def test_source_batch_partitions_eligible_sources_deterministically(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "paper-list.md").write_text("# Papers\n", encoding="utf-8")
+            (root / "industrial.md").write_text("# Industry\n", encoding="utf-8")
+            config = {
+                "version": 1,
+                "settings": {
+                    "daily_limit": 10,
+                    "weekly_limit": 20,
+                    "paper_file": "paper-list.md",
+                    "industry_file": "industrial.md",
+                    "candidate_file": "candidates.md",
+                    "state_file": "state.json",
+                    "runs_dir": "runs",
+                    "weekly_reports_dir": "reports",
+                },
+                "topics": [{"id": "serving", "keywords": ["llm serving"]}],
+                "sources": [
+                    {
+                        "id": f"source-{index}",
+                        "name": f"Source {index}",
+                        "type": "feed",
+                        "url": f"https://example.test/{index}",
+                        "tier": "A",
+                        "kind": "paper",
+                        "modes": ["weekly"],
+                    }
+                    for index in range(4)
+                ],
+            }
+            config_path = root / "config.yaml"
+            config_path.write_text(json.dumps(config), encoding="utf-8")
+
+            first = DiscoveryEngine(root, config_path, fetcher=FakeFetcher()).discover(
+                "weekly", source_batch_index=0, source_batch_count=2
+            )
+            second = DiscoveryEngine(root, config_path, fetcher=FakeFetcher()).discover(
+                "weekly", source_batch_index=1, source_batch_count=2
+            )
+
+            self.assertEqual(
+                [item["source_id"] for item in first["sources"]],
+                ["source-0", "source-1"],
+            )
+            self.assertEqual(
+                [item["source_id"] for item in second["sources"]],
+                ["source-2", "source-3"],
+            )
+
     def test_source_filter_limits_discovery_without_changing_mode(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

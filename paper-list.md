@@ -10,13 +10,13 @@
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
 | 分离式推理、通信与 KV 传输 | 184 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
-| 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
+| 长上下文、KV 状态与外部记忆 | 110 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
 | KV Cache 压缩、量化与淘汰 | 250 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
-| 算子、编译与硬件加速 | 158 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
+| 算子、编译与硬件加速 | 159 | attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速 |
 | MoE、Adapter、多租户与模型服务 | 29 | expert routing、adapter serving、多租户 batching、MoE 通信与缓存 |
 | Agent、RAG、多模态与应用级 Serving | 45 | agent workflow、RAG pipeline、多模态 stage graph、程序级调度 |
-| Workload、评测、可靠性与方法论 | 45 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
+| Workload、评测、可靠性与方法论 | 46 | trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析 |
 | AI 集群、向量数据库、安全与周边基础设施 | 51 | GPU 集群、向量数据库、TEE/FHE、侧信道、spot/geo routing |
 
 ## Evidence Layers
@@ -25,10 +25,10 @@
 
 | Venue Status | Count |
 |---|---:|
-| formal_conference | 381 |
-| poster_or_workshop | 43 |
-| preprint | 209 |
-| unclassified | 344 |
+| formal_conference | 506 |
+| poster_or_workshop | 44 |
+| preprint | 207 |
+| unclassified | 221 |
 
 ## Runtime、调度与服务架构
 
@@ -49,8 +49,8 @@
 | TurboAttention: Efficient Attention Approximation for High-Throughput LLMs | MLSys 2025 | Microsoft Research; Georgia Institute of Technology | TurboAttention 结合量化 attention 乘法和 softmax 近似，减少 KV 带宽、反量化与指数计算开销。 |
 | Niyama: Breaking the Silos of LLM Inference Serving | arXiv 预印本, 2025 | Microsoft Research | Niyama 以细粒度 QoS 分类、动态 chunking 和选择性请求降级在共享集群中混部交互式与批处理负载。 |
 | LeMix: Unified Scheduling for LLM Training and Inference on Multi-GPU Systems | arXiv 预印本, 2025 | University of California, Riverside 等 | LeMix 联合调度持续训练与在线推理，通过预测干扰和动态资源分配利用空闲 GPU 而不牺牲 serving 响应性。 |
-| Cascadia: A Cascade Serving System for Large Language Models | ICLR 2026 Poster | University of Cambridge; HKUST | Cascadia 联合优化大小模型 cascade 的查询路由、资源分配和并行部署，在回答质量约束下改善延迟与成本。 |
-| Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning | OSDI 2026 | UCLA; UC Berkeley; Harvard; NVIDIA; ByteDance 等 | Chimera 用 GPU memory ballooning 在多个 LLM 服务间动态伸缩显存占用，降低长尾模型共置时的成本。 |
+| Cascadia: An Efficient Cascade Serving System for Large Language Models | ICLR 2026 Poster | University of Cambridge; HKUST | Cascadia jointly optimizes model-cascade deployment, request routing, and parallel resource allocation; the official evaluation reports tighter latency SLOs and higher throughput than cascade baselines. |
+| Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning | OSDI 2026 | UCLA; UC Berkeley; Harvard; NVIDIA; ByteDance 等 | Prism uses elastic GPU memory ballooning to unify spatial and temporal sharing across bursty groups of models; its kvcached driver is open-sourced and deployed across more than 10K GPUs. |
 | HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds | NSDI 2026 | Peking University; Alibaba Group | With the proliferation of large language model (LLM) variants, developers are turning to serverless computing for cost-efficient LLM deployment. However, public cloud providers often struggle to provide performance guarantees for serverless LLM serving due to significant cold start latency caused by substantial model sizes and complex runtime dependencies. To address this problem, we present HydraServe, a serverless LLM serving system designed to minimize cold start latency in public clouds. HydraServe proactively distributes models across servers to quickly fetch them, and overlaps cold-start stages within workers to reduce startup latency. Additionally, HydraServe strategically places workers across GPUs to avoid network contention among cold-start instances. To minimize resource consumption during cold starts, HydraServe further introduces pipeline consolidation that can merge groups of workers into individual serving endpoints. Our comprehensive evaluations under diverse settings demonstrate that HydraServe reduces the cold start latency by 1.7×–4.7× and improves service level objective attainment by 1.43×–1.74× compared to baselines. |
 | JITServe: SLO-aware LLM Serving with Imprecise Request Information | NSDI 2026 | UIUC; Google; Cisco Research | JITServe 在输出长度和调用依赖未知时逐步收紧估计，并只分配满足 SLO 所需的 just-in-time serving bandwidth。 |
 | FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees | NSDI 2026 | Carnegie Mellon University; Purdue University; Anthropic; Mistral AI; AWS | Finetuning large language models (LLMs) is essential for task adaptation, yet today's serving stacks isolate inference and finetuning on separate GPU clusters—wasting resources and under-utilizing hardware. We introduce FlexLLM, the first system to co-serve LLM inference and PEFT-based finetuning on shared GPUs by fusing computation at the token level. FlexLLM's static compilation optimizations—dependent parallelization and graph pruning significantly shrink activation memory, leading to end-to-end GPU memory savings by up to 80%. At runtime, a novel token-level finetuning mechanism paired with a hybrid token scheduler dynamically interleaves inference and training tokens within each co-serving iteration, meeting strict latency SLOs while maximizing utilization. In end-to-end benchmarks on LLaMA-3.1-8B, Qwen-2.5-14B, and Qwen-2.5-32B, FlexLLM maintains inference SLO compliance at up to 20 req/s, and improves finetuning throughput by 1.9-4.8× under heavy inference workloads and 2.5-6.8× under light loads, preserving over 76% of peak finetuning progress even at peak demand. FlexLLM is publicly available at https://flexllm.github.io. |
@@ -89,10 +89,10 @@
 | HELIOS: Adaptive Model And Early-Exit Selection for Efficient LLM Inference Serving | MLSys 2026 | OpenReview 公开稿未列单位 | HELIOS 在线选择模型和 early-exit 层数，只加载满足任务目标所需的层，从而在质量约束下提高吞吐和能效。 |
 | Meeting SLOs, Slashing Hours: Automated Enterprise LLM Optimization with OptiKIT | MLSys 2026 | OpenReview 公开稿未列单位 | OptiKIT 自动化企业 LLM 压缩、调优和资源编排流程，让非专家团队在异构 GPU 集群上更稳定地满足 serving SLO。 |
 | SchedFlow: Transparent and Flexible Intra-Device Parallelism via Programmable Operator Scheduling | MLSys 2026 | MLSys 2026 官方页面未列单位 | SchedFlow 将逻辑模型定义与物理执行 schedule 解耦，用可编程 operator scheduling 在 vLLM、SGLang 和 HuggingFace Transformer 中透明接入设备内并行。 |
-| Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration | OSDI 2026 | Sun Yat-Sen University | 该工作用跨实例编排减少 commodity GPU 集群中的重复数据搬运和状态开销，提高低成本 GPU 上的 serving 效率。 |
+| Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration | OSDI 2026 | Sun Yat-Sen University | EcoServe uses partially disaggregated macro-instances and adaptive scheduling for commodity GPU clusters; OSDI reports up to 2.51x goodput over representative serving baselines on NVIDIA L20 clusters. |
 | Revisiting Pipeline Parallelism for LLM Serving | OSDI 2026 | Korea University | 该工作重新分析 pipeline parallelism 在 LLM serving 中的阶段空泡、batch 形成和延迟权衡，为在线推理选择更稳健的流水配置。 |
 | Simple is Better: Multiplication May Be All You Need for LLM Request Scheduling | OSDI 2026 | Shanghai Jiao Tong University; Alibaba Group | 该工作用更简单的乘法式请求调度指标协调排队、prefill/decode 负载和 KV 压力，避免过度复杂的在线策略。 |
-| Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing | OSDI 2026 | Sun Yat-sen University; HKUST; Pengcheng Laboratory; Qilu University of Technology | Kairox 在线平衡 GPU 与 CPU 上的 neuron 执行，把部分稀疏计算迁移到 CPU 以扩大本地和混合平台的可服务模型规模。 |
+| Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing | OSDI 2026 | Sun Yat-sen University; HKUST; Pengcheng Laboratory; Qilu University of Technology | Kairox dynamically balances hot and cold neurons between GPU and CPU with activation prediction, live prefetching, and temporal-momentum caching; OSDI reports up to 7.57x throughput over llama.cpp. |
 | CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | From Tokens to Layers: Redefining Stall-Free Scheduling for MoE Serving with Layered Prefill | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | LYNX: Workload-Agnostic Expert Remapping for Efficient MoE Inference | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
@@ -148,7 +148,7 @@
 | HydraInfer: Hybrid Disaggregated Scheduling for Multimodal Large Language Model Serving | arXiv 预印本, 2025 | Chinese Academy of Sciences; Beihang University 等 | HydraInfer 将视觉 encode、prefill 和 decode 分到异构实例，以 stage-level batching 和并行执行提高 MLLM 吞吐。 |
 | LoRAServe: Serving Heterogeneous LoRA Adapters in Distributed LLM Inference Systems | arXiv 预印本, 2025 | Microsoft Research; University of Illinois Urbana-Champaign | LoRAServe 感知 adapter rank 差异，动态重平衡放置并通过 GPUDirect RDMA 远程访问 adapter，降低多租户尾延迟。 |
 | TokenDance: Scaling Multi-Agent LLM Serving via Collective KV Cache Sharing | arXiv 预印本, 2026 | Peking University | TokenDance 利用多 agent round 的 All-Gather 结构集中复用共享 KV，并用 block-sparse diff 压缩 sibling cache。 |
-| Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads | NSDI 2026 | National University of Singapore; USTC; UC Berkeley | Libra 在任意 token 边界把请求拆为 micro-requests，以全局/局部两级调度和 chunked KV transfer 平衡动态负载。 |
+| Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads | NSDI 2026 | National University of Singapore; USTC; UC Berkeley | Libra uses micro-request flexible partitioning and scheduling to maximize goodput under SLOs when prefill/decode workloads are imbalanced and dynamic. |
 | SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading | NSDI 2026 | Tencent; Nanjing University | SwiftEP 用 buffer fusion 消除 MoE all-to-all staging copy，并以 TMA、RDMA scatter-gather 和 CUDA IPC 提高链路利用率。 |
 | XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads | ASPLOS 2026 | Huawei Technologies; Tsinghua University; Shanghai AI Laboratory | XY-Serve 用 token-wise P/D/V 调度、任务分解重排和 Ascend meta-kernel 平滑动态 shape 与混合阶段负载。 |
 | It Takes Two to Entangle | ASPLOS 2026 | New York University; ByteDance | 该工作研究组合式 AI 系统中不同执行组件之间的耦合，揭示单独优化某一模型阶段可能无法改善端到端性能。 |
@@ -186,7 +186,7 @@
 | KVComm: Enabling Efficient LLM Communication through Selective KV Sharing | ICLR 2026 Poster | OpenReview 公开稿未列单位 | KVComm 让多个 LLM 通过选择性共享关键 KV pairs 进行通信，减少多智能体系统中自然语言转述带来的推理成本和信息损失。 |
 | Cache-to-Cache: Direct Semantic Communication Between Large Language Models | ICLR 2026 Poster | OpenReview 公开稿未列单位 | Cache-to-Cache 让 LLM 之间直接传递语义 cache 状态，减少多模型协作时反复自然语言编码和解码造成的通信开销。 |
 | See What I See, Know What I Think: Dense Latent Communication Across Heterogeneous Agents | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该工作用 dense latent state 在异构 agent 之间传递视觉和意图信息，减少多智能体协作中自然语言转写造成的信息损失和额外推理开销。 |
-| OpenTela | OSDI 2026 | ETH Zurich; University of Cambridge; EPFL; MIT; HKUST | LLMFabric 把去中心化 HPC 集群统一成异构 LLM serving 资源池，在不同网络和 GPU 条件下协调模型部署与请求路由。 |
+| OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving | OSDI 2026 |  | OpenTela is a user-space orchestration overlay for fragmented HPC clusters, combining CRDT service discovery, a unified serving API, and heterogeneity-aware scheduling; the production deployment served 13 million requests across 142 models. |
 | UEP: Portable Expert-Parallel Communication | OSDI 2026 | UC Berkeley; UC Davis; University of Wisconsin-Madison; AMD; Inferact; Tsinghua University; AWS; Broadcom | UEP 提供可移植 expert-parallel 通信层，降低 MoE serving 中专家并行对特定 collective 和网络栈的绑定。 |
 | FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | fabric-lib: RDMA Point-to-Point Communication for LLM Systems | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
@@ -319,7 +319,6 @@
 | Tarragon: Making MoE-based LLM Inference Resilient | arXiv 预印本, 2026 | University of California, Riverside 等 | Tarragon 将 attention worker 和 expert worker 设为独立故障域，用 KV 增量 checkpoint 和 shadow experts 快速恢复。 |
 | vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention | ASPLOS 2025 | Microsoft Research India | vAttention 通过 CUDA virtual memory 保留连续虚拟 KV layout，同时按需分配物理页，避免重写 attention kernel。 |
 | Mirage: A Multi-Level Superoptimizer for Tensor Programs | OSDI 2025 | Carnegie Mellon University; Peking University; Purdue University | Mirage 用跨 kernel、thread block 和 thread 层级的统一表示搜索代数变换、调度和新 custom kernel。 |
-| Mirage Persistent Kernel: A Compiler and Runtime for Mega-Kernelizing Tensor Programs | arXiv 预印本, 2025 | Carnegie Mellon University; University of Washington 等 | MPK 将多 GPU 模型推理降为 SM-level task graph 和单个 persistent megakernel，实现跨算子软件流水。 |
 | InfiniGen: Efficient Generative Inference of Large Language Models with Dynamic KV Cache Management | OSDI 2024 | Seoul National University 等 | InfiniGen 用少量 rehearsal 预测下一层重要 KV，仅从 host memory 预取必要状态以加速 offloaded inference。 |
 | Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache | OSDI 2024 | Tsinghua University; Alibaba Cloud | Infinite-LLM 将 attention layer 解耦并使用 pooled distributed KVCache，支撑最长约两百万 token 的弹性服务。 |
 | Efficient Memory Management for Large Language Model Serving with PagedAttention | SOSP 2023 | UC Berkeley | vLLM/PagedAttention 用块式虚拟内存管理 KV cache，显著减少碎片并支持 beam search、parallel sampling 和前缀共享。 |
@@ -386,16 +385,16 @@
 | ContextPilot: Fast Long-Context Inference via Context Reuse | MLSys 2026 | OpenReview 公开稿未列单位 | ContextPilot 识别可复用上下文片段并规划复用路径，把长上下文请求转化为更少的 prefill 和 cache 恢复操作。 |
 | RAGBoost: Efficient Retrieval-Augmented Generation with Accuracy-Preserving Context Reuse | MLSys 2026 | OpenReview 公开稿未列单位 | RAGBoost 检测并复用 RAG 请求间重叠检索片段的上下文计算，通过索引、排序和去重减少重复 prefill。 |
 | Using Span Queries to Optimize Cache and Attention Locality | MLSys 2026 | OpenReview 公开稿未列单位 | 该工作用 span query 表达上下文片段访问范围，让 cache placement 和 attention 执行更好利用局部性。 |
-| FreeKV: Boosting KV Cache Retrieval for Efficient LLM Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | FreeKV 改进长上下文 KV cache 检索策略，在保持生成质量的同时减少需要常驻或加载的 cache 条目。 |
-| LouisKV: Efficient KV Cache Retrieval for Long Input-Output Sequences | ICLR 2026 Poster | OpenReview 公开稿未列单位 | LouisKV 面向长输入长输出请求改进 KV cache 检索，减少 decode 过程中对完整历史 cache 的无差别访问。 |
+| FreeKV: Boosting KV Cache Retrieval for Efficient LLM Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | FreeKV moves KV selection off the critical path with speculative retrieval, hybrid CPU/GPU layouts, and double-buffered streaming, reporting up to 13x speedup with near-lossless quality. |
+| LouisKV: Efficient KV Cache Retrieval for Long Input-Output Sequences | ICLR 2026 Poster | OpenReview 公开稿未列单位 | LouisKV exploits temporal locality and different input/output KV distributions, triggering retrieval at semantic boundaries and using decoupled fine-grained cache management for long reasoning sequences. |
 | IceCache: Memory-efficient KV-cache Management for Long-Sequence LLMs | ICLR 2026 Poster | OpenReview 公开稿未列单位 | IceCache 为长序列 LLM 推理设计更省内存的 KV 管理策略，在有限显存下扩大可服务上下文和并发。 |
-| QuoKA: Query-Oriented KV Selection for Efficient LLM Prefill | ICLR 2026 Poster | OpenReview 公开稿未列单位 | QuoKA 在 prefill 阶段按 query 选择关键 KV 子集，降低长输入处理中的 attention 计算和 cache 写入。 |
+| QuoKA: Query-Oriented KV Selection for Efficient LLM Prefill | ICLR 2026 Poster | OpenReview 公开稿未列单位 | QuoKA uses query-oriented sparse attention for chunked prefill, reporting 3x lower TTFT, 5x faster GPU attention, and nearly 7x faster CPU attention while evaluating 88% fewer KV pairs. |
 | Reconstructing KV Caches with Cross-Layer Fusion for Enhanced Transformers | ICLR 2026 Poster | OpenReview 公开稿未列单位 | 该工作用跨层融合重建 KV cache，在压缩或缺失 cache 状态下尽量恢复 Transformer 推理质量。 |
 | LycheeDecode: Accelerating Long-Context LLM Inference via Hybrid-Head Sparse Decoding | ICLR 2026 Poster | OpenReview 公开稿未列单位 | LycheeDecode 按 attention head 选择不同稀疏解码路径，降低长上下文 decode 阶段的 KV 访问和延迟。 |
-| ICaRus: Identical Cache Reuse for Efficient Multi-Model Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | ICaRus 让同架构任务模型共享相同 prompt 的 KV cache，仅在必要层重算差异，降低多模型 agent 场景的重复状态成本。 |
+| ICaRus: Identical Cache Reuse for Efficient Multi-Model Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | ICaRus lets specialized models share identical prompt KV caches across multi-model and agent workloads; the official page reports up to 11.1x lower P95 latency and 3.8x higher throughput. |
 | DualMap: Enabling Both Cache Affinity and Load Balancing for Distributed LLM Serving | ICLR 2026 Poster | OpenReview 公开稿未列单位 | DualMap 同时考虑 prefix cache affinity 和实例负载均衡，缓解分布式 LLM serving 中复用率与尾延迟的冲突。 |
 | Tactic: Adaptive Sparse Attention with Clustering and Distribution Fitting for Long-Context LLMs | ICLR 2026 Poster | OpenReview 公开稿未列单位 | Tactic 按层、头和输入分布自适应选择 sparse attention token budget，避免固定预算在长上下文 decoding 中过度保守。 |
-| Universal Model Routing for Efficient LLM Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | 该工作把模型表示成基于代表性 prompt 的特征向量，使 router 能在测试时把请求分配给未见过的新模型以降低推理成本。 |
+| Universal Model Routing for Efficient LLM Inference | ICLR 2026 Poster | OpenReview 公开稿未列单位 | UniRoute represents models by feature vectors from representative prompts and routes dynamically to previously unseen LLMs; the official evaluation covers more than 30 unseen models. |
 | Beyond Speedup - Utilizing KV Cache for Sampling and Reasoning | ICLR 2026 Poster | OpenReview 公开稿未列单位 | 该工作把 KV cache 从单纯加速结构扩展为采样和 reasoning-time reuse 的状态载体，探索更高层次的推理复用。 |
 | Bottlenecked Transformers: Periodic KV Cache Consolidation for Generalised Reasoning | ICLR 2026 Poster | OpenReview 公开稿未列单位 | Bottlenecked Transformer 用轻量 cache processor 周期性重写和整合 KV segments，把推理链中的 latent memory 作为可优化状态。 |
 | Keyless Attention: Value-Space Routing and Value-Only Caching for Efficient Transformers | arXiv 预印本, 2026 | 作者公开稿未列单位 | Keyless Attention 取消显式 key cache，用 value-space routing 和 value-only cache 降低 Transformer 推理中的 KV 存储与访问开销。 |
@@ -423,11 +422,11 @@
 | TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate | ICLR 2026 | Google Research; New York University; Google DeepMind | TurboQuant 通过随机旋转、近最优标量量化和 QJL 残差校正，实现面向 KV cache 的在线低比特向量量化。 |
 | PM-KVQ: Progressive Mixed-precision KV Cache Quantization for Long-CoT LLMs | ICLR 2026 Poster | Tsinghua University; Infinigence-AI; Columbia University; OPPO AI Center; Shanghai Jiao Tong University | PM-KVQ 采用渐进式混合精度量化和长位置分布校准，降低长 CoT 推理中 KV cache 量化的累积误差。 |
 | SmallKV: Small Model Assisted Compensation of KV Cache Compression for Efficient LLM Inference | NeurIPS 2025 | Shanghai Jiao Tong University; Fudan University; Nanjing University; Wuhan University; University of Goettingen | SmallKV 用小模型注意力补偿大模型 KV 压缩中的显著性漂移和边际信息过压缩。 |
-| ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models | ICLR 2026 Oral | Georgia Institute of Technology; NVIDIA Research | ThinKV 根据 CoT 中不同 thought 类型的重要性进行自适应量化和逐级淘汰，并用扩展 PagedAttention kernel 复用释放页。 |
+| ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models | ICLR 2026 Oral | Georgia Institute of Technology; NVIDIA Research | ThinKV combines thought-aware low-bit quantization and progressive KV eviction with a PagedAttention extension kernel; the official evaluation keeps less than 5% of the original cache and reports up to 5.8x higher throughput. |
 | Which Heads Matter for Reasoning? RL-Guided KV Cache Compression | ICML 2026 | Westlake University; McGill University; Mila; Zhejiang University; MBZUAI | RLKV 用强化学习探针识别对推理链关键的注意力头，并优先保留这些头的 KV cache 来压缩长 CoT 推理开销。 |
 | Cache What Lasts: Token Retention for Memory-Bounded KV Cache in LLMs | ICLR 2026 | Yale University; JPMorganChase AI Research | TRIM-KV 在 token 生成时预测长期保留价值，并随时间衰减以在固定内存预算下保留最有用的 KV。 |
 | EVICPRESS: Joint KV-Cache Compression and Eviction for Efficient LLM Serving | arXiv 预印本, 2025 | University of Chicago; UC Berkeley; Tensormesh; MIT; UC Santa Cruz; Stanford; Microsoft | EVICPRESS 联合优化 KV cache 的有损压缩和多层存储淘汰，在质量和延迟之间做全局权衡。 |
-| LookaheadKV: Fast and Accurate KV Cache Eviction by Glimpsing into the Future without Generation | ICLR 2026 Poster | Samsung Research | LookaheadKV 用轻量 lookahead tokens 和 LoRA 模块预测未来注意力分布，在无需草稿生成的情况下指导 KV 淘汰。 |
+| LookaheadKV: Fast and Accurate KV Cache Eviction by Glimpsing into the Future without Generation | ICLR 2026 Poster | Samsung Research | LookaheadKV predicts future KV importance with lightweight parameter-efficient modules, avoiding draft generation while retaining the accuracy benefits of future-aware eviction at negligible runtime overhead. |
 | SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving | arXiv 预印本, 2026 | Apple; University of Michigan 等 | SAW-INT4 面向真实 serving 约束设计 4-bit KV quantization，强调 paged layout、规则访存和 fused attention 可落地性。 |
 | Information-Aware KV Cache Compression for Long Reasoning | arXiv 预印本, 2026 | 作者公开稿未列单位 | InfoKV 将预测不确定性和层间表示演化构成的 entropy signal 与 attention 分数结合，用 Forward Influence 感知的 token 选择改进长推理 KV 压缩。 |
 | ReQAT: Achieving Full-Precision Reasoning Accuracy with 4-bit Floating-Point Quantization-Aware Training | ICML 2026 | 作者公开稿未列单位 | ReQAT 在量化感知训练中学习 4-bit 浮点格式与推理友好的张量变换，使 reasoning 模型在低比特 KV/激活存储下接近全精度准确率。 |
@@ -708,6 +707,7 @@
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
+| MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs | OSDI 2026 |  | MPK compiles multi-GPU LLM inference into SM-level task graphs and executes cross-operator pipelines in a persistent mega-kernel; OSDI reports up to 1.7x lower end-to-end inference latency. |
 | ServerlessLLM: Low-Latency Serverless Inference for Large Language Models | OSDI 2024 | University of Edinburgh 等 | ServerlessLLM 利用近 GPU 多层存储、快速 checkpoint loading 和 live migration 降低 serverless LLM 冷启动延迟。 |
 | S-LoRA: Serving Thousands of Concurrent LoRA Adapters | MLSys 2024 | UC Berkeley; Stanford University | S-LoRA 用 unified paging、异构 LoRA kernel 和 tensor parallelism 在单集群中服务数千 adapter。 |
 | FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving | MLSys 2025 | University of Washington; NVIDIA | FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。 |
@@ -792,7 +792,7 @@
 | IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference | MLSys 2026 | OpenReview 公开稿未列单位 | IntAttention 用整数域 IndexSoftmax 和端到端 INT8 attention pipeline 消除反量化-浮点 softmax-再量化路径，降低端侧延迟和能耗。 |
 | FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling | MLSys 2026 | OpenReview 公开稿未列单位 | FlashAttention-4 针对非对称硬件扩展重做 attention 算法和 kernel pipeline 协同设计，提高长上下文与大模型注意力吞吐。 |
 | ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels | MLSys 2026 | OpenReview 公开稿未列单位 | ParallelKittens 提供更系统的多 GPU kernel 编程与组合方式，降低跨 GPU LLM inference kernel 的实现复杂度。 |
-| ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping | OSDI 2026 | Shanghai Jiao Tong University | ADAngel 为任意精度量化 LLM 自适应映射计算路径，使不同 bit-width 的解码和矩阵运算更好匹配硬件资源。 |
+| ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping | OSDI 2026 | Shanghai Jiao Tong University | ADAngel generates a portfolio of mixed-precision GEMM kernels and dispatches them with an oracle policy map; OSDI reports up to 5.10x decode throughput over llama.cpp and 1.17x–2.38x TTFT speedups over TensorRT-LLM. |
 | SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving | MLSys 2026 | OpenReview 公开稿未列单位 | SHIP 用 SRAM-based huge inference pipeline 组织 LLM serving 数据流，减少生成阶段对外部内存带宽的依赖。 |
 | MixLLM: LLM Quantization with Global Mixed-precision between Output-features and Highly-efficient System Design | MLSys 2026 | OpenReview 公开稿未列单位 | MixLLM 在 output-feature 维度做全局混合精度量化，并配套高效反量化和流水重叠 kernel 以提升低比特推理吞吐。 |
 | Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE | MLSys 2026 | OpenReview 公开稿未列单位 | CORE 将移动 LLM 的频率调节、阶段调度和能耗模型统一起来，在端侧 SLO 下减少 CPU/GPU/NPU 能耗。 |
@@ -934,7 +934,7 @@
 | AAFLOW: Scalable Patterns for Agentic AI Workflows | arXiv 预印本, 2026 | 作者公开稿未列单位 | AAFLOW 将 agent workflow 建模为算子图，并用 Arrow/Cylon 的零拷贝数据平面与异步批处理降低 embedding、upsert 与 orchestration 开销。 |
 | Execution-State Capsules: Graph-Bound Execution-State Checkpoint and Restore for Low-Latency, Small-Batch, On-Device Physical-AI Serving | arXiv 预印本, 2026 | 作者公开稿未列单位 | Execution-State Capsules 将 agent/physical-AI workflow 的执行状态绑定到图节点，用小批量 checkpoint/restore 降低端侧服务恢复延迟。 |
 | Murakkab: Resource-Efficient Agentic Workflow Orchestration in Cloud Platforms | OSDI 2026 | MIT CSAIL; Microsoft Azure Research | Murakkab 将 agentic workflow 的依赖、暂停和资源需求暴露给云平台，在多步 LLM 应用中减少同步等待和过量配置。 |
-| AdaCache: Adaptive Caching and Context Augmentation for Efficient LLM Serving | ICLR 2026 Poster | OpenReview 公开稿未列单位 | AdaCache 针对 RAG 中高频检索片段做自适应缓存和上下文增强，减少重复处理长输入带来的 prefill 开销。 |
+| AdaCache: Adaptive Caching and Context Augmentation for Efficient LLM Serving | ICLR 2026 Poster | OpenReview 公开稿未列单位 | AdaCache combines cache-aware partial recomputation with adaptive retrieval depth for RAG serving, reducing redundant long-input processing while preserving generation quality. |
 | RagInfer: Efficient Retrieval-Augmented Generation Inference with Lookahead Retrieval | MLSys 2026 | OpenReview 公开稿未列单位 | RagInfer 用 lookahead retrieval 将检索和生成阶段重叠，降低大规模 RAG datastore 引入的在线推理延迟。 |
 | Hippocampus: An Efficient and Scalable Memory Module for Agentic AI | MLSys 2026 | OpenReview 公开稿未列单位 | Hippocampus 为 agentic AI 提供可扩展长期记忆模块，替代纯向量库或图遍历导致的高延迟记忆访问。 |
 | FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap | MLSys 2026 | OpenReview 公开稿未列单位 | FlashAgents 用 agent 间 token streaming、增量 prefill 和 prefix-aware coordination 重叠多智能体调用链中的等待与计算。 |
@@ -964,7 +964,7 @@
 | Fairness in Serving Large Language Models | arXiv 预印本, 2024 | UC Berkeley; Stanford University | VTC 用输入输出 token 成本定义 work-conserving fairness，避免长请求或大客户长期占用 continuous batching 能力。 |
 | GreenLLM: SLO-Aware Dynamic Frequency Scaling for Energy-Efficient LLM Serving | arXiv 预印本, 2025 | EPFL | GreenLLM 对 prefill/decode 分别建模和调频，在维持 token SLO 的同时降低 GPU 能耗。 |
 | FailSafe: High-performance Resilient Serving | arXiv 预印本, 2025 | Stanford University | FailSafe 用循环 KV 放置、混合 attention、负载路由和主动 KV 备份，使 tensor-parallel serving 在 GPU 故障后继续运行。 |
-| ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production | NSDI 2026 | Peking University; Alibaba Group | ServeGen 基于全球云服务 trace 刻画语言、多模态和 reasoning 模型负载，并按 client 组合生成更真实的 benchmark workload。 |
+| ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production | NSDI 2026 | Peking University; Alibaba Group | ServeGen characterizes production language, multimodal, and reasoning workloads and generates realistic per-client serving traces for benchmarking and design analysis; the project is open-sourced by Alibaba. |
 | Towards Efficient Generative Large Language Model Serving: A Survey from Algorithms to Systems | arXiv 综述, 2023 | Carnegie Mellon University 等 | 该综述从算法、单机 runtime 到分布式 serving 系统梳理生成式 LLM 推理的效率技术与研究问题。 |
 | LLM Inference Serving: Survey of Recent Advances and Opportunities | arXiv 综述, 2024 | Northeastern University; MIT Lincoln Laboratory | 该综述聚焦 2023 年后的系统级 LLM serving 论文，覆盖调度、内存、并行和生产部署机会。 |
 | Taming the Titans: A Survey of Efficient LLM Inference Serving | arXiv 综述, 2025 | Soochow University; Alibaba Cloud 等 | 该综述按 instance、cluster 和新兴应用场景系统整理模型放置、调度、存储、分离架构及云端策略。 |
@@ -979,7 +979,7 @@
 | Demystifying Numerical Instability in LLM Inference: Achieving Reproducible Inference for Mission-Critical Tasks with HEAL | arXiv 预印本, 2026 | 作者公开稿未列单位 | HEAL 分析 LLM 推理中的数值不稳定和不可复现来源，并用可控校正路径提高关键任务输出一致性。 |
 | Does Mixture-of-Experts Actually Help Inference on Consumer and Edge Hardware? An Empirical Study | arXiv 预印本, 2026 | 作者公开稿未列单位 | 该实证研究比较 MoE 在消费级和边缘硬件上的真实延迟、内存和能耗收益，避免只用理论 FLOPs 判断端侧可行性。 |
 | Concordia: JIT-Compiled Persistent-Kernel Checkpointing for Fault-Tolerant LLM Inference | arXiv 预印本, 2026 | 作者公开稿未列单位 | Concordia 用 JIT 编译的 persistent-kernel checkpointing 降低小 batch LLM 推理的容错快照开销。 |
-| StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference | OSDI 2026 | Shanghai Jiao Tong University; Alibaba Cloud; Alibaba Group | StriaTrace 面向在线 LLM inference 提供低开销 tracing 和诊断，把请求、kernel、KV 状态和服务异常关联起来定位性能问题。 |
+| StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference | OSDI 2026 | Shanghai Jiao Tong University; Alibaba Cloud; Alibaba Group | StriaTrace traces synchronization points and critical paths, enables detailed tracing only during anomalies, and uses roofline/regression diagnosis; OSDI reports 97.8% lower tracing overhead. |
 | RaidServe: High-performance Resilient Serving | MLSys 2026 | OpenReview 公开稿未列单位 | RaidServe 针对 tensor-parallel LLM serving 的单 GPU 故障设计冗余和恢复路径，减少故障后的 KV 复制和模型重载停顿。 |
 | GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving | MLSys 2026 | OpenReview 公开稿未列单位 | GhostServe 在后台用 erasure coding 保护流式 KV cache，避免故障恢复时完整重算或复制全部 serving 状态。 |
 | ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler | MLSys 2026 | OpenReview 公开稿未列单位 | ProfInfer 用 eBPF 对 LLM inference engine 做低侵入细粒度 profiling，把 operator、kernel 和请求级瓶颈关联起来。 |
@@ -993,19 +993,20 @@
 | OSWorld-Human: Benchmarking the Efficiency of Computer-Use Agents | MLSys 2026 | MLSys 2026 官方页面未列单位 | OSWorld-Human 用人类基线评测 computer-use agent 的效率，为桌面/浏览器 agent 系统的延迟、步骤数和成功率比较提供基准。 |
 | Shannonic: Efficient Entropy-Optimal Compression for ML Workloads | MLSys 2026 | MLSys 2026 官方页面未列单位 | Shannonic 面向 ML workload 提供接近熵最优的高效压缩，用于降低训练/推理数据流、特征和中间状态的存储与传输成本。 |
 | Toward Principled LLM Safety Testing: Solving the Jailbreak Oracle Problem | MLSys 2026 | MLSys 2026 官方页面未列单位 | 该工作把 jailbreak oracle 问题形式化，改进 LLM 安全测试中自动判定、复现和系统化评测的可靠性。 |
-| Reasoning Language Model Inference Serving Unveiled: An Empirical Study | ICLR 2026 Poster | OpenReview 公开稿未列单位 | 该实证研究刻画 reasoning LLM 在长输出、KV 增长和请求完成时间上的 serving 行为，为调度和容量规划提供基线。 |
+| Reasoning Language Model Inference Serving Unveiled: An Empirical Study | ICLR 2026 Poster | OpenReview 公开稿未列单位 | This official empirical study characterizes reasoning-model serving through memory fluctuation, stragglers, and adaptive runtime; it evaluates quantization, KV quantization, speculative decoding, and prefix caching under realistic workloads. |
 | A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints | ICML 2026 | 作者公开稿未列单位 | 该工作把计算和 KV cache 显存同时纳入排队稳定性分析，给出 LLM inference 系统何时会因内存约束失稳的理论条件。 |
 | BEAM: Joint Resource–Power Optimization for Energy-Efficient LLM Inference under SLO contraints | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Probe-and-Fetch: Dynamic KV Cache Pruning for Accelerated Long-Context Inference in Web-Scale AI Search | The Web Conference 2026 official industry accepted papers |  | Authors: Yuchen Li:Baidu Inc.,Shanghai Jiao Tong University;Rui Kong:Baidu Inc.;Xinran Chen:Baidu Inc.;Chengzhe Zhang:Baidu Inc.;Jiamin Chen:City University of Hong Kong;Cheng Deng:University of Edinburgh;Xinyu Ma:Baidu Inc.;Haojie Zhang:Baidu Inc.;Tianhao Peng:Baidu Inc.;Hengyi Cai:Baidu Inc.;Shuaiqiang Wang:Baidu Inc.;Jiashu Zhao:Wilfrid Laurier University;Yongqi Zhang:The Hong Kong University of Science and Technology (Guangzhou);Haoyi Xiong:Baidu Inc.;Jimmy Xiangji Huang:York University;Lei Chen:The Hong Kong University of Science and Technology (Guangzhou);Jun Wang:University College London;Dawei Yin:Baidu Inc. |
 | llm-tuna - Hyperparameter Optimization for LLM Inference | The Web Conference 2026 official short accepted papers |  | Authors: Thameem Abbas Ibrahim Bathusha:Red Hat LLC.;Aanya Sharma:Red Hat LLC.;Andy Huynh:Boston University;Rehan Samaratunga:Boston University;Ashish Kamra:Red Hat LLC. |
 | GAPS: Global-Aware Prediction-driven Scheduling for Large-Scale LLM Inference | AAMAS 2026 official proceedings |  | AAMAS 2026 official proceedings 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Understanding and Improving Communication Performance in Multi-node LLM Inference | ACM CAIS 2026 official accepted research papers |  | ACM CAIS 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| T-TAMER: Provably Taming Trade-offs in ML Serving | ICLR 2026 Poster |  | T-TAMER formulates multi-stage serving trade-offs such as early exit and model selection as a general decision process, targeting principled accuracy, latency, and resource guarantees. |
 
 ## AI 集群、向量数据库、安全与周边基础设施
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
-| PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving | NSDI 2026 | UC Santa Cruz; University of Nevada, Reno | PlanetServe 用去中心化 overlay 聚合分散算力，并联合设计转发、隐私和服务质量验证。 |
+| PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving | NSDI 2026 | UC Santa Cruz; University of Nevada, Reno | PlanetServe builds an overlay for decentralized LLM serving with resource-aware forwarding, privacy mechanisms, and quality verification; its prototype reduces latency by over 50% versus a baseline overlay. |
 | GFS: A Preemption-aware Scheduling Framework for GPU Clusters with Predictive Spot Instance Management | ASPLOS 2026 | Shanghai Jiao Tong University; Zhejiang University; Alibaba Group | GFS 预测 spot instance 风险并进行抢占感知调度，降低 GPU 集群中任务中断和资源浪费。 |
 | Sailor: Automating Distributed Training over Dynamic, Heterogeneous, and Geo-distributed Clusters | SOSP 2025 | SOSP 2025 官方目录未列单位 | Sailor 自动选择并调整跨区域异构集群的并行和通信计划，其动态规划方法也适用于广域推理。 |
 | Robust LLM Training Infrastructure at ByteDance | SOSP 2025 | ByteDance | 该工作总结字节跳动大模型基础设施中的故障检测、恢复、网络与作业治理经验。 |

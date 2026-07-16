@@ -57,6 +57,10 @@ KNOWN_CANONICALS = {
         "paper:osdi-2026-prism",
         "Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning",
     ),
+    "prism cost efficient multi llm serving via gpu memory ballooning": (
+        "paper:osdi-2026-prism",
+        "Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning",
+    ),
     "contextra hierarchical context caching long context language model serving": (
         "paper:osdi-2026-strata",
         "Strata",
@@ -64,6 +68,30 @@ KNOWN_CANONICALS = {
     "llmfabric unifying decentralized hpc clusters heterogeneous llm serving": (
         "paper:osdi-2026-opentela",
         "OpenTela",
+    ),
+    "cascadia cascade serving system large language models": (
+        "paper:iclr-2026-cascadia",
+        "Cascadia: An Efficient Cascade Serving System for Large Language Models",
+    ),
+    "cascadia efficient cascade serving system large language models": (
+        "paper:iclr-2026-cascadia",
+        "Cascadia: An Efficient Cascade Serving System for Large Language Models",
+    ),
+    "opentela": (
+        "paper:osdi-2026-opentela",
+        "OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving",
+    ),
+    "opentela unifying decentralized computing resources heterogeneous llm serving": (
+        "paper:osdi-2026-opentela",
+        "OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving",
+    ),
+    "mirage persistent kernel compiler runtime mega kernelizing tensor programs": (
+        "paper:osdi-2026-mpk",
+        "MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs",
+    ),
+    "mpk compiler runtime mega kernelizing tensor programs": (
+        "paper:osdi-2026-mpk",
+        "MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs",
     ),
 }
 
@@ -155,6 +183,14 @@ def _canonical_fields(record: dict[str, Any]) -> dict[str, Any]:
     for key in ("source_type", "venue_status"):
         if existing_evidence.get(key) in {None, "", "legacy_markdown", "unclassified"}:
             existing_evidence[key] = computed_evidence[key]
+    if computed_evidence["venue_status"] == "formal_conference" and existing_evidence.get("venue_status") in {
+        "preprint",
+        "poster_or_workshop",
+        "unclassified",
+        "legacy_markdown",
+    }:
+        existing_evidence["source_type"] = computed_evidence["source_type"]
+        existing_evidence["venue_status"] = computed_evidence["venue_status"]
     if record.get("source_ids") and record.get("source_tier") != "legacy":
         existing_evidence["verification_level"] = computed_evidence["verification_level"]
     record["evidence"] = existing_evidence
@@ -377,7 +413,7 @@ def _merge_record_evidence(existing: dict[str, Any], incoming: dict[str, Any]) -
 
 
 def append_records(path: Path, records: list[dict[str, Any]]) -> int:
-    existing = load_records(path)
+    existing = [normalize_record(record) for record in load_records(path)]
     lookup: dict[tuple[str, str], int] = {}
     for index, record in enumerate(existing):
         lookup[(str(record.get("canonical_id", "")), "canonical")] = index

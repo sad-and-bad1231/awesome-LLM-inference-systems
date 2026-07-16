@@ -25,6 +25,8 @@ class HttpFetcher:
         return error.code in {408, 425, 429} or 500 <= error.code < 600
 
     def fetch(self, source: dict, cache: dict) -> dict:
+        timeout = max(1, int(source.get("timeout_seconds", self.timeout)))
+        retries = max(0, int(source.get("fetch_retries", self.retries)))
         headers = {
             "User-Agent": self.user_agent,
             "Accept": "application/atom+xml, application/rss+xml, application/json, text/html;q=0.9, */*;q=0.5",
@@ -35,9 +37,9 @@ class HttpFetcher:
             headers["If-Modified-Since"] = cache["last_modified"]
         request = urllib.request.Request(source["url"], headers=headers)
         last_error = None
-        for attempt in range(self.retries + 1):
+        for attempt in range(retries + 1):
             try:
-                with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
                     return {
                         "status": response.status,
                         "body": response.read(),
@@ -66,6 +68,6 @@ class HttpFetcher:
                 ConnectionError,
             ) as error:
                 last_error = error
-            if attempt < self.retries:
+            if attempt < retries:
                 time.sleep(self.backoff_seconds * (attempt + 1))
         raise last_error or RuntimeError(f"failed to fetch {source['url']}")

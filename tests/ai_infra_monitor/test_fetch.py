@@ -17,6 +17,22 @@ def make_response(body=b"ok", status=200):
 
 
 class HttpFetcherTests(unittest.TestCase):
+    @patch("scripts.ai_infra_monitor.ai_infra_monitor.fetch.urllib.request.urlopen")
+    def test_source_can_override_timeout_and_retry_budget(self, urlopen):
+        urlopen.return_value = make_response()
+
+        HttpFetcher("test", timeout=25, retries=2, backoff_seconds=0).fetch(
+            {
+                "url": "https://example.test",
+                "timeout_seconds": 7,
+                "fetch_retries": 0,
+            },
+            {},
+        )
+
+        self.assertEqual(urlopen.call_args.kwargs["timeout"], 7)
+        self.assertEqual(urlopen.call_count, 1)
+
     @patch("scripts.ai_infra_monitor.ai_infra_monitor.fetch.time.sleep")
     @patch("scripts.ai_infra_monitor.ai_infra_monitor.fetch.urllib.request.urlopen")
     def test_retries_transient_transport_errors(self, urlopen, sleep):

@@ -385,7 +385,6 @@ def triage_candidate(
             peripheral_only
             or training_only
             or non_llm_system_signal
-            or (not title_system_signal and not bindings)
             or (
                 not has_core_topic
                 and not kernel_system_signal

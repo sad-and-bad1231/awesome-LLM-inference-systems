@@ -105,9 +105,19 @@ class DiscoveryEngine:
             float(settings.get("retry_backoff_seconds", 1.0)),
         )
 
-    def discover(self, mode: str, source_ids: set[str] | None = None) -> dict:
+    def discover(
+        self,
+        mode: str,
+        source_ids: set[str] | None = None,
+        source_batch_index: int = 0,
+        source_batch_count: int = 1,
+    ) -> dict:
         if mode not in {"daily", "weekly"}:
             raise ValueError("mode must be daily or weekly")
+        if source_batch_count < 1:
+            raise ValueError("source_batch_count must be positive")
+        if source_batch_index < 0 or source_batch_index >= source_batch_count:
+            raise ValueError("source_batch_index must be within source_batch_count")
         now = datetime.now(timezone.utc)
         run_id = now.strftime("%Y%m%dT%H%M%S%fZ")
         settings = self.config["settings"]
@@ -136,6 +146,11 @@ class DiscoveryEngine:
             )
             cache = {} if has_deferred else state["sources"].get(source["id"], {})
             eligible_sources.append((source, cache))
+
+        if source_batch_count > 1:
+            batch_size = (len(eligible_sources) + source_batch_count - 1) // source_batch_count
+            start = source_batch_index * batch_size
+            eligible_sources = eligible_sources[start : start + batch_size]
 
         fetch_results: dict[str, dict] = {}
         fetch_errors: dict[str, Exception] = {}
@@ -307,7 +322,7 @@ class DiscoveryEngine:
         candidate_by_identity = {item.identity: item for item in all_candidates}
         suppressed: list[dict[str, object]] = []
         deferred_count = 0
-        suppressed_count = 0
+        suppressed_count = len(all_candidates) - len(candidates)
         for identity, record in state["records"].items():
             if record.get("run_id") == run_id and identity not in selected_identities:
                 item = candidate_by_identity.get(identity)
@@ -317,7 +332,6 @@ class DiscoveryEngine:
                     deferred_count += 1
                 else:
                     record["status"] = "suppressed"
-                    suppressed_count += 1
                     if item:
                         suppressed.append(
                             {
@@ -348,6 +362,8 @@ class DiscoveryEngine:
             "version": 1,
             "run_id": run_id,
             "mode": mode,
+            "source_batch_index": source_batch_index,
+            "source_batch_count": source_batch_count,
             "created_at": now.isoformat(),
             "candidate_count": len(candidates),
             "candidates": [item.to_dict() for item in candidates],
@@ -365,6 +381,8 @@ class DiscoveryEngine:
             {
                 "run_id": run_id,
                 "mode": mode,
+                "source_batch_index": source_batch_index,
+                "source_batch_count": source_batch_count,
                 "created_at": now.isoformat(),
                 "candidate_count": len(candidates),
                 "suppressed_count": suppressed_count,

@@ -15,7 +15,7 @@ python scripts/ai_infra_monitor/monitor.py publish
 `paper-list.md` and `industrial-llm-inference-systems.md` are separate reading lists. `ai-infra-system-abstractions.md` is only a concise navigation index.
 The public repository views also include `README.md`, `papers/README.md`, and `industry/README.md`, plus the local diagrams under `figs/`. Optional `presentation` metadata controls a small curated set of featured entries without changing the fact schema.
 
-Discovery is intentionally resumable and low-cost: source pages are scanned first, while repository inspection and core-serving triage happen in the explicit `triage` step. Use repeatable `--source-id` arguments to sweep a large conference or ecosystem source incrementally. HTTP fetches use the configurable `max_parallel_fetches` worker pool, while parsing and state updates remain deterministic in source order. GitHub-backed triage uses the configurable `max_parallel_triage` worker pool and writes results back in input order. Discovery writes only the compact run manifest; triage materializes keep/high and keep/normal records into `data/candidates.jsonl`, and queue promotes them into the paper or industry stores. The `max_candidates_per_source` setting prevents a single large DBLP or program page from monopolizing a run; high-priority overflow is deferred, while low-priority overflow is recorded as suppressed in the run manifest and does not force a repeated full fetch.
+Discovery is intentionally resumable and low-cost: source pages are scanned first, while repository inspection and core-serving triage happen in the explicit `triage` step. Use repeatable `--source-id` arguments to sweep a large conference or ecosystem source incrementally. For a broad sweep, partition eligible sources into bounded runs with `--source-batch-count N --source-batch-index I`; the run manifest records the partition so batches can be triaged independently. HTTP fetches use the configurable `max_parallel_fetches` worker pool and source-level timeout/retry overrides, while parsing and state updates remain deterministic in source order. GitHub-backed triage uses the configurable `max_parallel_triage` worker pool and writes results back in input order. Discovery writes only the compact run manifest; triage materializes keep/high and keep/normal records into `data/candidates.jsonl`, and queue promotes them into the paper or industry stores. The `max_candidates_per_source` setting prevents a single large DBLP or program page from monopolizing a run; high-priority overflow is deferred, while low-priority overflow is recorded as suppressed in the run manifest and does not force a repeated full fetch.
 
 `html_program` sources handle conference programs whose paper titles are rendered as plain text blocks or event-modal anchors. `html_bold_program` handles accepted-paper lists rendered as bold titles inside table/list items or paragraphs. `html_heading_program` handles accepted lists using `h3` paper headings, `html_usenix_accepted` extracts only USENIX `node-paper` articles and their abstracts while ignoring navigation, `html_linklings_program` handles Linklings `ttip_object_info` presentation slots, `html_icdcs_program` extracts numbered paper rows from ICDCS-style program tables while ignoring session headers, `html_prefixed_program` extracts tagged entries such as `CLD_REG_113:` from cloud program pages, `html_paragraph_anchor_program` handles paper anchors nested in paragraph records, `html_author_paragraph_program` strips author prefixes from paragraph citations, `html_classed_title_program` extracts titles from a configured CSS class, `html_paper_id_list` extracts list entries marked with `paper-id` and `paper-authors` spans, `html_dblp_titles` extracts only DBLP publication entries, `html_paper_block_program` extracts strong titles from `paper` blocks, `html_table_title_program` extracts numbered title rows with a configurable title column, and `html_embedded_full_papers` extracts full-paper titles embedded as escaped HTML in Next.js pages. URL fragments are preserved for stable per-paper identity.
 
@@ -32,6 +32,14 @@ python scripts/ai_infra_monitor/monitor.py migrate --source <legacy-jsonl>
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate
+```
+
+For the full configured source pool, run bounded weekly batches (for example, `N=6`) and process each returned run ID through the same triage/queue flow:
+
+```powershell
+0..5 | ForEach-Object {
+  python scripts/ai_infra_monitor/monitor.py discover --mode weekly --source-batch-index $_ --source-batch-count 6
+}
 ```
 
 Daily automation:

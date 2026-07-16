@@ -102,7 +102,10 @@ def command_init(args) -> int:
 def command_discover(args) -> int:
     source_ids = set(args.source_id) if args.source_id else None
     manifest = DiscoveryEngine(args.root, args.config).discover(
-        args.mode, source_ids=source_ids
+        args.mode,
+        source_ids=source_ids,
+        source_batch_index=getattr(args, "source_batch_index", 0),
+        source_batch_count=getattr(args, "source_batch_count", 1),
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0
@@ -409,6 +412,18 @@ def build_parser() -> argparse.ArgumentParser:
         "--source-id",
         action="append",
         help="limit discovery to one or more configured source IDs; repeatable",
+    )
+    discover.add_argument(
+        "--source-batch-index",
+        type=int,
+        default=0,
+        help="zero-based batch index for partitioning eligible sources",
+    )
+    discover.add_argument(
+        "--source-batch-count",
+        type=int,
+        default=1,
+        help="number of deterministic source batches to run",
     )
     discover.set_defaults(func=command_discover)
     migrate = subparsers.add_parser("migrate")

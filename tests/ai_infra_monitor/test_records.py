@@ -11,6 +11,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     compact_candidate_records,
     load_records,
     migrate_jsonl_to_split_stores,
+    normalize_record,
     render_markdown_views,
     validate_record_stores,
     validate_record_store,
@@ -124,7 +125,81 @@ class RecordStoreTests(unittest.TestCase):
             self.assertEqual(merged["primary_url"], incoming.url)
             self.assertIn("usenix-nsdi26-spring-accepted", merged["source_ids"])
             self.assertEqual(merged["summary"], incoming.summary)
-            self.assertEqual(merged["evidence"]["verification_level"], "official_source")
+        self.assertEqual(merged["evidence"]["verification_level"], "official_source")
+
+    def test_promotion_merges_known_title_aliases(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.records import promote_candidates
+
+        with tempfile.TemporaryDirectory() as tmp:
+            papers = Path(tmp) / "papers.jsonl"
+            industry = Path(tmp) / "industry.jsonl"
+            legacy = candidate_to_record(
+                Candidate(
+                    title="Cascadia: A Cascade Serving System for Large Language Models",
+                    url="",
+                    summary="Legacy Cascadia summary",
+                ),
+                "paper",
+                "verified_legacy",
+            )
+            write_records(papers, [legacy])
+            incoming = Candidate(
+                title="Cascadia: An Efficient Cascade Serving System for Large Language Models",
+                url="https://iclr.cc/virtual/2026/poster/10006705",
+                source_id="iclr26-virtual",
+                source_name="ICLR 2026 official virtual papers",
+                tier="A",
+                summary="Official ICLR abstract for Cascadia.",
+                topics=("runtime-serving",),
+            )
+
+            self.assertEqual(promote_candidates(papers, industry, [incoming]), {"papers": 0, "industry": 0})
+            merged = load_records(papers)
+            self.assertEqual(len(merged), 1)
+            self.assertEqual(merged[0]["title"], incoming.title)
+            self.assertIn("iclr26-virtual", merged[0]["source_ids"])
+            self.assertIn("Cascadia: A Cascade Serving System for Large Language Models", merged[0]["aliases"])
+
+    def test_known_osdi_title_aliases_share_canonical_ids(self):
+        old_opentela = normalize_record(
+            candidate_to_record(Candidate(title="OpenTela", url=""), "paper", "verified_legacy")
+        )
+        new_opentela = normalize_record(
+            candidate_to_record(
+                Candidate(
+                    title="OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving",
+                    url="https://example.org/opentela",
+                ),
+                "paper",
+                "queued",
+            )
+        )
+        self.assertEqual(old_opentela["canonical_id"], "paper:osdi-2026-opentela")
+        self.assertEqual(old_opentela["canonical_id"], new_opentela["canonical_id"])
+
+    def test_official_venue_replaces_stale_preprint_evidence(self):
+        record = candidate_to_record(
+            Candidate(
+                title="Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning",
+                url="https://www.usenix.org/conference/osdi26/presentation/yu-shan",
+                source_id="osdi26-usenix",
+                tier="A",
+                venue="OSDI 2026",
+            ),
+            "paper",
+            "verified_legacy",
+        )
+        record["evidence"] = {
+            "source_type": "arxiv",
+            "venue_status": "preprint",
+            "verification_level": "official_source",
+            "verified_at": "",
+        }
+
+        normalized = normalize_record(record)
+
+        self.assertEqual(normalized["evidence"]["source_type"], "conference_program")
+        self.assertEqual(normalized["evidence"]["venue_status"], "formal_conference")
 
     def test_compact_candidate_records_marks_non_actionable_items_as_drop(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -332,6 +407,16 @@ class RecordStoreTests(unittest.TestCase):
             title="Harmonia: QoS-Aware and High-Throughput Generative Inference with a Single GPU",
             url="https://example.org/paper",
             topics=("runtime-serving",),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.priority, "normal")
+
+    def test_triage_keeps_kernel_system_with_llm_evidence_in_summary(self):
+        candidate = Candidate(
+            title="MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs",
+            url="https://example.org/mpk",
+            summary="A compiler and runtime for multi-GPU LLM inference with persistent kernel execution.",
+            topics=("kernel-compiler", "runtime-serving"),
         )
         result = triage_candidate(candidate, core_only=True)
         self.assertEqual(result.priority, "normal")

@@ -263,7 +263,7 @@ KV quantization, latent state, sparsity, and quality-cost tradeoffs.
 #### Featured
 
 - **Featured:** **[AITER: AI Tensor Engine for ROCm](https://github.com/ROCm/aiter)**
-  `AMD / ROCm` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `AMD / ROCm` · `2026` · `Industry / engineering material` · `Industrial Material`
   Tags: `serving` `amd` `rocm` `compiler` `kernel` `moe` `sglang` `vllm`
   AMD AITER (AI Tensor Engine for ROCm) provides C++/Python APIs and optimized Triton, Composable Kernel, and assembly operators for ROCm inference, including attention, MoE, GEMM, quantization, and communication kernels; it integrates with vLLM and SGLang.
 - **Featured:** **[FlashMLA](https://github.com/deepseek-ai/FlashMLA)**
@@ -546,7 +546,7 @@ SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.
 #### Featured
 
 - **Featured:** **[KServe Generative Inference Stack](https://kserve.github.io/website/docs/model-serving/generative-inference/overview)**
-  `KServe` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `KServe` · `2026` · `Industry / engineering material` · `Industrial Material`
   Tags: `serving` `gpu` `kserve` `kubernetes`
   Artifact: [source](https://github.com/kserve/kserve)
   KServe official documentation covering LLMInferenceService, multi-node/multi-GPU inference, model caching, and AI Gateway integration for Kubernetes-based generative serving.
