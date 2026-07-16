@@ -101,6 +101,8 @@ class DiscoveryEngine:
         self.fetcher = fetcher or HttpFetcher(
             settings.get("user_agent", "ai-infra-monitor/1.0"),
             int(settings.get("request_timeout_seconds", 25)),
+            int(settings.get("fetch_retries", 2)),
+            float(settings.get("retry_backoff_seconds", 1.0)),
         )
 
     def discover(self, mode: str, source_ids: set[str] | None = None) -> dict:

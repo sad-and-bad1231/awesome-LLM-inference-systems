@@ -289,6 +289,17 @@ class RecordStoreTests(unittest.TestCase):
         )
         self.assertEqual(triage_candidate(generic_gpu, core_only=True).priority, "low")
 
+    def test_triage_does_not_promote_nonserving_release_from_repo_structure(self):
+        candidate = Candidate(
+            title="AITER v0.1.17",
+            url="https://github.com/ROCm/aiter/releases/tag/v0.1.17",
+            summary="Release notes for CUDA and ROCm kernels.",
+            topics=("kernel-compiler", "hardware-edge"),
+        )
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.verdict, "downrank")
+        self.assertEqual(result.priority, "low")
+
     def test_decoder_word_does_not_trigger_decode_serving_signal(self):
         candidate = Candidate(
             title="Foundation Models with Traditional Decoders",

@@ -122,7 +122,7 @@ def command_queue(args) -> int:
         for item in manifest["candidates"]
         if item.get("tier") in set(args.tiers)
         and str(item.get("triage", {}).get("priority", "normal")) in {"high", "normal"}
-        and str(item.get("triage", {}).get("verdict", "keep")) != "reject"
+        and str(item.get("triage", {}).get("verdict", "keep")) == "keep"
     ]
     resolved = paths(args.root, config)
     counts = promote_candidates(resolved["paper_db_file"], resolved["industry_db_file"], selected)

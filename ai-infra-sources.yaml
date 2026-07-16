@@ -5,6 +5,8 @@
     "weekly_limit": 800,
     "max_candidates_per_source": 80,
     "request_timeout_seconds": 60,
+    "fetch_retries": 2,
+    "retry_backoff_seconds": 1.0,
     "max_parallel_fetches": 8,
     "max_parallel_triage": 16,
     "github_repo_inspection": true,
@@ -204,8 +206,8 @@
     {
       "id": "amd-aiter-kernels",
       "name": "AMD Instinct Inference Vector Kernels (AITER)",
-      "type": "github_releases",
-      "url": "https://api.github.com/repos/ROCm/aiter/releases",
+      "type": "feed",
+      "url": "https://github.com/ROCm/aiter/releases.atom",
       "tier": "A",
       "kind": "project",
       "topics": ["kernel-compiler", "runtime-serving", "hardware-edge"],
@@ -635,7 +637,7 @@
       "url": "https://dblp.org/db/conf/osdi/osdi2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "osdi26-usenix",
@@ -681,7 +683,7 @@
       "link_prefixes": ["https://dblp.org/rec/conf/asplos/"],
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "asplos26-v2",
@@ -710,7 +712,7 @@
       "url": "https://proceedings.mlsys.org/paper_files/paper/2025",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "mlsys26-virtual",
@@ -728,7 +730,7 @@
       "url": "https://dblp.org/db/conf/sosp/sosp2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "sosp26-accepted",

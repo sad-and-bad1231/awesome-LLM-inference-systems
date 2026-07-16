@@ -71,7 +71,7 @@ def append_candidate_records(path: Path, candidates: list[Candidate]) -> int:
         item
         for item in candidates
         if str(item.triage.get("priority", "normal")) in {"high", "normal"}
-        and str(item.triage.get("verdict", "keep")) != "reject"
+        and str(item.triage.get("verdict", "keep")) == "keep"
     ]
     return append_records(path, [candidate_to_record(item) for item in selected])
 

@@ -398,16 +398,18 @@ def triage_candidate(
         ]
         if inspect_repo:
             repo_signals.update(inspect_github_repository(repo, repo_timeout_seconds))
-            if repo_signals.get("has_system_language"):
+            if repo_signals.get("has_system_language") and verdict == "keep":
                 priority = "high"
                 reasons.append("GitHub languages include systems implementation")
-            if repo_signals.get("has_build_or_kernel_path"):
+            if repo_signals.get("has_build_or_kernel_path") and verdict == "keep":
                 priority = "high"
                 reasons.append("GitHub root contains build/kernel path")
             if repo_signals.get("unavailable"):
                 reasons.append("GitHub repository metadata unavailable")
-        if repo_signals["structure_hints"]:
+        if repo_signals["structure_hints"] and verdict == "keep":
             priority = "high"
+            reasons.append("repository structure suggests systems implementation")
+        elif repo_signals["structure_hints"]:
             reasons.append("repository structure suggests systems implementation")
         else:
             repo_signals["structure_hints"] = []
