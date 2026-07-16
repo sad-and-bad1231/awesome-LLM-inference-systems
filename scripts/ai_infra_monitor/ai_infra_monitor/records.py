@@ -363,6 +363,27 @@ def append_records(path: Path, records: list[dict[str, Any]]) -> int:
     return len(appended)
 
 
+def compact_candidate_records(path: Path) -> int:
+    """Keep only actionable candidates active while preserving rejected evidence."""
+    records = load_records(path)
+    changed = 0
+    for record in records:
+        if record.get("record_type") != "candidate" or record.get("status") in {"drop", "promote"}:
+            continue
+        triage = record.get("triage", {})
+        actionable = (
+            triage.get("verdict") == "keep"
+            and triage.get("priority") in {"high", "normal"}
+        )
+        if not actionable:
+            record["status"] = "drop"
+            normalize_record(record)
+            changed += 1
+    if changed:
+        write_records(path, records)
+    return changed
+
+
 def candidate_to_record(candidate: Candidate, record_type: str = "candidate", status: str = "new") -> dict[str, Any]:
     triage = candidate.triage or triage_candidate(candidate).to_dict()
     summary = candidate.summary
@@ -833,14 +854,20 @@ def render_markdown_views(
         )
     industry_path.write_text("\n".join(industry_lines) + "\n", encoding="utf-8", newline="\n")
 
-    active_candidates = [record for record in candidate_records if record.get("status") != "drop"]
-    dropped_candidates = [record for record in candidate_records if record.get("status") == "drop"]
+    active_candidates = [
+        record for record in candidate_records
+        if record.get("status") not in {"drop", "promote"}
+    ]
+    archived_candidates = [
+        record for record in candidate_records
+        if record.get("status") in {"drop", "promote"}
+    ]
     candidate_lines = [
         "# AI Infra Candidate Pool",
         "",
         GENERATED_NOTICE,
         "",
-        f"Active candidates: {len(active_candidates)}. Dropped audit items: {len(dropped_candidates)}.",
+        f"Active candidates: {len(active_candidates)}. Archived audit items: {len(archived_candidates)}.",
         "",
         "## Active Candidates",
         "",
@@ -853,9 +880,9 @@ def render_markdown_views(
         candidate_lines.append(
             f"| {_escape(record.get('discovered') or record.get('year') or '')} | {_escape(record['source_tier'])} | {_escape(record['record_type'])} | {_escape(source)} | {_escape(record['title'])} | {_escape(topics)} | {_render_link(record)} | {_escape(record['status'])} |"
         )
-    if dropped_candidates:
-        candidate_lines.extend(["", "<details>", "<summary>Dropped audit items</summary>", "", "| Discovered | Tier | Kind | Source | Title | Topics | URL | Status |", "|---|---|---|---|---|---|---|---|"])
-        for record in dropped_candidates:
+    if archived_candidates:
+        candidate_lines.extend(["", "<details>", "<summary>Archived audit items</summary>", "", "| Discovered | Tier | Kind | Source | Title | Topics | URL | Status |", "|---|---|---|---|---|---|---|---|"])
+        for record in archived_candidates:
             source = ", ".join(record.get("source_ids", [])) or record.get("venue_or_channel", "")
             topics = ", ".join(record.get("topics", []))
             candidate_lines.append(

@@ -8,7 +8,7 @@ Keep academic papers and industry/infrastructure solutions as separate, directly
 
 - `data/papers.jsonl` is the fact source for academic papers.
 - `data/industry.jsonl` is the fact source for company solutions, open-source systems, and engineering material.
-- `data/candidates.jsonl` is staging for newly discovered records before promotion.
+- `runs/<run-id>/candidates.json` is raw staging for newly discovered records; `data/candidates.jsonl` is the triaged actionable staging store before promotion.
 - `paper-list.md`, `industrial-llm-inference-systems.md`, and `ai-infra-candidates.md` are generated views.
 - `ai-infra-system-abstractions.md` remains a compact navigation index and never becomes the primary reading list.
 
@@ -17,7 +17,7 @@ Each main record keeps the existing technical fields and adds `canonical_id`, `a
 ## Data Flow
 
 ```text
-discover -> candidates.jsonl -> triage -> queue papers/industry -> render -> validate -> finalize
+discover -> run manifest -> triage -> candidates.jsonl -> queue papers/industry -> render -> validate -> finalize
 ```
 
 Queue promotion marks the staging record as promoted and writes a typed record to the matching main store. Cross-store canonical conflicts are validation errors unless the staging record is already promoted or dropped.

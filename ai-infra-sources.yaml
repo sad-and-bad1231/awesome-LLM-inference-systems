@@ -183,7 +183,7 @@
       "url": "https://www.anthropic.com/news",
       "tier": "B",
       "kind": "industry",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "databricks-engineering-blog",
@@ -610,7 +610,7 @@
       "url": "https://dblp.org/db/conf/iclr/iclr2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "icml25-dblp",
@@ -619,7 +619,7 @@
       "url": "https://dblp.org/db/conf/icml/icml2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "neurips-dblp-index",
@@ -748,7 +748,7 @@
       "url": "https://dblp.org/db/conf/sigcomm/sigcomm2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "sigcomm26-accepted",
@@ -882,7 +882,7 @@
       "url": "https://dblp.org/db/conf/micro/micro2025.html",
       "tier": "A",
       "kind": "paper",
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "ppopp26-dblp",
@@ -1124,7 +1124,7 @@
       "tier": "A",
       "kind": "paper",
       "topics": ["runtime-serving", "state-kv", "network-disaggregation", "program-scheduling", "agent-rag", "reliability-evaluation", "hardware-edge"],
-      "modes": ["weekly"]
+      "modes": []
     },
     {
       "id": "cloud26-program",

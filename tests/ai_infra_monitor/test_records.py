@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     candidate_to_record,
+    compact_candidate_records,
     load_records,
     migrate_jsonl_to_split_stores,
     render_markdown_views,
@@ -95,6 +96,79 @@ class RecordStoreTests(unittest.TestCase):
             self.assertEqual(promote_candidates(papers, industry, candidates), {"papers": 1, "industry": 1})
             self.assertEqual(load_records(papers)[0]["record_type"], "paper")
             self.assertEqual(load_records(industry)[0]["record_type"], "project")
+
+    def test_compact_candidate_records_marks_non_actionable_items_as_drop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "candidates.jsonl"
+            records = [
+                candidate_to_record(
+                    Candidate(
+                        title="Keep Candidate",
+                        url="https://example.org/keep",
+                        triage={
+                            "verdict": "keep",
+                            "priority": "normal",
+                            "reasons": [],
+                            "repo_signals": {},
+                            "physical_eval": {},
+                        },
+                    )
+                ),
+                candidate_to_record(
+                    Candidate(
+                        title="Noise Candidate",
+                        url="https://example.org/noise",
+                        triage={
+                            "verdict": "downrank",
+                            "priority": "low",
+                            "reasons": [],
+                            "repo_signals": {},
+                            "physical_eval": {},
+                        },
+                    )
+                ),
+            ]
+            write_records(path, records)
+
+            self.assertEqual(compact_candidate_records(path), 1)
+            compacted = load_records(path)
+            self.assertEqual(compacted[0]["status"], "new")
+            self.assertEqual(compacted[1]["status"], "drop")
+
+    def test_render_candidate_view_excludes_promoted_records_from_active_table(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate = candidate_to_record(
+                Candidate(
+                    title="Promoted Candidate",
+                    url="https://example.org/promoted",
+                    triage={
+                        "verdict": "keep",
+                        "priority": "normal",
+                        "reasons": [],
+                        "repo_signals": {},
+                        "physical_eval": {},
+                    },
+                ),
+                status="promote",
+            )
+            candidates = root / "candidates.jsonl"
+            write_records(candidates, [candidate])
+            candidate_view = root / "candidates.md"
+
+            render_markdown_views(
+                root / "papers.jsonl",
+                root / "industry.jsonl",
+                candidates,
+                root / "papers.md",
+                root / "industry.md",
+                candidate_view,
+                root / "abstractions.md",
+            )
+
+            text = candidate_view.read_text(encoding="utf-8")
+            self.assertIn("Active candidates: 0.", text)
+            self.assertIn("Promoted Candidate", text)
 
     def test_validation_rejects_duplicate_titles_and_new_record_without_url(self):
         with tempfile.TemporaryDirectory() as tmp:

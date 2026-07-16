@@ -26,8 +26,8 @@ from scripts.ai_infra_monitor.ai_infra_monitor.output import (  # noqa: E402
 )
 from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (  # noqa: E402
-    append_records,
     candidate_to_record,
+    compact_candidate_records,
     migrate_jsonl_to_split_stores,
     promote_candidates,
     render_markdown_views,
@@ -100,15 +100,9 @@ def command_init(args) -> int:
 
 
 def command_discover(args) -> int:
-    config = load_config(args.config)
     source_ids = set(args.source_id) if args.source_id else None
     manifest = DiscoveryEngine(args.root, args.config).discover(
         args.mode, source_ids=source_ids
-    )
-    candidate_path = paths(args.root, config)["candidate_db_file"]
-    append_records(
-        candidate_path,
-        [candidate_to_record(Candidate.from_dict(item)) for item in manifest.get("candidates", [])],
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0
@@ -134,6 +128,14 @@ def command_queue(args) -> int:
             record = normalize_record(record)
     write_records(resolved["candidate_db_file"], candidate_records)
     print(json.dumps({"queued": sum(counts.values()), "counts": counts, "run_id": args.run_id}))
+    return 0
+
+
+def command_compact(args) -> int:
+    config = load_config(args.config)
+    candidate_path = paths(args.root, config)["candidate_db_file"]
+    changed = compact_candidate_records(candidate_path)
+    print(json.dumps({"compacted": changed, "candidate_db_file": str(candidate_path)}))
     return 0
 
 
@@ -164,11 +166,19 @@ def command_triage(args) -> int:
     path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     candidate_records = load_records(paths(args.root, config)["candidate_db_file"])
     by_identity = {candidate_to_record(Candidate.from_dict(item))["canonical_id"]: item for item in manifest.get("candidates", [])}
+    changed_existing = False
     for record in candidate_records:
         item = by_identity.get(record.get("canonical_id"))
         if item:
-            record["triage"] = item["triage"]
-    write_records(paths(args.root, config)["candidate_db_file"], candidate_records)
+            if record.get("triage") != item["triage"]:
+                record["triage"] = item["triage"]
+                changed_existing = True
+    if changed_existing:
+        write_records(paths(args.root, config)["candidate_db_file"], candidate_records)
+    append_candidate_records(
+        paths(args.root, config)["candidate_db_file"],
+        [Candidate.from_dict(item) for item in candidates],
+    )
     print(json.dumps({"triaged": len(candidates), "run_id": args.run_id}))
     return 0
 
@@ -380,6 +390,7 @@ def build_parser() -> argparse.ArgumentParser:
     queue.add_argument("--run-id", required=True)
     queue.add_argument("--tiers", nargs="+", default=["B", "C"])
     queue.set_defaults(func=command_queue)
+    subparsers.add_parser("compact").set_defaults(func=command_compact)
     report = subparsers.add_parser("report")
     report.add_argument("--run-id", required=True)
     report.set_defaults(func=command_report)

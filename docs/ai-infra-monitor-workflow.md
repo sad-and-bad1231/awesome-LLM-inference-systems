@@ -92,7 +92,7 @@ The first version is deterministic and does not call an external LLM API.
 - Metadata rules downrank algorithmic-only simulation/proof records when no hardware, kernel, runtime, serving, or framework signal appears.
 - GitHub repo inspection records language and root-path signals where available. If the API is unavailable or rate-limited, the candidate is kept and `triage.repo_signals.unavailable` is written.
 - Ecosystem bindings promote records mentioning vLLM, SGLang, TensorRT-LLM, KServe, llm-d, LMCache, Kubernetes, or Docker.
-- Low-priority records are not deleted by default; queueing only writes high/normal priority non-reject records into JSONL.
+- Raw low-priority discoveries remain in the run manifest; triage only materializes `keep` records with `high` or `normal` priority into `data/candidates.jsonl`. The `compact` command converts legacy non-actionable candidate rows to `drop` without deleting their evidence.
 - `triage.llm_review` is reserved for a future strict expert review step.
 
 ## Finalize Gate
