@@ -473,6 +473,49 @@ class _ICDCSProgramParser(HTMLParser):
         self.items.append(item)
 
 
+class _PrefixedProgramParser(HTMLParser):
+    """Extract paper titles from tagged program entries such as ``CLD_REG_1``."""
+
+    def __init__(self, base_url: str, prefix: str):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.prefix = prefix
+        self.capture = False
+        self.text: list[str] = []
+        self.items: list[dict[str, str]] = []
+        self.seen_titles: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() == "em" and not self.capture:
+            self.capture = True
+            self.text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.capture:
+            self.text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() != "em" or not self.capture:
+            return
+        value = " ".join("".join(self.text).split())
+        self.capture = False
+        self.text = []
+        if not value.startswith(self.prefix):
+            return
+        title = re.sub(r"^[^:]+:\s*", "", value).strip()
+        if not title or title in self.seen_titles:
+            return
+        self.seen_titles.add(title)
+        self.items.append(
+            {
+                "title": title,
+                "url": f"{self.base_url}#{_program_slug(title)}",
+                "published": "",
+                "summary": "",
+            }
+        )
+
+
 class _PaperIdListParser(HTMLParser):
     """Extract titles from list items marked with paper-id and paper-authors spans."""
 
@@ -719,6 +762,14 @@ def parse_html_icdcs_program(body: bytes, base_url: str) -> list[dict[str, str]]
     return parser.items
 
 
+def parse_html_prefixed_program(
+    body: bytes, base_url: str, prefix: str
+) -> list[dict[str, str]]:
+    parser = _PrefixedProgramParser(base_url, prefix)
+    parser.feed(body.decode("utf-8", errors="replace"))
+    return parser.items
+
+
 def parse_html_paper_id_list(body: bytes, base_url: str) -> list[dict[str, str]]:
     parser = _PaperIdListParser(base_url)
     parser.feed(body.decode("utf-8", errors="replace"))
@@ -873,6 +924,8 @@ def parse_source(source: dict, body: bytes) -> list[dict[str, str]]:
         return parse_html_linklings_program(body, source["url"])
     if source_type == "html_icdcs_program":
         return parse_html_icdcs_program(body, source["url"])
+    if source_type == "html_prefixed_program":
+        return parse_html_prefixed_program(body, source["url"], source.get("entry_prefix", ""))
     if source_type == "html_paper_id_list":
         return parse_html_paper_id_list(body, source["url"])
     if source_type == "html_dblp_titles":

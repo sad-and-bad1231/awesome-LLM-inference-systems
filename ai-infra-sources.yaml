@@ -1114,6 +1114,28 @@
       "modes": ["weekly"]
     },
     {
+      "id": "socc26-schedule",
+      "name": "ACM SoCC 2026 official schedule",
+      "type": "html_classed_title_program",
+      "url": "https://acmsocc.org/2026/schedule.html",
+      "title_class": "talk-title",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "network-disaggregation", "program-scheduling", "agent-rag", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
+      "id": "cloud26-program",
+      "name": "IEEE CLOUD 2026 official conference program",
+      "type": "html_prefixed_program",
+      "url": "https://services.conferences.computer.org/2026/cloud-program/",
+      "entry_prefix": "CLD_",
+      "tier": "A",
+      "kind": "paper",
+      "topics": ["runtime-serving", "state-kv", "network-disaggregation", "program-scheduling", "agent-rag", "reliability-evaluation", "hardware-edge"],
+      "modes": ["weekly"]
+    },
+    {
       "id": "tensorrt-releases",
       "name": "NVIDIA TensorRT official releases",
       "type": "feed",

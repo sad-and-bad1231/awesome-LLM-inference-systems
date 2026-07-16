@@ -21,7 +21,7 @@
 | System Abstraction | Total | Papers | Industry/Projects | Candidates | Scope |
 |---|---:|---:|---:|---:|---|
 | Memory Topology & Virtualization | 287 | 186 | 50 | 51 | KV cache、long-context state、offload、prefix/RAG cache、CXL/分层内存。 |
-| Disaggregated Interconnects | 3002 | 148 | 86 | 2768 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
+| Disaggregated Interconnects | 3130 | 158 | 86 | 2886 | P/D 分离、KV transfer、RDMA/NIXL/UCCL、collective 和跨节点路由。 |
 | State Compression & Signal Coding | 8032 | 262 | 186 | 7584 | 低比特 KV、MLA latent、稀疏/量化/编码压缩与质量-成本权衡。 |
 | Execution Compilation & Kernel Fusion | 3732 | 130 | 115 | 3487 | Triton/CUDA/HIP kernel、attention/GEMM/MoE 算子、编译和硬件后端。 |
 | Program-Aware Scheduling | 618 | 199 | 53 | 366 | agent graph、structured generation、多阶段工作流和程序感知调度。 |
@@ -67,13 +67,13 @@ _Showing up to 12 representative records; full detail stays in generated compati
 | Accelerating Block Low-Rank Foundation Model Inference on Memory-Constrained GPUs | paper | 2026 | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
 | Accelerating Masked Diffusion Large Language Models: A Survey of Efficient Inference Techniques | paper | 2026 | IJCAI-ECAI 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
 | An LLM-Guided Query-Aware Inference System for GNN Models on Large Knowledge Graphs | paper | 2026 | ICDE 2026 official accepted research papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compression] [workload:agent,edge,rag] |
+| An SLO-Driven Feedback Controller for Kubernetes Horizontal Pod Autoscaling | paper | 2026 | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:agent,edge,rag] [framework_binding:kubernetes] [metrics:slo] |
 | Aurora: A Disaggregated GPU-PNM-PIM System for High-Throughput Mixed-Length LLM Inference | paper | 2026 | ACM ICS 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [optimization_layer:compiler,kernel] [workload:edge] |
+| BYSTANDER: State-Aware Execution-Time Prediction for Heterogeneous LLM Inference Scheduling | paper | 2026 | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [workload:agent,edge,rag] |
 | Batchmon: Exploiting Serverless Functions for Cost-Effective, SLO-Driven Batch Inference Serving | paper | 2026 | Authors: Josep Calero and Marc Sanchez-Artigas | [phase:serving] [workload:agent,edge,rag] [metrics:slo] |
 | Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators | paper | 2026 | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge] [metrics:throughput] |
 | BridgeLoRA: Privacy-preserving Collaborative Skip-Layer Connectors for Efficient Transformer Inference on Edge Cloud Continuum | paper | 2026 | Authors: Vilhelm Toivonen, Xiang Su, Xiaoli Liu, Sasu Tarkoma and Pan Hui | [phase:serving] [workload:agent,edge,rag] |
 | CIMERA: Compute-in-Interconnect and Memory with Reconfigurable Precision for LLM Inference | paper | 2026 | LLM impose significant computational and memory demands, creating challenges for energy-efficient inference across platforms ranging from data centers to power-constrained edge devices. Weight precision plays a critical role in balancing inference accuracy, throughput, and energy consumption, while modern LLM workloads exhibit pronounced heterogeneity and tolerance that favors adaptive precision execution. This paper presents CIMERA, a reconfigurable-precision LLM inference accelerator that integrates compute-in-interconnect and memory to mitigate the memory wall and enable precision-aware execution. Compared to Nvidia H100, CIMERA delivers up to $25\times$ and $10\times$ higher energy efficiency for 1B and 13B models, respectively. | [optimization_layer:memory] [workload:edge] [metrics:throughput] |
-| Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding | paper | 2026 | Authors: Soongyu Choi (KAIST), Yuntae Kim (KAIST), Muyoung Son (KAIST), Joo-Young Kim (KAIST) | [phase:serving] [optimization_layer:compiler,compression,kernel] [workload:edge,moe] |
-| Characterizing LLM Inference Energy-Performance Tradeoffs across Workloads and GPU Scaling | paper | 2026 | CCGrid 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 | [phase:serving] [hardware:gpu] [workload:edge] |
 
 ### State Compression & Signal Coding
 

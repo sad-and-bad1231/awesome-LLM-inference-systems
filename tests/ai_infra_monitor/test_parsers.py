@@ -19,6 +19,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.parsers import (
     parse_html_program,
     parse_html_linklings_program,
     parse_html_icdcs_program,
+    parse_html_prefixed_program,
 )
 
 
@@ -237,6 +238,24 @@ class ParserTests(unittest.TestCase):
             [
                 "TurboInfer: Joint Model Inference in Edge Cloud Systems",
                 "Efficient KV Cache Migration for Geo-Distributed LLM Inference",
+            ],
+        )
+
+    def test_parse_html_prefixed_program_extracts_cloud_paper_entries(self):
+        body = b"""
+        <p><em>CLD_REG_113: BYSTANDER: State-Aware Execution-Time Prediction for Heterogeneous LLM Inference Scheduling</em></p>
+        <p><em>Authors for the first paper</em></p>
+        <p><em>CLD_SHT_54: Reducing Memory Requirements of LLM Inference Through Online rANS Decompression</em></p>
+        <p><b>Efficient LLM Inference</b></p>
+        """
+        items = parse_html_prefixed_program(
+            body, "https://conference.example/cloud-program/", "CLD_"
+        )
+        self.assertEqual(
+            [item["title"] for item in items],
+            [
+                "BYSTANDER: State-Aware Execution-Time Prediction for Heterogeneous LLM Inference Scheduling",
+                "Reducing Memory Requirements of LLM Inference Through Online rANS Decompression",
             ],
         )
 

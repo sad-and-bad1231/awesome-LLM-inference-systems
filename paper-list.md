@@ -9,7 +9,7 @@
 | 类别 | 条目数 | 主用途 |
 |---|---:|---|
 | Runtime、调度与服务架构 | 75 | serving runtime、SLO、batching、autoscaling、serverless、模型路由 |
-| 分离式推理、通信与 KV 传输 | 165 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
+| 分离式推理、通信与 KV 传输 | 175 | prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排 |
 | 长上下文、KV 状态与外部记忆 | 111 | 长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回 |
 | KV Cache 压缩、量化与淘汰 | 247 | KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡 |
 | 推测解码、Test-time Scaling 与生成加速 | 29 | speculative decoding、并行解码、tree drafting、reasoning 生成加速 |
@@ -28,7 +28,7 @@
 | formal_conference | 369 |
 | poster_or_workshop | 43 |
 | preprint | 209 |
-| unclassified | 334 |
+| unclassified | 344 |
 
 ## Runtime、调度与服务架构
 
@@ -279,6 +279,16 @@
 | KV Cache Reuse for Elastic LLM Inference on Edge Devices | IEEE ICDCS 2026 official main technical sessions |  | Authors: Peishuo Wang, Zhenzhe Zheng, Xiaoyao Huang, Jie Wu, Fan Wu and Guihai Chen |
 | MixServe: An Automatic Distributed Serving System for MoE Models with Hybrid Parallelism Based on Fused Communication Algorithm | IEEE ICDCS 2026 official main technical sessions |  | Authors: Bowen Zhou, Jinrui Jia, Wenhao He, Yong Zhang and Fang Dong |
 | ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving | IEEE ICDCS 2026 official main technical sessions |  | Authors: Zhenguo Chen, Pujun Ding, Yuanwei Zhu, Hao Zhang, Jing Lv, Yakun Huang and Xiuquan Qiao |
+| An SLO-Driven Feedback Controller for Kubernetes Horizontal Pod Autoscaling | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Enhancing Task-based Workflows Deployment Across the Compute Continuum with Kubernetes Multiclusters | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| InferScale: Kubernetes-Native Predictive Autoscaling for SLO-Aware AI Inference | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| MLOPSHER: A Lightweight MLOps Usher with a Minimal Operational Contract for DVC–MLflow–FastAPI on Kubernetes | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Nf-PEAK: Process-Based Energy Attribution for Nextflow Workflows on Kubernetes Clusters | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Two-level Network Bandwidth Allocation for Multi-tenant AI Clouds in Kubernetes | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| BYSTANDER: State-Aware Execution-Time Prediction for Heterogeneous LLM Inference Scheduling | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Dynamic Pipeline Inference Optimization for LLMs: Load-Aware Partitioning, Updating, and Migration | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| Reducing Memory Requirements of LLM Inference Through Online rANS Decompression | IEEE CLOUD 2026 official conference program |  | IEEE CLOUD 2026 official conference program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| SneakPeek: Data-Aware Model Selection and Scheduling for Inference Serving on the Edge | ACM SoCC 2026 official schedule |  | ACM SoCC 2026 official schedule 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 
 ## 长上下文、KV 状态与外部记忆
 
