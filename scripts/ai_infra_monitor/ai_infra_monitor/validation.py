@@ -81,6 +81,7 @@ def _public_view_errors(
         public_root / "README.md",
         public_root / "papers" / "README.md",
         public_root / "industry" / "README.md",
+        public_root / "archive" / "README.md",
     )
     for path in required_views:
         errors.extend(_common_errors(path))
@@ -144,6 +145,12 @@ def _public_view_errors(
         for section in ("## At a Glance", "## Collection Navigation", "## Evidence and Selection", "## Resource List"):
             if section not in text:
                 errors.append(ValidationError(path, 1, f"missing public collection section: {section}"))
+    archive_path = public_root / "archive" / "README.md"
+    if archive_path.exists():
+        archive_text = archive_path.read_text(encoding="utf-8")
+        for section in ("## Reading Rule", "## Academic Papers", "## Industry and Projects"):
+            if section not in archive_text:
+                errors.append(ValidationError(archive_path, 1, f"missing archive section: {section}"))
     return errors
 
 

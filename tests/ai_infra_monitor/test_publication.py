@@ -96,12 +96,15 @@ class PublicationTests(unittest.TestCase):
             readme = (root / "README.md").read_text(encoding="utf-8")
             papers_view = (root / "papers" / "README.md").read_text(encoding="utf-8")
             industry_view = (root / "industry" / "README.md").read_text(encoding="utf-8")
+            archive_view = (root / "archive" / "README.md").read_text(encoding="utf-8")
             self.assertIn("Awesome AI Inference Systems", readme)
             self.assertIn("papers/README.md", readme)
             self.assertIn("industry/README.md", readme)
             self.assertIn("Serving Paper", papers_view)
             self.assertNotIn("Hidden Candidate", papers_view)
             self.assertNotIn("Training Only", papers_view)
+            self.assertIn("Training Only", archive_view)
+            self.assertIn("Archive", archive_view)
             self.assertIn("Formal Conference", papers_view)
             self.assertIn("Serving Project", industry_view)
             self.assertIn("Collection Navigation", papers_view)
@@ -112,6 +115,26 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("Evidence Ladder", readme)
             self.assertIn("Open-source project", industry_view)
             self.assertIn("generated from data/papers.jsonl", papers_view)
+
+    def test_mainline_records_are_sorted_by_foundation_then_frontier(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            foundation = _record("paper", "FlashAttention: IO-Aware Attention", "算子、编译与硬件加速")
+            foundation["year"] = "2022"
+            frontier = _record("paper", "Adaptive Fused Kernel for LLM Serving", "算子、编译与硬件加速")
+            papers.write_text("\n".join(json.dumps(item) for item in (frontier, foundation)) + "\n", encoding="utf-8")
+            industry.write_text("", encoding="utf-8")
+
+            render_public_repository(papers, industry, root)
+
+            papers_view = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            self.assertLess(
+                papers_view.index("FlashAttention: IO-Aware Attention"),
+                papers_view.index("Adaptive Fused Kernel for LLM Serving"),
+            )
 
     def test_presentation_metadata_controls_featured_order(self):
         with tempfile.TemporaryDirectory() as tmp:

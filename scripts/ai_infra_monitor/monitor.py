@@ -29,6 +29,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (  # noqa: E402
     candidate_to_record,
     compact_candidate_records,
+    curate_record_stores,
     migrate_jsonl_to_split_stores,
     promote_candidates,
     render_markdown_views,
@@ -303,6 +304,9 @@ def command_migrate(args) -> int:
 def command_render(args) -> int:
     config = load_config(args.config)
     resolved = paths(args.root, config)
+    curate_record_stores(
+        resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
+    )
     render_markdown_views(
         resolved["paper_db_file"],
         resolved["industry_db_file"],
@@ -329,7 +333,17 @@ def command_publish(args) -> int:
         resolved["industry_db_file"],
         args.root,
     )
-    print(json.dumps({"published_views": ["README.md", "papers/README.md", "industry/README.md"]}))
+    print(json.dumps({"published_views": ["README.md", "papers/README.md", "industry/README.md", "archive/README.md"]}))
+    return 0
+
+
+def command_curate(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    counts = curate_record_stores(
+        resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
+    )
+    print(json.dumps({"curated": counts}, ensure_ascii=False))
     return 0
 
 
@@ -368,6 +382,9 @@ def command_validate(args) -> int:
 def command_finalize(args) -> int:
     config = load_config(args.config)
     resolved = paths(args.root, config)
+    curate_record_stores(
+        resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
+    )
     jsonl_errors = validate_record_stores(
         resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
     )
@@ -530,6 +547,7 @@ def build_parser() -> argparse.ArgumentParser:
     migrate = subparsers.add_parser("migrate")
     migrate.add_argument("--source", type=Path, required=True, help="legacy unified JSONL source to split")
     migrate.set_defaults(func=command_migrate)
+    subparsers.add_parser("curate", help="backfill guide-based reading scope and priority metadata").set_defaults(func=command_curate)
     render = subparsers.add_parser("render")
     render.set_defaults(func=command_render)
     publish = subparsers.add_parser("publish")

@@ -6,6 +6,7 @@ import re
 from typing import Any
 from urllib.parse import quote
 
+from .curation import curation_for, curation_sort_key, is_public_mainline
 from .records import ABSTRACTIONS, load_records
 
 
@@ -115,7 +116,7 @@ def _tags(record: dict[str, Any]) -> str:
     return " ".join(f"`{_escape(value)}`" for value in values[:8])
 
 
-def _sort_key(record: dict[str, Any]) -> tuple[int, int, int, str]:
+def _sort_key(record: dict[str, Any]) -> tuple[int, int, int, int, str]:
     evidence_rank = {
         "formal_conference": 0,
         "industrial_material": 1,
@@ -127,9 +128,11 @@ def _sort_key(record: dict[str, Any]) -> tuple[int, int, int, str]:
         year = -int(record.get("year") or 0)
     except (TypeError, ValueError):
         year = 0
+    curation = curation_for(record)
     return (
+        0 if curation.get("scope") == "core" else 1,
+        {"foundation": 0, "frontier": 1, "supporting": 2}.get(curation.get("priority"), 3),
         evidence_rank.get(record.get("evidence", {}).get("venue_status"), 4),
-        0 if record.get("source_tier") == "A" else 1,
         year,
         str(record.get("title", "")),
     )
@@ -152,7 +155,7 @@ def _public_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
             for record in load_records(path)
             if record.get("record_type") in types
             and record.get("status") not in EXCLUDED_STATUSES
-            and _is_serving_mainline(record)
+            and is_public_mainline(record)
         ],
         key=_sort_key,
     )
@@ -187,6 +190,19 @@ def _featured_records(records: list[dict[str, Any]], limit: int) -> list[dict[st
         if len(selected) >= limit:
             break
     return selected[:limit]
+
+
+def _archive_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
+    return sorted(
+        [
+            record
+            for record in load_records(path)
+            if record.get("record_type") in types
+            and record.get("status") not in EXCLUDED_STATUSES
+            and not is_public_mainline(record)
+        ],
+        key=curation_sort_key,
+    )
 
 
 def _anchor(label: str) -> str:
@@ -291,7 +307,7 @@ def _render_collection(
         "",
         f"![AI inference system map]({image})",
         "",
-        "> **How to read this page.** Start with the featured entry points, then use the abstraction sections to compare mechanism, artifact, hardware, and serving evidence.",
+        "> **How to read this page.** Start with the featured entry points, then read foundation and frontier work before supporting records. Adjacent and archived material is kept in the [archive](../archive/README.md).",
         "",
         "## At a Glance",
         "",
@@ -318,7 +334,9 @@ def _render_collection(
             "| Venue / channel | What kind of source it is, not a quality score. |",
             "| Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |",
             "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
-            "| Featured | A small editorial starting set; all records remain below. |",
+            "| Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |",
+            "| Scope | Only `core` records are shown here; adjacent/archive material is in the archive page. |",
+            "| Featured | A small editorial starting set; all core records remain below. |",
             "",
             "## Resource List",
             "",
@@ -340,6 +358,53 @@ def _render_collection(
                 lines.extend(["#### Full Resource List", ""])
                 lines.extend(_entry(record, industry=industry) for record in remaining)
         lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _render_archive(
+    papers: list[dict[str, Any]], industry: list[dict[str, Any]]
+) -> str:
+    lines = [
+        "# AI Infra Adjacent and Archive",
+        "",
+        GENERATED_NOTICE,
+        "",
+        "本页集中存放偏离 serving 主线或暂不适合作为优先阅读入口的记录。事实、来源和摘要仍然保留；当 workload 或系统证据变强时，可重新进入主线。",
+        "",
+        "[Home](../README.md) · [Academic papers](../papers/README.md) · [Industry systems](../industry/README.md)",
+        "",
+        "## Reading Rule",
+        "",
+        "`adjacent` 表示与 AI Infra 有关但不直接改变 LLM serving 执行路径；`archive` 表示没有 guide.md 定义的 kernel/serving 主线信号。归档不是事实否定，也不是永久删除。",
+        "",
+        "| Scope | Papers | Industry / Projects |",
+        "|---|---:|---:|",
+        f"| adjacent | {sum(curation_for(record).get('scope') == 'adjacent' for record in papers)} | {sum(curation_for(record).get('scope') == 'adjacent' for record in industry)} |",
+        f"| archive | {sum(curation_for(record).get('scope') == 'archive' for record in papers)} | {sum(curation_for(record).get('scope') == 'archive' for record in industry)} |",
+    ]
+    for label, records, is_industry in (
+        ("Academic Papers", papers, False),
+        ("Industry and Projects", industry, True),
+    ):
+        lines.extend([
+            "",
+            f"## {label}",
+            "",
+            "| Scope | Priority | Year | Title | Channel / Organization | Reason |",
+            "|---|---|---:|---|---|---|",
+        ])
+        if not records:
+            lines.append("| - | - | - | No archived records | - | - |")
+            continue
+        for record in records:
+            curation = curation_for(record)
+            target = _url(record)
+            title = f"[{_escape(record.get('title'))}]({target})" if target else _escape(record.get("title"))
+            channel = record.get("orgs") if is_industry else record.get("venue_or_channel")
+            reason = "; ".join(curation.get("reasons", []))
+            lines.append(
+                f"| {_escape(curation.get('scope'))} | {_escape(curation.get('priority'))} | {_escape(record.get('year'))} | {title} | {_escape(channel)} | {_escape(reason)} |"
+            )
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -365,7 +430,7 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
         "",
         "## Overview",
         "",
-        "This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability.",
+        "This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability. The public reading path follows guide.md and keeps peripheral records in the archive.",
         "",
         "We prioritize work with system-level mechanisms, real hardware or production evidence, and clear connections to serving ecosystems such as vLLM, SGLang, TensorRT-LLM, Kubernetes, and LMCache.",
         "",
@@ -381,7 +446,8 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
         "|---|---|",
         "| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |",
         "| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |",
-        "| [Industry systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |",
         "| [Machine facts](data/papers.jsonl) | The JSONL records used to regenerate every public view. |",
         "",
         "## Contents",
@@ -389,7 +455,8 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
         "| Start here | Purpose |",
         "|---|---|",
         "| [Academic Papers](papers/README.md) | Conference, poster, workshop, preprint, and legacy-import paper records. |",
-        "| [Industry & Open-Source Systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [Industry & Open-Source Systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |",
+        "| [Adjacent / Archive](archive/README.md) | Related but non-mainline records, preserved with reasons and links. |",
         "| [System Abstraction Overview](ai-infra-system-abstractions.md) | Cross-collection taxonomy and full system map. |",
         "| [Contribution Guide](CONTRIBUTING.md) | JSONL facts, evidence policy, and generated-view workflow. |",
         "",
@@ -481,8 +548,11 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
 def render_public_repository(papers_path: Path, industry_path: Path, output_root: Path) -> None:
     papers = _public_records(papers_path, {"paper"})
     industry = _public_records(industry_path, {"industry", "project"})
+    archived_papers = _archive_records(papers_path, {"paper"})
+    archived_industry = _archive_records(industry_path, {"industry", "project"})
     (output_root / "papers").mkdir(parents=True, exist_ok=True)
     (output_root / "industry").mkdir(parents=True, exist_ok=True)
+    (output_root / "archive").mkdir(parents=True, exist_ok=True)
     (output_root / "README.md").write_text(_render_root(papers, industry), encoding="utf-8", newline="\n")
     (output_root / "papers" / "README.md").write_text(
         _render_collection(
@@ -503,6 +573,11 @@ def render_public_repository(papers_path: Path, industry_path: Path, output_root
             industry=True,
             image="../figs/ai-inference-system-map.png",
         ),
+        encoding="utf-8",
+        newline="\n",
+    )
+    (output_root / "archive" / "README.md").write_text(
+        _render_archive(archived_papers, archived_industry),
         encoding="utf-8",
         newline="\n",
     )

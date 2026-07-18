@@ -13,6 +13,7 @@ from typing import Any
 from .identity import normalize_title, record_identity
 from .models import Candidate
 from .triage import triage_candidate
+from .curation import CURATION_VERSION, classify_record, curation_sort_key, is_public_mainline
 
 
 ABSTRACTIONS = (
@@ -208,6 +209,9 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized.setdefault("display_category", "")
     normalized.setdefault("topics", [])
     normalized.setdefault("discovered", "")
+    current_curation = normalized.get("curation")
+    if not isinstance(current_curation, dict) or current_curation.get("version") != CURATION_VERSION:
+        normalized["curation"] = classify_record(normalized)
     return _canonical_fields(normalized)
 
 
@@ -373,6 +377,25 @@ def write_records(path: Path, records: list[dict[str, Any]]) -> None:
             if exc.errno not in {errno.EINVAL, errno.EACCES, errno.EBUSY} or attempt == 4:
                 raise
             time.sleep(0.2 * (attempt + 1))
+
+
+def curate_record_stores(
+    paper_path: Path, industry_path: Path, candidate_path: Path
+) -> dict[str, int]:
+    """Backfill deterministic reading metadata without changing source facts."""
+    counts: dict[str, int] = {}
+    for label, path in (
+        ("papers", paper_path),
+        ("industry", industry_path),
+        ("candidates", candidate_path),
+    ):
+        records = load_records(path)
+        normalized = [normalize_record(record) for record in records]
+        changed = sum(before != after for before, after in zip(records, normalized))
+        if changed:
+            write_records(path, normalized)
+        counts[label] = changed
+    return counts
 
 
 def _merge_record_evidence(existing: dict[str, Any], incoming: dict[str, Any]) -> bool:
@@ -748,6 +771,21 @@ def validate_record_store(path: Path) -> list[RecordValidationError]:
                     errors.append(RecordValidationError(path, number, "presentation.order must be a non-negative integer"))
                 if "blurb" in presentation and not isinstance(presentation["blurb"], str):
                     errors.append(RecordValidationError(path, number, "presentation.blurb must be a string"))
+        curation = record.get("curation")
+        if curation is not None:
+            if not isinstance(curation, dict):
+                errors.append(RecordValidationError(path, number, "invalid curation metadata"))
+            else:
+                if curation.get("version") != CURATION_VERSION:
+                    errors.append(RecordValidationError(path, number, "unsupported curation version"))
+                if curation.get("scope") not in {"core", "adjacent", "archive"}:
+                    errors.append(RecordValidationError(path, number, "invalid curation.scope"))
+                if curation.get("priority") not in {"foundation", "frontier", "supporting"}:
+                    errors.append(RecordValidationError(path, number, "invalid curation.priority"))
+                if not isinstance(curation.get("reasons"), list) or not all(
+                    isinstance(reason, str) for reason in curation["reasons"]
+                ):
+                    errors.append(RecordValidationError(path, number, "invalid curation.reasons"))
         if record.get("system_abstraction_primary") not in ABSTRACTIONS:
             errors.append(RecordValidationError(path, number, "invalid system_abstraction_primary"))
         tags = record.get("technical_tags", {})
@@ -799,11 +837,16 @@ def _render_link(record: dict[str, Any]) -> str:
 
 
 def _paper_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [
-        record
-        for record in records
-        if record.get("record_type") == "paper" and record.get("status") not in {"new", "keep", "drop", "promote"}
-    ]
+    return sorted(
+        [
+            record
+            for record in records
+            if record.get("record_type") == "paper"
+            and record.get("status") not in {"new", "keep", "drop", "promote"}
+            and is_public_mainline(record)
+        ],
+        key=curation_sort_key,
+    )
 
 
 def _candidate_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -815,11 +858,16 @@ def _candidate_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _industry_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [
-        record
-        for record in records
-        if record.get("record_type") in {"industry", "project"} and record.get("status") not in {"new", "keep", "drop", "promote"}
-    ]
+    return sorted(
+        [
+            record
+            for record in records
+            if record.get("record_type") in {"industry", "project"}
+            and record.get("status") not in {"new", "keep", "drop", "promote"}
+            and is_public_mainline(record)
+        ],
+        key=curation_sort_key,
+    )
 
 
 def _record_year(record: dict[str, Any]) -> int:
@@ -941,17 +989,16 @@ def render_markdown_views(
     active_candidates = [
         record for record in candidate_records
         if record.get("status") not in {"drop", "promote"}
+        and is_public_mainline(record)
+        and record.get("triage", {}).get("priority") in {"high", "normal"}
     ]
-    archived_candidates = [
-        record for record in candidate_records
-        if record.get("status") in {"drop", "promote"}
-    ]
+    archived_candidates = [record for record in candidate_records if record not in active_candidates]
     candidate_lines = [
         "# AI Infra Candidate Pool",
         "",
         GENERATED_NOTICE,
         "",
-        f"Active candidates: {len(active_candidates)}. Archived audit items: {len(archived_candidates)}.",
+        f"Active mainline candidates: {len(active_candidates)}. Backlog and archived audit items: {len(archived_candidates)}.",
         "",
         "## Active Candidates",
         "",
@@ -965,7 +1012,7 @@ def render_markdown_views(
             f"| {_escape(record.get('discovered') or record.get('year') or '')} | {_escape(record['source_tier'])} | {_escape(record['record_type'])} | {_escape(source)} | {_escape(record['title'])} | {_escape(topics)} | {_render_link(record)} | {_escape(record['status'])} |"
         )
     if archived_candidates:
-        candidate_lines.extend(["", "<details>", "<summary>Archived audit items</summary>", "", "| Discovered | Tier | Kind | Source | Title | Topics | URL | Status |", "|---|---|---|---|---|---|---|---|"])
+        candidate_lines.extend(["", "<details>", "<summary>Backlog and archived audit items</summary>", "", "| Discovered | Tier | Kind | Source | Title | Topics | URL | Status |", "|---|---|---|---|---|---|---|---|"])
         for record in archived_candidates:
             source = ", ".join(record.get("source_ids", [])) or record.get("venue_or_channel", "")
             topics = ", ".join(record.get("topics", []))

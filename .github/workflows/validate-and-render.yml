@@ -22,4 +22,4 @@ jobs:
       - name: Validate data and generated files
         run: python scripts/ai_infra_monitor/monitor.py validate
       - name: Ensure generated views are committed
-        run: git diff --exit-code -- README.md papers/README.md industry/README.md paper-list.md industrial-llm-inference-systems.md ai-infra-candidates.md ai-infra-system-abstractions.md figs/ai-inference-systems-cover.png figs/ai-inference-system-map.png figs/ai-inference-systems-cover.svg figs/ai-inference-system-map.svg
+        run: git diff --exit-code -- README.md papers/README.md industry/README.md archive/README.md paper-list.md industrial-llm-inference-systems.md ai-infra-candidates.md ai-infra-system-abstractions.md figs/ai-inference-systems-cover.png figs/ai-inference-system-map.png figs/ai-inference-systems-cover.svg figs/ai-inference-system-map.svg

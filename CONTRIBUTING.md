@@ -23,7 +23,9 @@ Add one JSONL record to the matching fact source:
 - `data/industry.jsonl` for companies, open-source projects, and engineering material
 - `data/candidates.jsonl` only for unverified discovery items
 
-Every record must pass the local schema validator and include a primary URL, evidence metadata, canonical identity, technical tags, and a concise factual summary. Do not edit generated `README.md`, `papers/README.md`, or `industry/README.md` directly.
+Every record must pass the local schema validator and include a primary URL, evidence metadata, canonical identity, technical tags, and a concise factual summary. Do not edit generated `README.md`, `papers/README.md`, `industry/README.md`, or `archive/README.md` directly.
+
+The deterministic curation layer adds `curation.scope` and `curation.priority` from `guide.md`. Core records are the public reading path; adjacent and archive records remain available in `archive/README.md` for audit. Run `curate` after changing the guide or curation rules, then render the views.
 
 For a small number of high-value public entry points, an optional `presentation` object may contain `featured`, a non-negative `order`, and a short `blurb`. These fields control display only and must not replace evidence or factual metadata.
 
@@ -47,6 +49,7 @@ Keep the README focused on navigation and evidence. Do not add a new visual pane
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate
+python scripts/ai_infra_monitor/monitor.py curate
 python -m unittest discover -s tests -p "test_*.py"
 ```
 

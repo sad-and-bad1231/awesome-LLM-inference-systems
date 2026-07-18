@@ -1,4 +1,5 @@
 import errno
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,6 +10,7 @@ from unittest.mock import patch
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     candidate_to_record,
     compact_candidate_records,
+    curate_record_stores,
     load_records,
     migrate_jsonl_to_split_stores,
     normalize_record,
@@ -25,6 +27,63 @@ from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
+    def test_curate_record_stores_backfills_existing_jsonl_records(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paper = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidate = root / "candidates.jsonl"
+            record = candidate_to_record(
+                Candidate(
+                    title="FlashAttention: IO-Aware Attention",
+                    url="https://example.org/flashattention",
+                    summary="An IO-aware attention kernel for LLM inference.",
+                ),
+                "paper",
+                "verified_legacy",
+            )
+            record.pop("curation")
+            paper.write_text(json.dumps(record) + "\n", encoding="utf-8")
+            industry.write_text("", encoding="utf-8")
+            candidate.write_text("", encoding="utf-8")
+
+            self.assertEqual(curate_record_stores(paper, industry, candidate), {"papers": 1, "industry": 0, "candidates": 0})
+            self.assertEqual(load_records(paper)[0]["curation"]["priority"], "foundation")
+
+    def test_normalize_record_adds_guide_curation_metadata(self):
+        record = candidate_to_record(
+            Candidate(
+                title="FlashAttention: Fast and Memory-Efficient Exact Attention",
+                url="https://example.org/flashattention",
+                summary="An IO-aware attention kernel for LLM inference.",
+                topics=("kernel-compiler",),
+            ),
+            "paper",
+            "verified_legacy",
+        )
+
+        self.assertEqual(record["curation"]["scope"], "core")
+        self.assertEqual(record["curation"]["priority"], "foundation")
+        self.assertIn("version", record["curation"])
+
+    def test_validator_rejects_invalid_curation_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / "records.jsonl"
+            record = candidate_to_record(
+                Candidate(title="Serving Paper", url="https://example.org/serving"),
+                "paper",
+                "verified_legacy",
+            )
+            record["curation"] = {"version": "wrong", "scope": "unknown", "priority": "low", "reasons": "nope"}
+            write_records(path, [record])
+
+            messages = "\n".join(error.message for error in validate_record_store(path))
+            self.assertIn("unsupported curation version", messages)
+            self.assertIn("invalid curation.scope", messages)
+            self.assertIn("invalid curation.priority", messages)
+            self.assertIn("invalid curation.reasons", messages)
+
     def test_write_records_retries_transient_windows_file_lock(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "records.jsonl"
@@ -271,7 +330,7 @@ class RecordStoreTests(unittest.TestCase):
             )
 
             text = candidate_view.read_text(encoding="utf-8")
-            self.assertIn("Active candidates: 0.", text)
+            self.assertIn("Active mainline candidates: 0.", text)
             self.assertIn("Promoted Candidate", text)
 
     def test_validation_rejects_duplicate_titles_and_new_record_without_url(self):

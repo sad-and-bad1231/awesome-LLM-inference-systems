@@ -22,7 +22,7 @@ class CliTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "render", "publish", "validate", "finalize", "status"):
+        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "curate", "render", "publish", "validate", "finalize", "status"):
             self.assertIn(command, result.stdout)
 
     def test_discover_keeps_new_candidates_in_run_manifest_until_triage(self):

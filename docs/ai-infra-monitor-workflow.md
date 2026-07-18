@@ -12,7 +12,7 @@ The retired long-COT side list is no longer part of the active workflow.
 
 ## Schema Policy
 
-Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history`, `evidence`, `record_type`, `title`, `venue_or_channel`, `year`, `orgs`, `summary`, `source_tier`, `primary_url`, `artifact_url`, `source_ids`, `status`, `system_abstraction_primary`, `system_abstraction_secondary`, `technical_tags`, and `triage`.
+Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history`, `evidence`, `record_type`, `title`, `venue_or_channel`, `year`, `orgs`, `summary`, `source_tier`, `primary_url`, `artifact_url`, `source_ids`, `status`, `system_abstraction_primary`, `system_abstraction_secondary`, `technical_tags`, and `triage`. Records also receive deterministic `curation` metadata: `scope` (`core|adjacent|archive`) and `priority` (`foundation|frontier|supporting`).
 
 `system_abstraction_primary` must be one of:
 
@@ -50,7 +50,7 @@ For a legacy unified JSONL export, run `monitor.py migrate --source <legacy-json
 
 ## Daily Automation
 
-Goal: collect signals and queue high/normal-priority candidates without hand-editing generated Markdown.
+Goal: collect signals and queue high/normal-priority candidates without hand-editing generated Markdown. Reading attention is separate: only `core` records enter the main public views; `adjacent` and `archive` records are retained in `archive/README.md`.
 
 Model policy: use GPT-5.6 Luna with medium reasoning. Daily work is mostly scripted discovery, triage, render, and validation, so the cheapest GPT-5.6 model is the default.
 
@@ -58,6 +58,7 @@ Model policy: use GPT-5.6 Luna with medium reasoning. Daily work is mostly scrip
 python scripts/ai_infra_monitor/monitor.py discover --mode daily
 python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py curate
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate
@@ -113,7 +114,7 @@ The first version is deterministic and does not call an external LLM API.
 
 ## Finalize Gate
 
-`finalize` runs in this order:
+`curate` backfills or refreshes guide-based reading scope and priority without changing source facts. `finalize` runs in this order:
 
 1. Validate JSONL schema, duplicates, enums, URLs, and candidate/verified conflicts.
 2. Render all internal Markdown views from JSONL.

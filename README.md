@@ -2,7 +2,7 @@
 
 <!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
 
-[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-447-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-121-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-223-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
+[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-382-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-90-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-199-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
 ![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
 
@@ -12,7 +12,7 @@ A curated, evidence-aware collection of LLM inference serving papers, industrial
 
 ## Overview
 
-This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability.
+This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability. The public reading path follows guide.md and keeps peripheral records in the archive.
 
 We prioritize work with system-level mechanisms, real hardware or production evidence, and clear connections to serving ecosystems such as vLLM, SGLang, TensorRT-LLM, Kubernetes, and LMCache.
 
@@ -28,7 +28,8 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 |---|---|
 | [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |
 | [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |
-| [Industry systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |
+| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
+| [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |
 | [Machine facts](data/papers.jsonl) | The JSONL records used to regenerate every public view. |
 
 ## Contents
@@ -36,7 +37,8 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 | Start here | Purpose |
 |---|---|
 | [Academic Papers](papers/README.md) | Conference, poster, workshop, preprint, and legacy-import paper records. |
-| [Industry & Open-Source Systems](industry/README.md) | Runtimes, operators, hardware stacks, transfer layers, and production material. |
+| [Industry & Open-Source Systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
+| [Adjacent / Archive](archive/README.md) | Related but non-mainline records, preserved with reasons and links. |
 | [System Abstraction Overview](ai-infra-system-abstractions.md) | Cross-collection taxonomy and full system map. |
 | [Contribution Guide](CONTRIBUTING.md) | JSONL facts, evidence policy, and generated-view workflow. |
 
@@ -44,12 +46,12 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Papers | Industry systems | Formal paper venues | System abstractions |
 |---:|---:|---:|---:|
-| 447 | 121 | 223 | 6 |
+| 382 | 90 | 199 | 6 |
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 447 | Formal Conference: 78, Formal Conference · Legacy Import: 145, Poster / Workshop: 9, Poster / Workshop · Legacy Import: 28, Preprint: 3, Preprint · Legacy Import: 156, Unclassified · Legacy Import: 28 |
-| Industry / open-source systems | 121 | Industrial Material: 2, Industrial Material · Legacy Import: 119 |
+| Academic papers | 382 | Formal Conference: 71, Formal Conference · Legacy Import: 128, Poster / Workshop: 7, Poster / Workshop · Legacy Import: 22, Preprint: 3, Preprint · Legacy Import: 127, Unclassified · Legacy Import: 24 |
+| Industry / open-source systems | 90 | Industrial Material: 1, Industrial Material · Legacy Import: 89 |
 
 ## Reading Paths
 
@@ -65,12 +67,12 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | System abstraction | Records | What it covers | Entry points |
 |---|---:|---|---|
-| **KV State & Memory** | 176 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
-| **P/D Disaggregation & KV Transfer** | 54 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
-| **KV Compression & Low-Bit State** | 92 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
-| **Kernel & Compiler** | 79 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
-| **Runtime & Serving** | 144 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
-| **Reliability & Benchmarks** | 23 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
+| **KV State & Memory** | 149 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
+| **P/D Disaggregation & KV Transfer** | 49 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
+| **KV Compression & Low-Bit State** | 66 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
+| **Kernel & Compiler** | 76 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
+| **Runtime & Serving** | 117 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
+| **Reliability & Benchmarks** | 15 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
 
 ## System Map
 
@@ -139,10 +141,10 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
   `IBM / Red Hat / llm-d` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
   Tags: `kubernetes` `llm-d`
   Kubernetes-native distributed LLM inference，把 vLLM、LMCache、Inference Gateway、KV-aware scheduling 组合起来。
-- **[LMCache](https://arxiv.org/abs/2510.09665)**
-  `LMCache 社区 / 企业采用` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
-  Tags: `gpu` `kv-cache` `rag` `lmcache`
-  将 KV cache 抽成独立层，支持跨 engine/query 复用和 GPU/CPU/storage/network 多层编排。
+- **[Mooncake](https://www.usenix.org/conference/fast25/presentation/qin)**
+  `Moonshot AI + Tsinghua` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  Tags: `serving`
+  以 KVCache 为中心做分离式 LLM serving 架构，面向长上下文在线服务。
 
 ## Evaluation Lens
 
