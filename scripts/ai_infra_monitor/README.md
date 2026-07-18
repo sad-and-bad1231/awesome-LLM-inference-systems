@@ -48,6 +48,7 @@ Daily automation:
 python scripts/ai_infra_monitor/monitor.py discover --mode daily
 python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py curate
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py validate
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit

@@ -79,6 +79,7 @@ Model policy: use GPT-5.6 Terra with high reasoning. Weekly work includes more j
 }
 python scripts/ai_infra_monitor/monitor.py triage --run-id <run-id>
 python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
+python scripts/ai_infra_monitor/monitor.py curate
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py publish
 python scripts/ai_infra_monitor/monitor.py validate

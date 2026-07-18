@@ -81,40 +81,40 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 ## Featured Papers
 
 - **[FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang)**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `gpu` `npu` `compiler` `kernel` `agent` `edge` `vllm`
   Artifact: [source](https://www.usenix.org/system/files/nsdi26-wu-bingyang.pdf)
   以输出 token 为粒度实现可抢占的分布式 LLM serving，提出 skip-join 多级反馈队列，并主动在 GPU/主机内存间搬运中间状态；官方 NSDI 2026 页面报告相对 vLLM 吞吐最高提升 6.1 倍。
 - **[HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou)**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `gpu` `agent` `rag` `latency`
   Artifact: [source](https://www.usenix.org/system/files/conference/nsdi26/nsdi26spring_lou_prepub.pdf)
   通过跨服务器预分发模型、重叠 cold-start 阶段、GPU 间 worker 放置和 pipeline consolidation，降低公有云 serverless LLM serving 冷启动；官方 NSDI 2026 页面报告冷启动延迟降低 1.7–4.7 倍，SLO attainment 提升 1.43–1.74 倍。
 - **QoServe: Breaking the Silos of LLM Inference Serving**
-  `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving`
   QoServe 统一管理原本割裂的 LLM serving 资源池，以减少不同服务等级和工作负载之间的资源孤岛。
 - **[PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `prefill` `serving` `gpu` `scheduler` `scheduling` `multi-turn` `long-context` `sglang`
   Artifact: [source](https://arxiv.org/abs/2601.11589)
   PLA-Serve（预印本标题 LAPS）在 prefill 阶段按 prompt 长度做双队列与时空分离：长 prefill 与短 prefill 隔离，并对短请求采用 length-aware batching 与 CUDA Graph clustering；在真实多轮 workload 上，相较 vanilla SGLang prefill 延迟降低超过 30%，SLO 违规降低 28%，多 GPU 下进一步降低 12%，Qwen2.5-32B prefill 吞吐提升 35%。
 - **[MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/forum?id=1JyePezdlF)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `prefill` `decode` `gpu` `cuda` `compression` `kv-cache` `long-context` `vllm`
   Artifact: [source](https://arxiv.org/abs/2506.02006)
   MorphServe 以反馈控制方式在运行时联合调整量化层和 KV cache 容量：高压时异步换入低精度层并弹性扩缩 KVC，压力恢复后再切回；在 Vicuna/Llama 和真实 workload 上平均 SLO 违规降低 92.45%，P95 TTFT 相较全精度 serving 改善 2.2x–3.9x，并保持生成质量。
 - **[AIRS: Scaling Live Inference in Resource Constrained Environments](https://openreview.net/forum?id=g1RWik4Gy1)**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving`
   AIRS 面向资源受限的在线推理流水线动态分配加速器与任务优先级，提高多阶段 LLM 评估/预测服务的吞吐和延迟稳定性。
 - **[Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration](https://www.usenix.org/conference/osdi26/presentation/du)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `gpu` `goodput`
   Artifact: [source](https://github.com/MLSysU/EcoServe)
   提出面向普通 GPU 集群的 partially disaggregated serving，通过时间维度 P/D 分离、跨实例循环协作、adaptive routing 和 mitosis scaling 缓解 prefill-decode 干扰；在 32 张 NVIDIA L20 以太网集群上，相比 vLLM、Sarathi、DistServe、MoonCake 等基线 goodput 最高提升 2.51 倍，并开源 EcoServe。
 - **[SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal)**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference`
+  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `kv-cache` `memory` `agent` `multi-turn` `vllm` `latency` `throughput`
   Artifact: [source](https://www.usenix.org/system/files/nsdi26-agarwal.pdf)
   SYMPHONY 将计算与 KV cache 存储解耦为面向多轮会话的 disaggregated memory layer，通过 advisory prefetch、priority-based KV 管理和 cooperative memory management 避开关键路径；在 LLaMA/ShareGPT/Burst-GPT 上相较 vLLM 将端到端延迟降低 2.4x，并在小幅延迟增加下服务 4x 请求。
@@ -122,27 +122,27 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 ## Featured Industry Systems
 
 - **[Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/)**
-  `NVIDIA` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `NVIDIA` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
   Tags: `routing` `serving` `kv-cache`
   分布式/分离式推理框架，组合 disaggregated serving、KV cache-aware routing、KV offloading，并用 NIXL 做低延迟 KV 传输。
 - **[NIXL / KV cache transfer](https://docs.nvidia.com/dynamo/archive/0.8.0/backends/trtllm/kv-cache-transfer.html)**
-  `NVIDIA` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `NVIDIA` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
   Tags: `decode` `prefill` `kv-cache`
   面向推理数据移动的传输层，在 prefill/decode 分离时把 KV cache 从 prefill worker 传到 decode worker。
 - **[FlashMLA](https://github.com/deepseek-ai/FlashMLA)**
-  `DeepSeek` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `DeepSeek` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
   Tags: `decode` `gpu` `hopper` `kernel` `kv-cache`
   面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。
 - **[vLLM V1 + torch.compile](https://pytorch.org/projects/vllm/)**
-  `PyTorch Foundation / vLLM community` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `PyTorch Foundation / vLLM community` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: foundation`
   Tags: `prefill` `vllm`
   vLLM 作为 PyTorch Foundation 项目，集成 torch.compile、PagedAttention、prefix caching、chunked prefill 等。
 - **[llm-d + LMCache + vLLM](https://research.ibm.com/publications/kv-cache-wins-you-can-feel-building-ai-aware-llm-routing-on-kubernetes)**
-  `IBM / Red Hat / llm-d` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `IBM / Red Hat / llm-d` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
   Tags: `kubernetes` `llm-d`
   Kubernetes-native distributed LLM inference，把 vLLM、LMCache、Inference Gateway、KV-aware scheduling 组合起来。
 - **[Mooncake](https://www.usenix.org/conference/fast25/presentation/qin)**
-  `Moonshot AI + Tsinghua` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import`
+  `Moonshot AI + Tsinghua` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
   Tags: `serving`
   以 KVCache 为中心做分离式 LLM serving 架构，面向长上下文在线服务。
 

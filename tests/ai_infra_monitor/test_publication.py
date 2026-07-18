@@ -131,6 +131,7 @@ class PublicationTests(unittest.TestCase):
             render_public_repository(papers, industry, root)
 
             papers_view = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            self.assertIn("Reading priority: foundation", papers_view)
             self.assertLess(
                 papers_view.index("FlashAttention: IO-Aware Attention"),
                 papers_view.index("Adaptive Fused Kernel for LLM Serving"),

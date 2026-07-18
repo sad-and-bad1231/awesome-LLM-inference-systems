@@ -224,6 +224,7 @@ def _entry(record: dict[str, Any], industry: bool = False, featured: bool = Fals
     else:
         meta.extend([_escape(record.get("venue_or_channel")), _escape(record.get("year")), _format_label(record)])
     meta.append(_evidence_label(record))
+    meta.append(f"Reading priority: {_escape(curation_for(record).get('priority') or 'supporting')}")
     lines = [f"- {headline}", f"  {' · '.join(f'`{item}`' for item in meta if item)}"]
     tags = _tags(record)
     if tags:

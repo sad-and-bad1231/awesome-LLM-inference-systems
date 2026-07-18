@@ -328,6 +328,9 @@ def command_render(args) -> int:
 def command_publish(args) -> int:
     config = load_config(args.config)
     resolved = paths(args.root, config)
+    curate_record_stores(
+        resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
+    )
     render_public_repository(
         resolved["paper_db_file"],
         resolved["industry_db_file"],
@@ -437,6 +440,7 @@ def command_finalize(args) -> int:
             args.root / "README.md",
             args.root / "papers" / "README.md",
             args.root / "industry" / "README.md",
+            args.root / "archive" / "README.md",
         ]
         report_dir = resolved["weekly_reports_dir"]
         if report_dir.exists():
