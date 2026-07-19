@@ -1,4 +1,5 @@
 import errno
+import gzip
 import json
 import tempfile
 import unittest
@@ -27,6 +28,84 @@ from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
+    def test_render_uses_seven_themes_exploration_and_project_aggregation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidates = root / "candidates.jsonl"
+            core = candidate_to_record(
+                Candidate(
+                    title="FlashAttention-4 Attention Kernel for LLM Inference",
+                    url="https://example.org/fa4",
+                    summary="A fast attention kernel. " * 40,
+                    venue="MLSys 2026",
+                    tier="A",
+                    topics=("kernel-compiler",),
+                ),
+                "paper",
+                "verified",
+            )
+            core["evidence"].update({"venue_status": "formal_conference", "verified_at": "2026-07-01"})
+            exploration = candidate_to_record(
+                Candidate(
+                    title="Context-Aware Comic Generation Inference Enhancement",
+                    url="https://example.org/comic",
+                    summary="A multimodal inference pipeline.",
+                    venue="ACM Multimedia 2026",
+                    tier="A",
+                    topics=("multimodal-diffusion",),
+                ),
+                "paper",
+                "verified",
+            )
+            exploration["technical_tags"]["phase"] = ["inference"]
+            exploration["technical_tags"]["workload"] = ["multimodal", "comic-generation"]
+            exploration["technical_tags"]["optimization_layer"] = ["pipeline"]
+            exploration["evidence"].update({"venue_status": "formal_conference", "verified_at": "2026-06-10"})
+            exploration.pop("curation", None)
+            project = candidate_to_record(
+                Candidate(
+                    title="Example LLM Serving Runtime",
+                    url="https://github.com/example/runtime",
+                    summary="A compact serving runtime.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            release = candidate_to_record(
+                Candidate(
+                    title="v1.2.3",
+                    url="https://github.com/example/runtime/releases/tag/v1.2.3",
+                    summary="<h2>Release</h2>" + " serving kernel change" * 1000,
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            write_records(papers, [core, exploration])
+            write_records(industry, [project, release])
+            write_records(candidates, [])
+
+            render_markdown_views(
+                papers, industry, candidates,
+                root / "papers.md", root / "industry.md", root / "candidates.md", root / "abstractions.md",
+            )
+
+            paper_text = (root / "papers.md").read_text(encoding="utf-8")
+            industry_text = (root / "industry.md").read_text(encoding="utf-8")
+            self.assertIn("## Attention / Kernel", paper_text)
+            self.assertIn("## 探索观察", paper_text)
+            self.assertIn("Context-Aware Comic Generation", paper_text)
+            self.assertIn("Example LLM Serving Runtime", industry_text)
+            self.assertNotIn("<h2>", industry_text)
+            self.assertNotIn("| v1.2.3 |", industry_text)
+
     def test_curate_record_stores_backfills_existing_jsonl_records(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -83,6 +162,7 @@ class RecordStoreTests(unittest.TestCase):
             self.assertIn("invalid curation.scope", messages)
             self.assertIn("invalid curation.priority", messages)
             self.assertIn("invalid curation.reasons", messages)
+            self.assertIn("invalid curation.themes", messages)
 
     def test_write_records_retries_transient_windows_file_lock(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -333,6 +413,38 @@ class RecordStoreTests(unittest.TestCase):
             self.assertIn("Active mainline candidates: 0.", text)
             self.assertIn("Promoted Candidate", text)
 
+    def test_render_candidate_view_summarizes_cold_archives_without_loading_bodies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidates = root / "data" / "candidates.jsonl"
+            write_records(candidates, [])
+            archive_dir = root / "data" / "archive" / "candidates"
+            archive_dir.mkdir(parents=True)
+            shard = archive_dir / "candidates-2025-01.jsonl.gz"
+            shard.write_bytes(
+                gzip.compress(
+                    b'{"id":"cold","title":"Cold Hidden Body"}\n',
+                    mtime=0,
+                )
+            )
+            candidate_view = root / "candidates.md"
+
+            render_markdown_views(
+                root / "papers.jsonl",
+                root / "industry.jsonl",
+                candidates,
+                root / "papers.md",
+                root / "industry.md",
+                candidate_view,
+                root / "abstractions.md",
+                candidate_archive_dir=archive_dir,
+            )
+
+            text = candidate_view.read_text(encoding="utf-8")
+            self.assertIn("Cold candidate archive: 1 records across 1 shards.", text)
+            self.assertIn("candidates-2025-01.jsonl.gz", text)
+            self.assertNotIn("Cold Hidden Body", text)
+
     def test_validation_rejects_duplicate_titles_and_new_record_without_url(self):
         with tempfile.TemporaryDirectory() as tmp:
             db = Path(tmp) / "infra-db.jsonl"
@@ -372,6 +484,20 @@ class RecordStoreTests(unittest.TestCase):
             topics=("agent-rag",),
         )
         self.assertEqual(triage_candidate(peripheral, core_only=True).priority, "low")
+
+    def test_core_triage_keeps_evidenced_exploratory_inference_work(self):
+        candidate = Candidate(
+            title="Context-Aware Comic Generation with Faster Diffusion Inference",
+            url="https://example.org/comic-inference",
+            summary="An official vision-language generation paper reporting latency and throughput.",
+            source_name="ACM Multimedia 2026 official program",
+            tier="A",
+            topics=("multimodal-diffusion",),
+        )
+
+        result = triage_candidate(candidate, core_only=True)
+        self.assertEqual(result.verdict, "keep")
+        self.assertIn(result.priority, {"normal", "high"})
 
     def test_core_triage_downranks_non_llm_inference_systems(self):
         candidate = Candidate(

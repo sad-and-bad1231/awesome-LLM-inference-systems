@@ -18,6 +18,8 @@ PHYSICAL_TERMS = (
     "hip",
     "rocm",
     "gpu",
+    "nvidia",
+    "amd",
     "npu",
     "tpu",
     "hopper",
@@ -148,6 +150,7 @@ MODEL_SYSTEM_TERMS = (
     "language models",
     "vision-language model",
     "vision-language models",
+    "vision-language",
     "transformer",
     "moe",
     "mixture-of-experts",
@@ -400,6 +403,28 @@ def triage_candidate(
                 if non_llm_system_signal
                 else "outside serving mainline without direct inference-serving signal"
             )
+        exploration_topics = set(candidate.topics) & {
+            "agent-rag",
+            "multimodal-diffusion",
+            "hardware-edge",
+            "reliability-evaluation",
+        }
+        trusted_exploration_source = candidate.tier == "A" and _contains_any(
+            candidate.source_name.lower(),
+            ("official", "conference", "proceedings", "accepted papers", "program"),
+        )
+        if (
+            exploration_topics
+            and model_system_signal
+            and (has_physical_signal or trusted_exploration_source)
+            and not algorithmic_only
+            and not peripheral_only
+            and not training_only
+            and not non_llm_system_signal
+        ):
+            verdict = "keep"
+            priority = "normal"
+            reasons.append("evidenced exploratory inference workload")
 
     if bindings:
         strong_bindings = [term for term in bindings if term in STRONG_FRAMEWORK_BINDINGS]

@@ -28,6 +28,8 @@ def _common_errors(path: Path) -> list[ValidationError]:
             errors.append(ValidationError(path, number, "trailing whitespace"))
         if line.startswith(("<<<<<<<", "=======", ">>>>>>>")):
             errors.append(ValidationError(path, number, "merge conflict marker"))
+        if re.search(r"<(?:h[1-6]|div|ul|li|script|style|p)\b", line, flags=re.IGNORECASE):
+            errors.append(ValidationError(path, number, "raw HTML in generated view"))
     return errors
 
 
@@ -180,6 +182,12 @@ def validate_workspace(
         _duplicates(industry_path, industry_rows, 1, "方案/论文", "industry solution")
     )
     errors.extend(_duplicates(candidate_path, candidate_rows, 4, "Title", "candidate"))
+    for number, cells in paper_rows:
+        if cells[0] != "题目" and len(cells[3]) > 240:
+            errors.append(ValidationError(paper_path, number, "display summary exceeds 240 characters"))
+    for number, cells in industry_rows:
+        if cells[1] != "方案/论文" and len(cells[4]) > 240:
+            errors.append(ValidationError(industry_path, number, "display summary exceeds 240 characters"))
     if public_root is not None:
         errors.extend(_public_view_errors(public_root, paper_db_path, industry_db_path))
     return errors

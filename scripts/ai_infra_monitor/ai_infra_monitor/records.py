@@ -13,7 +13,17 @@ from typing import Any
 from .identity import normalize_title, record_identity
 from .models import Candidate
 from .triage import triage_candidate
-from .curation import CURATION_VERSION, classify_record, curation_sort_key, is_public_mainline
+from .curation import (
+    CURATION_VERSION,
+    THEME_ORDER,
+    classify_record,
+    curation_for,
+    curation_sort_key,
+    is_public_mainline,
+    select_exploration,
+)
+from .reading import THEME_LABELS, aggregate_industry_records, display_summary
+from .maintenance import candidate_archive_summary
 
 
 ABSTRACTIONS = (
@@ -209,9 +219,7 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized.setdefault("display_category", "")
     normalized.setdefault("topics", [])
     normalized.setdefault("discovered", "")
-    current_curation = normalized.get("curation")
-    if not isinstance(current_curation, dict) or current_curation.get("version") != CURATION_VERSION:
-        normalized["curation"] = classify_record(normalized)
+    normalized["curation"] = classify_record(normalized)
     return _canonical_fields(normalized)
 
 
@@ -782,6 +790,13 @@ def validate_record_store(path: Path) -> list[RecordValidationError]:
                     errors.append(RecordValidationError(path, number, "invalid curation.scope"))
                 if curation.get("priority") not in {"foundation", "frontier", "supporting"}:
                     errors.append(RecordValidationError(path, number, "invalid curation.priority"))
+                themes = curation.get("themes")
+                if not isinstance(themes, list) or any(theme not in THEME_ORDER for theme in themes):
+                    errors.append(RecordValidationError(path, number, "invalid curation.themes"))
+                if record.get("record_type") in {"industry", "project"} and not isinstance(
+                    curation.get("project_key"), str
+                ):
+                    errors.append(RecordValidationError(path, number, "invalid curation.project_key"))
                 if not isinstance(curation.get("reasons"), list) or not all(
                     isinstance(reason, str) for reason in curation["reasons"]
                 ):
@@ -908,13 +923,43 @@ def render_markdown_views(
     industry_path: Path,
     candidate_path: Path,
     abstractions_path: Path,
+    exploration_window_days: int = 180,
+    exploration_limit_per_track: int = 20,
+    display_summary_max_chars: int = 240,
+    industry_milestone_links: int = 3,
+    candidate_archive_dir: Path | None = None,
 ) -> None:
-    paper_records = _paper_records(load_records(paper_db_path))
-    industry_records = _industry_records(load_records(industry_db_path))
+    paper_store = load_records(paper_db_path)
+    industry_store = load_records(industry_db_path)
+    paper_records = _paper_records(paper_store)
+    paper_exploration = select_exploration(
+        [record for record in paper_store if record.get("record_type") == "paper" and record.get("status") not in {"new", "keep", "drop", "promote"}],
+        window_days=exploration_window_days,
+        limit=exploration_limit_per_track,
+    )
+    industry_source = [
+        record for record in industry_store
+        if record.get("record_type") in {"industry", "project"}
+        and record.get("status") not in {"new", "keep", "drop", "promote"}
+    ]
+    industry_groups = [
+        group for group in aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
+        if group["scope"] == "core"
+    ]
+    industry_exploration_records = select_exploration(
+        industry_source, window_days=exploration_window_days, limit=max(exploration_limit_per_track * 5, exploration_limit_per_track)
+    )
+    industry_exploration_groups = aggregate_industry_records(
+        industry_exploration_records, milestone_limit=industry_milestone_links
+    )[:exploration_limit_per_track]
+    industry_records = [group["anchor"] for group in industry_groups]
     candidate_records = _candidate_records(load_records(candidate_db_path))
     records = paper_records + industry_records + candidate_records
 
-    category_counts = Counter(record.get("display_category") or _category_for_record(record) for record in paper_records)
+    category_counts = Counter(
+        curation_for(record).get("themes", [""])[0]
+        for record in paper_records if curation_for(record).get("themes")
+    )
     paper_lines = [
         "# Paper List（按类别整理；会议栏为最新发表/审稿状态）",
         "",
@@ -924,23 +969,11 @@ def render_markdown_views(
         "",
         "## 当前覆盖概览",
         "",
-        "| 类别 | 条目数 | 主用途 |",
-        "|---|---:|---|",
+        "| 主线 | 条目数 |",
+        "|---|---:|",
     ]
-    scopes = {
-        "Runtime、调度与服务架构": "serving runtime、SLO、batching、autoscaling、serverless、模型路由",
-        "分离式推理、通信与 KV 传输": "prefill/decode 分离、KV transfer、collective、CXL/RDMA、多实例编排",
-        "长上下文、KV 状态与外部记忆": "长上下文 serving、KV offload、prefix/RAG cache、分层存储与召回",
-        "KV Cache 压缩、量化与淘汰": "KV 量化、token/head/layer 保留、稀疏选择、压缩-质量权衡",
-        "推测解码、Test-time Scaling 与生成加速": "speculative decoding、并行解码、tree drafting、reasoning 生成加速",
-        "算子、编译与硬件加速": "attention/GEMM/MoE kernel、编译器、端侧/NPU/GPU/wafer-scale 加速",
-        "MoE、Adapter、多租户与模型服务": "expert routing、adapter serving、多租户 batching、MoE 通信与缓存",
-        "Agent、RAG、多模态与应用级 Serving": "agent workflow、RAG pipeline、多模态 stage graph、程序级调度",
-        "Workload、评测、可靠性与方法论": "trace、benchmark、fault tolerance、profiling、数值稳定性和理论分析",
-        "AI 集群、向量数据库、安全与周边基础设施": "GPU 集群、向量数据库、TEE/FHE、侧信道、spot/geo routing",
-    }
-    for category in PAPER_CATEGORIES:
-        paper_lines.append(f"| {category} | {category_counts.get(category, 0)} | {scopes[category]} |")
+    for theme in THEME_ORDER:
+        paper_lines.append(f"| {THEME_LABELS[theme]} | {category_counts.get(theme, 0)} |")
     evidence_counts = Counter(record.get("evidence", {}).get("venue_status", "unclassified") for record in paper_records)
     paper_lines.extend([
         "",
@@ -953,13 +986,19 @@ def render_markdown_views(
     ])
     for venue_status, count in sorted(evidence_counts.items()):
         paper_lines.append(f"| {_escape(venue_status)} | {count} |")
-    for category in PAPER_CATEGORIES:
-        rows = [record for record in paper_records if (record.get("display_category") or _category_for_record(record)) == category]
-        paper_lines.extend(["", f"## {category}", "", "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |", "|---|---|---|---|"])
+    for theme in THEME_ORDER:
+        rows = [record for record in paper_records if curation_for(record).get("themes", [""])[0] == theme]
+        paper_lines.extend(["", f"## {THEME_LABELS[theme]}", "", "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |", "|---|---|---|---|"])
         for record in rows:
+            labels = " / ".join(THEME_LABELS[item] for item in curation_for(record).get("themes", []) if item in THEME_LABELS)
             paper_lines.append(
-                f"| {_escape(record['title'])} | {_escape(record['venue_or_channel'])} | {_escape(record['orgs'])} | {_escape(record['summary'])} |"
+                f"| {_escape(record['title'])}<br><sub>{_escape(labels)}</sub> | {_escape(record['venue_or_channel'])} | {_escape(record['orgs'])} | {_escape(display_summary(record, display_summary_max_chars))} |"
             )
+    paper_lines.extend(["", "## 探索观察", "", f"最近 {exploration_window_days} 天内最多展示 {exploration_limit_per_track} 条有系统证据的新语境工作。", "", "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |", "|---|---|---|---|"])
+    for record in paper_exploration:
+        paper_lines.append(
+            f"| {_escape(record['title'])} | {_escape(record['venue_or_channel'])} | {_escape(record['orgs'])} | {_escape(display_summary(record, display_summary_max_chars))} |"
+        )
     paper_path.write_text("\n".join(paper_lines) + "\n", encoding="utf-8", newline="\n")
 
     industry_lines = [
@@ -975,14 +1014,27 @@ def render_markdown_views(
         "- Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。",
         "- Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。",
         "",
-        "## 企业方案清单",
+        "## 项目级工程主线",
         "",
         "| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |",
         "|---|---|---:|---|---|---|",
     ]
-    for record in industry_records:
+    for group in industry_groups:
+        record = group["anchor"]
+        themes = " / ".join(THEME_LABELS[item] for item in group["themes"] if item in THEME_LABELS)
+        links = [_render_link(record)]
+        links.extend(
+            f"[{_escape(item.get('title'))}]({item.get('primary_url') or item.get('artifact_url')})"
+            for item in group["milestones"] if item.get("primary_url") or item.get("artifact_url")
+        )
         industry_lines.append(
-            f"| {_escape(record['orgs'])} | {_escape(record['title'])} | {_escape(record['year'])} | {_escape(record['venue_or_channel'])} | {_escape(record['summary'])} | {_render_link(record)} |"
+            f"| {_escape(record['orgs'])} | {_escape(record['title'])} | {_escape(record['year'])} | {_escape(themes)} | {_escape(display_summary(record, display_summary_max_chars))} | {' · '.join(link for link in links if link)} |"
+        )
+    industry_lines.extend(["", "## 探索观察", "", f"最近 {exploration_window_days} 天内最多展示 {exploration_limit_per_track} 个有系统证据的新语境项目。", "", "| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |", "|---|---|---:|---|---|---|"])
+    for group in industry_exploration_groups:
+        record = group["anchor"]
+        industry_lines.append(
+            f"| {_escape(record['orgs'])} | {_escape(record['title'])} | {_escape(record['year'])} | 探索观察 | {_escape(display_summary(record, display_summary_max_chars))} | {_render_link(record)} |"
         )
     industry_path.write_text("\n".join(industry_lines) + "\n", encoding="utf-8", newline="\n")
 
@@ -993,12 +1045,15 @@ def render_markdown_views(
         and record.get("triage", {}).get("priority") in {"high", "normal"}
     ]
     archived_candidates = [record for record in candidate_records if record not in active_candidates]
+    cold_archives = candidate_archive_summary(candidate_archive_dir)
+    cold_archive_records = sum(count for _path, count in cold_archives)
     candidate_lines = [
         "# AI Infra Candidate Pool",
         "",
         GENERATED_NOTICE,
         "",
         f"Active mainline candidates: {len(active_candidates)}. Backlog and archived audit items: {len(archived_candidates)}.",
+        f"Cold candidate archive: {cold_archive_records} records across {len(cold_archives)} shards.",
         "",
         "## Active Candidates",
         "",
@@ -1020,6 +1075,14 @@ def render_markdown_views(
                 f"| {_escape(record.get('discovered') or record.get('year') or '')} | {_escape(record['source_tier'])} | {_escape(record['record_type'])} | {_escape(source)} | {_escape(record['title'])} | {_escape(topics)} | {_render_link(record)} | {_escape(record['status'])} |"
             )
         candidate_lines.extend(["", "</details>"])
+    if cold_archives:
+        candidate_lines.extend(["", "## Cold Archive", "", "| Shard | Records |", "|---|---:|"])
+        for shard, count in cold_archives:
+            try:
+                link = shard.relative_to(candidate_path.parent).as_posix()
+            except ValueError:
+                link = shard.as_posix()
+            candidate_lines.append(f"| [{_escape(shard.name)}]({link}) | {count} |")
     candidate_path.write_text("\n".join(candidate_lines) + "\n", encoding="utf-8", newline="\n")
 
     by_abstraction: dict[str, list[dict[str, Any]]] = defaultdict(list)

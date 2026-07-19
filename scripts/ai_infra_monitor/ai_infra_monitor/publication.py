@@ -1,13 +1,27 @@
 from __future__ import annotations
 
 from collections import Counter
+import errno
 from pathlib import Path
 import re
+import time
 from typing import Any
 from urllib.parse import quote
 
-from .curation import curation_for, curation_sort_key, is_public_mainline
+from .curation import THEME_ORDER, curation_for, curation_sort_key, is_public_mainline, select_exploration
+from .reading import THEME_LABELS, aggregate_industry_records, display_summary
 from .records import ABSTRACTIONS, load_records
+
+
+def _write_text(path: Path, text: str) -> None:
+    for attempt in range(5):
+        try:
+            path.write_text(text, encoding="utf-8", newline="\n")
+            return
+        except OSError as exc:
+            if exc.errno not in {errno.EINVAL, errno.EACCES, errno.EBUSY} or attempt == 4:
+                raise
+            time.sleep(0.2 * (attempt + 1))
 
 
 GENERATED_NOTICE = "<!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->"
@@ -149,16 +163,16 @@ def _featured_sort_key(record: dict[str, Any]) -> tuple[int, int, int, int, str]
 
 
 def _public_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
-    return sorted(
-        [
-            record
-            for record in load_records(path)
-            if record.get("record_type") in types
-            and record.get("status") not in EXCLUDED_STATUSES
-            and is_public_mainline(record)
-        ],
-        key=_sort_key,
-    )
+    records = [
+        record for record in load_records(path)
+        if record.get("record_type") in types and record.get("status") not in EXCLUDED_STATUSES
+    ]
+    if types <= {"industry", "project"}:
+        return [
+            _project_display(group) for group in aggregate_industry_records(records)
+            if group["scope"] == "core"
+        ]
+    return sorted([record for record in records if is_public_mainline(record)], key=_sort_key)
 
 
 def _is_serving_mainline(record: dict[str, Any]) -> bool:
@@ -209,11 +223,23 @@ def _anchor(label: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
 
 
-def _summary(record: dict[str, Any]) -> str:
-    return _escape(_presentation(record).get("blurb") or record.get("summary") or "No summary provided.")
+def _summary(record: dict[str, Any], max_chars: int = 240) -> str:
+    return _escape(display_summary(record, max_chars))
 
 
-def _entry(record: dict[str, Any], industry: bool = False, featured: bool = False) -> str:
+def _project_display(group: dict[str, Any]) -> dict[str, Any]:
+    record = dict(group["anchor"])
+    record["_reading_milestones"] = list(group["milestones"])
+    record["_reading_themes"] = list(group["themes"])
+    return record
+
+
+def _entry(
+    record: dict[str, Any],
+    industry: bool = False,
+    featured: bool = False,
+    summary_max_chars: int = 240,
+) -> str:
     url = _url(record)
     title_text = _escape(record.get("title"))
     title = f"[{title_text}]({url})" if url else title_text
@@ -232,7 +258,16 @@ def _entry(record: dict[str, Any], industry: bool = False, featured: bool = Fals
     artifact_url = str(record.get("artifact_url") or "")
     if artifact_url and artifact_url != url:
         lines.append(f"  Artifact: [source]({artifact_url})")
-    lines.append(f"  {_summary(record)}")
+    milestones = record.get("_reading_milestones", []) if industry else []
+    if milestones:
+        links = []
+        for milestone in milestones:
+            target = _url(milestone)
+            if target:
+                links.append(f"[{_escape(milestone.get('title'))}]({target})")
+        if links:
+            lines.append("  Milestones: " + " · ".join(links))
+    lines.append(f"  {_summary(record, summary_max_chars)}")
     return "\n".join(lines)
 
 
@@ -287,9 +322,19 @@ def _render_collection(
     records: list[dict[str, Any]],
     industry: bool,
     image: str,
+    exploration: list[dict[str, Any]] | None = None,
+    display_summary_max_chars: int = 240,
 ) -> str:
-    grouped = _group(records)
-    counts = Counter(PUBLIC_CATEGORIES.get(record.get("system_abstraction_primary"), "Unclassified") for record in records)
+    exploration = exploration or []
+    grouped = {theme: [] for theme in THEME_ORDER}
+    for record in records:
+        themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
+        if themes:
+            grouped[themes[0]].append(record)
+    counts = Counter(
+        (record.get("_reading_themes") or curation_for(record).get("themes", [""]))[0]
+        for record in records if (record.get("_reading_themes") or curation_for(record).get("themes"))
+    )
     featured_ids = {record.get("canonical_id") or record.get("id") for record in _featured_records(records, 12)}
     primary_status = "industrial_material" if industry else "formal_conference"
     primary_count = sum(record.get("evidence", {}).get("venue_status") == primary_status for record in records)
@@ -308,7 +353,7 @@ def _render_collection(
         "",
         f"![AI inference system map]({image})",
         "",
-        "> **How to read this page.** Start with the featured entry points, then read foundation and frontier work before supporting records. Adjacent and archived material is kept in the [archive](../archive/README.md).",
+        "> **How to read this page.** Start with the featured entry points, then read foundation and frontier work before supporting records. A bounded rolling exploration section keeps new workloads visible; the full adjacent/archive history remains in the [archive](../archive/README.md).",
         "",
         "## At a Glance",
         "",
@@ -319,10 +364,8 @@ def _render_collection(
         "## Collection Navigation",
         "",
     ]
-    lines.extend(
-        f"- [{PUBLIC_CATEGORIES[abstraction]}](#{_anchor(PUBLIC_CATEGORIES[abstraction])}) ({counts.get(PUBLIC_CATEGORIES[abstraction], 0)})"
-        for abstraction in ABSTRACTIONS
-    )
+    lines.extend(f"- [{THEME_LABELS[theme]}](#{_anchor(THEME_LABELS[theme])}) ({counts.get(theme, 0)})" for theme in THEME_ORDER)
+    lines.append(f"- [探索观察](#探索观察) ({len(exploration)})")
     lines.extend(
         [
             "",
@@ -336,29 +379,35 @@ def _render_collection(
             "| Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |",
             "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
             "| Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |",
-            "| Scope | Only `core` records are shown here; adjacent/archive material is in the archive page. |",
+            "| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
             "| Featured | A small editorial starting set; all core records remain below. |",
             "",
             "## Resource List",
             "",
         ]
     )
-    for abstraction in ABSTRACTIONS:
-        category = PUBLIC_CATEGORIES[abstraction]
-        rows = grouped.get(abstraction, [])
+    for theme in THEME_ORDER:
+        category = THEME_LABELS[theme]
+        rows = grouped.get(theme, [])
         featured = [record for record in rows if (record.get("canonical_id") or record.get("id")) in featured_ids]
         remaining = [record for record in rows if (record.get("canonical_id") or record.get("id")) not in featured_ids]
-        lines.extend([f"### {category} ({len(rows)})", "", PUBLIC_CATEGORY_DESCRIPTIONS[category], ""])
+        lines.extend([f"### {category} ({len(rows)})", ""])
         if not rows:
             lines.append("_No verified records yet._")
         else:
             if featured:
                 lines.extend(["#### Featured", ""])
-                lines.extend(_entry(record, industry=industry, featured=True) for record in featured)
+                lines.extend(_entry(record, industry=industry, featured=True, summary_max_chars=display_summary_max_chars) for record in featured)
             if remaining:
                 lines.extend(["#### Full Resource List", ""])
-                lines.extend(_entry(record, industry=industry) for record in remaining)
+                lines.extend(_entry(record, industry=industry, summary_max_chars=display_summary_max_chars) for record in remaining)
         lines.append("")
+    lines.extend(["### 探索观察", "", "最近 180 天内有正式或工程证据、但尚未成为稳定主线的新语境工作。", ""])
+    if exploration:
+        lines.extend(_entry(record, industry=industry, summary_max_chars=display_summary_max_chars) for record in exploration)
+    else:
+        lines.append("_No exploration records in the current rolling window._")
+    lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -409,7 +458,9 @@ def _render_archive(
     return "\n".join(lines).rstrip() + "\n"
 
 
-def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -> str:
+def _render_root(
+    papers: list[dict[str, Any]], industry: list[dict[str, Any]], display_summary_max_chars: int = 240
+) -> str:
     paper_counts = Counter(_evidence_label(record) for record in papers)
     industry_counts = Counter(_evidence_label(record) for record in industry)
     category_counts = _category_counts(papers, industry)
@@ -505,9 +556,9 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
             "",
         ]
     )
-    lines.extend(_entry(record) for record in featured_papers)
+    lines.extend(_entry(record, summary_max_chars=display_summary_max_chars) for record in featured_papers)
     lines.extend(["", "## Featured Industry Systems", ""])
-    lines.extend(_entry(record, industry=True) for record in featured_industry)
+    lines.extend(_entry(record, industry=True, summary_max_chars=display_summary_max_chars) for record in featured_industry)
     lines.extend(
         [
             "",
@@ -546,39 +597,66 @@ def _render_root(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -
     return "\n".join(lines).rstrip() + "\n"
 
 
-def render_public_repository(papers_path: Path, industry_path: Path, output_root: Path) -> None:
-    papers = _public_records(papers_path, {"paper"})
-    industry = _public_records(industry_path, {"industry", "project"})
+def render_public_repository(
+    papers_path: Path,
+    industry_path: Path,
+    output_root: Path,
+    exploration_window_days: int = 180,
+    exploration_limit_per_track: int = 20,
+    industry_milestone_links: int = 3,
+    display_summary_max_chars: int = 240,
+) -> None:
+    paper_source = [record for record in load_records(papers_path) if record.get("record_type") == "paper" and record.get("status") not in EXCLUDED_STATUSES]
+    industry_source = [record for record in load_records(industry_path) if record.get("record_type") in {"industry", "project"} and record.get("status") not in EXCLUDED_STATUSES]
+    papers = sorted([record for record in paper_source if is_public_mainline(record)], key=_sort_key)
+    paper_exploration = select_exploration(
+        paper_source, window_days=exploration_window_days, limit=exploration_limit_per_track
+    )
+    industry_groups = aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
+    industry = [_project_display(group) for group in industry_groups if group["scope"] == "core"]
+    industry_exploration_source = select_exploration(
+        industry_source,
+        window_days=exploration_window_days,
+        limit=max(exploration_limit_per_track * 5, exploration_limit_per_track),
+    )
+    industry_exploration = [
+        _project_display(group)
+        for group in aggregate_industry_records(industry_exploration_source, milestone_limit=industry_milestone_links)
+    ][:exploration_limit_per_track]
     archived_papers = _archive_records(papers_path, {"paper"})
     archived_industry = _archive_records(industry_path, {"industry", "project"})
     (output_root / "papers").mkdir(parents=True, exist_ok=True)
     (output_root / "industry").mkdir(parents=True, exist_ok=True)
     (output_root / "archive").mkdir(parents=True, exist_ok=True)
-    (output_root / "README.md").write_text(_render_root(papers, industry), encoding="utf-8", newline="\n")
-    (output_root / "papers" / "README.md").write_text(
+    _write_text(
+        output_root / "README.md",
+        _render_root(papers, industry, display_summary_max_chars),
+    )
+    _write_text(
+        output_root / "papers" / "README.md",
         _render_collection(
             "AI Inference Papers",
             "A complete academic paper collection organized by serving-system abstraction. Formal venues, posters/workshops, preprints, and legacy imports are labeled separately.",
             papers,
             industry=False,
             image="../figs/ai-inference-system-map.png",
+            exploration=paper_exploration,
+            display_summary_max_chars=display_summary_max_chars,
         ),
-        encoding="utf-8",
-        newline="\n",
     )
-    (output_root / "industry" / "README.md").write_text(
+    _write_text(
+        output_root / "industry" / "README.md",
         _render_collection(
             "Industry & Open-Source Inference Systems",
             "A complete collection of production systems, open-source runtimes, infrastructure projects, and engineering material, with artifact and ecosystem signals where available.",
             industry,
             industry=True,
             image="../figs/ai-inference-system-map.png",
+            exploration=industry_exploration,
+            display_summary_max_chars=display_summary_max_chars,
         ),
-        encoding="utf-8",
-        newline="\n",
     )
-    (output_root / "archive" / "README.md").write_text(
+    _write_text(
+        output_root / "archive" / "README.md",
         _render_archive(archived_papers, archived_industry),
-        encoding="utf-8",
-        newline="\n",
     )

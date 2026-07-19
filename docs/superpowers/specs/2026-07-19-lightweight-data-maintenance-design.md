@@ -42,6 +42,8 @@ data/
 - 最近 `candidate_hot_window_days` 天的终态候选；
 - 日期缺失或无法可靠解析的候选，以避免猜测性迁移。
 
+为防止一次大型会议扫描在窗口内生成数万条终态记录，近期终态候选还受 `candidate_hot_terminal_limit` 约束，默认保留按日期和 identity 稳定排序后的最近 500 条。活跃候选不受该数量限制。
+
 只有 `status` 为 `drop` 或 `promote`、且候选日期早于窗口截止日的记录可以归档。候选日期依次取 `discovered`、`evidence.verified_at`，两者均不可用时不归档。默认窗口为 180 天。
 
 归档按候选月份分片。维护命令会读取已有分片、按 canonical identity 去重、稳定排序，然后以确定性 gzip 元数据和原子替换方式写回。这样重复执行结果完全一致；已经不再接收记录的旧月份自然成为不可变文件。
@@ -73,6 +75,7 @@ python scripts/ai_infra_monitor/monitor.py maintain
 ```json
 {
   "candidate_hot_window_days": 180,
+  "candidate_hot_terminal_limit": 500,
   "candidate_archive_dir": "data/archive/candidates",
   "maintenance_on_weekly_sweep": true
 }

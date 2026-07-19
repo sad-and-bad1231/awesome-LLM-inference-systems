@@ -22,8 +22,60 @@ class CliTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "curate", "render", "publish", "validate", "finalize", "status"):
+        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "maintain", "curate", "render", "publish", "validate", "finalize", "status"):
             self.assertIn(command, result.stdout)
+
+    def test_maintain_outputs_one_compact_summary_line(self):
+        from scripts.ai_infra_monitor import monitor
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = root / "config.json"
+            config.write_text(
+                json.dumps(
+                    {
+                        "settings": {
+                            "paper_file": "papers.md",
+                            "industry_file": "industry.md",
+                            "candidate_file": "candidates.md",
+                            "state_file": "state.json",
+                            "runs_dir": "runs",
+                            "weekly_reports_dir": "reports",
+                            "candidate_db_file": "data/candidates.jsonl",
+                            "candidate_archive_dir": "data/archive/candidates",
+                            "candidate_hot_window_days": 180,
+                        },
+                        "sources": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            args = SimpleNamespace(root=root, config=config)
+            result = {
+                "archived": 2,
+                "hot_records": 3,
+                "archive_records": 2,
+                "archive_shards": 1,
+                "changed_shards": 1,
+                "skipped_undated": 0,
+                "state_compacted": 4,
+            }
+            with patch.object(monitor, "maintain_data", return_value=result), patch(
+                "builtins.print"
+            ) as printer:
+                self.assertEqual(monitor.command_maintain(args), 0)
+
+            printer.assert_called_once()
+            self.assertNotIn("\n", printer.call_args.args[0])
+
+    def test_sweep_no_commit_flag_keeps_finalization_local(self):
+        from scripts.ai_infra_monitor.monitor import build_parser
+
+        args = build_parser().parse_args(
+            ["sweep", "--mode", "weekly", "--no-commit"]
+        )
+
+        self.assertTrue(args.no_commit)
 
     def test_discover_keeps_new_candidates_in_run_manifest_until_triage(self):
         from scripts.ai_infra_monitor.monitor import command_discover
@@ -97,6 +149,9 @@ class CliTests(unittest.TestCase):
             ) as triage, patch.object(monitor, "command_queue") as queue, patch.object(
                 monitor, "command_report"
                 ) as report, patch.object(monitor, "command_finalize") as finalize:
+                maintenance = patch.object(monitor, "command_maintain", return_value=0)
+                maintain = maintenance.start()
+                self.addCleanup(maintenance.stop)
                 engine.return_value.discover.side_effect = manifests
                 for action in (triage, queue, report, finalize):
                     action.return_value = 0
@@ -109,6 +164,32 @@ class CliTests(unittest.TestCase):
             self.assertEqual([call.args[0].run_id for call in report.call_args_list], ["run-1", "run-2"])
             self.assertEqual([call.args[0].run_id for call in finalize.call_args_list], ["run-1", "run-2"])
             self.assertEqual([call.args[0].skip_render for call in finalize.call_args_list], [True, False])
+            maintain.assert_called_once()
+
+    def test_daily_sweep_does_not_run_maintenance(self):
+        from scripts.ai_infra_monitor import monitor
+
+        args = SimpleNamespace(
+            root=Path("."),
+            config=Path("config.yaml"),
+            mode="daily",
+            source_id=[],
+            source_batch_count=1,
+            start_batch_index=0,
+            end_batch_index=None,
+            tiers=["A"],
+            report=False,
+            no_commit=True,
+        )
+        with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
+            monitor, "command_triage", return_value=0
+        ), patch.object(monitor, "command_queue", return_value=0), patch.object(
+            monitor, "command_finalize", return_value=0
+        ), patch.object(monitor, "command_maintain", return_value=0) as maintain:
+            engine.return_value.discover.return_value = {"run_id": "run-daily"}
+            self.assertEqual(monitor.command_sweep(args), 0)
+
+        maintain.assert_not_called()
 
     def test_sweep_can_resume_from_a_later_batch(self):
         from scripts.ai_infra_monitor import monitor
@@ -130,6 +211,8 @@ class CliTests(unittest.TestCase):
             monitor, "command_triage", return_value=0
         ), patch.object(monitor, "command_queue", return_value=0), patch.object(
             monitor, "command_finalize", return_value=0
+        ), patch.object(
+            monitor, "command_maintain", return_value=0
         ):
             engine.return_value.discover.side_effect = manifests
             self.assertEqual(monitor.command_sweep(args), 0)

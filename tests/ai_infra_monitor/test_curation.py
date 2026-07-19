@@ -29,6 +29,148 @@ def _record(**overrides):
 
 
 class CurationTests(unittest.TestCase):
+    def test_v6_classifies_each_guide_theme_from_structured_signals(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        cases = {
+            "FlashAttention-4 Attention Kernel": "attention-kernel",
+            "Paged KV Cache Compression for LLM Inference": "kv-cache",
+            "Disaggregated Prefill Decode KV Transfer": "prefill-decode-transfer",
+            "Fused Speculative Decoding Draft Verify": "speculative-decoding",
+            "Expert Routing for MoE Inference": "moe",
+            "Wave DSL Compiler for LLM Kernels": "compiler-dsl",
+            "Continuous Batching Scheduler for LLM Serving": "runtime-scheduling",
+        }
+        for title, expected in cases.items():
+            with self.subTest(title=title):
+                result = classify_record(_record(title=title))
+                self.assertEqual(result["version"], "guide-2026-v6")
+                self.assertIn(expected, result["themes"])
+                self.assertEqual(result["scope"], "core")
+
+    def test_release_html_does_not_create_mainline_signal(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        result = classify_record(
+            _record(
+                record_type="project",
+                title="v1.92.0",
+                venue_or_channel="Official releases",
+                summary="<h2>LLM inference</h2>" + " kernel serving compiler" * 1000,
+                technical_tags={key: [] for key in _record()["technical_tags"]},
+                evidence={
+                    "venue_status": "industrial_material",
+                    "source_type": "project_or_engineering_material",
+                    "verification_level": "verified",
+                    "verified_at": "2026-07-01",
+                },
+            )
+        )
+
+        self.assertNotEqual(result["scope"], "core")
+        self.assertEqual(result["themes"], [])
+
+    def test_broad_batch_tags_do_not_promote_generic_dnn_inference(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        result = classify_record(
+            _record(
+                title="Coordinated Resource Management for Energy-Efficient DNN Inference on Edge Devices",
+                venue_or_channel="Euro-Par 2026",
+                technical_tags={
+                    "phase": ["serving"],
+                    "hardware": [],
+                    "optimization_layer": ["compiler", "compression", "kernel", "moe"],
+                    "workload": ["agent", "edge", "moe", "multimodal", "rag"],
+                    "framework_binding": [],
+                    "metrics": [],
+                },
+                evidence={
+                    "venue_status": "formal_conference",
+                    "source_type": "conference_program",
+                    "verification_level": "verified",
+                    "verified_at": "2026-06-01",
+                },
+            )
+        )
+
+        self.assertNotEqual(result["scope"], "core")
+        self.assertEqual(result["themes"], [])
+
+    def test_evidenced_comic_generation_inference_is_exploration(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        result = classify_record(
+            _record(
+                title="Context-Aware Comic Generation Inference Enhancement",
+                venue_or_channel="ACM Multimedia 2026",
+                technical_tags={
+                    "phase": ["inference"],
+                    "hardware": ["gpu"],
+                    "optimization_layer": ["pipeline"],
+                    "workload": ["multimodal", "comic-generation"],
+                    "framework_binding": [],
+                    "metrics": ["latency"],
+                },
+                evidence={
+                    "venue_status": "formal_conference",
+                    "source_type": "conference_program",
+                    "verification_level": "verified",
+                    "verified_at": "2026-06-10",
+                },
+            )
+        )
+
+        self.assertEqual(result["scope"], "adjacent")
+        self.assertEqual(result["themes"], [])
+
+    def test_exploration_selection_is_windowed_capped_and_deterministic(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import select_exploration
+
+        records = []
+        for index in range(25):
+            record = _record(
+                title=f"Multimodal Comic Inference Study {index:02d}",
+                venue_or_channel="ACM Multimedia 2026",
+                technical_tags={
+                    "phase": ["inference"],
+                    "hardware": ["gpu"],
+                    "optimization_layer": ["pipeline"],
+                    "workload": ["multimodal"],
+                    "framework_binding": [],
+                    "metrics": ["latency"],
+                },
+                evidence={
+                    "venue_status": "formal_conference",
+                    "source_type": "conference_program",
+                    "verification_level": "verified",
+                    "verified_at": f"2026-06-{(index % 20) + 1:02d}",
+                },
+            )
+            records.append(record)
+        records.append(
+            _record(
+                title="Old Multimodal Inference Study",
+                technical_tags={
+                    "phase": ["inference"], "hardware": ["gpu"],
+                    "optimization_layer": ["pipeline"], "workload": ["multimodal"],
+                    "framework_binding": [], "metrics": ["latency"],
+                },
+                evidence={
+                    "venue_status": "formal_conference",
+                    "source_type": "conference_program",
+                    "verification_level": "verified",
+                    "verified_at": "2025-01-01",
+                },
+            )
+        )
+
+        first = select_exploration(records, window_days=180, limit=20)
+        second = select_exploration(list(reversed(records)), window_days=180, limit=20)
+        self.assertEqual(len(first), 20)
+        self.assertEqual([item["title"] for item in first], [item["title"] for item in second])
+        self.assertNotIn("Old Multimodal Inference Study", {item["title"] for item in first})
+
     def test_guide_peripheral_record_is_archived(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
 

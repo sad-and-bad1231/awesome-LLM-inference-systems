@@ -1,8 +1,10 @@
+import errno
 import json
 import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.publication import GENERATED_NOTICE, render_public_repository
 from scripts.ai_infra_monitor.ai_infra_monitor.validation import validate_workspace
@@ -64,6 +66,85 @@ def _record(
 
 
 class PublicationTests(unittest.TestCase):
+    def test_publication_retries_a_transient_windows_write_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            papers.write_text("", encoding="utf-8")
+            industry.write_text("", encoding="utf-8")
+            target = root / "papers" / "README.md"
+            original_write_text = Path.write_text
+            attempts = 0
+
+            def flaky_write_text(path, *args, **kwargs):
+                nonlocal attempts
+                if path == target and attempts < 2:
+                    attempts += 1
+                    raise OSError(errno.EINVAL, "transient lock")
+                return original_write_text(path, *args, **kwargs)
+
+            with patch.object(Path, "write_text", new=flaky_write_text):
+                render_public_repository(papers, industry, root)
+
+            self.assertEqual(attempts, 2)
+            self.assertTrue(target.exists())
+
+    def test_validation_rejects_raw_html_and_oversized_display_summaries(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paper_view = root / "papers.md"
+            industry_view = root / "industry.md"
+            candidate_view = root / "candidates.md"
+            paper_view.write_text(
+                "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |\n"
+                "|---|---|---|---|\n"
+                f"| Paper | Venue | Org | {'x' * 241} |\n",
+                encoding="utf-8",
+            )
+            industry_view.write_text(
+                "| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |\n"
+                "|---|---|---:|---|---|---|\n"
+                "| Org | Project | 2026 | Runtime | <h2>raw release</h2> | link |\n",
+                encoding="utf-8",
+            )
+            candidate_view.write_text("# Candidates\n", encoding="utf-8")
+
+            errors = validate_workspace(paper_view, industry_view, candidate_view)
+            messages = "\n".join(error.message for error in errors)
+            self.assertIn("display summary exceeds 240 characters", messages)
+            self.assertIn("raw HTML in generated view", messages)
+
+    def test_public_views_share_theme_exploration_and_project_compaction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            core = _record("paper", "FlashAttention-4 Attention Kernel", "算子、编译与硬件加速")
+            exploration = _record("paper", "Comic Generation Inference Enhancement", "Agent、RAG、多模态与应用级 Serving")
+            exploration["technical_tags"]["framework_binding"] = []
+            exploration["technical_tags"]["optimization_layer"] = ["pipeline"]
+            exploration["technical_tags"]["workload"] = ["multimodal", "comic-generation"]
+            project = _record("project", "Example LLM Serving Runtime", "Runtime、调度与服务架构")
+            project["primary_url"] = "https://github.com/example/runtime"
+            release = _record("project", "v1.2.3", "Runtime、调度与服务架构")
+            release["primary_url"] = "https://github.com/example/runtime/releases/tag/v1.2.3"
+            release["summary"] = "<h2>Release notes</h2>" + " serving compiler" * 1000
+            papers.write_text("\n".join(json.dumps(item) for item in [core, exploration]) + "\n", encoding="utf-8")
+            industry.write_text("\n".join(json.dumps(item) for item in [project, release]) + "\n", encoding="utf-8")
+
+            render_public_repository(papers, industry, root)
+
+            papers_text = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            industry_text = (root / "industry" / "README.md").read_text(encoding="utf-8")
+            self.assertIn("Attention / Kernel", papers_text)
+            self.assertIn("探索观察", papers_text)
+            self.assertIn("Comic Generation Inference Enhancement", papers_text)
+            self.assertEqual(industry_text.count("Example LLM Serving Runtime"), 1)
+            self.assertNotIn("<h2>", industry_text)
+
     def test_renders_awesome_root_and_separate_public_collections(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
