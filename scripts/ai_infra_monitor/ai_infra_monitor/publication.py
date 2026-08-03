@@ -9,7 +9,12 @@ from typing import Any
 from urllib.parse import quote
 
 from .curation import THEME_ORDER, curation_for, curation_sort_key, is_public_mainline, select_exploration
-from .reading import THEME_LABELS, aggregate_industry_records, display_summary
+from .reading import (
+    THEME_LABELS,
+    aggregate_industry_records,
+    display_summary,
+    render_industry_topic,
+)
 from .records import ABSTRACTIONS, load_records
 
 
@@ -323,6 +328,7 @@ def _render_collection(
     industry: bool,
     image: str,
     exploration: list[dict[str, Any]] | None = None,
+    topic_records: list[dict[str, Any]] | None = None,
     display_summary_max_chars: int = 240,
 ) -> str:
     exploration = exploration or []
@@ -382,10 +388,18 @@ def _render_collection(
             "| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
             "| Featured | A small editorial starting set; all core records remain below. |",
             "",
-            "## Resource List",
-            "",
         ]
     )
+    if industry and topic_records:
+        topic = render_industry_topic(
+            topic_records,
+            "deepseek-ai-systems",
+            summary_max_chars=display_summary_max_chars,
+        )
+        if topic:
+            lines.extend(topic.rstrip().splitlines())
+            lines.append("")
+    lines.extend(["## Resource List", ""])
     for theme in THEME_ORDER:
         category = THEME_LABELS[theme]
         rows = grouped.get(theme, [])
@@ -653,6 +667,7 @@ def render_public_repository(
             industry=True,
             image="../figs/ai-inference-system-map.png",
             exploration=industry_exploration,
+            topic_records=industry_source,
             display_summary_max_chars=display_summary_max_chars,
         ),
     )

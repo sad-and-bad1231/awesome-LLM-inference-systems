@@ -20,6 +20,14 @@ THEME_LABELS = {
     "runtime-scheduling": "Runtime / Scheduling",
 }
 
+INDUSTRY_TOPIC_GROUPS = (
+    ("architecture", "架构与系统"),
+    ("kernels", "核心算子与通信"),
+    ("storage", "存储与数据路径"),
+    ("speculative", "推测解码"),
+    ("ocr-ecosystem", "OCR 与生态"),
+)
+
 
 def _is_release(record: dict[str, Any]) -> bool:
     title = str(record.get("title", "")).lower().strip()
@@ -145,3 +153,68 @@ def aggregate_industry_records(
         })
     projects.sort(key=lambda project: _anchor_sort_key(project["anchor"]))
     return projects
+
+
+def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dict[str, Any]]:
+    """Select explicitly tagged project anchors in deterministic topic-group order."""
+    tagged = [
+        record
+        for record in records
+        if isinstance(record.get("presentation"), dict)
+        and record["presentation"].get("topic") == topic
+    ]
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in tagged:
+        grouped[project_key_for(record)].append(record)
+
+    anchors = []
+    for rows in grouped.values():
+        non_releases = [record for record in rows if not _is_release(record)]
+        if non_releases:
+            anchors.append(sorted(non_releases, key=_anchor_sort_key)[0])
+        else:
+            stable = [record for record in rows if not _is_prerelease(record)]
+            anchors.append(max(stable or rows, key=_date_key))
+
+    group_rank = {key: index for index, (key, _label) in enumerate(INDUSTRY_TOPIC_GROUPS)}
+    anchors.sort(
+        key=lambda record: (
+            group_rank.get(str(record.get("presentation", {}).get("topic_group", "")), len(group_rank)),
+            str(record.get("title", "")).casefold(),
+        )
+    )
+    return anchors
+
+
+def _markdown_cell(value: Any) -> str:
+    return str(value or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
+def render_industry_topic(
+    records: list[dict[str, Any]], topic: str, *, summary_max_chars: int = 240
+) -> str:
+    """Render a compact industry topic table shared by internal and public views."""
+    selected = select_industry_topic(records, topic)
+    if not selected:
+        return ""
+    labels = dict(INDUSTRY_TOPIC_GROUPS)
+    lines = [
+        "## DeepSeek AI 系统专题",
+        "",
+        "从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。",
+        "",
+        "| 类别 | 材料 / 项目 | 系统作用 | 来源 |",
+        "|---|---|---|---|",
+    ]
+    for record in selected:
+        presentation = record.get("presentation", {})
+        group = labels.get(str(presentation.get("topic_group", "")), "其他")
+        url = str(record.get("primary_url") or record.get("artifact_url") or "")
+        title = _markdown_cell(record.get("title"))
+        linked_title = f"[{title}]({url})" if url else title
+        lines.append(
+            f"| {_markdown_cell(group)} | {linked_title} | "
+            f"{_markdown_cell(display_summary(record, summary_max_chars))} | "
+            f"{('[official](' + url + ')') if url else '—'} |"
+        )
+    return "\n".join(lines) + "\n"

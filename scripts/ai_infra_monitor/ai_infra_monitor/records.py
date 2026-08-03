@@ -22,7 +22,12 @@ from .curation import (
     is_public_mainline,
     select_exploration,
 )
-from .reading import THEME_LABELS, aggregate_industry_records, display_summary
+from .reading import (
+    THEME_LABELS,
+    aggregate_industry_records,
+    display_summary,
+    render_industry_topic,
+)
 from .maintenance import candidate_archive_summary
 
 
@@ -1013,12 +1018,21 @@ def render_markdown_views(
         "- TTFT under Drift：基础设施漂移、广域网抖动、Spot 节点切换时的首 token 延迟恶化边界。",
         "- Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。",
         "- Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。",
+    ]
+    topic = render_industry_topic(
+        industry_source,
+        "deepseek-ai-systems",
+        summary_max_chars=display_summary_max_chars,
+    )
+    if topic:
+        industry_lines.extend(["", *topic.rstrip().splitlines()])
+    industry_lines.extend([
         "",
         "## 项目级工程主线",
         "",
         "| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |",
         "|---|---|---:|---|---|---|",
-    ]
+    ])
     for group in industry_groups:
         record = group["anchor"]
         themes = " / ".join(THEME_LABELS[item] for item in group["themes"] if item in THEME_LABELS)

@@ -34,6 +34,39 @@ def _industry_record(title, url, *, summary="Concise project summary.", year="20
 
 
 class ReadingPresentationTests(unittest.TestCase):
+    def test_industry_topic_is_explicit_deduplicated_and_group_sorted(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic
+
+        storage = _industry_record("3FS", "https://github.com/deepseek-ai/3FS")
+        storage["curation"]["project_key"] = "github:deepseek-ai/3fs"
+        storage["presentation"] = {
+            "topic": "deepseek-ai-systems",
+            "topic_group": "storage",
+        }
+        kernel = _industry_record("FlashMLA", "https://github.com/deepseek-ai/FlashMLA")
+        kernel["curation"]["project_key"] = "github:deepseek-ai/flashmla"
+        kernel["presentation"] = {
+            "topic": "deepseek-ai-systems",
+            "topic_group": "kernels",
+        }
+        release = _industry_record(
+            "v1.0.0", "https://github.com/deepseek-ai/FlashMLA/releases/tag/v1.0.0"
+        )
+        release["curation"]["project_key"] = "github:deepseek-ai/flashmla"
+        release["presentation"] = {
+            "topic": "deepseek-ai-systems",
+            "topic_group": "kernels",
+        }
+        third_party = _industry_record(
+            "DeepSeek-compatible runtime", "https://github.com/example/deepseek-runtime"
+        )
+
+        selected = select_industry_topic(
+            [storage, third_party, release, kernel], "deepseek-ai-systems"
+        )
+
+        self.assertEqual([item["title"] for item in selected], ["FlashMLA", "3FS"])
+
     def test_display_summary_strips_html_truncates_and_preserves_source(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import display_summary
 

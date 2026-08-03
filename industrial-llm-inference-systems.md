@@ -10,20 +10,42 @@
 - Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。
 - Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。
 
+## DeepSeek AI 系统专题
+
+从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。
+
+| 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|
+| 架构与系统 | [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) | DeepSeek-V3 官方模型与推理参考，公开 MLA、DeepSeekMoE、FP8 权重转换及多种 GPU/NPU 运行入口。 | [official](https://github.com/deepseek-ai/DeepSeek-V3) |
+| 架构与系统 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | 在模型架构中加入 sparse attention/indexer，目标是在长上下文和 reasoning/agent 任务中降低推理成本。 | [official](https://arxiv.org/abs/2512.02556) |
+| 架构与系统 | [Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures](https://arxiv.org/abs/2505.09343) | 从 DeepSeek-V3/R1 的 MLA、MoE、FP8 与 Multi-Plane Network 出发，总结 2,048 张 H800 规模下的模型—硬件协同设计与系统瓶颈。 | [official](https://arxiv.org/abs/2505.09343) |
+| 架构与系统 | [MLA / Multi-head Latent Attention](https://arxiv.org/abs/2412.19437) | 把 KV cache 压到 latent 向量，DeepSeek-V3/R1 系列用 MLA 降低 long-context decode 的 KV 内存和带宽。 | [official](https://arxiv.org/abs/2412.19437) |
+| 核心算子与通信 | [DeepEP](https://github.com/deepseek-ai/DeepEP) | 面向 MoE expert parallel 的高吞吐、低延迟通信库，提供 dispatch/combine、低延迟模式与 GPU 通信优化。 | [official](https://github.com/deepseek-ai/DeepEP) |
+| 核心算子与通信 | [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | 面向 FP8/BF16 的 GPU GEMM kernel 库，为 DeepSeek dense 与 MoE 路径提供紧凑、可调优的矩阵乘实现。 | [official](https://github.com/deepseek-ai/DeepGEMM) |
+| 核心算子与通信 | [FlashMLA](https://github.com/deepseek-ai/FlashMLA) | 面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。 | [official](https://github.com/deepseek-ai/FlashMLA) |
+| 核心算子与通信 | [TileKernels](https://github.com/deepseek-ai/TileKernels) | 以 TileLang 编写的 kernel library，用 tile 级抽象组织和优化 GPU 算子实现。 | [official](https://github.com/deepseek-ai/TileKernels) |
+| 存储与数据路径 | [3FS](https://github.com/deepseek-ai/3FS) | 面向 AI 训练与推理负载的高性能分布式文件系统，强调并行数据路径、吞吐与大规模 checkpoint/data access。 | [official](https://github.com/deepseek-ai/3FS) |
+| 推测解码 | [DeepSpec](https://github.com/deepseek-ai/DeepSpec) | 用于训练、评估和复现实用 speculative decoding 方法的官方工具集，覆盖 draft/verify 与接受率评测。 | [official](https://github.com/deepseek-ai/DeepSpec) |
+| OCR 与生态 | [Awesome DeepSeek Agents](https://github.com/deepseek-ai/awesome-deepseek-agent) | 面向 DeepSeek Agent、coding agent 与工具调用生态的官方项目索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-agent) |
+| OCR 与生态 | [Awesome DeepSeek Integrations](https://github.com/deepseek-ai/awesome-deepseek-integration) | DeepSeek API 在应用、Agent、RAG、开发工具和基础设施中的官方集成索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-integration) |
+| OCR 与生态 | [DeepSeek Open Infra Index](https://github.com/deepseek-ai/open-infra-index) | DeepSeek 官方 AI infrastructure 导航入口，集中索引其生产验证的 kernel、通信、存储和系统工具。 | [official](https://github.com/deepseek-ai/open-infra-index) |
+| OCR 与生态 | [DeepSeek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR) | 通过视觉 token 压缩处理长文档上下文，并提供 OCR 推理与大规模页面数据生成路径。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR) |
+| OCR 与生态 | [DeepSeek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2) | DeepSeek OCR 的后续官方项目，以 Visual Causal Flow 组织文档视觉理解与生成流程。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR-2) |
+
 ## 项目级工程主线
 
 | 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |
 |---|---|---:|---|---|---|
 | AMD | ROCm + vLLM/SGLang/TensorRT-LLM ecosystem | 2024 | Compiler / DSL / Runtime / Scheduling | 通过 ROCm/HIP、Composable Kernel、Triton 和主流 runtime 支持 MI300/MI350 推理，核心竞争点是大 HBM 容量和开放集群。 | [primary](https://rocm.docs.amd.com/) |
 | PyTorch Foundation / vLLM community | vLLM V1 + torch.compile | 2025 | Prefill–Decode 与传输 / Runtime / Scheduling | vLLM 作为 PyTorch Foundation 项目，集成 torch.compile、PagedAttention、prefix caching、chunked prefill 等。 | [primary](https://pytorch.org/projects/vllm/) |
-| SGLang maintainers / RadixArk | SGLang 商业化 | 2026 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 围绕 RadixAttention、KV 复用和结构化生成提供企业化支持，显示 KV-aware runtime 正成为可独立商业化的软件层。 | [primary](https://github.com/sgl-project/sglang) · [v0.5.15.post1](https://github.com/sgl-project/sglang/releases/tag/v0.5.15.post1) |
+| SGLang maintainers / RadixArk | SGLang 商业化 | 2026 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 围绕 RadixAttention、KV 复用和结构化生成提供企业化支持，显示 KV-aware runtime 正成为可独立商业化的软件层。 | [primary](https://github.com/sgl-project/sglang) · [v0.5.16](https://github.com/sgl-project/sglang/releases/tag/v0.5.16) |
 | NVIDIA | NIXL / KV cache transfer | 2025 | KV Cache / Prefill–Decode 与传输 | 面向推理数据移动的传输层，在 prefill/decode 分离时把 KV cache 从 prefill worker 传到 decode worker。 | [primary](https://docs.nvidia.com/dynamo/archive/0.8.0/backends/trtllm/kv-cache-transfer.html) |
 | IBM / Red Hat / llm-d | llm-d + LMCache + vLLM | 2025 | Runtime / Scheduling | Kubernetes-native distributed LLM inference，把 vLLM、LMCache、Inference Gateway、KV-aware scheduling 组合起来。 | [primary](https://research.ibm.com/publications/kv-cache-wins-you-can-feel-building-ai-aware-llm-routing-on-kubernetes) |
 | NVIDIA | Dynamo KVBM | 2026 | Runtime / Scheduling | KVBM 作为统一 KV block memory layer，支持 vLLM/TensorRT-LLM 的远端共享、offload 和 write-through cache。 | [primary](https://docs.dynamo.nvidia.com/dynamo/components/kvbm) |
 | Microsoft | DeepSpeed-MoE | 2022 | MoE | 联合 expert parallel、通信优化和模型压缩，使稀疏大模型的推理成本可控。 | [primary](https://arxiv.org/abs/2201.05596) |
 | Microsoft Research Asia | Tutel | 2022 | MoE | 提供自适应 expert parallel、all-to-all、fused kernel 和动态配置，是通用 MoE 软件栈的重要来源。 | [primary](https://github.com/microsoft/tutel) |
 | PyTorch | torch.compile / Inductor | 2023 | Compiler / DSL / Runtime / Scheduling | 捕获 PyTorch graph 并经 Inductor/Triton 生成 fused kernel，逐步进入 vLLM 和模型服务的默认优化路径。 | [primary](https://docs.pytorch.org/docs/stable/torch.compiler.html) |
-| vLLM / PyTorch Foundation | vLLM V1 | 2023 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 以 PagedAttention、continuous batching、chunked prefill、prefix caching、speculative decoding 和 torch.compile 形成事实上的开源 serving 基线。 | [primary](https://github.com/vllm-project/vllm) · [v0.25.1](https://github.com/vllm-project/vllm/releases/tag/v0.25.1) · [v0.24.0rc2: Fix P/D with DP Supervisor (#46628)](https://github.com/vllm-project/vllm/releases/tag/v0.24.0rc2) |
+| vLLM / PyTorch Foundation | vLLM V1 | 2023 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 以 PagedAttention、continuous batching、chunked prefill、prefix caching、speculative decoding 和 torch.compile 形成事实上的开源 serving 基线。 | [primary](https://github.com/vllm-project/vllm) · [v0.26.1rc0](https://github.com/vllm-project/vllm/releases/tag/v0.26.1rc0) · [v0.24.0rc2: Fix P/D with DP Supervisor (#46628)](https://github.com/vllm-project/vllm/releases/tag/v0.24.0rc2) |
 | FlashInfer community / NVIDIA | FlashInfer kernel ecosystem | 2024 | Prefill–Decode 与传输 / Runtime / Scheduling | 针对 paged/ragged KV、decode、prefill、speculative tree 和 MLA 提供可组合 kernel，并集成 vLLM、SGLang 等 runtime。 | [primary](https://github.com/flashinfer-ai/flashinfer) |
 | Huawei | P/D-Serve | 2024 | Prefill–Decode 与传输 | 在数万 xPU/NPU 规模上部署 prefill/decode disaggregated serving，做 P/D 组织、调度和 D2D KV transfer。 | [primary](https://arxiv.org/abs/2408.08147) |
 | NVIDIA / University of Washington | FlashInfer production integration | 2025 | Runtime / Scheduling | 从论文发展为 vLLM、SGLang 等 runtime 共用的 attention/kernels 层，说明 kernel library 正成为独立基础设施层。 | [primary](https://proceedings.mlsys.org/paper_files/paper/2025/hash/dbf02b21d77409a2db30e56866a8ab3a-Abstract-Conference.html) |
@@ -60,7 +82,7 @@
 | vLLM maintainers / Inferact | vLLM 商业化 | 2026 | Runtime / Scheduling | vLLM 创始团队成立公司推动生产支持，说明通用推理 runtime 已从学术开源项目演进为独立基础设施赛道。 | [primary](https://techcrunch.com/2026/01/22/inference-startup-inferact-lands-150m-to-commercialize-vllm/) |
 | Ant Group + vLLM 社区 | vLLM-Omni | 2026 | Runtime / Scheduling | 用 stage graph 拆分 LLM、扩散模型和编码器，各阶段独立批处理、分配 GPU，并通过统一 connector 传递中间状态。 | [primary](https://arxiv.org/abs/2602.02204) |
 | Ant Group + vLLM | vLLM-Omni runtime | 2026 | Runtime / Scheduling | 将 LLM、multimodal encoder、diffusion generator 组织成 stage graph，使文本与视觉生成共享 vLLM 风格的调度和部署接口。 | [primary](https://github.com/vllm-project/vllm-omni) |
-|  | vllm-stack-0.1.9 | 2026 | Prefill–Decode 与传输 / Runtime / Scheduling | 官方发布记录，涉及：Runtime / Scheduling、Prefill–Decode 与传输。 | [primary](https://github.com/vllm-project/production-stack/releases/tag/vllm-stack-0.1.9) · [vllm-stack-0.1.11](https://github.com/vllm-project/production-stack/releases/tag/vllm-stack-0.1.11) |
+|  | vllm-stack-0.1.12 | 2026 | Prefill–Decode 与传输 / Runtime / Scheduling | 官方发布记录，涉及：Runtime / Scheduling。 | [primary](https://github.com/vllm-project/production-stack/releases/tag/vllm-stack-0.1.12) · [vllm-stack-0.1.9](https://github.com/vllm-project/production-stack/releases/tag/vllm-stack-0.1.9) |
 | NVIDIA / Linux Foundation ecosystem | UCX |  | Prefill–Decode 与传输 / Compiler / DSL | 统一 InfiniBand、RoCE、shared memory、CUDA memory 等传输，为 MPI、NCCL 和分布式 runtime 提供底层能力。 | [primary](https://github.com/openucx/ucx) |
 | NVIDIA | CUTLASS / CuTe DSL | 2017 | Prefill–Decode 与传输 / MoE / Compiler / DSL | 提供面向 Tensor Core 的可组合 GEMM、layout、pipeline 和 collective primitives；4.4/4.5 系列继续补充 Blackwell GQA decode、int4 KV、MX/NVFP4 block-scaled GEMM 和 MoE grouped GEMM 示例。 | [primary](https://github.com/NVIDIA/cutlass) |
 | NVIDIA | Triton Inference Server | 2018 | Compiler / DSL / Runtime / Scheduling | 负责模型仓库、dynamic batching、ensemble、metrics 和多框架后端，常作为 TensorRT-LLM/vLLM 外层生产服务面。 | [primary](https://github.com/triton-inference-server/server) |
@@ -69,7 +91,7 @@
 | Tsinghua University | FasterMoE | 2022 | MoE | 用 expert shadowing、smart scheduling 和 topology-aware communication 缓解动态路由不均。 | [primary](https://github.com/thu-pacman/FasterMoE) |
 | BentoML | BentoML / BentoCloud | 2023 | Runtime / Scheduling | 统一模型容器、API、batching、资源声明和 autoscaling，并与 vLLM、SGLang、TensorRT-LLM 等 runtime 集成。 | [primary](https://docs.bentoml.com/) |
 | Databricks / Stanford ecosystem | MegaBlocks | 2023 | MoE | 用 block-sparse operation 替代 capacity padding，为高效 MoE kernel 和 serving 提供基础。 | [primary](https://github.com/databricks/megablocks) |
-| NVIDIA | TensorRT-LLM | 2023 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 提供 inflight batching、paged KV、FP8/FP4、speculative decoding、TP/PP/EP 和多节点执行，是 NVIDIA 平台的产品级 LLM 引擎。 | [primary](https://github.com/NVIDIA/TensorRT-LLM) · [v1.3.0rc21](https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.3.0rc21) |
+| NVIDIA | TensorRT-LLM | 2023 | Prefill–Decode 与传输 / MoE / Compiler / DSL / Runtime / Scheduling | 提供 inflight batching、paged KV、FP8/FP4、speculative decoding、TP/PP/EP 和多节点执行，是 NVIDIA 平台的产品级 LLM 引擎。 | [primary](https://github.com/NVIDIA/TensorRT-LLM) · [v1.3.0rc23: Add Doc Gen](https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.3.0rc23) |
 | Huawei Cloud + NUS + SJTU | CachedAttention | 2024 | KV Cache / Runtime / Scheduling | 用 DRAM/SSD 分层保存跨轮 KV，配合 layer-wise preload、异步保存和 scheduler-aware eviction 降低 TTFT。 | [primary](https://www.usenix.org/conference/atc24/technical-sessions) |
 | Intel | Gaudi 2/3 software stack | 2024 | Runtime / Scheduling | 通过 SynapseAI、HCCL、FP8 和 vLLM/Optimum Habana 支持 LLM serving，以标准 Ethernet 和成本为差异点。 | [primary](https://docs.habana.ai/) |
 | Apple / MLX community | MLX-LM / vllm-mlx | 2024 | Runtime / Scheduling | 利用 Apple silicon 统一内存和 MLX 图执行提供本地 LLM 推理，并开始向 continuous batching 和 vLLM API 兼容扩展。 | [primary](https://github.com/ml-explore/mlx-lm) |
@@ -88,15 +110,17 @@
 | 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |
 |---|---|---:|---|---|---|
 |  | OpenVINO Model Server 2025.4 | 2025 | 探索观察 | 官方发布记录。 | [primary](https://github.com/openvinotoolkit/model_server/releases/tag/v2025.4) |
-|  | Dynamo v1.4.0-inkling-dev.1 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ai-dynamo/dynamo/releases/tag/v1.4.0-inkling-dev.1) |
+|  | AITER v0.1.16.post5 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ROCm/aiter/releases/tag/v0.1.16.post5) |
+|  | Dynamo v1.4.0-kimi-k3-dev.1 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ai-dynamo/dynamo/releases/tag/v1.4.0-kimi-k3-dev.1) |
+|  | KTransformers v0.6.4 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/kvcache-ai/ktransformers/releases/tag/v0.6.4) |
 | Google / TPU ecosystem | Ragged Paged Attention for TPU | 2026 | 探索观察 | 面向 TPU 的 ragged/paged LLM inference kernel，解决动态 batch、paged KV 和非规则序列形状。 | [primary](https://arxiv.org/abs/2604.15464) |
 |  | Ray-2.55.0 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ray-project/ray/releases/tag/ray-2.55.0) |
-|  | Release v0.6.15 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/flashinfer-ai/flashinfer/releases/tag/v0.6.15) |
+|  | Release v0.6.16 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/flashinfer-ai/flashinfer/releases/tag/v0.6.16) |
 | Microsoft Research | SPIN | 2026 | 探索观察 | 把 sparse attention execution pipeline 与 CPU/GPU hierarchical KV storage 联合设计，解决不规则 KV subset 检索开销。 | [primary](https://www.microsoft.com/en-us/research/publication/unifying-sparse-attention-with-hierarchical-memory-for-scalable-long-context-llm-serving/) |
-|  | v0.1.16 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ROCm/aiter/releases/tag/v0.1.16) |
+|  | ciflow/trunk/776ba0ccd00c619c20a6bcb27181815e4a90cb8e: Record LLM model execution latency (#21040) | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/pytorch/executorch/releases/tag/ciflow%2Ftrunk%2F776ba0ccd00c619c20a6bcb27181815e4a90cb8e) |
 |  | v0.14.0 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/InternLM/lmdeploy/releases/tag/v0.14.0) |
 |  | v0.26.dev0: [Refactor] Update TVM runtime integration (#3501) | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/mlc-ai/mlc-llm/releases/tag/v0.26.dev0) |
-|  | v0.5.1 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/LMCache/LMCache/releases/tag/v0.5.1) |
-|  | v0.6.2.post2: 0.6.2.post2: submodule refactor and update tutorial (#1993) | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/kvcache-ai/ktransformers/releases/tag/v0.6.2.post2) |
+|  | v0.5.2 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/LMCache/LMCache/releases/tag/v0.5.2) |
 |  | v1.2.1-dev: feat(inference): add Meta AI remote inference provider (#6275) | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ogx-ai/ogx/releases/tag/v1.2.1-dev) |
+|  | v1.95.0-dev.1 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/BerriAI/litellm/releases/tag/v1.95.0-dev.1) |
 |  | v2.17: Disable cuDNN 9.23.0/9.23.1 for MXFP8 attention (#3173) | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/NVIDIA/TransformerEngine/releases/tag/v2.17) |

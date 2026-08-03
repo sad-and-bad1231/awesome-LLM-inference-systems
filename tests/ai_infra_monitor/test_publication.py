@@ -129,11 +129,23 @@ class PublicationTests(unittest.TestCase):
             exploration["technical_tags"]["workload"] = ["multimodal", "comic-generation"]
             project = _record("project", "Example LLM Serving Runtime", "Runtime、调度与服务架构")
             project["primary_url"] = "https://github.com/example/runtime"
+            deepseek = _record("project", "FlashMLA", "算子、编译与硬件加速")
+            deepseek["primary_url"] = "https://github.com/deepseek-ai/FlashMLA"
+            deepseek["presentation"] = {
+                "topic": "deepseek-ai-systems",
+                "topic_group": "kernels",
+            }
+            third_party = _record(
+                "project", "Third-party DeepSeek Runtime", "Runtime、调度与服务架构"
+            )
             release = _record("project", "v1.2.3", "Runtime、调度与服务架构")
             release["primary_url"] = "https://github.com/example/runtime/releases/tag/v1.2.3"
             release["summary"] = "<h2>Release notes</h2>" + " serving compiler" * 1000
             papers.write_text("\n".join(json.dumps(item) for item in [core, exploration]) + "\n", encoding="utf-8")
-            industry.write_text("\n".join(json.dumps(item) for item in [project, release]) + "\n", encoding="utf-8")
+            industry.write_text(
+                "\n".join(json.dumps(item) for item in [project, release, deepseek, third_party]) + "\n",
+                encoding="utf-8",
+            )
 
             render_public_repository(papers, industry, root)
 
@@ -143,6 +155,12 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("探索观察", papers_text)
             self.assertIn("Comic Generation Inference Enhancement", papers_text)
             self.assertEqual(industry_text.count("Example LLM Serving Runtime"), 1)
+            self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
+            topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
+                "## Resource List", 1
+            )[0]
+            self.assertIn("FlashMLA", topic_text)
+            self.assertNotIn("Third-party DeepSeek Runtime", topic_text)
             self.assertNotIn("<h2>", industry_text)
 
     def test_renders_awesome_root_and_separate_public_collections(self):

@@ -76,6 +76,34 @@ class RecordStoreTests(unittest.TestCase):
                 "project",
                 "verified",
             )
+            deepseek = candidate_to_record(
+                Candidate(
+                    title="FlashMLA",
+                    url="https://github.com/deepseek-ai/FlashMLA",
+                    summary="Official MLA decode kernels.",
+                    tier="A",
+                    topics=("kernel-compiler", "state-kv"),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            deepseek["presentation"] = {
+                "topic": "deepseek-ai-systems",
+                "topic_group": "kernels",
+            }
+            third_party = candidate_to_record(
+                Candidate(
+                    title="Third-party DeepSeek Runtime",
+                    url="https://github.com/example/deepseek-runtime",
+                    summary="A compatible serving runtime.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
             release = candidate_to_record(
                 Candidate(
                     title="v1.2.3",
@@ -89,7 +117,7 @@ class RecordStoreTests(unittest.TestCase):
                 "verified",
             )
             write_records(papers, [core, exploration])
-            write_records(industry, [project, release])
+            write_records(industry, [project, release, deepseek, third_party])
             write_records(candidates, [])
 
             render_markdown_views(
@@ -103,6 +131,12 @@ class RecordStoreTests(unittest.TestCase):
             self.assertIn("## 探索观察", paper_text)
             self.assertIn("Context-Aware Comic Generation", paper_text)
             self.assertIn("Example LLM Serving Runtime", industry_text)
+            self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
+            topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
+                "## 项目级工程主线", 1
+            )[0]
+            self.assertIn("FlashMLA", topic_text)
+            self.assertNotIn("Third-party DeepSeek Runtime", topic_text)
             self.assertNotIn("<h2>", industry_text)
             self.assertNotIn("| v1.2.3 |", industry_text)
 
