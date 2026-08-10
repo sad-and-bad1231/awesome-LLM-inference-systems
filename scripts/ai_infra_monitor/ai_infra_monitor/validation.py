@@ -28,6 +28,8 @@ def _common_errors(path: Path) -> list[ValidationError]:
             errors.append(ValidationError(path, number, "trailing whitespace"))
         if line.startswith(("<<<<<<<", "=======", ">>>>>>>")):
             errors.append(ValidationError(path, number, "merge conflict marker"))
+        if re.search(r"<(?:h[1-6]|div|ul|li|script|style|p)\b", line, flags=re.IGNORECASE):
+            errors.append(ValidationError(path, number, "raw HTML in generated view"))
     return errors
 
 
@@ -75,8 +77,14 @@ def _public_view_errors(
     public_root: Path,
     paper_db_path: Path | None,
     industry_db_path: Path | None,
+    public_limits: dict[str, int] | None = None,
 ) -> list[ValidationError]:
     errors: list[ValidationError] = []
+    public_limits = public_limits or {}
+    paper_limit = int(public_limits.get("public_paper_limit_per_theme", 8))
+    industry_limit = int(public_limits.get("public_industry_limit_per_theme", 5))
+    exploration_limit = int(public_limits.get("public_exploration_limit_per_track", 15))
+    topic_limit = int(public_limits.get("public_company_topic_limit", 8))
     required_views = (
         public_root / "README.md",
         public_root / "papers" / "README.md",
@@ -129,8 +137,14 @@ def _public_view_errors(
         if paper_db_path and industry_db_path:
             from .publication import _public_records
 
-            papers = _public_records(paper_db_path, {"paper"})
-            industry = _public_records(industry_db_path, {"industry", "project"})
+            papers = _public_records(
+                paper_db_path, {"paper"}, limit_per_theme=paper_limit
+            )
+            industry = _public_records(
+                industry_db_path,
+                {"industry", "project"},
+                limit_per_theme=industry_limit,
+            )
             expected = {
                 "Academic papers": len(papers),
                 "Industry / open-source systems": len(industry),
@@ -145,6 +159,33 @@ def _public_view_errors(
         for section in ("## At a Glance", "## Collection Navigation", "## Evidence and Selection", "## Resource List"):
             if section not in text:
                 errors.append(ValidationError(path, 1, f"missing public collection section: {section}"))
+        theme_limit = paper_limit if path.parent.name == "papers" else industry_limit
+        kind = "paper" if path.parent.name == "papers" else "industry"
+        for number, line in enumerate(text.splitlines(), 1):
+            match = re.fullmatch(r"### .+ \((\d+)\)", line)
+            if match and int(match.group(1)) > theme_limit:
+                errors.append(
+                    ValidationError(path, number, f"public {kind} theme budget exceeded")
+                )
+            exploration = re.fullmatch(r"- \[探索观察\]\([^)]*\) \((\d+)\)", line)
+            if exploration and int(exploration.group(1)) > exploration_limit:
+                errors.append(ValidationError(path, number, "public exploration budget exceeded"))
+    industry_public = public_root / "industry" / "README.md"
+    if industry_public.exists():
+        from .reading import INDUSTRY_TOPICS
+
+        industry_text = industry_public.read_text(encoding="utf-8")
+        for topic in INDUSTRY_TOPICS:
+            marker = f"## {topic['title']}"
+            if marker not in industry_text:
+                continue
+            section = industry_text.split(marker, 1)[1].split("\n## ", 1)[0]
+            table_lines = [line for line in section.splitlines() if line.startswith("|")]
+            row_count = max(len(table_lines) - 2, 0)
+            if row_count > topic_limit:
+                errors.append(
+                    ValidationError(industry_public, 1, f"public company topic budget exceeded: {topic['key']}")
+                )
     archive_path = public_root / "archive" / "README.md"
     if archive_path.exists():
         archive_text = archive_path.read_text(encoding="utf-8")
@@ -162,6 +203,7 @@ def validate_workspace(
     industry_db_path: Path | None = None,
     candidate_db_path: Path | None = None,
     public_root: Path | None = None,
+    public_limits: dict[str, int] | None = None,
 ) -> list[ValidationError]:
     errors = []
     if paper_db_path and industry_db_path and candidate_db_path:
@@ -180,6 +222,16 @@ def validate_workspace(
         _duplicates(industry_path, industry_rows, 1, "方案/论文", "industry solution")
     )
     errors.extend(_duplicates(candidate_path, candidate_rows, 4, "Title", "candidate"))
+    for number, cells in paper_rows:
+        if cells[0] != "题目" and len(cells[3]) > 240:
+            errors.append(ValidationError(paper_path, number, "display summary exceeds 240 characters"))
+    for number, cells in industry_rows:
+        if cells[1] != "方案/论文" and len(cells[4]) > 240:
+            errors.append(ValidationError(industry_path, number, "display summary exceeds 240 characters"))
     if public_root is not None:
-        errors.extend(_public_view_errors(public_root, paper_db_path, industry_db_path))
+        errors.extend(
+            _public_view_errors(
+                public_root, paper_db_path, industry_db_path, public_limits
+            )
+        )
     return errors

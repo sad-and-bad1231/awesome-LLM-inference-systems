@@ -1,8 +1,10 @@
+import errno
 import json
 import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.publication import GENERATED_NOTICE, render_public_repository
 from scripts.ai_infra_monitor.ai_infra_monitor.validation import validate_workspace
@@ -64,6 +66,187 @@ def _record(
 
 
 class PublicationTests(unittest.TestCase):
+    def test_publication_applies_separate_reading_budgets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+
+            paper_records = []
+            for index in range(5):
+                record = _record("paper", f"Runtime Paper {index}", "Runtime、调度与服务架构")
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "core",
+                    "priority": "frontier",
+                    "themes": ["runtime-scheduling"],
+                    "reasons": ["test"],
+                }
+                paper_records.append(record)
+            for index in range(5):
+                record = _record("paper", f"Agent Exploration {index}", "Agent、RAG、多模态与应用级 Serving")
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "adjacent",
+                    "priority": "supporting",
+                    "themes": [],
+                    "reasons": ["test"],
+                }
+                paper_records.append(record)
+
+            industry_records = []
+            for index in range(5):
+                record = _record("project", f"Runtime Project {index}", "Runtime、调度与服务架构")
+                record["primary_url"] = f"https://github.com/example/runtime-{index}"
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "core",
+                    "priority": "frontier",
+                    "themes": ["runtime-scheduling"],
+                    "project_key": f"github:example/runtime-{index}",
+                    "reasons": ["test"],
+                }
+                industry_records.append(record)
+
+            papers.write_text("\n".join(json.dumps(item) for item in paper_records) + "\n", encoding="utf-8")
+            industry.write_text("\n".join(json.dumps(item) for item in industry_records) + "\n", encoding="utf-8")
+
+            render_public_repository(
+                papers,
+                industry,
+                root,
+                public_paper_limit_per_theme=3,
+                public_industry_limit_per_theme=2,
+                public_exploration_limit_per_track=2,
+                public_company_topic_limit=2,
+            )
+
+            paper_text = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            industry_text = (root / "industry" / "README.md").read_text(encoding="utf-8")
+            self.assertIn("Runtime Paper 2", paper_text)
+            self.assertNotIn("Runtime Paper 3", paper_text)
+            self.assertIn("Agent Exploration 1", paper_text)
+            self.assertNotIn("Agent Exploration 2", paper_text)
+            self.assertIn("Runtime Project 1", industry_text)
+            self.assertNotIn("Runtime Project 2", industry_text)
+            self.assertNotIn("all core records remain below", paper_text)
+            self.assertIn("bounded core reading set", paper_text)
+
+    def test_publication_retries_a_transient_windows_write_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            papers.write_text("", encoding="utf-8")
+            industry.write_text("", encoding="utf-8")
+            target = root / "papers" / "README.md"
+            original_write_text = Path.write_text
+            attempts = 0
+
+            def flaky_write_text(path, *args, **kwargs):
+                nonlocal attempts
+                if path == target and attempts < 2:
+                    attempts += 1
+                    raise OSError(errno.EINVAL, "transient lock")
+                return original_write_text(path, *args, **kwargs)
+
+            with patch.object(Path, "write_text", new=flaky_write_text):
+                render_public_repository(papers, industry, root)
+
+            self.assertEqual(attempts, 2)
+            self.assertTrue(target.exists())
+
+    def test_validation_rejects_raw_html_and_oversized_display_summaries(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paper_view = root / "papers.md"
+            industry_view = root / "industry.md"
+            candidate_view = root / "candidates.md"
+            paper_view.write_text(
+                "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |\n"
+                "|---|---|---|---|\n"
+                f"| Paper | Venue | Org | {'x' * 241} |\n",
+                encoding="utf-8",
+            )
+            industry_view.write_text(
+                "| 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |\n"
+                "|---|---|---:|---|---|---|\n"
+                "| Org | Project | 2026 | Runtime | <h2>raw release</h2> | link |\n",
+                encoding="utf-8",
+            )
+            candidate_view.write_text("# Candidates\n", encoding="utf-8")
+
+            errors = validate_workspace(paper_view, industry_view, candidate_view)
+            messages = "\n".join(error.message for error in errors)
+            self.assertIn("display summary exceeds 240 characters", messages)
+            self.assertIn("raw HTML in generated view", messages)
+
+    def test_public_views_share_theme_exploration_and_project_compaction(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+            core = _record("paper", "FlashAttention-4 Attention Kernel", "算子、编译与硬件加速")
+            exploration = _record("paper", "Comic Generation Inference Enhancement", "Agent、RAG、多模态与应用级 Serving")
+            exploration["technical_tags"]["framework_binding"] = []
+            exploration["technical_tags"]["optimization_layer"] = ["pipeline"]
+            exploration["technical_tags"]["workload"] = ["multimodal", "comic-generation"]
+            project = _record("project", "Example LLM Serving Runtime", "Runtime、调度与服务架构")
+            project["primary_url"] = "https://github.com/example/runtime"
+            deepseek = _record("project", "FlashMLA", "算子、编译与硬件加速")
+            deepseek["primary_url"] = "https://github.com/deepseek-ai/FlashMLA"
+            deepseek["presentation"] = {
+                "topic": "deepseek-ai-systems",
+                "topic_group": "kernels",
+            }
+            moonshot = _record("project", "Mooncake", "Runtime、调度与服务架构")
+            moonshot["primary_url"] = "https://github.com/kvcache-ai/Mooncake"
+            moonshot["presentation"] = {
+                "topic": "moonshot-ai-systems",
+                "topic_group": "inference-systems",
+            }
+            minimax = _record("project", "MiniMax-M3", "Runtime、调度与服务架构")
+            minimax["primary_url"] = "https://github.com/MiniMax-AI/MiniMax-M3"
+            minimax["presentation"] = {
+                "topic": "minimax-ai-systems",
+                "topic_group": "models-architecture",
+            }
+            third_party = _record(
+                "project", "Third-party DeepSeek Runtime", "Runtime、调度与服务架构"
+            )
+            release = _record("project", "v1.2.3", "Runtime、调度与服务架构")
+            release["primary_url"] = "https://github.com/example/runtime/releases/tag/v1.2.3"
+            release["summary"] = "<h2>Release notes</h2>" + " serving compiler" * 1000
+            papers.write_text("\n".join(json.dumps(item) for item in [core, exploration]) + "\n", encoding="utf-8")
+            industry.write_text(
+                "\n".join(
+                    json.dumps(item)
+                    for item in [project, release, deepseek, moonshot, minimax, third_party]
+                ) + "\n",
+                encoding="utf-8",
+            )
+
+            render_public_repository(papers, industry, root)
+
+            papers_text = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            industry_text = (root / "industry" / "README.md").read_text(encoding="utf-8")
+            self.assertIn("Attention / Kernel", papers_text)
+            self.assertIn("探索观察", papers_text)
+            self.assertIn("Comic Generation Inference Enhancement", papers_text)
+            self.assertEqual(industry_text.count("Example LLM Serving Runtime"), 1)
+            self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## Kimi / Moonshot AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## MiniMax AI 系统专题"), 1)
+            topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
+                "## Resource List", 1
+            )[0]
+            self.assertIn("FlashMLA", topic_text)
+            self.assertNotIn("Third-party DeepSeek Runtime", topic_text)
+            self.assertNotIn("<h2>", industry_text)
+
     def test_renders_awesome_root_and_separate_public_collections(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -110,7 +293,11 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("Collection Navigation", papers_view)
             self.assertIn("How to read this page", papers_view)
             self.assertIn("Start Here", readme)
-            self.assertIn("| 1 | 1 | 1 | 6 |", readme)
+            self.assertIn("docs/START-HERE.md", readme)
+            self.assertIn("| 1 | 1 | 1 | 7 |", readme)
+            self.assertIn("papers/README.md#kv-cache", readme)
+            self.assertIn("industry/README.md#runtime-scheduling", readme)
+            self.assertNotIn("#kv-state-memory", readme)
             self.assertIn("Reading Paths", readme)
             self.assertIn("Evidence Ladder", readme)
             self.assertIn("Open-source project", industry_view)
@@ -181,6 +368,11 @@ class PublicationTests(unittest.TestCase):
                 shutil.copyfile(source_figs / name, root / "figs" / name)
             for name in ("ai-infra-system-abstractions.md", "CONTRIBUTING.md"):
                 shutil.copyfile(Path(__file__).parents[2] / name, root / name)
+            (root / "docs").mkdir()
+            shutil.copyfile(
+                Path(__file__).parents[2] / "docs" / "START-HERE.md",
+                root / "docs" / "START-HERE.md",
+            )
             paper_view = root / "paper-list.md"
             industry_view = root / "industrial.md"
             candidate_view = root / "candidates.md"

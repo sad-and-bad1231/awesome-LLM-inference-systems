@@ -7,13 +7,17 @@ Run commands from the workspace root:
 ```powershell
 python scripts/ai_infra_monitor/monitor.py init
 python scripts/ai_infra_monitor/monitor.py discover --mode daily
+python scripts/ai_infra_monitor/monitor.py audit
 python scripts/ai_infra_monitor/monitor.py validate
 python scripts/ai_infra_monitor/monitor.py publish
 ```
 
-`data/papers.jsonl` and `data/industry.jsonl` are the main fact sources; `data/candidates.jsonl` stores only triaged, actionable staging records. Raw discovery candidates remain in `runs/<run-id>/candidates.json` until triage. Markdown files are generated views. Each record carries deterministic `curation.scope` and `curation.priority` metadata derived from `guide.md`: core records stay in the main views, while adjacent/archive records move to `archive/README.md`.
+`data/papers.jsonl` and `data/industry.jsonl` are the main fact sources; `data/candidates.jsonl` stores recent triaged staging records. Raw discovery candidates remain in `runs/<run-id>/candidates.json` until triage, while old terminal candidates are retained in deterministic `data/archive/candidates/*.jsonl.gz` shards. Markdown files are generated views. Each record carries deterministic `curation.scope` and `curation.priority` metadata derived from `guide.md`: core records stay in the main views, while adjacent/archive records move to `archive/README.md`.
 `paper-list.md` and `industrial-llm-inference-systems.md` are separate reading lists. `ai-infra-system-abstractions.md` is only a concise navigation index.
+The two reading lists share seven guide-aligned themes plus a 180-day exploration window. Industry releases are grouped by project, and display summaries are compact derivatives; the JSONL stores retain the original facts and release text. Public pages are deliberately bounded to 8 papers and 5 industry projects per theme, 15 exploration entries per track, and 8 projects per company topic. Internal lists and JSONL remain unbounded.
 The public repository views also include `README.md`, `papers/README.md`, `industry/README.md`, and `archive/README.md`, plus the local diagrams under `figs/`. Optional `presentation` metadata controls a small curated set of featured entries without changing the fact schema.
+
+Core facts carry explicit affiliation and artifact states in `evidence`; legacy values are labeled as legacy or not checked instead of being treated as verified. `monitor.py audit` prints aggregate counts, gaps, duplicates, long summaries, theme coverage, and projected public sizes as one compact JSON object. It never prints full summaries, making it the preferred low-token health check before discovery or manual verification.
 
 Discovery is intentionally resumable and low-cost: source pages are scanned first, while repository inspection and core-serving triage happen in the explicit `triage` step. Use repeatable `--source-id` arguments to sweep a large conference or ecosystem source incrementally. For a broad sweep, partition eligible sources into bounded runs with `--source-batch-count N --source-batch-index I`; the run manifest records the partition so batches can be triaged independently. HTTP fetches use the configurable `max_parallel_fetches` worker pool and source-level timeout/retry overrides, while parsing and state updates remain deterministic in source order. GitHub-backed triage uses the configurable `max_parallel_triage` worker pool and writes results back in input order. Discovery writes only the compact run manifest; triage materializes keep/high and keep/normal records into `data/candidates.jsonl`, and queue promotes them into the paper or industry stores. The `max_candidates_per_source` setting prevents a single large DBLP or program page from monopolizing a run; high-priority overflow is deferred, while low-priority overflow is recorded as suppressed in the run manifest and does not force a repeated full fetch.
 
@@ -51,6 +55,7 @@ python scripts/ai_infra_monitor/monitor.py queue --run-id <run-id> --tiers A B C
 python scripts/ai_infra_monitor/monitor.py curate
 python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py validate
+python scripts/ai_infra_monitor/monitor.py audit
 python scripts/ai_infra_monitor/monitor.py finalize --run-id <run-id> --no-commit
 ```
 
@@ -64,7 +69,7 @@ python scripts/ai_infra_monitor/monitor.py render
 python scripts/ai_infra_monitor/monitor.py validate
 ```
 
-`compact` is a one-time migration/maintenance command that marks legacy non-actionable candidate records as `drop` while preserving them for audit. Run it after upgrading an existing candidate store, not on every daily scan. Weekly automation uses the same flow, with `--mode weekly`, followed by
+`compact` is a one-time migration command that marks legacy non-actionable candidate records as `drop`. `maintain` moves terminal candidates older than the configured 180-day hot window into monthly gzip audit shards, caps recent terminal rows at 500 by default, and compacts redundant fields in the ignored local state file. It is idempotent, emits one summary line, and runs automatically only at the end of a successful weekly `sweep`; daily scans stay minimal. Weekly automation otherwise uses the same flow, with `--mode weekly`, followed by
 `report` and `finalize` without `--no-commit` only when a commit is intended. `curate` can be run independently to backfill the reading metadata after a schema or guide update.
 
 For a reproducible bounded sweep, use `sweep`. It stays local and non-committing by default. A triage or queue failure stops that batch before report/finalize, while later bounded batches remain resumable. Intermediate batches only validate JSONL and update state; the last batch renders and validates all Markdown/public views, so a six-batch sweep does not repeat global rendering six times:

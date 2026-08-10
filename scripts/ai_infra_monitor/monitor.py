@@ -15,11 +15,13 @@ from scripts.ai_infra_monitor.ai_infra_monitor.discovery import (  # noqa: E402
     DiscoveryEngine,
     load_config,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.audit import build_audit  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.git_ops import (  # noqa: E402
     commit_research_updates,
     is_repository,
 )
 from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate  # noqa: E402
+from scripts.ai_infra_monitor.ai_infra_monitor.maintenance import maintain_data  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.output import (  # noqa: E402
     append_candidate_records,
     load_manifest,
@@ -59,6 +61,7 @@ def paths(root: Path, config: dict) -> dict[str, Path]:
         "paper_db_file": "data/papers.jsonl",
         "industry_db_file": "data/industry.jsonl",
         "candidate_db_file": "data/candidates.jsonl",
+        "candidate_archive_dir": "data/archive/candidates",
         "abstraction_file": "ai-infra-system-abstractions.md",
     }
     resolved = {
@@ -75,6 +78,28 @@ def paths(root: Path, config: dict) -> dict[str, Path]:
     for key, value in defaults.items():
         resolved[key] = root / settings.get(key, value)
     return resolved
+
+
+def reading_options(config: dict) -> dict[str, int]:
+    settings = config["settings"]
+    return {
+        "exploration_window_days": int(settings.get("exploration_window_days", 180)),
+        "exploration_limit_per_track": int(settings.get("exploration_limit_per_track", 20)),
+        "display_summary_max_chars": int(settings.get("display_summary_max_chars", 240)),
+        "industry_milestone_links": int(settings.get("industry_milestone_links", 3)),
+    }
+
+
+def public_reading_options(config: dict) -> dict[str, int]:
+    settings = config["settings"]
+    return {
+        "public_paper_limit_per_theme": int(settings.get("public_paper_limit_per_theme", 8)),
+        "public_industry_limit_per_theme": int(settings.get("public_industry_limit_per_theme", 5)),
+        "public_exploration_limit_per_track": int(
+            settings.get("public_exploration_limit_per_track", 15)
+        ),
+        "public_company_topic_limit": int(settings.get("public_company_topic_limit", 8)),
+    }
 
 
 def manifest_path(root: Path, config: dict, run_id: str) -> Path:
@@ -126,6 +151,9 @@ def command_sweep(args) -> int:
     run_ids: list[str] = []
     failures: list[dict[str, object]] = []
     engine = DiscoveryEngine(args.root, args.config)
+    engine_config = getattr(engine, "config", {})
+    engine_settings = engine_config.get("settings", {}) if isinstance(engine_config, dict) else {}
+    weekly_maintenance = bool(engine_settings.get("maintenance_on_weekly_sweep", True))
     for batch_index in range(start_index, end_index + 1):
         manifest = engine.discover(
             args.mode,
@@ -150,6 +178,14 @@ def command_sweep(args) -> int:
             if command_report(lifecycle) != 0:
                 failures.append({"run_id": run_id, "step": "report"})
                 continue
+        if (
+            args.mode == "weekly"
+            and batch_index == end_index
+            and weekly_maintenance
+            and command_maintain(SimpleNamespace(root=args.root, config=args.config)) != 0
+        ):
+            failures.append({"run_id": run_id, "step": "maintain"})
+            continue
         lifecycle.no_commit = args.no_commit
         # Rendering the whole public repository is global work; defer it until the last batch.
         lifecycle.skip_render = batch_index != end_index
@@ -202,6 +238,21 @@ def command_compact(args) -> int:
     candidate_path = paths(args.root, config)["candidate_db_file"]
     changed = compact_candidate_records(candidate_path)
     print(json.dumps({"compacted": changed, "candidate_db_file": str(candidate_path)}))
+    return 0
+
+
+def command_maintain(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    settings = config["settings"]
+    result = maintain_data(
+        resolved["candidate_db_file"],
+        resolved["candidate_archive_dir"],
+        resolved["state_file"],
+        int(settings.get("candidate_hot_window_days", 180)),
+        hot_terminal_limit=int(settings.get("candidate_hot_terminal_limit", 500)),
+    )
+    print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
     return 0
 
 
@@ -307,6 +358,7 @@ def command_render(args) -> int:
     curate_record_stores(
         resolved["paper_db_file"], resolved["industry_db_file"], resolved["candidate_db_file"]
     )
+    options = reading_options(config)
     render_markdown_views(
         resolved["paper_db_file"],
         resolved["industry_db_file"],
@@ -315,11 +367,15 @@ def command_render(args) -> int:
         resolved["industry_file"],
         resolved["candidate_file"],
         resolved["abstraction_file"],
+        candidate_archive_dir=resolved["candidate_archive_dir"],
+        **options,
     )
     render_public_repository(
         resolved["paper_db_file"],
         resolved["industry_db_file"],
         args.root,
+        **options,
+        **public_reading_options(config),
     )
     print(json.dumps({"rendered": True, "paper_db_file": str(resolved["paper_db_file"]), "industry_db_file": str(resolved["industry_db_file"])}))
     return 0
@@ -335,6 +391,8 @@ def command_publish(args) -> int:
         resolved["paper_db_file"],
         resolved["industry_db_file"],
         args.root,
+        **reading_options(config),
+        **public_reading_options(config),
     )
     print(json.dumps({"published_views": ["README.md", "papers/README.md", "industry/README.md", "archive/README.md"]}))
     return 0
@@ -373,6 +431,7 @@ def command_validate(args) -> int:
         resolved["industry_db_file"],
         resolved["candidate_db_file"],
         args.root,
+        public_limits=public_reading_options(config),
     )
     if errors:
         for error in errors:
@@ -405,6 +464,8 @@ def command_finalize(args) -> int:
             resolved["industry_file"],
             resolved["candidate_file"],
             resolved["abstraction_file"],
+            candidate_archive_dir=resolved["candidate_archive_dir"],
+            **reading_options(config),
         )
         render_public_repository(
             resolved["paper_db_file"],
@@ -445,6 +506,9 @@ def command_finalize(args) -> int:
         report_dir = resolved["weekly_reports_dir"]
         if report_dir.exists():
             tracked.extend(report_dir.glob("*.md"))
+        archive_dir = resolved["candidate_archive_dir"]
+        if archive_dir.exists():
+            tracked.extend(archive_dir.glob("candidates-*.jsonl.gz"))
         commit_output = commit_research_updates(
             args.root,
             f"research: update ai infra index ({args.run_id})",
@@ -481,6 +545,23 @@ def command_status(args) -> int:
             indent=2,
         )
     )
+    return 0
+
+
+def command_audit(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    public = public_reading_options(config)
+    result = build_audit(
+        load_records(resolved["paper_db_file"]),
+        load_records(resolved["industry_db_file"]),
+        load_records(resolved["candidate_db_file"]),
+        paper_limit_per_theme=public["public_paper_limit_per_theme"],
+        industry_limit_per_theme=public["public_industry_limit_per_theme"],
+        exploration_limit_per_track=public["public_exploration_limit_per_track"],
+        company_topic_limit=public["public_company_topic_limit"],
+    )
+    print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
     return 0
 
 
@@ -543,7 +624,7 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--report", action="store_true", help="write a report for every batch")
     sweep.add_argument(
         "--no-commit",
-        action=argparse.BooleanOptionalAction,
+        action="store_true",
         default=True,
         help="keep finalize local without creating a Git commit (default: true)",
     )
@@ -564,10 +645,14 @@ def build_parser() -> argparse.ArgumentParser:
     queue.add_argument("--tiers", nargs="+", default=["B", "C"])
     queue.set_defaults(func=command_queue)
     subparsers.add_parser("compact").set_defaults(func=command_compact)
+    subparsers.add_parser(
+        "maintain", help="archive old terminal candidates and compact local state"
+    ).set_defaults(func=command_maintain)
     report = subparsers.add_parser("report")
     report.add_argument("--run-id", required=True)
     report.set_defaults(func=command_report)
     subparsers.add_parser("validate").set_defaults(func=command_validate)
+    subparsers.add_parser("audit", help="print compact aggregate fact-store diagnostics").set_defaults(func=command_audit)
     finalize = subparsers.add_parser("finalize")
     finalize.add_argument("--run-id", required=True)
     finalize.add_argument("--no-commit", action="store_true")

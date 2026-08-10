@@ -26,7 +26,13 @@ def save_state(path: Path, data: dict) -> None:
     )
     try:
         with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as stream:
-            json.dump(data, stream, ensure_ascii=False, indent=2, sort_keys=True)
+            json.dump(
+                data,
+                stream,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            )
             stream.write("\n")
         os.replace(temporary_name, path)
     finally:
