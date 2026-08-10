@@ -108,6 +108,10 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 | Serving、P/D 与 KV Cache | [Ascend-vLLM prefix caching / KV offload](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) | 在 Ascend NPU 上支持 prefix caching、KV cache CPU offload 和 Mooncake/LMCache 连接。 | [official](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) |
 | Serving、P/D 与 KV Cache | [CachedAttention](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) | 用 DRAM/SSD 分层保存跨轮 KV，配合 layer-wise preload、异步保存和 scheduler-aware eviction 降低 TTFT。 | [official](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) |
 | Serving、P/D 与 KV Cache | [P/D-Serve](https://arxiv.org/abs/2408.08147) | 在数万 xPU/NPU 规模上部署 prefill/decode disaggregated serving，做 P/D 组织、调度和 D2D KV transfer。 | [official](https://arxiv.org/abs/2408.08147) |
+| 生产推理系统 | [LLM Serving on Huawei CloudMatrix384](https://arxiv.org/abs/2506.12708) | CloudMatrix384 以昇腾超节点互联和生产级系统软件组织大规模 LLM Serving，覆盖并行执行、P/D 分离、KV 传输与集群调度。 | [official](https://arxiv.org/abs/2506.12708) |
+| 训练与推理框架 | [MindSpore](https://github.com/mindspore-ai/mindspore) | MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。 | [official](https://github.com/mindspore-ai/mindspore) |
+| 云平台与资源管理 | [ModelArts](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) | ModelArts 提供数据、开发、分布式训练、模型部署、异构资源调度和运维的一站式平台，并支持昇腾推理栈。 | [official](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) |
+| CPU 与异构基础设施 | [Kunpeng BoostKit Inference](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) | Kunpeng BoostKit SRA Inference 为鲲鹏平台提供推理加速套件和优化算子，补足通用 CPU 与昇腾 NPU 协同栈的 CPU 侧能力。 | [official](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) |
 
 ## 项目级工程主线
 
@@ -130,6 +134,7 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 | DeepSeek | DeepGEMM / DeepEP | 2025 | MoE | FP8 GEMM 与 MoE expert-parallel 通信库，支撑 DeepSeek 系列训练和推理的 dense/MoE fast path。 | [primary](https://flashmla.net/) |
 | ByteDance | InfiniStore | 2025 | Runtime / Scheduling | 高性能分布式 KV cache store，支持 PD 分离中的 KV transfer、非分离集群的跨节点 KV reuse，并通过 LMCache 集成 vLLM。 | [primary](https://github.com/bytedance/InfiniStore) |
 | KServe | KV Cache Offloading | 2025 | KV Cache / Runtime / Scheduling | 在 KServe generative inference 中集成 LMCache/vLLM KV offloading，面向云原生模型服务。 | [primary](https://kserve.github.io/website/docs/model-serving/generative-inference/kvcache-offloading) |
+| Huawei Cloud | LLM Serving on Huawei CloudMatrix384 | 2025 | Prefill–Decode 与传输 / MoE / Runtime / Scheduling | CloudMatrix384 以昇腾超节点互联和生产级系统软件组织大规模 LLM Serving，覆盖并行执行、P/D 分离、KV 传输与集群调度。 | [primary](https://arxiv.org/abs/2506.12708) |
 | ByteDance Seed | MegaScale-Infer | 2025 | MoE | 将 attention 和 MoE FFN 分池部署，以 disaggregated expert parallelism、ping-pong pipeline 和 M2N 通信提升专家利用率。 | [primary](https://arxiv.org/abs/2504.02263) |
 | NVIDIA | NVFP4 KV cache | 2025 | KV Cache / MoE | Blackwell 侧使用 4-bit KV 存储、attention 前解量化到 FP8，面向长上下文、大 batch、多 agent/MoE 降低 HBM 压力。 | [primary](https://developer.nvidia.com/blog/optimizing-inference-for-long-context-and-large-batch-sizes-with-nvfp4-kv-cache/) |
 | Microsoft Research | Online Scheduling with KV Cache Constraints | 2025 | KV Cache / Runtime / Scheduling | 将 KV cache memory constraint 纳入在线 batching/scheduling 理论模型，提供与 hindsight optimal 对比的调度算法。 | [primary](https://www.microsoft.com/en-us/research/publication/online-scheduling-for-llm-inference-with-kv-cache-constraints/) |
@@ -190,6 +195,9 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 |  | AITER v0.1.16.post5 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ROCm/aiter/releases/tag/v0.1.16.post5) |
 |  | Dynamo v1.4.0-kimi-k3-dev.1 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ai-dynamo/dynamo/releases/tag/v1.4.0-kimi-k3-dev.1) |
 |  | KTransformers v0.6.4 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/kvcache-ai/ktransformers/releases/tag/v0.6.4) |
+| Huawei Kunpeng | Kunpeng BoostKit Inference | 2026 | 探索观察 | Kunpeng BoostKit SRA Inference 为鲲鹏平台提供推理加速套件和优化算子，补足通用 CPU 与昇腾 NPU 协同栈的 CPU 侧能力。 | [primary](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) |
+| MindSpore community / Huawei | MindSpore | 2026 | 探索观察 | MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。 | [primary](https://github.com/mindspore-ai/mindspore) |
+| Huawei Cloud | ModelArts | 2026 | 探索观察 | ModelArts 提供数据、开发、分布式训练、模型部署、异构资源调度和运维的一站式平台，并支持昇腾推理栈。 | [primary](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) |
 | Google / TPU ecosystem | Ragged Paged Attention for TPU | 2026 | 探索观察 | 面向 TPU 的 ragged/paged LLM inference kernel，解决动态 batch、paged KV 和非规则序列形状。 | [primary](https://arxiv.org/abs/2604.15464) |
 |  | Ray-2.55.0 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/ray-project/ray/releases/tag/ray-2.55.0) |
 |  | Release v0.6.16 | 2026 | 探索观察 | 官方发布记录。 | [primary](https://github.com/flashinfer-ai/flashinfer/releases/tag/v0.6.16) |

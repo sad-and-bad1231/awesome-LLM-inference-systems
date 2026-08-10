@@ -12,6 +12,12 @@ CURATION_VERSION = "guide-2026-v6"
 SCOPES = ("core", "adjacent", "archive")
 PRIORITIES = ("foundation", "frontier", "supporting")
 
+HUAWEI_FULL_STACK_ADJACENT_GROUPS = {
+    "training-frameworks",
+    "cloud-platform",
+    "cpu-heterogeneous",
+}
+
 THEME_ORDER = (
     "attention-kernel",
     "kv-cache",
@@ -203,10 +209,20 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
         _contains(title_channel, THEME_TERMS[theme]) for theme in themes
     )
     superseded_by = str(record.get("evidence", {}).get("superseded_by") or "").strip()
+    presentation = record.get("presentation", {})
+    huawei_full_stack_adjacent = (
+        isinstance(presentation, dict)
+        and presentation.get("topic") == "huawei-ascend-ai-systems"
+        and presentation.get("topic_group") in HUAWEI_FULL_STACK_ADJACENT_GROUPS
+    )
 
     if superseded_by:
         scope = "archive"
         reasons = [f"superseded by verified record {superseded_by}"]
+        themes = []
+    elif huawei_full_stack_adjacent:
+        scope = "adjacent"
+        reasons = ["explicit company-stack context outside the stable inference mainline"]
         themes = []
     elif themes and (direct_themes or structured_core_signal) and (
         model_signal or explicit_kernel or inherently_model_specific

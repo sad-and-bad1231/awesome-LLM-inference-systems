@@ -25,7 +25,7 @@ A bounded reading view of production systems, open-source runtimes, infrastructu
 - [MoE](#moe) (5)
 - [Compiler / DSL](#compiler-dsl) (5)
 - [Runtime / Scheduling](#runtime-scheduling) (5)
-- [探索观察](#探索观察) (2)
+- [探索观察](#探索观察) (5)
 
 ## Evidence and Selection
 
@@ -131,6 +131,8 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 | Serving、P/D 与 KV Cache | [Ascend-vLLM prefix caching / KV offload](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) | 在 Ascend NPU 上支持 prefix caching、KV cache CPU offload 和 Mooncake/LMCache 连接。 | [official](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) |
 | Serving、P/D 与 KV Cache | [CachedAttention](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) | 用 DRAM/SSD 分层保存跨轮 KV，配合 layer-wise preload、异步保存和 scheduler-aware eviction 降低 TTFT。 | [official](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) |
 | Serving、P/D 与 KV Cache | [P/D-Serve](https://arxiv.org/abs/2408.08147) | 在数万 xPU/NPU 规模上部署 prefill/decode disaggregated serving，做 P/D 组织、调度和 D2D KV transfer。 | [official](https://arxiv.org/abs/2408.08147) |
+| 生产推理系统 | [LLM Serving on Huawei CloudMatrix384](https://arxiv.org/abs/2506.12708) | CloudMatrix384 以昇腾超节点互联和生产级系统软件组织大规模 LLM Serving，覆盖并行执行、P/D 分离、KV 传输与集群调度。 | [official](https://arxiv.org/abs/2506.12708) |
+| 训练与推理框架 | [MindSpore](https://github.com/mindspore-ai/mindspore) | MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。 | [official](https://github.com/mindspore-ai/mindspore) |
 
 ## Resource List
 
@@ -303,6 +305,18 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 
 最近 180 天内有正式或工程证据、但尚未成为稳定主线的新语境工作。
 
+- **[Kunpeng BoostKit Inference](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html)**
+  `Huawei Kunpeng` · `2026` · `Industry / engineering material` · `Industrial Material` · `Reading priority: supporting`
+  Tags: `serving` `cpu` `kernel` `tensorflow`
+  Kunpeng BoostKit SRA Inference 为鲲鹏平台提供推理加速套件和优化算子，补足通用 CPU 与昇腾 NPU 协同栈的 CPU 侧能力。
+- **[MindSpore](https://github.com/mindspore-ai/mindspore)**
+  `MindSpore community / Huawei` · `2026` · `Open-source project` · `Industrial Material` · `Reading priority: supporting`
+  Tags: `serving` `npu` `gpu` `compiler` `kernel` `mindspore`
+  MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。
+- **[ModelArts](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html)**
+  `Huawei Cloud` · `2026` · `Industry / engineering material` · `Industrial Material` · `Reading priority: supporting`
+  Tags: `serving` `npu` `gpu` `scheduler` `mindspore` `pytorch` `availability`
+  ModelArts 提供数据、开发、分布式训练、模型部署、异构资源调度和运维的一站式平台，并支持昇腾推理栈。
 - **[Ragged Paged Attention for TPU](https://arxiv.org/abs/2604.15464)**
   `Google / TPU ecosystem` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: supporting`
   Tags: `tpu` `kernel` `rag`

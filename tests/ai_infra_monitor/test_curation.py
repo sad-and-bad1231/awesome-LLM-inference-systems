@@ -141,6 +141,48 @@ class CurationTests(unittest.TestCase):
         self.assertEqual(result["scope"], "adjacent")
         self.assertEqual(result["themes"], [])
 
+    def test_huawei_full_stack_groups_remain_adjacent_to_mainline(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        for group, title in (
+            ("training-frameworks", "MindSpore training and inference framework"),
+            ("cloud-platform", "ModelArts LLM runtime scheduler"),
+            ("cpu-heterogeneous", "Kunpeng inference compiler"),
+        ):
+            with self.subTest(group=group):
+                record = _record(title=title, record_type="project")
+                record["presentation"] = {
+                    "topic": "huawei-ascend-ai-systems",
+                    "topic_group": group,
+                }
+
+                result = classify_record(record)
+
+                self.assertEqual(result["scope"], "adjacent")
+                self.assertEqual(result["themes"], [])
+
+    def test_cloudmatrix_production_llm_serving_is_mainline(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        result = classify_record(
+            _record(
+                record_type="industry",
+                title="LLM Serving on Huawei CloudMatrix384",
+                venue_or_channel="Huawei Cloud first-party systems paper",
+                technical_tags={
+                    "phase": ["prefill", "decode", "serving"],
+                    "hardware": ["npu", "rdma"],
+                    "optimization_layer": ["communication", "scheduler"],
+                    "workload": ["moe"],
+                    "framework_binding": [],
+                    "metrics": ["latency", "throughput"],
+                },
+            )
+        )
+
+        self.assertEqual(result["scope"], "core")
+        self.assertIn("runtime-scheduling", result["themes"])
+
     def test_exploration_selection_is_windowed_capped_and_deterministic(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.curation import select_exploration
 

@@ -105,7 +105,7 @@
 
 建议先按七主题建立机制地图，再用公司专题回答：这家公司在哪些系统层自研、哪些层依赖社区、论文和项目是否形成了连续工程链。不要把基础模型发布、Agent demo 和推理系统项目混成同一种证据。
 
-昇腾/华为专题第一阶段按 **CANN/Ascend C 工具链 → MindIE/vLLM Ascend 运行时 → P/D 与 KV Cache Serving** 阅读，先理解国产 NPU 上从算子到服务的执行链。MindSpore、ModelArts、鲲鹏和更广泛的平台生态属于第二阶段，待推理主线稳定后再扩展。
+昇腾/华为专题先按 **CANN/Ascend C 工具链 → MindIE/vLLM Ascend 运行时 → P/D、KV Cache 与 CloudMatrix384** 阅读国产 NPU 从算子到超节点服务的执行链；再读 **MindSpore → ModelArts → Kunpeng BoostKit**，补齐训练框架、云平台和 CPU/异构基础设施。后三者只作完整栈导航，不会因此进入七主题主线。
 
 ## 日常维护只需要这些命令
 

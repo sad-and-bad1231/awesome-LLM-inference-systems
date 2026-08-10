@@ -96,6 +96,9 @@ INDUSTRY_TOPICS = (
             ("inference-runtime", "推理运行时"),
             ("serving-kv", "Serving、P/D 与 KV Cache"),
             ("production-systems", "生产推理系统"),
+            ("training-frameworks", "训练与推理框架"),
+            ("cloud-platform", "云平台与资源管理"),
+            ("cpu-heterogeneous", "CPU 与异构基础设施"),
         ),
     },
 )

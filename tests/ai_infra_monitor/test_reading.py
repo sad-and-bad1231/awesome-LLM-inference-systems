@@ -155,6 +155,36 @@ class ReadingPresentationTests(unittest.TestCase):
 
         self.assertEqual([item["title"] for item in selected], ["FlashMLA", "3FS"])
 
+    def test_huawei_topic_orders_inference_before_full_stack_extension(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import render_industry_topic
+
+        groups = (
+            ("CloudMatrix384", "production-systems"),
+            ("MindSpore", "training-frameworks"),
+            ("ModelArts", "cloud-platform"),
+            ("Kunpeng BoostKit", "cpu-heterogeneous"),
+        )
+        records = []
+        for title, group in groups:
+            record = _industry_record(title, f"https://example.org/{title.lower()}")
+            record["curation"]["project_key"] = f"canonical:{title.lower()}"
+            record["presentation"] = {
+                "topic": "huawei-ascend-ai-systems",
+                "topic_group": group,
+            }
+            records.append(record)
+
+        rendered = render_industry_topic(records, "huawei-ascend-ai-systems")
+
+        labels = (
+            "生产推理系统",
+            "训练与推理框架",
+            "云平台与资源管理",
+            "CPU 与异构基础设施",
+        )
+        positions = [rendered.index(label) for label in labels]
+        self.assertEqual(positions, sorted(positions))
+
     def test_industry_topic_applies_a_deterministic_project_budget(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic
 

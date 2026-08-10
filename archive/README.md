@@ -12,7 +12,7 @@
 
 | Scope | Papers | Industry / Projects |
 |---|---:|---:|
-| adjacent | 33 | 4 |
+| adjacent | 33 | 7 |
 | archive | 338 | 159 |
 
 ## Academic Papers
@@ -395,6 +395,9 @@
 
 | Scope | Priority | Year | Title | Channel / Organization | Reason |
 |---|---|---:|---|---|---|
+| adjacent | supporting | 2026 | [Kunpeng BoostKit Inference](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) | Huawei Kunpeng | explicit company-stack context outside the stable inference mainline; supporting or exploratory evidence |
+| adjacent | supporting | 2026 | [MindSpore](https://github.com/mindspore-ai/mindspore) | MindSpore community / Huawei | explicit company-stack context outside the stable inference mainline; supporting or exploratory evidence |
+| adjacent | supporting | 2026 | [ModelArts](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) | Huawei Cloud | explicit company-stack context outside the stable inference mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | [Ragged Paged Attention for TPU](https://arxiv.org/abs/2604.15464) | Google / TPU ecosystem | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | [SPIN](https://www.microsoft.com/en-us/research/publication/unifying-sparse-attention-with-hierarchical-memory-for-scalable-long-context-llm-serving/) | Microsoft Research | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2025 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | DeepSeek | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
