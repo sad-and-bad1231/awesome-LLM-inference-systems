@@ -7,6 +7,7 @@ import re
 import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -26,9 +27,13 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    render_industry_topics,
 )
 from .maintenance import candidate_archive_summary
+
+
+AFFILIATION_STATUSES = {"verified", "partial", "not_found", "not_checked", "legacy_present"}
+ARTIFACT_STATUSES = {"official", "author_repo", "third_party", "not_found", "not_checked", "legacy_linked"}
 
 
 ABSTRACTIONS = (
@@ -225,7 +230,18 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized.setdefault("topics", [])
     normalized.setdefault("discovered", "")
     normalized["curation"] = classify_record(normalized)
-    return _canonical_fields(normalized)
+    normalized = _canonical_fields(normalized)
+    if curation_for(normalized).get("scope") == "core":
+        evidence = normalized["evidence"]
+        evidence.setdefault(
+            "affiliation_status", "legacy_present" if str(normalized.get("orgs", "")).strip() else "not_checked"
+        )
+        evidence.setdefault(
+            "artifact_status", "legacy_linked" if str(normalized.get("artifact_url", "")).strip() else "not_checked"
+        )
+        evidence.setdefault("metadata_checked_at", "")
+        evidence.setdefault("metadata_sources", [])
+    return normalized
 
 
 @dataclass(frozen=True)
@@ -377,10 +393,20 @@ def load_records(path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def _record_json(record: dict[str, Any]) -> str:
+    return json.dumps(
+        record, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+
+
+def _records_payload(records: list[dict[str, Any]]) -> str:
+    text = "\n".join(_record_json(record) for record in records)
+    return text + ("\n" if text else "")
+
+
 def write_records(path: Path, records: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    text = "\n".join(json.dumps(record, ensure_ascii=False, sort_keys=True) for record in records)
-    payload = text + ("\n" if text else "")
+    payload = _records_payload(records)
     for attempt in range(5):
         try:
             path.write_text(payload, encoding="utf-8", newline="\n")
@@ -405,7 +431,7 @@ def curate_record_stores(
         records = load_records(path)
         normalized = [normalize_record(record) for record in records]
         changed = sum(before != after for before, after in zip(records, normalized))
-        if changed:
+        if changed or (path.exists() and path.read_text(encoding="utf-8") != _records_payload(normalized)):
             write_records(path, normalized)
         counts[label] = changed
     return counts
@@ -479,7 +505,7 @@ def append_records(path: Path, records: list[dict[str, Any]]) -> int:
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8", newline="\n") as stream:
             for record in appended:
-                stream.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+                stream.write(_record_json(record) + "\n")
     return len(appended)
 
 
@@ -769,6 +795,47 @@ def validate_record_store(path: Path) -> list[RecordValidationError]:
             errors.append(RecordValidationError(path, number, "invalid identity history fields"))
         if not isinstance(record.get("evidence"), dict):
             errors.append(RecordValidationError(path, number, "invalid evidence"))
+        else:
+            evidence = record["evidence"]
+            curation_scope = (
+                record.get("curation", {}).get("scope")
+                if isinstance(record.get("curation"), dict)
+                else None
+            )
+            affiliation_status = evidence.get("affiliation_status")
+            artifact_status = evidence.get("artifact_status")
+            if curation_scope == "core" or affiliation_status is not None:
+                if affiliation_status not in AFFILIATION_STATUSES:
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.affiliation_status")
+                    )
+            if curation_scope == "core" or artifact_status is not None:
+                if artifact_status not in ARTIFACT_STATUSES:
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.artifact_status")
+                    )
+            checked_at = evidence.get("metadata_checked_at")
+            if curation_scope == "core" or checked_at is not None:
+                if not isinstance(checked_at, str):
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.metadata_checked_at")
+                    )
+                elif checked_at:
+                    try:
+                        date.fromisoformat(checked_at)
+                    except ValueError:
+                        errors.append(
+                            RecordValidationError(path, number, "invalid evidence.metadata_checked_at")
+                        )
+            sources = evidence.get("metadata_sources")
+            if curation_scope == "core" or sources is not None:
+                if not isinstance(sources, list) or not all(
+                    isinstance(source, str) and source.startswith(("https://", "http://"))
+                    for source in sources
+                ):
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.metadata_sources")
+                    )
         presentation = record.get("presentation")
         if presentation is not None:
             if not isinstance(presentation, dict):
@@ -1019,9 +1086,8 @@ def render_markdown_views(
         "- Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。",
         "- Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。",
     ]
-    topic = render_industry_topic(
+    topic = render_industry_topics(
         industry_source,
-        "deepseek-ai-systems",
         summary_max_chars=display_summary_max_chars,
     )
     if topic:

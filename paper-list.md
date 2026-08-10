@@ -11,7 +11,7 @@
 | Attention / Kernel | 7 |
 | KV Cache | 145 |
 | Prefill–Decode 与传输 | 36 |
-| Speculative Decoding | 85 |
+| Speculative Decoding | 84 |
 | MoE | 63 |
 | Compiler / DSL | 8 |
 | Runtime / Scheduling | 132 |
@@ -24,16 +24,16 @@
 |---|---:|
 | formal_conference | 199 |
 | poster_or_workshop | 25 |
-| preprint | 112 |
+| preprint | 111 |
 | unclassified | 140 |
 
 ## Attention / Kernel
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
-| vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention<br><sub>Attention / Kernel / Compiler / DSL</sub> | ASPLOS 2025 | Microsoft Research, Bangalore, India; Indian Institute of Science, Bangalore, India | vAttention 通过 CUDA virtual memory 保留连续虚拟 KV layout，同时按需分配物理页，避免重写 attention kernel。 |
-| Efficient Memory Management for Large Language Model Serving with PagedAttention<br><sub>Attention / Kernel / Runtime / Scheduling</sub> | SOSP 2023 | UC Berkeley, Berkeley, United States of America; UC Berkeley, Berkeley, USA; UC Berkeley and Stanford University, Berkeley, USA; Independent Researcher, Berkeley, United States of America; UC San Diego, La Jolla, United States of America | vLLM/PagedAttention 用块式虚拟内存管理 KV cache，显著减少碎片并支持 beam search、parallel sampling 和前缀共享。 |
-| FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-Precision<br><sub>Attention / Kernel</sub> | arXiv 预印本, 2024 | Colfax Research; Meta; NVIDIA; Georgia Tech; Princeton University; Together AI | FlashAttention-3 利用 Hopper TMA、warp specialization 和 FP8 block quantization 重叠数据移动、matmul 与 softmax。 |
+| vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention<br><sub>Attention / Kernel / Compiler / DSL</sub> | ASPLOS 2025 | Microsoft Research India; Indian Institute of Science | vAttention 通过 CUDA virtual memory 保留连续虚拟 KV layout，同时按需分配物理页，避免重写 attention kernel。 |
+| Efficient Memory Management for Large Language Model Serving with PagedAttention<br><sub>Attention / Kernel / Runtime / Scheduling</sub> | SOSP 2023 | UC Berkeley; Stanford University; Independent Researcher; UC San Diego | vLLM/PagedAttention 用块式虚拟内存管理 KV cache，显著减少碎片并支持 beam search、parallel sampling 和前缀共享。 |
+| FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-Precision<br><sub>Attention / Kernel</sub> | arXiv 预印本, 2024 | Colfax Research; Meta; NVIDIA; Georgia Institute of Technology; Princeton University; Together AI | FlashAttention-3 利用 Hopper TMA、warp specialization 和 FP8 block quantization 重叠数据移动、matmul 与 softmax。 |
 | FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling<br><sub>Attention / Kernel</sub> | MLSys 2026 | OpenReview 公开稿未列单位 | FlashAttention-4 针对非对称硬件扩展重做 attention 算法和 kernel pipeline 协同设计，提高长上下文与大模型注意力吞吐。 |
 | I/O Analysis is All You Need: An I/O Analysis for Long-Sequence Attention<br><sub>Attention / Kernel</sub> | ASPLOS 2026 | Illinois Institute of Technology, Chicago, IL, USA; Institute of Computing Technology, Chinese Academy of Sciences, University of Chinese Academy of Sciences, Beijing, China; Institute of Computing Technology, Chinese Academy of Sciences, Beijing, China | 该工作从 I/O 复杂度而非 FLOPs 分析长序列 attention，指导算法与硬件在数据搬运瓶颈下协同优化。 |
 | FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference<br><sub>Attention / Kernel</sub> | MLSys 2025 | UC San Diego; Amazon | FastTree 为 radix-tree KV 共享设计专用 attention kernel，并在 runtime 中自适应划分共享上下文查询组。 |
@@ -193,7 +193,7 @@
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
-| DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving<br><sub>Prefill–Decode 与传输 / Runtime / Scheduling</sub> | OSDI 2024 | Peking University; StepFun; UC San Diego | DistServe 将 prefill 和 decode 放到不同 GPU 上，并按 TTFT/TPOT 约束联合优化资源与并行策略。 |
+| DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving<br><sub>Prefill–Decode 与传输 / Runtime / Scheduling</sub> | OSDI 2024 | Peking University; UC San Diego; StepFun | DistServe 将 prefill 和 decode 放到不同 GPU 上，并按 TTFT/TPOT 约束联合优化资源与并行策略。 |
 | P/D-Serve: Serving Disaggregated Large Language Model at Scale<br><sub>Prefill–Decode 与传输</sub> | arXiv 预印本, 2024 | Huawei Technologies Co., Ltd. | P/D-Serve 面向大规模商业部署，将 prefill/decode 组织、调度和 KVCache 传输做端到端优化，以提升分离式 LLM 服务吞吐和 SLO 表现。 |
 | ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping<br><sub>Prefill–Decode 与传输 / Compiler / DSL / Runtime / Scheduling</sub> | OSDI 2026 | Shanghai Jiao Tong University | ADAngel 用 DPR 模型生成多种混合精度 GEMM kernel，并通过 Oracle Policy Map 在运行时为任意 bit-width/shape 任务选择策略；相较 llama.cpp decode 吞吐最高提升 5.10x，相较 TensorRT-LLM prefill TTFT 提升 1.17x–2.38x。 |
 | DecodeShare: Tracing the Shared Pathways of LLM Decode-Time Decisions<br><sub>Prefill–Decode 与传输</sub> | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
@@ -234,9 +234,9 @@
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
-| Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads<br><sub>Speculative Decoding</sub> | ICML 2024 | Princeton University; Together AI; University of Illinois Urbana-Champaign | Medusa 在目标模型上添加多个 decoding heads，无需独立 draft model 即可并行预测和验证多个未来 token。 |
+| Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads<br><sub>Speculative Decoding</sub> | ICML 2024 | Princeton University; Together AI; University of Illinois Urbana-Champaign; Carnegie Mellon University; University of Connecticut | Medusa 在目标模型上添加多个 decoding heads，无需独立 draft model 即可并行预测和验证多个未来 token。 |
 | Accelerating Large-Scale Reasoning Model Inference with Sparse Self-Speculative Decoding<br><sub>Speculative Decoding</sub> | MLSys 2026 | UC Berkeley; Massachusetts Institute of Technology; University of Washington; NVIDIA; Cornell University; Tsinghua University | SparseSpec 以稀疏注意力版本的同一模型充当 draft，并联合调度 drafting、verification 和动态 KV 管理以加速长 CoT。 |
-| AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding<br><sub>Speculative Decoding / Runtime / Scheduling</sub> | EuroSys 2026 official accepted papers |  | EuroSys 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
+| AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding<br><sub>Speculative Decoding / Runtime / Scheduling</sub> | EuroSys 2026 | Carnegie Mellon University; Princeton University; EPFL; Amazon Web Services; Purdue University | AdaServe 为多 SLO 请求构造硬件感知的推测树并动态选择验证 token；官方论文报告 SLO 违约最高降低 4.3×、goodput 最高提升 1.9×。 |
 | Beat the long tail: Distribution-Aware Speculative Decoding for RL Training<br><sub>Speculative Decoding</sub> | MLSys 2026 | University of Illinois Urbana-Champaign; Together AI; UC San Diego; Prime Intellect | DAS 利用历史 rollout 维护非参数 drafter，并按轨迹长度分配 speculative budget，缩短 RL post-training 中长尾生成阶段。 |
 | Cascade: Utility-Driven Speculative Decoding for Mixture-of-Experts<br><sub>Speculative Decoding / MoE</sub> | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | DFVG: A Heterogeneous Architecture for Speculative Decoding with Draft-on-FPGA and Verify-on-GPU<br><sub>Speculative Decoding</sub> | ASPLOS 2026 | Shanghai Jiao Tong University; Southeast University; Eastern Institute of Technology Ningbo | DFVG 将 draft 放在 FPGA、verify 放在 GPU，以异构流水降低推测解码的草稿成本并提高验证硬件利用率。 |
@@ -245,7 +245,7 @@
 | Incentivizing and Orchestrating Cloud-Edge LLM Speculative Decoding via Auctions<br><sub>Speculative Decoding</sub> | IEEE ICDCS 2026 official main technical sessions |  | Authors: Mingtao Ji, Lei Jiao, Bin Tang, Zhihao Qu, Chen Chen and Baoliu Ye |
 | MemSpec: Memory-Aware Runtime for Adaptive Draft Scheduling in Speculative Decoding on Edge Devices<br><sub>Speculative Decoding / Runtime / Scheduling / Compiler / DSL</sub> | PLDI 2026 official program |  | PLDI 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | NexSpec: Towards Optimizing Speculative Decoding in Reinforcement Learning Systems<br><sub>Speculative Decoding</sub> | MLSys 2026 | OpenReview 公开稿未列单位 | NexSpec 针对 RL 系统中的 speculative decoding 动态调参、更新 drafter 并按 rollout reward 加权，缓解大 batch 和 actor 漂移下的加速失效。 |
-| PRISM: Parametrically Refactor Inference for Speculative Decoding Draft Models<br><sub>Speculative Decoding</sub> | MLSys 2026 |  | PRISM refactors speculative-decoding draft-model inference to improve draft generation efficiency and verification throughput. |
+| PRISM: Parametrically Refactor Inference for Speculative Decoding Draft Models<br><sub>Speculative Decoding / Runtime / Scheduling</sub> | MLSys 2026 | University of Waterloo; Central China Institute of Artificial Intelligence; The Chinese University of Hong Kong; University of Science and Technology of China; Dalian University of Technology | PRISM refactors speculative-decoding draft-model inference to improve draft generation efficiency and verification throughput. |
 | SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding<br><sub>Speculative Decoding</sub> | ICML 2026 official virtual papers |  | ICML 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Scaling Up, Speeding Up: A Benchmark of Speculative Decoding for Efficient LLM Test-Time Scaling<br><sub>Speculative Decoding</sub> | ICLR 2026 official virtual papers |  | ICLR 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | SpecDiff-2: Scaling Diffusion Drafter Alignment For Faster Speculative Decoding<br><sub>Speculative Decoding</sub> | MLSys 2026 | University of Virginia | SpecDiff-2 用离散扩散模型作为非自回归 drafter，并校准 diffusion drafter 与自回归 verifier 的分布差异，以提升 speculative decoding 接受率和并行度。 |
@@ -314,7 +314,6 @@
 | EfficientRollout: System-Aware Self-Speculative Decoding for RL Rollouts<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2026 | FuriosaAI; UC Berkeley | EfficientRollout 为 RL rollout 设计自推测解码和系统感知开关策略，在活跃 batch 缩小时继续利用并行验证加速。 |
 | JetFlow: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2026 | 作者公开稿未列单位 | JetFlow 用单次前向的并行 draft head 生成具因果一致性的候选树，突破 speculative decoding 在更大 draft budget 下的扩展瓶颈。 |
 | Speculative Speculative Decoding<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2026 | Department of Computer Science, Stanford University; Department of Computer Science, Princeton University; Together AI | Saguaro 在目标模型验证当前草稿时预先推测验证结果并并行准备下一批草稿，从而进一步隐藏 drafting 串行开销。 |
-| AdaServe: SLO-Customized LLM Serving with Fine-Grained Speculative Decoding<br><sub>Speculative Decoding / Runtime / Scheduling</sub> | arXiv 预印本, 2025 | Carnegie Mellon University; Peking University 等 | AdaServe 将 speculative token tree 构造和请求级 SLO 结合，动态选择验证 token 以提高 goodput。 |
 | Mirror Speculative Decoding: Breaking the Serial Barrier in LLM Inference<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2025 | Apple | Mirror-SD 在异构 GPU/NPU 上并行运行互补的 draft/target 推测流水线，突破串行 drafting 的延迟上限。 |
 | SpecMemo: Speculative Decoding is in Your Pocket<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2025 | University of Illinois Urbana-Champaign | SpecMemo 建模推测解码的内存下界并优化 rejected-token 状态，使受限 GPU 和移动场景也能获得加速。 |
 | SwiftSpec: Ultra-Low Latency LLM Decoding by Scaling Asynchronous Speculative Decoding<br><sub>Speculative Decoding</sub> | arXiv 预印本, 2025 | ByteDance Seed; University of Chicago | SwiftSpec 将 draft 与 target 异步解耦扩展，并加入 tree-aware KV management 和 fused kernels 追求单请求极低延迟。 |
@@ -324,11 +323,11 @@
 
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
-| MegaBlocks: Efficient Sparse Training with Mixture-of-Experts<br><sub>MoE</sub> | MLSys 2023 | Stanford University; Google 等 | MegaBlocks 把动态 token routing 转化为 block-sparse operation，避免 expert capacity padding；其 kernel 思路影响 MoE inference。 |
-| Tutel: Adaptive Mixture-of-Experts at Scale<br><sub>MoE</sub> | MLSys 2023 | Microsoft Research Asia 等 | Tutel 以自适应并行、all-to-all 和 fused kernel 构建通用 MoE runtime。 |
+| MegaBlocks: Efficient Sparse Training with Mixture-of-Experts<br><sub>MoE</sub> | MLSys 2023 | Stanford University; Google DeepMind; Microsoft Research | MegaBlocks 把动态 token routing 转化为 block-sparse operation，避免 expert capacity padding；其 kernel 思路影响 MoE inference。 |
+| Tutel: Adaptive Mixture-of-Experts at Scale<br><sub>MoE</sub> | MLSys 2023 | Microsoft Research Asia; Microsoft Azure | Tutel 以自适应并行、all-to-all 和 fused kernel 构建通用 MoE runtime。 |
 | DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale<br><sub>MoE</sub> | ICML 2022 | Microsoft | DeepSpeed-MoE 联合优化 expert parallel、通信和模型压缩，使大规模 MoE 同时具备训练和推理可行性。 |
 | Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design<br><sub>MoE / Prefill–Decode 与传输</sub> | OSDI 2026 | Tsinghua University; Xingyun | 该工作用 stream-loading prefill、SmallEP、零拷贝 prefill/decode 分离和 CPU FP8 kernel，把本地 CPU-GPU 平台上的 MoE serving 拉近云端 SLO。 |
-| CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving<br><sub>MoE / Runtime / Scheduling</sub> | MLSys 2026 official virtual papers |  | CRAFT performs fine-grained, per-layer expert replication under a memory budget to improve load balance and serving goodput for large MoE models. |
+| CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving<br><sub>MoE / Runtime / Scheduling</sub> | MLSys 2026 | Amazon; University of Toronto | CRAFT performs fine-grained, per-layer expert replication under a memory budget to improve load balance and serving goodput for large MoE models. |
 | Dynamo-MoE: Accelerating Sparse Large Model Inference<br><sub>MoE / Compiler / DSL</sub> | HPDC 2026 official program |  | HPDC 2026 official program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | EARTH: An Efficient MoE Accelerator with Entropy-Aware Speculative Prefetch and Result Reuse<br><sub>MoE</sub> | ASPLOS 2026 | Shanghai Jiao Tong University, Shanghai, China and Shanghai Qi Zhi Institute, Shanghai, China; Shanghai Jiao Tong University, Shanghai, China; National University of Defense Technology, Changsha, Hunan, China and Shanghai Qi Zhi Institute, Shanghai, China; Shanghai Jiaotong University, Shanghai, China and Shanghai Qi Zhi Institute, Shanghai, China | EARTH 根据 gating entropy 推测预取 expert 并复用结果，以降低 MoE expert 加载等待与误预取代价。 |
 | Efficient MoE Inference on Single GPU with Dynamic Expert Caching<br><sub>MoE / Compiler / DSL</sub> | IEEE IPDPS 2026 official detailed program |  | IEEE IPDPS 2026 official detailed program 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
@@ -406,7 +405,7 @@
 | 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |
 |---|---|---|---|
 | ADAPTIVE ERASURE CODING FOR FAULT-TOLERANT LLM SERVING WITH CONTINUOUS BATCHING<br><sub>Runtime / Scheduling</sub> | MLSys 2026 official virtual papers |  | MLSys 2026 official virtual papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
-| FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving<br><sub>Runtime / Scheduling</sub> | MLSys 2025 | University of Washington; NVIDIA | FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。 |
+| FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving<br><sub>Runtime / Scheduling</sub> | MLSys 2025 | University of Washington; NVIDIA; Perplexity AI; Carnegie Mellon University; Independent Researcher | FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。 |
 | Llumnix: Dynamic Scheduling for Large Language Model Serving<br><sub>Runtime / Scheduling</sub> | OSDI 2024 | Alibaba Group | Llumnix 通过请求及其 KV 状态的 live migration，在多实例间动态重调度以改善尾延迟、隔离和负载均衡。 |
 | MemServe: Context Caching for Disaggregated LLM Serving with Elastic Memory Pool<br><sub>Runtime / Scheduling</sub> | arXiv 预印本, 2024 | Huawei Cloud; University of Chinese Academy of Sciences; Institute of Computing Technology, Chinese Academy of Sciences; Peking University | MemServe 以 MemPool 统一管理跨实例分布式 KV，并联合 context caching、PD 分离和全局 locality-aware scheduling。 |
 | SGLang: Efficient Execution of Structured Language Model Programs<br><sub>Runtime / Scheduling</sub> | NeurIPS 2024 | Stanford University; UC Berkeley; Shanghai Jiao Tong University; Texas A&M University; Independent Researcher | SGLang 用 RadixAttention、结构化生成语言和高性能 runtime 统一优化多调用、共享前缀和约束生成工作流。 |

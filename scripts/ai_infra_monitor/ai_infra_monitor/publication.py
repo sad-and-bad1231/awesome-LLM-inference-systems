@@ -13,7 +13,9 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    public_source_records,
+    render_industry_topics,
+    select_public_mainline,
 )
 from .records import ABSTRACTIONS, load_records
 
@@ -31,23 +33,15 @@ def _write_text(path: Path, text: str) -> None:
 
 GENERATED_NOTICE = "<!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->"
 PUBLIC_REPOSITORY_URL = "https://github.com/sad-and-bad1231/awesome-LLM-inference-systems"
-PUBLIC_CATEGORIES = {
-    "Program-Aware Scheduling": "Runtime & Serving",
-    "Disaggregated Interconnects": "P/D Disaggregation & KV Transfer",
-    "Memory Topology & Virtualization": "KV State & Memory",
-    "State Compression & Signal Coding": "KV Compression & Low-Bit State",
-    "Execution Compilation & Kernel Fusion": "Kernel & Compiler",
-    "SRE/Fault-Tolerance/Sparing": "Reliability & Benchmarks",
+THEME_DESCRIPTIONS = {
+    "attention-kernel": "Attention、GEMM、融合算子及其 GPU/NPU 执行效率。",
+    "kv-cache": "KV 分配、复用、压缩、卸载和分层状态管理。",
+    "prefill-decode-transfer": "Prefill/decode 解耦、KV 传输、路由与分布式数据路径。",
+    "speculative-decoding": "Draft-and-verify、多 token 预测和验证流水线。",
+    "moe": "专家放置、复制、路由、通信和负载均衡。",
+    "compiler-dsl": "Triton/DSL、图编译、自动生成和跨硬件 kernel 适配。",
+    "runtime-scheduling": "批处理、调度、SLO、扩缩容和生产运行时。",
 }
-PUBLIC_CATEGORY_DESCRIPTIONS = {
-    "KV State & Memory": "KV blocks, prefix state, offload, external memory, and memory-aware serving.",
-    "P/D Disaggregation & KV Transfer": "Prefill/decode separation, KV transfer, routing, and distributed transport.",
-    "KV Compression & Low-Bit State": "KV quantization, latent state, sparsity, and quality-cost tradeoffs.",
-    "Kernel & Compiler": "CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.",
-    "Runtime & Serving": "Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.",
-    "Reliability & Benchmarks": "SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.",
-}
-EXCLUDED_STATUSES = {"new", "keep", "drop", "promote", "queued"}
 DIRECT_SERVING_TERMS = (
     "inference",
     "serving",
@@ -70,11 +64,11 @@ METRIC_DESCRIPTIONS = (
     ("Numerical Reproducibility", "混合精度、量化和大规模部署中的数值稳定性与可复现性。"),
 )
 READING_PATHS = (
-    ("Reduce first-token latency", "P/D disaggregation, KV transfer, prefix reuse", "papers/README.md#p-d-disaggregation-kv-transfer"),
-    ("Fit longer context", "KV state, offload, compression, and memory tiers", "papers/README.md#kv-state-memory"),
-    ("Raise decode goodput", "Kernels, compilation, MoE execution, and batching", "papers/README.md#kernel-compiler"),
-    ("Operate in production", "Runtime policy, SLOs, recovery, and ecosystem bindings", "industry/README.md#runtime-serving"),
-    ("Deploy beyond CUDA", "AMD, TPU, NPU, Apple, and heterogeneous serving stacks", "industry/README.md#hardware-ecosystem"),
+    ("Reduce first-token latency", "P/D disaggregation, KV transfer, and routing", "papers/README.md#prefill-decode"),
+    ("Fit longer context", "KV allocation, reuse, offload, and compression", "papers/README.md#kv-cache"),
+    ("Raise decode goodput", "Attention kernels, compilation, and fusion", "papers/README.md#attention-kernel"),
+    ("Scale MoE serving", "Expert placement, replication, communication, and balancing", "papers/README.md#moe"),
+    ("Operate in production", "Runtime policy, SLOs, recovery, and deployment", "industry/README.md#runtime-scheduling"),
 )
 EVIDENCE_LADDER = (
     ("Formal venue", "Conference or journal identity confirmed; publication status is shown as metadata."),
@@ -167,17 +161,26 @@ def _featured_sort_key(record: dict[str, Any]) -> tuple[int, int, int, int, str]
     return (0 if presentation.get("featured") is True else 1, order, *base)
 
 
-def _public_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
-    records = [
-        record for record in load_records(path)
-        if record.get("record_type") in types and record.get("status") not in EXCLUDED_STATUSES
-    ]
+def _public_records(
+    path: Path, types: set[str], *, limit_per_theme: int | None = None
+) -> list[dict[str, Any]]:
+    records = public_source_records(load_records(path), types)
     if types <= {"industry", "project"}:
-        return [
+        selected = [
             _project_display(group) for group in aggregate_industry_records(records)
             if group["scope"] == "core"
         ]
-    return sorted([record for record in records if is_public_mainline(record)], key=_sort_key)
+        return (
+            selected
+            if limit_per_theme is None
+            else select_public_mainline(selected, limit_per_theme=limit_per_theme)
+        )
+    selected = sorted([record for record in records if is_public_mainline(record)], key=_sort_key)
+    return (
+        selected
+        if limit_per_theme is None
+        else select_public_mainline(selected, limit_per_theme=limit_per_theme)
+    )
 
 
 def _is_serving_mainline(record: dict[str, Any]) -> bool:
@@ -212,13 +215,12 @@ def _featured_records(records: list[dict[str, Any]], limit: int) -> list[dict[st
 
 
 def _archive_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
+    source = public_source_records(load_records(path), types)
     return sorted(
         [
             record
-            for record in load_records(path)
-            if record.get("record_type") in types
-            and record.get("status") not in EXCLUDED_STATUSES
-            and not is_public_mainline(record)
+            for record in source
+            if not is_public_mainline(record)
         ],
         key=curation_sort_key,
     )
@@ -283,12 +285,12 @@ def _group(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     return grouped
 
 
-def _category_counts(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -> dict[str, int]:
+def _theme_counts(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -> dict[str, int]:
     counts = Counter()
     for record in [*papers, *industry]:
-        category = PUBLIC_CATEGORIES.get(record.get("system_abstraction_primary"))
-        if category:
-            counts[category] += 1
+        themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
+        if themes and themes[0] in THEME_ORDER:
+            counts[themes[0]] += 1
     return counts
 
 
@@ -330,6 +332,7 @@ def _render_collection(
     exploration: list[dict[str, Any]] | None = None,
     topic_records: list[dict[str, Any]] | None = None,
     display_summary_max_chars: int = 240,
+    company_topic_limit: int | None = None,
 ) -> str:
     exploration = exploration or []
     grouped = {theme: [] for theme in THEME_ORDER}
@@ -386,15 +389,15 @@ def _render_collection(
             "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
             "| Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |",
             "| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
-            "| Featured | A small editorial starting set; all core records remain below. |",
+            "| Featured | A small editorial starting set within the bounded core reading set; complete facts remain in JSONL and the archive. |",
             "",
         ]
     )
     if industry and topic_records:
-        topic = render_industry_topic(
+        topic = render_industry_topics(
             topic_records,
-            "deepseek-ai-systems",
             summary_max_chars=display_summary_max_chars,
+            limit_per_topic=company_topic_limit,
         )
         if topic:
             lines.extend(topic.rstrip().splitlines())
@@ -477,7 +480,7 @@ def _render_root(
 ) -> str:
     paper_counts = Counter(_evidence_label(record) for record in papers)
     industry_counts = Counter(_evidence_label(record) for record in industry)
-    category_counts = _category_counts(papers, industry)
+    theme_counts = _theme_counts(papers, industry)
     featured_papers = _featured_records(papers, 8)
     featured_industry = _featured_records(industry, 6)
     formal_papers = sum(record.get("evidence", {}).get("venue_status") == "formal_conference" for record in papers)
@@ -510,7 +513,8 @@ def _render_root(
         "",
         "| Research entry point | What you get |",
         "|---|---|",
-        "| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |",
+        "| [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |",
+        "| [Paper map](figs/ai-inference-system-map.png) | The serving lifecycle and system layers in one figure. |",
         "| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |",
         "| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |",
         "| [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |",
@@ -528,9 +532,9 @@ def _render_root(
         "",
         "## Coverage",
         "",
-        "| Papers | Industry systems | Formal paper venues | System abstractions |",
+        "| Papers | Industry systems | Formal paper venues | Reading themes |",
         "|---:|---:|---:|---:|",
-        f"| {len(papers)} | {len(industry)} | {formal_papers} | {len(ABSTRACTIONS)} |",
+        f"| {len(papers)} | {len(industry)} | {formal_papers} | {len(THEME_ORDER)} |",
         "",
         "| Collection | Records | Evidence breakdown |",
         "|---|---:|---|",
@@ -549,15 +553,15 @@ def _render_root(
         "",
         "## Taxonomy",
         "",
-        "| System abstraction | Records | What it covers | Entry points |",
+        "| Reading theme | Records | What it covers | Entry points |",
         "|---|---:|---|---|",
     ]
     )
-    for abstraction in ABSTRACTIONS:
-        category = PUBLIC_CATEGORIES[abstraction]
-        anchor = _anchor(category)
+    for theme in THEME_ORDER:
+        label = THEME_LABELS[theme]
+        anchor = _anchor(label)
         lines.append(
-            f"| **{category}** | {category_counts.get(category, 0)} | {_escape(PUBLIC_CATEGORY_DESCRIPTIONS[category])} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
+            f"| **{label}** | {theme_counts.get(theme, 0)} | {_escape(THEME_DESCRIPTIONS[theme])} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
         )
     lines.extend(
         [
@@ -619,24 +623,36 @@ def render_public_repository(
     exploration_limit_per_track: int = 20,
     industry_milestone_links: int = 3,
     display_summary_max_chars: int = 240,
+    public_paper_limit_per_theme: int = 8,
+    public_industry_limit_per_theme: int = 5,
+    public_exploration_limit_per_track: int = 15,
+    public_company_topic_limit: int = 8,
 ) -> None:
-    paper_source = [record for record in load_records(papers_path) if record.get("record_type") == "paper" and record.get("status") not in EXCLUDED_STATUSES]
-    industry_source = [record for record in load_records(industry_path) if record.get("record_type") in {"industry", "project"} and record.get("status") not in EXCLUDED_STATUSES]
-    papers = sorted([record for record in paper_source if is_public_mainline(record)], key=_sort_key)
+    paper_source = public_source_records(load_records(papers_path), {"paper"})
+    industry_source = public_source_records(load_records(industry_path), {"industry", "project"})
+    papers = select_public_mainline(
+        sorted([record for record in paper_source if is_public_mainline(record)], key=_sort_key),
+        limit_per_theme=public_paper_limit_per_theme,
+    )
     paper_exploration = select_exploration(
-        paper_source, window_days=exploration_window_days, limit=exploration_limit_per_track
+        paper_source,
+        window_days=exploration_window_days,
+        limit=public_exploration_limit_per_track,
     )
     industry_groups = aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
-    industry = [_project_display(group) for group in industry_groups if group["scope"] == "core"]
+    industry = select_public_mainline(
+        [_project_display(group) for group in industry_groups if group["scope"] == "core"],
+        limit_per_theme=public_industry_limit_per_theme,
+    )
     industry_exploration_source = select_exploration(
         industry_source,
         window_days=exploration_window_days,
-        limit=max(exploration_limit_per_track * 5, exploration_limit_per_track),
+        limit=max(public_exploration_limit_per_track * 5, public_exploration_limit_per_track),
     )
     industry_exploration = [
         _project_display(group)
         for group in aggregate_industry_records(industry_exploration_source, milestone_limit=industry_milestone_links)
-    ][:exploration_limit_per_track]
+    ][:public_exploration_limit_per_track]
     archived_papers = _archive_records(papers_path, {"paper"})
     archived_industry = _archive_records(industry_path, {"industry", "project"})
     (output_root / "papers").mkdir(parents=True, exist_ok=True)
@@ -650,7 +666,7 @@ def render_public_repository(
         output_root / "papers" / "README.md",
         _render_collection(
             "AI Inference Papers",
-            "A complete academic paper collection organized by serving-system abstraction. Formal venues, posters/workshops, preprints, and legacy imports are labeled separately.",
+            "A bounded academic reading view organized by serving-system abstraction. Complete facts remain in JSONL and the archive.",
             papers,
             industry=False,
             image="../figs/ai-inference-system-map.png",
@@ -662,13 +678,14 @@ def render_public_repository(
         output_root / "industry" / "README.md",
         _render_collection(
             "Industry & Open-Source Inference Systems",
-            "A complete collection of production systems, open-source runtimes, infrastructure projects, and engineering material, with artifact and ecosystem signals where available.",
+            "A bounded reading view of production systems, open-source runtimes, infrastructure projects, and official engineering material.",
             industry,
             industry=True,
             image="../figs/ai-inference-system-map.png",
             exploration=industry_exploration,
             topic_records=industry_source,
             display_summary_max_chars=display_summary_max_chars,
+            company_topic_limit=public_company_topic_limit,
         ),
     )
     _write_text(
