@@ -33,21 +33,14 @@ def _write_text(path: Path, text: str) -> None:
 
 GENERATED_NOTICE = "<!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->"
 PUBLIC_REPOSITORY_URL = "https://github.com/sad-and-bad1231/awesome-LLM-inference-systems"
-PUBLIC_CATEGORIES = {
-    "Program-Aware Scheduling": "Runtime & Serving",
-    "Disaggregated Interconnects": "P/D Disaggregation & KV Transfer",
-    "Memory Topology & Virtualization": "KV State & Memory",
-    "State Compression & Signal Coding": "KV Compression & Low-Bit State",
-    "Execution Compilation & Kernel Fusion": "Kernel & Compiler",
-    "SRE/Fault-Tolerance/Sparing": "Reliability & Benchmarks",
-}
-PUBLIC_CATEGORY_DESCRIPTIONS = {
-    "KV State & Memory": "KV blocks, prefix state, offload, external memory, and memory-aware serving.",
-    "P/D Disaggregation & KV Transfer": "Prefill/decode separation, KV transfer, routing, and distributed transport.",
-    "KV Compression & Low-Bit State": "KV quantization, latent state, sparsity, and quality-cost tradeoffs.",
-    "Kernel & Compiler": "CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends.",
-    "Runtime & Serving": "Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.",
-    "Reliability & Benchmarks": "SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.",
+THEME_DESCRIPTIONS = {
+    "attention-kernel": "Attention、GEMM、融合算子及其 GPU/NPU 执行效率。",
+    "kv-cache": "KV 分配、复用、压缩、卸载和分层状态管理。",
+    "prefill-decode-transfer": "Prefill/decode 解耦、KV 传输、路由与分布式数据路径。",
+    "speculative-decoding": "Draft-and-verify、多 token 预测和验证流水线。",
+    "moe": "专家放置、复制、路由、通信和负载均衡。",
+    "compiler-dsl": "Triton/DSL、图编译、自动生成和跨硬件 kernel 适配。",
+    "runtime-scheduling": "批处理、调度、SLO、扩缩容和生产运行时。",
 }
 DIRECT_SERVING_TERMS = (
     "inference",
@@ -71,11 +64,11 @@ METRIC_DESCRIPTIONS = (
     ("Numerical Reproducibility", "混合精度、量化和大规模部署中的数值稳定性与可复现性。"),
 )
 READING_PATHS = (
-    ("Reduce first-token latency", "P/D disaggregation, KV transfer, prefix reuse", "papers/README.md#p-d-disaggregation-kv-transfer"),
-    ("Fit longer context", "KV state, offload, compression, and memory tiers", "papers/README.md#kv-state-memory"),
-    ("Raise decode goodput", "Kernels, compilation, MoE execution, and batching", "papers/README.md#kernel-compiler"),
-    ("Operate in production", "Runtime policy, SLOs, recovery, and ecosystem bindings", "industry/README.md#runtime-serving"),
-    ("Deploy beyond CUDA", "AMD, TPU, NPU, Apple, and heterogeneous serving stacks", "industry/README.md#hardware-ecosystem"),
+    ("Reduce first-token latency", "P/D disaggregation, KV transfer, and routing", "papers/README.md#prefill-decode"),
+    ("Fit longer context", "KV allocation, reuse, offload, and compression", "papers/README.md#kv-cache"),
+    ("Raise decode goodput", "Attention kernels, compilation, and fusion", "papers/README.md#attention-kernel"),
+    ("Scale MoE serving", "Expert placement, replication, communication, and balancing", "papers/README.md#moe"),
+    ("Operate in production", "Runtime policy, SLOs, recovery, and deployment", "industry/README.md#runtime-scheduling"),
 )
 EVIDENCE_LADDER = (
     ("Formal venue", "Conference or journal identity confirmed; publication status is shown as metadata."),
@@ -292,12 +285,12 @@ def _group(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     return grouped
 
 
-def _category_counts(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -> dict[str, int]:
+def _theme_counts(papers: list[dict[str, Any]], industry: list[dict[str, Any]]) -> dict[str, int]:
     counts = Counter()
     for record in [*papers, *industry]:
-        category = PUBLIC_CATEGORIES.get(record.get("system_abstraction_primary"))
-        if category:
-            counts[category] += 1
+        themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
+        if themes and themes[0] in THEME_ORDER:
+            counts[themes[0]] += 1
     return counts
 
 
@@ -487,7 +480,7 @@ def _render_root(
 ) -> str:
     paper_counts = Counter(_evidence_label(record) for record in papers)
     industry_counts = Counter(_evidence_label(record) for record in industry)
-    category_counts = _category_counts(papers, industry)
+    theme_counts = _theme_counts(papers, industry)
     featured_papers = _featured_records(papers, 8)
     featured_industry = _featured_records(industry, 6)
     formal_papers = sum(record.get("evidence", {}).get("venue_status") == "formal_conference" for record in papers)
@@ -520,7 +513,8 @@ def _render_root(
         "",
         "| Research entry point | What you get |",
         "|---|---|",
-        "| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |",
+        "| [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |",
+        "| [Paper map](figs/ai-inference-system-map.png) | The serving lifecycle and system layers in one figure. |",
         "| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |",
         "| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |",
         "| [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |",
@@ -538,9 +532,9 @@ def _render_root(
         "",
         "## Coverage",
         "",
-        "| Papers | Industry systems | Formal paper venues | System abstractions |",
+        "| Papers | Industry systems | Formal paper venues | Reading themes |",
         "|---:|---:|---:|---:|",
-        f"| {len(papers)} | {len(industry)} | {formal_papers} | {len(ABSTRACTIONS)} |",
+        f"| {len(papers)} | {len(industry)} | {formal_papers} | {len(THEME_ORDER)} |",
         "",
         "| Collection | Records | Evidence breakdown |",
         "|---|---:|---|",
@@ -559,15 +553,15 @@ def _render_root(
         "",
         "## Taxonomy",
         "",
-        "| System abstraction | Records | What it covers | Entry points |",
+        "| Reading theme | Records | What it covers | Entry points |",
         "|---|---:|---|---|",
     ]
     )
-    for abstraction in ABSTRACTIONS:
-        category = PUBLIC_CATEGORIES[abstraction]
-        anchor = _anchor(category)
+    for theme in THEME_ORDER:
+        label = THEME_LABELS[theme]
+        anchor = _anchor(label)
         lines.append(
-            f"| **{category}** | {category_counts.get(category, 0)} | {_escape(PUBLIC_CATEGORY_DESCRIPTIONS[category])} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
+            f"| **{label}** | {theme_counts.get(theme, 0)} | {_escape(THEME_DESCRIPTIONS[theme])} | [Papers](papers/README.md#{anchor}) · [Industry](industry/README.md#{anchor}) |"
         )
     lines.extend(
         [

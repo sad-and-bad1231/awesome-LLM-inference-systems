@@ -26,7 +26,8 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Research entry point | What you get |
 |---|---|
-| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |
+| [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |
+| [Paper map](figs/ai-inference-system-map.png) | The serving lifecycle and system layers in one figure. |
 | [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |
 | [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
 | [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |
@@ -44,9 +45,9 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 ## Coverage
 
-| Papers | Industry systems | Formal paper venues | System abstractions |
+| Papers | Industry systems | Formal paper venues | Reading themes |
 |---:|---:|---:|---:|
-| 50 | 29 | 46 | 6 |
+| 50 | 29 | 46 | 7 |
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
@@ -57,22 +58,23 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Research question | Follow this path |
 |---|---|
-| **Reduce first-token latency** | P/D disaggregation, KV transfer, prefix reuse ([open](papers/README.md#p-d-disaggregation-kv-transfer)) |
-| **Fit longer context** | KV state, offload, compression, and memory tiers ([open](papers/README.md#kv-state-memory)) |
-| **Raise decode goodput** | Kernels, compilation, MoE execution, and batching ([open](papers/README.md#kernel-compiler)) |
-| **Operate in production** | Runtime policy, SLOs, recovery, and ecosystem bindings ([open](industry/README.md#runtime-serving)) |
-| **Deploy beyond CUDA** | AMD, TPU, NPU, Apple, and heterogeneous serving stacks ([open](industry/README.md#hardware-ecosystem)) |
+| **Reduce first-token latency** | P/D disaggregation, KV transfer, and routing ([open](papers/README.md#prefill-decode)) |
+| **Fit longer context** | KV allocation, reuse, offload, and compression ([open](papers/README.md#kv-cache)) |
+| **Raise decode goodput** | Attention kernels, compilation, and fusion ([open](papers/README.md#attention-kernel)) |
+| **Scale MoE serving** | Expert placement, replication, communication, and balancing ([open](papers/README.md#moe)) |
+| **Operate in production** | Runtime policy, SLOs, recovery, and deployment ([open](industry/README.md#runtime-scheduling)) |
 
 ## Taxonomy
 
-| System abstraction | Records | What it covers | Entry points |
+| Reading theme | Records | What it covers | Entry points |
 |---|---:|---|---|
-| **KV State & Memory** | 21 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
-| **P/D Disaggregation & KV Transfer** | 9 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
-| **KV Compression & Low-Bit State** | 21 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
-| **Kernel & Compiler** | 15 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
-| **Runtime & Serving** | 11 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
-| **Reliability & Benchmarks** | 2 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
+| **Attention / Kernel** | 8 | Attention、GEMM、融合算子及其 GPU/NPU 执行效率。 | [Papers](papers/README.md#attention-kernel) · [Industry](industry/README.md#attention-kernel) |
+| **KV Cache** | 13 | KV 分配、复用、压缩、卸载和分层状态管理。 | [Papers](papers/README.md#kv-cache) · [Industry](industry/README.md#kv-cache) |
+| **Prefill–Decode 与传输** | 13 | Prefill/decode 解耦、KV 传输、路由与分布式数据路径。 | [Papers](papers/README.md#prefill-decode) · [Industry](industry/README.md#prefill-decode) |
+| **Speculative Decoding** | 10 | Draft-and-verify、多 token 预测和验证流水线。 | [Papers](papers/README.md#speculative-decoding) · [Industry](industry/README.md#speculative-decoding) |
+| **MoE** | 13 | 专家放置、复制、路由、通信和负载均衡。 | [Papers](papers/README.md#moe) · [Industry](industry/README.md#moe) |
+| **Compiler / DSL** | 9 | Triton/DSL、图编译、自动生成和跨硬件 kernel 适配。 | [Papers](papers/README.md#compiler-dsl) · [Industry](industry/README.md#compiler-dsl) |
+| **Runtime / Scheduling** | 13 | 批处理、调度、SLO、扩缩容和生产运行时。 | [Papers](papers/README.md#runtime-scheduling) · [Industry](industry/README.md#runtime-scheduling) |
 
 ## System Map
 

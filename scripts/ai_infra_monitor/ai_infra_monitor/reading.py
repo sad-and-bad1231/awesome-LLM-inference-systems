@@ -227,6 +227,11 @@ def aggregate_industry_records(
 
     projects = []
     for key, rows in grouped.items():
+        eligible_rows = [
+            record
+            for record in rows
+            if record.get("status") not in PUBLIC_EXCLUDED_STATUSES
+        ]
         non_releases = [record for record in rows if not _is_release(record)]
         if non_releases:
             anchor = sorted(non_releases, key=_anchor_sort_key)[0]
@@ -235,7 +240,7 @@ def aggregate_industry_records(
             anchor = max(stable or rows, key=_date_key)
 
         candidates = [
-            record for record in rows
+            record for record in eligible_rows
             if record is not anchor
             and curation_for(record).get("scope") == "core"
             and curation_for(record).get("priority") in {"foundation", "frontier"}
@@ -261,9 +266,15 @@ def aggregate_industry_records(
 
         themes = [
             theme for theme in THEME_ORDER
-            if any(theme in curation_for(record).get("themes", []) for record in rows)
+            if any(
+                theme in curation_for(record).get("themes", [])
+                for record in eligible_rows
+            )
         ]
-        scopes = {curation_for(record).get("scope", "archive") for record in rows}
+        scopes = {
+            curation_for(record).get("scope", "archive")
+            for record in eligible_rows
+        }
         group_scope = "core" if "core" in scopes else "adjacent" if "adjacent" in scopes else "archive"
         projects.append({
             "project_key": key,

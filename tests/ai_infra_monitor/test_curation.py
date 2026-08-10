@@ -70,6 +70,23 @@ class CurationTests(unittest.TestCase):
         self.assertNotEqual(result["scope"], "core")
         self.assertEqual(result["themes"], [])
 
+    def test_superseded_preprint_remains_archived_after_recuration(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
+
+        result = classify_record(
+            _record(
+                title="AdaServe: SLO-Customized Speculative Decoding",
+                evidence={
+                    "venue_status": "preprint",
+                    "superseded_by": "doi:10.1145/example",
+                },
+            )
+        )
+
+        self.assertEqual(result["scope"], "archive")
+        self.assertEqual(result["themes"], [])
+        self.assertIn("superseded", " ".join(result["reasons"]))
+
     def test_broad_batch_tags_do_not_promote_generic_dnn_inference(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.curation import classify_record
 

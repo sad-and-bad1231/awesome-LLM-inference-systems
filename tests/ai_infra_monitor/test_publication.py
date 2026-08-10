@@ -293,7 +293,11 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("Collection Navigation", papers_view)
             self.assertIn("How to read this page", papers_view)
             self.assertIn("Start Here", readme)
-            self.assertIn("| 1 | 1 | 1 | 6 |", readme)
+            self.assertIn("docs/START-HERE.md", readme)
+            self.assertIn("| 1 | 1 | 1 | 7 |", readme)
+            self.assertIn("papers/README.md#kv-cache", readme)
+            self.assertIn("industry/README.md#runtime-scheduling", readme)
+            self.assertNotIn("#kv-state-memory", readme)
             self.assertIn("Reading Paths", readme)
             self.assertIn("Evidence Ladder", readme)
             self.assertIn("Open-source project", industry_view)
@@ -364,6 +368,11 @@ class PublicationTests(unittest.TestCase):
                 shutil.copyfile(source_figs / name, root / "figs" / name)
             for name in ("ai-infra-system-abstractions.md", "CONTRIBUTING.md"):
                 shutil.copyfile(Path(__file__).parents[2] / name, root / name)
+            (root / "docs").mkdir()
+            shutil.copyfile(
+                Path(__file__).parents[2] / "docs" / "START-HERE.md",
+                root / "docs" / "START-HERE.md",
+            )
             paper_view = root / "paper-list.md"
             industry_view = root / "industrial.md"
             candidate_view = root / "candidates.md"

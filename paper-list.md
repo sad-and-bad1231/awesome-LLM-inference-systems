@@ -11,7 +11,7 @@
 | Attention / Kernel | 7 |
 | KV Cache | 145 |
 | Prefill–Decode 与传输 | 36 |
-| Speculative Decoding | 85 |
+| Speculative Decoding | 84 |
 | MoE | 63 |
 | Compiler / DSL | 8 |
 | Runtime / Scheduling | 132 |
@@ -24,7 +24,7 @@
 |---|---:|
 | formal_conference | 199 |
 | poster_or_workshop | 25 |
-| preprint | 112 |
+| preprint | 111 |
 | unclassified | 140 |
 
 ## Attention / Kernel
@@ -255,7 +255,6 @@
 | MagicDec: Breaking the Latency-Throughput Tradeoff for Long Context Generation with Speculative Decoding<br><sub>Speculative Decoding</sub> | ICML 2025 | Carnegie Mellon University; Moffett AI; Together AI | MagicDec 指出长上下文下 target verification 成本相对下降，并联合优化 draft/target KV cache 以兼顾 batch throughput 和 latency。 |
 | PhoenixOS: Concurrent OS-level GPU Checkpoint and Restore with Validated Speculation<br><sub>Speculative Decoding</sub> | SOSP 2025 | Institute of Parallel and Distributed Systems, Shanghai Jiao Tong University, Shanghai, China; National University of Singapore, Singapore, Singapore | PhoenixOS 在操作系统层并发执行 GPU checkpoint/restore，并通过验证式推测减少暂停时间。 |
 | D-cut: Adaptive Verification Depth Pruning for Batched Speculative Decoding<br><sub>Speculative Decoding / MoE / Compiler / DSL</sub> | arXiv AI infrastructure query |  | Speculative decoding accelerates large language model (LLM) inference without compromising output quality. Recent parallel drafting methods further improve single-request performance by decoupling draft length from drafting latency, enabli… |
-| AdaServe: SLO-Customized LLM Serving with Fine-Grained Speculative Decoding<br><sub>Speculative Decoding / Runtime / Scheduling</sub> | arXiv 预印本, 2025 | Carnegie Mellon University; Princeton University; EPFL; Amazon Web Services; Purdue University | AdaServe 将 speculative token tree 构造和请求级 SLO 结合，动态选择验证 token 以提高 goodput。 |
 | ACCEPTANCE-GUIDED ADAPTIVE SPECULATIVE DECODING FOR EFFICIENT LARGE LANGUAGE MODEL INFERENCE<br><sub>Speculative Decoding</sub> | ICASSP 2026 official accepted papers |  | ICASSP 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | ASPIRE: Asynchronous Batched Self-Speculative Decoding for Long-Context LLM Inference<br><sub>Speculative Decoding / Compiler / DSL</sub> | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |
 | Accelerating Speculative Decoding with Block Diffusion Draft Trees<br><sub>Speculative Decoding / Compiler / DSL</sub> | COLM 2026 official accepted papers |  | COLM 2026 official accepted papers 官方页面条目；发现源未提供摘要，需进一步核对正文。 |

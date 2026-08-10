@@ -13,7 +13,7 @@
 | Scope | Papers | Industry / Projects |
 |---|---:|---:|
 | adjacent | 33 | 4 |
-| archive | 337 | 157 |
+| archive | 338 | 157 |
 
 ## Academic Papers
 
@@ -336,6 +336,7 @@
 | archive | supporting | 2026 | ViCoStream: Streaming VideoLLMs Can Run Beyond 100 FPS with Stage-Wise Coordinated Inference | arXiv 预印本, 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | WANSpec: Leveraging Global Compute Capacity for LLM Inference | arXiv 预印本, 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | When NPUs Are Not Always Faster: A Stage-Level Analysis of Mobile LLM Inference | arXiv 预印本, 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [AdaServe: SLO-Customized LLM Serving with Fine-Grained Speculative Decoding](https://arxiv.org/abs/2501.12162) | arXiv 预印本, 2025 | superseded by verified record doi:10.1145/3767295.3769315; supporting or exploratory evidence |
 | archive | supporting | 2025 | AlayaDB: The Data Foundation for Efficient and Effective Long-context LLM Inference | arXiv 预印本, 2025 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | CompactFusion: Accelerating Parallel Diffusion Model Serving with Residual Compression | arXiv 预印本, 2025 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | Cornserve: Efficiently Serving Any-to-Any Multimodal Models | arXiv 预印本, 2025 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |

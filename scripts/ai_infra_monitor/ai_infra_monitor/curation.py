@@ -202,8 +202,13 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     release_has_explicit_mechanism = any(
         _contains(title_channel, THEME_TERMS[theme]) for theme in themes
     )
+    superseded_by = str(record.get("evidence", {}).get("superseded_by") or "").strip()
 
-    if themes and (direct_themes or structured_core_signal) and (
+    if superseded_by:
+        scope = "archive"
+        reasons = [f"superseded by verified record {superseded_by}"]
+        themes = []
+    elif themes and (direct_themes or structured_core_signal) and (
         model_signal or explicit_kernel or inherently_model_specific
     ) and not peripheral and (
         not _is_release(record) or release_has_explicit_mechanism

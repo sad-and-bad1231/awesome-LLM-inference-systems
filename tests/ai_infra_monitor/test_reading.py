@@ -14,7 +14,7 @@ def _industry_record(title, url, *, summary="Concise project summary.", year="20
         "venue_or_channel": "Official project material",
         "year": year,
         "summary": summary,
-        "status": "queued",
+        "status": "verified",
         "source_tier": "A",
         "evidence": {
             "venue_status": "industrial_material",
@@ -229,6 +229,26 @@ class ReadingPresentationTests(unittest.TestCase):
 
         group = aggregate_industry_records([rc, stable])[0]
         self.assertEqual(group["anchor"]["title"], "v2.0.0")
+
+    def test_unpromoted_releases_do_not_expand_project_themes_or_milestones(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import aggregate_industry_records
+
+        anchor = _industry_record(
+            "Transfer Library",
+            "https://github.com/example/project",
+            themes=["prefill-decode-transfer"],
+        )
+        queued_release = _industry_record(
+            "v2.0.0 MoE compiler release",
+            "https://github.com/example/project/releases/tag/v2.0.0",
+            themes=["moe", "compiler-dsl"],
+        )
+        queued_release["status"] = "queued"
+
+        project = aggregate_industry_records([anchor, queued_release])[0]
+
+        self.assertEqual(project["themes"], ["prefill-decode-transfer"])
+        self.assertEqual(project["milestones"], [])
 
 
 if __name__ == "__main__":
