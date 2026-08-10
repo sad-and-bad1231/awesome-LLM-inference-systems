@@ -20,13 +20,77 @@ THEME_LABELS = {
     "runtime-scheduling": "Runtime / Scheduling",
 }
 
-INDUSTRY_TOPIC_GROUPS = (
-    ("architecture", "架构与系统"),
-    ("kernels", "核心算子与通信"),
-    ("storage", "存储与数据路径"),
-    ("speculative", "推测解码"),
-    ("ocr-ecosystem", "OCR 与生态"),
+INDUSTRY_TOPICS = (
+    {
+        "key": "deepseek-ai-systems",
+        "title": "DeepSeek AI 系统专题",
+        "description": "从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。",
+        "groups": (
+            ("architecture", "架构与系统"),
+            ("kernels", "核心算子与通信"),
+            ("storage", "存储与数据路径"),
+            ("speculative", "推测解码"),
+            ("ocr-ecosystem", "OCR 与生态"),
+        ),
+    },
+    {
+        "key": "moonshot-ai-systems",
+        "title": "Kimi / Moonshot AI 系统专题",
+        "description": "Kimi 模型架构、KV-centric serving、推理 kernel 与开发工具的官方材料。",
+        "groups": (
+            ("models-architecture", "模型与架构"),
+            ("inference-systems", "推理与 Serving"),
+            ("kernels", "Kernel 与通信"),
+            ("tools-ecosystem", "工具与生态"),
+        ),
+    },
+    {
+        "key": "minimax-ai-systems",
+        "title": "MiniMax AI 系统专题",
+        "description": "MiniMax 开放模型、多模态接口与 Agent 工具链的官方材料。",
+        "groups": (
+            ("models-architecture", "模型与架构"),
+            ("multimodal-agents", "多模态与 Agent"),
+            ("tools-ecosystem", "工具与生态"),
+        ),
+    },
+    {
+        "key": "zhipu-ai-systems",
+        "title": "GLM / 智谱 AI 系统专题",
+        "description": "GLM 模型、多模态推理、训练框架与开放工作空间的官方材料。",
+        "groups": (
+            ("models-architecture", "模型与架构"),
+            ("training-data", "训练与数据"),
+            ("multimodal-agents", "多模态与 Agent"),
+            ("tools-ecosystem", "工具与生态"),
+        ),
+    },
+    {
+        "key": "stepfun-ai-systems",
+        "title": "阶跃星辰 AI 系统专题",
+        "description": "Step 系列模型、训练框架、实时语音和多模态 Agent 的官方材料。",
+        "groups": (
+            ("models-architecture", "模型与架构"),
+            ("training-data", "训练与数据"),
+            ("multimodal-agents", "多模态与 Agent"),
+            ("tools-ecosystem", "工具与生态"),
+        ),
+    },
+    {
+        "key": "bytedance-ai-systems",
+        "title": "字节跳动 AI 系统专题",
+        "description": "ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材料。",
+        "groups": (
+            ("models-architecture", "模型与架构"),
+            ("inference-systems", "推理系统"),
+            ("training-data", "训练、数据与通信"),
+            ("multimodal-agents", "多模态与 Agent"),
+        ),
+    },
 )
+
+INDUSTRY_TOPIC_BY_KEY = {topic["key"]: topic for topic in INDUSTRY_TOPICS}
+INDUSTRY_TOPIC_GROUPS = INDUSTRY_TOPIC_BY_KEY["deepseek-ai-systems"]["groups"]
 
 
 def _is_release(record: dict[str, Any]) -> bool:
@@ -176,7 +240,9 @@ def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dic
             stable = [record for record in rows if not _is_prerelease(record)]
             anchors.append(max(stable or rows, key=_date_key))
 
-    group_rank = {key: index for index, (key, _label) in enumerate(INDUSTRY_TOPIC_GROUPS)}
+    config = INDUSTRY_TOPIC_BY_KEY.get(topic)
+    groups = config["groups"] if config else ()
+    group_rank = {key: index for index, (key, _label) in enumerate(groups)}
     anchors.sort(
         key=lambda record: (
             group_rank.get(str(record.get("presentation", {}).get("topic_group", "")), len(group_rank)),
@@ -194,14 +260,15 @@ def render_industry_topic(
     records: list[dict[str, Any]], topic: str, *, summary_max_chars: int = 240
 ) -> str:
     """Render a compact industry topic table shared by internal and public views."""
+    config = INDUSTRY_TOPIC_BY_KEY.get(topic)
     selected = select_industry_topic(records, topic)
-    if not selected:
+    if not config or not selected:
         return ""
-    labels = dict(INDUSTRY_TOPIC_GROUPS)
+    labels = dict(config["groups"])
     lines = [
-        "## DeepSeek AI 系统专题",
+        f"## {config['title']}",
         "",
-        "从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。",
+        str(config["description"]),
         "",
         "| 类别 | 材料 / 项目 | 系统作用 | 来源 |",
         "|---|---|---|---|",
@@ -218,3 +285,16 @@ def render_industry_topic(
             f"{('[official](' + url + ')') if url else '—'} |"
         )
     return "\n".join(lines) + "\n"
+
+
+def render_industry_topics(records: list[dict[str, Any]], *, summary_max_chars: int = 240) -> str:
+    """Render all configured company topics in stable order."""
+    sections = [
+        render_industry_topic(
+            records,
+            str(config["key"]),
+            summary_max_chars=summary_max_chars,
+        ).rstrip()
+        for config in INDUSTRY_TOPICS
+    ]
+    return "\n\n".join(section for section in sections if section) + ("\n" if any(sections) else "")

@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -6,6 +7,29 @@ from scripts.ai_infra_monitor.ai_infra_monitor.validation import validate_worksp
 
 
 class ValidationTests(unittest.TestCase):
+    def test_company_topic_records_have_official_evidence_and_valid_groups(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import INDUSTRY_TOPICS
+
+        topic_configs = {item["key"]: item for item in INDUSTRY_TOPICS}
+        expected = set(topic_configs)
+        records = [
+            json.loads(line)
+            for line in (Path(__file__).resolve().parents[2] / "data" / "industry.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        ]
+        tagged = [record for record in records if record.get("presentation", {}).get("topic")]
+
+        self.assertEqual({record["presentation"]["topic"] for record in tagged}, expected)
+        for record in tagged:
+            topic = record["presentation"]["topic"]
+            allowed_groups = {key for key, _label in topic_configs[topic]["groups"]}
+            self.assertIn(record["presentation"]["topic_group"], allowed_groups)
+            self.assertTrue(record.get("primary_url") or record.get("artifact_url"))
+            if topic != "deepseek-ai-systems":
+                self.assertEqual(record["evidence"]["verification_level"], "official_source")
+
     def test_detects_duplicate_paper_and_empty_link(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

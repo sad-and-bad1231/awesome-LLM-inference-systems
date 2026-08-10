@@ -135,6 +135,18 @@ class PublicationTests(unittest.TestCase):
                 "topic": "deepseek-ai-systems",
                 "topic_group": "kernels",
             }
+            moonshot = _record("project", "Mooncake", "Runtime、调度与服务架构")
+            moonshot["primary_url"] = "https://github.com/kvcache-ai/Mooncake"
+            moonshot["presentation"] = {
+                "topic": "moonshot-ai-systems",
+                "topic_group": "inference-systems",
+            }
+            minimax = _record("project", "MiniMax-M3", "Runtime、调度与服务架构")
+            minimax["primary_url"] = "https://github.com/MiniMax-AI/MiniMax-M3"
+            minimax["presentation"] = {
+                "topic": "minimax-ai-systems",
+                "topic_group": "models-architecture",
+            }
             third_party = _record(
                 "project", "Third-party DeepSeek Runtime", "Runtime、调度与服务架构"
             )
@@ -143,7 +155,10 @@ class PublicationTests(unittest.TestCase):
             release["summary"] = "<h2>Release notes</h2>" + " serving compiler" * 1000
             papers.write_text("\n".join(json.dumps(item) for item in [core, exploration]) + "\n", encoding="utf-8")
             industry.write_text(
-                "\n".join(json.dumps(item) for item in [project, release, deepseek, third_party]) + "\n",
+                "\n".join(
+                    json.dumps(item)
+                    for item in [project, release, deepseek, moonshot, minimax, third_party]
+                ) + "\n",
                 encoding="utf-8",
             )
 
@@ -156,6 +171,8 @@ class PublicationTests(unittest.TestCase):
             self.assertIn("Comic Generation Inference Enhancement", papers_text)
             self.assertEqual(industry_text.count("Example LLM Serving Runtime"), 1)
             self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## Kimi / Moonshot AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## MiniMax AI 系统专题"), 1)
             topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
                 "## Resource List", 1
             )[0]

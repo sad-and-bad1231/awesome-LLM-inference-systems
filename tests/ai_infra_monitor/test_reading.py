@@ -34,6 +34,32 @@ def _industry_record(title, url, *, summary="Concise project summary.", year="20
 
 
 class ReadingPresentationTests(unittest.TestCase):
+    def test_configured_industry_topics_render_in_fixed_order(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import render_industry_topics
+
+        moonshot = _industry_record("Mooncake", "https://github.com/kvcache-ai/Mooncake")
+        moonshot["curation"]["project_key"] = "github:kvcache-ai/mooncake"
+        moonshot["presentation"] = {
+            "topic": "moonshot-ai-systems",
+            "topic_group": "inference-systems",
+        }
+        minimax = _industry_record("MiniMax-M3", "https://github.com/MiniMax-AI/MiniMax-M3")
+        minimax["curation"]["project_key"] = "github:minimax-ai/minimax-m3"
+        minimax["presentation"] = {
+            "topic": "minimax-ai-systems",
+            "topic_group": "models-architecture",
+        }
+        third_party = _industry_record(
+            "Unofficial MiniMax runtime", "https://github.com/example/minimax-runtime"
+        )
+
+        rendered = render_industry_topics([third_party, minimax, moonshot])
+
+        self.assertLess(rendered.index("## Kimi / Moonshot AI 系统专题"), rendered.index("## MiniMax AI 系统专题"))
+        self.assertIn("Mooncake", rendered)
+        self.assertIn("MiniMax-M3", rendered)
+        self.assertNotIn("Unofficial MiniMax runtime", rendered)
+
     def test_industry_topic_is_explicit_deduplicated_and_group_sorted(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic
 

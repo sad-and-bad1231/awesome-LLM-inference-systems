@@ -26,7 +26,7 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    render_industry_topics,
 )
 from .maintenance import candidate_archive_summary
 
@@ -1019,9 +1019,8 @@ def render_markdown_views(
         "- Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。",
         "- Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。",
     ]
-    topic = render_industry_topic(
+    topic = render_industry_topics(
         industry_source,
-        "deepseek-ai-systems",
         summary_max_chars=display_summary_max_chars,
     )
     if topic:

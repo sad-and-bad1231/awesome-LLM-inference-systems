@@ -92,6 +92,38 @@ class RecordStoreTests(unittest.TestCase):
                 "topic": "deepseek-ai-systems",
                 "topic_group": "kernels",
             }
+            moonshot = candidate_to_record(
+                Candidate(
+                    title="Mooncake",
+                    url="https://github.com/kvcache-ai/Mooncake",
+                    summary="KV-centric disaggregated serving.",
+                    tier="A",
+                    topics=("runtime-serving", "state-kv"),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            moonshot["presentation"] = {
+                "topic": "moonshot-ai-systems",
+                "topic_group": "inference-systems",
+            }
+            minimax = candidate_to_record(
+                Candidate(
+                    title="MiniMax-M3",
+                    url="https://github.com/MiniMax-AI/MiniMax-M3",
+                    summary="Official open model project.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            minimax["presentation"] = {
+                "topic": "minimax-ai-systems",
+                "topic_group": "models-architecture",
+            }
             third_party = candidate_to_record(
                 Candidate(
                     title="Third-party DeepSeek Runtime",
@@ -117,7 +149,7 @@ class RecordStoreTests(unittest.TestCase):
                 "verified",
             )
             write_records(papers, [core, exploration])
-            write_records(industry, [project, release, deepseek, third_party])
+            write_records(industry, [project, release, deepseek, moonshot, minimax, third_party])
             write_records(candidates, [])
 
             render_markdown_views(
@@ -132,6 +164,8 @@ class RecordStoreTests(unittest.TestCase):
             self.assertIn("Context-Aware Comic Generation", paper_text)
             self.assertIn("Example LLM Serving Runtime", industry_text)
             self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## Kimi / Moonshot AI 系统专题"), 1)
+            self.assertEqual(industry_text.count("## MiniMax AI 系统专题"), 1)
             topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
                 "## 项目级工程主线", 1
             )[0]

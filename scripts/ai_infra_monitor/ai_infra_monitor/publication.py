@@ -13,7 +13,7 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    render_industry_topics,
 )
 from .records import ABSTRACTIONS, load_records
 
@@ -391,9 +391,8 @@ def _render_collection(
         ]
     )
     if industry and topic_records:
-        topic = render_industry_topic(
+        topic = render_industry_topics(
             topic_records,
-            "deepseek-ai-systems",
             summary_max_chars=display_summary_max_chars,
         )
         if topic:
