@@ -34,6 +34,43 @@ def _industry_record(title, url, *, summary="Concise project summary.", year="20
 
 
 class ReadingPresentationTests(unittest.TestCase):
+    def test_public_selector_applies_theme_budget_and_stable_priority_order(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_public_mainline
+
+        supporting = _industry_record(
+            "Supporting Runtime", "https://example.org/supporting", priority="supporting"
+        )
+        frontier = _industry_record(
+            "Frontier Runtime", "https://example.org/frontier", priority="frontier"
+        )
+        foundation = _industry_record(
+            "Foundation Runtime", "https://example.org/foundation", priority="foundation"
+        )
+        multi_theme = _industry_record(
+            "Multi Theme",
+            "https://example.org/multi",
+            priority="foundation",
+            themes=["runtime-scheduling", "kv-cache"],
+        )
+
+        first = select_public_mainline(
+            [supporting, frontier, multi_theme, foundation], limit_per_theme=2
+        )
+        second = select_public_mainline(
+            [foundation, multi_theme, frontier, supporting], limit_per_theme=2
+        )
+
+        self.assertEqual(
+            [record["title"] for record in first],
+            ["Multi Theme", "Foundation Runtime", "Frontier Runtime"],
+        )
+        self.assertEqual(first[0]["_reading_themes"][0], "kv-cache")
+        self.assertEqual(
+            [record["title"] for record in first],
+            [record["title"] for record in second],
+        )
+        self.assertEqual(sum(record["title"] == "Multi Theme" for record in first), 1)
+
     def test_configured_industry_topics_render_in_fixed_order(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import render_industry_topics
 
@@ -93,6 +130,25 @@ class ReadingPresentationTests(unittest.TestCase):
 
         self.assertEqual([item["title"] for item in selected], ["FlashMLA", "3FS"])
 
+    def test_industry_topic_applies_a_deterministic_project_budget(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic
+
+        records = []
+        for index in range(4):
+            record = _industry_record(
+                f"Kernel {index}", f"https://github.com/deepseek-ai/kernel-{index}"
+            )
+            record["curation"]["project_key"] = f"github:deepseek-ai/kernel-{index}"
+            record["presentation"] = {
+                "topic": "deepseek-ai-systems",
+                "topic_group": "kernels",
+            }
+            records.append(record)
+
+        selected = select_industry_topic(records, "deepseek-ai-systems", limit=2)
+
+        self.assertEqual([record["title"] for record in selected], ["Kernel 0", "Kernel 1"])
+
     def test_display_summary_strips_html_truncates_and_preserves_source(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import display_summary
 
@@ -129,6 +185,7 @@ class ReadingPresentationTests(unittest.TestCase):
         github = _industry_record("v1", "https://github.com/Example/Project/releases/tag/v1")
         source = _industry_record("Release", "https://example.org/release")
         source["source_ids"] = ["tensor-runtime-releases"]
+        source["curation"]["project_key"] = "source:tensor-runtime"
 
         self.assertEqual(project_key_for(github), "github:example/project")
         self.assertEqual(project_key_for(source), "source:tensor-runtime")

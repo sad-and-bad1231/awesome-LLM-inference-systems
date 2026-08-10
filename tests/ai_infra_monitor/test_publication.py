@@ -66,6 +66,73 @@ def _record(
 
 
 class PublicationTests(unittest.TestCase):
+    def test_publication_applies_separate_reading_budgets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "data" / "papers.jsonl"
+            industry = root / "data" / "industry.jsonl"
+            papers.parent.mkdir(parents=True)
+
+            paper_records = []
+            for index in range(5):
+                record = _record("paper", f"Runtime Paper {index}", "Runtime、调度与服务架构")
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "core",
+                    "priority": "frontier",
+                    "themes": ["runtime-scheduling"],
+                    "reasons": ["test"],
+                }
+                paper_records.append(record)
+            for index in range(5):
+                record = _record("paper", f"Agent Exploration {index}", "Agent、RAG、多模态与应用级 Serving")
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "adjacent",
+                    "priority": "supporting",
+                    "themes": [],
+                    "reasons": ["test"],
+                }
+                paper_records.append(record)
+
+            industry_records = []
+            for index in range(5):
+                record = _record("project", f"Runtime Project {index}", "Runtime、调度与服务架构")
+                record["primary_url"] = f"https://github.com/example/runtime-{index}"
+                record["curation"] = {
+                    "version": "guide-2026-v6",
+                    "scope": "core",
+                    "priority": "frontier",
+                    "themes": ["runtime-scheduling"],
+                    "project_key": f"github:example/runtime-{index}",
+                    "reasons": ["test"],
+                }
+                industry_records.append(record)
+
+            papers.write_text("\n".join(json.dumps(item) for item in paper_records) + "\n", encoding="utf-8")
+            industry.write_text("\n".join(json.dumps(item) for item in industry_records) + "\n", encoding="utf-8")
+
+            render_public_repository(
+                papers,
+                industry,
+                root,
+                public_paper_limit_per_theme=3,
+                public_industry_limit_per_theme=2,
+                public_exploration_limit_per_track=2,
+                public_company_topic_limit=2,
+            )
+
+            paper_text = (root / "papers" / "README.md").read_text(encoding="utf-8")
+            industry_text = (root / "industry" / "README.md").read_text(encoding="utf-8")
+            self.assertIn("Runtime Paper 2", paper_text)
+            self.assertNotIn("Runtime Paper 3", paper_text)
+            self.assertIn("Agent Exploration 1", paper_text)
+            self.assertNotIn("Agent Exploration 2", paper_text)
+            self.assertIn("Runtime Project 1", industry_text)
+            self.assertNotIn("Runtime Project 2", industry_text)
+            self.assertNotIn("all core records remain below", paper_text)
+            self.assertIn("bounded core reading set", paper_text)
+
     def test_publication_retries_a_transient_windows_write_lock(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

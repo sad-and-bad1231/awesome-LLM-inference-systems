@@ -13,7 +13,7 @@ The retired long-COT side list is no longer part of the active workflow.
 
 ## Schema Policy
 
-Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history`, `evidence`, `record_type`, `title`, `venue_or_channel`, `year`, `orgs`, `summary`, `source_tier`, `primary_url`, `artifact_url`, `source_ids`, `status`, `system_abstraction_primary`, `system_abstraction_secondary`, `technical_tags`, and `triage`. Records also receive deterministic `curation` metadata: `scope` (`core|adjacent|archive`) and `priority` (`foundation|frontier|supporting`).
+Every JSONL record must include `id`, `canonical_id`, `aliases`, `status_history`, `evidence`, `record_type`, `title`, `venue_or_channel`, `year`, `orgs`, `summary`, `source_tier`, `primary_url`, `artifact_url`, `source_ids`, `status`, `system_abstraction_primary`, `system_abstraction_secondary`, `technical_tags`, and `triage`. Records also receive deterministic `curation` metadata: `scope` (`core|adjacent|archive`) and `priority` (`foundation|frontier|supporting`). Every core record additionally has explicit `evidence.affiliation_status`, `evidence.artifact_status`, `evidence.metadata_checked_at`, and `evidence.metadata_sources`; legacy presence and unreviewed gaps are not equivalent to verification.
 
 `system_abstraction_primary` must be one of:
 
@@ -46,7 +46,8 @@ For a legacy unified JSONL export, run `monitor.py migrate --source <legacy-json
 - Treat the JSONL stores as the complete fact layer. Generated reading views contain a guide-aligned mainline, a deterministic 180-day exploration window, and links to the retained archive.
 - Organize both research and engineering views around seven themes: Attention/Kernel, KV Cache, Prefill-Decode transport, speculative decoding, MoE, Compiler/DSL, and Runtime/Scheduling.
 - Collapse industry release streams to one row per project. Raw release notes remain in JSONL; generated summaries are HTML-free and capped at 240 characters.
-- Keep at most 20 evidenced exploration entries per track. The window is relative to the newest stored evidence date so rendering is reproducible.
+- Keep at most 20 evidenced exploration entries per internal track and 15 per public track. Public mainline budgets are 8 papers and 5 aggregated industry projects per theme, plus 8 entries per company topic. The window is relative to the newest stored evidence date so rendering is reproducible.
+- Use `python scripts/ai_infra_monitor/monitor.py audit` for a compact, summary-free view of evidence gaps, duplicates, theme coverage, long release notes, and projected public sizes.
 - Keep `ai-infra-system-abstractions.md` short enough to scan. It should show entry points, coverage counts, SRE metrics, and representative items rather than every row.
 - Keep full detail in `data/papers.jsonl` and `data/industry.jsonl`; the abstraction file is only a navigation index.
 - Keep dropped candidates available for audit, but do not mix them into the active candidate table. `maintain` moves terminal candidates older than 180 days into deterministic monthly gzip shards; daily rendering reads only the hot store and archive counts.

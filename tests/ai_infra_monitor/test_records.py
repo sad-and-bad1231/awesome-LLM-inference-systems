@@ -28,6 +28,79 @@ from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
+    def test_write_records_uses_compact_jsonl(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+
+            write_records(path, [{"id": "one", "title": "One"}])
+
+            self.assertEqual(path.read_text(encoding="utf-8"), '{"id":"one","title":"One"}\n')
+
+    def test_normalize_core_record_adds_conservative_evidence_states(self):
+        with_links = candidate_to_record(
+            Candidate(
+                title="Runtime Scheduler for LLM Serving",
+                url="https://example.org/runtime",
+                summary="A serving scheduler.",
+                kind="paper",
+            ),
+            "paper",
+            "verified",
+        )
+        with_links["orgs"] = "Example University"
+        with_links["artifact_url"] = "https://github.com/example/runtime"
+        for field in (
+            "affiliation_status",
+            "artifact_status",
+            "metadata_checked_at",
+            "metadata_sources",
+        ):
+            with_links["evidence"].pop(field, None)
+
+        normalized = normalize_record(with_links)
+
+        self.assertEqual(normalized["evidence"]["affiliation_status"], "legacy_present")
+        self.assertEqual(normalized["evidence"]["artifact_status"], "legacy_linked")
+        self.assertEqual(normalized["evidence"]["metadata_checked_at"], "")
+        self.assertEqual(normalized["evidence"]["metadata_sources"], [])
+
+        normalized["orgs"] = ""
+        normalized["artifact_url"] = ""
+        normalized["evidence"].pop("affiliation_status")
+        normalized["evidence"].pop("artifact_status")
+        normalized = normalize_record(normalized)
+        self.assertEqual(normalized["evidence"]["affiliation_status"], "not_checked")
+        self.assertEqual(normalized["evidence"]["artifact_status"], "not_checked")
+
+    def test_validator_requires_valid_core_evidence_contract(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+            record = candidate_to_record(
+                Candidate(
+                    title="Runtime Scheduler for LLM Serving",
+                    url="https://example.org/runtime",
+                    summary="A serving scheduler.",
+                ),
+                "paper",
+                "verified",
+            )
+            record["evidence"].update(
+                {
+                    "affiliation_status": "guessed",
+                    "artifact_status": "maybe",
+                    "metadata_checked_at": "August 10",
+                    "metadata_sources": ["not-a-url"],
+                }
+            )
+            path.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+            messages = "\n".join(error.message for error in validate_record_store(path))
+
+            self.assertIn("invalid evidence.affiliation_status", messages)
+            self.assertIn("invalid evidence.artifact_status", messages)
+            self.assertIn("invalid evidence.metadata_checked_at", messages)
+            self.assertIn("invalid evidence.metadata_sources", messages)
+
     def test_render_uses_seven_themes_exploration_and_project_aggregation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -197,6 +270,30 @@ class RecordStoreTests(unittest.TestCase):
             self.assertEqual(curate_record_stores(paper, industry, candidate), {"papers": 1, "industry": 0, "candidates": 0})
             self.assertEqual(load_records(paper)[0]["curation"]["priority"], "foundation")
 
+    def test_curate_compacts_jsonl_even_when_semantics_are_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            paper = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidate = root / "candidates.jsonl"
+            record = candidate_to_record(
+                Candidate(
+                    title="Runtime Scheduler for LLM Serving",
+                    url="https://example.org/runtime",
+                    summary="A serving scheduler.",
+                ),
+                "paper",
+                "verified",
+            )
+            paper.write_text(json.dumps(record, sort_keys=True) + "\n", encoding="utf-8")
+            industry.write_text("", encoding="utf-8")
+            candidate.write_text("", encoding="utf-8")
+
+            counts = curate_record_stores(paper, industry, candidate)
+
+            self.assertEqual(counts["papers"], 0)
+            self.assertNotIn('": "', paper.read_text(encoding="utf-8"))
+
     def test_normalize_record_adds_guide_curation_metadata(self):
         record = candidate_to_record(
             Candidate(
@@ -248,7 +345,7 @@ class RecordStoreTests(unittest.TestCase):
                 write_records(path, [{"id": "one", "title": "One"}])
 
             self.assertEqual(len(calls), 3)
-            self.assertIn('"id": "one"', path.read_text(encoding="utf-8"))
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["id"], "one")
 
     def test_splits_existing_store_and_merges_known_title_aliases(self):
         with tempfile.TemporaryDirectory() as tmp:

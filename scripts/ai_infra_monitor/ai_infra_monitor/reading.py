@@ -91,6 +91,19 @@ INDUSTRY_TOPICS = (
 
 INDUSTRY_TOPIC_BY_KEY = {topic["key"]: topic for topic in INDUSTRY_TOPICS}
 INDUSTRY_TOPIC_GROUPS = INDUSTRY_TOPIC_BY_KEY["deepseek-ai-systems"]["groups"]
+PUBLIC_EXCLUDED_STATUSES = {"new", "keep", "drop", "promote", "queued"}
+
+
+def public_source_records(
+    records: list[dict[str, Any]], record_types: set[str]
+) -> list[dict[str, Any]]:
+    """Return the exact fact-store rows eligible to feed public views."""
+    return [
+        record
+        for record in records
+        if record.get("record_type") in record_types
+        and record.get("status") not in PUBLIC_EXCLUDED_STATUSES
+    ]
 
 
 def _is_release(record: dict[str, Any]) -> bool:
@@ -131,7 +144,8 @@ def display_summary(record: dict[str, Any], max_chars: int = 240) -> str:
 
 
 def project_key_for(record: dict[str, Any]) -> str:
-    return project_key_for_record(record)
+    stored = curation_for(record).get("project_key")
+    return str(stored) if stored else project_key_for_record(record)
 
 
 def _date_key(record: dict[str, Any]) -> tuple[str, str, str]:
@@ -158,6 +172,49 @@ def _anchor_sort_key(record: dict[str, Any]) -> tuple[int, int, str, str]:
         str(record.get("year", "")),
         str(record.get("title", "")),
     )
+
+
+def _public_sort_key(record: dict[str, Any]) -> tuple[int, int, int, str]:
+    curation = curation_for(record)
+    evidence_rank = {
+        "formal_conference": 0,
+        "industrial_material": 1,
+        "poster_or_workshop": 2,
+        "preprint": 3,
+        "unclassified": 4,
+    }
+    try:
+        year_rank = -int(record.get("year") or 0)
+    except (TypeError, ValueError):
+        year_rank = 0
+    return (
+        {"foundation": 0, "frontier": 1, "supporting": 2}.get(
+            curation.get("priority"), 3
+        ),
+        evidence_rank.get(str(record.get("evidence", {}).get("venue_status", "")), 4),
+        year_rank,
+        str(record.get("title", "")).casefold(),
+    )
+
+
+def select_public_mainline(
+    records: list[dict[str, Any]], *, limit_per_theme: int
+) -> list[dict[str, Any]]:
+    """Return one deterministic, bounded public placement per record."""
+    grouped: dict[str, list[dict[str, Any]]] = {theme: [] for theme in THEME_ORDER}
+    for record in records:
+        raw_themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
+        themes = [theme for theme in THEME_ORDER if theme in raw_themes]
+        if themes:
+            display = dict(record)
+            display["_reading_themes"] = themes
+            grouped[themes[0]].append(display)
+
+    selected: list[dict[str, Any]] = []
+    budget = max(int(limit_per_theme), 0)
+    for theme in THEME_ORDER:
+        selected.extend(sorted(grouped[theme], key=_public_sort_key)[:budget])
+    return selected
 
 
 def aggregate_industry_records(
@@ -219,7 +276,9 @@ def aggregate_industry_records(
     return projects
 
 
-def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dict[str, Any]]:
+def select_industry_topic(
+    records: list[dict[str, Any]], topic: str, *, limit: int | None = None
+) -> list[dict[str, Any]]:
     """Select explicitly tagged project anchors in deterministic topic-group order."""
     tagged = [
         record
@@ -249,7 +308,7 @@ def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dic
             str(record.get("title", "")).casefold(),
         )
     )
-    return anchors
+    return anchors if limit is None else anchors[: max(int(limit), 0)]
 
 
 def _markdown_cell(value: Any) -> str:
@@ -257,11 +316,15 @@ def _markdown_cell(value: Any) -> str:
 
 
 def render_industry_topic(
-    records: list[dict[str, Any]], topic: str, *, summary_max_chars: int = 240
+    records: list[dict[str, Any]],
+    topic: str,
+    *,
+    summary_max_chars: int = 240,
+    limit: int | None = None,
 ) -> str:
     """Render a compact industry topic table shared by internal and public views."""
     config = INDUSTRY_TOPIC_BY_KEY.get(topic)
-    selected = select_industry_topic(records, topic)
+    selected = select_industry_topic(records, topic, limit=limit)
     if not config or not selected:
         return ""
     labels = dict(config["groups"])
@@ -287,13 +350,19 @@ def render_industry_topic(
     return "\n".join(lines) + "\n"
 
 
-def render_industry_topics(records: list[dict[str, Any]], *, summary_max_chars: int = 240) -> str:
+def render_industry_topics(
+    records: list[dict[str, Any]],
+    *,
+    summary_max_chars: int = 240,
+    limit_per_topic: int | None = None,
+) -> str:
     """Render all configured company topics in stable order."""
     sections = [
         render_industry_topic(
             records,
             str(config["key"]),
             summary_max_chars=summary_max_chars,
+            limit=limit_per_topic,
         ).rstrip()
         for config in INDUSTRY_TOPICS
     ]

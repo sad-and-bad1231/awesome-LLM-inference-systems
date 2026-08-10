@@ -13,6 +13,21 @@ MONITOR = ROOT / "scripts" / "ai_infra_monitor" / "monitor.py"
 
 
 class CliTests(unittest.TestCase):
+    def test_public_reading_options_use_bounded_defaults(self):
+        from scripts.ai_infra_monitor.monitor import public_reading_options
+
+        options = public_reading_options({"settings": {}})
+
+        self.assertEqual(
+            options,
+            {
+                "public_paper_limit_per_theme": 8,
+                "public_industry_limit_per_theme": 5,
+                "public_exploration_limit_per_track": 15,
+                "public_company_topic_limit": 8,
+            },
+        )
+
     def test_help_lists_core_commands(self):
         result = subprocess.run(
             [sys.executable, str(MONITOR), "--help"],
@@ -22,7 +37,7 @@ class CliTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "maintain", "curate", "render", "publish", "validate", "finalize", "status"):
+        for command in ("discover", "sweep", "migrate", "triage", "queue", "compact", "maintain", "curate", "render", "publish", "validate", "audit", "finalize", "status"):
             self.assertIn(command, result.stdout)
 
     def test_maintain_outputs_one_compact_summary_line(self):
