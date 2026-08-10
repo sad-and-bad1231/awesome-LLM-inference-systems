@@ -14,7 +14,7 @@ A bounded academic reading view organized by serving-system abstraction. Complet
 
 | Records | Formal venue | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 50 | 46 | 16 | 47 |
+| 50 | 46 | 19 | 47 |
 
 ## Collection Navigation
 
@@ -170,6 +170,11 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `kv-cache`
   SparseSpec 以稀疏注意力版本的同一模型充当 draft，并联合调度 drafting、verification 和动态 KV 管理以加速长 CoT。
+- **[AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding](https://dl.acm.org/doi/10.1145/3767295.3769315)**
+  `EuroSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
+  Tags: `serving` `slo` `goodput`
+  Artifact: [source](https://zenodo.org/records/17052619)
+  AdaServe 为多 SLO 请求构造硬件感知的推测树并动态选择验证 token；官方论文报告 SLO 违约最高降低 4.3×、goodput 最高提升 1.9×。
 - **Beat the long tail: Distribution-Aware Speculative Decoding for RL Training**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `training`
@@ -181,17 +186,14 @@ Evidence labels describe the source material. Featured entries are editorial ent
 - **NexSpec: Towards Optimizing Speculative Decoding in Reinforcement Learning Systems**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   NexSpec 针对 RL 系统中的 speculative decoding 动态调参、更新 drafter 并按 rollout reward 加权，缓解大 batch 和 actor 漂移下的加速失效。
+- **[PRISM: Parametrically Refactor Inference for Speculative Decoding Draft Models](https://openreview.net/forum?id=cvU2HuuxEf)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
+  Tags: `serving` `gpu` `sglang` `throughput`
+  Artifact: [source](https://github.com/Akemiiii/prism-mlsys-ae)
+  PRISM refactors speculative-decoding draft-model inference to improve draft generation efficiency and verification throughput.
 - **SpecDiff-2: Scaling Diffusion Drafter Alignment For Faster Speculative Decoding**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   SpecDiff-2 用离散扩散模型作为非自回归 drafter，并校准 diffusion drafter 与自回归 verifier 的分布差异，以提升 speculative decoding 接受率和并行度。
-- **Speculative Decoding: Performance or Illusion?**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving`
-  该工作用真实 serving 条件重新评估 speculative decoding，区分离线 speedup 与在线负载下的端到端收益。
-- **AdaSpec: Adaptive Speculative Decoding for Fast, SLO-Aware Large Language Model Serving**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `kv-cache` `slo`
-  AdaSpec 根据请求 SLO、草稿成本和接受率动态选择 speculative decoding 配置。
 
 ### MoE (8)
 
@@ -214,6 +216,11 @@ Evidence labels describe the source material. Featured entries are editorial ent
   DeepSpeed-MoE 联合优化 expert parallel、通信和模型压缩，使大规模 MoE 同时具备训练和推理可行性。
 #### Full Resource List
 
+- **[CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving](https://mlsys.org/virtual/2026/poster/3508)**
+  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
+  Tags: `serving` `memory` `moe` `goodput`
+  Artifact: [source](https://github.com/Accelsnow/CRAFT_core)
+  CRAFT performs fine-grained, per-layer expert replication under a memory budget to improve load balance and serving goodput for large MoE models.
 - **EARTH: An Efficient MoE Accelerator with Entropy-Aware Speculative Prefetch and Result Reuse**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `moe`
@@ -230,10 +237,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `moe`
   MoE-APEX 根据 expert 热度和执行需求自适应选择精度与卸载方式，缓解 MoE 权重容量和传输瓶颈。
-- **MoEBlaze: Breaking the Memory Wall for Efficient MoE Training on Modern GPUs**
-  `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `training` `gpu` `memory` `moe`
-  MoEBlaze 针对现代 GPU 上 MoE 训练的显存墙优化 expert 参数、激活和通信组织，为大规模 MoE 系统提供训练侧基础设施。
 
 ### Compiler / DSL (4)
 

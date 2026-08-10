@@ -50,7 +50,7 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 50 | Formal Conference: 26, Formal Conference · Legacy Import: 20, Preprint: 3, Unclassified: 1 |
+| Academic papers | 50 | Formal Conference: 29, Formal Conference · Legacy Import: 17, Preprint: 3, Unclassified: 1 |
 | Industry / open-source systems | 29 | Industrial Material: 28, Industrial Material · Legacy Import: 1 |
 
 ## Reading Paths
@@ -67,11 +67,11 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | System abstraction | Records | What it covers | Entry points |
 |---|---:|---|---|
-| **KV State & Memory** | 22 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
+| **KV State & Memory** | 21 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
 | **P/D Disaggregation & KV Transfer** | 9 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
 | **KV Compression & Low-Bit State** | 21 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
 | **Kernel & Compiler** | 15 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
-| **Runtime & Serving** | 10 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
+| **Runtime & Serving** | 11 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
 | **Reliability & Benchmarks** | 2 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
 
 ## System Map
