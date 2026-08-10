@@ -87,6 +87,17 @@ INDUSTRY_TOPICS = (
             ("multimodal-agents", "多模态与 Agent"),
         ),
     },
+    {
+        "key": "huawei-ascend-ai-systems",
+        "title": "昇腾 / 华为 AI 系统专题",
+        "description": "昇腾 NPU 的 CANN/Ascend C 工具链、推理运行时与生产 Serving 系统材料；第一阶段仅收录直接作用于推理执行路径的官方或正式证据。",
+        "groups": (
+            ("hardware-toolchain", "芯片工具链与算子"),
+            ("inference-runtime", "推理运行时"),
+            ("serving-kv", "Serving、P/D 与 KV Cache"),
+            ("production-systems", "生产推理系统"),
+        ),
+    },
 )
 
 INDUSTRY_TOPIC_BY_KEY = {topic["key"]: topic for topic in INDUSTRY_TOPICS}

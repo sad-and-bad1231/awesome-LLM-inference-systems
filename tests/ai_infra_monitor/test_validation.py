@@ -43,6 +43,7 @@ class ValidationTests(unittest.TestCase):
 
         topic_configs = {item["key"]: item for item in INDUSTRY_TOPICS}
         expected = set(topic_configs)
+        self.assertIn("huawei-ascend-ai-systems", expected)
         records = [
             json.loads(line)
             for line in (Path(__file__).resolve().parents[2] / "data" / "industry.jsonl")

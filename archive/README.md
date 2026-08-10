@@ -13,7 +13,7 @@
 | Scope | Papers | Industry / Projects |
 |---|---:|---:|
 | adjacent | 33 | 4 |
-| archive | 338 | 157 |
+| archive | 338 | 159 |
 
 ## Academic Papers
 
@@ -399,10 +399,12 @@
 | adjacent | supporting | 2026 | [SPIN](https://www.microsoft.com/en-us/research/publication/unifying-sparse-attention-with-hierarchical-memory-for-scalable-long-context-llm-serving/) | Microsoft Research | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2025 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | DeepSeek | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2024 | [TensorRT diffusion pipelines](https://developer.nvidia.com/tensorrt) | NVIDIA | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
+| archive | supporting | 2024 | [CachedAttention](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) | Huawei Cloud + NUS + SJTU | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [AI200 / AI250](https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm) | Qualcomm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Awesome DeepSeek Agents](https://github.com/deepseek-ai/awesome-deepseek-agent) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [BlueField-4 + DOCA in-silicon security for AI factories](https://developer.nvidia.com/blog/advancing-ai-infrastructure-for-agentic-ai-with-nvidia-doca-in-silicon-security/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [BlueField-4 STX / context memory storage](https://www.tomshardware.com/tech-industry/nvidia-launches-bluefield-4-stx-storage-architecture-for-agentic-ai) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [CANN / Ascend C](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/900/index/index.html) | Huawei Ascend | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [CacheSlide](https://www.usenix.org/conference/fast26/technical-sessions) | Inspur + Huawei Cloud + Shanghai Jiao Tong University + Peking University | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [DeepSeek Open Infra Index](https://github.com/deepseek-ai/open-infra-index) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [DeepSeek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |

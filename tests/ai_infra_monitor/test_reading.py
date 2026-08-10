@@ -86,16 +86,41 @@ class ReadingPresentationTests(unittest.TestCase):
             "topic": "minimax-ai-systems",
             "topic_group": "models-architecture",
         }
+        bytedance = _industry_record(
+            "Seed-1.8", "https://github.com/ByteDance-Seed/Seed-1.8"
+        )
+        bytedance["curation"]["project_key"] = "github:bytedance-seed/seed-1.8"
+        bytedance["presentation"] = {
+            "topic": "bytedance-ai-systems",
+            "topic_group": "models-architecture",
+        }
+        mindie = _industry_record("MindIE", "https://www.hiascend.com/software/mindie")
+        mindie["curation"]["project_key"] = "canonical:url:https://www.hiascend.com/software/mindie"
+        mindie["presentation"] = {
+            "topic": "huawei-ascend-ai-systems",
+            "topic_group": "inference-runtime",
+        }
         third_party = _industry_record(
             "Unofficial MiniMax runtime", "https://github.com/example/minimax-runtime"
         )
+        third_party_ascend = _industry_record(
+            "Third-party Ascend adapter", "https://github.com/example/ascend-adapter"
+        )
 
-        rendered = render_industry_topics([third_party, minimax, moonshot])
+        rendered = render_industry_topics(
+            [third_party_ascend, mindie, bytedance, third_party, minimax, moonshot]
+        )
 
         self.assertLess(rendered.index("## Kimi / Moonshot AI 系统专题"), rendered.index("## MiniMax AI 系统专题"))
+        self.assertLess(
+            rendered.index("## 字节跳动 AI 系统专题"),
+            rendered.index("## 昇腾 / 华为 AI 系统专题"),
+        )
         self.assertIn("Mooncake", rendered)
         self.assertIn("MiniMax-M3", rendered)
+        self.assertIn("MindIE", rendered)
         self.assertNotIn("Unofficial MiniMax runtime", rendered)
+        self.assertNotIn("Third-party Ascend adapter", rendered)
 
     def test_industry_topic_is_explicit_deduplicated_and_group_sorted(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic

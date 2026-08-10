@@ -119,6 +119,19 @@ ByteDance Seed 的基础模型、长上下文推理与大规模训练系统材�
 | 推理系统 | [ShadowKV](https://seed.bytedance.com/zh/public_papers/shadowkv-kv-cache-in-shadows-for-high-throughput-long-context-llm-inference) | GPU 只保留低秩 keys、landmarks 和少量 outliers，values 放 CPU DRAM，decode 时按需召回 Top-K value。 | [official](https://seed.bytedance.com/zh/public_papers/shadowkv-kv-cache-in-shadows-for-high-throughput-long-context-llm-inference) |
 | 训练、数据与通信 | [VeOmni](https://github.com/ByteDance-Seed/VeOmni) | 以模型为中心组织分布式 recipe 的多模态大模型训练框架。 | [official](https://github.com/ByteDance-Seed/VeOmni) |
 
+## 昇腾 / 华为 AI 系统专题
+
+昇腾 NPU 的 CANN/Ascend C 工具链、推理运行时与生产 Serving 系统材料；第一阶段仅收录直接作用于推理执行路径的官方或正式证据。
+
+| 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|
+| 芯片工具链与算子 | [CANN / Ascend C](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/900/index/index.html) | CANN 为昇腾硬件提供 AI 计算软件栈、框架接口与运行时能力，Ascend C 用于开发和优化设备侧自定义算子。 | [official](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/900/index/index.html) |
+| 推理运行时 | [MindIE](https://www.hiascend.com/software/mindie) | 面向昇腾 NPU 提供 LLM 推理、服务化、并行执行、量化和调度能力，是国产算力生产栈的重要入口。 | [official](https://www.hiascend.com/software/mindie) |
+| 推理运行时 | [vLLM Ascend](https://github.com/vllm-project/vllm-ascend) | vLLM Ascend 是 vLLM 社区的昇腾硬件插件，为 Ascend NPU 提供模型执行、量化、自定义算子和分布式推理适配。 | [official](https://github.com/vllm-project/vllm-ascend) |
+| Serving、P/D 与 KV Cache | [Ascend-vLLM prefix caching / KV offload](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) | 在 Ascend NPU 上支持 prefix caching、KV cache CPU offload 和 Mooncake/LMCache 连接。 | [official](https://support.huaweicloud.com/intl/en-us/bestpractice-modelarts/modelarts_llm_infer_5906020.html) |
+| Serving、P/D 与 KV Cache | [CachedAttention](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) | 用 DRAM/SSD 分层保存跨轮 KV，配合 layer-wise preload、异步保存和 scheduler-aware eviction 降低 TTFT。 | [official](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) |
+| Serving、P/D 与 KV Cache | [P/D-Serve](https://arxiv.org/abs/2408.08147) | 在数万 xPU/NPU 规模上部署 prefill/decode disaggregated serving，做 P/D 组织、调度和 D2D KV transfer。 | [official](https://arxiv.org/abs/2408.08147) |
+
 ## Resource List
 
 ### Attention / Kernel (2)
