@@ -20,6 +20,11 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     validate_record_store,
     write_records,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.curation import (
+    ARCHIVE_PIN_TOPIC,
+    FOUNDATION_PIN_TOPIC,
+    classify_record,
+)
 from scripts.ai_infra_monitor.ai_infra_monitor.triage import (
     triage_candidate,
     triage_candidates,
@@ -28,6 +33,56 @@ from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
+    def test_render_exploration_excludes_project_already_in_core(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidates = root / "candidates.jsonl"
+            project = candidate_to_record(
+                Candidate(
+                    title="v1.2.2",
+                    url="https://github.com/example/runtime/releases/tag/v1.2.2",
+                    summary="A compact serving runtime.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            project["curation"]["scope"] = "core"
+            project["curation"]["priority"] = "frontier"
+            project["curation"]["themes"] = ["kv-cache"]
+            project["evidence"]["verified_at"] = "2026-07-01"
+            release_url = "https://github.com/example/runtime/releases/tag/v1.2.3"
+            release = candidate_to_record(
+                Candidate(
+                    title="v1.2.3",
+                    url=release_url,
+                    summary="Official release record.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
+            )
+            release["curation"]["scope"] = "adjacent"
+            release["curation"]["themes"] = ["runtime-scheduling"]
+            release["evidence"]["verified_at"] = "2026-07-02"
+            write_records(papers, [])
+            write_records(industry, [project, release])
+            write_records(candidates, [])
+
+            render_markdown_views(
+                papers, industry, candidates,
+                root / "papers.md", root / "industry.md", root / "candidates.md", root / "abstractions.md",
+            )
+
+            industry_text = (root / "industry.md").read_text(encoding="utf-8")
+            self.assertEqual(industry_text.count(release_url), 1)
+
     def test_render_uses_seven_themes_exploration_and_project_aggregation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -178,6 +233,63 @@ class RecordStoreTests(unittest.TestCase):
         self.assertEqual(record["curation"]["scope"], "core")
         self.assertEqual(record["curation"]["priority"], "foundation")
         self.assertIn("version", record["curation"])
+
+    def test_pinned_topics_override_scope_and_priority(self):
+        def build(topics):
+            record = candidate_to_record(
+                Candidate(
+                    title="A Serving System for Large Language Model Inference",
+                    url="https://example.org/serving-system",
+                    summary="Serving system with scheduler and kernel optimizations.",
+                    topics=("runtime-serving",),
+                ),
+                "paper",
+                "verified",
+            )
+            record["topics"] = list(topics)
+            return classify_record(record)
+
+        foundation = build([FOUNDATION_PIN_TOPIC])
+        self.assertEqual((foundation["scope"], foundation["priority"]), ("core", "foundation"))
+
+        archived = build([ARCHIVE_PIN_TOPIC])
+        self.assertEqual((archived["scope"], archived["priority"]), ("archive", "supporting"))
+        self.assertEqual(archived["themes"], [])
+
+    def test_foundation_pinned_core_paper_renders_in_foundation_lane(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidates = root / "candidates.jsonl"
+            record = candidate_to_record(
+                Candidate(
+                    title="Roofline: An Insightful Visual Performance Model for Multicore Architectures",
+                    url="https://example.org/roofline",
+                    summary="A visual performance model for multicore architectures.",
+                    venue="CACM 2009",
+                    tier="A",
+                ),
+                "paper",
+                "verified",
+            )
+            # Manual pin with no matching keyword theme: the renderer must still
+            # place it somewhere instead of dropping it (and must not crash).
+            record["topics"] = [FOUNDATION_PIN_TOPIC]
+            record["curation"] = classify_record(record)
+            self.assertEqual(record["curation"]["themes"], [])
+            write_records(papers, [record])
+            write_records(industry, [])
+            write_records(candidates, [])
+
+            render_markdown_views(
+                papers, industry, candidates,
+                root / "papers.md", root / "industry.md", root / "candidates.md", root / "abstractions.md",
+            )
+
+            paper_text = (root / "papers.md").read_text(encoding="utf-8")
+            self.assertIn("## 奠基与架构 / Foundation", paper_text)
+            self.assertIn("Roofline", paper_text)
 
     def test_validator_rejects_invalid_curation_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:

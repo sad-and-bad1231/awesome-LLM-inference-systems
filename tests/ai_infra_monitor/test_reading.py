@@ -67,6 +67,88 @@ class ReadingPresentationTests(unittest.TestCase):
 
         self.assertEqual([item["title"] for item in selected], ["FlashMLA", "3FS"])
 
+    def test_configured_topics_render_in_registry_order_and_unknown_topic_is_empty(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import (
+            INDUSTRY_TOPICS,
+            render_industry_topic,
+            render_industry_topics,
+        )
+
+        self.assertEqual(
+            [topic["key"] for topic in INDUSTRY_TOPICS],
+            [
+                "deepseek-ai-systems",
+                "moonshot-ai-systems",
+                "minimax-ai-systems",
+                "zhipu-ai-systems",
+                "stepfun-ai-systems",
+                "bytedance-ai-systems",
+            ],
+        )
+
+        moonshot = _industry_record("Kimi-K2", "https://github.com/MoonshotAI/Kimi-K2")
+        moonshot["presentation"] = {
+            "topic": "moonshot-ai-systems",
+            "topic_group": "model-architecture",
+        }
+
+        rendered = render_industry_topics([moonshot])
+        self.assertIn("Moonshot / Kimi 系统专题", rendered)
+        self.assertNotIn("DeepSeek AI 系统专题", rendered)
+        self.assertEqual(render_industry_topic([moonshot], "not-a-topic"), "")
+        self.assertEqual(render_industry_topics([]), "")
+
+    def test_generated_records_sort_ahead_of_ungenerated_in_generation_chain_order(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import select_industry_topic
+
+        def generated(title: str, generation: str) -> dict:
+            record = _industry_record(title, f"https://github.com/MoonshotAI/{title}")
+            record["presentation"] = {
+                "topic": "moonshot-ai-systems",
+                "topic_group": "model-architecture",
+                "generation": generation,
+            }
+            return record
+
+        records = [
+            generated("Ungenerated", ""),
+            generated("Kimi-K3", "Kimi-K3"),
+            generated("Kimi-K2", "Kimi-K2"),
+        ]
+
+        selected = select_industry_topic(records, "moonshot-ai-systems")
+
+        # 链中下标：Kimi-K2=2 < Kimi-K3=4；未标注代际者排在其后。
+        self.assertEqual([item["title"] for item in selected], ["Kimi-K2", "Kimi-K3", "Ungenerated"])
+
+    def test_topic_table_surfaces_generation_column(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import render_industry_topic
+
+        record = _industry_record("Kimi-K2", "https://github.com/MoonshotAI/Kimi-K2")
+        record["presentation"] = {
+            "topic": "moonshot-ai-systems",
+            "topic_group": "model-architecture",
+            "generation": "Kimi-K2",
+        }
+
+        rendered = render_industry_topic([record], "moonshot-ai-systems")
+
+        self.assertIn("| 代际 | 类别 |", rendered)
+        self.assertIn("| Kimi-K2 | 模型架构 |", rendered)
+
+    def test_topic_table_marks_missing_generation_with_placeholder(self):
+        from scripts.ai_infra_monitor.ai_infra_monitor.reading import render_industry_topic
+
+        record = _industry_record("Mooncake", "https://github.com/MoonshotAI/Mooncake")
+        record["presentation"] = {
+            "topic": "moonshot-ai-systems",
+            "topic_group": "inference-systems",
+        }
+
+        rendered = render_industry_topic([record], "moonshot-ai-systems")
+
+        self.assertIn("| — | 推理系统 |", rendered)
+
     def test_display_summary_strips_html_truncates_and_preserves_source(self):
         from scripts.ai_infra_monitor.ai_infra_monitor.reading import display_summary
 

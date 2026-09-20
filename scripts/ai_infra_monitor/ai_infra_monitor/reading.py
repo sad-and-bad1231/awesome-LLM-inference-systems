@@ -18,15 +18,178 @@ THEME_LABELS = {
     "moe": "MoE",
     "compiler-dsl": "Compiler / DSL",
     "runtime-scheduling": "Runtime / Scheduling",
+    "foundation": "奠基与架构 / Foundation",
 }
 
-INDUSTRY_TOPIC_GROUPS = (
-    ("architecture", "架构与系统"),
-    ("kernels", "核心算子与通信"),
-    ("storage", "存储与数据路径"),
-    ("speculative", "推测解码"),
-    ("ocr-ecosystem", "OCR 与生态"),
+# 展示用兜底主线，见 curation.THEME_ORDER 注释。
+FOUNDATION_THEME = "foundation"
+
+
+def display_themes(record: dict[str, Any], *, allow_foundation: bool = False) -> list[str]:
+    """Return the presentation lanes for a record.
+
+    ``core`` records that no keyword theme matches (for example manually pinned
+    foundation root nodes such as architecture or quantization papers) would
+    otherwise be missing from every themed section. When ``allow_foundation`` is
+    set they fall back to the foundation lane so they stay visible.
+    """
+    curation = curation_for(record)
+    themes = list(curation.get("themes") or [])
+    if not themes and allow_foundation and curation.get("scope") == "core":
+        return [FOUNDATION_THEME]
+    return themes
+
+# --------------------------------------------------------------- 公司专题注册表
+# 有序注册表：新增公司只需在此追加一项，render_industry_topics 会自动纳入渲染，
+# 无需改动调用方（自洽的扩充路径）。
+#
+# 每个专题字段：
+#   key          记录 presentation.topic 的取值
+#   title        专题标题
+#   description  专题说明
+#   groups       有序 (group_key, label)，对应 presentation.topic_group，兼作次级排序权重
+#   generations  该公司「模型代际」的有序链，对应 presentation.generation。
+#                排序时按链中下标升序（模型迭代优先）；未命中链的记录排在其后。
+DEFAULT_TOPIC_GROUPS = (
+    ("model-architecture", "模型架构"),
+    ("inference-systems", "推理系统"),
+    ("training-data", "训练与数据"),
+    ("multimodal-agents", "多模态与 Agent"),
+    ("tools-ecosystem", "工具与生态"),
 )
+
+INDUSTRY_TOPICS: tuple[dict[str, Any], ...] = (
+    {
+        "key": "deepseek-ai-systems",
+        "title": "DeepSeek AI 系统专题",
+        "description": "从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原主题主表中。",
+        "groups": (
+            ("architecture", "架构与系统"),
+            ("kernels", "核心算子与通信"),
+            ("storage", "存储与数据路径"),
+            ("speculative", "推测解码"),
+            ("ocr-ecosystem", "OCR 与生态"),
+        ),
+        "generations": (
+            "DeepSeek-V2",
+            "DeepSeek-V2.5",
+            "DeepSeek-V3",
+            "DeepSeek-V3.1",
+            "DeepSeek-V3.2",
+            "DeepSeek-R1",
+            "DeepSeek-OCR",
+            "DeepSeek-OCR-2",
+        ),
+    },
+    {
+        "key": "moonshot-ai-systems",
+        "title": "Moonshot / Kimi 系统专题",
+        "description": "Kimi 模型代际与其配套的推理、存储与 Agent 工程材料；专题仅作聚合导航。",
+        "groups": DEFAULT_TOPIC_GROUPS,
+        "generations": (
+            "Kimi-K1",
+            "Kimi-K1.5",
+            "Kimi-K2",
+            "Kimi-K2.5",
+            "Kimi-K3",
+            "Kimi-Linear",
+        ),
+    },
+    {
+        "key": "minimax-ai-systems",
+        "title": "MiniMax 系统专题",
+        "description": "MiniMax 模型代际与其推理、多模态与 Agent 工具链材料；专题仅作聚合导航。",
+        "groups": DEFAULT_TOPIC_GROUPS,
+        "generations": (
+            "MiniMax-01",
+            "MiniMax-M1",
+            "MiniMax-M2",
+            "MiniMax-M2.1",
+            "MiniMax-M2.5",
+            "MiniMax-M2.7",
+            "MiniMax-M3",
+            "MiniMax-Music3",
+        ),
+    },
+    {
+        "key": "zhipu-ai-systems",
+        "title": "智谱 / Z.ai 系统专题",
+        "description": "GLM 模型代际与其推理、多模态与 Agent 工程材料；专题仅作聚合导航。",
+        "groups": DEFAULT_TOPIC_GROUPS,
+        "generations": (
+            "GLM-130B",
+            "ChatGLM-6B",
+            "ChatGLM2-6B",
+            "ChatGLM3",
+            "GLM-4",
+            "GLM-4-Voice",
+            "GLM-4.5",
+            "GLM-5",
+            "GLM-Edge",
+            "GLM-V",
+            "GLM-Image",
+            "GLM-OCR",
+            "GLM-TTS",
+            "GLM-ASR",
+        ),
+    },
+    {
+        "key": "stepfun-ai-systems",
+        "title": "阶跃星辰 / StepFun 系统专题",
+        "description": "Step 模型代际与其推理、语音、视频与多模态工程材料；专题仅作聚合导航。",
+        "groups": DEFAULT_TOPIC_GROUPS,
+        "generations": (
+            "Step3",
+            "Step3-VL-10B",
+            "Step-3.5-Flash",
+            "Step-3.7-Flash",
+            "Step-Audio",
+            "Step-Audio2",
+            "Step-Audio-R1",
+            "Step-Audio-EditX",
+            "Step-Video-T2V",
+            "Step-Video-TI2V",
+            "Step1X-Edit",
+            "Step1X-3D",
+            "NextStep-1",
+        ),
+    },
+    {
+        "key": "bytedance-ai-systems",
+        "title": "字节 Seed / 火山引擎系统专题",
+        "description": "Seed 模型代际与其推理、训练与系统基础设施材料；专题仅作聚合导航。",
+        "groups": DEFAULT_TOPIC_GROUPS,
+        "generations": (
+            "Seed1.5-VL",
+            "Seed-Thinking-v1.5",
+            "seed-oss",
+            "Seed-Coder",
+            "Seed-X-7B",
+            "Seed-Prover",
+            "BFS-Prover-V2",
+            "Stable-DiffCoder",
+        ),
+    },
+)
+
+INDUSTRY_TOPICS_BY_KEY: dict[str, dict[str, Any]] = {
+    str(topic["key"]): topic for topic in INDUSTRY_TOPICS
+}
+
+
+def industry_topic_group_rank(topic: str) -> dict[str, int]:
+    groups = INDUSTRY_TOPICS_BY_KEY.get(topic, {}).get("groups") or DEFAULT_TOPIC_GROUPS
+    return {key: index for index, (key, _label) in enumerate(groups)}
+
+
+def industry_topic_group_labels(topic: str) -> dict[str, str]:
+    groups = INDUSTRY_TOPICS_BY_KEY.get(topic, {}).get("groups") or DEFAULT_TOPIC_GROUPS
+    return {key: label for key, label in groups}
+
+
+def industry_topic_generation_rank(topic: str) -> dict[str, int]:
+    generations = INDUSTRY_TOPICS_BY_KEY.get(topic, {}).get("generations") or ()
+    return {label: index for index, label in enumerate(generations)}
 
 
 def _is_release(record: dict[str, Any]) -> bool:
@@ -130,7 +293,7 @@ def aggregate_industry_records(
         milestones = []
         seen_themes = set()
         for record in candidates:
-            primary_theme = curation_for(record).get("themes", [""])[0]
+            primary_theme = (curation_for(record).get("themes") or [""])[0]
             if primary_theme in seen_themes:
                 continue
             seen_themes.add(primary_theme)
@@ -156,7 +319,12 @@ def aggregate_industry_records(
 
 
 def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dict[str, Any]]:
-    """Select explicitly tagged project anchors in deterministic topic-group order."""
+    """Select explicitly tagged project anchors, ordered model-generation first.
+
+    Records carrying ``presentation.generation`` sort by their position in the
+    topic's generation chain so a company section reads as a model iteration
+    timeline; records without a generation fall back to topic-group order.
+    """
     tagged = [
         record
         for record in records
@@ -176,10 +344,18 @@ def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dic
             stable = [record for record in rows if not _is_prerelease(record)]
             anchors.append(max(stable or rows, key=_date_key))
 
-    group_rank = {key: index for index, (key, _label) in enumerate(INDUSTRY_TOPIC_GROUPS)}
+    group_rank = industry_topic_group_rank(topic)
+    generation_rank = industry_topic_generation_rank(topic)
+    # 未标注代际 / 未命中代际链的记录排在已标注者之后。
+    unknown_generation = len(generation_rank)
     anchors.sort(
         key=lambda record: (
-            group_rank.get(str(record.get("presentation", {}).get("topic_group", "")), len(group_rank)),
+            generation_rank.get(
+                str(record.get("presentation", {}).get("generation") or ""), unknown_generation
+            ),
+            group_rank.get(
+                str(record.get("presentation", {}).get("topic_group", "")), len(group_rank)
+            ),
             str(record.get("title", "")).casefold(),
         )
     )
@@ -193,28 +369,48 @@ def _markdown_cell(value: Any) -> str:
 def render_industry_topic(
     records: list[dict[str, Any]], topic: str, *, summary_max_chars: int = 240
 ) -> str:
-    """Render a compact industry topic table shared by internal and public views."""
+    """Render one configured company topic table; empty text for unknown topics."""
+    meta = INDUSTRY_TOPICS_BY_KEY.get(topic)
+    if meta is None:
+        return ""
     selected = select_industry_topic(records, topic)
     if not selected:
         return ""
-    labels = dict(INDUSTRY_TOPIC_GROUPS)
+    labels = industry_topic_group_labels(topic)
     lines = [
-        "## DeepSeek AI 系统专题",
+        f"## {meta['title']}",
         "",
-        "从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。",
+        str(meta["description"]),
         "",
-        "| 类别 | 材料 / 项目 | 系统作用 | 来源 |",
-        "|---|---|---|---|",
+        "| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |",
+        "|---|---|---|---|---|",
     ]
     for record in selected:
         presentation = record.get("presentation", {})
+        generation = _markdown_cell(presentation.get("generation")) or "—"
         group = labels.get(str(presentation.get("topic_group", "")), "其他")
         url = str(record.get("primary_url") or record.get("artifact_url") or "")
         title = _markdown_cell(record.get("title"))
         linked_title = f"[{title}]({url})" if url else title
         lines.append(
-            f"| {_markdown_cell(group)} | {linked_title} | "
+            f"| {generation} | {_markdown_cell(group)} | {linked_title} | "
             f"{_markdown_cell(display_summary(record, summary_max_chars))} | "
             f"{('[official](' + url + ')') if url else '—'} |"
         )
     return "\n".join(lines) + "\n"
+
+
+def render_industry_topics(
+    records: list[dict[str, Any]], *, summary_max_chars: int = 240
+) -> str:
+    """Render every configured, non-empty company topic in registry order."""
+    sections = [
+        rendered
+        for topic in INDUSTRY_TOPICS
+        if (
+            rendered := render_industry_topic(
+                records, str(topic["key"]), summary_max_chars=summary_max_chars
+            )
+        )
+    ]
+    return "\n".join(section.rstrip() + "\n" for section in sections)

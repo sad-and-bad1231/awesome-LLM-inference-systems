@@ -26,7 +26,8 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    display_themes,
+    render_industry_topics,
 )
 from .maintenance import candidate_archive_summary
 
@@ -951,9 +952,14 @@ def render_markdown_views(
         group for group in aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
         if group["scope"] == "core"
     ]
+    core_industry_project_keys = {group["project_key"] for group in industry_groups}
     industry_exploration_records = select_exploration(
         industry_source, window_days=exploration_window_days, limit=max(exploration_limit_per_track * 5, exploration_limit_per_track)
     )
+    industry_exploration_records = [
+        record for record in industry_exploration_records
+        if curation_for(record).get("project_key") not in core_industry_project_keys
+    ]
     industry_exploration_groups = aggregate_industry_records(
         industry_exploration_records, milestone_limit=industry_milestone_links
     )[:exploration_limit_per_track]
@@ -961,10 +967,8 @@ def render_markdown_views(
     candidate_records = _candidate_records(load_records(candidate_db_path))
     records = paper_records + industry_records + candidate_records
 
-    category_counts = Counter(
-        curation_for(record).get("themes", [""])[0]
-        for record in paper_records if curation_for(record).get("themes")
-    )
+    paper_themes = [display_themes(record, allow_foundation=True) for record in paper_records]
+    category_counts = Counter(lanes[0] for lanes in paper_themes if lanes)
     paper_lines = [
         "# Paper List（按类别整理；会议栏为最新发表/审稿状态）",
         "",
@@ -992,10 +996,10 @@ def render_markdown_views(
     for venue_status, count in sorted(evidence_counts.items()):
         paper_lines.append(f"| {_escape(venue_status)} | {count} |")
     for theme in THEME_ORDER:
-        rows = [record for record in paper_records if curation_for(record).get("themes", [""])[0] == theme]
+        rows = [record for record, lanes in zip(paper_records, paper_themes) if lanes and lanes[0] == theme]
         paper_lines.extend(["", f"## {THEME_LABELS[theme]}", "", "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |", "|---|---|---|---|"])
         for record in rows:
-            labels = " / ".join(THEME_LABELS[item] for item in curation_for(record).get("themes", []) if item in THEME_LABELS)
+            labels = " / ".join(THEME_LABELS[item] for item in display_themes(record, allow_foundation=True) if item in THEME_LABELS)
             paper_lines.append(
                 f"| {_escape(record['title'])}<br><sub>{_escape(labels)}</sub> | {_escape(record['venue_or_channel'])} | {_escape(record['orgs'])} | {_escape(display_summary(record, display_summary_max_chars))} |"
             )
@@ -1019,9 +1023,8 @@ def render_markdown_views(
         "- Generation Stall Rate：推测解码验证失败、MoE all-to-all 热点或 tool-call 挂起造成的生成中断率。",
         "- Numerical Reproducibility：低精度混合量化、scale search 和异构执行导致的数值不稳定与非确定性。",
     ]
-    topic = render_industry_topic(
+    topic = render_industry_topics(
         industry_source,
-        "deepseek-ai-systems",
         summary_max_chars=display_summary_max_chars,
     )
     if topic:

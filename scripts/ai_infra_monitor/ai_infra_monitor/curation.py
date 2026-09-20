@@ -12,6 +12,14 @@ CURATION_VERSION = "guide-2026-v6"
 SCOPES = ("core", "adjacent", "archive")
 PRIORITIES = ("foundation", "frontier", "supporting")
 
+# 记录 topics 中带此标记时，强制 scope=core / priority=foundation。
+# 用于人工策展的经典根节点：它们用词与现代论文不同，关键词启发式会误判为 archive。
+FOUNDATION_PIN_TOPIC = "foundation-pinned"
+
+# 记录 topics 中带此标记时，强制 scope=archive / priority=supporting。
+# 用于人工策展：pre-2026 的非奠基论文统一退出公开主线，保留事实但移入 archive。
+ARCHIVE_PIN_TOPIC = "archive-pinned"
+
 THEME_ORDER = (
     "attention-kernel",
     "kv-cache",
@@ -20,9 +28,14 @@ THEME_ORDER = (
     "moe",
     "compiler-dsl",
     "runtime-scheduling",
+    # 展示用兜底主线：人工钉选的经典根节点（架构/训练/量化等）不命中上面任何关键词
+    # 主线；若不兜底，它们会从所有分区里消失。它从不参与关键词命中，只在渲染时由
+    # reading.display_themes 补位。
+    "foundation",
 )
 
 THEME_TERMS = {
+    "foundation": (),
     "attention-kernel": (
         "flashattention", "flash attention", "attention kernel", "pagedattention",
         "long-sequence attention", "io-aware attention",
@@ -203,7 +216,20 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
         _contains(title_channel, THEME_TERMS[theme]) for theme in themes
     )
 
-    if themes and (direct_themes or structured_core_signal) and (
+    # 人工钉选：把明确策展的经典根节点固定进主线，不依赖关键词启发式。
+    # 标记写在记录的 topics 里（topic "foundation-pinned"），便于后续增删。
+    record_topics = [str(topic) for topic in (record.get("topics") or [])]
+    pinned = FOUNDATION_PIN_TOPIC in record_topics
+    archive_pinned = ARCHIVE_PIN_TOPIC in record_topics
+
+    if pinned:
+        scope = "core"
+        reasons = ["manually curated foundation root node (pinned in topics)"]
+    elif archive_pinned:
+        scope = "archive"
+        reasons = ["manually archived pre-2026 non-foundation record (pinned in topics)"]
+        themes = []
+    elif themes and (direct_themes or structured_core_signal) and (
         model_signal or explicit_kernel or inherently_model_specific
     ) and not peripheral and (
         not _is_release(record) or release_has_explicit_mechanism
@@ -223,7 +249,13 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     formal = record.get("evidence", {}).get("venue_status") == "formal_conference"
     physical = bool(record.get("triage", {}).get("physical_eval", {}).get("has_physical_signal"))
     high_triage = record.get("triage", {}).get("priority") == "high"
-    if scope == "core" and _contains(foundation_text, FOUNDATION_TERMS):
+    if pinned:
+        priority = "foundation"
+        reasons.append("kept as long-term foundation reading set")
+    elif archive_pinned:
+        priority = "supporting"
+        reasons.append("excluded from the pre-2026 foundation mainline")
+    elif scope == "core" and _contains(foundation_text, FOUNDATION_TERMS):
         priority = "foundation"
         reasons.append("foundational serving or kernel abstraction")
     elif scope == "core" and _year(record) >= 2025 and (

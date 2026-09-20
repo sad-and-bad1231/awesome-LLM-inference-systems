@@ -10,10 +10,12 @@ from urllib.parse import quote
 
 from .curation import THEME_ORDER, curation_for, curation_sort_key, is_public_mainline, select_exploration
 from .reading import (
+    FOUNDATION_THEME,
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
-    render_industry_topic,
+    display_themes,
+    render_industry_topics,
 )
 from .records import ABSTRACTIONS, load_records
 
@@ -332,15 +334,18 @@ def _render_collection(
     display_summary_max_chars: int = 240,
 ) -> str:
     exploration = exploration or []
-    grouped = {theme: [] for theme in THEME_ORDER}
+    lanes_by_record: list[list[str]] = []
     for record in records:
-        themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
-        if themes:
-            grouped[themes[0]].append(record)
-    counts = Counter(
-        (record.get("_reading_themes") or curation_for(record).get("themes", [""]))[0]
-        for record in records if (record.get("_reading_themes") or curation_for(record).get("themes"))
-    )
+        seeded = list(record.get("_reading_themes") or [])
+        lanes_by_record.append(seeded or display_themes(record, allow_foundation=not industry))
+    # The presentation-only `foundation` lane belongs to the paper taxonomy; omitting it
+    # from industry navigation avoids an empty "Foundation (0)" section.
+    theme_order = [theme for theme in THEME_ORDER if not (industry and theme == FOUNDATION_THEME)]
+    grouped = {theme: [] for theme in theme_order}
+    for record, lanes in zip(records, lanes_by_record):
+        if lanes:
+            grouped[lanes[0]].append(record)
+    counts = Counter(lanes[0] for lanes in lanes_by_record if lanes)
     featured_ids = {record.get("canonical_id") or record.get("id") for record in _featured_records(records, 12)}
     primary_status = "industrial_material" if industry else "formal_conference"
     primary_count = sum(record.get("evidence", {}).get("venue_status") == primary_status for record in records)
@@ -370,7 +375,7 @@ def _render_collection(
         "## Collection Navigation",
         "",
     ]
-    lines.extend(f"- [{THEME_LABELS[theme]}](#{_anchor(THEME_LABELS[theme])}) ({counts.get(theme, 0)})" for theme in THEME_ORDER)
+    lines.extend(f"- [{THEME_LABELS[theme]}](#{_anchor(THEME_LABELS[theme])}) ({counts.get(theme, 0)})" for theme in theme_order)
     lines.append(f"- [探索观察](#探索观察) ({len(exploration)})")
     lines.extend(
         [
@@ -385,22 +390,21 @@ def _render_collection(
             "| Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |",
             "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
             "| Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |",
-            "| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
+            "| Scope | `core` records form the main reading themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
             "| Featured | A small editorial starting set; all core records remain below. |",
             "",
         ]
     )
     if industry and topic_records:
-        topic = render_industry_topic(
+        topics = render_industry_topics(
             topic_records,
-            "deepseek-ai-systems",
             summary_max_chars=display_summary_max_chars,
         )
-        if topic:
-            lines.extend(topic.rstrip().splitlines())
+        if topics:
+            lines.extend(topics.rstrip().splitlines())
             lines.append("")
     lines.extend(["## Resource List", ""])
-    for theme in THEME_ORDER:
+    for theme in theme_order:
         category = THEME_LABELS[theme]
         rows = grouped.get(theme, [])
         featured = [record for record in rows if (record.get("canonical_id") or record.get("id")) in featured_ids]

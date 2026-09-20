@@ -37,30 +37,156 @@ Evidence labels describe the source material. Featured entries are editorial ent
 | Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |
 | Artifact | A linked implementation, documentation page, or deployment entry point. |
 | Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |
-| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |
+| Scope | `core` records form the main reading themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |
 | Featured | A small editorial starting set; all core records remain below. |
 
 ## DeepSeek AI 系统专题
 
-从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原七主题主表中。
+从模型架构到 kernel、通信、存储和应用数据路径的官方系统材料；专题仅作聚合导航，项目仍保留在原主题主表中。
 
-| 类别 | 材料 / 项目 | 系统作用 | 来源 |
-|---|---|---|---|
-| 架构与系统 | [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) | DeepSeek-V3 官方模型与推理参考，公开 MLA、DeepSeekMoE、FP8 权重转换及多种 GPU/NPU 运行入口。 | [official](https://github.com/deepseek-ai/DeepSeek-V3) |
-| 架构与系统 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | 在模型架构中加入 sparse attention/indexer，目标是在长上下文和 reasoning/agent 任务中降低推理成本。 | [official](https://arxiv.org/abs/2512.02556) |
-| 架构与系统 | [Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures](https://arxiv.org/abs/2505.09343) | 从 DeepSeek-V3/R1 的 MLA、MoE、FP8 与 Multi-Plane Network 出发，总结 2,048 张 H800 规模下的模型—硬件协同设计与系统瓶颈。 | [official](https://arxiv.org/abs/2505.09343) |
-| 架构与系统 | [MLA / Multi-head Latent Attention](https://arxiv.org/abs/2412.19437) | 把 KV cache 压到 latent 向量，DeepSeek-V3/R1 系列用 MLA 降低 long-context decode 的 KV 内存和带宽。 | [official](https://arxiv.org/abs/2412.19437) |
-| 核心算子与通信 | [DeepEP](https://github.com/deepseek-ai/DeepEP) | 面向 MoE expert parallel 的高吞吐、低延迟通信库，提供 dispatch/combine、低延迟模式与 GPU 通信优化。 | [official](https://github.com/deepseek-ai/DeepEP) |
-| 核心算子与通信 | [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | 面向 FP8/BF16 的 GPU GEMM kernel 库，为 DeepSeek dense 与 MoE 路径提供紧凑、可调优的矩阵乘实现。 | [official](https://github.com/deepseek-ai/DeepGEMM) |
-| 核心算子与通信 | [FlashMLA](https://github.com/deepseek-ai/FlashMLA) | 面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。 | [official](https://github.com/deepseek-ai/FlashMLA) |
-| 核心算子与通信 | [TileKernels](https://github.com/deepseek-ai/TileKernels) | 以 TileLang 编写的 kernel library，用 tile 级抽象组织和优化 GPU 算子实现。 | [official](https://github.com/deepseek-ai/TileKernels) |
-| 存储与数据路径 | [3FS](https://github.com/deepseek-ai/3FS) | 面向 AI 训练与推理负载的高性能分布式文件系统，强调并行数据路径、吞吐与大规模 checkpoint/data access。 | [official](https://github.com/deepseek-ai/3FS) |
-| 推测解码 | [DeepSpec](https://github.com/deepseek-ai/DeepSpec) | 用于训练、评估和复现实用 speculative decoding 方法的官方工具集，覆盖 draft/verify 与接受率评测。 | [official](https://github.com/deepseek-ai/DeepSpec) |
-| OCR 与生态 | [Awesome DeepSeek Agents](https://github.com/deepseek-ai/awesome-deepseek-agent) | 面向 DeepSeek Agent、coding agent 与工具调用生态的官方项目索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-agent) |
-| OCR 与生态 | [Awesome DeepSeek Integrations](https://github.com/deepseek-ai/awesome-deepseek-integration) | DeepSeek API 在应用、Agent、RAG、开发工具和基础设施中的官方集成索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-integration) |
-| OCR 与生态 | [DeepSeek Open Infra Index](https://github.com/deepseek-ai/open-infra-index) | DeepSeek 官方 AI infrastructure 导航入口，集中索引其生产验证的 kernel、通信、存储和系统工具。 | [official](https://github.com/deepseek-ai/open-infra-index) |
-| OCR 与生态 | [DeepSeek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR) | 通过视觉 token 压缩处理长文档上下文，并提供 OCR 推理与大规模页面数据生成路径。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR) |
-| OCR 与生态 | [DeepSeek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2) | DeepSeek OCR 的后续官方项目，以 Visual Causal Flow 组织文档视觉理解与生成流程。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR-2) |
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| DeepSeek-V2 | 架构与系统 | [MLA / Multi-head Latent Attention](https://arxiv.org/abs/2412.19437) | 把 KV cache 压到 latent 向量，DeepSeek-V3/R1 系列用 MLA 降低 long-context decode 的 KV 内存和带宽。 | [official](https://arxiv.org/abs/2412.19437) |
+| DeepSeek-V3 | 架构与系统 | [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) | DeepSeek-V3 官方模型与推理参考，公开 MLA、DeepSeekMoE、FP8 权重转换及多种 GPU/NPU 运行入口。 | [official](https://github.com/deepseek-ai/DeepSeek-V3) |
+| DeepSeek-V3 | 架构与系统 | [Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures](https://arxiv.org/abs/2505.09343) | 从 DeepSeek-V3/R1 的 MLA、MoE、FP8 与 Multi-Plane Network 出发，总结 2,048 张 H800 规模下的模型—硬件协同设计与系统瓶颈。 | [official](https://arxiv.org/abs/2505.09343) |
+| DeepSeek-V3.2 | 架构与系统 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | 在模型架构中加入 sparse attention/indexer，目标是在长上下文和 reasoning/agent 任务中降低推理成本。 | [official](https://arxiv.org/abs/2512.02556) |
+| DeepSeek-OCR | OCR 与生态 | [DeepSeek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR) | 通过视觉 token 压缩处理长文档上下文，并提供 OCR 推理与大规模页面数据生成路径。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR) |
+| DeepSeek-OCR-2 | OCR 与生态 | [DeepSeek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2) | DeepSeek OCR 的后续官方项目，以 Visual Causal Flow 组织文档视觉理解与生成流程。 | [official](https://github.com/deepseek-ai/DeepSeek-OCR-2) |
+| — | 核心算子与通信 | [DeepEP](https://github.com/deepseek-ai/DeepEP) | 面向 MoE expert parallel 的高吞吐、低延迟通信库，提供 dispatch/combine、低延迟模式与 GPU 通信优化。 | [official](https://github.com/deepseek-ai/DeepEP) |
+| — | 核心算子与通信 | [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | 面向 FP8/BF16 的 GPU GEMM kernel 库，为 DeepSeek dense 与 MoE 路径提供紧凑、可调优的矩阵乘实现。 | [official](https://github.com/deepseek-ai/DeepGEMM) |
+| — | 核心算子与通信 | [FlashMLA](https://github.com/deepseek-ai/FlashMLA) | 面向 MLA decode 的高性能 kernel，支持 paged KV cache、FP8 KV、Hopper/B200 等 GPU 优化。 | [official](https://github.com/deepseek-ai/FlashMLA) |
+| — | 核心算子与通信 | [TileKernels](https://github.com/deepseek-ai/TileKernels) | 以 TileLang 编写的 kernel library，用 tile 级抽象组织和优化 GPU 算子实现。 | [official](https://github.com/deepseek-ai/TileKernels) |
+| — | 存储与数据路径 | [3FS](https://github.com/deepseek-ai/3FS) | 面向 AI 训练与推理负载的高性能分布式文件系统，强调并行数据路径、吞吐与大规模 checkpoint/data access。 | [official](https://github.com/deepseek-ai/3FS) |
+| — | 推测解码 | [DeepSpec](https://github.com/deepseek-ai/DeepSpec) | 用于训练、评估和复现实用 speculative decoding 方法的官方工具集，覆盖 draft/verify 与接受率评测。 | [official](https://github.com/deepseek-ai/DeepSpec) |
+| — | OCR 与生态 | [Awesome DeepSeek Agents](https://github.com/deepseek-ai/awesome-deepseek-agent) | 面向 DeepSeek Agent、coding agent 与工具调用生态的官方项目索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-agent) |
+| — | OCR 与生态 | [Awesome DeepSeek Integrations](https://github.com/deepseek-ai/awesome-deepseek-integration) | DeepSeek API 在应用、Agent、RAG、开发工具和基础设施中的官方集成索引。 | [official](https://github.com/deepseek-ai/awesome-deepseek-integration) |
+| — | OCR 与生态 | [DeepSeek Open Infra Index](https://github.com/deepseek-ai/open-infra-index) | DeepSeek 官方 AI infrastructure 导航入口，集中索引其生产验证的 kernel、通信、存储和系统工具。 | [official](https://github.com/deepseek-ai/open-infra-index) |
+
+## Moonshot / Kimi 系统专题
+
+Kimi 模型代际与其配套的推理、存储与 Agent 工程材料；专题仅作聚合导航。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| Kimi-K1.5 | 模型架构 | [Kimi-k1.5](https://github.com/MoonshotAI/Kimi-k1.5) | Kimi k1.5 官方仓库，K 系列推理模型代际之一（官方仓库未附描述文本）。 | [official](https://github.com/MoonshotAI/Kimi-k1.5) |
+| Kimi-K2 | 模型架构 | [Kimi-K2](https://github.com/MoonshotAI/Kimi-K2) | Kimi K2 是月之暗面团队开发的大语言模型系列官方仓库，公开模型与使用入口。 | [official](https://github.com/MoonshotAI/Kimi-K2) |
+| Kimi-K2.5 | 模型架构 | [Kimi-K2.5](https://github.com/MoonshotAI/Kimi-K2.5) | Kimi K2.5 官方仓库，官方定位为 Open Visual Agentic Intelligence。 | [official](https://github.com/MoonshotAI/Kimi-K2.5) |
+| Kimi-K3 | 模型架构 | [Kimi-K3](https://github.com/MoonshotAI/Kimi-K3) | Kimi K3 官方仓库，官方定位为 Open Frontier Intelligence。 | [official](https://github.com/MoonshotAI/Kimi-K3) |
+| Kimi-Linear | 模型架构 | [Kimi-Linear](https://github.com/MoonshotAI/Kimi-Linear) | Kimi 线性注意力模型线的官方仓库（官方仓库未附描述文本）。 | [official](https://github.com/MoonshotAI/Kimi-Linear) |
+| — | 模型架构 | [MoBA](https://github.com/MoonshotAI/MoBA) | MoBA: Mixture of Block Attention for Long-Context LLMs，面向长上下文的块稀疏注意力机制。 | [official](https://github.com/MoonshotAI/MoBA) |
+| — | 推理系统 | [checkpoint-engine](https://github.com/MoonshotAI/checkpoint-engine) | Checkpoint-engine：用于在 LLM 推理引擎中更新模型权重的轻量中间件。 | [official](https://github.com/MoonshotAI/checkpoint-engine) |
+| — | 推理系统 | [FlashKDA](https://github.com/MoonshotAI/FlashKDA) | FlashKDA：高性能 Kimi Delta Attention kernel 库。 | [official](https://github.com/MoonshotAI/FlashKDA) |
+| — | 推理系统 | [Mooncake](https://www.usenix.org/conference/fast25/presentation/qin) | 以 KVCache 为中心做分离式 LLM serving 架构，面向长上下文在线服务。 | [official](https://www.usenix.org/conference/fast25/presentation/qin) |
+| — | 推理系统 | [Mooncake Joins PyTorch Ecosystem](https://pytorch.org/blog/mooncake-joins-pytorch-ecosystem/) | Mooncake 加入 PyTorch 生态，面向 SGLang、vLLM、TensorRT-LLM 提供 KVCache transfer 和 storage 能力。 | [official](https://pytorch.org/blog/mooncake-joins-pytorch-ecosystem/) |
+| — | 推理系统 | [MoonEP](https://github.com/MoonshotAI/MoonEP) | MoonEP：通过动态冗余专家实现负载均衡的专家并行（expert parallelism）库。 | [official](https://github.com/MoonshotAI/MoonEP) |
+| — | 推理系统 | [vLLM x Mooncake Store](https://vllm.ai/blog/2026-05-06-mooncake-store) | 将 Mooncake distributed KV cache store 接入 vLLM，在 agentic traces 上提升吞吐、降低 TTFT 和端到端延迟。 | [official](https://vllm.ai/blog/2026-05-06-mooncake-store) |
+| — | 训练与数据 | [Moonlight](https://github.com/MoonshotAI/Moonlight) | Moonlight：验证 Muon 优化器在 LLM 训练中可扩展性的官方工作。 | [official](https://github.com/MoonshotAI/Moonlight) |
+| — | 多模态与 Agent | [Kimi-Audio](https://github.com/MoonshotAI/Kimi-Audio) | Kimi-Audio：开源音频基础模型，覆盖音频理解、生成与对话。 | [official](https://github.com/MoonshotAI/Kimi-Audio) |
+| — | 多模态与 Agent | [Kimi-VL](https://github.com/MoonshotAI/Kimi-VL) | Kimi-VL：MoE 视觉语言模型，面向多模态推理、长上下文理解与 Agent 能力。 | [official](https://github.com/MoonshotAI/Kimi-VL) |
+| — | 工具与生态 | [kimi-code](https://github.com/MoonshotAI/kimi-code) | Kimi Code CLI，官方定位为面向下一代 Agent 的起点。 | [official](https://github.com/MoonshotAI/kimi-code) |
+
+## MiniMax 系统专题
+
+MiniMax 模型代际与其推理、多模态与 Agent 工具链材料；专题仅作聚合导航。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| MiniMax-01 | 模型架构 | [MiniMax-01](https://github.com/MiniMax-AI/MiniMax-01) | MiniMax-Text-01 与 MiniMax-VL-01 官方仓库，基于 Linear Attention 的大语言模型与视觉语言模型。 | [official](https://github.com/MiniMax-AI/MiniMax-01) |
+| MiniMax-M1 | 模型架构 | [MiniMax-M1](https://github.com/MiniMax-AI/MiniMax-M1) | MiniMax-M1：官方称其为全球首个开放权重的大规模 hybrid-attention 推理模型。 | [official](https://github.com/MiniMax-AI/MiniMax-M1) |
+| MiniMax-M2 | 模型架构 | [MiniMax-M2](https://github.com/MiniMax-AI/MiniMax-M2) | MiniMax-M2：为 coding 与 agentic 工作流打造的模型。 | [official](https://github.com/MiniMax-AI/MiniMax-M2) |
+| MiniMax-M2.1 | 模型架构 | [MiniMax-M2.1](https://github.com/MiniMax-AI/MiniMax-M2.1) | MiniMax M2.1：官方定位为面向真实开发与 agent 场景的 SOTA 模型。 | [official](https://github.com/MiniMax-AI/MiniMax-M2.1) |
+| MiniMax-M2.5 | 模型架构 | [MiniMax-M2.5](https://github.com/MiniMax-AI/MiniMax-M2.5) | MiniMax-M2.5 官方仓库；官方 README 将其定位为 MiniMax 最新模型（M2 系列代际之一）。 | [official](https://github.com/MiniMax-AI/MiniMax-M2.5) |
+| MiniMax-M2.7 | 模型架构 | [MiniMax-M2.7](https://github.com/MiniMax-AI/MiniMax-M2.7) | MiniMax-M2.7 是官方首个深度参与自身演进的模型，能构建复杂 agent harness，并借助 Agent Teams 与 Skills 完成复杂生产力任务（官方 README）。 | [official](https://github.com/MiniMax-AI/MiniMax-M2.7) |
+| MiniMax-M3 | 模型架构 | [MiniMax-M3](https://github.com/MiniMax-AI/MiniMax-M3) | MiniMax-M3 是原生多模态模型，支持 1M 上下文，约 428B 总参数 / 23B 激活参数（官方 README）。 | [official](https://github.com/MiniMax-AI/MiniMax-M3) |
+| MiniMax-Music3 | 多模态与 Agent | [MiniMax-Music3](https://github.com/MiniMax-AI/MiniMax-Music3) | MiniMax Music 3：高性能音乐生成模型，可依歌词与音乐描述生成最长五分钟、结构完整的歌曲（官方 README）。 | [official](https://github.com/MiniMax-AI/MiniMax-Music3) |
+| — | 训练与数据 | [SynLogic](https://github.com/MiniMax-AI/SynLogic) | SynLogic（NeurIPS 2025）：面向可验证推理任务的合成数据工作。 | [official](https://github.com/MiniMax-AI/SynLogic) |
+| — | 训练与数据 | [VTP](https://github.com/MiniMax-AI/VTP) | VTP（ECCV 2026）：面向生成任务的视觉 tokenizer 可扩展预训练。 | [official](https://github.com/MiniMax-AI/VTP) |
+| — | 多模态与 Agent | [audio-tools](https://github.com/MiniMax-AI/audio-tools) | 面向文本转音频的优化工具集，覆盖训练与推理工作流。 | [official](https://github.com/MiniMax-AI/audio-tools) |
+| — | 多模态与 Agent | [One-RL-to-See-Them-All](https://github.com/MiniMax-AI/One-RL-to-See-Them-All) | One RL to See Them All：视觉三重统一强化学习的官方实现。 | [official](https://github.com/MiniMax-AI/One-RL-to-See-Them-All) |
+| — | 工具与生态 | [cli](https://github.com/MiniMax-AI/cli) | MiniMax 官方 CLI：生成文本、图像、视频、语音与音乐。 | [official](https://github.com/MiniMax-AI/cli) |
+| — | 工具与生态 | [Mini-Agent](https://github.com/MiniMax-AI/Mini-Agent) | Mini-Agent：最小但完整的单 agent 示例工程，展示 agent 的核心执行流水线与生产级特性。 | [official](https://github.com/MiniMax-AI/Mini-Agent) |
+| — | 工具与生态 | [MiniMax-MCP](https://github.com/MiniMax-AI/MiniMax-MCP) | MiniMax 官方 MCP server，接入其 TTS、图像生成与视频生成 API。 | [official](https://github.com/MiniMax-AI/MiniMax-MCP) |
+| — | 工具与生态 | [OpenRoom](https://github.com/MiniMax-AI/OpenRoom) | OpenRoom：浏览器内的桌面环境，让 AI Agent 以自然语言操作各类应用。 | [official](https://github.com/MiniMax-AI/OpenRoom) |
+
+## 智谱 / Z.ai 系统专题
+
+GLM 模型代际与其推理、多模态与 Agent 工程材料；专题仅作聚合导航。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| GLM-130B | 模型架构 | [GLM-130B](https://github.com/zai-org/GLM-130B) | GLM-130B：开源双语预训练模型（ICLR 2023）。 | [official](https://github.com/zai-org/GLM-130B) |
+| ChatGLM-6B | 模型架构 | [ChatGLM-6B](https://github.com/zai-org/ChatGLM-6B) | ChatGLM-6B：开源双语对话语言模型。 | [official](https://github.com/zai-org/ChatGLM-6B) |
+| ChatGLM2-6B | 模型架构 | [ChatGLM2-6B](https://github.com/zai-org/ChatGLM2-6B) | ChatGLM2-6B：开源双语对话 LLM。 | [official](https://github.com/zai-org/ChatGLM2-6B) |
+| ChatGLM3 | 模型架构 | [ChatGLM3](https://github.com/zai-org/ChatGLM3) | ChatGLM3 系列：开源双语对话 LLM。 | [official](https://github.com/zai-org/ChatGLM3) |
+| GLM-4 | 模型架构 | [GLM-4](https://github.com/zai-org/GLM-4) | GLM-4 系列：开源多语言多模态对话模型。 | [official](https://github.com/zai-org/GLM-4) |
+| GLM-4-Voice | 多模态与 Agent | [GLM-4-Voice](https://github.com/zai-org/GLM-4-Voice) | GLM-4-Voice：端到端中英语音对话模型。 | [official](https://github.com/zai-org/GLM-4-Voice) |
+| GLM-4.5 | 模型架构 | [GLM-4.5](https://github.com/zai-org/GLM-4.5) | GLM-4.5：面向 Agentic、Reasoning 与 Coding（ARC）的基础模型。 | [official](https://github.com/zai-org/GLM-4.5) |
+| GLM-5 | 模型架构 | [GLM-5](https://github.com/zai-org/GLM-5) | GLM-5：官方定位从 Vibe Coding 走向 Agentic Engineering。 | [official](https://github.com/zai-org/GLM-5) |
+| GLM-Edge | 模型架构 | [GLM-Edge](https://github.com/zai-org/GLM-Edge) | GLM-Edge：GLM 系列端侧模型。 | [official](https://github.com/zai-org/GLM-Edge) |
+| GLM-V | 多模态与 Agent | [GLM-V](https://github.com/zai-org/GLM-V) | GLM-4.6V / 4.5V / 4.1V-Thinking：以可扩展强化学习迈向通用多模态推理。 | [official](https://github.com/zai-org/GLM-V) |
+| GLM-Image | 多模态与 Agent | [GLM-Image](https://github.com/zai-org/GLM-Image) | GLM-Image：采用混合自回归 + 扩散解码器架构的图像生成模型；官方 README 称其通用生成质量对齐主流 latent diffusion，并在密集知识场景有优势。 | [official](https://github.com/zai-org/GLM-Image) |
+| GLM-OCR | 多模态与 Agent | [GLM-OCR](https://github.com/zai-org/GLM-OCR) | GLM-OCR：官方定位为准确、快速、全面的 OCR 模型。 | [official](https://github.com/zai-org/GLM-OCR) |
+| GLM-TTS | 多模态与 Agent | [GLM-TTS](https://github.com/zai-org/GLM-TTS) | GLM-TTS：基于多奖励强化学习的可控、富情感零样本 TTS。 | [official](https://github.com/zai-org/GLM-TTS) |
+| GLM-ASR | 多模态与 Agent | [GLM-ASR](https://github.com/zai-org/GLM-ASR) | GLM-ASR-Nano：1.5B 参数的鲁棒开源语音识别模型。 | [official](https://github.com/zai-org/GLM-ASR) |
+| — | 模型架构 | [CodeGeeX4](https://github.com/zai-org/CodeGeeX4) | CodeGeeX4-ALL-9B：覆盖代码补全、代码解释器、Web 搜索与函数调用等场景的多用途模型。 | [official](https://github.com/zai-org/CodeGeeX4) |
+| — | 工具与生态 | [Open-AutoGLM](https://github.com/zai-org/Open-AutoGLM) | Open-AutoGLM：开源手机 Agent 模型与框架。 | [official](https://github.com/zai-org/Open-AutoGLM) |
+| — | 工具与生态 | [Synapse](https://github.com/zai-org/Synapse) | Synapse：自托管 AI 工作空间，支持可共享的 AI 队友、共享会话与记忆。 | [official](https://github.com/zai-org/Synapse) |
+
+## 阶跃星辰 / StepFun 系统专题
+
+Step 模型代际与其推理、语音、视频与多模态工程材料；专题仅作聚合导航。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| Step3 | 模型架构 | [Step3](https://github.com/stepfun-ai/Step3) | Step3：MoE 架构的多模态推理模型，321B 总参数 / 38B 激活；官方 README 称其端到端以最小化解码成本为设计目标。 | [official](https://github.com/stepfun-ai/Step3) |
+| Step3-VL-10B | 多模态与 Agent | [Step3-VL-10B](https://github.com/stepfun-ai/Step3-VL-10B) | Step3-VL-10B：10B 规模的紧凑多模态模型；官方称达到该量级 SOTA，可比肩 10–20 倍参数量的模型。 | [official](https://github.com/stepfun-ai/Step3-VL-10B) |
+| Step-3.5-Flash | 模型架构 | [Step-3.5-Flash](https://github.com/stepfun-ai/Step-3.5-Flash) | Step-3.5-Flash：官方定位快速、锐利且可靠的 agentic intelligence。 | [official](https://github.com/stepfun-ai/Step-3.5-Flash) |
+| Step-3.7-Flash | 模型架构 | [Step-3.7-Flash](https://github.com/stepfun-ai/Step-3.7-Flash) | Step-3.7-Flash：面向真实 agent 场景的高效率 Flash 模型。 | [official](https://github.com/stepfun-ai/Step-3.7-Flash) |
+| Step-Audio | 多模态与 Agent | [Step-Audio](https://github.com/stepfun-ai/Step-Audio) | Step-Audio：面向智能语音交互的开源框架，统一理解与生成，含 130B 多模态模型与 3B TTS，支持多语言、情感语气与方言。官方已标注该仓库不再维护，指向 Step-Audio2 / Step-Audio-R1 / Step-Audio-EditX。 | [official](https://github.com/stepfun-ai/Step-Audio) |
+| Step-Audio2 | 多模态与 Agent | [Step-Audio2](https://github.com/stepfun-ai/Step-Audio2) | Step-Audio 2：面向工业级音频理解与语音对话的端到端多模态大模型。 | [official](https://github.com/stepfun-ai/Step-Audio2) |
+| Step-Audio-R1 | 多模态与 Agent | [Step-Audio-R1](https://github.com/stepfun-ai/Step-Audio-R1) | Step-Audio-R1 方向；官方随仓库发布 Step-Audio-R1.5 的三个独立评测基准。 | [official](https://github.com/stepfun-ai/Step-Audio-R1) |
+| Step-Audio-EditX | 多模态与 Agent | [Step-Audio-EditX](https://github.com/stepfun-ai/Step-Audio-EditX) | Step-Audio-EditX：3B 参数、基于强化学习的音频编辑模型，可编辑情感、说话风格与副语言特征。 | [official](https://github.com/stepfun-ai/Step-Audio-EditX) |
+| Step-Video-T2V | 多模态与 Agent | [Step-Video-T2V](https://github.com/stepfun-ai/Step-Video-T2V) | Step-Video-T2V：文生视频模型的官方推理代码与权重（含 Turbo 版本），技术报告 arXiv 2502.10248。 | [official](https://github.com/stepfun-ai/Step-Video-T2V) |
+| Step-Video-TI2V | 多模态与 Agent | [Step-Video-TI2V](https://github.com/stepfun-ai/Step-Video-TI2V) | 基于 Step-Video-T2V 的图像到视频（I2V）模型，提供 motion score 控制生成动态幅度。 | [official](https://github.com/stepfun-ai/Step-Video-TI2V) |
+| Step1X-Edit | 多模态与 Agent | [Step1X-Edit](https://github.com/stepfun-ai/Step1X-Edit) | Step1X-Edit：开源图像编辑模型；官方称其可比肩 GPT-4o、Gemini 2 Flash 等闭源模型。 | [official](https://github.com/stepfun-ai/Step1X-Edit) |
+| Step1X-3D | 多模态与 Agent | [Step1X-3D](https://github.com/stepfun-ai/Step1X-3D) | Step1X-3D：高保真、可控的带纹理 3D 资产生成。 | [official](https://github.com/stepfun-ai/Step1X-3D) |
+| NextStep-1 | 多模态与 Agent | [NextStep-1](https://github.com/stepfun-ai/NextStep-1) | NextStep-1（ICLR 2026 Oral）：以连续 token 做自回归图像生成的 SOTA 工作。 | [official](https://github.com/stepfun-ai/NextStep-1) |
+| — | 推理系统 | [StepMesh](https://github.com/stepfun-ai/StepMesh) | StepMesh：面向 Attention-FFN 解耦架构的高性能、低延迟通信库。 | [official](https://github.com/stepfun-ai/StepMesh) |
+| — | 训练与数据 | [SteptronOss](https://github.com/stepfun-ai/SteptronOss) | SteptronOss：轻量、AI-native 的大语言模型训练框架，强调快速迭代、可复现实验与模块化配置。 | [official](https://github.com/stepfun-ai/SteptronOss) |
+| — | 工具与生态 | [gelab-zero](https://github.com/stepfun-ai/gelab-zero) | STEP-GUI：由 StepFun-GELab 团队开发的 GUI agent 方案。 | [official](https://github.com/stepfun-ai/gelab-zero) |
+| — | 工具与生态 | [Step-Realtime-CLI](https://github.com/stepfun-ai/Step-Realtime-CLI) | step-realtime-cli：终端 AI 编码助手，支持文本与实时语音交互，用于读代码、改文件与执行命令。 | [official](https://github.com/stepfun-ai/Step-Realtime-CLI) |
+
+## 字节 Seed / 火山引擎系统专题
+
+Seed 模型代际与其推理、训练与系统基础设施材料；专题仅作聚合导航。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| Seed1.5-VL | 多模态与 Agent | [Seed1.5-VL](https://github.com/ByteDance-Seed/Seed1.5-VL) | Seed1.5-VL：面向通用多模态理解与推理的视觉语言基础模型。 | [official](https://github.com/ByteDance-Seed/Seed1.5-VL) |
+| Seed-Thinking-v1.5 | 模型架构 | [Seed-Thinking-v1.5](https://github.com/ByteDance-Seed/Seed-Thinking-v1.5) | Seed-Thinking-v1.5：具备先思考再作答能力的推理模型；官方 README 给出 AIME 2024 86.7、Codeforces 55.0 等指标。 | [official](https://github.com/ByteDance-Seed/Seed-Thinking-v1.5) |
+| seed-oss | 模型架构 | [seed-oss](https://github.com/ByteDance-Seed/seed-oss) | seed-oss 系列模型，以 Apache-2.0 许可向开源社区发布（官方 README）。 | [official](https://github.com/ByteDance-Seed/seed-oss) |
+| Seed-Coder | 模型架构 | [Seed-Coder](https://github.com/ByteDance-Seed/Seed-Coder) | Seed-Coder：轻量开源代码 LLM 系列，含 base、instruct 与 reasoning 三个版本。 | [official](https://github.com/ByteDance-Seed/Seed-Coder) |
+| Seed-X-7B | 模型架构 | [Seed-X-7B](https://github.com/ByteDance-Seed/Seed-X-7B) | Seed-X：开源多语言翻译模型系列，包含 instruct 模型、强化学习模型与奖励模型。 | [official](https://github.com/ByteDance-Seed/Seed-X-7B) |
+| Seed-Prover | 模型架构 | [Seed-Prover](https://github.com/ByteDance-Seed/Seed-Prover) | Seed AI4Math 组的形式化证明项目页，涵盖 Seed-Prover 1.5、Seed-Prover 与 Delta-Prover。 | [official](https://github.com/ByteDance-Seed/Seed-Prover) |
+| BFS-Prover-V2 | 模型架构 | [BFS-Prover-V2](https://github.com/ByteDance-Seed/BFS-Prover-V2) | BFS-Prover-V2：面向 Lean4 的 SOTA 开源步级定理证明系统，针对训练与推理两侧的可扩展性。 | [official](https://github.com/ByteDance-Seed/BFS-Prover-V2) |
+| Stable-DiffCoder | 模型架构 | [Stable-DiffCoder](https://github.com/ByteDance-Seed/Stable-DiffCoder) | Stable-DiffCoder：轻量开源代码扩散语言模型（DLLM）系列，含 base 与 instruct 版本。 | [official](https://github.com/ByteDance-Seed/Stable-DiffCoder) |
+| — | 模型架构 | [AHN](https://github.com/ByteDance-Seed/AHN) | AHN（Artificial Hippocampus Networks）：面向高效长上下文建模。 | [official](https://github.com/ByteDance-Seed/AHN) |
+| — | 模型架构 | [decoupleQ](https://github.com/ByteDance-Seed/decoupleQ) | decoupleQ：一种面向 LLM 的量化算法。 | [official](https://github.com/ByteDance-Seed/decoupleQ) |
+| — | 推理系统 | [Astral](https://dblp.org/db/conf/sigcomm/sigcomm2025.html) | 从拓扑、路由、拥塞控制和作业编排构建大模型数据中心网络，是企业 AI fabric 的生产案例。 | [official](https://dblp.org/db/conf/sigcomm/sigcomm2025.html) |
+| — | 推理系统 | [cudaLLM](https://github.com/ByteDance-Seed/cudaLLM) | cudaLLM：训练 LLM 自动生成高效且正确 CUDA kernel 的完整流水线，采用 SFT + RL 两阶段。 | [official](https://github.com/ByteDance-Seed/cudaLLM) |
+| — | 推理系统 | [entangle](https://github.com/ByteDance-Seed/entangle) | entangle（ASPLOS'26）：论文 “It Takes Two to Entangle” 的官方代码。 | [official](https://github.com/ByteDance-Seed/entangle) |
+| — | 推理系统 | [FlexPrefill](https://github.com/ByteDance-Seed/FlexPrefill) | FlexPrefill（ICLR 2025 Oral）：面向高效长序列推理的上下文感知稀疏注意力机制。 | [official](https://github.com/ByteDance-Seed/FlexPrefill) |
+| — | 推理系统 | [InfiniStore](https://github.com/bytedance/InfiniStore) | 高性能分布式 KV cache store，支持 PD 分离中的 KV transfer、非分离集群的跨节点 KV reuse，并通过 LMCache 集成 vLLM。 | [official](https://github.com/bytedance/InfiniStore) |
+| — | 推理系统 | [LightSeq](https://github.com/bytedance/lightseq) | 通过 fused layer、定制 CUDA kernel 和显存复用部署 NLP 与生成模型。 | [official](https://github.com/bytedance/lightseq) |
+| — | 推理系统 | [MegaScale-Infer](https://arxiv.org/abs/2504.02263) | 将 attention 和 MoE FFN 分池部署，以 disaggregated expert parallelism、ping-pong pipeline 和 M2N 通信提升专家利用率。 | [official](https://arxiv.org/abs/2504.02263) |
+| — | 推理系统 | [ShadowKV](https://seed.bytedance.com/zh/public_papers/shadowkv-kv-cache-in-shadows-for-high-throughput-long-context-llm-inference) | GPU 只保留低秩 keys、landmarks 和少量 outliers，values 放 CPU DRAM，decode 时按需召回 Top-K value。 | [official](https://seed.bytedance.com/zh/public_papers/shadowkv-kv-cache-in-shadows-for-high-throughput-long-context-llm-inference) |
+| — | 推理系统 | [SwiftSpec](https://arxiv.org/abs/2506.11309) | 异步扩展 draft/target 执行，配合 tree-aware KV 管理和 fused kernel，面向交互式单请求降低解码延迟。 | [official](https://arxiv.org/abs/2506.11309) |
+| — | 推理系统 | [Triton-distributed](https://github.com/ByteDance-Seed/Triton-distributed) | Triton-distributed：分布式编译器与优化并行 kernel。 | [official](https://github.com/ByteDance-Seed/Triton-distributed) |
+| — | 训练与数据 | [ByteCheckpoint](https://github.com/ByteDance-Seed/ByteCheckpoint) | ByteCheckpoint：面向大基础模型（LFM）的统一 checkpoint 库。 | [official](https://github.com/ByteDance-Seed/ByteCheckpoint) |
+| — | 训练与数据 | [DATAMASK](https://github.com/ByteDance-Seed/DATAMASK) | DATAMASK：基于策略梯度掩码学习的大规模预训练数据联合筛选。 | [official](https://github.com/ByteDance-Seed/DATAMASK) |
+| — | 训练与数据 | [SDP4Bit](https://github.com/ByteDance-Seed/SDP4Bit) | SDP4Bit：面向 LLM 训练的 sharded data parallelism 4-bit 通信量化。 | [official](https://github.com/ByteDance-Seed/SDP4Bit) |
+| — | 训练与数据 | [VeOmni](https://github.com/ByteDance-Seed/VeOmni) | VeOmni：以模型为中心的分布式训练配方库，覆盖任意模态的模型训练扩展。 | [official](https://github.com/ByteDance-Seed/VeOmni) |
+| — | 多模态与 Agent | [Bagel](https://github.com/ByteDance-Seed/Bagel) | Bagel：开源统一多模态模型。 | [official](https://github.com/ByteDance-Seed/Bagel) |
 
 ## Resource List
 

@@ -14,17 +14,18 @@ A complete academic paper collection organized by serving-system abstraction. Fo
 
 | Records | Formal venue | With artifact | Tagged records |
 |---:|---:|---:|---:|
-| 241 | 111 | 22 | 232 |
+| 225 | 109 | 22 | 209 |
 
 ## Collection Navigation
 
 - [Attention / Kernel](#attention-kernel) (6)
-- [KV Cache](#kv-cache) (59)
-- [Prefill–Decode 与传输](#prefill-decode) (26)
-- [Speculative Decoding](#speculative-decoding) (23)
-- [MoE](#moe) (34)
-- [Compiler / DSL](#compiler-dsl) (3)
-- [Runtime / Scheduling](#runtime-scheduling) (90)
+- [KV Cache](#kv-cache) (49)
+- [Prefill–Decode 与传输](#prefill-decode) (20)
+- [Speculative Decoding](#speculative-decoding) (16)
+- [MoE](#moe) (28)
+- [Compiler / DSL](#compiler-dsl) (7)
+- [Runtime / Scheduling](#runtime-scheduling) (63)
+- [奠基与架构 / Foundation](#foundation) (36)
 - [探索观察](#探索观察) (18)
 
 ## Evidence and Selection
@@ -37,29 +38,31 @@ Evidence labels describe the source material. Featured entries are editorial ent
 | Technical tags | Searchable system surface; tags may be incomplete for legacy imports. |
 | Artifact | A linked implementation, documentation page, or deployment entry point. |
 | Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |
-| Scope | `core` records form the seven main themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |
+| Scope | `core` records form the main reading themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |
 | Featured | A small editorial starting set; all core records remain below. |
 
 ## Resource List
 
 ### Attention / Kernel (6)
 
-#### Featured
+#### Full Resource List
 
-- **Featured:** **vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention**
+- **vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention**
   `ASPLOS 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `serving` `cuda` `kernel` `memory`
   vAttention 通过 CUDA virtual memory 保留连续虚拟 KV layout，同时按需分配物理页，避免重写 attention kernel。
-#### Full Resource List
-
+- **[FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning](https://arxiv.org/abs/2307.08691)**
+  `ICLR 2024` · `2024` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `gpu`
+  在 FA1 的 IO 优化之上改进 thread-block 与 warp 级工作划分，进一步提升 GPU 利用率。
 - **Efficient Memory Management for Large Language Model Serving with PagedAttention**
   `SOSP 2023` · `2023` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `serving` `kv-cache` `memory` `vllm`
   vLLM/PagedAttention 用块式虚拟内存管理 KV cache，显著减少碎片并支持 beam search、parallel sampling 和前缀共享。
-- **FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-Precision**
-  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
-  Tags: `hopper` `kv-cache` `quantization`
-  FlashAttention-3 利用 Hopper TMA、warp specialization 和 FP8 block quantization 重叠数据移动、matmul 与 softmax。
+- **[FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://arxiv.org/abs/2205.14135)**
+  `NeurIPS 2022` · `2022` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `kernel` `memory`
+  提出 IO-aware 的精确 attention，用 tiling 把 HBM 与 SRAM 之间的数据搬移降到最低，attention kernel 的真正根节点。
 - **FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `kernel`
@@ -67,12 +70,8 @@ Evidence labels describe the source material. Featured entries are editorial ent
 - **I/O Analysis is All You Need: An I/O Analysis for Long-Sequence Attention**
   `ASPLOS 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   该工作从 I/O 复杂度而非 FLOPs 分析长序列 attention，指导算法与硬件在数据搬运瓶颈下协同优化。
-- **FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `kernel`
-  FastTree 为 radix-tree KV 共享设计专用 attention kernel，并在 runtime 中自适应划分共享上下文查询组。
 
-### KV Cache (59)
+### KV Cache (49)
 
 #### Featured
 
@@ -83,6 +82,18 @@ Evidence labels describe the source material. Featured entries are editorial ent
   MorphServe 以反馈控制方式在运行时联合调整量化层和 KV cache 容量：高压时异步换入低精度层并弹性扩缩 KVC，压力恢复后再切回；在 Vicuna/Llama 和真实 workload 上平均 SLO 违规降低 92.45%，P95 TTFT 相较全精度 serving 改善 2.2x–3.9x，并保持生成质量。
 #### Full Resource List
 
+- **InfiniGen: Efficient Generative Inference of Large Language Models with Dynamic KV Cache Management**
+  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `kv-cache` `memory`
+  InfiniGen 用少量 rehearsal 预测下一层重要 KV，仅从 host memory 预取必要状态以加速 offloaded inference。
+- **Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache**
+  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `long-context`
+  Infinite-LLM 将 attention layer 解耦并使用 pooled distributed KVCache，支撑最长约两百万 token 的弹性服务。
+- **Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving**
+  `FAST 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  Mooncake 以 KVCache 为中心构建分离式 LLM serving 架构，利用 CPU/DRAM/SSD/NIC 资源扩展在线长上下文服务能力。
 - **A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints**
   `ICML 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `kv-cache` `memory`
@@ -150,18 +161,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ICML 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `compression` `kv-cache`
   RLKV 用强化学习探针识别对推理链关键的注意力头，并优先保留这些头的 KV cache 来压缩长 CoT 推理开销。
-- **Oneiros: KV Cache Optimization through Parameter Remapping for Multi-tenant LLM Serving**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `kv-cache`
-  Oneiros 通过参数重映射提高不同 tenant 间 KV cache 的兼容和复用能力。
-- **RocketKV: Accelerating Long-Context LLM Inference via Two-Stage KV Cache Compression**
-  `ICML 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `compression` `kv-cache` `long-context`
-  RocketKV 先粗粒度永久淘汰输入 KV token，再用动态稀疏注意力进行细粒度 top-k 选择以加速长上下文解码。
-- **ShadowKV: KV Cache in Shadows for High-Throughput Long-Context LLM Inference**
-  `ICML 2025 Spotlight` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `gpu` `kv-cache` `long-context` `throughput`
-  ShadowKV 在 GPU 侧保留低秩 keys、landmarks 和少量 outliers，并按需从 CPU DRAM 拉取匹配 value 以提升长上下文吞吐。
 - **[FreeKV: Boosting KV Cache Retrieval for Efficient LLM Inference](https://iclr.cc/virtual/2026/poster/10006722)**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop` · `Reading priority: frontier`
   Tags: `serving` `gpu` `compiler` `kernel`
@@ -174,14 +173,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop` · `Reading priority: frontier`
   Tags: `decode` `serving` `npu` `tpu` `kv-cache`
   LouisKV exploits temporal locality and different input/output KV distributions, triggering retrieval at semantic boundaries and using decoupled fine-grained cache management for long reasoning sequences.
-- **InfiniGen: Efficient Generative Inference of Large Language Models with Dynamic KV Cache Management**
-  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: supporting`
-  Tags: `kv-cache` `memory`
-  InfiniGen 用少量 rehearsal 预测下一层重要 KV，仅从 host memory 预取必要状态以加速 offloaded inference。
-- **Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache**
-  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: supporting`
-  Tags: `long-context`
-  Infinite-LLM 将 attention layer 解耦并使用 pooled distributed KVCache，支撑最长约两百万 token 的弹性服务。
 - **Attention Is All You Need for KV Cache in Diffusion LLMs**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
   Tags: `kv-cache`
@@ -210,10 +201,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
   Tags: `tpu` `kv-cache`
   ReST-KV 通过逐层输出重构和时空平滑修正 token 删除后的注意力重分布，使 KV eviction 更适合长序列生成。
-- **AdaptCache: KV Cache Native Storage Hierarchy for Low-Delay and High-Quality Language Model Serving**
-  `SOSP 2025 BigMem Workshop` · `2025` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `kv-cache` `rag`
-  AdaptCache 为每个 KV entry 联合选择有损压缩算法、压缩率和 DRAM/SSD 放置，在质量约束下提高 DRAM 命中并降低恢复延迟。
 - **AnchorKV: Safety-Aware KV Cache Compression via Soft Penalty with a Refusal Anchor**
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `compression` `kv-cache`
@@ -286,43 +273,23 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `kv-cache`
   VeriCache 用压缩 KV 起草、完整 KV 验证，并重叠 HBM 解码与 PCIe/网络换入，保证输出与 full-KV 完全一致。
-- **FlowKV: A Disaggregated Inference Framework with Low-Latency KV Cache Transfer and Load-Aware Scheduling**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill` `kv-cache` `latency`
-  FlowKV 优化块级 KV cache 传输并引入负载感知调度，降低 prefill 到 decode 的传输延迟和节点不均衡。
-- **Online Scheduling for LLM Inference with KV Cache Constraints**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `kv-cache`
-  该工作将 KV cache 容量约束纳入 online scheduling 理论，分析 batching、延迟与 hindsight optimal 的竞争关系。
-- **TraCT: Disaggregated LLM Serving with CXL Shared Memory KV Cache at Rack-Scale**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `cxl` `kv-cache` `memory`
-  TraCT 用 CXL shared memory 同时作为 KV transfer substrate 和 rack-wide prefix-aware KV cache，探索机架级 KV cache 共享。
 - **CacheSlide: Unlocking Cross Position-Aware KV Cache Reuse for Accelerating LLM Serving**
   `FAST 2026` · `2026` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
   Tags: `serving` `kv-cache` `agent`
   CacheSlide 针对 agent prompt 中相对位置稳定的片段设计 RPDC、位置校正和 layer-wise spill-aware KV 复用。
-- **Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving**
-  `FAST 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  Mooncake 以 KVCache 为中心构建分离式 LLM serving 架构，利用 CPU/DRAM/SSD/NIC 资源扩展在线长上下文服务能力。
-- **Oaken: Fast and Efficient LLM Serving with Online-Offline Hybrid KV Cache Quantization**
-  `ISCA 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `kv-cache` `quantization`
-  Oaken 将离线量化与在线自适应 KV 量化结合，在降低 cache 带宽和容量的同时控制运行时开销。
-- **RefreshKV: Updating Small KV Cache During Long-form Generation**
-  `ACL 2025 Long Papers` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `kv-cache`
-  RefreshKV 在长文本生成中交替执行全量注意力和小 KV cache 注意力，动态刷新保留 token 以改善长生成质量。
-- **SmallKV: Small Model Assisted Compensation of KV Cache Compression for Efficient LLM Inference**
-  `NeurIPS 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `compression` `kv-cache`
-  SmallKV 用小模型注意力补偿大模型 KV 压缩中的显著性漂移和边际信息过压缩。
 
-### Prefill–Decode 与传输 (26)
+### Prefill–Decode 与传输 (20)
 
 #### Featured
 
+- **Featured:** **CacheBlend: Fast Large Language Model Serving for RAG with Cached Knowledge Fusion**
+  `EuroSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `prefill` `serving` `edge` `rag`
+  CacheBlend 复用非前缀知识片段的预计算 KV，并用知识融合机制降低 RAG prefill 延迟。
+- **Featured:** **Context Parallelism for Scalable Million-Token Inference**
+  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `decode` `prefill`
+  该工作用 pass-KV/pass-Q 两种精确 ring attention 在 128 张 H100 上扩展百万 token prefill 和 persistent-KV decode。
 - **Featured:** **[PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG)**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `prefill` `serving` `gpu` `scheduler` `scheduling` `multi-turn` `long-context` `sglang`
@@ -338,10 +305,14 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `decode` `prefill` `gpu` `goodput` `tpot`
   DistServe 将 prefill 和 decode 放到不同 GPU 上，并按 TTFT/TPOT 约束联合优化资源与并行策略。
-- **P/D-Serve: Serving Disaggregated Large Language Model at Scale**
-  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
-  Tags: `decode` `prefill` `slo`
-  P/D-Serve 面向大规模商业部署，将 prefill/decode 组织、调度和 KVCache 传输做端到端优化，以提升分离式 LLM 服务吞吐和 SLO 表现。
+- **Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve**
+  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `decode` `prefill` `latency` `stall`
+  Sarathi-Serve 用 chunked prefill 和 stall-free scheduling 缓解 prefill/decode 混批中的吞吐-延迟冲突。
+- **[Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150)**
+  `arXiv 2019` · `2019` · `Research record` · `Preprint` · `Reading priority: foundation`
+  Tags: `decode`
+  提出 Multi-Query Attention，只保留单个 KV head，直接从 decode 阶段的 KV 读取带宽瓶颈出发做优化。
 - **[ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping](https://www.usenix.org/conference/osdi26/presentation/liu-yao)**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `prefill` `decode` `gpu` `compiler` `compression` `tensorrt-llm` `throughput` `ttft`
@@ -372,34 +343,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   Tags: `serving` `training` `gpu` `amd` `moe` `routing` `sglang` `throughput`
   Artifact: [source](https://www.usenix.org/system/files/osdi26-mao-ziming-uep.pdf)
   UEP 以 GPU-CPU 控制通道和 CPU proxy 代替强耦合的 GPU-initiated RDMA，使 expert-parallel 通信跨 NVIDIA/AMD GPU、AWS EFA 与 Broadcom NIC 保持可移植；在 EFA 上 dispatch/combine 吞吐提升 2.1x，SGLang token 吞吐提升最高 40%，16 节点 AMD+Broadcom DeepSeek-V3 训练吞吐提升最高 45%。
-- **Alibaba Stellar: A New Generation RDMA Network for Cloud AI**
-  `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `rdma`
-  Stellar 针对云 AI 集群重构 RDMA 网络的可靠性、拥塞控制和多租户隔离。
-- **ByteDance Jakiro: Enabling RDMA and TCP over Virtual Private Cloud**
-  `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `rdma`
-  Jakiro 在 VPC 中统一支持 RDMA 和 TCP，使云端 AI workload 获得高性能且可隔离的网络。
-- **LeanAttention: Hardware-Aware Scalable Attention Mechanism for the Decode-Phase of Transformers**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode`
-  LeanAttention 重构 decode attention 的执行流，在保持精确 attention 的同时提高超长上下文可扩展性。
-- **POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference**
-  `ASPLOS 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode` `prefill` `gpu` `kernel`
-  POD-Attention 设计可同时处理 prefill/decode 混合批的 GPU attention kernel，提升两阶段重叠执行效率。
-- **PrefillOnly: An Inference Engine for Prefill-only Workloads in Large Language Model Applications**
-  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode` `prefill` `kv-cache`
-  PrefillOnly 专门优化 embedding、reranking 和 prompt encoding 等只有 prefill、没有 decode 的 LLM 应用。
-- **THORN-ML: Transparent Hardware Offloaded Resilient Networks for RDMA based Distributed ML Workloads**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `rdma`
-  THORN-ML 将故障检测和恢复逻辑下沉到网络硬件，提高 RDMA 大模型作业的透明容错能力。
-- **Vedrfolnir: RDMA Network Performance Anomalies Diagnosis in Collective Communications**
-  `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `rdma`
-  Vedrfolnir 关联 RDMA telemetry 与 collective 行为，诊断分布式 AI 集群的尾延迟和性能异常。
 - **[QuoKA: Query-Oriented KV Selection for Efficient LLM Prefill](https://iclr.cc/virtual/2026/poster/10008892)**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop` · `Reading priority: frontier`
   Tags: `prefill` `serving` `gpu` `compiler` `kernel` `ttft`
@@ -423,16 +366,8 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `serving` `gpu` `multimodal` `vllm`
   vLLM-Omni 把任意到任意多模态模型分解为独立 stage graph，为 LLM、扩散模型和编码器分别批处理和分配 GPU。
-- **SPAD: Specialized Prefill and Decode Hardware for Disaggregated LLM Inference**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill`
-  SPAD 分别设计面向 prefill 和 decode 的专用芯片，以更低硬件成本匹配两阶段不同的算力和带宽需求。
-- **SDR-RDMA: Software-Defined Reliability Architecture for Planetary Scale RDMA Communication**
-  `SC 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `rdma`
-  SDR-RDMA 将可靠性策略软件定义化，以支撑跨地域超大规模 RDMA 通信。
 
-### Speculative Decoding (23)
+### Speculative Decoding (16)
 
 #### Full Resource List
 
@@ -440,6 +375,9 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ICML 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `kv-cache`
   Medusa 在目标模型上添加多个 decoding heads，无需独立 draft model 即可并行预测和验证多个未来 token。
+- **[Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192)**
+  `ICML 2023` · `2023` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  提出 draft 模型 + 并行验证的投机解码，在不改变目标分布的前提下加速生成。
 - **Accelerating Large-Scale Reasoning Model Inference with Sparse Self-Speculative Decoding**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `kv-cache`
@@ -462,18 +400,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `serving`
   该工作用真实 serving 条件重新评估 speculative decoding，区分离线 speedup 与在线负载下的端到端收益。
-- **AdaSpec: Adaptive Speculative Decoding for Fast, SLO-Aware Large Language Model Serving**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `kv-cache` `slo`
-  AdaSpec 根据请求 SLO、草稿成本和接受率动态选择 speculative decoding 配置。
-- **MagicDec: Breaking the Latency-Throughput Tradeoff for Long Context Generation with Speculative Decoding**
-  `ICML 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `kv-cache` `long-context` `latency` `throughput`
-  MagicDec 指出长上下文下 target verification 成本相对下降，并联合优化 draft/target KV cache 以兼顾 batch throughput 和 latency。
-- **PhoenixOS: Concurrent OS-level GPU Checkpoint and Restore with Validated Speculation**
-  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `gpu`
-  PhoenixOS 在操作系统层并发执行 GPU checkpoint/restore，并通过验证式推测减少暂停时间。
 - **Learning To Draft: Adaptive Speculative Decoding with Reinforcement Learning**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
   LTD 将 draft/verify 时间分配建模为 RL 环境，联合学习两个策略以直接优化每轮 speculative decoding 的吞吐。
@@ -503,28 +429,8 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `kv-cache`
   Saguaro 在目标模型验证当前草稿时预先推测验证结果并并行准备下一批草稿，从而进一步隐藏 drafting 串行开销。
-- **AdaServe: SLO-Customized LLM Serving with Fine-Grained Speculative Decoding**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `kv-cache` `goodput` `slo`
-  AdaServe 将 speculative token tree 构造和请求级 SLO 结合，动态选择验证 token 以提高 goodput。
-- **Mirror Speculative Decoding: Breaking the Serial Barrier in LLM Inference**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `gpu` `npu` `kv-cache`
-  Mirror-SD 在异构 GPU/NPU 上并行运行互补的 draft/target 推测流水线，突破串行 drafting 的延迟上限。
-- **SpecMemo: Speculative Decoding is in Your Pocket**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `gpu` `kv-cache`
-  SpecMemo 建模推测解码的内存下界并优化 rejected-token 状态，使受限 GPU 和移动场景也能获得加速。
-- **SwiftSpec: Ultra-Low Latency LLM Decoding by Scaling Asynchronous Speculative Decoding**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `kernel` `kv-cache` `latency`
-  SwiftSpec 将 draft 与 target 异步解耦扩展，并加入 tree-aware KV management 和 fused kernels 追求单请求极低延迟。
-- **LIA: A Single-GPU LLM Inference Acceleration with Layer Bypass and Adaptive Speculative Decoding**
-  `ISCA 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `gpu` `kv-cache`
-  LIA 联合 layer bypass 与自适应推测解码，在单 GPU 上减少不必要的层执行和 token generation 延迟。
 
-### MoE (34)
+### MoE (28)
 
 #### Featured
 
@@ -535,6 +441,10 @@ Evidence labels describe the source material. Featured entries are editorial ent
   SwiftEP 面向 MoE prefill 的 all-to-all 通信，以 buffer fusion 消除 staging copy，并结合 TMA offloading、RDMA scatter-gather、QP 并行和 CUDA IPC 提升 NVLink/网络利用率；在 16/32 GPU 集群上相较 DeepEP，算法带宽最高提升 119.7%，SM 占用最高下降 66.7%，服务容量提升 21.2%。
 #### Full Resource List
 
+- **KTransformers: Unleashing the Full Potential of CPU/GPU Hybrid Inference for MoE Models**
+  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `gpu` `kernel` `moe`
+  KTransformers 把活跃 expert、attention 与其他算子分配到 CPU/GPU，并用定制 kernel 提升本地 MoE 推理。
 - **MegaBlocks: Efficient Sparse Training with Mixture-of-Experts**
   `MLSys 2023` · `2023` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `routing` `training` `kernel` `moe`
@@ -547,6 +457,18 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `ICML 2022` · `2022` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `training` `moe`
   DeepSpeed-MoE 联合优化 expert parallel、通信和模型压缩，使大规模 MoE 同时具备训练和推理可行性。
+- **[GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)**
+  `ICLR 2020/2021` · `2021` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `moe`
+  把 MoE 条件计算与自动分片结合，给出稀疏专家模型在分布式集群上的执行方案。
+- **[Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538)**
+  `ICLR 2017` · `2017` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `moe` `rag`
+  提出稀疏门控 MoE 层，用条件计算让参数量扩到极大规模而单样本计算量近似不变。
+- **[Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/abs/2101.03961)**
+  `JMLR 2021/2022` · `2022` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `moe`
+  用 top-1 路由大幅简化 MoE，把稀疏模型规模推到万亿参数级别。
 - **Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design**
   `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `decode` `prefill` `gpu` `kernel` `kv-cache` `moe` `slo`
@@ -571,26 +493,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `training` `gpu` `memory` `moe`
   MoEBlaze 针对现代 GPU 上 MoE 训练的显存墙优化 expert 参数、激活和通信组织，为大规模 MoE 系统提供训练侧基础设施。
-- **COMET: Fine-grained Computation-communication Overlapping for Mixture-of-Experts**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `moe`
-  COMET 通过依赖分析、任务重排和自适应工作量分配细粒度重叠 MoE 通信与计算，并已用于万卡级生产集群。
-- **KTransformers: Unleashing the Full Potential of CPU/GPU Hybrid Inference for MoE Models**
-  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `gpu` `kernel` `moe`
-  KTransformers 把活跃 expert、attention 与其他算子分配到 CPU/GPU，并用定制 kernel 提升本地 MoE 推理。
-- **MiLo: Efficient Quantized MoE Inference with Mixture of Low-Rank Compensators**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `kernel` `kv-cache` `moe`
-  MiLo 用自适应低秩补偿器恢复超低比特 MoE 的精度，并配套 Tensor Core 友好的 3-bit kernel。
-- **MixNet: A Runtime Reconfigurable Optical-Electrical Fabric for Distributed Mixture-of-Experts Training**
-  `SIGCOMM 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `routing` `training` `moe`
-  MixNet 根据 MoE 动态 all-to-all 流量重配置光电混合 fabric，缓解 expert routing 热点。
-- **Stratum: System-Hardware Co-Design with Tiered Monolithic 3D-Stackable DRAM for Efficient MoE Serving**
-  `MICRO 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode` `serving` `moe`
-  Stratum 将分层 monolithic-3D DRAM、近存计算和 expert 热度预测结合，提高 MoE decode 的带宽和能效。
 - **Libra: Effective yet Efficient Load Balancing for Large-scale MoE Inference**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
   Tags: `moe`
@@ -643,35 +545,31 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `serving` `gpu` `kv-cache` `moe`
   WiSP 将 expert 权重与 KV cache 统一建模为 GPU working set，并用 MV-WSA 在两者之间动态分配 VRAM 以提升低资源 MoE serving 吞吐。
-- **BEAM: Binary Expert Activation Masking for Dynamic Routing in MoE**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `routing` `moe`
-  BEAM 用二值 expert activation mask 做动态路由，减少 MoE 推理中不必要的 expert 激活和通信。
-- **BrownoutServe: SLO-Aware Inference Serving under Bursty Workloads for MoE-based LLMs**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `moe` `slo`
-  BrownoutServe 在突发流量下动态减少部分 expert 访问并使用 united experts，在精度和 SLO 之间调节。
-- **DuoServe-MoE: Dual-Phase Expert Prefetch and Cache Scheduling for Efficient MoE LLM Inference**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill` `moe`
-  DuoServe-MoE 为 prefill 和 decode 设计不同 expert prefetch/cache 策略，以较小显存运行大型 MoE。
-- **MegaScale-Infer: Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `moe`
-  MegaScale-Infer 将 attention 与 MoE FFN 解耦部署，并以 ping-pong pipeline 和 M2N 通信库提高专家利用率。
 - **CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution**
   `DAC 2026` · `2026` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
   Tags: `gpu` `moe` `throughput`
   CoX-MoE 用合并式 expert 执行、静态 expert 分层与选择性 attention offload 协调 CPU-GPU 协作，避免 micro-batch 导致的 MoE 推理低效。
-- **Diff-MoE: Efficient Batched MoE Inference with Priority-Driven Differential Expert Caching**
-  `SC 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `moe`
-  Diff-MoE 根据 expert 优先级采用差异化缓存，并面向 batch 复用热点 expert。
 
-### Compiler / DSL (3)
+### Compiler / DSL (7)
 
 #### Full Resource List
 
+- **[Triton: An Intermediate Language and Compiler for Tiled Neural Network Computations](https://doi.org/10.1145/3315508.3329973)**
+  `MAPL/PLDI 2019` · `2019` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `gpu` `compiler` `kernel`
+  提出 tile 级 GPU kernel 编程语言与编译优化流水线，是现代 AI kernel DSL 的关键源头。
+- **[TVM: An Automated End-to-End Optimizing Compiler for Deep Learning](https://arxiv.org/abs/1802.04799)**
+  `OSDI 2018` · `2018` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `compiler`
+  端到端深度学习编译器，把图级优化与算子级调度分离，让同一模型可移植到多样硬件。
+- **Punica: Multi-Tenant LoRA Serving**
+  `arXiv 预印本, 2023/持续使用` · `2023` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `cuda` `kernel`
+  Punica 用 heterogeneous batching CUDA kernel 和共享 base model 支撑多租户 LoRA serving。
+- **LightSeq: A High Performance Inference Library for Transformers**
+  `NAACL 2021 System Demonstrations` · `2021` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: foundation`
+  Tags: `cuda` `kernel`
+  LightSeq 通过 layer fusion、定制 CUDA kernel 和显存复用提供 Transformer 推理库。
 - **[Agentix: An Efficient Serving Engine for LLM Agents as General Programs](https://www.usenix.org/conference/nsdi26/presentation/luo)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `tpu` `compiler` `kernel` `agent` `rag` `vllm` `latency`
@@ -685,14 +583,10 @@ Evidence labels describe the source material. Featured entries are editorial ent
   Tags: `gpu` `kernel`
   ParallelKittens 提供更系统的多 GPU kernel 编程与组合方式，降低跨 GPU LLM inference kernel 的实现复杂度。
 
-### Runtime / Scheduling (90)
+### Runtime / Scheduling (63)
 
 #### Featured
 
-- **Featured:** **FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `kernel`
-  FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。
 - **Featured:** **BOute: Cost-Efficient LLM Serving with Heterogeneous LLMs and GPUs via Multi-Objective Bayesian Optimization**
   `MLSys 2026` · `2026` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
   Tags: `serving` `gpu`
@@ -723,14 +617,42 @@ Evidence labels describe the source material. Featured entries are editorial ent
   SYMPHONY 将计算与 KV cache 存储解耦为面向多轮会话的 disaggregated memory layer，通过 advisory prefetch、priority-based KV 管理和 cooperative memory management 避开关键路径；在 LLaMA/ShareGPT/Burst-GPT 上相较 vLLM 将端到端延迟降低 2.4x，并在小幅延迟增加下服务 4x 请求。
 #### Full Resource List
 
+- **FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving**
+  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `kernel`
+  FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。
+- **QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving**
+  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `kv-cache` `quantization`
+  QServe 联合 W4A8KV4 量化、SmoothAttention、权重重排和寄存器级并行，将理论低比特节省转成云端 serving 吞吐。
+- **DejaVu: KV-cache Streaming for Fast, Fault-tolerant Generative LLM Serving**
+  `ICML 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `kv-cache`
+  DejaVu 用 KV-cache streaming 支持 prompt-token 分离、microbatch swapping 和状态复制，缓解流水线空泡、显存过配和故障恢复问题。
 - **Llumnix: Dynamic Scheduling for Large Language Model Serving**
   `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `serving`
   Llumnix 通过请求及其 KV 状态的 live migration，在多实例间动态重调度以改善尾延迟、隔离和负载均衡。
-- **MemServe: Context Caching for Disaggregated LLM Serving with Elastic Memory Pool**
+- **ServerlessLLM: Low-Latency Serverless Inference for Large Language Models**
+  `OSDI 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `gpu` `latency`
+  ServerlessLLM 利用近 GPU 多层存储、快速 checkpoint loading 和 live migration 降低 serverless LLM 冷启动延迟。
+- **Taming the Titans: A Survey of Efficient LLM Inference Serving**
+  `arXiv 综述, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  该综述按 instance、cluster 和新兴应用场景系统整理模型放置、调度、存储、分离架构及云端策略。
+- **BurstGPT: A Real-world Workload Dataset to Optimize LLM Serving Systems**
   `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `memory`
-  MemServe 以 MemPool 统一管理跨实例分布式 KV，并联合 context caching、PD 分离和全局 locality-aware scheduling。
+  Tags: `serving`
+  BurstGPT 发布 Azure OpenAI 服务的五百余万条真实 trace，揭示 burst、长度和失败模式对调度评估的影响。
+- **MuxServe: Flexible Spatial-Temporal Multiplexing for Multiple LLM Serving**
+  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `decode` `prefill`
+  MuxServe 结合模型流行度、空间共置和 prefill/decode 时间复用，提高多模型 serving 的显存与算力利用率。
+- **Preble: Efficient Distributed Prompt Scheduling for LLM Serving**
+  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  Preble 在分布式集群中联合优化共享前缀 KV 复用和计算负载均衡，并用分层调度处理 prompt locality。
 - **SGLang: Efficient Execution of Structured Language Model Programs**
   `NeurIPS 2024` · `2024` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: foundation`
   Tags: `serving` `agent` `rag` `sglang`
@@ -815,50 +737,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   Tags: `prefill` `decode` `gpu` `edge` `scheduler` `speculative-decoding` `goodput` `slo`
   Artifact: [source](https://arxiv.org/abs/2601.11652)
   将边缘设备纳入 speculative serving，针对 wasted drafting 与 verification interference，设计 speculation controller、verification-time estimator 和 verification batch scheduler；在公开实验中，系统容量最高提升 2.1/4.1 倍，goodput 最高提升 1.94/3.7 倍，相比 centralized serving 与 SLED。
-- **Aegaeon: Effective GPU Pooling for Concurrent LLM Serving on the Market**
-  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `gpu`
-  Aegaeon 通过细粒度 GPU pooling 和模型复用服务长尾模型市场，降低每个模型独占设备的成本。
-- **Cauchy: A Cost-Efficient LLM Serving System through Adaptive Heterogeneous Deployment**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `gpu` `slo`
-  Cauchy 在不同 GPU 类型和云实例间动态放置模型，根据负载变化降低满足 SLO 的成本。
-- **Chameleon: Adaptive Caching and Scheduling for Many-Adapter LLM Inference Environments**
-  `MICRO 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `moe`
-  Chameleon 联合管理大量 LoRA/adapter 的缓存和请求调度，减少多租户适配器服务中的换入与等待。
-- **Fast State Restoration in LLM Serving with HCache**
-  `EuroSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `prefill` `serving`
-  HCache 缓存并恢复模型服务的中间状态，降低实例迁移、抢占或恢复后的重复 prefill 成本。
-- **LServe: Efficient Long-sequence LLM Serving with Unified Sparse Attention**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode` `prefill`
-  LServe 将 prefill 与 decode 的硬件友好结构化稀疏统一起来，以 streaming heads 和层次 KV page selection 加速长序列服务。
-- **Multiplexed Heterogeneous LLM Serving via Stage-Aligned Parallelism**
-  `SoCC 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode` `prefill`
-  该工作按模型阶段对齐异构设备的并行与复用方式，避免 prefill/decode 在不同硬件上的能力错配。
-- **PAISE: PIM-Accelerated Inference Scheduling Engine for Transformer-based LLM**
-  `HPCA 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `decode`
-  PAISE 将 Transformer 请求调度与 PIM 执行特征联合建模，降低内存密集 decode 的排队和数据移动。
-- **QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `kv-cache` `quantization`
-  QServe 联合 W4A8KV4 量化、SmoothAttention、权重重排和寄存器级并行，将理论低比特节省转成云端 serving 吞吐。
-- **SOLA: Optimizing SLO Attainment for Large Language Model Serving with State-Aware Scheduling**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `slo` `tpot`
-  SOLA 在每次迭代感知请求状态和系统状态，动态平衡 TTFT、TPOT 及请求间公平性。
-- **ThunderServe: High-performance and Cost-efficient LLM Serving in Cloud Environments**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `gpu`
-  ThunderServe 在异构 GPU 和网络环境中联合优化部署与并行策略，并以轻量重调度适应故障和流量漂移。
-- **throttLL'eM: Predictive GPU Throttling for Energy Efficient LLM Inference Serving**
-  `HPCA 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: frontier`
-  Tags: `serving` `gpu` `slo`
-  throttLL'eM 预测 token 阶段的性能余量并动态调节 GPU 功率或频率，在满足 serving SLO 时降低能耗。
 - **[AdaCache: Adaptive Caching and Context Augmentation for Efficient LLM Serving](https://iclr.cc/virtual/2026/poster/10010915)**
   `ICLR 2026 Poster` · `2026` · `Academic paper` · `Poster / Workshop` · `Reading priority: frontier`
   Tags: `prefill` `serving` `npu` `agent` `rag`
@@ -875,13 +753,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint` · `Reading priority: frontier`
   Tags: `serving`
   OServe 针对请求空间异质性和流量时间变化，动态选择异构模型部署并迁移并行配置。
-- **DejaVu: KV-cache Streaming for Fast, Fault-tolerant Generative LLM Serving**
-  `ICML 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `kv-cache`
-  DejaVu 用 KV-cache streaming 支持 prompt-token 分离、microbatch swapping 和状态复制，缓解流水线空泡、显存过配和故障恢复问题。
-- **ExeGPT: Constraint-Aware Resource Scheduling for LLM Inference**
-  `ASPLOS 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: supporting`
-  ExeGPT 根据输入输出长度分布和延迟约束搜索 batch、并行度及执行计划，以最大化约束下吞吐。
 - **A First Look at Bugs in LLM Inference Serving Systems**
   `EuroSys 2026 poster` · `2026` · `Academic paper` · `Poster / Workshop · Legacy Import` · `Reading priority: supporting`
   Tags: `serving`
@@ -973,78 +844,6 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `arXiv 预印本, 2026` · `2026` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
   Tags: `serving` `slo` `tpot`
   Tropical 用 SLO-aware multiplexing 在非分离与分离 serving 之间折中排队时间和干扰，提升 TTFT/TPOT 的联合达标率。
-- **AccelGen: Heterogeneous SLO-Guaranteed High-Throughput LLM Inference Serving for Diverse Applications**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `agent` `rag` `slo` `throughput`
-  AccelGen 用动态 chunk、iteration SLO 优先级和 compute/KV 双资源感知 batching 服务长短 prompt 与不同延迟约束。
-- **Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `kv-cache` `goodput` `ttft`
-  Apt-Serve 将 KV cache 与更省内存的 hidden cache 组合，并动态优化 batch composition 以扩大并发和 TTFT goodput。
-- **AugServe: Adaptive Request Scheduling for Augmented Large Language Model Inference Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `agent` `rag`
-  AugServe 针对 tool-augmented 请求用两阶段调度和动态 token batch limit 缓解未知暂停与队头阻塞。
-- **CXL-SpecKV: A Disaggregated FPGA Speculative KV-Cache for Datacenter LLM Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `cxl` `kv-cache` `memory`
-  CXL-SpecKV 将 KV cache offload 到远端 FPGA/CXL memory，并用 speculative prefetch 与压缩/解压引擎降低带宽压力。
-- **EVICPRESS: Joint KV-Cache Compression and Eviction for Efficient LLM Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `compression` `kv-cache`
-  EVICPRESS 联合优化 KV cache 的有损压缩和多层存储淘汰，在质量和延迟之间做全局权衡。
-- **GreenLLM: SLO-Aware Dynamic Frequency Scaling for Energy-Efficient LLM Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill` `gpu` `slo`
-  GreenLLM 对 prefill/decode 分别建模和调频，在维持 token SLO 的同时降低 GPU 能耗。
-- **HydraInfer: Hybrid Disaggregated Scheduling for Multimodal Large Language Model Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill` `multimodal`
-  HydraInfer 将视觉 encode、prefill 和 decode 分到异构实例，以 stage-level batching 和并行执行提高 MLLM 吞吐。
-- **LeMix: Unified Scheduling for LLM Training and Inference on Multi-GPU Systems**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `training` `gpu`
-  LeMix 联合调度持续训练与在线推理，通过预测干扰和动态资源分配利用空闲 GPU 而不牺牲 serving 响应性。
-- **Niyama: Breaking the Silos of LLM Inference Serving**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  Niyama 以细粒度 QoS 分类、动态 chunking 和选择性请求降级在共享集群中混部交互式与批处理负载。
-- **On Evaluating Performance of LLM Inference Serving Systems**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `stall`
-  该工作归纳 baseline、实验配置和 metric 反模式，并用推测解码案例说明错误归一化会掩盖 generation stall。
-- **Taming the Titans: A Survey of Efficient LLM Inference Serving**
-  `arXiv 综述, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  该综述按 instance、cluster 和新兴应用场景系统整理模型放置、调度、存储、分离架构及云端策略。
-- **TokenScale: Timely and Accurate Autoscaling for Disaggregated LLM Serving with Token Velocity**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill`
-  TokenScale 用 token velocity 统一衡量 PD 各阶段压力，并允许 decoder 临时执行 prefill 以吸收突发流量。
-- **semi-PD: Towards Efficient LLM Serving via Phase-Wise Disaggregated Computation and Unified Storage**
-  `arXiv 预印本, 2025` · `2025` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill` `rag`
-  semi-PD 在 SM 级别分离 prefill/decode 计算但统一显存管理，减少完全 PD 分离带来的存储浪费和迁移开销。
-- **BurstGPT: A Real-world Workload Dataset to Optimize LLM Serving Systems**
-  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  BurstGPT 发布 Azure OpenAI 服务的五百余万条真实 trace，揭示 burst、长度和失败模式对调度评估的影响。
-- **LLM Inference Serving: Survey of Recent Advances and Opportunities**
-  `arXiv 综述, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  该综述聚焦 2023 年后的系统级 LLM serving 论文，覆盖调度、内存、并行和生产部署机会。
-- **MuxServe: Flexible Spatial-Temporal Multiplexing for Multiple LLM Serving**
-  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `decode` `prefill`
-  MuxServe 结合模型流行度、空间共置和 prefill/decode 时间复用，提高多模型 serving 的显存与算力利用率。
-- **Preble: Efficient Distributed Prompt Scheduling for LLM Serving**
-  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving`
-  Preble 在分布式集群中联合优化共享前缀 KV 复用和计算负载均衡，并用分层调度处理 prompt locality。
-- **The CAP Principle for LLM Serving: A Survey of Long-Context Large Language Model Serving**
-  `arXiv 综述, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `long-context`
-  该综述以 Context length、Accuracy、Performance 三目标冲突组织长上下文 serving，并强调用户感知指标定义。
 - **3DLS: A 3D Logic-Stacked Architecture for Disaggregated LLM Serving**
   `IEEE Computer Architecture Letters 2026` · `2026` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
   Tags: `decode` `serving`
@@ -1053,14 +852,148 @@ Evidence labels describe the source material. Featured entries are editorial ent
   `FAST 2026` · `2026` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
   Tags: `serving` `rag`
   Bidaw 让计算调度感知 KV 加载延迟，并让两级存储利用模型响应预测访问与淘汰，提高多轮会话 KV 命中。
-- **LiquidGEMM: Hardware-Efficient W4A8 GEMM Kernel for High-Performance LLM Serving**
-  `SC 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
+
+### 奠基与架构 / Foundation (36)
+
+#### Full Resource List
+
+- **NanoFlow: Towards Optimal Large Language Model Serving Throughput**
+  `OSDI 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `gpu` `memory` `throughput`
+  NanoFlow 将请求拆成 operation-level nano-batches，并在单 GPU 内重叠 compute、memory 和 network 资源。
+- **XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models**
+  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `gpu` `agent` `rag`
+  XGrammar 预处理上下文无关 token、压缩运行时 grammar 状态，并与 GPU 推理重叠以实现近零开销结构化生成。
+- **[AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration](https://arxiv.org/abs/2306.00978)**
+  `MLSys 2024` · `2024` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `compression` `kv-cache`
+  提出激活感知的权重量化，只保护少量显著通道即可显著降低量化误差，部署侧被广泛采用。
+- **EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty**
+  `ICML 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  EAGLE 在倒数第二层 feature space 中自回归预测草稿，降低 token-level drafting 的不确定性和开销。
+- **[Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)**
+  `ICLR 2024` · `2024` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  发现 attention sink 现象并用有界 KV 维持流式长上下文，使显存不随序列长度增长。
+- **Prompt Cache: Modular Attention Reuse for Low-Latency Inference**
+  `MLSys 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `latency` `ttft`
+  Prompt Cache 用显式 prompt module schema 预计算并复用非连续文本模块的 attention state，降低长提示 TTFT。
+- **S-LoRA: Serving Thousands of Concurrent LoRA Adapters**
+  `MLSys 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
   Tags: `serving` `kernel`
-  LiquidGEMM 针对 W4A8 推理设计硬件高效的反量化、数据布局和 GEMM kernel。
-- **MaverIQ: Fingerprint-Guided Extrapolation and Fragmentation-Aware Layering for Intent-Based LLM Serving**
-  `SC 2025` · `2025` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: supporting`
-  Tags: `serving` `rag`
-  MaverIQ 用 workload fingerprint 预测资源需求，并以碎片感知的分层配置实现 intent-based serving。
+  S-LoRA 用 unified paging、异构 LoRA kernel 和 tensor parallelism 在单集群中服务数千 adapter。
+- **SpecInfer: Accelerating Generative Large Language Model Serving with Tree-based Speculative Inference and Verification**
+  `ASPLOS 2024` · `2024` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  SpecInfer 用多个小模型构造候选 token tree，并由目标模型一次并行验证多条生成路径。
+- **AlpaServe: Statistical Multiplexing with Model Parallelism for Deep Learning Serving**
+  `OSDI 2023` · `2023` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  AlpaServe 将模型并行用于多模型 statistical multiplexing，在 burst workload 下联合优化模型放置和并行配置。
+- **FlexGen: High-Throughput Generative Inference of Large Language Models with a Single GPU**
+  `ICML 2023` · `2023` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `gpu` `kv-cache` `throughput`
+  FlexGen 用线性规划在 GPU、CPU 和磁盘间放置权重、激活和 KV cache，使单张消费级 GPU 也能做高吞吐超大模型离线推理。
+- **[GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers](https://arxiv.org/abs/2210.17323)**
+  `ICLR 2023` · `2023` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `training` `kv-cache` `quantization`
+  基于二阶信息逐层量化权重，成为 3/4-bit 权重量化最经典的方法之一。
+- **[SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models](https://arxiv.org/abs/2211.10438)**
+  `ICML 2023` · `2023` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `training` `kv-cache` `quantization`
+  用激活平滑把量化难度从 activation 迁移到 weight，实现可落地的 W8A8 量化。
+- **Orca: A Distributed Serving System for Transformer-Based Generative Models**
+  `OSDI 2022` · `2022` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  Orca 以 iteration-level scheduling 和 selective batching 奠定现代 continuous batching LLM serving 的基础。
+- **TurboTransformers: An Efficient GPU Serving System for Transformer Models**
+  `PPoPP 2021` · `2021` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `gpu` `kernel`
+  TurboTransformers 用动态 batch、序列长度感知调度和融合 kernel 加速早期 Transformer 在线服务。
+- **[Ansor: Generating High-Performance Tensor Programs for Deep Learning](https://arxiv.org/abs/2006.06762)**
+  `OSDI 2020` · `2020` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  用分层搜索与代价模型自动生成高性能 tensor program，把算子调度优化自动化。
+- **[Serving DNNs like Clockwork: Performance Predictability from the Bottom Up](https://arxiv.org/abs/2006.02464)**
+  `OSDI 2020` · `2020` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `serving` `slo`
+  自底向上构建可预测执行，系统化尾延迟、SLO 与性能隔离，是 serving 可预测性的经典工作。
+- **[Clipper: A Low-Latency Online Prediction Serving System](https://arxiv.org/abs/1612.03079)**
+  `NSDI 2017` · `2017` · `Academic paper` · `Formal Conference` · `Reading priority: foundation`
+  Tags: `serving` `latency`
+  通用在线预测服务系统，在 LLM 之前就把 batching、缓存、延迟-吞吐权衡与多模型托管系统化。
+- **[TensorFlow-Serving: Flexible, High-Performance ML Serving](https://arxiv.org/abs/1712.06139)**
+  `NIPS Systems Workshop 2017` · `2017` · `Academic paper` · `Poster / Workshop` · `Reading priority: foundation`
+  Tags: `serving`
+  Google 生产级模型服务架构，支持多框架、多版本、多租户托管，是工业模型服务的早期范式。
+- **DeepSpeed-FastGen: High-throughput Text Generation for LLMs via MII and DeepSpeed-Inference**
+  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `throughput`
+  DeepSpeed-FastGen 以 Dynamic SplitFuse 将长 prompt 拆分并与 generation 动态组合，兼顾有效吞吐和 token 尾延迟。
+- **LoongServe: Efficiently Serving Long-Context Large Language Models with Elastic Sequence Parallelism**
+  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving` `long-context`
+  LoongServe 用弹性 sequence parallelism 按请求和阶段实时改变并行度，降低长短请求混合下的 KV 迁移和资源浪费。
+- **PowerInfer-2: Fast Large Language Model Inference on a Smartphone**
+  `arXiv 预印本, 2024` · `2024` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `npu`
+  PowerInfer-2 以 neuron cluster 为单位在 NPU/CPU/存储间调度和流水，实现超内存 LLM 的手机端推理。
+- **[Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318)**
+  `arXiv 2023` · `2023` · `Research record` · `Preprint` · `Reading priority: foundation`
+  与前者同期独立提出的投机采样根工作，构成投机解码的完整历史起点。
+- **[DeepSpeed Ulysses: System Optimizations for Enabling Training of Extreme Long Sequence Transformer Models](https://arxiv.org/abs/2309.14509)**
+  `arXiv 2023` · `2023` · `Research record` · `Preprint` · `Reading priority: foundation`
+  Tags: `training`
+  按序列维切分并用 all-to-all 通信，是序列并行的重要系统根节点。
+- **[Ring Attention with Blockwise Transformers for Near-Infinite Context](https://arxiv.org/abs/2310.01889)**
+  `arXiv 2023` · `2023` · `Research record` · `Preprint` · `Reading priority: foundation`
+  用 blockwise attention 与 ring 通信把长序列切到多设备，并让通信与计算重叠。
+- **Towards Efficient Generative Large Language Model Serving: A Survey from Algorithms to Systems**
+  `arXiv 综述, 2023` · `2023` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `serving`
+  该综述从算法、单机 runtime 到分布式 serving 系统梳理生成式 LLM 推理的效率技术与研究问题。
+- **Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism**
+  `arXiv 预印本, 2019` · `2019` · `Research record` · `Preprint · Legacy Import` · `Reading priority: foundation`
+  Tags: `training`
+  Megatron-LM 建立 tensor model parallel 的核心拆分方法，后续成为训练和推理 runtime 的基础。
+- **Splitwise: Efficient Generative LLM Inference Using Phase Splitting**
+  `ISCA 2024` · `2024` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: foundation`
+  Splitwise 将 prompt computation 与 token generation 部署到不同机器池，在吞吐、成本和功耗之间做阶段化资源优化。
+- **[GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints](https://arxiv.org/abs/2305.13245)**
+  `EMNLP 2023` · `2023` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `training`
+  提出分组查询注意力，可从 MHA checkpoint 低成本转换，在 MQA 的速度与 MHA 的质量之间取得平衡。
+- **[H2O: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models](https://arxiv.org/abs/2306.14048)**
+  `NeurIPS 2023` · `2023` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `kv-cache`
+  发现 KV cache 中存在少量 heavy-hitter token，据此做动态保留与淘汰，是 KV 压缩路线的早期代表。
+- **DeepSpeed Inference: Enabling Efficient Inference of Transformer Models at Unprecedented Scale**
+  `SC 2022` · `2022` · `Research record` · `Unclassified · Legacy Import` · `Reading priority: foundation`
+  Tags: `kernel`
+  DeepSpeed Inference 通过 inference-adapted parallelism、kernel injection 和量化部署超大 Transformer。
+- **[LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale](https://arxiv.org/abs/2208.07339)**
+  `NeurIPS 2022` · `2022` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `kv-cache`
+  发现 Transformer 激活中的 outlier 维度，给出混合精度 INT8 推理路线，开启 LLM 低比特量化方向。
+- **[ZeroQuant: Efficient and Affordable Post-Training Quantization for Large-Scale Transformers](https://arxiv.org/abs/2206.01861)**
+  `NeurIPS 2022` · `2022` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `training` `kv-cache` `quantization`
+  提出硬件友好的训练后量化方案与配套推理后端，是 LLM 量化与系统协同设计的早期代表。
+- **[Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM](https://arxiv.org/abs/2104.04473)**
+  `SC 2021` · `2021` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `training` `gpu`
+  系统化组合张量并行、流水线并行与数据并行，是现代分布式 LLM 运行时并行的基础参考。
+- **[GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965)**
+  `NeurIPS 2019` · `2019` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `training`
+  用 micro-batch 切分与重计算实现流水线并行，让超大模型可跨多设备训练。
+- **[Attention Is All You Need](https://arxiv.org/abs/1706.03762)**
+  `NeurIPS 2017` · `2017` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  提出完全基于 attention 的 Transformer，去掉循环与卷积，是所有现代 LLM 的计算图源头。
+- **[Roofline: An Insightful Visual Performance Model for Multicore Architectures](https://doi.org/10.1145/1498765.1498785)**
+  `CACM 2009` · `2009` · `Research record` · `Unclassified` · `Reading priority: foundation`
+  Tags: `kernel`
+  提出用算术强度与「峰值算力 / 内存带宽」两条上界判断 kernel 是计算受限还是访存受限，是理解 attention、GEMM、KV 搬运性能瓶颈的基础分析语言。
 
 ### 探索观察
 
