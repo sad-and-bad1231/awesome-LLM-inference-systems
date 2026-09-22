@@ -11,11 +11,14 @@ from urllib.parse import quote
 from .curation import THEME_ORDER, curation_for, curation_sort_key, is_public_mainline, select_exploration
 from .reading import (
     FOUNDATION_THEME,
+    PUBLIC_EXCLUDED_STATUSES,
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
     display_themes,
+    public_source_records,
     render_industry_topics,
+    select_public_mainline,
 )
 from .records import ABSTRACTIONS, load_records
 
@@ -49,7 +52,7 @@ PUBLIC_CATEGORY_DESCRIPTIONS = {
     "Runtime & Serving": "Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch.",
     "Reliability & Benchmarks": "SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation.",
 }
-EXCLUDED_STATUSES = {"new", "keep", "drop", "promote", "queued"}
+EXCLUDED_STATUSES = PUBLIC_EXCLUDED_STATUSES
 DIRECT_SERVING_TERMS = (
     "inference",
     "serving",
@@ -169,17 +172,28 @@ def _featured_sort_key(record: dict[str, Any]) -> tuple[int, int, int, int, str]
     return (0 if presentation.get("featured") is True else 1, order, *base)
 
 
-def _public_records(path: Path, types: set[str]) -> list[dict[str, Any]]:
-    records = [
-        record for record in load_records(path)
-        if record.get("record_type") in types and record.get("status") not in EXCLUDED_STATUSES
-    ]
+def _public_records(
+    path: Path, types: set[str], *, limit_per_theme: int | None = None
+) -> list[dict[str, Any]]:
+    records = public_source_records(load_records(path), types)
     if types <= {"industry", "project"}:
-        return [
+        selected = [
             _project_display(group) for group in aggregate_industry_records(records)
             if group["scope"] == "core"
         ]
-    return sorted([record for record in records if is_public_mainline(record)], key=_sort_key)
+        return (
+            selected
+            if limit_per_theme is None
+            else select_public_mainline(selected, limit_per_theme=limit_per_theme)
+        )
+    selected = sorted([record for record in records if is_public_mainline(record)], key=_sort_key)
+    return (
+        selected
+        if limit_per_theme is None
+        else select_public_mainline(
+            selected, limit_per_theme=limit_per_theme, allow_foundation=True
+        )
+    )
 
 
 def _is_serving_mainline(record: dict[str, Any]) -> bool:
@@ -332,6 +346,7 @@ def _render_collection(
     exploration: list[dict[str, Any]] | None = None,
     topic_records: list[dict[str, Any]] | None = None,
     display_summary_max_chars: int = 240,
+    company_topic_limit: int | None = None,
 ) -> str:
     exploration = exploration or []
     lanes_by_record: list[list[str]] = []
@@ -391,7 +406,7 @@ def _render_collection(
             "| Artifact | A linked implementation, documentation page, or deployment entry point. |",
             "| Curation priority | Foundation and frontier work appear first within each abstraction; supporting records follow. |",
             "| Scope | `core` records form the main reading themes; a bounded `adjacent` window appears under exploration, with full adjacent/archive history on the archive page. |",
-            "| Featured | A small editorial starting set; all core records remain below. |",
+            "| Featured | A small editorial starting set within the bounded core reading set; complete facts remain in JSONL and the archive. |",
             "",
         ]
     )
@@ -399,6 +414,7 @@ def _render_collection(
         topics = render_industry_topics(
             topic_records,
             summary_max_chars=display_summary_max_chars,
+            limit_per_topic=company_topic_limit,
         )
         if topics:
             lines.extend(topics.rstrip().splitlines())
@@ -477,7 +493,10 @@ def _render_archive(
 
 
 def _render_root(
-    papers: list[dict[str, Any]], industry: list[dict[str, Any]], display_summary_max_chars: int = 240
+    papers: list[dict[str, Any]],
+    industry: list[dict[str, Any]],
+    display_summary_max_chars: int = 240,
+    include_start_here: bool = False,
 ) -> str:
     paper_counts = Counter(_evidence_label(record) for record in papers)
     industry_counts = Counter(_evidence_label(record) for record in industry)
@@ -514,6 +533,11 @@ def _render_root(
         "",
         "| Research entry point | What you get |",
         "|---|---|",
+        *(
+            ["| [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |"]
+            if include_start_here
+            else []
+        ),
         "| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |",
         "| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |",
         "| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |",
@@ -623,24 +647,39 @@ def render_public_repository(
     exploration_limit_per_track: int = 20,
     industry_milestone_links: int = 3,
     display_summary_max_chars: int = 240,
+    public_paper_limit_per_theme: int = 8,
+    public_industry_limit_per_theme: int = 5,
+    public_exploration_limit_per_track: int = 15,
+    public_company_topic_limit: int = 8,
 ) -> None:
-    paper_source = [record for record in load_records(papers_path) if record.get("record_type") == "paper" and record.get("status") not in EXCLUDED_STATUSES]
-    industry_source = [record for record in load_records(industry_path) if record.get("record_type") in {"industry", "project"} and record.get("status") not in EXCLUDED_STATUSES]
-    papers = sorted([record for record in paper_source if is_public_mainline(record)], key=_sort_key)
+    paper_source = public_source_records(load_records(papers_path), {"paper"})
+    industry_source = public_source_records(
+        load_records(industry_path), {"industry", "project"}
+    )
+    papers = select_public_mainline(
+        sorted([record for record in paper_source if is_public_mainline(record)], key=_sort_key),
+        limit_per_theme=public_paper_limit_per_theme,
+        allow_foundation=True,
+    )
     paper_exploration = select_exploration(
-        paper_source, window_days=exploration_window_days, limit=exploration_limit_per_track
+        paper_source,
+        window_days=exploration_window_days,
+        limit=public_exploration_limit_per_track,
     )
     industry_groups = aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
-    industry = [_project_display(group) for group in industry_groups if group["scope"] == "core"]
+    industry = select_public_mainline(
+        [_project_display(group) for group in industry_groups if group["scope"] == "core"],
+        limit_per_theme=public_industry_limit_per_theme,
+    )
     industry_exploration_source = select_exploration(
         industry_source,
         window_days=exploration_window_days,
-        limit=max(exploration_limit_per_track * 5, exploration_limit_per_track),
+        limit=max(public_exploration_limit_per_track * 5, public_exploration_limit_per_track),
     )
     industry_exploration = [
         _project_display(group)
         for group in aggregate_industry_records(industry_exploration_source, milestone_limit=industry_milestone_links)
-    ][:exploration_limit_per_track]
+    ][:public_exploration_limit_per_track]
     archived_papers = _archive_records(papers_path, {"paper"})
     archived_industry = _archive_records(industry_path, {"industry", "project"})
     (output_root / "papers").mkdir(parents=True, exist_ok=True)
@@ -648,7 +687,12 @@ def render_public_repository(
     (output_root / "archive").mkdir(parents=True, exist_ok=True)
     _write_text(
         output_root / "README.md",
-        _render_root(papers, industry, display_summary_max_chars),
+        _render_root(
+            papers,
+            industry,
+            display_summary_max_chars,
+            include_start_here=(output_root / "docs" / "START-HERE.md").exists(),
+        ),
     )
     _write_text(
         output_root / "papers" / "README.md",
@@ -673,6 +717,7 @@ def render_public_repository(
             exploration=industry_exploration,
             topic_records=industry_source,
             display_summary_max_chars=display_summary_max_chars,
+            company_topic_limit=public_company_topic_limit,
         ),
     )
     _write_text(

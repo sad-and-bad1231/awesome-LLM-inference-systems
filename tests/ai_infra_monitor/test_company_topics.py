@@ -61,6 +61,7 @@ class CompanyTopicContractTests(unittest.TestCase):
                 "bytedance-ai-systems",
                 "xiaomi-ai-systems",
                 "tencent-ai-systems",
+                "huawei-ascend-ai-systems",
                 "nvidia-ai-systems",
                 "amd-ai-systems",
                 "openai-ai-systems",

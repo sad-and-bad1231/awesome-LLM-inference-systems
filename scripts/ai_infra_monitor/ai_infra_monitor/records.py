@@ -7,6 +7,7 @@ import re
 import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -30,6 +31,10 @@ from .reading import (
     render_industry_topics,
 )
 from .maintenance import candidate_archive_summary
+
+
+AFFILIATION_STATUSES = {"verified", "partial", "not_found", "not_checked", "legacy_present"}
+ARTIFACT_STATUSES = {"official", "author_repo", "third_party", "not_found", "not_checked", "legacy_linked"}
 
 
 ABSTRACTIONS = (
@@ -243,7 +248,18 @@ def normalize_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized.setdefault("topics", [])
     normalized.setdefault("discovered", "")
     normalized["curation"] = classify_record(normalized)
-    return _canonical_fields(normalized)
+    normalized = _canonical_fields(normalized)
+    if curation_for(normalized).get("scope") == "core":
+        evidence = normalized["evidence"]
+        evidence.setdefault(
+            "affiliation_status", "legacy_present" if str(normalized.get("orgs", "")).strip() else "not_checked"
+        )
+        evidence.setdefault(
+            "artifact_status", "legacy_linked" if str(normalized.get("artifact_url", "")).strip() else "not_checked"
+        )
+        evidence.setdefault("metadata_checked_at", "")
+        evidence.setdefault("metadata_sources", [])
+    return normalized
 
 
 @dataclass(frozen=True)
@@ -787,6 +803,47 @@ def validate_record_store(path: Path) -> list[RecordValidationError]:
             errors.append(RecordValidationError(path, number, "invalid identity history fields"))
         if not isinstance(record.get("evidence"), dict):
             errors.append(RecordValidationError(path, number, "invalid evidence"))
+        else:
+            evidence = record["evidence"]
+            curation_scope = (
+                record.get("curation", {}).get("scope")
+                if isinstance(record.get("curation"), dict)
+                else None
+            )
+            affiliation_status = evidence.get("affiliation_status")
+            artifact_status = evidence.get("artifact_status")
+            if curation_scope == "core" or affiliation_status is not None:
+                if affiliation_status not in AFFILIATION_STATUSES:
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.affiliation_status")
+                    )
+            if curation_scope == "core" or artifact_status is not None:
+                if artifact_status not in ARTIFACT_STATUSES:
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.artifact_status")
+                    )
+            checked_at = evidence.get("metadata_checked_at")
+            if curation_scope == "core" or checked_at is not None:
+                if not isinstance(checked_at, str):
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.metadata_checked_at")
+                    )
+                elif checked_at:
+                    try:
+                        date.fromisoformat(checked_at)
+                    except ValueError:
+                        errors.append(
+                            RecordValidationError(path, number, "invalid evidence.metadata_checked_at")
+                        )
+            sources = evidence.get("metadata_sources")
+            if curation_scope == "core" or sources is not None:
+                if not isinstance(sources, list) or not all(
+                    isinstance(source, str) and source.startswith(("https://", "http://"))
+                    for source in sources
+                ):
+                    errors.append(
+                        RecordValidationError(path, number, "invalid evidence.metadata_sources")
+                    )
         presentation = record.get("presentation")
         if presentation is not None:
             if not isinstance(presentation, dict):

@@ -15,6 +15,7 @@ from scripts.ai_infra_monitor.ai_infra_monitor.discovery import (  # noqa: E402
     DiscoveryEngine,
     load_config,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.audit import build_audit  # noqa: E402
 from scripts.ai_infra_monitor.ai_infra_monitor.git_ops import (  # noqa: E402
     commit_research_updates,
     is_repository,
@@ -86,6 +87,18 @@ def reading_options(config: dict) -> dict[str, int]:
         "exploration_limit_per_track": int(settings.get("exploration_limit_per_track", 20)),
         "display_summary_max_chars": int(settings.get("display_summary_max_chars", 240)),
         "industry_milestone_links": int(settings.get("industry_milestone_links", 3)),
+    }
+
+
+def public_reading_options(config: dict) -> dict[str, int]:
+    settings = config["settings"]
+    return {
+        "public_paper_limit_per_theme": int(settings.get("public_paper_limit_per_theme", 8)),
+        "public_industry_limit_per_theme": int(settings.get("public_industry_limit_per_theme", 5)),
+        "public_exploration_limit_per_track": int(
+            settings.get("public_exploration_limit_per_track", 15)
+        ),
+        "public_company_topic_limit": int(settings.get("public_company_topic_limit", 8)),
     }
 
 
@@ -362,6 +375,7 @@ def command_render(args) -> int:
         resolved["industry_db_file"],
         args.root,
         **options,
+        **public_reading_options(config),
     )
     print(json.dumps({"rendered": True, "paper_db_file": str(resolved["paper_db_file"]), "industry_db_file": str(resolved["industry_db_file"])}))
     return 0
@@ -378,6 +392,7 @@ def command_publish(args) -> int:
         resolved["industry_db_file"],
         args.root,
         **reading_options(config),
+        **public_reading_options(config),
     )
     print(json.dumps({"published_views": ["README.md", "papers/README.md", "industry/README.md", "archive/README.md"]}))
     return 0
@@ -416,6 +431,7 @@ def command_validate(args) -> int:
         resolved["industry_db_file"],
         resolved["candidate_db_file"],
         args.root,
+        public_limits=public_reading_options(config),
     )
     if errors:
         for error in errors:
@@ -532,6 +548,23 @@ def command_status(args) -> int:
     return 0
 
 
+def command_audit(args) -> int:
+    config = load_config(args.config)
+    resolved = paths(args.root, config)
+    public = public_reading_options(config)
+    result = build_audit(
+        load_records(resolved["paper_db_file"]),
+        load_records(resolved["industry_db_file"]),
+        load_records(resolved["candidate_db_file"]),
+        paper_limit_per_theme=public["public_paper_limit_per_theme"],
+        industry_limit_per_theme=public["public_industry_limit_per_theme"],
+        exploration_limit_per_track=public["public_exploration_limit_per_track"],
+        company_topic_limit=public["public_company_topic_limit"],
+    )
+    print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="AI infrastructure research monitor")
     parser.add_argument("--root", type=Path, default=ROOT)
@@ -619,6 +652,7 @@ def build_parser() -> argparse.ArgumentParser:
     report.add_argument("--run-id", required=True)
     report.set_defaults(func=command_report)
     subparsers.add_parser("validate").set_defaults(func=command_validate)
+    subparsers.add_parser("audit", help="print compact aggregate fact-store diagnostics").set_defaults(func=command_audit)
     finalize = subparsers.add_parser("finalize")
     finalize.add_argument("--run-id", required=True)
     finalize.add_argument("--no-commit", action="store_true")

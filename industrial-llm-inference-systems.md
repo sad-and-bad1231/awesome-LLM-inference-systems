@@ -149,6 +149,7 @@ GLM 模型代际与其推理、多模态与 Agent 工程材料；专题仅作聚
 | GLM-TTS | 多模态与 Agent | [GLM-TTS](https://github.com/zai-org/GLM-TTS) | GLM-TTS：基于多奖励强化学习的可控、富情感零样本 TTS。 | [official](https://github.com/zai-org/GLM-TTS) |
 | GLM-ASR | 多模态与 Agent | [GLM-ASR](https://github.com/zai-org/GLM-ASR) | GLM-ASR-Nano：1.5B 参数的鲁棒开源语音识别模型。 | [official](https://github.com/zai-org/GLM-ASR) |
 | — | 模型架构 | [CodeGeeX4](https://github.com/zai-org/CodeGeeX4) | CodeGeeX4-ALL-9B：覆盖代码补全、代码解释器、Web 搜索与函数调用等场景的多用途模型。 | [official](https://github.com/zai-org/CodeGeeX4) |
+| — | 训练与数据 | [slime](https://github.com/THUDM/slime) | 面向大模型 RL scaling 的后训练框架，为 GLM 系列训练工作流提供支持。 | [official](https://github.com/THUDM/slime) |
 | — | 工具与生态 | [Open-AutoGLM](https://github.com/zai-org/Open-AutoGLM) | Open-AutoGLM：开源手机 Agent 模型与框架。 | [official](https://github.com/zai-org/Open-AutoGLM) |
 | — | 工具与生态 | [Synapse](https://github.com/zai-org/Synapse) | Synapse：自托管 AI 工作空间，支持可共享的 AI 队友、共享会话与记忆。 | [official](https://github.com/zai-org/Synapse) |
 
@@ -192,6 +193,7 @@ Seed 模型代际与其推理、训练与系统基础设施材料；专题仅作
 | Stable-DiffCoder | 模型架构 | [Stable-DiffCoder](https://github.com/ByteDance-Seed/Stable-DiffCoder) | Stable-DiffCoder：轻量开源代码扩散语言模型（DLLM）系列，含 base 与 instruct 版本。 | [official](https://github.com/ByteDance-Seed/Stable-DiffCoder) |
 | — | 模型架构 | [AHN](https://github.com/ByteDance-Seed/AHN) | AHN（Artificial Hippocampus Networks）：面向高效长上下文建模。 | [official](https://github.com/ByteDance-Seed/AHN) |
 | — | 模型架构 | [decoupleQ](https://github.com/ByteDance-Seed/decoupleQ) | decoupleQ：一种面向 LLM 的量化算法。 | [official](https://github.com/ByteDance-Seed/decoupleQ) |
+| — | 模型架构 | [Seed-1.8](https://github.com/ByteDance-Seed/Seed-1.8) | 面向真实世界 Agent 的统一基础模型，支持搜索、代码执行、GUI 交互和成本感知推理。 | [official](https://github.com/ByteDance-Seed/Seed-1.8) |
 | — | 推理系统 | [Astral](https://dblp.org/db/conf/sigcomm/sigcomm2025.html) | 从拓扑、路由、拥塞控制和作业编排构建大模型数据中心网络，是企业 AI fabric 的生产案例。 | [official](https://dblp.org/db/conf/sigcomm/sigcomm2025.html) |
 | — | 推理系统 | [cudaLLM](https://github.com/ByteDance-Seed/cudaLLM) | cudaLLM：训练 LLM 自动生成高效且正确 CUDA kernel 的完整流水线，采用 SFT + RL 两阶段。 | [official](https://github.com/ByteDance-Seed/cudaLLM) |
 | — | 推理系统 | [entangle](https://github.com/ByteDance-Seed/entangle) | entangle（ASPLOS'26）：论文 “It Takes Two to Entangle” 的官方代码。 | [official](https://github.com/ByteDance-Seed/entangle) |
@@ -269,6 +271,18 @@ MiMo 模型代际与其音频、视觉语言、具身与代码工程材料；专
 | — | Kernel 与编译 | [Simple-Attention-Sparsification](https://github.com/Tencent-Hunyuan/Simple-Attention-Sparsification) | SAS 官方代码：通过端到端优化实现简单注意力稀疏化的研究实现。 | [official](https://github.com/Tencent-Hunyuan/Simple-Attention-Sparsification) |
 | — | 训练与数据 | [llm.hunyuan.T1](https://github.com/Tencent/llm.hunyuan.T1) | 混元 T1 的强化学习后训练工程仓库，README 以 RL 在后训练阶段的新 Scaling 范式开篇。 | [official](https://github.com/Tencent/llm.hunyuan.T1) |
 | — | 训练与数据 | [Rosetta-inference](https://github.com/Tencent-Hunyuan/Rosetta-inference) | Rosetta-inference：腾讯混元开源的原生多模态预训练方案，官方强调不出现灾难性遗忘。 | [official](https://github.com/Tencent-Hunyuan/Rosetta-inference) |
+
+## 昇腾 / 华为 AI 系统专题
+
+昇腾 NPU 的 CANN/Ascend C 工具链、推理运行时与生产 Serving 系统材料；第一阶段仅收录直接作用于推理执行路径的官方或正式证据。
+
+| 代际 | 类别 | 材料 / 项目 | 系统作用 | 来源 |
+|---|---|---|---|---|
+| — | 芯片工具链与算子 | [CANN / Ascend C](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/900/index/index.html) | CANN 为昇腾硬件提供 AI 计算软件栈、框架接口与运行时能力，Ascend C 用于开发和优化设备侧自定义算子。 | [official](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/900/index/index.html) |
+| — | 生产推理系统 | [LLM Serving on Huawei CloudMatrix384](https://arxiv.org/abs/2506.12708) | CloudMatrix384 以昇腾超节点互联和生产级系统软件组织大规模 LLM Serving，覆盖并行执行、P/D 分离、KV 传输与集群调度。 | [official](https://arxiv.org/abs/2506.12708) |
+| — | 训练与推理框架 | [MindSpore](https://github.com/mindspore-ai/mindspore) | MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。 | [official](https://github.com/mindspore-ai/mindspore) |
+| — | 云平台与资源管理 | [ModelArts](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) | ModelArts 提供数据、开发、分布式训练、模型部署、异构资源调度和运维的一站式平台，并支持昇腾推理栈。 | [official](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) |
+| — | CPU 与异构基础设施 | [Kunpeng BoostKit Inference](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) | Kunpeng BoostKit SRA Inference 为鲲鹏平台提供推理加速套件和优化算子，补足通用 CPU 与昇腾 NPU 协同栈的 CPU 侧能力。 | [official](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) |
 
 ## NVIDIA AI 系统专题
 
@@ -541,6 +555,7 @@ Mooncake 以 KVCache 为中心的分离式 Serving 与传输层材料；不收�
 | DeepSeek | DeepGEMM / DeepEP | 2025 | MoE | FP8 GEMM 与 MoE expert-parallel 通信库，支撑 DeepSeek 系列训练和推理的 dense/MoE fast path。 | [primary](https://flashmla.net/) |
 | ByteDance | InfiniStore | 2025 | Runtime / Scheduling | 高性能分布式 KV cache store，支持 PD 分离中的 KV transfer、非分离集群的跨节点 KV reuse，并通过 LMCache 集成 vLLM。 | [primary](https://github.com/bytedance/InfiniStore) |
 | KServe | KV Cache Offloading | 2025 | KV Cache / Runtime / Scheduling | 在 KServe generative inference 中集成 LMCache/vLLM KV offloading，面向云原生模型服务。 | [primary](https://kserve.github.io/website/docs/model-serving/generative-inference/kvcache-offloading) |
+| Huawei Cloud | LLM Serving on Huawei CloudMatrix384 | 2025 | Prefill–Decode 与传输 / MoE / Runtime / Scheduling | CloudMatrix384 以昇腾超节点互联和生产级系统软件组织大规模 LLM Serving，覆盖并行执行、P/D 分离、KV 传输与集群调度。 | [primary](https://arxiv.org/abs/2506.12708) |
 | Microsoft Research | LeanAttention / TurboAttention | 2025 | Attention / Kernel / Prefill–Decode 与传输 | 分别从精确 decode dataflow 和端到端量化 attention 两条路线降低长上下文 memory wall。 | [primary](https://proceedings.mlsys.org/paper_files/paper/2025/hash/16ec6494e9b5a4138de7238761d715b4-Abstract-Conference.html) |
 | ByteDance Seed | MegaScale-Infer | 2025 | MoE | 将 attention 和 MoE FFN 分池部署，以 disaggregated expert parallelism、ping-pong pipeline 和 M2N 通信提升专家利用率。 | [primary](https://arxiv.org/abs/2504.02263) |
 | NVIDIA | NVFP4 KV cache | 2025 | KV Cache / MoE | NVFP4 KV cache 量化把显存占用相对 FP8 再压缩最高 50%，等效把上下文预算翻倍；在 LiveCodeBench、MMLU-PRO、MBPP、Ruler 64K 上精度损失低于 1%，decode 阶段缓解显存带宽压力，prefill 阶段 TTFT 最高改善 3 倍。 | [primary](https://developer.nvidia.com/blog/optimizing-inference-for-long-context-and-large-batch-sizes-with-nvfp4-kv-cache/) |
@@ -570,6 +585,8 @@ Mooncake 以 KVCache 为中心的分离式 Serving 与传输层材料；不收�
 | Moonshot / PyTorch | Mooncake Joins PyTorch Ecosystem | 2026 | Runtime / Scheduling | Mooncake 加入 PyTorch 生态，面向 SGLang、vLLM、TensorRT-LLM 提供 KVCache transfer 和 storage 能力。 | [primary](https://pytorch.org/blog/mooncake-joins-pytorch-ecosystem/) |
 | vLLM / Mooncake ecosystem | MooncakeStoreConnector | 2026 | Runtime / Scheduling | vLLM 文档化 MooncakeStoreConnector，支持 embedded 和 standalone-store 模式，扩展 CPU/SSD KV pool。 | [primary](https://docs.vllm.ai/en/v0.22.0/features/mooncake_store_connector_usage/) |
 | NVIDIA | NIXL / Inference Transfer Library | 2026 | Prefill–Decode 与传输 | NIXL 是开源的厂商无关数据搬运库，为 GPU 显存、CPU 内存与存储层之间的传输提供统一 API，后端覆盖 RDMA、GPU-initiated networking、GPU-Direct storage、NVMe 与 S3／Azure Blob；核心场景是 P/D 分离的 KV 传输、长上下文 KV 落盘与权重快速换入。 | [primary](https://developer.nvidia.com/blog/?p=113426) |
+| NVIDIA / ai-dynamo maintainers | NVIDIA Dynamo | 2026 | Prefill–Decode 与传输 / Runtime / Scheduling | Dynamo 在 vLLM、SGLang 和 TensorRT-LLM 之上提供多节点编排，组合 P/D 解耦、KV-aware 路由、多层 KV 缓存和自动扩缩容。 | [primary](https://github.com/ai-dynamo/dynamo) |
+| NVIDIA / ai-dynamo maintainers | NVIDIA Inference Xfer Library (NIXL) | 2026 | Prefill–Decode 与传输 | NIXL 为分布式推理提供统一的点到点数据传输抽象，在 HBM、DRAM、SSD 和对象存储之间选择 UCX、GPUDirect Storage 等后端。 | [primary](https://github.com/ai-dynamo/nixl) |
 | Novita AI + vLLM | PegaFlow External KV Cache | 2026 | KV Cache / Runtime / Scheduling | PegaFlow 作为 Rust standalone external KV cache service 通过 vLLM connector 接入，面向生产级外部 KV cache。 | [primary](https://vllm.ai/blog/2026-05-18-pegaflow) |
 | AMD ROCm + vLLM | Productionizing TurboQuant on AMD GPUs | 2026 | Compiler / DSL / Runtime / Scheduling | 在 AMD GPU 上把 TurboQuant 的 KV cache 压缩做成 vLLM 可部署路径，并通过 Triton/HIP/FlyDSL kernel 优化提升长上下文 agent workload 的 TTFT、吞吐与 cache 命中。 | [primary](https://rocm.blogs.amd.com/artificial-intelligence/turboquant-vllm-agentic/README.html) |
 | Dell + NVIDIA + LMCache/vLLM | RDMA-Accelerated KV Cache Storage Offload | 2026 | KV Cache / Prefill–Decode 与传输 / Runtime / Scheduling | 将 vLLM、LMCache、NVIDIA NIXL 和 Dell PowerScale/ObjectScale/Project Lightning 结合，做多轮推理的分层 KV offload。 | [primary](https://infohub.delltechnologies.com/p/scaling-multi-turn-llm-inference-with-kv-cache-storage-offload-and-dell-rdma-accelerated-architecture/) |
@@ -581,6 +598,7 @@ Mooncake 以 KVCache 为中心的分离式 Serving 与传输层材料；不收�
 | IBM / Red Hat / Google 等 | UCCL | 2026 | Prefill–Decode 与传输 | GPU 通信库，覆盖 collectives、P2P KV cache transfer、RL weight transfer 和 expert parallelism，进入 llm-d 分布式推理栈。 | [primary](https://github.com/uccl-project/uccl) |
 | NVIDIA | When to Use Encode-Prefill-Decode Disaggregation to Accelerate Multimodal Model Serving | 2026 | Prefill–Decode 与传输 | Dynamo 实现 encode-prefill-decode（EPD）三级解耦，把视觉编码从 LLM 的 prefill／decode 中拆出；对图像密集、输出中短与量化 MoE 模型，TTFT 最高快 5 倍、端到端响应时间最高快 7 倍。编码器可聚合部署、与 P/D worker 共卡，或放到更低成本的独立 GPU 层经 NIXL 连接。 | [primary](https://developer.nvidia.com/blog/when-to-use-encode-prefill-decode-disaggregation-to-accelerate-multimodal-model-serving/) |
 | llm-d | llm-d KV Cache | 2026 | KV Cache / Runtime / Scheduling | 用 vLLM KVEvents 构建全局 near-real-time KV block locality 视图，支持跨 pod KV-aware routing 和 offloading。 | [primary](https://github.com/llm-d/llm-d-kv-cache) |
+| vLLM Project maintainers | vLLM Production Stack | 2026 | Runtime / Scheduling | vLLM Production Stack 是面向 Kubernetes 的参考部署层，提供 Helm、服务发现、路由、可观测性和集群级运行入口。 | [primary](https://github.com/vllm-project/production-stack) |
 | Moonshot / Mooncake / vLLM | vLLM x Mooncake Store | 2026 | Runtime / Scheduling | 将 Mooncake distributed KV cache store 接入 vLLM，在 agentic traces 上提升吞吐、降低 TTFT 和端到端延迟。 | [primary](https://vllm.ai/blog/2026-05-06-mooncake-store) |
 | vLLM maintainers / Inferact | vLLM 商业化 | 2026 | Runtime / Scheduling | vLLM 创始团队成立公司推动生产支持，说明通用推理 runtime 已从学术开源项目演进为独立基础设施赛道。 | [primary](https://techcrunch.com/2026/01/22/inference-startup-inferact-lands-150m-to-commercialize-vllm/) |
 | Ant Group + vLLM 社区 | vLLM-Omni | 2026 | Runtime / Scheduling | 用 stage graph 拆分 LLM、扩散模型和编码器，各阶段独立批处理、分配 GPU，并通过统一 connector 传递中间状态。 | [primary](https://arxiv.org/abs/2602.02204) |
@@ -617,5 +635,8 @@ Mooncake 以 KVCache 为中心的分离式 Serving 与传输层材料；不收�
 
 | 企业/组织 | 方案/论文 | 年份 | 对应方向 | 核心做法 | 材料 |
 |---|---|---:|---|---|---|
+| Huawei Kunpeng | Kunpeng BoostKit Inference | 2026 | 探索观察 | Kunpeng BoostKit SRA Inference 为鲲鹏平台提供推理加速套件和优化算子，补足通用 CPU 与昇腾 NPU 协同栈的 CPU 侧能力。 | [primary](https://www.hikunpeng.com/document/detail/en/SRA/accelFeatures/SRA_Inference/kunpengsra_inference_16_0001.html) |
+| MindSpore community / Huawei | MindSpore | 2026 | 探索观察 | MindSpore 是面向端、边、云训练与推理的开源框架，原生支持昇腾处理器并强调软硬件协同优化。 | [primary](https://github.com/mindspore-ai/mindspore) |
+| Huawei Cloud | ModelArts | 2026 | 探索观察 | ModelArts 提供数据、开发、分布式训练、模型部署、异构资源调度和运维的一站式平台，并支持昇腾推理栈。 | [primary](https://support.huaweicloud.com/intl/en-us/productdesc-modelarts/modelarts_01_0001.html) |
 | Google / TPU ecosystem | Ragged Paged Attention for TPU | 2026 | 探索观察 | 面向 TPU 的 ragged/paged LLM inference kernel，解决动态 batch、paged KV 和非规则序列形状。 | [primary](https://arxiv.org/abs/2604.15464) |
 | Microsoft Research | SPIN | 2026 | 探索观察 | 把 sparse attention execution pipeline 与 CPU/GPU hierarchical KV storage 联合设计，解决不规则 KV subset 检索开销。 | [primary](https://www.microsoft.com/en-us/research/publication/unifying-sparse-attention-with-hierarchical-memory-for-scalable-long-context-llm-serving/) |

@@ -25,6 +25,14 @@ ARCHIVE_PIN_TOPIC = "archive-pinned"
 # "tensor program"、"online LLM inference"），关键词启发式会误判为 archive 而从主线消失。
 CORE_PIN_TOPIC = "core-pinned"
 
+# 华为全栈专题里属于「公司技术栈背景」而非「稳定推理主线」的分组：显式踢出主线，
+# 保留事实但归入 adjacent（在公开视图里只作为探索观察出现）。
+HUAWEI_FULL_STACK_ADJACENT_GROUPS = {
+    "training-frameworks",
+    "cloud-platform",
+    "cpu-heterogeneous",
+}
+
 THEME_ORDER = (
     "attention-kernel",
     "kv-cache",
@@ -228,6 +236,14 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     archive_pinned = ARCHIVE_PIN_TOPIC in record_topics
     core_pinned = CORE_PIN_TOPIC in record_topics
 
+    superseded_by = str(record.get("evidence", {}).get("superseded_by") or "").strip()
+    presentation_meta = record.get("presentation", {})
+    huawei_full_stack_adjacent = (
+        isinstance(presentation_meta, dict)
+        and presentation_meta.get("topic") == "huawei-ascend-ai-systems"
+        and presentation_meta.get("topic_group") in HUAWEI_FULL_STACK_ADJACENT_GROUPS
+    )
+
     if pinned:
         scope = "core"
         reasons = ["manually curated foundation root node (pinned in topics)"]
@@ -238,6 +254,14 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     elif core_pinned:
         scope = "core"
         reasons = ["manually curated core mainline record (pinned in topics)"]
+    elif superseded_by:
+        scope = "archive"
+        reasons = [f"superseded by verified record {superseded_by}"]
+        themes = []
+    elif huawei_full_stack_adjacent:
+        scope = "adjacent"
+        reasons = ["explicit company-stack context outside the stable inference mainline"]
+        themes = []
     elif themes and (direct_themes or structured_core_signal) and (
         model_signal or explicit_kernel or inherently_model_specific
     ) and not peripheral and (

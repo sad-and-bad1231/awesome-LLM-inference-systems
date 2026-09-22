@@ -85,6 +85,19 @@ FRAMEWORK_TOPIC_GROUPS = (
     ("ecosystem", "生态与工具"),
 )
 
+# 华为是全栈厂商（芯片工具链 + 推理运行时 + Serving + 训练框架 + 云 + CPU 异构），
+# 既不能归入 CHIP_TOPIC_GROUPS 也不能归入 PLATFORM_TOPIC_GROUPS 而不丢分组语义，
+# 因此保留其独立的 group 家族。
+HUAWEI_TOPIC_GROUPS = (
+    ("hardware-toolchain", "芯片工具链与算子"),
+    ("inference-runtime", "推理运行时"),
+    ("serving-kv", "Serving、P/D 与 KV Cache"),
+    ("production-systems", "生产推理系统"),
+    ("training-frameworks", "训练与推理框架"),
+    ("cloud-platform", "云平台与资源管理"),
+    ("cpu-heterogeneous", "CPU 与异构基础设施"),
+)
+
 INDUSTRY_TOPICS: tuple[dict[str, Any], ...] = (
     {
         "key": "deepseek-ai-systems",
@@ -265,6 +278,13 @@ INDUSTRY_TOPICS: tuple[dict[str, Any], ...] = (
         ),
     },
     {
+        "key": "huawei-ascend-ai-systems",
+        "title": "昇腾 / 华为 AI 系统专题",
+        "description": "昇腾 NPU 的 CANN/Ascend C 工具链、推理运行时与生产 Serving 系统材料；第一阶段仅收录直接作用于推理执行路径的官方或正式证据。",
+        "groups": HUAWEI_TOPIC_GROUPS,
+        "generations": (),
+    },
+    {
         "key": "nvidia-ai-systems",
         "title": "NVIDIA AI 系统专题",
         "description": "NVIDIA 加速器平台、推理运行时、Kernel/编译、互连与生产 Serving 材料；专题仅作聚合导航。",
@@ -382,6 +402,21 @@ INDUSTRY_TOPICS_BY_KEY: dict[str, dict[str, Any]] = {
     str(topic["key"]): topic for topic in INDUSTRY_TOPICS
 }
 
+# 公开视图门槛：这些状态只属于发现/策展队列，不进入公开渲染。
+PUBLIC_EXCLUDED_STATUSES = {"new", "keep", "drop", "promote", "queued"}
+
+
+def public_source_records(
+    records: list[dict[str, Any]], record_types: set[str]
+) -> list[dict[str, Any]]:
+    """Return the exact fact-store rows eligible to feed public views."""
+    return [
+        record
+        for record in records
+        if record.get("record_type") in record_types
+        and record.get("status") not in PUBLIC_EXCLUDED_STATUSES
+    ]
+
 
 def industry_topic_group_rank(topic: str) -> dict[str, int]:
     groups = INDUSTRY_TOPICS_BY_KEY.get(topic, {}).get("groups") or DEFAULT_TOPIC_GROUPS
@@ -465,6 +500,58 @@ def _anchor_sort_key(record: dict[str, Any]) -> tuple[int, int, str, str]:
     )
 
 
+def _public_sort_key(record: dict[str, Any]) -> tuple[int, int, int, str]:
+    curation = curation_for(record)
+    evidence_rank = {
+        "formal_conference": 0,
+        "industrial_material": 1,
+        "poster_or_workshop": 2,
+        "preprint": 3,
+        "unclassified": 4,
+    }
+    try:
+        year_rank = -int(record.get("year") or 0)
+    except (TypeError, ValueError):
+        year_rank = 0
+    return (
+        {"foundation": 0, "frontier": 1, "supporting": 2}.get(curation.get("priority"), 3),
+        evidence_rank.get(str(record.get("evidence", {}).get("venue_status", "")), 4),
+        year_rank,
+        str(record.get("title", "")).casefold(),
+    )
+
+
+def select_public_mainline(
+    records: list[dict[str, Any]],
+    *,
+    limit_per_theme: int,
+    allow_foundation: bool = False,
+) -> list[dict[str, Any]]:
+    """Return one deterministic, bounded public placement per record.
+
+    每条记录只放进它的首个主题车道，因此「每主题预算」等价于生成视图里
+    ``### {主题} (N)`` 的条数上限。``foundation`` 是展示兜底车道：``allow_foundation``
+    打开时，不命中任何关键词的 ``core`` 记录落到该车道，与 ``display_themes`` 的
+    兜底语义保持一致——否则钉选的奠基类论文会被这条预算静默丢弃。
+    """
+    grouped: dict[str, list[dict[str, Any]]] = {theme: [] for theme in THEME_ORDER}
+    for record in records:
+        raw_themes = record.get("_reading_themes") or curation_for(record).get("themes", [])
+        themes = [theme for theme in THEME_ORDER if theme in raw_themes]
+        if not themes and allow_foundation and curation_for(record).get("scope") == "core":
+            themes = [FOUNDATION_THEME]
+        if themes:
+            display = dict(record)
+            display["_reading_themes"] = themes
+            grouped[themes[0]].append(display)
+
+    selected: list[dict[str, Any]] = []
+    budget = max(int(limit_per_theme), 0)
+    for theme in THEME_ORDER:
+        selected.extend(sorted(grouped[theme], key=_public_sort_key)[:budget])
+    return selected
+
+
 def aggregate_industry_records(
     records: list[dict[str, Any]], *, milestone_limit: int = 3
 ) -> list[dict[str, Any]]:
@@ -524,12 +611,15 @@ def aggregate_industry_records(
     return projects
 
 
-def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dict[str, Any]]:
+def select_industry_topic(
+    records: list[dict[str, Any]], topic: str, *, limit: int | None = None
+) -> list[dict[str, Any]]:
     """Select explicitly tagged project anchors, ordered model-generation first.
 
     Records carrying ``presentation.generation`` sort by their position in the
     topic's generation chain so a company section reads as a model iteration
     timeline; records without a generation fall back to topic-group order.
+    ``limit`` caps the returned anchor count (``None`` = unbounded).
     """
     tagged = [
         record
@@ -565,7 +655,7 @@ def select_industry_topic(records: list[dict[str, Any]], topic: str) -> list[dic
             str(record.get("title", "")).casefold(),
         )
     )
-    return anchors
+    return anchors if limit is None else anchors[: max(int(limit), 0)]
 
 
 def _markdown_cell(value: Any) -> str:
@@ -573,13 +663,17 @@ def _markdown_cell(value: Any) -> str:
 
 
 def render_industry_topic(
-    records: list[dict[str, Any]], topic: str, *, summary_max_chars: int = 240
+    records: list[dict[str, Any]],
+    topic: str,
+    *,
+    summary_max_chars: int = 240,
+    limit: int | None = None,
 ) -> str:
     """Render one configured company topic table; empty text for unknown topics."""
     meta = INDUSTRY_TOPICS_BY_KEY.get(topic)
     if meta is None:
         return ""
-    selected = select_industry_topic(records, topic)
+    selected = select_industry_topic(records, topic, limit=limit)
     if not selected:
         return ""
     labels = industry_topic_group_labels(topic)
@@ -607,7 +701,10 @@ def render_industry_topic(
 
 
 def render_industry_topics(
-    records: list[dict[str, Any]], *, summary_max_chars: int = 240
+    records: list[dict[str, Any]],
+    *,
+    summary_max_chars: int = 240,
+    limit_per_topic: int | None = None,
 ) -> str:
     """Render every configured, non-empty company topic in registry order."""
     sections = [
@@ -615,7 +712,10 @@ def render_industry_topics(
         for topic in INDUSTRY_TOPICS
         if (
             rendered := render_industry_topic(
-                records, str(topic["key"]), summary_max_chars=summary_max_chars
+                records,
+                str(topic["key"]),
+                summary_max_chars=summary_max_chars,
+                limit=limit_per_topic,
             )
         )
     ]
