@@ -2,7 +2,7 @@
 
 <!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
 
-[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-225-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-63-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-109-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-07-16-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
+[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-329-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-89-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-134-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-09-20-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
 ![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
 
@@ -46,12 +46,12 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | Papers | Industry systems | Formal paper venues | System abstractions |
 |---:|---:|---:|---:|
-| 225 | 63 | 109 | 6 |
+| 329 | 89 | 134 | 6 |
 
 | Collection | Records | Evidence breakdown |
 |---|---:|---|
-| Academic papers | 225 | Formal Conference: 56, Formal Conference · Legacy Import: 53, Poster / Workshop: 7, Poster / Workshop · Legacy Import: 18, Preprint: 7, Preprint · Legacy Import: 65, Unclassified: 10, Unclassified · Legacy Import: 9 |
-| Industry / open-source systems | 63 | Industrial Material: 1, Industrial Material · Legacy Import: 62 |
+| Academic papers | 329 | Formal Conference: 84, Formal Conference · Legacy Import: 50, Poster / Workshop: 7, Poster / Workshop · Legacy Import: 18, Preprint: 78, Preprint · Legacy Import: 65, Unclassified: 18, Unclassified · Legacy Import: 9 |
+| Industry / open-source systems | 89 | Industrial Material: 27, Industrial Material · Legacy Import: 62 |
 
 ## Reading Paths
 
@@ -67,12 +67,12 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 
 | System abstraction | Records | What it covers | Entry points |
 |---|---:|---|---|
-| **KV State & Memory** | 91 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
-| **P/D Disaggregation & KV Transfer** | 35 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
-| **KV Compression & Low-Bit State** | 51 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
-| **Kernel & Compiler** | 42 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
-| **Runtime & Serving** | 58 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
-| **Reliability & Benchmarks** | 11 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
+| **KV State & Memory** | 98 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
+| **P/D Disaggregation & KV Transfer** | 60 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
+| **KV Compression & Low-Bit State** | 103 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
+| **Kernel & Compiler** | 70 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
+| **Runtime & Serving** | 66 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
+| **Reliability & Benchmarks** | 21 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
 
 ## System Map
 
@@ -105,10 +105,10 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
   Artifact: [source](https://arxiv.org/abs/2506.02006)
   MorphServe 以反馈控制方式在运行时联合调整量化层和 KV cache 容量：高压时异步换入低精度层并弹性扩缩 KVC，压力恢复后再切回；在 Vicuna/Llama 和真实 workload 上平均 SLO 违规降低 92.45%，P95 TTFT 相较全精度 serving 改善 2.2x–3.9x，并保持生成质量。
 - **[Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration](https://www.usenix.org/conference/osdi26/presentation/du)**
-  `OSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
+  `USENIX OSDI 2026 technical sessions` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `gpu` `goodput`
   Artifact: [source](https://github.com/MLSysU/EcoServe)
-  提出面向普通 GPU 集群的 partially disaggregated serving，通过时间维度 P/D 分离、跨实例循环协作、adaptive routing 和 mitosis scaling 缓解 prefill-decode 干扰；在 32 张 NVIDIA L20 以太网集群上，相比 vLLM、Sarathi、DistServe、MoonCake 等基线 goodput 最高提升 2.51 倍，并开源 EcoServe。
+  EcoServe 面向商品 GPU 集群提出「部分分离」（PaDG）策略：在单实例内沿时间维分离 prefill/decode 以缓解干扰，并循环激活多实例保证 prefill 连续可用；配合自适应路由与有丝分裂式扩缩，在 32-GPU L20 以太网集群上 goodput 比 vLLM/Sarathi/DistServe/MoonCake 高 1.96×–2.51×。
 - **[SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal)**
   `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
   Tags: `serving` `kv-cache` `memory` `agent` `multi-turn` `vllm` `latency` `throughput`

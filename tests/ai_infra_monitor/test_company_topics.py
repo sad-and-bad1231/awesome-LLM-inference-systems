@@ -53,11 +53,25 @@ class CompanyTopicContractTests(unittest.TestCase):
             keys,
             [
                 "deepseek-ai-systems",
+                "qwen-ai-systems",
                 "moonshot-ai-systems",
                 "minimax-ai-systems",
                 "zhipu-ai-systems",
                 "stepfun-ai-systems",
                 "bytedance-ai-systems",
+                "xiaomi-ai-systems",
+                "tencent-ai-systems",
+                "nvidia-ai-systems",
+                "amd-ai-systems",
+                "openai-ai-systems",
+                "anthropic-ai-systems",
+                "google-ai-systems",
+                "meta-ai-systems",
+                "vllm-community",
+                "sglang-community",
+                "lmcache-community",
+                "llm-d-community",
+                "mooncake-community",
             ],
         )
         for topic in INDUSTRY_TOPICS:
@@ -65,6 +79,13 @@ class CompanyTopicContractTests(unittest.TestCase):
             generations = list(topic["generations"])
             self.assertEqual(len(groups), len(set(groups)), topic["key"])
             self.assertEqual(len(generations), len(set(generations)), topic["key"])
+
+    def test_registry_requires_key_title_description(self):
+        for topic in INDUSTRY_TOPICS:
+            context = str(topic.get("key"))
+            self.assertTrue(topic.get("title"), context)
+            self.assertTrue(topic.get("description"), context)
+            self.assertTrue(topic.get("groups"), context)
 
 
 if __name__ == "__main__":

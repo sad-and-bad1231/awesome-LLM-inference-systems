@@ -74,17 +74,10 @@ class ReadingPresentationTests(unittest.TestCase):
             render_industry_topics,
         )
 
-        self.assertEqual(
-            [topic["key"] for topic in INDUSTRY_TOPICS],
-            [
-                "deepseek-ai-systems",
-                "moonshot-ai-systems",
-                "minimax-ai-systems",
-                "zhipu-ai-systems",
-                "stepfun-ai-systems",
-                "bytedance-ai-systems",
-            ],
-        )
+        # 注册表的完整有序清单由 test_company_topics.py 单点钉住；这里只校验顺序自洽。
+        keys = [topic["key"] for topic in INDUSTRY_TOPICS]
+        self.assertEqual(len(keys), len(set(keys)))
+        self.assertGreaterEqual(len(keys), 6)
 
         moonshot = _industry_record("Kimi-K2", "https://github.com/MoonshotAI/Kimi-K2")
         moonshot["presentation"] = {

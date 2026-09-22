@@ -12,8 +12,8 @@
 
 | Scope | Papers | Industry / Projects |
 |---|---:|---:|
-| adjacent | 18 | 4 |
-| archive | 396 | 213 |
+| adjacent | 17 | 4 |
+| archive | 391 | 367 |
 
 ## Academic Papers
 
@@ -24,7 +24,6 @@
 | adjacent | supporting | 2026 | [Cortex: Achieving Low-Latency, Cost-Efficient Remote Data Access for LLM via Semantic-Aware Knowledge Caching](https://www.usenix.org/conference/nsdi26/presentation/ruan-cortex) | NSDI 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | FastTTS: Accelerating Test-Time Scaling for Edge LLM Reasoning | ASPLOS 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
-| adjacent | supporting | 2026 | [Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin) | OSDI 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference | MLSys 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | NodeSweep: Practical Straggler Detection and Health Monitoring for Large-Scale Foundation Model Training | MLSys 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2026 | Optimizing PyTorch Inference with LLM-Based Multi-Agent Systems | MLSys 2026 | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
@@ -52,7 +51,6 @@
 | archive | supporting | 2026 | BEAM: Joint Resource-Power Optimization for Energy-Efficient LLM Inference under SLO constraints | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | BOOST: BOttleneck-Optimized Scalable Training Framework for Low-Rank Large Language Models | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
-| archive | supporting | 2026 | [BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan) | OSDI 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | BatchLLM: Optimizing Large Batched LLM Inference with Global Prefix Sharing and Throughput-oriented Token Batching | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | Beyond the Buzz: A Pragmatic Take on Inference Disaggregation | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | BlendServe: Optimizing Offline Inference with Resource-Aware Batching | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -92,7 +90,6 @@
 | archive | supporting | 2026 | HybridTier: An Adaptive and Lightweight CXL-Memory Tiering System | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | Insum: Sparse GPU Kernels Simplified and Optimized with Indirect Einsums | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | It Takes Two to Entangle | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
-| archive | supporting | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | LEANN: A Low-Storage Overhead Vector Index | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [LLMFolder: Revisiting Constant Folding in Large Language Models](https://doi.org/10.1145/3767295.3769339) | EuroSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | LLMInfer-Bench: Building the Virtuous Cycle for AI-driven LLM Systems | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -103,7 +100,6 @@
 | archive | supporting | 2026 | [MFS: An Efficient Model Family Serving System for LLMs](https://doi.org/10.1145/3767295.3769355) | EuroSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | ML Fleet Efficiency: Improving TPU Systems at Scale with ML Productivity Goodput | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | MLCommons Chakra: Advancing Performance Benchmarking and Co-design using Standardized Execution Traces | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
-| archive | supporting | 2026 | [MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs](https://www.usenix.org/conference/osdi26/presentation/cheng) | OSDI 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | MSCCL++: Rethinking GPU Communication Abstractions for AI Inference | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | MTraining: Distributed Dynamic Sparse Attention for Efficient Ultra-Long Context Training | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | Massive-Scale Out-Of-Core UMAP on the GPU | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -146,9 +142,7 @@
 | archive | supporting | 2026 | Sparing Strategies to Minimize Reliability Impact On Large Training Jobs | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | SpeContext: Enabling Efficient Long-context Reasoning with Speculative Context Sparsity in LLMs | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | Spira: Exploiting Voxel Data Structural Properties for Efficient Sparse Convolution in Point Cloud Networks | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
-| archive | supporting | 2026 | [Strata](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang) | OSDI 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | StreamDiffusionV2: A Streaming System for Dynamic and Interactive Video Generation | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
-| archive | supporting | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | TetriServe: Efficiently Serving Mixed DiT Workloads | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | The OpenHands Software Agent SDK: A Composable and Extensible Foundation for Production Agents | MLSys 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation | ASPLOS 2026 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -443,21 +437,34 @@
 | adjacent | supporting | 2025 | [DeepSeek-V3.2 / DeepSeek Sparse Attention](https://arxiv.org/abs/2512.02556) | DeepSeek | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | adjacent | supporting | 2024 | [TensorRT diffusion pipelines](https://developer.nvidia.com/tensorrt) | NVIDIA | evidenced inference-system exploration outside the stable mainline; supporting or exploratory evidence |
 | archive | supporting | 2026 | [AI200 / AI250](https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm) | Qualcomm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [AgentENV](https://github.com/kvcache-ai/AgentENV) | Mooncake community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [AngelSpec](https://github.com/Tencent/AngelSpec) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Awesome DeepSeek Agents](https://github.com/deepseek-ai/awesome-deepseek-agent) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [BlueField-4 + DOCA in-silicon security for AI factories](https://developer.nvidia.com/blog/advancing-ai-infrastructure-for-agentic-ai-with-nvidia-doca-in-silicon-security/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [BlueField-4 STX / context memory storage](https://www.tomshardware.com/tech-industry/nvidia-launches-bluefield-4-stx-storage-architecture-for-agentic-ai) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [CacheSlide](https://www.usenix.org/conference/fast26/technical-sessions) | Inspur + Huawei Cloud + Shanghai Jiao Tong University + Peking University | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [DeepSeek Open Infra Index](https://github.com/deepseek-ai/open-infra-index) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [DeepSeek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [DeepSeek-V4](https://api-docs.deepseek.com/news/news260424) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [DeepSeek-V4.1-Flash](https://api-docs.deepseek.com/news/news260910) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [DroidSpeak](https://www.microsoft.com/en-us/research/publication/droidspeak-kv-cache-sharing-for-efficient-multi-llm-serving/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Dynamo 1.0 Production-Scale Multi-Node Inference](https://developer.nvidia.com/blog/?p=113961) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Dynamo Snapshot](https://developer.nvidia.com/blog/nvidia-dynamo-snapshot-fast-startup-for-inference-workloads-on-kubernetes/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [FlashKDA](https://github.com/MoonshotAI/FlashKDA) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [FlashQLA](https://github.com/QwenLM/FlashQLA) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Full-Stack Optimizations for Agentic Inference with Dynamo](https://developer.nvidia.com/blog/full-stack-optimizations-for-agentic-inference-with-nvidia-dynamo/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [GLM-5](https://github.com/zai-org/GLM-5) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [GLM-5.2](https://z.ai/blog/glm-5.2) | Z.ai / Zhipu | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [GLM-5.3](https://z.ai/blog/glm-5.3) | Z.ai / Zhipu | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [GLM-Image](https://github.com/zai-org/GLM-Image) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [GLM-OCR](https://github.com/zai-org/GLM-OCR) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Gemini 3](https://deepmind.google/models/gemini/pro/) | Google DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [HY-World-2.0](https://github.com/Tencent-Hunyuan/HY-World-2.0) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Helios / Instinct MI455X rack-scale platform](https://www.tomshardware.com/tech-industry/semiconductors/hpe-adopts-amd-helios-rack-architecture-for-2026-ai-systems) | AMD + HPE | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [HiLS-Attention](https://github.com/Tencent-Hunyuan/HiLS-Attention) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Hy-MT2](https://github.com/Tencent-Hunyuan/Hy-MT2) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Hy3](https://github.com/Tencent-Hunyuan/Hy3) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Hy4-preview](https://github.com/Tencent-Hunyuan/Hy4-preview) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [HydraServe](https://www.usenix.org/conference/nsdi26/technical-sessions) | Alibaba Group + Peking University | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [KEEP](https://www.microsoft.com/en-us/research/publication/keep-a-kv-cache-centric-memory-management-system-for-efficient-embodied-planning/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [KServe Generative Inference Stack](https://kserve.github.io/website/docs/model-serving/generative-inference/overview) | KServe | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -471,6 +478,9 @@
 | archive | supporting | 2026 | [MX-SAFE](https://arxiv.org/abs/2605.24391) | Open Compute numerical-format ecosystem | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Maia 200](https://www.techradar.com/pro/microsoft-unveils-maia-200-its-powerhouse-accelerator-looking-to-unlock-the-power-of-large-scale-ai) | Microsoft | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Memento](https://www.microsoft.com/en-us/research/articles/memento-teaching-llms-to-manage-their-own-context/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [MiMo-Code](https://github.com/XiaomiMiMo/MiMo-Code) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [MiMo-Skills](https://github.com/XiaomiMiMo/MiMo-Skills) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [MiMo-V2.5-ASR](https://github.com/XiaomiMiMo/MiMo-V2.5-ASR) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [MiniMax-M2.5](https://github.com/MiniMax-AI/MiniMax-M2.5) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [MiniMax-M2.7](https://github.com/MiniMax-AI/MiniMax-M2.7) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [MiniMax-M3](https://github.com/MiniMax-AI/MiniMax-M3) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -478,11 +488,21 @@
 | archive | supporting | 2026 | [MoonEP](https://github.com/MoonshotAI/MoonEP) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [OpenRoom](https://github.com/MiniMax-AI/OpenRoom) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Perfect Recall, Parallel Efficiency: MLA for Million-Token Decoding](https://www.microsoft.com/en-us/research/publication/perfect-recall-parallel-efficiency-multi-head-latent-attention-for-million-token-context-decoding/) | Google / DeepSeek 相关研究 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen-AgentWorld](https://github.com/QwenLM/Qwen-AgentWorld) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen-Drive-1.0](https://github.com/QwenLM/Qwen-Drive-1.0) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen-Image-2.1](https://github.com/QwenLM/Qwen-Image-2.1) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen-MM-Plugins](https://github.com/QwenLM/Qwen-MM-Plugins) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen-VLA](https://github.com/QwenLM/Qwen-VLA) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen3-ASR](https://github.com/QwenLM/Qwen3-ASR) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [RTP-LLM](https://arxiv.org/abs/2605.29639) | Alibaba Group | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Rosetta-inference](https://github.com/Tencent-Hunyuan/Rosetta-inference) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [SAW-INT4](https://arxiv.org/abs/2604.19157) | Apple / academic collaboration | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [SYMPHONY](https://www.usenix.org/conference/nsdi26/presentation/agarwal) | UC/industry collaboration | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [ServeGen](https://github.com/alibaba/ServeGen) | Alibaba Group + Peking University | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Shift Parallelism / Arctic Inference](https://www.asplos-conference.org/asplos2026/program/) | Snowflake AI Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [Simple-Attention-Sparsification](https://github.com/Tencent-Hunyuan/Simple-Attention-Sparsification) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Stable-DiffCoder](https://github.com/ByteDance-Seed/Stable-DiffCoder) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Step-3.5-Flash](https://github.com/stepfun-ai/Step-3.5-Flash) | StepFun | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Step-3.7-Flash](https://github.com/stepfun-ai/Step-3.7-Flash) | StepFun | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -495,13 +515,24 @@
 | archive | supporting | 2026 | [TurboQuant](https://arxiv.org/abs/2504.19874) | Google Research / DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Tutti](https://arxiv.org/abs/2605.03375) | University/industry collaboration | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [Vera Rubin NVL72](https://www.nvidia.com/en-us/data-center/technologies/rubin/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [afd-plugin](https://github.com/vllm-project/afd-plugin) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [agentic-api](https://github.com/vllm-project/agentic-api) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [awesome-mimo-agent](https://github.com/XiaomiMiMo/awesome-mimo-agent) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [cli](https://github.com/MiniMax-AI/cli) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [dllm-plugin](https://github.com/vllm-project/dllm-plugin) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [hpc-ops](https://github.com/Tencent/hpc-ops) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [humming](https://github.com/vllm-project/humming) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2026 | [kimi-code](https://github.com/MoonshotAI/kimi-code) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [llm-d-async](https://github.com/llm-d/llm-d-async) | llm-d community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [sgl-eval](https://github.com/sgl-project/sgl-eval) | SGLang community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [tml-fa4](https://github.com/vllm-project/tml-fa4) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2026 | [vime](https://github.com/vllm-project/vime) | vLLM community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [3FS](https://github.com/deepseek-ai/3FS) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [AHN](https://github.com/ByteDance-Seed/AHN) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [AdaptCache](https://arxiv.org/abs/2509.00105) | Microsoft Research + University of Chicago | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Aegaeon](https://dblp.org/db/conf/sosp/sosp2025.html) | Alibaba Group | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [AlayaDB](https://arxiv.org/abs/2504.10326) | AlayaDB AI + academia | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [AngelSlim](https://github.com/Tencent/AngelSlim) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Astral](https://dblp.org/db/conf/sigcomm/sigcomm2025.html) | ByteDance | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [BFS-Prover-V2](https://github.com/ByteDance-Seed/BFS-Prover-V2) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Bagel](https://github.com/ByteDance-Seed/Bagel) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -510,25 +541,49 @@
 | archive | supporting | 2025 | [Cache-Craft](https://arxiv.org/abs/2502.15734) | Adobe Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [CacheBlend](https://www.microsoft.com/en-us/research/uploads/prod/2024/09/eurosys25-final999.pdf) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Chameleon](https://arxiv.org/abs/2411.17741) | IBM + University of Illinois Urbana-Champaign | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Claude 4](https://www.anthropic.com/news/claude-4) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Claude Opus 4.5](https://www.anthropic.com/news/claude-opus-4-5) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Context Parallelism for Million-Token Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/78834433edc3291f4c6cbbd2759324db-Abstract-Conference.html) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DATAMASK](https://github.com/ByteDance-Seed/DATAMASK) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DECA](https://arxiv.org/abs/2505.19349) | Intel + University of Illinois Urbana-Champaign | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DeepEP](https://github.com/deepseek-ai/DeepEP) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DeepSeek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [DeepSeek-R1](https://api-docs.deepseek.com/news/news250120) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [DeepSeek-V3.1](https://api-docs.deepseek.com/news/news250821) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DeepSpec](https://github.com/deepseek-ai/DeepSpec) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Dynamo](https://developer.nvidia.com/blog/introducing-nvidia-dynamo-a-low-latency-distributed-inference-framework-for-scaling-reasoning-ai-models/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [DynamoLLM](https://www.microsoft.com/en-us/research/publication/dynamollm-designing-llm-inference-clusters-for-performance-and-energy-efficiency/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [FastFlowLM](https://github.com/ROCm/FastFlowLM) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [FlashInfer](https://proceedings.mlsys.org/paper_files/paper/2025/file/dbf02b21d77409a2db30e56866a8ab3a-Paper-Conference.pdf) | FlashInfer 社区 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [FlashMLA](https://github.com/deepseek-ai/FlashMLA) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [FlashVDM](https://github.com/Tencent-Hunyuan/FlashVDM) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [FlexAttention for inference](https://pytorch.org/blog/flexattention-for-inference/) | Meta / PyTorch | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [FlexPrefill](https://github.com/ByteDance-Seed/FlexPrefill) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [FlowKV](https://arxiv.org/abs/2504.03775) | Alibaba Cloud | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [FlyDSL](https://github.com/ROCm/FlyDSL) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [GLM-4.5](https://github.com/zai-org/GLM-4.5) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [GLM-ASR](https://github.com/zai-org/GLM-ASR) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [GLM-TTS](https://github.com/zai-org/GLM-TTS) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [GLM-V](https://github.com/zai-org/GLM-V) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Gemini 2.5](https://arxiv.org/abs/2507.06261) | Google DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Gemma 3](https://deepmind.google/models/gemma/gemma-3/) | Google DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [HACK](https://arxiv.org/abs/2502.03589) | Microsoft Research + Clemson + Harvard | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HY-WorldPlay](https://github.com/Tencent-Hunyuan/HY-WorldPlay) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan-7B](https://github.com/Tencent-Hunyuan/Hunyuan-7B) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan-A13B](https://github.com/Tencent-Hunyuan/Hunyuan-A13B) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan-MT](https://github.com/Tencent-Hunyuan/Hunyuan-MT) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan-TurboS](https://github.com/Tencent-Hunyuan/Hunyuan-TurboS) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan3D-2](https://github.com/Tencent-Hunyuan/Hunyuan3D-2) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Hunyuan3D-Omni](https://github.com/Tencent-Hunyuan/Hunyuan3D-Omni) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanImage-2.1](https://github.com/Tencent-Hunyuan/HunyuanImage-2.1) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanImage-3.0](https://github.com/Tencent-Hunyuan/HunyuanImage-3.0) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanOCR](https://github.com/Tencent-Hunyuan/HunyuanOCR) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanVideo-1.5](https://github.com/Tencent-Hunyuan/HunyuanVideo-1.5) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanVision](https://github.com/Tencent-Hunyuan/HunyuanVision) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanWorld-1.0](https://github.com/Tencent-Hunyuan/HunyuanWorld-1.0) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [HunyuanWorld-Voyager](https://github.com/Tencent-Hunyuan/HunyuanWorld-Voyager) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Inference evaluation anti-patterns](https://arxiv.org/abs/2507.09019) | Microsoft Research 等 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [InferenceMAX](https://www.tomshardware.com/tech-industry/inferencemax-ai-benchmark-tests-software-stacks-efficiency-and-tco-vendor-neutral-suite-runs-nightly-and-tracks-performance-changes-over-time) | SemiAnalysis | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures](https://arxiv.org/abs/2505.09343) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -539,9 +594,20 @@
 | archive | supporting | 2025 | [Kimi-Linear](https://github.com/MoonshotAI/Kimi-Linear) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Kimi-VL](https://github.com/MoonshotAI/Kimi-VL) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Kimi-k1.5](https://github.com/MoonshotAI/Kimi-k1.5) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [LMBenchmark](https://github.com/LMCache/LMBenchmark) | LMCache community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [LMCache](https://arxiv.org/abs/2510.09665) | LMCache 社区 / 企业采用 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [LMCache-Ascend](https://github.com/LMCache/LMCache-Ascend) | LMCache community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [LMCache-Examples](https://github.com/LMCache/LMCache-Examples) | LMCache community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Llama 4](https://github.com/meta-llama/llama-models/blob/main/models/llama4/MODEL_CARD.md) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [MagicDec](https://arxiv.org/abs/2408.11049) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Medha](https://www.microsoft.com/en-us/research/publication/medha-efficient-llm-inference-on-multi-million-context-lengths-without-approximation/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo](https://github.com/XiaomiMiMo/MiMo) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-Audio](https://github.com/XiaomiMiMo/MiMo-Audio) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-Audio-Tokenizer](https://github.com/XiaomiMiMo/MiMo-Audio-Tokenizer) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-Audio-Training](https://github.com/XiaomiMiMo/MiMo-Audio-Training) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-Embodied](https://github.com/XiaomiMiMo/MiMo-Embodied) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-V2-Flash](https://github.com/XiaomiMiMo/MiMo-V2-Flash) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [MiMo-VL](https://github.com/XiaomiMiMo/MiMo-VL) | Xiaomi MiMo | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Mini-Agent](https://github.com/MiniMax-AI/Mini-Agent) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [MiniMax-01](https://github.com/MiniMax-AI/MiniMax-01) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [MiniMax-M1](https://github.com/MiniMax-AI/MiniMax-M1) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -555,6 +621,15 @@
 | archive | supporting | 2025 | [NextStep-1](https://github.com/stepfun-ai/NextStep-1) | StepFun | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [One-RL-to-See-Them-All](https://github.com/MiniMax-AI/One-RL-to-See-Them-All) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [Open-AutoGLM](https://github.com/zai-org/Open-AutoGLM) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [QwQ](https://github.com/QwenLM/QwQ) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen-Image](https://github.com/QwenLM/Qwen-Image) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen-Image-Layered](https://github.com/QwenLM/Qwen-Image-Layered) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen2.5-Omni](https://github.com/QwenLM/Qwen2.5-Omni) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen3-ASR-Toolkit](https://github.com/QwenLM/Qwen3-ASR-Toolkit) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen3-Embedding](https://github.com/QwenLM/Qwen3-Embedding) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen3.8](https://github.com/QwenLM/Qwen3.8) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [Qwen3Guard](https://github.com/QwenLM/Qwen3Guard) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [RAG-Stack](https://arxiv.org/abs/2510.20296) | RAG-Stack team | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [RetroInfer / RetrievalAttention](https://www.microsoft.com/en-us/research/publication/retroinfer-a-vector-storage-engine-for-scalable-long-context-llm-inference/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [RocketKV](https://arxiv.org/abs/2502.14051) | NVIDIA + Georgia Tech | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -585,16 +660,45 @@
 | archive | supporting | 2025 | [VeOmni](https://github.com/ByteDance-Seed/VeOmni) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [VectorLiteRAG](https://arxiv.org/abs/2504.08930) | VectorLiteRAG team | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [WaferLLM on Cerebras WSE-2](https://www.usenix.org/conference/osdi25/technical-sessions) | Microsoft Research + University of Edinburgh | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [WeDLM](https://github.com/Tencent/WeDLM) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [audio-tools](https://github.com/MiniMax-AI/audio-tools) | MiniMax | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [checkpoint-engine](https://github.com/MoonshotAI/checkpoint-engine) | Moonshot AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [claude-agent-sdk-python](https://github.com/anthropics/claude-agent-sdk-python) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [claude-code](https://github.com/anthropics/claude-code) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [claude-code-action](https://github.com/anthropics/claude-code-action) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [codex](https://github.com/openai/codex) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [cudaLLM](https://github.com/ByteDance-Seed/cudaLLM) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [entangle](https://github.com/ByteDance-Seed/entangle) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [flex-block-attn](https://github.com/Tencent-Hunyuan/flex-block-attn) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [gelab-zero](https://github.com/stepfun-ai/gelab-zero) | StepFun | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [gpt-oss](https://github.com/openai/gpt-oss) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [llm-d-batch-gateway](https://github.com/llm-d/llm-d-batch-gateway) | llm-d community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [llm-d-benchmark](https://github.com/llm-d/llm-d-benchmark) | llm-d community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [llm-d-router](https://github.com/llm-d/llm-d-router) | llm-d community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [llm-d-routing-sidecar](https://github.com/llm-d/llm-d-routing-sidecar) | llm-d community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [llm.hunyuan.T1](https://github.com/Tencent/llm.hunyuan.T1) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [lmcache-agent-trace](https://github.com/LMCache/lmcache-agent-trace) | LMCache community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [lmcache_frontend](https://github.com/LMCache/lmcache_frontend) | LMCache community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [openai-agents-python](https://github.com/openai/openai-agents-python) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [prompt-ops](https://github.com/meta-llama/prompt-ops) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [qwen-code](https://github.com/QwenLM/qwen-code) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [rbg](https://github.com/sgl-project/rbg) | SGLang community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [rocm-libraries](https://github.com/ROCm/rocm-libraries) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [rocm-systems](https://github.com/ROCm/rocm-systems) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [sandbox-runtime](https://github.com/anthropics/sandbox-runtime) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [seed-oss](https://github.com/ByteDance-Seed/seed-oss) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [sgl-kernel-npu](https://github.com/sgl-project/sgl-kernel-npu) | SGLang community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [sgl-kernel-xpu](https://github.com/sgl-project/sgl-kernel-xpu) | SGLang community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [skills](https://github.com/anthropics/skills) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2025 | [synthetic-data-kit](https://github.com/meta-llama/synthetic-data-kit) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2025 | [高速推理 API / Llama API 合作](https://www.cerebras.ai/) | Cerebras | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [AI Engine Direct / QNN](https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk) | Qualcomm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Awesome DeepSeek Integrations](https://github.com/deepseek-ai/awesome-deepseek-integration) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Claude 3](https://www.anthropic.com/news/claude-3-family) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Claude 3.5](https://www.anthropic.com/news/claude-3-5-sonnet) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [CodeGeeX4](https://github.com/zai-org/CodeGeeX4) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [DeepSeek-V2.5](https://www.deepseek.com/news/deepseek-v2-5/) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [EAGLE 系列](https://github.com/SafeAILab/EAGLE) | Microsoft Research Asia + Peking University | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [ExecuTorch](https://pytorch.org/executorch/) | Meta / PyTorch | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -603,9 +707,13 @@
 | archive | supporting | 2024 | [GLM-4](https://github.com/zai-org/GLM-4) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [GLM-4-Voice](https://github.com/zai-org/GLM-4-Voice) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [GLM-Edge](https://github.com/zai-org/GLM-Edge) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Gemma 2](https://arxiv.org/abs/2408.00118) | Google DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [GroqCloud / LPU Inference](https://groq.com/groqcloud) | Groq | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Hunyuan3D-1](https://github.com/Tencent-Hunyuan/Hunyuan3D-1) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [HunyuanVideo](https://github.com/Tencent-Hunyuan/HunyuanVideo) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [JetStream + MaxText](https://cloud.google.com/tpu/docs/tutorials/LLM/jetstream-maxtext-inference-v6e) | Google Cloud | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [JetStream / MaxText / Pathways on TPU](https://github.com/AI-Hypercomputer/JetStream) | Google | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [KsanaLLM](https://github.com/Tencent/KsanaLLM) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [LiteRT](https://ai.google.dev/edge/litert) | Google | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [MAX Engine](https://docs.modular.com/max/) | Modular | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [MLA / Multi-head Latent Attention](https://arxiv.org/abs/2412.19437) | DeepSeek | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -613,17 +721,31 @@
 | archive | supporting | 2024 | [ONNX Runtime GenAI](https://github.com/microsoft/onnxruntime-genai) | Microsoft | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [OpenVINO GenAI](https://github.com/openvinotoolkit/openvino.genai) | Intel | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [QServe / OmniServe](https://github.com/mit-han-lab/omniserve) | MIT Han Lab / NVIDIA ecosystem | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen-Cookbook](https://github.com/QwenLM/Qwen-Cookbook) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen2-Audio](https://github.com/QwenLM/Qwen2-Audio) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen2.5-Math](https://github.com/QwenLM/Qwen2.5-Math) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen3](https://github.com/QwenLM/Qwen3) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [SDP4Bit](https://github.com/ByteDance-Seed/SDP4Bit) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [SambaNova Cloud / RDU](https://sambanova.ai/) | SambaNova Systems | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Splitwise](https://www.microsoft.com/en-us/research/publication/splitwise-efficient-generative-llm-inference-using-phase-splitting/) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [T-MAC](https://2025.eurosys.org/program.html) | Microsoft Research Asia | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [TT-Metalium / Wormhole](https://github.com/tenstorrent/tt-metal) | Tenstorrent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [Tencent-Hunyuan-Large](https://github.com/Tencent-Hunyuan/Tencent-Hunyuan-Large) | Tencent Hunyuan | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [TheRock](https://github.com/ROCm/TheRock) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Together Inference Engine](https://docs.together.ai/) | Together AI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Trainium / Trainium3 + Neuron runtime](https://awsdocs-neuron.readthedocs-hosted.com/) | AWS / Neuron 生态 | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Wafer-scale Inference](https://www.cerebras.ai/inference) | Cerebras | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [Workers AI](https://developers.cloudflare.com/workers-ai/) | Cloudflare | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [XGrammar structured generation engine](https://github.com/mlc-ai/xgrammar) | MLC / CMU | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [anthropic-sdk-go](https://github.com/anthropics/anthropic-sdk-go) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [claude-quickstarts](https://github.com/anthropics/claude-quickstarts) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [decoupleQ](https://github.com/ByteDance-Seed/decoupleQ) | ByteDance Seed | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [gemma](https://github.com/google-deepmind/gemma) | Google DeepMind | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [llama-models](https://github.com/meta-llama/llama-models) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [llama3](https://github.com/meta-llama/llama3) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2024 | [swarm](https://github.com/openai/swarm) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2024 | [xDiT](https://github.com/xdit-project/xDiT) | xDiT community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [ChatGLM-6B](https://github.com/zai-org/ChatGLM-6B) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [ChatGLM2-6B](https://github.com/zai-org/ChatGLM2-6B) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
@@ -632,24 +754,50 @@
 | archive | supporting | 2023 | [Inferentia2 + Neuron](https://aws.amazon.com/machine-learning/inferentia/) | AWS | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [LMDeploy](https://github.com/InternLM/lmdeploy) | InternLM / Shanghai AI Laboratory | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [LightLLM](https://github.com/ModelTC/lightllm) | ModelTC community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [MI300X](https://www.amd.com/en/products/accelerators/instinct/mi300.html) | AMD | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [MLC-LLM](https://github.com/mlc-ai/mlc-llm) | MLC community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [MLX / Core ML](https://github.com/ml-explore/mlx) | Apple | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [PurpleLlama](https://github.com/meta-llama/PurpleLlama) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [Qwen](https://github.com/QwenLM/Qwen) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [Qwen-Agent](https://github.com/QwenLM/Qwen-Agent) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [Qwen-Audio](https://github.com/QwenLM/Qwen-Audio) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [Qwen-VL](https://github.com/QwenLM/Qwen-VL) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [VBASE](https://www.usenix.org/conference/osdi23/presentation/zhang-qianxi) | Microsoft Research + academia | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [anthropic-sdk-python](https://github.com/anthropics/anthropic-sdk-python) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [anthropic-sdk-typescript](https://github.com/anthropics/anthropic-sdk-typescript) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [claude-cookbooks](https://github.com/anthropics/claude-cookbooks) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [codellama](https://github.com/meta-llama/codellama) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [cuVS / CAGRA](https://github.com/rapidsai/cuvs) | NVIDIA RAPIDS | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [evals](https://github.com/openai/evals) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [llama](https://github.com/meta-llama/llama) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2023 | [llama.cpp](https://github.com/ggml-org/llama.cpp) | Meta / community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2023 | [qwen.cpp](https://github.com/QwenLM/qwen.cpp) | Alibaba Qwen | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2022 | [DeepSpeed-Inference](https://www.deepspeed.ai/tutorials/inference-tutorial/) | Microsoft | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2022 | [Diffusers](https://huggingface.co/docs/diffusers/index) | Hugging Face | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2022 | [FastDeploy](https://github.com/PaddlePaddle/FastDeploy) | PaddlePaddle / Baidu | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2022 | [GLM-130B](https://github.com/zai-org/GLM-130B) | Zhipu AI / Z.ai | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2022 | [Hopper](https://www.nvidia.com/en-us/data-center/technologies/hopper-architecture/) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2022 | [Text Generation Inference, TGI](https://github.com/huggingface/text-generation-inference) | Hugging Face | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2022 | [hh-rlhf](https://github.com/anthropics/hh-rlhf) | Anthropic | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2022 | [tiktoken](https://github.com/openai/tiktoken) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2022 | [whisper](https://github.com/openai/whisper) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2021 | [DALL-E](https://github.com/openai/DALL-E) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2021 | [MSCCL / MSCCL++](https://github.com/microsoft/msccl) | Microsoft | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2021 | [TurboTransformers](https://github.com/Tencent/TurboTransformers) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2020 | [CLIP](https://github.com/openai/CLIP) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2020 | [ScaNN](https://github.com/google-research/google-research/tree/master/scann) | Google Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2020 | [TNN](https://github.com/Tencent/TNN) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2020 | [gpt-3](https://github.com/openai/gpt-3) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2020 | [openai-python](https://github.com/openai/openai-python) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2019 | [DiskANN / FreshDiskANN / SPFresh](https://github.com/microsoft/DiskANN) | Microsoft Research | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2019 | [Megatron-LM / Megatron-Core](https://github.com/NVIDIA/Megatron-LM) | NVIDIA | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2019 | [Milvus](https://github.com/milvus-io/milvus) | Zilliz / LF AI & Data | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2019 | [gpt-2](https://github.com/openai/gpt-2) | OpenAI | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2018 | [AMDMIGraphX](https://github.com/ROCm/AMDMIGraphX) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2017 | [Faiss](https://github.com/facebookresearch/faiss) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2017 | [ncnn](https://github.com/Tencent/ncnn) | Tencent | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2016 | [HNSW / hnswlib](https://github.com/nmslib/hnswlib) | NMSLIB community | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
+| archive | supporting | 2016 | [hip](https://github.com/ROCm/hip) | AMD ROCm | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting | 2013 | [Annoy](https://github.com/spotify/annoy) | Spotify | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting |  | [Gloo](https://github.com/facebookincubator/gloo) | Meta | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |
 | archive | supporting |  | [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/) | MLCommons | no direct guide theme or evidenced exploration signal; supporting or exploratory evidence |

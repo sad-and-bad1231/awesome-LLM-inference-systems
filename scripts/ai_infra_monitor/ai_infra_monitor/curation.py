@@ -20,6 +20,11 @@ FOUNDATION_PIN_TOPIC = "foundation-pinned"
 # 用于人工策展：pre-2026 的非奠基论文统一退出公开主线，保留事实但移入 archive。
 ARCHIVE_PIN_TOPIC = "archive-pinned"
 
+# 记录 topics 中带此标记时，强制 scope=core，priority 仍按常规规则判定（前沿工作=frontier）。
+# 用于人工策展的高价值前沿工作：它们的标题/渠道不含主题关键词（例如 "long context caching"、
+# "tensor program"、"online LLM inference"），关键词启发式会误判为 archive 而从主线消失。
+CORE_PIN_TOPIC = "core-pinned"
+
 THEME_ORDER = (
     "attention-kernel",
     "kv-cache",
@@ -221,6 +226,7 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     record_topics = [str(topic) for topic in (record.get("topics") or [])]
     pinned = FOUNDATION_PIN_TOPIC in record_topics
     archive_pinned = ARCHIVE_PIN_TOPIC in record_topics
+    core_pinned = CORE_PIN_TOPIC in record_topics
 
     if pinned:
         scope = "core"
@@ -229,6 +235,9 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
         scope = "archive"
         reasons = ["manually archived pre-2026 non-foundation record (pinned in topics)"]
         themes = []
+    elif core_pinned:
+        scope = "core"
+        reasons = ["manually curated core mainline record (pinned in topics)"]
     elif themes and (direct_themes or structured_core_signal) and (
         model_signal or explicit_kernel or inherently_model_specific
     ) and not peripheral and (

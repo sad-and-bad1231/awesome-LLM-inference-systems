@@ -9,6 +9,7 @@ from time import sleep
 from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+    KNOWN_CANONICALS,
     candidate_to_record,
     compact_candidate_records,
     curate_record_stores,
@@ -20,8 +21,10 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     validate_record_store,
     write_records,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.identity import normalize_title
 from scripts.ai_infra_monitor.ai_infra_monitor.curation import (
     ARCHIVE_PIN_TOPIC,
+    CORE_PIN_TOPIC,
     FOUNDATION_PIN_TOPIC,
     classify_record,
 )
@@ -242,6 +245,8 @@ class RecordStoreTests(unittest.TestCase):
                     url="https://example.org/serving-system",
                     summary="Serving system with scheduler and kernel optimizations.",
                     topics=("runtime-serving",),
+                    published="2026-07-13",
+                    discovered="2026-07-13",
                 ),
                 "paper",
                 "verified",
@@ -255,6 +260,82 @@ class RecordStoreTests(unittest.TestCase):
         archived = build([ARCHIVE_PIN_TOPIC])
         self.assertEqual((archived["scope"], archived["priority"]), ("archive", "supporting"))
         self.assertEqual(archived["themes"], [])
+
+        # core-pinned keeps the computed themes and lets priority stay "normal", i.e.
+        # a recent tier-A record is still promoted to the frontier lane.
+        core = build([CORE_PIN_TOPIC])
+        self.assertEqual(core["scope"], "core")
+        self.assertEqual(core["priority"], "frontier")
+        self.assertTrue(core["themes"])
+
+    def test_core_pin_rescues_title_without_theme_keywords(self):
+        """core-pinned is the only lever for papers the keyword heuristic cannot see.
+
+        Example: an OSDI paper titled "Hierarchical Context Caching for Long Context
+        Language Model Serving" carries no THEME_TERMS keyword ("context caching"
+        is not "kv cache"), so the heuristic archives it and it silently vanishes
+        from the mainline.
+        """
+
+        def build(topics):
+            record = candidate_to_record(
+                Candidate(
+                    title="Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+                    url="https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang",
+                    summary="Caching long contexts across HBM, host memory and SSD tiers.",
+                    venue="USENIX OSDI 2026 technical sessions",
+                    tier="A",
+                    published="2026-07-13",
+                    discovered="2026-07-13",
+                ),
+                "paper",
+                "verified",
+            )
+            record["topics"] = list(topics)
+            return classify_record(record)
+
+        # Without the pin the heuristic misses it entirely.
+        unpinned = build([])
+        self.assertEqual(unpinned["scope"], "archive")
+        self.assertEqual(unpinned["themes"], [])
+
+        # With the pin it joins the mainline, still as a frontier-lane record.
+        pinned_record = build([CORE_PIN_TOPIC])
+        self.assertEqual(pinned_record["scope"], "core")
+        self.assertEqual(pinned_record["priority"], "frontier")
+
+    def test_known_canonicals_registry_maps_every_canonical_title_to_itself(self):
+        """The registry must be idempotent.
+
+        `_canonical_fields` rewrites a record's title to the registered canonical title.
+        If that title is not itself a key, the next pass no longer matches and silently
+        swaps the stable canonical_id for a URL-derived one.
+        """
+        for known_id, known_title in KNOWN_CANONICALS.values():
+            canonical_id, canonical_title = KNOWN_CANONICALS[normalize_title(known_title)]
+            self.assertEqual(canonical_id, known_id, known_title)
+            self.assertEqual(canonical_title, known_title, known_title)
+
+    def test_canonical_identity_is_stable_across_repeated_normalisation(self):
+        record = candidate_to_record(
+            Candidate(
+                title="Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+                url="https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang",
+                summary="Hierarchical context caching across HBM, host memory and SSD tiers.",
+                venue="USENIX OSDI 2026 technical sessions",
+                tier="A",
+                published="2026-07-13",
+            ),
+            "paper",
+            "verified",
+        )
+        first = normalize_record(dict(record))
+        second = normalize_record(dict(first))
+        third = normalize_record(dict(second))
+        self.assertEqual(first["canonical_id"], "paper:osdi-2026-strata")
+        self.assertEqual(second["canonical_id"], first["canonical_id"])
+        self.assertEqual(third["canonical_id"], first["canonical_id"])
+        self.assertEqual(second["title"], first["title"])
 
     def test_foundation_pinned_core_paper_renders_in_foundation_lane(self):
         with tempfile.TemporaryDirectory() as tmp:

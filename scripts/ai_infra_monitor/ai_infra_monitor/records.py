@@ -80,11 +80,21 @@ KNOWN_CANONICALS = {
     ),
     "contextra hierarchical context caching long context language model serving": (
         "paper:osdi-2026-strata",
-        "Strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+    ),
+    "strata hierarchical context caching long context language model serving": (
+        "paper:osdi-2026-strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+    ),
+    # The record was previously stored under the bare program short name "Strata";
+    # keep the key so re-normalising restores the official proceedings title.
+    "strata": (
+        "paper:osdi-2026-strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
     ),
     "llmfabric unifying decentralized hpc clusters heterogeneous llm serving": (
         "paper:osdi-2026-opentela",
-        "OpenTela",
+        "OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving",
     ),
     "cascadia cascade serving system large language models": (
         "paper:iclr-2026-cascadia",
@@ -111,6 +121,13 @@ KNOWN_CANONICALS = {
         "MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs",
     ),
 }
+
+# Make the registry idempotent: a canonical title must map back to its own entry.
+# Otherwise `_canonical_fields` rewrites the title on the first pass and, because the
+# rewritten title is no longer a key, silently swaps the stable canonical_id for a
+# URL-derived one on the next pass.
+for _known_id, _known_title in list(KNOWN_CANONICALS.values()):
+    KNOWN_CANONICALS.setdefault(normalize_title(_known_title), (_known_id, _known_title))
 
 
 def _evidence(record: dict[str, Any]) -> dict[str, str]:
