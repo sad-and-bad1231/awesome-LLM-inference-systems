@@ -63,8 +63,10 @@ class AuditTests(unittest.TestCase):
     def test_industry_exploration_projection_counts_projects_not_release_records(self):
         first = _record("Project Release 1", record_type="project", scope="adjacent")
         second = _record("Project Release 2", record_type="project", scope="adjacent")
-        first["curation"]["project_key"] = "github:example/project"
-        second["curation"]["project_key"] = "github:example/project"
+        # head 侧 project_key 由 primary_url / source_ids 派生（不再读取 curation.project_key
+        # 缓存），所以让两条记录共享同一仓库 URL 来落进同一个 project。
+        first["primary_url"] = "https://github.com/example/project"
+        second["primary_url"] = "https://github.com/example/project"
 
         result = build_audit(
             [],

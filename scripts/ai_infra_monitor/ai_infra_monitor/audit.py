@@ -117,9 +117,13 @@ def build_audit(
             "candidates": _store_audit(candidates),
         },
         "public_projection": {
+            # papers 视图开启 foundation 兜底车道（与 reading.display_themes 一致），
+            # 否则不命中关键词的奠基类论文会从投影计数里漏掉。
             "papers": len(
                 select_public_mainline(
-                    paper_mainline, limit_per_theme=paper_limit_per_theme
+                    paper_mainline,
+                    limit_per_theme=paper_limit_per_theme,
+                    allow_foundation=True,
                 )
             ),
             "industry_projects": len(

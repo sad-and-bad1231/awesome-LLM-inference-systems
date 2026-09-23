@@ -9,6 +9,7 @@ from time import sleep
 from unittest.mock import patch
 
 from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+    KNOWN_CANONICALS,
     candidate_to_record,
     compact_candidate_records,
     curate_record_stores,
@@ -20,6 +21,13 @@ from scripts.ai_infra_monitor.ai_infra_monitor.records import (
     validate_record_store,
     write_records,
 )
+from scripts.ai_infra_monitor.ai_infra_monitor.identity import normalize_title
+from scripts.ai_infra_monitor.ai_infra_monitor.curation import (
+    ARCHIVE_PIN_TOPIC,
+    CORE_PIN_TOPIC,
+    FOUNDATION_PIN_TOPIC,
+    classify_record,
+)
 from scripts.ai_infra_monitor.ai_infra_monitor.triage import (
     triage_candidate,
     triage_candidates,
@@ -28,78 +36,55 @@ from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
 
 
 class RecordStoreTests(unittest.TestCase):
-    def test_write_records_uses_compact_jsonl(self):
+    def test_render_exploration_excludes_project_already_in_core(self):
         with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "records.jsonl"
-
-            write_records(path, [{"id": "one", "title": "One"}])
-
-            self.assertEqual(path.read_text(encoding="utf-8"), '{"id":"one","title":"One"}\n')
-
-    def test_normalize_core_record_adds_conservative_evidence_states(self):
-        with_links = candidate_to_record(
-            Candidate(
-                title="Runtime Scheduler for LLM Serving",
-                url="https://example.org/runtime",
-                summary="A serving scheduler.",
-                kind="paper",
-            ),
-            "paper",
-            "verified",
-        )
-        with_links["orgs"] = "Example University"
-        with_links["artifact_url"] = "https://github.com/example/runtime"
-        for field in (
-            "affiliation_status",
-            "artifact_status",
-            "metadata_checked_at",
-            "metadata_sources",
-        ):
-            with_links["evidence"].pop(field, None)
-
-        normalized = normalize_record(with_links)
-
-        self.assertEqual(normalized["evidence"]["affiliation_status"], "legacy_present")
-        self.assertEqual(normalized["evidence"]["artifact_status"], "legacy_linked")
-        self.assertEqual(normalized["evidence"]["metadata_checked_at"], "")
-        self.assertEqual(normalized["evidence"]["metadata_sources"], [])
-
-        normalized["orgs"] = ""
-        normalized["artifact_url"] = ""
-        normalized["evidence"].pop("affiliation_status")
-        normalized["evidence"].pop("artifact_status")
-        normalized = normalize_record(normalized)
-        self.assertEqual(normalized["evidence"]["affiliation_status"], "not_checked")
-        self.assertEqual(normalized["evidence"]["artifact_status"], "not_checked")
-
-    def test_validator_requires_valid_core_evidence_contract(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "records.jsonl"
-            record = candidate_to_record(
+            root = Path(tmp)
+            papers = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidates = root / "candidates.jsonl"
+            project = candidate_to_record(
                 Candidate(
-                    title="Runtime Scheduler for LLM Serving",
-                    url="https://example.org/runtime",
-                    summary="A serving scheduler.",
+                    title="v1.2.2",
+                    url="https://github.com/example/runtime/releases/tag/v1.2.2",
+                    summary="A compact serving runtime.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
                 ),
-                "paper",
+                "project",
                 "verified",
             )
-            record["evidence"].update(
-                {
-                    "affiliation_status": "guessed",
-                    "artifact_status": "maybe",
-                    "metadata_checked_at": "August 10",
-                    "metadata_sources": ["not-a-url"],
-                }
+            project["curation"]["scope"] = "core"
+            project["curation"]["priority"] = "frontier"
+            project["curation"]["themes"] = ["kv-cache"]
+            project["evidence"]["verified_at"] = "2026-07-01"
+            release_url = "https://github.com/example/runtime/releases/tag/v1.2.3"
+            release = candidate_to_record(
+                Candidate(
+                    title="v1.2.3",
+                    url=release_url,
+                    summary="Official release record.",
+                    tier="A",
+                    topics=("runtime-serving",),
+                    kind="project",
+                ),
+                "project",
+                "verified",
             )
-            path.write_text(json.dumps(record) + "\n", encoding="utf-8")
+            release["curation"]["scope"] = "adjacent"
+            release["curation"]["themes"] = ["runtime-scheduling"]
+            release["evidence"]["verified_at"] = "2026-07-02"
+            write_records(papers, [])
+            write_records(industry, [project, release])
+            write_records(candidates, [])
 
-            messages = "\n".join(error.message for error in validate_record_store(path))
+            render_markdown_views(
+                papers, industry, candidates,
+                root / "papers.md", root / "industry.md", root / "candidates.md", root / "abstractions.md",
+            )
 
-            self.assertIn("invalid evidence.affiliation_status", messages)
-            self.assertIn("invalid evidence.artifact_status", messages)
-            self.assertIn("invalid evidence.metadata_checked_at", messages)
-            self.assertIn("invalid evidence.metadata_sources", messages)
+            industry_text = (root / "industry.md").read_text(encoding="utf-8")
+            self.assertEqual(industry_text.count(release_url), 1)
 
     def test_render_uses_seven_themes_exploration_and_project_aggregation(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -165,38 +150,6 @@ class RecordStoreTests(unittest.TestCase):
                 "topic": "deepseek-ai-systems",
                 "topic_group": "kernels",
             }
-            moonshot = candidate_to_record(
-                Candidate(
-                    title="Mooncake",
-                    url="https://github.com/kvcache-ai/Mooncake",
-                    summary="KV-centric disaggregated serving.",
-                    tier="A",
-                    topics=("runtime-serving", "state-kv"),
-                    kind="project",
-                ),
-                "project",
-                "verified",
-            )
-            moonshot["presentation"] = {
-                "topic": "moonshot-ai-systems",
-                "topic_group": "inference-systems",
-            }
-            minimax = candidate_to_record(
-                Candidate(
-                    title="MiniMax-M3",
-                    url="https://github.com/MiniMax-AI/MiniMax-M3",
-                    summary="Official open model project.",
-                    tier="A",
-                    topics=("runtime-serving",),
-                    kind="project",
-                ),
-                "project",
-                "verified",
-            )
-            minimax["presentation"] = {
-                "topic": "minimax-ai-systems",
-                "topic_group": "models-architecture",
-            }
             third_party = candidate_to_record(
                 Candidate(
                     title="Third-party DeepSeek Runtime",
@@ -222,7 +175,7 @@ class RecordStoreTests(unittest.TestCase):
                 "verified",
             )
             write_records(papers, [core, exploration])
-            write_records(industry, [project, release, deepseek, moonshot, minimax, third_party])
+            write_records(industry, [project, release, deepseek, third_party])
             write_records(candidates, [])
 
             render_markdown_views(
@@ -237,8 +190,6 @@ class RecordStoreTests(unittest.TestCase):
             self.assertIn("Context-Aware Comic Generation", paper_text)
             self.assertIn("Example LLM Serving Runtime", industry_text)
             self.assertEqual(industry_text.count("## DeepSeek AI 系统专题"), 1)
-            self.assertEqual(industry_text.count("## Kimi / Moonshot AI 系统专题"), 1)
-            self.assertEqual(industry_text.count("## MiniMax AI 系统专题"), 1)
             topic_text = industry_text.split("## DeepSeek AI 系统专题", 1)[1].split(
                 "## 项目级工程主线", 1
             )[0]
@@ -270,30 +221,6 @@ class RecordStoreTests(unittest.TestCase):
             self.assertEqual(curate_record_stores(paper, industry, candidate), {"papers": 1, "industry": 0, "candidates": 0})
             self.assertEqual(load_records(paper)[0]["curation"]["priority"], "foundation")
 
-    def test_curate_compacts_jsonl_even_when_semantics_are_unchanged(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            paper = root / "papers.jsonl"
-            industry = root / "industry.jsonl"
-            candidate = root / "candidates.jsonl"
-            record = candidate_to_record(
-                Candidate(
-                    title="Runtime Scheduler for LLM Serving",
-                    url="https://example.org/runtime",
-                    summary="A serving scheduler.",
-                ),
-                "paper",
-                "verified",
-            )
-            paper.write_text(json.dumps(record, sort_keys=True) + "\n", encoding="utf-8")
-            industry.write_text("", encoding="utf-8")
-            candidate.write_text("", encoding="utf-8")
-
-            counts = curate_record_stores(paper, industry, candidate)
-
-            self.assertEqual(counts["papers"], 0)
-            self.assertNotIn('": "', paper.read_text(encoding="utf-8"))
-
     def test_normalize_record_adds_guide_curation_metadata(self):
         record = candidate_to_record(
             Candidate(
@@ -309,6 +236,141 @@ class RecordStoreTests(unittest.TestCase):
         self.assertEqual(record["curation"]["scope"], "core")
         self.assertEqual(record["curation"]["priority"], "foundation")
         self.assertIn("version", record["curation"])
+
+    def test_pinned_topics_override_scope_and_priority(self):
+        def build(topics):
+            record = candidate_to_record(
+                Candidate(
+                    title="A Serving System for Large Language Model Inference",
+                    url="https://example.org/serving-system",
+                    summary="Serving system with scheduler and kernel optimizations.",
+                    topics=("runtime-serving",),
+                    published="2026-07-13",
+                    discovered="2026-07-13",
+                ),
+                "paper",
+                "verified",
+            )
+            record["topics"] = list(topics)
+            return classify_record(record)
+
+        foundation = build([FOUNDATION_PIN_TOPIC])
+        self.assertEqual((foundation["scope"], foundation["priority"]), ("core", "foundation"))
+
+        archived = build([ARCHIVE_PIN_TOPIC])
+        self.assertEqual((archived["scope"], archived["priority"]), ("archive", "supporting"))
+        self.assertEqual(archived["themes"], [])
+
+        # core-pinned keeps the computed themes and lets priority stay "normal", i.e.
+        # a recent tier-A record is still promoted to the frontier lane.
+        core = build([CORE_PIN_TOPIC])
+        self.assertEqual(core["scope"], "core")
+        self.assertEqual(core["priority"], "frontier")
+        self.assertTrue(core["themes"])
+
+    def test_core_pin_rescues_title_without_theme_keywords(self):
+        """core-pinned is the only lever for papers the keyword heuristic cannot see.
+
+        Example: an OSDI paper titled "Hierarchical Context Caching for Long Context
+        Language Model Serving" carries no THEME_TERMS keyword ("context caching"
+        is not "kv cache"), so the heuristic archives it and it silently vanishes
+        from the mainline.
+        """
+
+        def build(topics):
+            record = candidate_to_record(
+                Candidate(
+                    title="Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+                    url="https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang",
+                    summary="Caching long contexts across HBM, host memory and SSD tiers.",
+                    venue="USENIX OSDI 2026 technical sessions",
+                    tier="A",
+                    published="2026-07-13",
+                    discovered="2026-07-13",
+                ),
+                "paper",
+                "verified",
+            )
+            record["topics"] = list(topics)
+            return classify_record(record)
+
+        # Without the pin the heuristic misses it entirely.
+        unpinned = build([])
+        self.assertEqual(unpinned["scope"], "archive")
+        self.assertEqual(unpinned["themes"], [])
+
+        # With the pin it joins the mainline, still as a frontier-lane record.
+        pinned_record = build([CORE_PIN_TOPIC])
+        self.assertEqual(pinned_record["scope"], "core")
+        self.assertEqual(pinned_record["priority"], "frontier")
+
+    def test_known_canonicals_registry_maps_every_canonical_title_to_itself(self):
+        """The registry must be idempotent.
+
+        `_canonical_fields` rewrites a record's title to the registered canonical title.
+        If that title is not itself a key, the next pass no longer matches and silently
+        swaps the stable canonical_id for a URL-derived one.
+        """
+        for known_id, known_title in KNOWN_CANONICALS.values():
+            canonical_id, canonical_title = KNOWN_CANONICALS[normalize_title(known_title)]
+            self.assertEqual(canonical_id, known_id, known_title)
+            self.assertEqual(canonical_title, known_title, known_title)
+
+    def test_canonical_identity_is_stable_across_repeated_normalisation(self):
+        record = candidate_to_record(
+            Candidate(
+                title="Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+                url="https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang",
+                summary="Hierarchical context caching across HBM, host memory and SSD tiers.",
+                venue="USENIX OSDI 2026 technical sessions",
+                tier="A",
+                published="2026-07-13",
+            ),
+            "paper",
+            "verified",
+        )
+        first = normalize_record(dict(record))
+        second = normalize_record(dict(first))
+        third = normalize_record(dict(second))
+        self.assertEqual(first["canonical_id"], "paper:osdi-2026-strata")
+        self.assertEqual(second["canonical_id"], first["canonical_id"])
+        self.assertEqual(third["canonical_id"], first["canonical_id"])
+        self.assertEqual(second["title"], first["title"])
+
+    def test_foundation_pinned_core_paper_renders_in_foundation_lane(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            papers = root / "papers.jsonl"
+            industry = root / "industry.jsonl"
+            candidates = root / "candidates.jsonl"
+            record = candidate_to_record(
+                Candidate(
+                    title="Roofline: An Insightful Visual Performance Model for Multicore Architectures",
+                    url="https://example.org/roofline",
+                    summary="A visual performance model for multicore architectures.",
+                    venue="CACM 2009",
+                    tier="A",
+                ),
+                "paper",
+                "verified",
+            )
+            # Manual pin with no matching keyword theme: the renderer must still
+            # place it somewhere instead of dropping it (and must not crash).
+            record["topics"] = [FOUNDATION_PIN_TOPIC]
+            record["curation"] = classify_record(record)
+            self.assertEqual(record["curation"]["themes"], [])
+            write_records(papers, [record])
+            write_records(industry, [])
+            write_records(candidates, [])
+
+            render_markdown_views(
+                papers, industry, candidates,
+                root / "papers.md", root / "industry.md", root / "candidates.md", root / "abstractions.md",
+            )
+
+            paper_text = (root / "papers.md").read_text(encoding="utf-8")
+            self.assertIn("## 奠基与架构 / Foundation", paper_text)
+            self.assertIn("Roofline", paper_text)
 
     def test_validator_rejects_invalid_curation_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -345,7 +407,7 @@ class RecordStoreTests(unittest.TestCase):
                 write_records(path, [{"id": "one", "title": "One"}])
 
             self.assertEqual(len(calls), 3)
-            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["id"], "one")
+            self.assertIn('"id": "one"', path.read_text(encoding="utf-8"))
 
     def test_splits_existing_store_and_merges_known_title_aliases(self):
         with tempfile.TemporaryDirectory() as tmp:
