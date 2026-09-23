@@ -71,8 +71,15 @@ class ValidationTests(unittest.TestCase):
             allowed_groups = {key for key, _label in topic_configs[topic]["groups"]}
             self.assertIn(record["presentation"]["topic_group"], allowed_groups)
             self.assertTrue(record.get("primary_url") or record.get("artifact_url"))
-            if topic != "deepseek-ai-systems":
-                self.assertEqual(record["evidence"]["verification_level"], "official_source")
+            # 华为专题沿用其「第一阶段仅收录直接作用于推理执行路径的官方证据」政策，
+            # 因此强制 official_source。其余专题在 head 线已扩展到 20 个、覆盖 374 条
+            # 带 topic 的记录，其中含迁移期导入的 legacy_import，故只要求来源等级已
+            # 显式标注（不做"全部官方源"的强断言）。
+            level = record["evidence"]["verification_level"]
+            if topic == "huawei-ascend-ai-systems":
+                self.assertEqual(level, "official_source")
+            else:
+                self.assertIn(level, {"official_source", "legacy_import"})
 
     def test_detects_duplicate_paper_and_empty_link(self):
         with tempfile.TemporaryDirectory() as tmp:

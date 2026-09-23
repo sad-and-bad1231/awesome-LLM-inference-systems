@@ -27,6 +27,7 @@ from .reading import (
     THEME_LABELS,
     aggregate_industry_records,
     display_summary,
+    display_themes,
     render_industry_topics,
 )
 from .maintenance import candidate_archive_summary
@@ -84,11 +85,21 @@ KNOWN_CANONICALS = {
     ),
     "contextra hierarchical context caching long context language model serving": (
         "paper:osdi-2026-strata",
-        "Strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+    ),
+    "strata hierarchical context caching long context language model serving": (
+        "paper:osdi-2026-strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
+    ),
+    # The record was previously stored under the bare program short name "Strata";
+    # keep the key so re-normalising restores the official proceedings title.
+    "strata": (
+        "paper:osdi-2026-strata",
+        "Strata: Hierarchical Context Caching for Long Context Language Model Serving",
     ),
     "llmfabric unifying decentralized hpc clusters heterogeneous llm serving": (
         "paper:osdi-2026-opentela",
-        "OpenTela",
+        "OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving",
     ),
     "cascadia cascade serving system large language models": (
         "paper:iclr-2026-cascadia",
@@ -115,6 +126,13 @@ KNOWN_CANONICALS = {
         "MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs",
     ),
 }
+
+# Make the registry idempotent: a canonical title must map back to its own entry.
+# Otherwise `_canonical_fields` rewrites the title on the first pass and, because the
+# rewritten title is no longer a key, silently swaps the stable canonical_id for a
+# URL-derived one on the next pass.
+for _known_id, _known_title in list(KNOWN_CANONICALS.values()):
+    KNOWN_CANONICALS.setdefault(normalize_title(_known_title), (_known_id, _known_title))
 
 
 def _evidence(record: dict[str, Any]) -> dict[str, str]:
@@ -393,20 +411,10 @@ def load_records(path: Path) -> list[dict[str, Any]]:
     return records
 
 
-def _record_json(record: dict[str, Any]) -> str:
-    return json.dumps(
-        record, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    )
-
-
-def _records_payload(records: list[dict[str, Any]]) -> str:
-    text = "\n".join(_record_json(record) for record in records)
-    return text + ("\n" if text else "")
-
-
 def write_records(path: Path, records: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    payload = _records_payload(records)
+    text = "\n".join(json.dumps(record, ensure_ascii=False, sort_keys=True) for record in records)
+    payload = text + ("\n" if text else "")
     for attempt in range(5):
         try:
             path.write_text(payload, encoding="utf-8", newline="\n")
@@ -431,7 +439,7 @@ def curate_record_stores(
         records = load_records(path)
         normalized = [normalize_record(record) for record in records]
         changed = sum(before != after for before, after in zip(records, normalized))
-        if changed or (path.exists() and path.read_text(encoding="utf-8") != _records_payload(normalized)):
+        if changed:
             write_records(path, normalized)
         counts[label] = changed
     return counts
@@ -505,7 +513,7 @@ def append_records(path: Path, records: list[dict[str, Any]]) -> int:
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8", newline="\n") as stream:
             for record in appended:
-                stream.write(_record_json(record) + "\n")
+                stream.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
     return len(appended)
 
 
@@ -1018,9 +1026,14 @@ def render_markdown_views(
         group for group in aggregate_industry_records(industry_source, milestone_limit=industry_milestone_links)
         if group["scope"] == "core"
     ]
+    core_industry_project_keys = {group["project_key"] for group in industry_groups}
     industry_exploration_records = select_exploration(
         industry_source, window_days=exploration_window_days, limit=max(exploration_limit_per_track * 5, exploration_limit_per_track)
     )
+    industry_exploration_records = [
+        record for record in industry_exploration_records
+        if curation_for(record).get("project_key") not in core_industry_project_keys
+    ]
     industry_exploration_groups = aggregate_industry_records(
         industry_exploration_records, milestone_limit=industry_milestone_links
     )[:exploration_limit_per_track]
@@ -1028,10 +1041,8 @@ def render_markdown_views(
     candidate_records = _candidate_records(load_records(candidate_db_path))
     records = paper_records + industry_records + candidate_records
 
-    category_counts = Counter(
-        curation_for(record).get("themes", [""])[0]
-        for record in paper_records if curation_for(record).get("themes")
-    )
+    paper_themes = [display_themes(record, allow_foundation=True) for record in paper_records]
+    category_counts = Counter(lanes[0] for lanes in paper_themes if lanes)
     paper_lines = [
         "# Paper List（按类别整理；会议栏为最新发表/审稿状态）",
         "",
@@ -1059,10 +1070,10 @@ def render_markdown_views(
     for venue_status, count in sorted(evidence_counts.items()):
         paper_lines.append(f"| {_escape(venue_status)} | {count} |")
     for theme in THEME_ORDER:
-        rows = [record for record in paper_records if curation_for(record).get("themes", [""])[0] == theme]
+        rows = [record for record, lanes in zip(paper_records, paper_themes) if lanes and lanes[0] == theme]
         paper_lines.extend(["", f"## {THEME_LABELS[theme]}", "", "| 题目 | 发表的会议 | 主要作者单位 | 一句话总结 |", "|---|---|---|---|"])
         for record in rows:
-            labels = " / ".join(THEME_LABELS[item] for item in curation_for(record).get("themes", []) if item in THEME_LABELS)
+            labels = " / ".join(THEME_LABELS[item] for item in display_themes(record, allow_foundation=True) if item in THEME_LABELS)
             paper_lines.append(
                 f"| {_escape(record['title'])}<br><sub>{_escape(labels)}</sub> | {_escape(record['venue_or_channel'])} | {_escape(record['orgs'])} | {_escape(display_summary(record, display_summary_max_chars))} |"
             )

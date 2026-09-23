@@ -12,6 +12,21 @@ CURATION_VERSION = "guide-2026-v6"
 SCOPES = ("core", "adjacent", "archive")
 PRIORITIES = ("foundation", "frontier", "supporting")
 
+# 记录 topics 中带此标记时，强制 scope=core / priority=foundation。
+# 用于人工策展的经典根节点：它们用词与现代论文不同，关键词启发式会误判为 archive。
+FOUNDATION_PIN_TOPIC = "foundation-pinned"
+
+# 记录 topics 中带此标记时，强制 scope=archive / priority=supporting。
+# 用于人工策展：pre-2026 的非奠基论文统一退出公开主线，保留事实但移入 archive。
+ARCHIVE_PIN_TOPIC = "archive-pinned"
+
+# 记录 topics 中带此标记时，强制 scope=core，priority 仍按常规规则判定（前沿工作=frontier）。
+# 用于人工策展的高价值前沿工作：它们的标题/渠道不含主题关键词（例如 "long context caching"、
+# "tensor program"、"online LLM inference"），关键词启发式会误判为 archive 而从主线消失。
+CORE_PIN_TOPIC = "core-pinned"
+
+# 华为全栈专题里属于「公司技术栈背景」而非「稳定推理主线」的分组：显式踢出主线，
+# 保留事实但归入 adjacent（在公开视图里只作为探索观察出现）。
 HUAWEI_FULL_STACK_ADJACENT_GROUPS = {
     "training-frameworks",
     "cloud-platform",
@@ -26,9 +41,14 @@ THEME_ORDER = (
     "moe",
     "compiler-dsl",
     "runtime-scheduling",
+    # 展示用兜底主线：人工钉选的经典根节点（架构/训练/量化等）不命中上面任何关键词
+    # 主线；若不兜底，它们会从所有分区里消失。它从不参与关键词命中，只在渲染时由
+    # reading.display_themes 补位。
+    "foundation",
 )
 
 THEME_TERMS = {
+    "foundation": (),
     "attention-kernel": (
         "flashattention", "flash attention", "attention kernel", "pagedattention",
         "long-sequence attention", "io-aware attention",
@@ -208,15 +228,33 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     release_has_explicit_mechanism = any(
         _contains(title_channel, THEME_TERMS[theme]) for theme in themes
     )
+
+    # 人工钉选：把明确策展的经典根节点固定进主线，不依赖关键词启发式。
+    # 标记写在记录的 topics 里（topic "foundation-pinned"），便于后续增删。
+    record_topics = [str(topic) for topic in (record.get("topics") or [])]
+    pinned = FOUNDATION_PIN_TOPIC in record_topics
+    archive_pinned = ARCHIVE_PIN_TOPIC in record_topics
+    core_pinned = CORE_PIN_TOPIC in record_topics
+
     superseded_by = str(record.get("evidence", {}).get("superseded_by") or "").strip()
-    presentation = record.get("presentation", {})
+    presentation_meta = record.get("presentation", {})
     huawei_full_stack_adjacent = (
-        isinstance(presentation, dict)
-        and presentation.get("topic") == "huawei-ascend-ai-systems"
-        and presentation.get("topic_group") in HUAWEI_FULL_STACK_ADJACENT_GROUPS
+        isinstance(presentation_meta, dict)
+        and presentation_meta.get("topic") == "huawei-ascend-ai-systems"
+        and presentation_meta.get("topic_group") in HUAWEI_FULL_STACK_ADJACENT_GROUPS
     )
 
-    if superseded_by:
+    if pinned:
+        scope = "core"
+        reasons = ["manually curated foundation root node (pinned in topics)"]
+    elif archive_pinned:
+        scope = "archive"
+        reasons = ["manually archived pre-2026 non-foundation record (pinned in topics)"]
+        themes = []
+    elif core_pinned:
+        scope = "core"
+        reasons = ["manually curated core mainline record (pinned in topics)"]
+    elif superseded_by:
         scope = "archive"
         reasons = [f"superseded by verified record {superseded_by}"]
         themes = []
@@ -244,7 +282,13 @@ def classify_record(record: dict[str, Any]) -> dict[str, Any]:
     formal = record.get("evidence", {}).get("venue_status") == "formal_conference"
     physical = bool(record.get("triage", {}).get("physical_eval", {}).get("has_physical_signal"))
     high_triage = record.get("triage", {}).get("priority") == "high"
-    if scope == "core" and _contains(foundation_text, FOUNDATION_TERMS):
+    if pinned:
+        priority = "foundation"
+        reasons.append("kept as long-term foundation reading set")
+    elif archive_pinned:
+        priority = "supporting"
+        reasons.append("excluded from the pre-2026 foundation mainline")
+    elif scope == "core" and _contains(foundation_text, FOUNDATION_TERMS):
         priority = "foundation"
         reasons.append("foundational serving or kernel abstraction")
     elif scope == "core" and _year(record) >= 2025 and (
