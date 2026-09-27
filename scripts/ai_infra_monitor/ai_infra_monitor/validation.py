@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-import struct
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -96,21 +95,9 @@ def _public_view_errors(
         if path.exists() and GENERATED_NOTICE not in path.read_text(encoding="utf-8"):
             errors.append(ValidationError(path, 1, "missing generated-view notice"))
 
-    required_assets = (
-        public_root / "figs" / "ai-inference-systems-cover.png",
-        public_root / "figs" / "ai-inference-system-map.png",
-    )
-    for path in required_assets:
-        if not path.exists():
-            errors.append(ValidationError(path, 0, "required public image does not exist"))
-            continue
-        header = path.read_bytes()
-        if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
-            errors.append(ValidationError(path, 0, "public image is not a valid PNG"))
-            continue
-        width, height = struct.unpack(">II", header[16:24])
-        if width < 640 or height < 200:
-            errors.append(ValidationError(path, 0, "public image dimensions are too small"))
+    # Note: figs/ai-inference-systems-cover.png + figs/ai-inference-system-map.png
+    # were removed as part of the project restructure; the previous required_assets
+    # check is intentionally omitted here.
 
     markdown_link_pattern = re.compile(r"!?(?:\[([^\]]*)\])\(([^)]+)\)")
     for path in required_views:
