@@ -4,8 +4,6 @@
 
 [![Academic Papers](https://img.shields.io/badge/Academic%20Papers-63-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-31-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-52-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-09-20-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
 
-![AI inference systems serving stack](figs/ai-inference-systems-cover.png)
-
 > **A serving-first research entrance.** Follow the request path from admission to output, then inspect where state lives, how it moves, how kernels execute, and how production systems recover.
 
 A curated, evidence-aware collection of LLM inference serving papers, industrial systems, and open-source AI infrastructure.
@@ -27,7 +25,6 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 | Research entry point | What you get |
 |---|---|
 | [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |
-| [Paper map](figs/ai-inference-system-map.png) | The six system abstractions and the serving lifecycle in one figure. |
 | [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |
 | [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
 | [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |
@@ -74,10 +71,6 @@ Out of scope by default: training-only methods, algorithm-only simulations witho
 | **Kernel & Compiler** | 24 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
 | **Runtime & Serving** | 16 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
 | **Reliability & Benchmarks** | 4 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
-
-## System Map
-
-![AI inference system abstractions](figs/ai-inference-system-map.png)
 
 ## Featured Papers
 

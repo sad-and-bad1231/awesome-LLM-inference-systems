@@ -1,3 +1,13 @@
+"""AI infrastructure research monitor CLI.
+
+This module deliberately uses lazy imports per subcommand so the heavy
+"auto-discovery" modules (discovery, fetch, parsers, triage, curation,
+reading, output, maintenance, identity) only load when their corresponding
+subcommand is invoked. That makes CI subcommands (validate, render, publish,
+audit) cheap to start and lets us delete unused modules without breaking the
+core CI pipeline.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -11,46 +21,7 @@ from types import SimpleNamespace
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.ai_infra_monitor.ai_infra_monitor.discovery import (  # noqa: E402
-    DiscoveryEngine,
-    load_config,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.audit import build_audit  # noqa: E402
-from scripts.ai_infra_monitor.ai_infra_monitor.git_ops import (  # noqa: E402
-    commit_research_updates,
-    is_repository,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate  # noqa: E402
-from scripts.ai_infra_monitor.ai_infra_monitor.maintenance import maintain_data  # noqa: E402
-from scripts.ai_infra_monitor.ai_infra_monitor.output import (  # noqa: E402
-    append_candidate_records,
-    load_manifest,
-    write_weekly_report,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository  # noqa: E402
-from scripts.ai_infra_monitor.ai_infra_monitor.records import (  # noqa: E402
-    candidate_to_record,
-    compact_candidate_records,
-    curate_record_stores,
-    migrate_jsonl_to_split_stores,
-    promote_candidates,
-    render_markdown_views,
-    validate_record_stores,
-    load_records,
-    normalize_record,
-    write_records,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.state import (  # noqa: E402
-    load_state,
-    save_state,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.validation import (  # noqa: E402
-    validate_workspace,
-)
-from scripts.ai_infra_monitor.ai_infra_monitor.triage import (  # noqa: E402
-    triage_candidates,
-)
-
+from scripts.ai_infra_monitor.ai_infra_monitor.config import load_config  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -107,6 +78,8 @@ def manifest_path(root: Path, config: dict, run_id: str) -> Path:
 
 
 def command_init(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.state import save_state
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     resolved["runs_dir"].mkdir(parents=True, exist_ok=True)
@@ -127,6 +100,8 @@ def command_init(args) -> int:
 
 
 def command_discover(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.discovery import DiscoveryEngine
+
     source_ids = set(args.source_id) if args.source_id else None
     manifest = DiscoveryEngine(args.root, args.config).discover(
         args.mode,
@@ -139,6 +114,8 @@ def command_discover(args) -> int:
 
 
 def command_sweep(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.discovery import DiscoveryEngine
+
     """Run bounded discovery batches through triage, queue, report, and finalize."""
     source_ids = set(args.source_id) if args.source_id else None
     batch_count = max(1, int(args.source_batch_count))
@@ -149,7 +126,7 @@ def command_sweep(args) -> int:
         print("invalid sweep batch range", file=sys.stderr)
         return 1
     run_ids: list[str] = []
-    failures: list[dict[str, object]] = []
+    failures: list[dict] = []
     engine = DiscoveryEngine(args.root, args.config)
     engine_config = getattr(engine, "config", {})
     engine_settings = engine_config.get("settings", {}) if isinstance(engine_config, dict) else {}
@@ -209,6 +186,16 @@ def command_sweep(args) -> int:
 
 
 def command_queue(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
+    from scripts.ai_infra_monitor.ai_infra_monitor.output import load_manifest
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+        candidate_to_record,
+        load_records,
+        normalize_record,
+        promote_candidates,
+        write_records,
+    )
+
     config = load_config(args.config)
     manifest = load_manifest(manifest_path(args.root, config, args.run_id))
     selected = [
@@ -234,6 +221,8 @@ def command_queue(args) -> int:
 
 
 def command_compact(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import compact_candidate_records
+
     config = load_config(args.config)
     candidate_path = paths(args.root, config)["candidate_db_file"]
     changed = compact_candidate_records(candidate_path)
@@ -242,6 +231,8 @@ def command_compact(args) -> int:
 
 
 def command_maintain(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.maintenance import maintain_data
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     settings = config["settings"]
@@ -257,6 +248,19 @@ def command_maintain(args) -> int:
 
 
 def command_triage(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.models import Candidate
+    from scripts.ai_infra_monitor.ai_infra_monitor.output import (
+        append_candidate_records,
+        load_manifest,
+    )
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+        candidate_to_record,
+        load_records,
+        normalize_record,
+        write_records,
+    )
+    from scripts.ai_infra_monitor.ai_infra_monitor.triage import triage_candidates
+
     config = load_config(args.config)
     path = manifest_path(args.root, config, args.run_id)
     manifest = load_manifest(path)
@@ -336,6 +340,8 @@ def command_triage(args) -> int:
 
 
 def command_migrate(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import migrate_jsonl_to_split_stores
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     source = args.source.resolve()
@@ -353,6 +359,12 @@ def command_migrate(args) -> int:
 
 
 def command_render(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+        curate_record_stores,
+        render_markdown_views,
+    )
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     curate_record_stores(
@@ -382,6 +394,9 @@ def command_render(args) -> int:
 
 
 def command_publish(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import curate_record_stores
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     curate_record_stores(
@@ -399,6 +414,8 @@ def command_publish(args) -> int:
 
 
 def command_curate(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import curate_record_stores
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     counts = curate_record_stores(
@@ -409,6 +426,11 @@ def command_curate(args) -> int:
 
 
 def command_report(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.output import (
+        load_manifest,
+        write_weekly_report,
+    )
+
     config = load_config(args.config)
     manifest = load_manifest(manifest_path(args.root, config, args.run_id))
     report = (
@@ -421,6 +443,8 @@ def command_report(args) -> int:
 
 
 def command_validate(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.validation import validate_workspace
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     errors = validate_workspace(
@@ -442,6 +466,19 @@ def command_validate(args) -> int:
 
 
 def command_finalize(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.git_ops import (
+        commit_research_updates,
+        is_repository,
+    )
+    from scripts.ai_infra_monitor.ai_infra_monitor.output import load_manifest
+    from scripts.ai_infra_monitor.ai_infra_monitor.publication import render_public_repository
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import (
+        curate_record_stores,
+        render_markdown_views,
+        validate_record_stores,
+    )
+    from scripts.ai_infra_monitor.ai_infra_monitor.state import load_state, save_state
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     curate_record_stores(
@@ -528,6 +565,8 @@ def command_finalize(args) -> int:
 
 
 def command_status(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.state import load_state
+
     config = load_config(args.config)
     state = load_state(paths(args.root, config)["state_file"])
     pending = sum(
@@ -549,6 +588,9 @@ def command_status(args) -> int:
 
 
 def command_audit(args) -> int:
+    from scripts.ai_infra_monitor.ai_infra_monitor.audit import build_audit
+    from scripts.ai_infra_monitor.ai_infra_monitor.records import load_records
+
     config = load_config(args.config)
     resolved = paths(args.root, config)
     public = public_reading_options(config)

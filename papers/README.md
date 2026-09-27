@@ -6,8 +6,6 @@
 
 A complete academic paper collection organized by serving-system abstraction. Formal venues, posters/workshops, preprints, and legacy imports are labeled separately.
 
-![AI inference system map](../figs/ai-inference-system-map.png)
-
 > **How to read this page.** Start with the featured entry points, then read foundation and frontier work before supporting records. A bounded rolling exploration section keeps new workloads visible; the full adjacent/archive history remains in the [archive](../archive/README.md).
 
 ## At a Glance

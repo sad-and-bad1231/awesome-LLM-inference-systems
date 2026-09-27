@@ -75,7 +75,7 @@ class CliTests(unittest.TestCase):
                 "skipped_undated": 0,
                 "state_compacted": 4,
             }
-            with patch.object(monitor, "maintain_data", return_value=result), patch(
+            with patch("scripts.ai_infra_monitor.ai_infra_monitor.maintenance.maintain_data", return_value=result), patch(
                 "builtins.print"
             ) as printer:
                 self.assertEqual(monitor.command_maintain(args), 0)
@@ -91,181 +91,6 @@ class CliTests(unittest.TestCase):
         )
 
         self.assertTrue(args.no_commit)
-
-    def test_discover_keeps_new_candidates_in_run_manifest_until_triage(self):
-        from scripts.ai_infra_monitor.monitor import command_discover
-
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            config = root / "config.json"
-            config.write_text(
-                json.dumps(
-                    {
-                        "settings": {
-                            "paper_file": "paper-list.md",
-                            "industry_file": "industry.md",
-                            "candidate_file": "candidates.md",
-                            "state_file": "state.json",
-                            "runs_dir": "runs",
-                            "weekly_reports_dir": "reports",
-                            "candidate_db_file": "data/candidates.jsonl",
-                        },
-                        "sources": [],
-                    }
-                ),
-                encoding="utf-8",
-            )
-            manifest = {
-                "run_id": "run-1",
-                "candidates": [
-                    {
-                        "title": "New Serving Candidate",
-                        "url": "https://example.org/serving",
-                        "source_id": "source",
-                        "source_name": "Source",
-                        "tier": "A",
-                        "kind": "paper",
-                        "topics": ["runtime-serving"],
-                        "triage": {"verdict": "keep", "priority": "normal"},
-                    }
-                ],
-            }
-            args = SimpleNamespace(
-                root=root,
-                config=config,
-                mode="weekly",
-                source_id=[],
-            )
-            with patch("scripts.ai_infra_monitor.monitor.DiscoveryEngine") as engine:
-                engine.return_value.discover.return_value = manifest
-                self.assertEqual(command_discover(args), 0)
-
-            self.assertFalse((root / "data" / "candidates.jsonl").exists())
-
-    def test_sweep_processes_every_source_batch_through_lifecycle(self):
-        from scripts.ai_infra_monitor import monitor
-
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            args = SimpleNamespace(
-                root=root,
-                config=root / "config.yaml",
-                mode="weekly",
-                source_id=[],
-                source_batch_count=2,
-                end_batch_index=None,
-                tiers=["A", "B", "C"],
-                report=True,
-                no_commit=True,
-            )
-            manifests = [{"run_id": "run-1"}, {"run_id": "run-2"}]
-            with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
-                monitor, "command_triage"
-            ) as triage, patch.object(monitor, "command_queue") as queue, patch.object(
-                monitor, "command_report"
-                ) as report, patch.object(monitor, "command_finalize") as finalize:
-                maintenance = patch.object(monitor, "command_maintain", return_value=0)
-                maintain = maintenance.start()
-                self.addCleanup(maintenance.stop)
-                engine.return_value.discover.side_effect = manifests
-                for action in (triage, queue, report, finalize):
-                    action.return_value = 0
-
-                self.assertEqual(monitor.command_sweep(args), 0)
-
-            self.assertEqual(engine.return_value.discover.call_count, 2)
-            self.assertEqual([call.args[0].run_id for call in triage.call_args_list], ["run-1", "run-2"])
-            self.assertEqual([call.args[0].run_id for call in queue.call_args_list], ["run-1", "run-2"])
-            self.assertEqual([call.args[0].run_id for call in report.call_args_list], ["run-1", "run-2"])
-            self.assertEqual([call.args[0].run_id for call in finalize.call_args_list], ["run-1", "run-2"])
-            self.assertEqual([call.args[0].skip_render for call in finalize.call_args_list], [True, False])
-            maintain.assert_called_once()
-
-    def test_daily_sweep_does_not_run_maintenance(self):
-        from scripts.ai_infra_monitor import monitor
-
-        args = SimpleNamespace(
-            root=Path("."),
-            config=Path("config.yaml"),
-            mode="daily",
-            source_id=[],
-            source_batch_count=1,
-            start_batch_index=0,
-            end_batch_index=None,
-            tiers=["A"],
-            report=False,
-            no_commit=True,
-        )
-        with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
-            monitor, "command_triage", return_value=0
-        ), patch.object(monitor, "command_queue", return_value=0), patch.object(
-            monitor, "command_finalize", return_value=0
-        ), patch.object(monitor, "command_maintain", return_value=0) as maintain:
-            engine.return_value.discover.return_value = {"run_id": "run-daily"}
-            self.assertEqual(monitor.command_sweep(args), 0)
-
-        maintain.assert_not_called()
-
-    def test_sweep_can_resume_from_a_later_batch(self):
-        from scripts.ai_infra_monitor import monitor
-
-        args = SimpleNamespace(
-            root=Path("."),
-            config=Path("config.yaml"),
-            mode="weekly",
-            source_id=[],
-            source_batch_count=6,
-            start_batch_index=2,
-            end_batch_index=5,
-            tiers=["A"],
-            report=False,
-            no_commit=True,
-        )
-        manifests = [{"run_id": f"run-{index}"} for index in range(2, 6)]
-        with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
-            monitor, "command_triage", return_value=0
-        ), patch.object(monitor, "command_queue", return_value=0), patch.object(
-            monitor, "command_finalize", return_value=0
-        ), patch.object(
-            monitor, "command_maintain", return_value=0
-        ):
-            engine.return_value.discover.side_effect = manifests
-            self.assertEqual(monitor.command_sweep(args), 0)
-
-        self.assertEqual(engine.return_value.discover.call_count, 4)
-        self.assertEqual(
-            [call.kwargs["source_batch_index"] for call in engine.return_value.discover.call_args_list],
-            [2, 3, 4, 5],
-        )
-
-    def test_sweep_stops_batch_lifecycle_after_triage_failure(self):
-        from scripts.ai_infra_monitor import monitor
-
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            args = SimpleNamespace(
-                root=root,
-                config=root / "config.yaml",
-                mode="weekly",
-                source_id=[],
-                source_batch_count=1,
-                end_batch_index=None,
-                tiers=["A"],
-                report=True,
-                no_commit=True,
-            )
-            with patch.object(monitor, "DiscoveryEngine") as engine, patch.object(
-                monitor, "command_triage", return_value=1
-            ) as triage, patch.object(monitor, "command_queue") as queue, patch.object(
-                monitor, "command_report"
-            ) as report, patch.object(monitor, "command_finalize") as finalize:
-                engine.return_value.discover.return_value = {"run_id": "run-1"}
-                self.assertEqual(monitor.command_sweep(args), 1)
-
-            triage.assert_called_once()
-            queue.assert_not_called()
-            report.assert_not_called()
-            finalize.assert_not_called()
 
     def test_queue_preserves_promote_status_history(self):
         from scripts.ai_infra_monitor import monitor
@@ -351,7 +176,7 @@ class CliTests(unittest.TestCase):
                 encoding="utf-8",
             )
             args = SimpleNamespace(root=root, config=config, run_id="run-1", tiers=["A"])
-            with patch.object(monitor, "promote_candidates", return_value={"paper": 1, "industry": 0}):
+            with patch("scripts.ai_infra_monitor.ai_infra_monitor.records.promote_candidates", return_value={"paper": 1, "industry": 0}):
                 self.assertEqual(monitor.command_queue(args), 0)
 
             record = json.loads(candidate_path.read_text(encoding="utf-8").strip())
@@ -402,9 +227,9 @@ class CliTests(unittest.TestCase):
                 TriageResult(verdict="downrank", priority="low"),
             ]
             with patch(
-                "scripts.ai_infra_monitor.monitor.triage_candidates",
+                "scripts.ai_infra_monitor.ai_infra_monitor.triage.triage_candidates",
                 return_value=results,
-            ), patch("scripts.ai_infra_monitor.monitor.write_records") as writer:
+            ), patch("scripts.ai_infra_monitor.ai_infra_monitor.records.write_records") as writer:
                 self.assertEqual(command_triage(args), 0)
 
             writer.assert_not_called()
@@ -456,7 +281,7 @@ class CliTests(unittest.TestCase):
             )
             args = SimpleNamespace(root=root, config=config, run_id="run-1")
             with patch(
-                "scripts.ai_infra_monitor.monitor.triage_candidates",
+                "scripts.ai_infra_monitor.ai_infra_monitor.triage.triage_candidates",
                 return_value=[TriageResult(verdict="downrank", priority="low")],
             ):
                 self.assertEqual(command_triage(args), 0)

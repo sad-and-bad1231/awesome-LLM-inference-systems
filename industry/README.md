@@ -6,8 +6,6 @@
 
 A complete collection of production systems, open-source runtimes, infrastructure projects, and engineering material, with artifact and ecosystem signals where available.
 
-![AI inference system map](../figs/ai-inference-system-map.png)
-
 > **How to read this page.** Start with the featured entry points, then read foundation and frontier work before supporting records. A bounded rolling exploration section keeps new workloads visible; the full adjacent/archive history remains in the [archive](../archive/README.md).
 
 ## At a Glance
