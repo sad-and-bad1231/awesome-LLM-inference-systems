@@ -51,7 +51,6 @@ For a legacy unified JSONL export, run `monitor.py migrate --source <legacy-json
 - Keep `ai-infra-system-abstractions.md` short enough to scan. It should show entry points, coverage counts, SRE metrics, and representative items rather than every row.
 - Keep full detail in `data/papers.jsonl` and `data/industry.jsonl`; the abstraction file is only a navigation index.
 - Keep dropped candidates available for audit, but do not mix them into the active candidate table. `maintain` moves terminal candidates older than 180 days into deterministic monthly gzip shards; daily rendering reads only the hot store and archive counts.
-- Keep `figs/ai-inference-systems-cover.png` and `figs/ai-inference-system-map.png` tracked with their SVG sources; public README links must remain local and stable.
 - Do not add another top-level index file unless it replaces an existing view.
 
 ## Daily Automation
