@@ -13,10 +13,15 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 | [Surveys](#surveys--start-here) | Six complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
 | [Serving systems](topics/serving-systems.md) | Fifty additional papers on runtime, scheduling, SLOs, KV-aware routing, distributed serving and elasticity (2024–2026). |
-| [NVIDIA](organizations/NVIDIA.md) | Inference engines, distributed control planes, communication and kernel infrastructure; official projects vs collaborative papers. |
-| [DeepSeek](organizations/DeepSeek.md) | MLA/DSA, MoE, communication and execution kernels; technical reports vs first-party code. |
+| [Organizations](#organizations) | Selected first-party research, model architecture and inference infrastructure; brief company indexes. |
 
 **Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. Paper mechanisms are summarized from source materials; reported speedups are not treated as independently reproduced results. See [Curation policy](CURATION.md).
+
+## Organizations
+
+Short, source-linked maps of **publicly documented** model-inference techniques and first-party infrastructure. These are not corporate publication rankings.
+
+[DeepSeek](organizations/DeepSeek.md) · [NVIDIA](organizations/NVIDIA.md) · [Google](organizations/Google.md) · [Microsoft](organizations/Microsoft.md) · [AMD](organizations/AMD.md) · [OpenAI](organizations/OpenAI.md) · [Anthropic](organizations/Anthropic.md) · [Meta](organizations/Meta.md) · [AWS](organizations/AWS.md) · [Apple](organizations/Apple.md) · [Intel](organizations/Intel.md)
 
 ## Surveys — start here
 
