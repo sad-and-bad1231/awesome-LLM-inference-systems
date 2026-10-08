@@ -67,3 +67,7 @@ For every new row: verify the **final published title and venue** rather than as
 ## Expansion and limits (October 2026)
 
 Large corpus discovery is not bulk admission. A historical source's `core`, `verified_legacy`, or `official_source` label is only a retrieval signal. Each public topic row needs a named technical mechanism and a publisher/conference source with evidence of implementation or technically meaningful measurement. Screening of publication abstracts is weaker than reading the evaluation section or reproducing the results, and should never be described as equivalent. Generic DNN, training-only and venue-title-only candidates remain outside the main eight topics. No quota overrides these rules.
+
+## 2026 conference expansion discipline
+
+For the 2026 large-volume request, **2026 must describe the accepted formal conference publication**, not merely a paper's preprint date. Verify a paper-specific proceedings page, DOI or publisher-endorsed conference schedule, not a scraped bibliography entry. Require concrete LLM inference relevance and distinctive evaluated system mechanisms. Record numerical shortfalls honestly rather than importing training papers, generic GPU benchmark papers or incomplete program-title-only entries to satisfy a fixed quota. The 2026 conference-only tranche adds 48 entries. The target of 300 *additional* entries remains unmet and should not be confused with the cumulative library count.
