@@ -15,7 +15,7 @@ The first 50-paper Serving cohort has been **retired as an independent paper lis
 
 - **ExeGPT / SpotServe**: former ASPLOS general program links were replaced by individual author arXiv records, while venue labels are retained as previously catalogued. Publisher-specific landing-page URLs should be substituted when independently confirmed.
 - **CacheBlend / DeltaZip**: replaced EuroSys conference-list URLs with paper-specific ACM DOIs.
-- **Pensieve**: links to the EuroSys technical program rather than a generic accepted-papers page; individual publisher URL remains a follow-up bibliographic task.
+- **Pensieve**: replaced generic EuroSys program link with the paper-specific ACM DOI.
 - **Simple Is Better**: replaced generic OSDI technical sessions page with the author-specific USENIX landing page.
 
 Older catalog rows remain recoverable in Git history. **Reclassification is not experimental reproduction**; reported mechanisms are from publication abstracts and technical descriptions, not independently measured speedups.
