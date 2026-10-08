@@ -2,7 +2,7 @@
 
 ## Goal
 
-Maintain an approachable **Awesome** list, not a paper database, monitoring platform, knowledge graph, ranking site, or per-paper note repository. `README.md` is the only public catalog and single source of truth. Updates are manual and small.
+Maintain an approachable, **selectively edited Awesome bibliography**, not a paper database, monitoring platform, knowledge graph, ranking site or per-paper note repository. `README.md` is the editorial entrance; each topic or organization Markdown page is a directly maintained, human-reviewed list. No machine-generated parallel catalog. Updates should remain small and attributable to primary sources.
 
 ## Admission gate
 
@@ -45,3 +45,11 @@ Require a distinct systems lens (Serving architecture, hardware/compilers, KV ca
 ## Historical prerequisites
 
 Only a small set of pre-LLM papers belongs here, when its mechanism directly grounds modern inference (Transformer, blockwise verification, MQA). Label background architectures/algorithms separately from evaluated modern serving systems.
+
+## Topic and organization pages
+
+A **topic page** is a deliberately bounded, reproducible bibliography: one problem family, primary publication links, explicit year/venue, and a short *distinct mechanism* for each paper. Do not re-list established anchor entries from the home page to inflate coverage; link back instead. Paper counts are descriptive, never targets that override admission quality. When only an official conference program is available, label that weaker link provenance.
+
+An **organization page** is an annotated map of first-party engineering work directly relevant to LLM inference. Label the evidence type: **peer-reviewed research**, **technical report**, **official software/artifact**, **engineering documentation**, or **collaborative research**. Organization authorship or maintenance does not imply exclusive research credit. Don't confuse model-quality reports with serving systems papers or production-runtime implementations; avoid exhaustive model-checkpoint/release listings. Prefer canonical project repos, publisher pages, and official documentation. Account for versioned capability and compatibility claims.
+
+These are reader-facing Markdown pages, not a second structured database. Resist new pipelines and automatic admission.
