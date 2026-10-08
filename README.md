@@ -12,9 +12,12 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Six complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Serving systems](topics/serving-systems.md) | Fifty additional papers on runtime, scheduling, SLOs, KV-aware routing, distributed serving and elasticity (2024–2026). |
+| [Papers by mechanism](topics/README.md) | Eight technical categories; 21 newly verified papers across execution, KV, decoding, MoE, scheduling and systems evidence. |
+| [Serving Systems — legacy selection](topics/serving-systems.md) | Earlier 50-paper cohort; retained for individually verified reclassification, not auto-imported. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
 | [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
+
+**One primary home per paper.** The homepage keeps historic foundations and surveys; technical additions live under [eight topic categories](topics/README.md). The older Serving cohort remains visible during independent re-audit.
 
 **Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. Paper mechanisms are summarized from source materials; reported speedups are not treated as independently reproduced results. See [Curation policy](CURATION.md).
 
