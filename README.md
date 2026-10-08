@@ -2,7 +2,7 @@
 
 **A concise, source-checked selection of foundational LLM inference systems papers and surveys.** Not an exhaustive bibliography or ranking.
 
-> Rebuild in progress (2026-10-08): 30 papers and 6 surveys. The 1,003-record uploaded JSONL is a candidate pool, not an admission list. Bibliographic facts and summarized mechanisms were checked against official publications; performance claims have **not** been independently reproduced. The historical `main` branch is unchanged.
+> Rebuild in progress (2026-10-08): 30 papers and 6 surveys. The 1,003-record uploaded JSONL is a candidate pool, not an admission list. Bibliographic facts and summarized mechanisms were checked against official publications; performance claims have **not** been independently reproduced. The initial 19-paper list has already been merged into `main`; this branch proposes 11 more papers and 6 surveys. The earlier data and automation remain recoverable in Git history.
 
 ## Surveys — start here
 

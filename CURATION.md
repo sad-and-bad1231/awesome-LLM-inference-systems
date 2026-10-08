@@ -32,7 +32,7 @@ A paper or survey is accepted when all baseline requirements are satisfied:
 
 ## Rebuild provenance
 
-Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First pass is selective identity-and-abstract-level screening, **not a complete reading of all papers or verification of each experimental claim**. The seed includes 18 matching uploaded records and one independently verified missing historical prerequisite (FlashAttention, NeurIPS 2022). The old `main` branch and Git history preserve the original data/automation until a deliberate merge; this draft branch intentionally contains only these two Markdown files.
+Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First pass is selective identity-and-abstract-level screening, **not a complete reading of all papers or verification of each experimental claim**. The original 19-paper seed contained 18 entries from the upload and the missing FlashAttention paper. This follow-up adds 11 further historical/engineering papers and 6 complementary surveys. The initial 19-paper reset was merged into `main` in PR #7. Earlier data and automation can still be recovered from Git history. This follow-up branch changes only `README.md` and `CURATION.md`.
 
 ## Change discipline
 
