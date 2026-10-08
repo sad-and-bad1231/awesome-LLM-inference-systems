@@ -23,7 +23,7 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Former 50-entry Serving cohort: reclassified and admitted | 49 |
 | New second-wave papers admitted by primary-source screening | 50 |
 | Broad literature sweep: source-screened additional papers | 80 |
-| 2026 top-conference additions (strict-source tranche) | 48 |
+| 2026 top-conference additions (strict-source tranche) | 53 |
 | **Canonical topic entries** | **253** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
@@ -43,6 +43,6 @@ The evidence tier is publication/abstract and technical-description screening, *
 
 This tranche adds **53 papers published in 2026**, with one official conference proceedings/publisher/venue page per entry, or the paper-specific DOI. Covered venues: MLSys, OSDI, EuroSys, ASPLOS, ISCA, HPCA, ICML, and ICLR. Excluded were duplicates, arXiv-only submissions, training-only papers, publication-program titles without substantiated mechanisms, and general DNN work lacking inference relevance. The 2026 NeurIPS conference does not take place until December and its official proceedings are not yet equivalent to an issued 2026 archival paper volume.
 
-**Important:** The user requested **300 new 2026 top-conference papers**. This vetted tranche adds **53**, not 300; its contribution does not discharge the numerical target. The 248 figure is the *cumulative* eight-topic total (previously 200). No paper is added solely to meet a quota; source and system-mechanism standards remain in force.
+**Important:** The user requested **300 new 2026 top-conference papers**. This vetted tranche adds **53**, not 300; its contribution does not discharge the numerical target. The 253 figure is the *cumulative* eight-topic total (previously 200). No paper is added solely to meet a quota; source and system-mechanism standards remain in force.
 
 This pass checked publication identity and mechanism from publisher/venue material. Evaluation details are summarized from authors' papers and abstracts; no independent hardware replication or complete methodological audit is implied.
