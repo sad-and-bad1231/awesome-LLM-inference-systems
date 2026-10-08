@@ -1,8 +1,8 @@
-# Serving systems
+# Serving systems · legacy selection
 
 *Runtime · Scheduling · Resource management · Disaggregated serving*
 
-An intentionally selective set of **50 formally published** works (2024–2026). Its boundary is the **request-to-GPU execution path**: routing, batching, KV state, disaggregation, parallelism, elastic capacity, multi-model service and production workloads. Specific kernel work appears only where tightly co-designed with serving.
+**Legacy cohort (50 papers, 2024–2026), pending individual source and mechanism re-audit.** This index is frozen: new admission and canonical technical categorization occur under the [eight topic pages](README.md). Original scope: an intentionally selective set of works. Its boundary is the **request-to-GPU execution path**: routing, batching, KV state, disaggregation, parallelism, elastic capacity, multi-model service and production workloads. Specific kernel work appears only where tightly co-designed with serving.
 
 > **Evidence standard:** venue and identity checked against publisher/conference/author records. The fourth column is an editorial summary of the *proposed mechanism*, not an independently replicated performance claim. Entries link to a publisher paper page, the author's PDF, or an official conference program (if a stable per-paper page was not available). Not a ranking.
 
