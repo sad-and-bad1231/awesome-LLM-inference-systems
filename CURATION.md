@@ -6,7 +6,7 @@ Maintain an approachable **Awesome** list, not a paper database, monitoring plat
 
 ## Admission gate
 
-A paper is accepted when all baseline requirements are satisfied:
+A paper or survey is accepted when all baseline requirements are satisfied:
 
 1. **Systems relevance:** targets a concrete LLM inference/serving bottleneck (runtime scheduling, memory/KV, P/D transfer, kernel/compiler, distributed systems, parallelism, speculation, production operations), or is a genuinely foundational prerequisite.
 2. **Substantive contribution:** proposes an identifiable and reusable system mechanism or architecture, not merely a renamed heuristic, new prompt/task, or marginal parameter tuning.
@@ -32,8 +32,16 @@ A paper is accepted when all baseline requirements are satisfied:
 
 ## Rebuild provenance
 
-Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First pass is selective identity-and-abstract-level screening, **not a complete reading of all papers or verification of each experimental claim**. The seed includes 18 matching uploaded records and one independently verified missing historical prerequisite (FlashAttention, NeurIPS 2022). The old `main` branch and Git history preserve the original data/automation until a deliberate merge; this draft branch intentionally contains only these two Markdown files.
+Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First pass is selective identity-and-abstract-level screening, **not a complete reading of all papers or verification of each experimental claim**. The original 19-paper seed contained 18 entries from the upload and the missing FlashAttention paper. This follow-up adds 11 further historical/engineering papers and 6 complementary surveys. The initial 19-paper reset was merged into `main` in PR #7. Earlier data and automation can still be recovered from Git history. This follow-up branch changes only `README.md` and `CURATION.md`.
 
 ## Change discipline
 
 No crawler, JSONL store, generated views, CI publication pipeline, deep research-note hierarchy, badges with hardcoded counts, or mandatory per-paper reading documents. Add complexity only when a concrete presentation need cannot be solved with Markdown.
+
+## Survey-specific gate
+
+Require a distinct systems lens (Serving architecture, hardware/compilers, KV cache, scheduling or distributed inference), credible primary source, meaningful taxonomy/synthesis and an honest coverage boundary. Prefer peer-reviewed surveys; strong lab-authored preprints must be clearly labeled. Reject near-duplicate overviews and survey titles without substantial system content.
+
+## Historical prerequisites
+
+Only a small set of pre-LLM papers belongs here, when its mechanism directly grounds modern inference (Transformer, blockwise verification, MQA). Label background architectures/algorithms separately from evaluated modern serving systems.
