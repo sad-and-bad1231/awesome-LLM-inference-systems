@@ -1,163 +1,59 @@
-# Awesome AI Inference Systems
+# Awesome LLM Inference Systems
 
-<!-- generated from data/papers.jsonl and data/industry.jsonl; do not edit directly -->
+A **selectively curated**, lightweight list of papers with foundational or demonstrable engineering contributions to LLM inference systems. Not an exhaustive bibliography.
 
-[![Academic Papers](https://img.shields.io/badge/Academic%20Papers-63-168de2)](papers/README.md) [![Industry Systems](https://img.shields.io/badge/Industry%20Systems-31-0a8f6a)](industry/README.md) [![Formal Venues](https://img.shields.io/badge/Formal%20Venues-52-7b61ff)](papers/README.md#evidence-and-selection) ![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-09-20-555555) [![CI](https://img.shields.io/badge/CI-workflow-brightgreen)](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/actions/workflows/validate-and-render.yml)
+**Selection principle:** systems contribution and credible evaluation first; venue and research organization are supporting signals, not substitutes for technical merit. Entries point to publisher/conference records where available. See [CURATION.md](CURATION.md).
 
-> **A serving-first research entrance.** Follow the request path from admission to output, then inspect where state lives, how it moves, how kernels execute, and how production systems recover.
+> **Rebuild status (2026-10-08):** seed list of 19 papers, screened from an uploaded 1,003-record JSONL collection (plus one missing foundational paper). This is **not** a full audit or a claim that unlisted papers lack merit. The original database remains in the unchanged `main` branch/history pending review of this draft.
 
-A curated, evidence-aware collection of LLM inference serving papers, industrial systems, and open-source AI infrastructure.
+## Papers
 
-## Overview
+### 2022
 
-This repository maps the serving mainline from request state to production operations: memory, transport, execution, runtime scheduling, and reliability. The public reading path follows guide.md and keeps peripheral records in the archive.
+| Paper | Venue | Research groups / institutions* | Systems contribution |
+|---|---|---|---|
+| [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/conference/osdi22/presentation/yu) | OSDI 2022 | Seoul National University · FriendliAI | Iteration-level scheduling 与 selective batching，确立自回归 serving 的调度抽象。 |
+| [FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://papers.neurips.cc/paper_files/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html) | NeurIPS 2022 | Stanford · University at Buffalo | IO-aware exact attention / tiling；从内存访问出发重构 Attention Kernel。 |
+| [DeepSpeed Inference: Enabling Efficient Inference of Transformer Models at Unprecedented Scale](https://sc22.supercomputing.org/proceedings/tech_paper/tech_paper_pages/pap307.html) | SC 2022 | Microsoft | 多 GPU 与 CPU/NVMe 异构推理，体现跨设备资源系统设计。 |
 
-We prioritize work with system-level mechanisms, real hardware or production evidence, and clear connections to serving ecosystems such as vLLM, SGLang, TensorRT-LLM, Kubernetes, and LMCache.
+### 2023
 
-Out of scope by default: training-only methods, algorithm-only simulations without serving evidence, generic vector databases, and peripheral hardware work without an inference-system connection.
+| Paper | Venue | Research groups / institutions* | Systems contribution |
+|---|---|---|---|
+| [Efficient Memory Management for Large Language Model Serving with PagedAttention](https://doi.org/10.1145/3600006.3613165) | SOSP 2023 | UC Berkeley · Stanford · UC San Diego | Paged KV Cache 与 vLLM；突破动态 KV 内存碎片和请求间复用。 |
+| [FlexGen: High-Throughput Generative Inference of Large Language Models with a Single GPU](https://proceedings.mlr.press/v202/sheng23a.html) | ICML 2023 | Stanford · UC Berkeley · ETH Zürich | 异构内存卸载与调度优化，展示资源受限场景的系统权衡。 |
+| [AlpaServe: Statistical Multiplexing with Model Parallelism for Deep Learning Serving](https://www.usenix.org/conference/osdi23/presentation/li-zhouhan) | OSDI 2023 | UC Berkeley · Peking University · collaborators | 利用 Model Parallelism 改善多模型负载下的统计复用与 SLO。 |
 
-| In scope | Usually excluded unless they directly affect serving |
-|---|---|
-| LLM serving, KV state, P/D transport, kernels, runtimes, scheduling, SRE, and production infrastructure | Training-only optimization, pure model quality work, generic databases, and hardware papers without an inference path |
+### 2024
 
-## Start Here
+| Paper | Venue | Research groups / institutions* | Systems contribution |
+|---|---|---|---|
+| [Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve](https://www.usenix.org/conference/osdi24/presentation/agrawal) | OSDI 2024 | Georgia Tech · Microsoft Research | Chunked Prefill 与 stall-free scheduling，重新平衡 TTFT、TPOT 和吞吐。 |
+| [DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/zhong-yinmin) | OSDI 2024 | Peking University · UC San Diego · StepFun | P/D 分离、SLO-aware 配置与 Goodput 导向的服务部署。 |
+| [Splitwise: Efficient Generative LLM Inference Using Phase Splitting](https://www.microsoft.com/en-us/research/publication/splitwise-efficient-generative-llm-inference-using-phase-splitting/) | ISCA 2024 | Microsoft Research · University of Washington | 依据 Prefill/Decode 计算特征划分资源与机器；关注成本、功耗和传输。 |
+| [Llumnix: Dynamic Scheduling for Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/sun-biao) | OSDI 2024 | Alibaba Group | 请求与 KV 状态的 live migration，实现跨实例动态重调度。 |
+| [SGLang: Efficient Execution of Structured Language Model Programs](https://proceedings.neurips.cc/paper_files/paper/2024/hash/724be4472168f31ba1c9ac630f15dec8-Abstract-Conference.html) | NeurIPS 2024 | Stanford · UC Berkeley · collaborators | 将结构化程序执行、RadixAttention 和高效输出解码纳入统一 Runtime。 |
+| [Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://proceedings.mlr.press/v235/cai24b.html) | ICML 2024 | Princeton · Together AI · UIUC · collaborators | 多解码头与 Tree-based Verification，拓展推测解码设计空间。 |
 
-| Research entry point | What you get |
-|---|---|
-| [中文接手与阅读指南](docs/START-HERE.md) | 第一次打开仓库时从这里开始：项目结构、分类哲学、阅读顺序和最少命令。 |
-| [Academic papers](papers/README.md) | Formal venues, preprints, legacy imports, and evidence labels kept separate. |
-| [Industry systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
-| [Adjacent / archive](archive/README.md) | Peripheral or lower-priority records retained for audit without occupying the main reading path. |
-| [Machine facts](data/papers.jsonl) | The JSONL records used to regenerate every public view. |
+### 2025
 
-## Contents
+| Paper | Venue | Research groups / institutions* | Systems contribution |
+|---|---|---|---|
+| [FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/dbf02b21d77409a2db30e56866a8ab3a-Abstract-Conference.html) | MLSys 2025 | University of Washington · NVIDIA · CMU | 可组合 KV 格式、JIT 模板与负载均衡的 Serving Attention Engine。 |
+| [NanoFlow: Towards Optimal Large Language Model Serving Throughput](https://www.usenix.org/conference/osdi25/presentation/zhu-kan) | OSDI 2025 | University of Washington · collaborators | Operation-level Nano-batching，重叠设备上的 Compute/Memory/Network。 |
+| [Mooncake: Trading More Storage for Less Computation — A KVCache-centric Architecture for Serving LLM Chatbot](https://www.usenix.org/conference/fast25/presentation/qin) | FAST 2025 | Moonshot AI · Tsinghua University | 生产 KV Cache 共享与分离式存储，构建长上下文 Serving 数据路径。 |
+| [QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/fbe2b2f74a2ece8070d8fb073717bda6-Abstract-Conference.html) | MLSys 2025 | MIT Han Lab · collaborators | 量化算法与 GPU 执行内核协同设计，避免低比特推理的反量化开销。 |
 
-| Start here | Purpose |
-|---|---|
-| [Academic Papers](papers/README.md) | Conference, poster, workshop, preprint, and legacy-import paper records. |
-| [Industry & Open-Source Systems](industry/README.md) | Core runtimes, operators, hardware stacks, transfer layers, and production material. |
-| [Adjacent / Archive](archive/README.md) | Related but non-mainline records, preserved with reasons and links. |
-| [System Abstraction Overview](ai-infra-system-abstractions.md) | Cross-collection taxonomy and full system map. |
-| [Contribution Guide](CONTRIBUTING.md) | JSONL facts, evidence policy, and generated-view workflow. |
+### 2026
 
-## Coverage
+| Paper | Venue | Research groups / institutions* | Systems contribution |
+|---|---|---|---|
+| [Strata: Hierarchical Context Caching for Long Context Language Model Serving](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang) | OSDI 2026 | Stanford · NVIDIA · collaborators | 分层 KV Cache I/O 与 cache-aware scheduling，针对缓存加载瓶颈。 |
+| [Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning](https://www.usenix.org/conference/osdi26/presentation/yu-shan) | OSDI 2026 | UCLA · UC Berkeley · Harvard · collaborators | GPU Memory Ballooning 统一多模型空间/时间共享，有生产部署证据。 |
+| [FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang) | NSDI 2026 | Peking University · collaborators | 迭代级可抢占调度与状态卸载，将抢占机制用于 LLM Serving。 |
 
-| Papers | Industry systems | Formal paper venues | System abstractions |
-|---:|---:|---:|---:|
-| 63 | 31 | 52 | 6 |
-
-| Collection | Records | Evidence breakdown |
-|---|---:|---|
-| Academic papers | 63 | Formal Conference: 20, Formal Conference · Legacy Import: 32, Preprint: 2, Preprint · Legacy Import: 5, Unclassified: 2, Unclassified · Legacy Import: 2 |
-| Industry / open-source systems | 31 | Industrial Material: 9, Industrial Material · Legacy Import: 22 |
-
-## Reading Paths
-
-| Research question | Follow this path |
-|---|---|
-| **Reduce first-token latency** | P/D disaggregation, KV transfer, prefix reuse ([open](papers/README.md#p-d-disaggregation-kv-transfer)) |
-| **Fit longer context** | KV state, offload, compression, and memory tiers ([open](papers/README.md#kv-state-memory)) |
-| **Raise decode goodput** | Kernels, compilation, MoE execution, and batching ([open](papers/README.md#kernel-compiler)) |
-| **Operate in production** | Runtime policy, SLOs, recovery, and ecosystem bindings ([open](industry/README.md#runtime-serving)) |
-| **Deploy beyond CUDA** | AMD, TPU, NPU, Apple, and heterogeneous serving stacks ([open](industry/README.md#hardware-ecosystem)) |
-
-## Taxonomy
-
-| System abstraction | Records | What it covers | Entry points |
-|---|---:|---|---|
-| **KV State & Memory** | 24 | KV blocks, prefix state, offload, external memory, and memory-aware serving. | [Papers](papers/README.md#kv-state-memory) · [Industry](industry/README.md#kv-state-memory) |
-| **P/D Disaggregation & KV Transfer** | 6 | Prefill/decode separation, KV transfer, routing, and distributed transport. | [Papers](papers/README.md#p-d-disaggregation-kv-transfer) · [Industry](industry/README.md#p-d-disaggregation-kv-transfer) |
-| **KV Compression & Low-Bit State** | 20 | KV quantization, latent state, sparsity, and quality-cost tradeoffs. | [Papers](papers/README.md#kv-compression-low-bit-state) · [Industry](industry/README.md#kv-compression-low-bit-state) |
-| **Kernel & Compiler** | 24 | CUDA, Triton, HIP, attention, GEMM, MoE kernels, and compiler backends. | [Papers](papers/README.md#kernel-compiler) · [Industry](industry/README.md#kernel-compiler) |
-| **Runtime & Serving** | 16 | Runtime scheduling, agent graphs, structured generation, and SLO-aware dispatch. | [Papers](papers/README.md#runtime-serving) · [Industry](industry/README.md#runtime-serving) |
-| **Reliability & Benchmarks** | 4 | SLOs, drift, recovery, reproducibility, benchmarks, and graceful degradation. | [Papers](papers/README.md#reliability-benchmarks) · [Industry](industry/README.md#reliability-benchmarks) |
-
-## Featured Papers
-
-- **[FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang)**
-  `NSDI 2026` · `2026` · `Academic paper` · `Formal Conference` · `Reading priority: frontier`
-  Tags: `serving` `gpu` `npu` `compiler` `kernel` `agent` `edge` `vllm`
-  Artifact: [source](https://www.usenix.org/system/files/nsdi26-wu-bingyang.pdf)
-  以输出 token 为粒度实现可抢占的分布式 LLM serving，提出 skip-join 多级反馈队列，并主动在 GPU/主机内存间搬运中间状态；官方 NSDI 2026 页面报告相对 vLLM 吞吐最高提升 6.1 倍。
-- **CacheBlend: Fast Large Language Model Serving for RAG with Cached Knowledge Fusion**
-  `EuroSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `prefill` `serving` `edge` `rag`
-  CacheBlend 复用非前缀知识片段的预计算 KV，并用知识融合机制降低 RAG prefill 延迟。
-- **Context Parallelism for Scalable Million-Token Inference**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `decode` `prefill`
-  该工作用 pass-KV/pass-Q 两种精确 ring attention 在 128 张 H100 上扩展百万 token prefill 和 persistent-KV decode。
-- **FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `kernel`
-  FlashInfer 用 block-sparse/composable KV format、JIT attention template 和 load-balanced scheduling 提供 serving-oriented kernel。
-- **KTransformers: Unleashing the Full Potential of CPU/GPU Hybrid Inference for MoE Models**
-  `SOSP 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `gpu` `kernel` `moe`
-  KTransformers 把活跃 expert、attention 与其他算子分配到 CPU/GPU，并用定制 kernel 提升本地 MoE 推理。
-- **NanoFlow: Towards Optimal Large Language Model Serving Throughput**
-  `OSDI 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `gpu` `memory` `throughput`
-  NanoFlow 将请求拆成 operation-level nano-batches，并在单 GPU 内重叠 compute、memory 和 network 资源。
-- **QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `kv-cache` `quantization`
-  QServe 联合 W4A8KV4 量化、SmoothAttention、权重重排和寄存器级并行，将理论低比特节省转成云端 serving 吞吐。
-- **XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models**
-  `MLSys 2025` · `2025` · `Academic paper` · `Formal Conference · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `gpu` `agent` `rag`
-  XGrammar 预处理上下文无关 token、压缩运行时 grammar 状态，并与 GPU 推理重叠以实现近零开销结构化生成。
-
-## Featured Industry Systems
-
-- **[vLLM V1 + torch.compile](https://pytorch.org/projects/vllm/)**
-  `PyTorch Foundation / vLLM community` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: foundation`
-  Tags: `prefill` `vllm`
-  vLLM 作为 PyTorch Foundation 项目，集成 torch.compile、PagedAttention、prefix caching、chunked prefill 等。
-- **[Dynamo KVBM](https://docs.dynamo.nvidia.com/dynamo/components/kvbm)**
-  `NVIDIA` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: frontier`
-  Tags: `memory` `tensorrt-llm` `vllm`
-  KVBM 作为统一 KV block memory layer，支持 vLLM/TensorRT-LLM 的远端共享、offload 和 write-through cache。
-- **[ROCm + vLLM/SGLang/TensorRT-LLM ecosystem](https://rocm.docs.amd.com/)**
-  `AMD` · `2024` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: foundation`
-  Tags: `amd` `gpu` `kernel` `sglang` `tensorrt-llm`
-  通过 ROCm/HIP、Composable Kernel、Triton 和主流 runtime 支持 MI300/MI350 推理，核心竞争点是大 HBM 容量和开放集群。
-- **[SGLang 商业化](https://github.com/sgl-project/sglang)**
-  `SGLang maintainers / RadixArk` · `2026` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: foundation`
-  Tags: `sglang`
-  围绕 RadixAttention、KV 复用和结构化生成提供企业化支持，显示 KV-aware runtime 正成为可独立商业化的软件层。
-- **[sglang-omni](https://github.com/sgl-project/sglang-omni)**
-  `SGLang community` · `2026` · `Industry / engineering material` · `Industrial Material` · `Reading priority: foundation`
-  Tags: `serving`
-  SGLang-Omni：面向音频等全模态模型的高性能服务框架。
-- **[FlashInfer production integration](https://proceedings.mlsys.org/paper_files/paper/2025/hash/dbf02b21d77409a2db30e56866a8ab3a-Abstract-Conference.html)**
-  `NVIDIA / University of Washington` · `2025` · `Industry / engineering material` · `Industrial Material · Legacy Import` · `Reading priority: foundation`
-  Tags: `serving` `kernel` `sglang` `vllm`
-  从论文发展为 vLLM、SGLang 等 runtime 共用的 attention/kernels 层，说明 kernel library 正成为独立基础设施层。
-
-## Evaluation Lens
-
-The collection tracks system behavior beyond isolated token throughput:
-
-| Metric | What to look for |
-|---|---|
-| **TTFT under Drift** | 首 token 延迟在网络抖动、Spot 切换和基础设施漂移下的恶化边界。 |
-| **Generation Stall Rate** | 由验证失败、专家拥塞或 tool-call 挂起造成的生成中断率。 |
-| **Numerical Reproducibility** | 混合精度、量化和大规模部署中的数值稳定性与可复现性。 |
-
-## Evidence Policy
-
-Venue status and source type are factual metadata. Technical tags summarize the system surface. Legacy imports are marked explicitly. Internal triage priority is a discovery signal, not a publication-quality ranking.
-
-### Evidence Ladder
-
-| Evidence layer | How it is used |
-|---|---|
-| **Formal venue** | Conference or journal identity confirmed; publication status is shown as metadata. |
-| **Artifact / ecosystem** | A code, runtime, hardware, deployment, or production entry point is linked when available. |
-| **Physical evaluation** | Real hardware or end-to-end serving evidence is preferred over algorithm-only simulation. |
-| **Legacy import** | Imported during migration and retained for coverage; not an implicit quality ranking. |
+*Institution labels are concise representative affiliations, not exhaustive author lists or a ranking. Paper identity, publication, and the summarized mechanisms were checked against primary proceedings/project pages. They are **not** substitutes for independent re-benchmarking or complete peer review.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Add facts to JSONL and regenerate the Markdown views; do not edit generated tables directly.
+Before proposing a paper, read [CURATION.md](CURATION.md). Prefer one official paper link and one concrete sentence explaining the reusable mechanism. Do not add raw crawls, conference dumps, or automatically generated rankings. Submit a small PR for each batch.
