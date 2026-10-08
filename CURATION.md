@@ -6,7 +6,7 @@ Maintain an approachable **Awesome** list, not a paper database, monitoring plat
 
 ## Admission gate
 
-A paper is accepted when all baseline requirements are satisfied:
+A paper or survey is accepted when all baseline requirements are satisfied:
 
 1. **Systems relevance:** targets a concrete LLM inference/serving bottleneck (runtime scheduling, memory/KV, P/D transfer, kernel/compiler, distributed systems, parallelism, speculation, production operations), or is a genuinely foundational prerequisite.
 2. **Substantive contribution:** proposes an identifiable and reusable system mechanism or architecture, not merely a renamed heuristic, new prompt/task, or marginal parameter tuning.
@@ -37,3 +37,11 @@ Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First 
 ## Change discipline
 
 No crawler, JSONL store, generated views, CI publication pipeline, deep research-note hierarchy, badges with hardcoded counts, or mandatory per-paper reading documents. Add complexity only when a concrete presentation need cannot be solved with Markdown.
+
+## Survey-specific gate
+
+Require a distinct systems lens (Serving architecture, hardware/compilers, KV cache, scheduling or distributed inference), credible primary source, meaningful taxonomy/synthesis and an honest coverage boundary. Prefer peer-reviewed surveys; strong lab-authored preprints must be clearly labeled. Reject near-duplicate overviews and survey titles without substantial system content.
+
+## Historical prerequisites
+
+Only a small set of pre-LLM papers belongs here, when its mechanism directly grounds modern inference (Transformer, blockwise verification, MQA). Label background architectures/algorithms separately from evaluated modern serving systems.
