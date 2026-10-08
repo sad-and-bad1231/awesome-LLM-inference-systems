@@ -1,24 +1,30 @@
 # Papers by systems mechanism
 
-Eight stable research categories. Papers have **one primary technical home**, chosen by the novel reusable mechanism—not by author, hardware brand, year, application or trending workload. Multi-layer contributions may be cross-linked, but full paper rows are not duplicated.
+Eight research categories. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
 
 [← Home](../README.md) · [Curation policy](../CURATION.md)
 
-| Mechanism | First verified additions | Scope |
+| Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 2 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 3 | Reuse, eviction, compression, offloading, distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 3 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 5 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 3 | Expert movement, conditional computation, sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 1 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 1 | Parallelism, multi-node orchestration and phase placement |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 3 | Validated models, traces and production diagnosis |
+| [Kernels & Compilers](kernels-compilers.md) | 11 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 18 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 10 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 13 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 11 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 22 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 27 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 8 | Validated models, traces, benchmarks and production diagnosis |
 
-## Migration discipline
+## Admission summary (2026-10-08)
 
-**October 2026 initial wave: 21 new papers**, individually matched to publisher/conference pages and their mechanism/evaluation summaries. These are **additions**, not a re-labeling of the older 80-entry public collection.
+| Decision | Count |
+|---|---:|
+| First eight-category admission wave | 21 |
+| Former 50-entry Serving cohort: reclassified and admitted | 49 |
+| New second-wave papers admitted by primary-source screening | 50 |
+| **Canonical topic entries** | **120** |
+| Legacy paper held out: general-purpose AI model serving | 1 |
 
-The existing [Serving Systems first cohort](serving-systems.md) (50 papers, 2024–2026) is retained as a **legacy selection pending re-audit**. We will move entries into one of the eight categories only after checking paper title, actual publication, primary mechanism and end-to-end engineering evidence; a prior `verified_legacy`/`core` field does not grant automatic admission. Historic [Foundations](../README.md#foundational-and-influential-papers) remain featured on the homepage; links to them are cross-references, not second full records.
+The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The six selected surveys also remain unchanged.
 
-**No quota.** A class with only one newly admitted paper is intentional, not a sign that its field lacks important works. The emphasis is on publication provenance, mechanism novelty, evaluative rigor and relevance to real inference.
+**Quality boundary.** Publisher/proceedings identity and proposed mechanisms have been cross-checked; independent reproduction of speedups is not claimed. Workshop articles are labeled as such. No automatic bulk import from the historical JSONL or upstream paper lists; per-paper experimental validity is an ongoing editorial review responsibility.
