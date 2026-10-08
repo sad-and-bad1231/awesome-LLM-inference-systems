@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (49)
+## Papers (52)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -27,11 +27,13 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan) | OSDI 2026 | BatchGen 以「序列协程」计算模型把每条序列表示为细粒度事件驱动协程，让运行时动态重组工作（更大专家级 batch、缓解掉队、跨设备重分配），在 128-GPU 集群上把批完成时间最多缩短 2.3×，在内存受限加速器上比最强卸载基线快至多 9.6× |
 | 2026 | [BatchLLM: Optimizing Large Batched LLM Inference with Global Prefix Sharing and Throughput-oriented Token Batching](https://proceedings.mlsys.org/paper_files/paper/2026/hash/5b7ae1758452854dee4e962207d38304-Abstract-Conference.html) | MLSys 2026 | 对离线大批量任务跨请求共享全局 Prefix，并采用吞吐导向 Token Batching。 |
 | 2026 | [BEAM: Joint Resource–Power Optimization for Energy-Efficient LLM Inference under SLO contraints](https://proceedings.mlsys.org/paper_files/paper/2026/hash/eb3c42ddfa16d8421fdba13528107cc1-Abstract-Conference.html) | MLSys 2026 | 在 vLLM 上联合调节 GPU 频率、Chunk Size 与 Microbatch，利用请求 SLO Slack 降低推理能耗。 |
+| 2026 | [Beyond Prediction: Tail-Aware Scheduling for LLM Inference](https://proceedings.mlr.press/v306/li26n.html) | ICML 2026 | 无需精确长度预测，联合尾延迟风险与 Cache-aware Preemption 调度。 |
 | 2026 | [BlendServe: Optimizing Offline Inference with Resource-Aware Batching](https://doi.org/10.1145/3779212.3790133) | ASPLOS 2026 | 离线推理批次中协调 Prefill/Decode 的资源差异以提升 GPU 使用效率。 |
 | 2026 | [BOute: Cost-Efficient LLM Serving with Heterogeneous LLMs and GPUs via Multi-Objective Bayesian Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ed1d3d4c64dc1b95332a8cde3f2a0bdf-Abstract-Conference.html) | MLSys 2026 | 以 MOBO 联合优化异构模型查询路由、GPU 配置和服务成本。 |
 | 2026 | [Bullet: Boosting GPU Utilization for LLM Serving via Dynamic Spatial-Temporal Orchestration](https://doi.org/10.1145/3779212.3790135) | ASPLOS 2026 | 联合时间与空间调度降低在线推理的 GPU 空闲与资源碎片。 |
 | 2026 | [Cascadia: An Efficient Cascade Serving System for Large Language Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/b76105b94a8c1286c860ad885ec588f1-Abstract-Conference.html) | ICLR 2026 | 以模型级联和跨实例路由优化 SLO 条件下的多模型 Serving。 |
 | 2026 | [CONCUR: High-Throughput Agentic Batch Inference of LLM via Congestion-Based Concurrency Control](https://proceedings.mlr.press/v306/chen26fs.html) | ICML 2026 | 对 Agent KV Thrashing 引入拥塞感知并发控制。 |
+| 2026 | [DuetServe: Harmonizing Prefill and Decode for LLM Serving via Adaptive GPU Multiplexing](https://proceedings.mlr.press/v306/gao26m.html) | ICML 2026 | 通过 SM 级动态分区隔离 Prefill/Decode，并根据 SLO 预测选择是否共享。 |
 | 2026 | [FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) | MLSys 2026 | FlashAgents 用 agent 间 token streaming、增量 prefill 和 prefix-aware coordination 重叠多智能体调用链中的等待与计算 |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
 | 2026 | [From Tokens to Layers: Redefining Stall-Free Scheduling for MoE Serving with Layered Prefill](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c0f460c6d63599ea870ba9db63dc96a9-Abstract-Conference.html) | MLSys 2026 | 改用模型层分组而非 Token Chunk 执行 Prefill，减少 Expert Weight 重载。 |
@@ -61,5 +63,6 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 | THETA 按 Prefill/Decode 干扰阈值选择 Mixed/Exclusive Batch。 |
 | 2026 | [TokenFlow: Responsive LLM Text Streaming Serving under Request Burst via Preemptive Scheduling](https://doi.org/10.1145/3767295.3769328) | EuroSys 2026 | 利用客户端 Token Buffer 的富余量实施抢占调度与主动 KV Offload。 |
 | 2026 | [Towards Resource-Efficient Serverless LLM Inference with SLINFER](https://2026.hpca-conf.org/details/hpca-2026-main-conference/8/Towards-Resource-Efficient-Serverless-LLM-Inference-with-SLINFER) | HPCA 2026 | 以 CPU/GPU 异构容量弹性支持 Serverless LLM 推理。 |
+| 2026 | [WarmServe: Enabling One-for-Many GPU Prewarming for Multi-LLM Serving](https://proceedings.mlr.press/v306/lou26f.html) | ICML 2026 | 以多模型 GPU 权重预热、KV 空间复用和快速内存切换降低突发流量 TTFT。 |
 
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*

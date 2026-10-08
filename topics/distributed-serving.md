@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (42)
+## Papers (43)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -45,6 +45,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
 | 2026 | [Not All Prefills Are Equal: PPD Disaggregation for Multi-turn LLM Serving](https://icml.cc/virtual/2026/poster/64036) | ICML 2026 | 针对多轮 serving 采用 prompt 长度感知的 prefill-decode 分离，把增量 prefill 按长度路由以减少争用、提升 SLO 达成率 |
 | 2026 | [OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving](https://www.usenix.org/conference/osdi26/presentation/yao) | OSDI 2026 | 在跨 Slurm/HPC/异构计算环境提供发现、路由与故障控制平面。 |
+| 2026 | [PipeSD: An Efficient Cloud-Edge Collaborative Pipeline Inference Framework with Speculative Decoding](https://proceedings.mlr.press/v306/han26k.html) | ICML 2026 | Cloud–Edge 端协同采用 Token Batch Pipeline 与双阈值 Verify 触发以重叠计算/网络。 |
 | 2026 | [RaidServe: High-performance Resilient Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/507b4aacefe5325908e24f042617b741-Abstract-Conference.html) | MLSys 2026 | RaidServe 面向 tensor-parallel serving 中的 GPU 故障，通过 cyclic KVCache placement 均衡显存、hybrid attention 消除 straggler、fine-grained load-aware routing 动态分配请求，并主动备份 KVCac… |
 | 2026 | [REMIX: Dynamic Partitioning for Fine-Grained Heterogeneous LLM Serving](https://mlsys.org/virtual/2026/poster/10182) | MLSys 2026 | 以细粒度动态 Partition 调整异构设备上的计算和内存利用。 |
 | 2026 | [Revisiting Pipeline Parallelism for LLM Serving](https://www.usenix.org/conference/osdi26/presentation/hwang) | OSDI 2026 | 针对动态 Prefill/Decode 负载重新设计 Chunk Size 与阶段负载平衡。 |
