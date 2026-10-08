@@ -13,15 +13,16 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 | [Surveys](#surveys--start-here) | Six complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
 | [Serving systems](topics/serving-systems.md) | Fifty additional papers on runtime, scheduling, SLOs, KV-aware routing, distributed serving and elasticity (2024–2026). |
-| [Organizations](#organizations) | Selected first-party research, model architecture and inference infrastructure; brief company indexes. |
+| [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
+| [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
 
 **Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. Paper mechanisms are summarized from source materials; reported speedups are not treated as independently reproduced results. See [Curation policy](CURATION.md).
 
 ## Organizations
 
-Short, source-linked maps of **publicly documented** model-inference techniques and first-party infrastructure. These are not corporate publication rankings.
+Brief maps of publicly documented model-inference techniques and first-party infrastructure. Organized by region only for navigation, not by perceived research quality.
 
-[DeepSeek](organizations/DeepSeek.md) · [NVIDIA](organizations/NVIDIA.md) · [Google](organizations/Google.md) · [Microsoft](organizations/Microsoft.md) · [AMD](organizations/AMD.md) · [OpenAI](organizations/OpenAI.md) · [Anthropic](organizations/Anthropic.md) · [Meta](organizations/Meta.md) · [AWS](organizations/AWS.md) · [Apple](organizations/Apple.md) · [Intel](organizations/Intel.md)
+[**Companies — China & US**](organizations/README.md) · [**Research labs & open-source communities**](communities/README.md)
 
 ## Surveys — start here
 
