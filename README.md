@@ -10,9 +10,9 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 
 | Collection | What to expect |
 |---|---|
-| [Surveys](#surveys--start-here) | Six complementary reading maps, clearly separating peer-reviewed publications from preprints. |
+| [Surveys](#surveys--start-here) | Seven complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight technical categories, 253 canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight technical categories, 286 canonical topic entries and a concise admission history. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
 | [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
@@ -38,6 +38,7 @@ Only complementary surveys with useful systems synthesis are retained. **Preprin
 | Resource efficiency | [Resource-efficient Algorithms and Systems of Foundation Models: A Survey](https://doi.org/10.1145/3706418) | ACM Computing Surveys 2025 | PKU/BUPT；覆盖跨计算、存储和部署的优化；包含训练、ViT 和 Diffusion。 |
 | Inference architecture | [A Survey of LLM Inference Systems](https://arxiv.org/abs/2506.21901) | arXiv 2025 (preprint) | 清华团队；从 Kernel、Batching、KV 到多副本、P/D 分离和 Serverless；未标为已审稿。 |
 | KV: token / model / systems | [A Survey on Large Language Model Acceleration based on KV Cache Management](https://openreview.net/forum?id=z3JZzu9EA3) | TMLR 2025 | HKUST/PolyU/HUST 等；比较 KV 选择、压缩、量化及系统管理；包含算法层。 |
+| Distributed collectives | [Collective Communication for Distributed LLM Systems: Planning, Runtime Adaptation, and Computation Coordination](https://doi.org/10.1109/MNET.2026.3724863) | IEEE Network 2026 (Early Access) | 覆盖分布式训练与推理的 Collective Communication，按通信规划、Runtime 自适应及算通协同组织研究；包含训练，不等同于 Serving-only Survey。 |
 | KV: system behavior | [Towards Efficient Large Language Model Serving: A Survey on System-Aware KV Cache Optimization](https://aclanthology.org/2026.findings-acl.1916/) | ACL Findings 2026 | 墨尔本大学/HUST；Temporal/Spatial/Structural 维度分析 Serving-time KV；排除重训型方法。 |
 
 **Reading path:** *Inference systems* → *KV system behavior* → *KV algorithm+system taxonomy*. Consult the *full-stack* survey for hardware/kernel/compiler context.

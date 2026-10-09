@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (31)
+## Papers (32)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -42,6 +42,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2026 | [Optimizing PyTorch Inference with LLM-Based Multi-Agent Systems](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bd49b53516ce9ea248fb73522d71a508-Abstract-Conference.html) | MLSys 2026 | 通过多智能体调优并真实运行 H100 上的推理算子。 |
 | 2026 | [PADE: A Predictor-Free Sparse Attention Accelerator via Unified Execution and Stage Fusion](https://2026.hpca-conf.org/details/hpca-2026-main-conference/3/PADE-A-Predictor-Free-Sparse-Attention-Accelerator-via-Unified-Execution-and-Stage-F) | HPCA 2026 | 将稀疏选择与 Attention 执行融合，消除专用预测关键路径。 |
 | 2026 | [ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ff997469ac66cf893c4183efeb22212a-Abstract-Conference.html) | MLSys 2026 | 用可重用通信与同步原语编写 TP/SP/EP 跨卡重叠 Kernel。 |
+| 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*
