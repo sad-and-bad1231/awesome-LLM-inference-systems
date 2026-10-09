@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (52)
+## Papers (53)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -48,6 +48,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [MFS: An Efficient Model Family Serving System for LLMs](https://doi.org/10.1145/3767295.3769355) | EuroSys 2026 | 利用同系列模型之间的参数/执行共享特征优化多模型服务。 |
 | 2026 | [MorphServe: Efficient and Workload-Aware LLM Serving via Runtime Quantized Layer Swapping and KV Cache Resizing](https://openreview.net/forum?id=1JyePezdlF) | MLSys 2026 | 动态调整量化 Layer Residency 与 KV 容量以适应请求规模变化。 |
 | 2026 | [Murakkab: Resource-Efficient Agentic Workflow Orchestration in Cloud Platforms](https://www.usenix.org/conference/osdi26/presentation/chaudhry) | OSDI 2026 | 以 declarative abstraction 解耦 agent workflow 规格与执行配置，结合 profile-guided optimizer 和 adaptive runtime 联合映射模型、硬件与工作流阶段 |
+| 2026 | [Online Linear Programming for Multi-Objective Routing in LLM Serving](https://proceedings.mlr.press/v306/chen26ft.html) | ICML 2026 | 以在线线性规划的 Shadow Price 决定多 Decode Worker 的 Admission/Routing；实验基于 Vidur 仿真。 |
 | 2026 | [Optimizing Deployment Configurations for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/97dc07f1253ab33ee514f395a82fa7cc-Abstract-Conference.html) | MLSys 2026 | 研究服务部署方案的资源与性能配置空间，指导高性能推理服务选型。 |
 | 2026 | [PASCAL: A Phase-Aware Scheduling Algorithm for Serving Reasoning-based Large Language Models](https://2026.hpca-conf.org/details/hpca-2026-main-conference/19/PASCAL-A-Phase-Aware-Scheduling-Algorithm-for-Serving-Reasoning-based-Large-Language) | HPCA 2026 | 分离 Reasoning/Answering 阶段的执行优先级与抢占规则。 |
 | 2026 | [PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG) | MLSys 2026 | 按 Prompt Prefill 长度协调请求分配，处理长短输入混合下的资源干扰。 |
