@@ -10,9 +10,9 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 
 | Collection | What to expect |
 |---|---|
-| [Surveys](#surveys--start-here) | Seven complementary reading maps, clearly separating peer-reviewed publications from preprints. |
+| [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight technical categories, 473 canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight technical categories, 478 canonical topic entries and a concise admission history. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
 | [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
@@ -34,6 +34,7 @@ Only complementary surveys with useful systems synthesis are retained. **Preprin
 | Lens | Survey | Publication | Why it matters / scope boundary |
 |---|---|---|---|
 | Serving: algorithms → systems | [Towards Efficient Generative Large Language Model Serving: A Survey from Algorithms to Systems](https://arxiv.org/abs/2312.15234) | arXiv 2023; revised 2025 | CMU/Purdue 等团队，研究解码算法到部署体系结构的完整 Serving 脉络；不覆盖所有 2026 工作。 |
+| Long-context CAP trade-offs | [The CAP Principle for LLM Serving: A Survey of Long-Context Large Language Model Serving](https://arxiv.org/abs/2405.11299) | arXiv 2024 (survey preprint) | Context/Accuracy/Performance 三目标及长上下文 Serving 的用户感知权衡；CAP 是研究分类与设计启发式，不是形式化不可能性定理。 |
 | Hardware / full-stack | [Full Stack Optimization of Transformer Inference: a Survey](https://arxiv.org/abs/2302.14017) | arXiv 2023 | UC Berkeley 团队；算子分析、Mapping、专用加速器与 Gemmini 案例；不限于 LLM Serving。 |
 | Resource efficiency | [Resource-efficient Algorithms and Systems of Foundation Models: A Survey](https://doi.org/10.1145/3706418) | ACM Computing Surveys 2025 | PKU/BUPT；覆盖跨计算、存储和部署的优化；包含训练、ViT 和 Diffusion。 |
 | Inference architecture | [A Survey of LLM Inference Systems](https://arxiv.org/abs/2506.21901) | arXiv 2025 (preprint) | 清华团队；从 Kernel、Batching、KV 到多副本、P/D 分离和 Serverless；未标为已审稿。 |
