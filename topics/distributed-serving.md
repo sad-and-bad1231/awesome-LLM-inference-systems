@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (90)
+## Papers (91)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -102,5 +102,6 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Turbo: Efficiently Serving Long-Context Large Language Models with In-Network Aggregation](https://doi.org/10.1145/3789240.3829140) | SIGCOMM 2026 | 将 Long-context 分布式 Attention 的部分 Aggregation 下沉至网络设备，减少 Context Parallel 跨节点归约瓶颈。 |
 | 2026 | [TurboBus: Pooling PCIe Bandwidth for LLM Workloads via Scale-Up Fabrics](https://doi.org/10.1145/3789240.3829130) | SIGCOMM 2026 | 通过 Scale-up Fabric 借用空闲 PCIe Link 带宽并对 GPU 传输重路由，优化权重加载和推理状态搬运。 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
+| 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
 
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*

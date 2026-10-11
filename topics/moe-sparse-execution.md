@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (42)
+## Papers (43)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -33,6 +33,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [AFORE: Attention-FFN Disaggregation with Overlapped Reconfiguration of Experts](https://arxiv.org/abs/2610.03203) | arXiv 2026 (preprint) | 利用 AFD Microbatch 前瞻负载信号，在流水窗口内重配与迁移 Hot Experts。 |
 | 2026 | [Balancing and Beyond: Communication-Centric Optimizations in Expert Parallelism](https://doi.org/10.1145/3789240.3829201) | SIGCOMM 2026 | 面向大规模 Expert Parallelism 联合调整 Expert Placement、跨机数据传输及算通重叠，而非仅优化负载均衡。 |
 | 2026 | [Capacity-Aware Inference: Mitigating the Straggler Effect in Mixture of Experts](https://proceedings.iclr.cc/paper_files/paper/2026/hash/94e845868a9ace4bc239d0c529d32f4c-Abstract-Conference.html) | ICLR 2026 | 通过 Expert Capacity 约束和本地候选扩展缓解 EP 负载不均；存在精度/加速权衡。 |
+| 2026 | [CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution](https://arxiv.org/abs/2605.17889) | arXiv 2026 (preprint) | 将 Expert Microbatches 合并为常规 Batch，利用 CPU AMX 与 GPU 同步执行 Expert/Attention，并按热点分层放置专家减少 PCIe 迁移；与 MoE-Lightning、FlexGen 做端到端吞吐对照。 |
 | 2026 | [CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/3a7f9e485845dac27423375c934cb4db-Abstract-Conference.html) | MLSys 2026 | CRAFT（MLSys 2026）在给定内存预算下对大规模 MoE 模型做细粒度的逐层专家复制（expert replication），把热门专家复制到多个设备以缓解专家负载不均，从而在不超预算的前提下提升 serving goodput |
 | 2026 | [Director: Accelerating Distributed MoE Serving via Online Proactive Expert Placement](https://arxiv.org/abs/2607.08782) | arXiv 2026 (preprint) | 预测请求的 Expert 激活并在计算窗口内迁移专家，在线更新分布式 Expert Placement。 |
 | 2026 | [Expert Streaming: Accelerating Low-Batch MoE Inference via Multi-chiplet Architecture and Dynamic Expert Trajectory Scheduling](https://arxiv.org/abs/2603.27624) | arXiv 2026 (preprint) | FSE-DP 在多 Chiplet 互联上按动态专家轨迹流式分配 MoE 执行并重叠通信。 |

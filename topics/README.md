@@ -7,12 +7,12 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 88 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 29 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 26 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 42 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 78 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 90 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 95 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 30 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 43 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 80 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 91 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 31 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
@@ -29,7 +29,9 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Legacy JSONL reconciliation (2026-10-11) | 52 |
 | Strict re-verification of legacy holdouts (2026-10-11) | 39 |
 | Follow-up legacy primary-source verification (2026-10-11) | 9 |
-| **Canonical topic entries** | **434** |
+| Agentic cache, quantization & speculation verification (2026-10-11) | 7 |
+| Further verifiable KV, MoE and inter-regional systems (2026-10-11) | 6 |
+| **Canonical topic entries** | **447** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -97,3 +99,13 @@ RouteBalance is admitted on actual heterogenous 28-GPU cluster measurements of j
 ## Follow-up primary-source verification: disaggregation and elastic serving (2026-10-11)
 
 Nine additional source-checked high-impact systems are admitted (2025: 4; 2026: 5). Details are placed in the existing Distributed Serving, KV/Memory and Runtime/Scheduling classes: semi-PD, HydraInfer, TraCT, TokenScale, RTP-LLM, TokenDance, KernelFlume, SAC and Festina. Each has an original paper source and author-reported real GPU/prototype or production-trace Serving results. KernelFlume's real A6000/H100 measurements are intentionally distinguished from its larger simulated scenarios. The original 1,003-record holdouts **remain pending except specifically rechecked records**; they are not wholesale rejected.
+
+
+## Agentic cache, quantization and speculation verification (2026-10-11)
+
+Seven more historical source entries were individually checked and admitted: Pythia (live SGLang/A100 implementation and real traces); TokenCake (arXiv 2025 preprint updated in 2026, with vLLM source and agent workload experiments); AdaptCache (explicitly **SOSP BigMem 2025 Workshop**, not main SOSP); SwiftCache (cross-model NVLink KV reuse); CacheWise (vLLM coding-agent traces); SAW-INT4 (SGLang fused Paged KV INT4/quality/throughput evaluation); and JetSpec (originally JetFlow in this uploaded corpus, now a 2026 preprint with original arXiv ID 2606.18394, GPU and vLLM benchmarks). These are all substantive systems mechanisms with author-reported deployed or hardware-level evaluation. Publication labels never silently inherit future conference claims from code READMEs.
+
+
+## Further verified cache, MoE and scheduling mechanisms (2026-10-11)
+
+Six additional original-corpus records independently passed the same admission gate: formal **SC 2025 MaverIQ**, arXiv **2025 EVICPRESS**, and arXiv **2026** WANSpec, VeriCache, Joint Encoding of KV Cache Blocks, and CoX-MoE. Every paper has a distinct serving-specific implementation or architectural mechanism and authors' reported actual code or cluster/GPU/cloud deployment evaluation. WANSpec combines measured real-cloud deployment with simulated extrapolation; no simulator output is represented as physical hardware measurement. VeriCache's output-equivalence claim is attributed to the original experimental protocol. The prior pending queue remains unfinished.

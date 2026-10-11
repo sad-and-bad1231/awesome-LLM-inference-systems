@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (78)
+## Papers (80)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -25,6 +25,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
+| 2025 | [MaverIQ: Fingerprint-Guided Extrapolation and Fragmentation-Aware Layering for Intent-Based LLM Serving](https://doi.org/10.1145/3712285.3759867) | SC 2025 | 以轻量 Model Fingerprint 和配置性能解析模型外推真实 LLM 延迟，并采用不均匀 Layer Placement 利用碎片 GPU 容量；TensorRT-LLM 代码及真实集群模型和负载测量。 |
 | 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
 | 2025 | [Optimizing LLM Queries in Relational Data Analytics Workloads](https://proceedings.mlsys.org/paper_files/paper/2025/hash/b5dc49f44db2fadc5c4d717c57f4a424-Abstract-Conference.html) | MLSys 2025 | 针对表格批量 LLM 调用按行与字段重排序，借助关系依赖最大化 Prefix KV 命中并缩短分析作业完成时间。 |
 | 2025 | [Past-Future Scheduler for LLM Serving under SLA Guarantees](https://doi.org/10.1145/3676641.3716011) | ASPLOS 2025 | 结合历史响应长度与未来 Decode/KV 需求估计控制排队优先级，缓解动态请求造成的 SLO 违约。 |
@@ -74,6 +75,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [PASCAL: A Phase-Aware Scheduling Algorithm for Serving Reasoning-based Large Language Models](https://2026.hpca-conf.org/details/hpca-2026-main-conference/19/PASCAL-A-Phase-Aware-Scheduling-Algorithm-for-Serving-Reasoning-based-Large-Language) | HPCA 2026 | 分离 Reasoning/Answering 阶段的执行优先级与抢占规则。 |
 | 2026 | [PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG) | MLSys 2026 | 按 Prompt Prefill 长度协调请求分配，处理长短输入混合下的资源干扰。 |
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50% |
+| 2026 | [Pythia: Exploiting Workflow Predictability for Efficient Agent-Native LLM Serving](https://arxiv.org/abs/2604.25899) | arXiv 2026 (preprint) | 在 SGLang 暴露 Agent Workflow DAG，协同做 Speculative Cache Management、Lookahead Request Scheduling 和 Phase-Adaptive Autoscaling；8×A100 实测 SWE-bench Pro/Deep Research JCT、P95 JCT 与吞吐。 |
 | 2026 | [QoServe: Breaking the Silos of LLM Inference Serving](https://doi.org/10.1145/3779212.3790206) | ASPLOS 2026 | 针对独立 Serving 部署的资源孤岛，研究跨服务资源共享与 QoS。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving](https://arxiv.org/abs/2606.17949) | arXiv 2026 (preprint) | 融合 Model Quality/Cost Router 与实例级负载平衡，以低开销预测和实时 Queue State 做统一在线映射；13 实例、28 GPU 异构集群对照 Quality–Cost–Throughput Frontiers，并公开系统源码。 |

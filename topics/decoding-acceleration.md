@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (29)
+## Papers (30)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -34,6 +34,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [Dynamic-dLLM: Dynamic Cache-Budget and Adaptive Parallel Decoding for Training-Free Acceleration of Diffusion LLM](https://openreview.net/forum?id=SdnkB5pGbq) | ICLR 2026 | Dynamic Cache Updating 按层和扩散步骤调整 KV 更新预算，Adaptive Parallel Decoding 基于 Token 分布动态调整提交门槛；在多模型和推理任务中报告时延/精度权衡并有公开代码。 |
 | 2026 | [ECHO: Elastic Speculative Decoding with Sparse Gating for High-Concurrency Scenarios](https://proceedings.mlr.press/v306/hu26ar.html) | ICML 2026 | 在 SGLang 统一 Batch Super-tree 上使用 Sparse Confidence Gating 动态分配 Draft 深度/宽度及 Verify 计算预算；覆盖 Qwen3-235B 与高并发吞吐对照。 |
 | 2026 | [Fast-dLLM: Training-free Acceleration of Diffusion LLM by Enabling KV Cache and Parallel Decoding](https://nvlabs.github.io/Fast-dLLM/) | ICLR 2026 | 为双向 Diffusion LLM 设计 Block-wise Approximate KV Cache，并以置信度策略并行提交 Token；提供 LLaDA/Dream 质量与端到端生成性能对照及公开实现，注意非严格等价解码。 |
+| 2026 | [JetSpec: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting](https://arxiv.org/abs/2606.18394) | arXiv 2026 (formerly JetFlow) | 训练基于 Frozen Target Fused Hidden States 的 Causal Parallel Draft Head，单次 Forward 并行生成树并整体 Verify；H100/B200 GPU 与 vLLM 集成实测 Speculative Acceptance、延迟和端到端解码。 |
 | 2026 | [NanoSpec: Accelerating Speculative Decoding using Minimalist In-Context Vocabularies](https://proceedings.mlr.press/v306/chen26fm.html) | ICML 2026 | 动态收缩 Draft 词表，并以异步 Gather/GPU 驻留状态克服稀疏访存瓶颈，报告端到端推测解码收益。 |
 | 2026 | [PRISM: Parametrically Refactor Inference for Speculative Decoding Draft Models](https://openreview.net/forum?id=cvU2HuuxEf) | MLSys 2026 | PRISM（MLSys 2026）对 speculative decoding 中的 draft 模型推理做参数化重构，在保持验证阶段正确性的前提下降低草稿生成的算力与延迟开销，从而提升草稿生成效率与验证吞吐量 |
 | 2026 | [SpecDiff-2: Scaling Diffusion Drafter Alignment For Faster Speculative Decoding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/041dad5ed2191b44ba3ed0e00cdc3187-Abstract-Conference.html) | MLSys 2026 | 使用离散扩散并行 Drafter 与自回归验证器对齐，提高接受率。 |
