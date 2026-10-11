@@ -8,12 +8,15 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (75)
+## Papers (78)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2024 | [DéjàVu: KV-cache Streaming for Fast, Fault-tolerant Generative LLM Serving](https://proceedings.mlr.press/v235/strati24a.html) | ICML 2024 | DéjàVuLib 实现跨 GPU 的 KV 流式传输，同时支持 Prompt/Token Disaggregation、Microbatch Swapping 与状态复制容错。 |
 | 2024 | [HeteGen: Efficient Heterogeneous Parallel Inference for Large Language Models on Resource-Constrained Devices](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5431dca75a8d2abc1fb51e89e8324f10-Abstract-Conference.html) | MLSys 2024 | 针对 GPU/CPU 异构设备规划推理执行与参数转移，实现受限资源大模型部署。 |
+| 2024 | [Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache](https://arxiv.org/abs/2401.02669) | arXiv 2024 (preprint) | DistAttention 与弹性分布式 KV Pool 分离 Attention 计算/状态驻留，在多 GPU 间扩展 Long-context Serving。 |
 | 2024 | [LoongServe: Efficiently Serving Long-Context Large Language Models with Elastic Sequence Parallelism](https://doi.org/10.1145/3694715.3695948) | SOSP 2024 | Elastic Sequence Parallelism 随上下文长度和负载变化动态调整跨 GPU 并行度。 |
+| 2024 | [MemServe: Context Caching for Disaggregated LLM Serving with Elastic Memory Pool](https://arxiv.org/abs/2406.17565) | arXiv 2024 (preprint) | 以 MemPool 统一跨 Worker 分布式 KV 内存，再用全局 Prefix-tree Cache-aware Scheduler 联结 Context Reuse 和 P/D 分离。 |
 | 2024 | [P/D-Serve: Serving Disaggregated Large Language Model at Scale](https://arxiv.org/abs/2408.08147) | arXiv 2024 (preprint) | 以中心化全局调度、异步通信与连续 KV 搬运协调大规模 P/D 分离部署。 |
 | 2024 | [RingAttention with Blockwise Transformers for Near-Infinite Context](https://proceedings.iclr.cc/paper_files/paper/2024/hash/1119587863e78451f080da2a768c4935-Abstract-Conference.html) | ICLR 2024 | Blockwise Attention 与跨设备 Ring KV 传输流水，改善超长序列可扩展执行（兼含训练）。 |
 | 2024 | [ServerlessLLM: Low-Latency Serverless Inference for Large Language Models](https://www.usenix.org/conference/osdi24/presentation/fu) | OSDI 2024 | 多层 Checkpoint Loading、位置感知调度与推理迁移协同减少冷启动。 |

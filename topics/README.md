@@ -6,14 +6,14 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 48 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 76 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Kernels & Compilers](kernels-compilers.md) | 49 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 77 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 20 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 23 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 35 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 68 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 75 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 27 | Validated models, traces, benchmarks and production diagnosis |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 36 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 70 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 78 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 28 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
 
@@ -26,8 +26,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | 2026 top-conference additions (strict-source tranche) | 53 |
 | Distributed-inference literature expansion (2026-10-09) | 33 |
 | 2025–2026 landmark systems sweep (2026-10-11) | 48 |
-| Legacy JSONL reconciliation (2026-10-11) | 38 |
-| **Canonical topic entries** | **372** |
+| Legacy JSONL reconciliation (2026-10-11) | 47 |
+| **Canonical topic entries** | **381** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -63,4 +63,7 @@ This reviewed wave adds **48** distinct primary papers (**26 from 2025; 22 from 
 
 ## Historical 1,003-record JSONL reconciliation (2026-10-11)
 
-The supplied legacy JSONL contains **1,003 candidate records**; it is a discovery dataset, not primary publication evidence. An exact normalized-title comparison against the pre-wave eight-topic bibliography found 206 direct overlaps; fuzzy/alternate-title, homepage and survey matches are handled conservatively separately. A strict primary-source and systems-evidence check admitted **38 additional papers** (**21 dated 2025; 17 dated 2026**), placed in their existing mechanism categories. Important legacy errors corrected at admission: **MagicDec is ICLR 2025**, **Shortcut-connected Expert Parallelism is ICML 2025**, **HotPrefix and DepCache are PACMMOD 2025**, **LMCache's verified paper is arXiv 2025 rather than a verified MLSys 2026 publication**, and HACK's SIGCOMM appearance is a poster rather than an assumed full paper. Publisher or official conference identity and paper abstracts/author implementation claims were corroborated for admitted entries; no independent benchmark reproduction is implied. Entries without enough evidence remain outside the library. The one-row-per-source audit is delivered separately, not committed as a redundant catalog.
+The supplied legacy JSONL contains **1,003 candidate records**; it is a discovery dataset, not primary publication evidence. An exact normalized-title comparison against the pre-wave eight-topic bibliography found 206 direct overlaps; fuzzy/alternate-title, homepage and survey matches are handled conservatively separately. A strict primary-source and systems-evidence check admitted **47 additional papers** (**8 published in 2024; 22 in 2025; 17 in 2026**), placed in their existing mechanism categories. Important legacy errors corrected at admission: **MagicDec is ICLR 2025**, **Shortcut-connected Expert Parallelism is ICML 2025**, **HotPrefix and DepCache are PACMMOD 2025**, **LMCache's verified paper is arXiv 2025 rather than a verified MLSys 2026 publication**, and HACK's SIGCOMM appearance is a poster rather than an assumed full paper. Publisher or official conference identity and paper abstracts/author implementation claims were corroborated for admitted entries; no independent benchmark reproduction is implied. Entries without enough evidence remain outside the library. The one-row-per-source audit is delivered separately, not committed as a redundant catalog.
+
+
+The historic-backfill pass also admitted early serving work (DéjàVu, CachedAttention, Andes, QLM, Hydragen, MemServe, Infinite-LLM, PowerInfer-2) and formally published **KDD 2025 BurstGPT**. Punica, EAGLE/EAGLE-2, Parrot and VTC fairness were found already present and were not re-added. The legacy BurstGPT record was dated to its 2024 preprint, while the canonical paper is cited at its final 2025 ACM proceedings venue.
