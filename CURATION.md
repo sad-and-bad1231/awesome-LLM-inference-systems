@@ -121,3 +121,6 @@ Nine disaggregated serving, elastically scheduled and KV-memory systems (semi-PD
 ## Agentic KV and runtime re-verification (2026-10-11)
 
 Pythia, TokenCake, AdaptCache, SwiftCache, CacheWise, SAW-INT4 and JetSpec were individually checked against original publication pages, project code and author reports. TokenCake's early 2025 arXiv record and 2026 revision are not treated as a formally published 2027 conference volume; its primary venue remains arXiv until proceedings exist. JetFlow in the legacy data was revised/renamed JetSpec in current arXiv and project pages; the same arXiv identifier prevents duplicate imports. SAW-INT4 is admitted for real SGLang/PagedAttention co-design, not because model quality alone is sufficient. The older pending categories are not reclassified as scientific rejects.
+
+
+Six further source-verified admissions (MaverIQ, EVICPRESS, WANSpec, VeriCache, Joint KV Encoding and CoX-MoE) were checked against publisher DOI, primary arXiv pages, release artifacts and real system benchmark summaries. MaverIQ's formal SC 2025 status was confirmed rather than imported from its legacy title alone; other preprints remain labeled as such. These meet the same inference-specific mechanism and implementation/evaluation gate, without any claim of independent result reproduction.
