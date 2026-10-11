@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (91)
+## Papers (93)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -45,6 +45,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Prefill-Decode Aggregation or Disaggregation? Unifying Both for Goodput-Optimized LLM Serving](https://arxiv.org/abs/2508.01989) | arXiv 2025 (preprint) | TaiChi 用混合阶段部署与 Latency Shifting 按 TTFT/TPOT SLO 选择聚合、分离或混合执行。 |
 | 2025 | [Seesaw: High-throughput LLM Inference via Model Re-sharding](https://proceedings.mlsys.org/paper_files/paper/2025/hash/cbc4ab80cd77aa0eb87da062fbcddb46-Abstract-Conference.html) | MLSys 2025 | 跨 Prefill/Decode 动态调整模型 Sharding，配合分层 KV 缓冲减少转换开销。 |
 | 2025 | [semi-PD: Towards Efficient LLM Serving via Phase-Wise Disaggregated Computation and Unified Storage](https://arxiv.org/abs/2504.19867) | arXiv 2025 (preprint) | 在 SM 级分离 Prefill 与 Decode Compute、共享模型权重与 KV Storage，结合统一 Memory Manager/SLO-aware Partitioning；在 DeepSeek/Llama GPU Serving 工作负载实测请求延迟和 SLO。 |
+| 2025 | [Serving Heterogeneous LoRA Adapters in Distributed LLM Inference Systems (LoRAServe)](https://arxiv.org/abs/2511.22880) | arXiv 2025 (preprint) | 按 Adapter Rank 波动动态跨 GPU 放置与路由，利用 GPU Direct RDMA 实现共享，按生产 Trace 实测吞吐/TTFT/显卡需求。 |
 | 2025 | [Star Attention: Efficient LLM Inference over Long Sequences](https://proceedings.mlr.press/v267/acharya25a.html) | ICML 2025 | 通过分布式上下文 Block Attention 与 Anchor Token 降低多 GPU Long-context 通信。 |
 | 2025 | [Step-3 is Large yet Affordable: Model-system Co-design for Cost-effective Decoding](https://arxiv.org/abs/2507.19427) | arXiv 2025 (technical report) | MFA Attention 与 Attention-FFN Disaggregation 协同设计，联动 KV 表示、专家并行及通信。 |
 | 2025 | [TAPAS: Thermal- and Power-Aware Scheduling for LLM Inference in Cloud Platforms](https://doi.org/10.1145/3676641.3716025) | ASPLOS 2025 | 将动态功耗、温度和服务请求纳入云端 LLM 集群调度。 |
@@ -71,6 +72,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [HBM Is Not All You Need: Efficient Disaggregated LLM Serving across Memory-heterogeneous Accelerators](https://arxiv.org/abs/2606.29986) | arXiv 2026 (preprint) | HMA-Serve 跨厂商 GDDR-Prefill/HBM-Decode 部署，采用阶段量化、按层传 KV 和延迟解量化。 |
 | 2026 | [HexGen-3: A Fully Disaggregated LLM Serving Framework with Fine-Grained Heterogeneous Resource Autoscaling](https://icml.cc/virtual/2026/poster/62564) | ICML 2026 | HexGen-3（ICML 2026）提出全分离（fully disaggregated）的 LLM serving 框架，把推理的各阶段解耦独立部署，并以分层调度器配合异构资源的自动扩缩（autoscaling），在成本与性能之间取得更优平衡 |
 | 2026 | [HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou) | NSDI 2026 | 模型预分布、阶段重叠、无网络热点放置和 Pipeline Consolidation。 |
+| 2026 | [InfiniLoRA: Disaggregated Multi-LoRA Serving for Large Language Models](https://arxiv.org/abs/2604.07173) | arXiv 2026 (preprint) | 将 LoRA Adapter 执行与 Base Model 分离为共享 LoRA Server；并行感知执行、GPU-initiated 通信与 SLO Provisioning 通过在线服务评价。 |
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
 | 2026 | [KernelFlume: Elastic Core-Attention Scaling for Agentic Long-Context Decoding](https://arxiv.org/abs/2606.29207) | arXiv 2026 (preprint) | 将 Dense Projection/FFN 与仅托管按 Token Range 分片 KV 的 Weightless Attention Nodes 分离，以 UCX + Inter-layer Pipeline 动态扩容；A6000/H100 实机测试延迟和成本，明确区分后续模拟规模外推。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
