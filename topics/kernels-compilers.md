@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (49)
+## Papers (50)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -35,6 +35,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [SpInfer: Leveraging Low-Level Sparsity for Efficient Large Language Model Inference on GPUs](https://doi.org/10.1145/3689031.3717481) | EuroSys 2025 | 以 SpMM 和新稀疏格式利用推理 GEMM 的低级稀疏性，减少存储和计算开销。 |
 | 2025 | [T-MAC: CPU Renaissance via Table Lookup for Low-Bit LLM Deployment on Edge](https://doi.org/10.1145/3689031.3696099) | EuroSys 2025 | 以 Group-wise Lookup Table 替换低比特 CPU Decode 的反量化乘加，利用 SIMD 改善边缘 LLM 推理。 |
 | 2025 | [ThunderKittens: Simple, Fast, and Adorable Kernels](https://proceedings.iclr.cc/paper_files/paper/2025/file/05dc08730e32441edff52b0fa6caab5f-Paper-Conference.pdf) | ICLR 2025 | 面向 GPU Tile/布局的数据抽象与原生执行流水，用于高性能 Attention Kernel。 |
+| 2025 | [TileLang: A Composable Tiled Programming Model for AI Systems](https://arxiv.org/abs/2504.17577) | arXiv 2025 (preprint) | 将 Tile Dataflow 与线程映射、Tensorization、Layout 及 Pipeline Scheduling 解耦，在 GEMM/FlashAttention/MLA 等 GPU 推理 Kernel 上提供可执行编译器及实测。 |
 | 2025 | [TileLink: Generating Efficient Compute-Communication Overlapping Kernels using Tile-Centric Primitives](https://proceedings.mlsys.org/paper_files/paper/2025/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2025 | 以 Tile 为接口生成重叠通信与计算的分布式 Kernel。 |
 | 2025 | [TurboAttention: Efficient Attention Approximation for High-Throughput LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/f4f55846501f3336f293fd8b6de10770-Abstract-Conference.html) | MLSys 2025 | FlashQ 与整数 Softmax 近似融合量化 Attention 算子，避免 KV 解量化并评估端到端吞吐。 |
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://arxiv.org/abs/2503.02236) | HPCA 2025 | 以 Codebook Cache、融合数据流和自适应 Tile 生成向量量化 LLM Kernel，减少码本与权重访存。 |

@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (28)
+## Papers (29)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -20,6 +20,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2025 | [BurstGPT: A Real-World Workload Dataset to Optimize LLM Serving Systems](https://doi.org/10.1145/3711896.3737413) | KDD 2025 | 基于云端 LLM 请求日志发布 Bursty Traffic/长度/失败 Trace，并在真实负载特征下评估 Serving 调度与缓存设计。 |
 | 2025 | [KVCache Cache in the Wild: Characterizing and Optimizing KVCache Cache at a Large Cloud Provider](https://www.usenix.org/conference/atc25/presentation/wang-jiahao) | USENIX ATC 2025 | 基于云厂商真实请求 Trace 刻画跨轮/单轮 KV 命中、复用时间和容量需求，评估工作负载感知的缓存决策。 |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
+| 2025 | [Towards Efficient Large Multimodal Model Serving](https://arxiv.org/abs/2502.00937) | arXiv 2025 (preprint) | 对真实多模态服务 Trace 和六类模型进行分阶段 Profiling，评估编码/Prefill/Decode 解耦及资源分配的 SLO 影响。 |
 | 2026 | [Beyond the Buzz: A Pragmatic Take on Inference Disaggregation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/d49cee5f3a79d97d719df255689d83d7-Abstract-Conference.html) | MLSys 2026 | 通过不同规模部署评估 P/D 分离的价值和资源、传输及调度边界。 |
 | 2026 | [Breaking the Ice: Analyzing Cold Start Latency in vLLM](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29416b66c2149872b9d1415a3fd2c5e0-Abstract-Conference.html) | MLSys 2026 | 剖析 vLLM 冷启动的初始化、权重加载和图捕获关键路径。 |
 | 2026 | [Characterizing Cloud-Native LLM Inference at ByteDance and Exposing Optimization Challenges and Opportunities for Future AI Accelerators](https://doi.org/10.1109/HPCA68181.2026.11408526) | HPCA 2026 (Industry Track) | 以 Doubao 生产负载与跨 Instruction/Kernel/Model 多级评估刻画异构 LLM 推理瓶颈及硬件选型边界。 |

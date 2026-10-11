@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (78)
+## Papers (80)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -26,6 +26,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [BlitzScale: Fast and Live Large Model Autoscaling with O(1) Host Caching](https://www.usenix.org/conference/osdi25/presentation/zhang-dingyan) | OSDI 2025 | 借计算网络加载权重，以 Layer 粒度 Live Scaling 消除等待完整启动的停顿。 |
 | 2025 | [Cauchy: A Cost-Efficient LLM Serving System through Adaptive Heterogeneous Deployment](https://doi.org/10.1145/3772052.3772264) | SoCC 2025 | 针对异构资源与 Workload 变化动态调整部署以降低成本。 |
 | 2025 | [Context Parallelism for Scalable Million-Token Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/78834433edc3291f4c6cbbd2759324db-Abstract-Conference.html) | MLSys 2025 | 以 Pass-KV/Pass-Q 环形 Attention 和多节点通信优化百万上下文精确计算。 |
+| 2025 | [Cornserve: Efficiently Serving Any-to-Any Multimodal Models](https://arxiv.org/abs/2512.14098) | arXiv 2025 (preprint) | 为 Any-to-Any 多模态组件构建推理 DAG，根据编解码阶段的异构特性自动规划 Disaggregation，并由分布式 Runtime 执行。 |
 | 2025 | [DynamoLLM: Designing LLM Inference Clusters for Performance and Energy Efficiency](https://ieeexplore.ieee.org/document/10946802) | HPCA 2025 | 动态重配实例、并行方案与 GPU 频率以优化 SLO 下的集群能耗。 |
 | 2025 | [Efficient MoE Inference with Fine-Grained Scheduling of Disaggregated Expert Parallelism (FinDEP)](https://arxiv.org/abs/2512.21487) | arXiv 2025 (preprint) | 把 Disaggregated Expert Parallelism 的计算和通信拆成可调粒度任务，搜索流水与重叠顺序。 |
 | 2025 | [Enabling Efficient GPU Communication over Multiple NICs with FuseLink](https://www.usenix.org/conference/osdi25/presentation/ren) | OSDI 2025 | 利用 GPU Relay 和 NIC Pooling 缓解跨节点热点，论文含 LLM Serving TTFT 实际评估。 |
@@ -35,6 +36,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [HexGen-2: Disaggregated Generative Inference of LLMs in Heterogeneous Environment](https://openreview.net/pdf?id=Cs6MrbFuMq) | ICLR 2025 | 以图划分和最大流联合规划异构 GPU、P/D 并行与跨阶段 KV 通信。 |
 | 2025 | [Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod](https://arxiv.org/abs/2508.02520) | arXiv 2025 (technical report) | xDeepServe 在 Ascend CloudMatrix384 上采用 Transformerless 分离执行、XCCL 与去中心化 DP 组。 |
 | 2025 | [Janus: Disaggregating Attention and Experts for Scalable MoE Inference](https://arxiv.org/abs/2512.13525) | arXiv 2025 (preprint) | 独立伸缩 Attention/Expert GPU 池，GPU 端负载平衡与两阶段分层通信。 |
+| 2025 | [Medha: Efficient LLM Inference on Multi-Million Context Lengths Without Approximation](https://www.microsoft.com/en-us/research/publication/medha-efficient-llm-inference-on-multi-million-context-lengths-without-approximation/) | arXiv 2025 (preprint) | 通过 Adaptive Prefill Chunking、Sequence Pipeline Parallelism 和 KV-cache Parallelism 处理多百万 Token 的动态长度与跨节点执行。 |
 | 2025 | [MegaScale-Infer: Efficient Mixture-of-Experts Model Serving with Disaggregated Expert Parallelism](https://doi.org/10.1145/3718958.3750506) | SIGCOMM 2025 | Attention/FFN 分离、Ping-pong Microbatch Pipeline 与 M2N 通信，独立配置 Attention/Expert 资源。 |
 | 2025 | [Mercury: Unlocking Multi-GPU Operator Optimization for LLMs via Remote Memory Scheduling](https://doi.org/10.1145/3731569.3764798) | SOSP 2025 | 在算子级调度远端 GPU Memory Access，联合多 GPU 的数据放置、计算与互联通信。 |
 | 2025 | [NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html) | MLSys 2025 | 将部分 Attention 计算和 KV 状态转至 CPU，并执行异步流水与负载感知调度。 |
