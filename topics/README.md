@@ -6,12 +6,12 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 97 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Kernels & Compilers](kernels-compilers.md) | 51 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 99 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 30 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 44 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 81 | Batching, routing, SLO, fairness and request-level control |
+| [Runtime & Scheduling](runtime-scheduling.md) | 84 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 95 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 32 | Validated models, traces, benchmarks and production diagnosis |
 
@@ -34,7 +34,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Verified LoRA disaggregation systems (2026-10-11) | 2 |
 | Legacy primary paper identity & evaluation review (2026-10-11) | 3 |
 | Additional verified execution mechanisms (2026-10-11) | 4 |
-| **Canonical topic entries** | **456** |
+| Primary-source six-paper architecture/runtime review (2026-10-11) | 6 |
+| **Canonical topic entries** | **462** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -127,3 +128,8 @@ TetriInfer was located under its full preprint title with working disaggregated 
 ## Additional source-reviewed execution systems (2026-10-11)
 
 Four long-pending works admitted from original arXiv abstracts with concrete claimed implementations and measured real devices/serving: CacheFlow (3D parallel KV restoration), ReMP (state-preserving TP/PP reconfiguration), NPUMoE (Apple ANE MoE execution), and SCORPIO (heterogeneous-SLO admission and batching). All remain **preprints** unless publisher evidence changes. Paper-reported gains are not independently replicated; the remaining legacy queue is not characterized as rejected merely for lacking metadata.
+
+
+## Evidence-reviewed legacy systems (2026-10-11)
+
+Six papers passed the original gate on primary sources: DeepSpeed-FastGen (Dynamic SplitFuse and real service benchmark), LeMix (training/serving colocation with SLO evaluation), AIRS (MLSys 2026 industrial TPU inference pipeline), CXL-SpecKV (FPGA 2026 paper and open RTL/driver implementation), ITME (CXL memory prototype with commercial-device measurements) and VeriAttn (real Intel TDX evaluation of TEE–GPU Attention). Publisher versus preprint status is preserved in each row. Simulation-only chip proposals, generic GPU collectives without inference-specific measurements and purely model-quality techniques remain separate holdouts rather than loosely admitted.

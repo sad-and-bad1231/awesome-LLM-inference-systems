@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (50)
+## Papers (51)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://arxiv.org/abs/2503.02236) | HPCA 2025 | 以 Codebook Cache、融合数据流和自适应 Tile 生成向量量化 LLM Kernel，减少码本与权重访存。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 通过实测反馈和优化记忆改善 Trainium NKI Kernel 搜索。 |
 | 2026 | [BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2026 | 利用 Online Softmax 统计直接跳过可忽略的 Attention Block。 |
+| 2026 | [Communication-Efficient Verifiable Attention for LLM Inference (VeriAttn)](https://arxiv.org/abs/2606.16352) | arXiv 2026 (preprint) | 将 Attention 计算迁至 GPU、TEE 保留完整性验证，通过 Prefill Pipeline 和 Decode 分区减轻 TEE–GPU 通信；Intel TDX 平台实测。 |
 | 2026 | [CoPilotIO: CPU as a Co-Pilot for GPU I/O to Free GPU Compute](https://www.usenix.org/conference/osdi26/presentation/chen-guanyi) | OSDI 2026 | GPU 发起异步 I/O，由 CPU 代理轮询并以设备硬件 Barrier 同步；包含 MoE 推理实测。 |
 | 2026 | [DynaFlow: Transparent and Flexible Intra-Device Parallelism via Programmable Operator Scheduling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bbd7d8bd780fcf7143add2317ba04638-Abstract-Conference.html) | MLSys 2026 | 分离计算定义与物理算子调度，并使用异步数据流优化 GPU 并发执行。 |
 | 2026 | [Event Tensor: A Unified Abstraction for Compiling Dynamic Megakernel](https://openreview.net/forum?id=PJqFhAbUHa) | MLSys 2026 | Event Tensor 用统一事件张量抽象编译动态 megakernel，减少 LLM inference 中 kernel launch 和跨算子同步开销 |
