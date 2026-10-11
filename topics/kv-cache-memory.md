@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (101)
+## Papers (103)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -42,6 +42,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2025 | [Marconi: Prefix Caching for the Era of Hybrid LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/7c180af017258d239bac6248d1eb26ac-Abstract-Conference.html) | MLSys 2025 | 针对 Attention+SSM 共同维护的状态建立收益感知 Cache Admission/Eviction。 |
 | 2025 | [Oneiros: KV Cache Optimization through Parameter Remapping for Multi-tenant LLM Serving](https://doi.org/10.1145/3772052.3772215) | SoCC 2025 | 在 CPU/GPU 快互联上单向迁移静态模型层参数以腾出 KV 常驻容量，而非频繁双向交换 KV Cache。 |
 | 2025 | [PyramidKV: Dynamic KV Cache Compression based on Pyramidal Information Funneling](https://www.microsoft.com/en-us/research/publication/pyramidkv-dynamic-kv-cache-compression-based-on-pyramidal-information-funneling/) | COLM 2025 | 以分层信息汇聚规律分配不同层的 KV Budget，避免统一保留比例的低效。 |
+| 2025 | [RefreshKV: Updating Small KV Cache During Long-form Generation](https://aclanthology.org/2025.acl-long.1211/) | ACL 2025 | 长输出期间周期性从 Full KV Attention 刷新小型活跃 KV 集，减轻不可逆 Eviction 失准；A100 上对照 H2O/SnapKV 的输出质量与推理耗时。 |
 | 2025 | [RocketKV: Accelerating Long-Context LLM Inference via Two-Stage KV Cache Compression](https://proceedings.mlr.press/v267/behnam25a.html) | ICML 2025 | 先永久裁剪 KV 再作细粒度 Query-aware 稀疏访问，提供可执行的长上下文 Decode 加速。 |
 | 2025 | [SALS: Sparse Attention in Latent Space for KV Cache Compression](https://proceedings.neurips.cc/paper_files/paper/2025/hash/00a0ebcad584c59dbc439c2af8793638-Abstract-Conference.html) | NeurIPS 2025 | 在 RoPE 友好潜空间实现稀疏 KV 表示以减少缓存恢复计算。 |
 | 2025 | [ShadowKV: KV Cache in Shadows for High-Throughput Long-Context LLM Inference](https://proceedings.mlr.press/v267/sun25b.html) | ICML 2025 | 保留低秩 Key/索引在 GPU，Value Offload 到 CPU 并按 Query 稀疏取回 KV，平衡长上下文质量与吞吐。 |
@@ -78,6 +79,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [KEEP: A KV-Cache-Centric Memory Management System for Efficient Embodied Planning](https://arxiv.org/abs/2602.23592) | arXiv 2026 (preprint) | 对 Embodied Planning 的静态/动态记忆分组缓存 KV，以 Multi-hop 局部重算和 Layer-balanced Loading 避免失效/流水失衡；有代码和 ALFRED 真实推理实验，对比 CacheBlend 的 TTFT 与任务成功率。 |
 | 2026 | [Kitty: Accurate and Efficient 2-bit KV Cache Quantization with Dynamic Channel-wise Precision Boost](https://proceedings.mlsys.org/paper_files/paper/2026/hash/e4d8d1b5120be349d3fff8878650cf45-Abstract-Conference.html) | MLSys 2026 | 量化敏感 KV 通道动态保留高精度，使用分页低精度布局与 Triton Kernel。 |
 | 2026 | [KVDrive: A Holistic Multi-Tier KV Cache Management System for Long-Context LLM Inference](https://doi.org/10.1145/3802077) | PACMMOD 2026 | 联合管理 GPU/DRAM/SSD KV 驻留、注意力访问模式与跨层 I/O Pipeline，避免稀疏访问被缓存传输阻塞。 |
+| 2026 | [KVEraser: Learning to Steer KV Cache for Efficient Localized Context Erasing](https://arxiv.org/abs/2606.17034) | arXiv 2026 (preprint) | 对已缓存对话局部删除执行 Learned KV State Steering，复用未受影响的后缀状态而非全量重 Prefill；报告 1K–32K 上下文的实际延迟与质量权衡。 |
 | 2026 | [KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving](https://doi.org/10.1145/3789240.3829139) | SIGCOMM 2026 | 按网络/服务 SLO 与质量损失预算自适应选择 KV Compression 及远端复用策略。 |
 | 2026 | [KVSwap: Disk-aware KV Cache Offloading for Long-Context On-device Inference](https://arxiv.org/abs/2511.11907) | MobiSys 2026 | 以磁盘友好的 KV 布局和元数据预测选择性预取，重叠存储读写与设备长上下文 Decode。 |
 | 2026 | [LazyAttention: Efficient Retrieval-Augmented Generation with Deferred Positional Encoding](https://proceedings.mlr.press/v306/xia26f.html) | ICML 2026 | 将位置编码调整下推到 Attention Kernel，实现零拷贝非前缀 KV 复用。 |

@@ -7,11 +7,11 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 56 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 101 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 103 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 32 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 45 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 84 | Batching, routing, SLO, fairness and request-level control |
+| [Runtime & Scheduling](runtime-scheduling.md) | 87 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 96 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 32 | Validated models, traces, benchmarks and production diagnosis |
 
@@ -38,10 +38,11 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Primary-source kernel and speculative-system review (2026-10-11) | 6 |
 | Primary-source GPU/Trainium/Metal execution verification (2026-10-11) | 3 |
 | Verified MoE system architectures (2026-10-11) | 2 |
-| **Canonical topic entries** | **473** |
+| Strict 50-record legacy verification batch (2026-10-11) | 5 |
+| **Canonical topic entries** | **478** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
-The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
+The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
 
 **Quality boundary.** Publisher/proceedings identity and proposed mechanisms have been cross-checked; independent reproduction of speedups is not claimed. Workshop articles are labeled as such. No automatic bulk import from the historical JSONL or upstream paper lists; per-paper experimental validity is an ongoing editorial review responsibility.
 
@@ -151,3 +152,8 @@ Three missing historical records pass strict system relevance and hardware/evalu
 ## Two more strict MoE serving admissions (2026-10-11)
 
 BrownoutServe has a verified IEEE Transactions on Computers 2026 archival DOI, real vLLM serving comparison and public code, and distinct SLO/accuracy expert brownout system. CrossPool is a 2026 preprint with separated expert-weight / KV GPU pools, KV virtualizer, layer pipeline and user-level P99 TBT evaluation. Different authors, physical bottlenecks and mechanisms from existing MoE serving entries; no bibliographic duplication. Do not infer author-reported gains were independently reproduced. Additional source-only preprints remain pending.
+
+
+## Strict 50-record original-file evidence review (2026-10-11)
+
+Original source indices **#28–#230** (the first **50** previously pending entries in original index order) were each assigned a primary-source URL, independently described technical issue and disposition. **Five** new canonical topic admissions passed the unchanged system-mechanism/implementation/evaluation gate: DyOrc (SoCC 2025), *The Price of Anarchy in Disaggregated Inference* (2026 preprint with a measured deployed Dynamo router), VectorLiteRAG (formal HPCA 2026 title and Zenodo FAISS-system artifact), RefreshKV (ACL 2025 A100 latency experiment), KVEraser (2026 preprint with inference latency and quality evaluation). A **sixth** admission is an independently categorized arXiv 2024 survey, *The CAP Principle for LLM Serving*, included only on the homepage survey list; its CAP framing is a trade-off heuristic, not a formal impossibility theorem. **Five** historical titles were already present as canonical entries or homepage foundations. **Seven** architectural/storage candidates have identified sources but require more rigorous experimental attribution; they remain pending, not rejected. The other **32** source-checked items are excluded for documented scope, weak independent mechanism or absent inference-system evidence. The annotated 50-record audit is delivered separately to the user; no shadow catalog added to this repo. **No claim of 50 full-paper methodological audits or independent reproduction.**
