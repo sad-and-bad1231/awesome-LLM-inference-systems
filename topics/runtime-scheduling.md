@@ -8,17 +8,20 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (65)
+## Papers (70)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2024 | [Andes: Defining and Enhancing Quality-of-Experience in LLM-Based Text Streaming Services](https://arxiv.org/abs/2404.16283) | arXiv 2024 (preprint) | 为 Text Streaming 定义面向用户的 QoE，并以 Token-level Preemption 和到达流量感知调度协调首 Token 与平滑输出。 |
 | 2024 | [dLoRA: Dynamically Orchestrating Requests and Adapters for LoRA LLM Serving](https://www.usenix.org/conference/osdi24/presentation/wu-bingyang) | OSDI 2024 | Credit-based LoRA Batching 与 Adapter/Request 协同迁移，提高多租户低秩适配器 Serving 效率。 |
 | 2024 | [ExeGPT: Constraint-Aware Resource Scheduling for LLM Inference](https://arxiv.org/abs/2404.07947) | ASPLOS 2024 | 将推理资源配置与约束条件共同纳入调度，比较部署配置的延迟与吞吐。 |
 | 2024 | [Fairness in Serving Large Language Models](https://www.usenix.org/conference/osdi24/presentation/sheng) | OSDI 2024 | Virtual Token Counter 把 Prefill/Decode 的 Token Cost 计入公平服务定义和连续批处理调度。 |
 | 2024 | [MuxServe: Flexible Spatial-Temporal Multiplexing for Multiple LLM Serving](https://proceedings.mlr.press/v235/duan24a.html) | ICML 2024 | 按模型热度联合空间/时间复用显存与计算，区分 Prefill/Decode 的资源需求。 |
+| 2024 | [One Queue Is All You Need: Resolving Head-of-Line Blocking in Large Language Model Serving](https://arxiv.org/abs/2407.00047) | arXiv 2024 (preprint) | QLM 通过 Stochastic Programming 联合控制 Model Swapping、Request Eviction、状态迁移等服务操作，降低多模型 SLO 的队头阻塞。 |
 | 2024 | [Parrot: Efficient Serving of LLM-based Applications with Semantic Variable](https://www.usenix.org/conference/osdi24/presentation/lin-chaofan) | OSDI 2024 | 以 Semantic Variable 暴露请求间数据依赖，支持 Agentic Workflow 级任务排程和 Prefix 复用。 |
 | 2024 | [Punica: Multi-Tenant LoRA Serving](https://proceedings.mlsys.org/paper_files/paper/2024/file/054de805fcceb78a201f5e9d53c85908-Paper-Conference.pdf) | MLSys 2024 | 以 SGMV Kernel 合批不同 LoRA Adapter 的 Decode，并统一调度多租户请求。 |
 | 2025 | [Aegaeon: Effective GPU Pooling for Concurrent LLM Serving on the Market](https://doi.org/10.1145/3731569.3764815) | SOSP 2025 | Token 粒度复用 GPU 承载模型长尾，低开销弹性调整并验证生产服务。 |
+| 2025 | [AI Metropolis: Scaling Large Language Model-based Multi-Agent Simulation with Out-of-order Execution](https://proceedings.mlsys.org/paper_files/paper/2025/hash/4f31327e046913c7238d5b671f5d820e-Abstract-Conference.html) | MLSys 2025 | 跟踪多 Agent 的真实依赖并乱序触发 LLM 请求，消除全局同步引起的虚假依赖与低利用率。 |
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
@@ -44,6 +47,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Bullet: Boosting GPU Utilization for LLM Serving via Dynamic Spatial-Temporal Orchestration](https://doi.org/10.1145/3779212.3790135) | ASPLOS 2026 | 联合时间与空间调度降低在线推理的 GPU 空闲与资源碎片。 |
 | 2026 | [Cascadia: An Efficient Cascade Serving System for Large Language Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/b76105b94a8c1286c860ad885ec588f1-Abstract-Conference.html) | ICLR 2026 | 以模型级联和跨实例路由优化 SLO 条件下的多模型 Serving。 |
 | 2026 | [CONCUR: High-Throughput Agentic Batch Inference of LLM via Congestion-Based Concurrency Control](https://proceedings.mlr.press/v306/chen26fs.html) | ICML 2026 | 对 Agent KV Thrashing 引入拥塞感知并发控制。 |
+| 2026 | [DualMap: Enabling Both Cache Affinity and Load Balancing for Distributed LLM Serving](https://arxiv.org/abs/2602.06502) | ICLR 2026 | 在两套 Prefix Hash Mapping 间根据 SLO 与负载路由请求，使用双环扩缩容与热点迁移平衡 KV Locality。 |
 | 2026 | [DuetServe: Harmonizing Prefill and Decode for LLM Serving via Adaptive GPU Multiplexing](https://proceedings.mlr.press/v306/gao26m.html) | ICML 2026 | 通过 SM 级动态分区隔离 Prefill/Decode，并根据 SLO 预测选择是否共享。 |
 | 2026 | [FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) | MLSys 2026 | FlashAgents 用 agent 间 token streaming、增量 prefill 和 prefix-aware coordination 重叠多智能体调用链中的等待与计算 |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
@@ -68,6 +72,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | 基于真实生产语义搜索评估 Serving 的模型、硬件及执行优化。 |
 | 2026 | [Scheduling LLM Inference with Uncertainty-Aware Output Length Predictions](https://proceedings.mlr.press/v306/zheng26ae.html) | ICML 2026 | 将输出长度分布的尾部风险纳入在线调度策略。 |
+| 2026 | [Serving Hybrid LLM Loads with SLO Guarantees Using CPU-GPU Attention Piggybacking](https://doi.org/10.1145/3802107) | PACMMOD 2026 | OmniServe 将 Best-effort Attention 异步卸载至 CPU，并对 Dense Layers 进行 Layer-wise Batching，保障混布 LS SLO。 |
 | 2026 | [Simple Is Better: Multiplication May Be All You Need for LLM Request Scheduling](https://www.usenix.org/conference/osdi26/presentation/zhang-dingyan) | OSDI 2026 | 结合缓存重算量与实例 Batch 规模构造免调参 Routing Metric，并验证生产部署。 |
 | 2026 | [SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://doi.org/10.1145/3767295.3769353) | EuroSys 2026 | 跨 Region 根据 Prefix Cache Locality 和排队状态动态迁移请求。 |
 | 2026 | [SuperInfer: SLO-Aware Rotary Scheduling and Memory Management for LLM Inference on Superchips](https://openreview.net/forum?id=RuslSHdIHa) | MLSys 2026 | SuperInfer 面向 GH200 的 NVLink-C2C 设计请求轮转调度和全双工 KV 搬运，缓解高负载下的 HOL blocking |

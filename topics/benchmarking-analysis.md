@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (25)
+## Papers (29)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -17,10 +17,13 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2024 | [LLMServingSim: A HW/SW Co-Simulation Infrastructure for LLM Inference Serving at Scale](https://doi.org/10.1109/IISWC63097.2024.00012) | IISWC 2024 | 构建 LLM 服务调度与硬件执行协同模拟，实现不同硬件/软件配置定量分析。 |
 | 2024 | [The Importance of Workload Choice in Evaluating LLM Inference Systems](https://doi.org/10.1145/3642970.3655823) | EuroMLSys workshop 2024 | 系统比较输入/输出长度、请求到达过程等 Benchmark 设计对推理系统排名和判断的影响。 |
 | 2024 | [Vidur: A Large-Scale Simulation Framework for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/b74a8de47d2b3c928360e0a011f48351-Abstract-Conference.html) | MLSys 2024 | 基于算子 Profiling 与预测模型模拟 Batch/Parallelism/负载，使用真实推理数据校验仿真误差。 |
+| 2025 | [BurstGPT: A Real-World Workload Dataset to Optimize LLM Serving Systems](https://doi.org/10.1145/3711896.3737413) | KDD 2025 | 基于云端 LLM 请求日志发布 Bursty Traffic/长度/失败 Trace，并在真实负载特征下评估 Serving 调度与缓存设计。 |
 | 2025 | [KVCache Cache in the Wild: Characterizing and Optimizing KVCache Cache at a Large Cloud Provider](https://www.usenix.org/conference/atc25/presentation/wang-jiahao) | USENIX ATC 2025 | 基于云厂商真实请求 Trace 刻画跨轮/单轮 KV 命中、复用时间和容量需求，评估工作负载感知的缓存决策。 |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
+| 2025 | [Towards Efficient Large Multimodal Model Serving](https://arxiv.org/abs/2502.00937) | arXiv 2025 (preprint) | 对真实多模态服务 Trace 和六类模型进行分阶段 Profiling，评估编码/Prefill/Decode 解耦及资源分配的 SLO 影响。 |
 | 2026 | [Beyond the Buzz: A Pragmatic Take on Inference Disaggregation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/d49cee5f3a79d97d719df255689d83d7-Abstract-Conference.html) | MLSys 2026 | 通过不同规模部署评估 P/D 分离的价值和资源、传输及调度边界。 |
 | 2026 | [Breaking the Ice: Analyzing Cold Start Latency in vLLM](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29416b66c2149872b9d1415a3fd2c5e0-Abstract-Conference.html) | MLSys 2026 | 剖析 vLLM 冷启动的初始化、权重加载和图捕获关键路径。 |
+| 2026 | [Characterizing Cloud-Native LLM Inference at ByteDance and Exposing Optimization Challenges and Opportunities for Future AI Accelerators](https://doi.org/10.1109/HPCA68181.2026.11408526) | HPCA 2026 (Industry Track) | 以 Doubao 生产负载与跨 Instruction/Kernel/Model 多级评估刻画异构 LLM 推理瓶颈及硬件选型边界。 |
 | 2026 | [Characterizing Parallelism Strategies in LLM Inference: Fundamental Compute-Communication Trade-offs](https://arxiv.org/abs/2610.05305) | arXiv 2026 (preprint) | 解析 TP/PP/Hybrid 的 Collective、点对点通信与 Pipeline Bubble，比较 Prefill/Decode 不同瓶颈。 |
 | 2026 | [Charon: A Unified and Fine-Grained Simulator for Large-Scale LLM Training and Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/dbc8ce0fdfcd55172d73fb05dbae07fc-Abstract-Conference.html) | MLSys 2026 | 精细化推理性能模拟并用跨模型/配置与真实部署验证预测误差。 |
 | 2026 | [Demystifying the Mixture of Experts Serving Tax](https://proceedings.mlsys.org/paper_files/paper/2026/hash/42a452cbafa9dd64e9ba4aa95cc1ef21-Abstract-Conference.html) | MLSys 2026 | 将 MoE 的 Prefill/Decode 开销分解为可量化执行税项。 |
@@ -34,6 +37,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [Semantic Integrity Matters: Benchmarking and Preserving High-Density Reasoning in KV Cache Compression](https://proceedings.mlr.press/v306/liu26dz.html) | ICML 2026 | KVFundaBench 强调评估 KV 压缩对密集推理语义的真实影响。 |
 | 2026 | [ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) | NSDI 2026 | 基于真实云服务 Trace 刻画多类型推理负载并合成代表性请求流。 |
 | 2026 | [Speculative Decoding: Performance or Illusion?](https://proceedings.mlsys.org/paper_files/paper/2026/hash/554e056fe2b6d9fd27ffcd3367ae1267-Abstract-Conference.html) | MLSys 2026 | 在现实 vLLM Batch/负载下复测多类推测解码，并对比理论上限。 |
+| 2026 | [SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding](https://proceedings.mlr.press/v306/abramovich26a.html) | ICML 2026 | 在 vLLM/TensorRT-LLM 的真实 Batch/吞吐负载下量化 Speculative Decoding 对数据分布和 Draft 长度的敏感性。 |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设。 |

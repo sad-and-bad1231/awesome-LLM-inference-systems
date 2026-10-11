@@ -85,3 +85,14 @@ Added 33 screened papers within the existing mechanism pages, with particular at
 The MLSys 2025 cross-check additionally admits LeanAttention, MEADOW and relational LLM-query scheduling, and the ASPLOS 2025 cross-check adds FlashGen and Neuralink. SOSP 2026 had accepted-paper announcements by 2026-10-11 but acceptance alone is not an archival proceedings citation; pending papers were not bulk-admitted without publication-qualified sources.
 
 The final 2026 PACMMOD/PVLDB publication check adds AlignedServe, RetroInfer, OrbitFlow and SPDP. CoKV was examined but withheld because the inspected evidence emphasizes compression quality rather than an isolated, validated online serving-system improvement. General ANN papers remain outside scope.
+
+
+## Legacy corpus evidence-gated reconciliation (2026-10-11)
+
+The separately supplied 1,003-record JSONL is **not** an authority for venue, year, status, evaluation or acceptance. We screened candidate records, compared normalized titles with existing canonical rows, and admitted **52 missing papers** only where a verifiable primary paper identity and a distinct inference-specific systems mechanism with reported implementation/evaluation were found. In particular, some legacy "official_source" descriptions only prove that a title appeared on a program or poster page; those are **not** sufficient evidence of a valid serving system. Poster/preprint/Industry Track distinctions and corrected publication years are recorded in individual entries. Existing duplicates and historical foundations are not re-added. Unverified, training-only, generic vector database, quality-only and venue-title-only candidates are held out; do not relax the gate to hit a paper target. This is source/abstract/technical-artifact screening, not an exhaustive full-paper experiment audit or independent replication. The 1,003-entry source-by-source disposition report is maintained as a separately delivered user artifact, **not** a parallel repository database.
+
+
+The historic follow-up adds 9 originally missing older LLM serving mechanisms including the formally published KDD 2025 BurstGPT paper (listed as 2024 preprint in the original source). Punica, EAGLE/EAGLE-2, Parrot and VTC were already in the canonical categories and not duplicated. Oaken was corrected to its final ISCA 2025 DOI (10.1145/3695053.3731019). All selected admissions still require paper-reported implementation and evaluation; no exception was made for historically famous papers.
+
+
+Five additional original-file candidates with concrete inference system evidence (TileLang, Medha, BitMoD, Cornserve and a multimodal serving trace/architecture study) passed the same admission gate. Possible preprint-only scheduling papers with unclear independent experimental boundaries remain withheld, even if conference submissions or later programs mention the title.
