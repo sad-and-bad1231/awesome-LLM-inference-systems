@@ -7,13 +7,13 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 77 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 20 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 24 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 36 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 70 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 80 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 29 | Validated models, traces, benchmarks and production diagnosis |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 85 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 29 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 26 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 42 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 76 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 86 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 31 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
 
@@ -27,7 +27,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Distributed-inference literature expansion (2026-10-09) | 33 |
 | 2025–2026 landmark systems sweep (2026-10-11) | 48 |
 | Legacy JSONL reconciliation (2026-10-11) | 52 |
-| **Canonical topic entries** | **386** |
+| Strict re-verification of legacy holdouts (2026-10-11) | 39 |
+| **Canonical topic entries** | **425** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -70,3 +71,23 @@ The historic-backfill pass also admitted early serving work (DéjàVu, CachedAtt
 
 
 An additional high-signal sweep admitted TileLang (source-evidenced kernel compiler/implementation), Medha (long-context pipeline and distributed KV), BitMoD (HPCA 2025 bit-serial engine), Cornserve (preprint evaluation and open implementation) and a measured multimodal production-trace study. These entries are labeled according to verified archival or preprint status, not the legacy dataset's venue string.
+
+
+## Strict re-verification of historical holdouts (2026-10-11)
+
+Re-opened the historical per-record reconciliation and independently searched archival publisher pages, official code/artifact sites and author preprints. **39 formerly withheld works** met the same admission gate (4 dated 2025; 35 dated 2026; venue status verified independently), with distinct execution mechanisms and author-reported actual runtime/accuracy or GPU validation. No conference-poster promotion is allowed: **Kascade and Cascade are cited as arXiv 2025 preprints**, not as MLSys 2026 main-conference papers. Training-free dLLM acceleration is inference work, not training-only research. Strict decoding output-distribution equivalence is **not claimed** for FLy or approximate diffusion methods; they are evaluated as quality/latency trade-offs. **The remaining historical corpus is NOT certified complete or rejected:** entries without individual primary-source and experiment review remain pending verification. Cross-title aliases, surveys and existing bibliography rows must be reconciled separately; candidate count is not a quality score.
+
+
+Further evidence-backed admissions: SiFAR and near-speed-of-light GPU collectives (real multi-GPU LLM inference), Sangam (runnable H100 dLLM Serving), SMetric (production Agent traces), PagedWeight (GPU memory/quality/throughput), D-cut (batched speculation), ViBE (GPU-variability-aware EP placement). **HiFA4 is held out** because the speedup is projected without measured on-NPU Kernel timing. **VarRate is held out** pending convincing end-to-end online inference runtime evidence beyond compression accuracy and prefill overhead. Both are evidence-boundary decisions, not claims of scientific invalidity.
+
+
+Additional official-record checks admit vLLM-Omni (stage-graph and executable serving), Tarragon (worker-level fault containment), ConServe (conversation-level single KV move), SPIN (vLLM sparse-attention/hierarchical KV) and **Tropical**. The legacy corpus incorrectly dated Tropical 2026: its actual formal publication is **DAC 2025**, DOI 10.1109/DAC63849.2025.11132617. Exact citation year takes precedence over uploaded records.
+
+
+Tutti, HYPIC and KEEP were separately source-confirmed through the original arXiv descriptions plus authors' public implementations: Tutti integrates GPU-initiated SSD KV transport with a vLLM connector, HYPIC implements segment-composable recurrent state and Attention boundary repair, and KEEP implements grouped persistent planning KV with cross-layer recomputation. All three report real inference TTFT/throughput or task-quality tradeoffs; they are arXiv **preprints** and are not mislabeled as formal conference acceptances.
+
+
+Further primary-source admissions: SLOs-Serve (multi-SLO token budgeting), SVF geometry-aware scheduling (vLLM implementation), the TOSEM 2026 929-bug empirical study, ICLR 2026 Tactic, LycheeDecode, MiniPIC, and HERALD. Each has implementation-based system evidence, rigorous measured systems analysis, or end-to-end hardware evaluation described in its primary source. TOSEM's empirical bug taxonomy is a systems study, not a claim to have optimized inference. Authors' published speedups are not independently reproduced.
+
+
+RouteBalance is admitted on actual heterogenous 28-GPU cluster measurements of joint model selection and instance load balancing, including router-baseline isolation and source release. Models Take Notes at Prefill is admitted for editable/position-portable cache composition, public implementation and an online vLLM system evaluation; enormous reported P90 TTFT improvements apply to specific recomputation baselines and must not be generalized across all workloads. The economic proposal Can I Buy Your KV Cache? is held out as a general-serving architecture admission, as its token-level/compute microbenchmark and monetary model are insufficient proof of a deployed cross-party cache-delivery system.
