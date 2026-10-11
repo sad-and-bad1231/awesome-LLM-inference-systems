@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (71)
+## Papers (72)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -76,6 +76,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Serving Hybrid LLM Loads with SLO Guarantees Using CPU-GPU Attention Piggybacking](https://doi.org/10.1145/3802107) | PACMMOD 2026 | OmniServe 将 Best-effort Attention 异步卸载至 CPU，并对 Dense Layers 进行 Layer-wise Batching，保障混布 LS SLO。 |
 | 2026 | [Simple Is Better: Multiplication May Be All You Need for LLM Request Scheduling](https://www.usenix.org/conference/osdi26/presentation/zhang-dingyan) | OSDI 2026 | 结合缓存重算量与实例 Batch 规模构造免调参 Routing Metric，并验证生产部署。 |
 | 2026 | [SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://doi.org/10.1145/3767295.3769353) | EuroSys 2026 | 跨 Region 根据 Prefix Cache Locality 和排队状态动态迁移请求。 |
+| 2026 | [SMetric: Rethink LLM Scheduling for Serving Agents with Balanced Session-centric Scheduling](https://arxiv.org/abs/2607.08565) | arXiv 2026 (preprint) | 基于真实 Agent Session Trace，将首个 Session Request 均衡路由、后续按本地 KV 复用路由；在 Global-tier Cache 的 Colocation/Disaggregation 实测 TPS 与负载均衡。 |
 | 2026 | [SuperInfer: SLO-Aware Rotary Scheduling and Memory Management for LLM Inference on Superchips](https://openreview.net/forum?id=RuslSHdIHa) | MLSys 2026 | SuperInfer 面向 GH200 的 NVLink-C2C 设计请求轮转调度和全双工 KV 搬运，缓解高负载下的 HOL blocking |
 | 2026 | [TeleRAG: Efficient Retrieval-Augmented Generation Inference with Lookahead Retrieval](https://proceedings.mlsys.org/paper_files/paper/2026/hash/7fd522b89ac21009b7bbe7560a9a5add-Abstract-Conference.html) | MLSys 2026 | 预测 Retrieval Data 并与 LLM Generation 重叠，配合 Cache-aware Scheduling 降低 RAG 推理关键路径。 |
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 | THETA 按 Prefill/Decode 干扰阈值选择 Mixed/Exclusive Batch。 |
