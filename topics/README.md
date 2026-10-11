@@ -10,9 +10,9 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | [KV Cache & Context Memory](kv-cache-memory.md) | 101 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 32 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 44 | Expert movement, conditional computation and sparse attention |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 45 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 84 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 95 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 96 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 32 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
@@ -37,7 +37,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Primary-source six-paper architecture/runtime review (2026-10-11) | 6 |
 | Primary-source kernel and speculative-system review (2026-10-11) | 6 |
 | Primary-source GPU/Trainium/Metal execution verification (2026-10-11) | 3 |
-| **Canonical topic entries** | **471** |
+| Verified MoE system architectures (2026-10-11) | 2 |
+| **Canonical topic entries** | **473** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -145,3 +146,8 @@ The 1,003-entry corpus has six more **primary-source verified** admissions: HILO
 ## Hardware-specific inference toolchain review (2026-10-11)
 
 Three missing historical records pass strict system relevance and hardware/evaluation checks: KPerfIR (OSDI 2025 Triton compiler-linked performance analysis, quantified overhead and error), NeuronMM (2025 preprint, real AWS Trainium LLM kernel and end-to-end inference evaluation, public code), and BaseRT (2026 preprint, native Metal runtime and public M3/M4 reproducible baselines). Each is kernel/compiler-centered with no new category. Do not conflate preprint and peer-reviewed status; measured gains are authors' results, not replicated locally. More historical corpus items remain pending.
+
+
+## Two more strict MoE serving admissions (2026-10-11)
+
+BrownoutServe has a verified IEEE Transactions on Computers 2026 archival DOI, real vLLM serving comparison and public code, and distinct SLO/accuracy expert brownout system. CrossPool is a 2026 preprint with separated expert-weight / KV GPU pools, KV virtualizer, layer pipeline and user-level P99 TBT evaluation. Different authors, physical bottlenecks and mechanisms from existing MoE serving entries; no bibliographic duplication. Do not infer author-reported gains were independently reproduced. Additional source-only preprints remain pending.
