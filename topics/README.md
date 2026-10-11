@@ -6,14 +6,14 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 78 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 29 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 26 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 40 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 72 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 83 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 30 | Validated models, traces, benchmarks and production diagnosis |
+| [Kernels & Compilers](kernels-compilers.md) | 500 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 781 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 290 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 260 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 400 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 721 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 833 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 300 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
 
@@ -27,8 +27,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Distributed-inference literature expansion (2026-10-09) | 33 |
 | 2025–2026 landmark systems sweep (2026-10-11) | 48 |
 | Legacy JSONL reconciliation (2026-10-11) | 52 |
-| Strict re-verification of legacy holdouts (2026-10-11) | 22 |
-| **Canonical topic entries** | **408** |
+| Strict re-verification of legacy holdouts (2026-10-11) | 27 |
+| **Canonical topic entries** | **413** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -75,7 +75,10 @@ An additional high-signal sweep admitted TileLang (source-evidenced kernel compi
 
 ## Strict re-verification of historical holdouts (2026-10-11)
 
-Re-opened the historical per-record reconciliation and independently searched archival publisher pages, official code/artifact sites and author preprints. **22 formerly withheld works** met the same admission gate (2 preprints dated 2025; 20 works dated 2026, including preprints), with distinct execution mechanisms and author-reported actual runtime/accuracy or GPU validation. No conference-poster promotion is allowed: **Kascade and Cascade are cited as arXiv 2025 preprints**, not as MLSys 2026 main-conference papers. Training-free dLLM acceleration is inference work, not training-only research. Strict decoding output-distribution equivalence is **not claimed** for FLy or approximate diffusion methods; they are evaluated as quality/latency trade-offs. **The remaining historical corpus is NOT certified complete or rejected:** entries without individual primary-source and experiment review remain pending verification. Cross-title aliases, surveys and existing bibliography rows must be reconciled separately; candidate count is not a quality score.
+Re-opened the historical per-record reconciliation and independently searched archival publisher pages, official code/artifact sites and author preprints. **27 formerly withheld works** met the same admission gate (3 dated 2025; 24 dated 2026; venue status verified independently), with distinct execution mechanisms and author-reported actual runtime/accuracy or GPU validation. No conference-poster promotion is allowed: **Kascade and Cascade are cited as arXiv 2025 preprints**, not as MLSys 2026 main-conference papers. Training-free dLLM acceleration is inference work, not training-only research. Strict decoding output-distribution equivalence is **not claimed** for FLy or approximate diffusion methods; they are evaluated as quality/latency trade-offs. **The remaining historical corpus is NOT certified complete or rejected:** entries without individual primary-source and experiment review remain pending verification. Cross-title aliases, surveys and existing bibliography rows must be reconciled separately; candidate count is not a quality score.
 
 
 Further evidence-backed admissions: SiFAR and near-speed-of-light GPU collectives (real multi-GPU LLM inference), Sangam (runnable H100 dLLM Serving), SMetric (production Agent traces), PagedWeight (GPU memory/quality/throughput), D-cut (batched speculation), ViBE (GPU-variability-aware EP placement). **HiFA4 is held out** because the speedup is projected without measured on-NPU Kernel timing. **VarRate is held out** pending convincing end-to-end online inference runtime evidence beyond compression accuracy and prefill overhead. Both are evidence-boundary decisions, not claims of scientific invalidity.
+
+
+Additional official-record checks admit vLLM-Omni (stage-graph and executable serving), Tarragon (worker-level fault containment), ConServe (conversation-level single KV move), SPIN (vLLM sparse-attention/hierarchical KV) and **Tropical**. The legacy corpus incorrectly dated Tropical 2026: its actual formal publication is **DAC 2025**, DOI 10.1109/DAC63849.2025.11132617. Exact citation year takes precedence over uploaded records.
