@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (70)
+## Papers (71)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -57,6 +57,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin) | OSDI 2026 | SERENO 发现并发 LLM 推理使前台卡顿率升 153% 而自身吞吐仅降约 1%，遂复用 speculative decoding 插入细粒度让步点实现可抢占执行，在检测到带宽争用时把带宽让给前台 |
 | 2026 | [JITServe: SLO-aware LLM Serving with Imprecise Request Information](https://www.usenix.org/conference/nsdi26/presentation/zhang-wei) | NSDI 2026 | 渐进修正未知请求长度估计，以 Just-in-time 资源分配优化 Goodput。 |
 | 2026 | [KUNSERVE: Parameter-centric Memory Management for Efficient Memory Overloading Handling in LLM Serving](https://dl.acm.org/doi/10.1145/3767295.3769348) | EuroSys 2026 | 以参数为中心处理 Serving 的显存超额占用，减少模型切换及请求停顿。 |
+| 2026 | [Laser: Unlocking Layer-Level Scheduling for Efficient Multi-SLO LLM Serving](https://doi.org/10.1145/3774934.3786413) | PPoPP 2026 | 将连续 Batching 的 Iteration-level 调度细化至 Layer-level，跨请求和执行实例协调不同 TTFT/TPOT SLO，在真实部署报告吞吐与达标率的权衡。 |
 | 2026 | [Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads](https://www.usenix.org/conference/nsdi26/presentation/ruan-libra) | NSDI 2026 | 以 Micro-request 分解动态 Prefill/Decode 工作量，在不均衡负载下调度并满足 SLO。 |
 | 2026 | [Locality-Aware Beam Scheduling for Efficient Test-Time Compute with a Consumer-grade GPU](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c74b624843218d9b6713fcf299d6d5e4-Abstract-Conference.html) | MLSys 2026 | 按照 Beam 间共享 Prefix 和 Token 局部性分组调度并预取，降低消费级 GPU 的 KV Offload。 |
 | 2026 | [Meeting SLOs, Slashing Hours: Automated Enterprise LLM Optimization with OptiKIT](https://proceedings.mlsys.org/paper_files/paper/2026/hash/4904fad153f6434a7bcf04465d4be2cc-Abstract-Conference.html) | MLSys 2026 | 自动调节企业推理部署和资源配置以满足 SLO。 |

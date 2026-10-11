@@ -96,3 +96,8 @@ The historic follow-up adds 9 originally missing older LLM serving mechanisms in
 
 
 Five additional original-file candidates with concrete inference system evidence (TileLang, Medha, BitMoD, Cornserve and a multimodal serving trace/architecture study) passed the same admission gate. Possible preprint-only scheduling papers with unclear independent experimental boundaries remain withheld, even if conference submissions or later programs mention the title.
+
+
+## Re-review correction: missing evidence is not rejection (2026-10-11)
+
+Following a user challenge to the prior 1,003-record historical audit, we independently searched primary venues, author articles, and runnable artifacts for previously withheld entries. **15 additionally verified papers** were admitted without relaxing systems relevance, reusable mechanism, or credible implementation/evaluation requirements. In particular, earlier automated keyword screening incorrectly treated 'training-free' Diffusion LLM inference as training-only, and some authors' workshop/symposium/poster titles had been labeled as main-conference papers in the imported data. Canonical entries correct preprint versus proceedings identity; open implementation alone is not a substitute for measured evidence. The old holdout category 'unverified' MUST NOT be interpreted as an academic negative decision, and the original 1,003 papers have **not** all received full-text experiment audits. Admission uses primary source and author-reported systems evidence, not independent benchmark reproduction. See separately delivered per-source revision ledger for what was actually checked and what remains pending.

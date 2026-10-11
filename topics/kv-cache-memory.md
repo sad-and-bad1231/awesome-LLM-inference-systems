@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (77)
+## Papers (78)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -83,6 +83,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [SmartGen: Seamless Disaggregated LLM Inference with Selective KV Cache Transfer](https://arxiv.org/abs/2607.28150) | arXiv 2026 (preprint) | 主动推送重要 KV、按需并行读取及后续推送全部状态，缩短 P/D 交接等待。 |
 | 2026 | [SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs](https://www.usenix.org/conference/fast26/presentation/zheng) | FAST 2026 | 对稀疏 Attention 的 KV 访问按大块写入 SSD 并做时序局部性预测预取，重叠 Attention 与 SSD I/O。 |
 | 2026 | [SparseServe: Unlocking Parallelism for Dynamic Sparse Attention in Long-Context LLM Serving](https://arxiv.org/abs/2509.24626) | ICS 2026 | 针对动态稀疏 Attention 实现碎片感知 KV 传输、Working-set-aware Batch 和分层 Prefill，缓解 HBM 容量瓶颈。 |
+| 2026 | [SpeContext: Enabling Efficient Long-context Reasoning with Speculative Context Sparsity in LLMs](https://doi.org/10.1145/3779212.3790224) | ASPLOS 2026 | 以 Distilled Retrieval Head 预测原模型关注的长上下文 KV，异步预取和 Elastic KV Residency 重叠 GPU 计算；在云端和边缘实机评估准确率/吞吐/显存折中。 |
 | 2026 | [Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token](https://openreview.net/forum?id=FuRo7Ur5Ib) | MLSys 2026 | Stream2LLM 将上下文流式加载与 prefill 计算重叠，把长 prompt 的数据到达时间隐藏到首 token 前的执行流水中 |
 | 2026 | [ThinKV: Thought-Adaptive KV Cache Compression for Efficient Reasoning Models](https://iclr.cc/virtual/2026/poster/10009980) | ICLR 2026 | ThinKV 结合思维感知低比特量化与渐进式 KV 淘汰并配 PagedAttention 扩展 kernel，官方评测仅保留不到 5% 原缓存却取得至多 5.8× 更高吞吐 |
 | 2026 | [TriAttention: Efficient Long Reasoning with Trigonometric KV Compression](https://proceedings.mlr.press/v306/mao26e.html) | ICML 2026 | 利用三角结构筛选长 Reasoning Trace 的高价值 KV。 |
