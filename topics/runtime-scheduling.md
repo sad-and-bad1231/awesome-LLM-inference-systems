@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (53)
+## Papers (65)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -19,10 +19,21 @@ Scheduling tokens, requests and model instances within online inference services
 | 2024 | [Parrot: Efficient Serving of LLM-based Applications with Semantic Variable](https://www.usenix.org/conference/osdi24/presentation/lin-chaofan) | OSDI 2024 | 以 Semantic Variable 暴露请求间数据依赖，支持 Agentic Workflow 级任务排程和 Prefix 复用。 |
 | 2024 | [Punica: Multi-Tenant LoRA Serving](https://proceedings.mlsys.org/paper_files/paper/2024/file/054de805fcceb78a201f5e9d53c85908-Paper-Conference.pdf) | MLSys 2024 | 以 SGMV Kernel 合批不同 LoRA Adapter 的 Decode，并统一调度多租户请求。 |
 | 2025 | [Aegaeon: Effective GPU Pooling for Concurrent LLM Serving on the Market](https://doi.org/10.1145/3731569.3764815) | SOSP 2025 | Token 粒度复用 GPU 承载模型长尾，低开销弹性调整并验证生产服务。 |
+| 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
+| 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
+| 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
+| 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
+| 2025 | [Optimizing LLM Queries in Relational Data Analytics Workloads](https://proceedings.mlsys.org/paper_files/paper/2025/hash/b5dc49f44db2fadc5c4d717c57f4a424-Abstract-Conference.html) | MLSys 2025 | 针对表格批量 LLM 调用按行与字段重排序，借助关系依赖最大化 Prefix KV 命中并缩短分析作业完成时间。 |
+| 2025 | [Past-Future Scheduler for LLM Serving under SLA Guarantees](https://doi.org/10.1145/3676641.3716011) | ASPLOS 2025 | 结合历史响应长度与未来 Decode/KV 需求估计控制排队优先级，缓解动态请求造成的 SLO 违约。 |
+| 2025 | [Pie: A Programmable Serving System for Emerging LLM Applications](https://doi.org/10.1145/3731569.3764814) | SOSP 2025 | 将推理服务控制从固定 Decode Loop 转为可编程执行单元，支持应用自定义请求编排与策略。 |
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |
+| 2025 | [PrefillOnly: An Inference Engine for Prefill-only Workloads in Large Language Model Applications](https://doi.org/10.1145/3731569.3764834) | SOSP 2025 | 针对只需少量输出的 Prefill-only 应用移除无用 Decode/KV 工作，设计专用 Batch 与请求排序。 |
+| 2025 | [Resource Multiplexing in Tuning and Serving Large Language Models](https://www.usenix.org/conference/atc25/presentation/he-yongjun) | USENIX ATC 2025 | LLMStation 将 Fine-tuning 拆为可挂起 Pipeline，与推理 Batch 做迭代级 GPU 时空复用并保证 Serving SLO。 |
 | 2025 | [SOLA: Optimizing SLO Attainment for Large Language Model Serving with State-Aware Scheduling](https://proceedings.mlsys.org/paper_files/paper/2025/hash/bc82dbfbfa43232be85b8d9838f49c3e-Abstract-Conference.html) | MLSys 2025 | 按请求和全局状态动态调节 Iteration 调度以协调 TTFT 与 TPOT。 |
+| 2025 | [Toppings: CPU-Assisted, Rank-Aware Adapter Serving for LLM Inference](https://www.usenix.org/conference/atc25/presentation/li-suyi-toppings) | USENIX ATC 2025 | LoRA 加载期间先在 CPU 执行适配层、完成 GPU Residency 后切回，并采用 Adapter Rank-aware SLO 调度。 |
 | 2025 | [XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models](https://proceedings.mlsys.org/paper_files/paper/2025/hash/5c20ca4b0b20b0bd2f1d839dc605e70f-Abstract-Conference.html) | MLSys 2025 | 词表静态预检、持久 Grammar Stack 与 CPU/GPU 重叠减少结构化生成开销。 |
 | 2026 | [Agentix: An Efficient Serving Engine for LLM Agents as General Programs](https://www.usenix.org/conference/nsdi26/presentation/luo) | NSDI 2026 | 将 Agent 程序依赖纳入服务调度，降低请求和程序级 Head-of-line Blocking。 |
+| 2026 | [AlignedServe: Orchestrating Prefix-aware Batching to Build a High-throughput and Computing-efficient LLM Serving System](https://doi.org/10.1145/3802009) | PACMMOD 2026 | 按 KV Prefix 长度组织批次避免 Decode Iteration Bubble，并用 GPU-to-GPU 预取与批级调度降低延迟。 |
 | 2026 | [AUM: Unleashing the Efficiency Potential of Shared Processors with Accelerator Units for LLM Serving](https://2026.hpca-conf.org/details/hpca-2026-main-conference/36/AUM-Unleashing-the-Efficiency-Potential-of-Shared-Processors-with-Accelerator-Units-) | HPCA 2026 | 建模共享矩阵加速资源与频率干扰，调度服务执行。 |
 | 2026 | [BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan) | OSDI 2026 | BatchGen 以「序列协程」计算模型把每条序列表示为细粒度事件驱动协程，让运行时动态重组工作（更大专家级 batch、缓解掉队、跨设备重分配），在 128-GPU 集群上把批完成时间最多缩短 2.3×，在内存受限加速器上比最强卸载基线快至多 9.6× |
 | 2026 | [BatchLLM: Optimizing Large Batched LLM Inference with Global Prefix Sharing and Throughput-oriented Token Batching](https://proceedings.mlsys.org/paper_files/paper/2026/hash/5b7ae1758452854dee4e962207d38304-Abstract-Conference.html) | MLSys 2026 | 对离线大批量任务跨请求共享全局 Prefix，并采用吞吐导向 Token Batching。 |
@@ -63,6 +74,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [TeleRAG: Efficient Retrieval-Augmented Generation Inference with Lookahead Retrieval](https://proceedings.mlsys.org/paper_files/paper/2026/hash/7fd522b89ac21009b7bbe7560a9a5add-Abstract-Conference.html) | MLSys 2026 | 预测 Retrieval Data 并与 LLM Generation 重叠，配合 Cache-aware Scheduling 降低 RAG 推理关键路径。 |
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 | THETA 按 Prefill/Decode 干扰阈值选择 Mixed/Exclusive Batch。 |
 | 2026 | [TokenFlow: Responsive LLM Text Streaming Serving under Request Burst via Preemptive Scheduling](https://doi.org/10.1145/3767295.3769328) | EuroSys 2026 | 利用客户端 Token Buffer 的富余量实施抢占调度与主动 KV Offload。 |
+| 2026 | [Towards High-Goodput LLM Serving with Prefill-decode Multiplexing](https://doi.org/10.1145/3779212.3790236) | ASPLOS 2026 | MuxWise 在同一 GPU 上对 Prefill/Decode 计算和空间进行细粒度 Multiplexing，为物理 P/D 分离提供强对照。 |
 | 2026 | [Towards Resource-Efficient Serverless LLM Inference with SLINFER](https://2026.hpca-conf.org/details/hpca-2026-main-conference/8/Towards-Resource-Efficient-Serverless-LLM-Inference-with-SLINFER) | HPCA 2026 | 以 CPU/GPU 异构容量弹性支持 Serverless LLM 推理。 |
 | 2026 | [WarmServe: Enabling One-for-Many GPU Prewarming for Multi-LLM Serving](https://proceedings.mlr.press/v306/lou26f.html) | ICML 2026 | 以多模型 GPU 权重预热、KV 空间复用和快速内存切换降低突发流量 TTFT。 |
 
