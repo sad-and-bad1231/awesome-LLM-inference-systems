@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (94)
+## Papers (95)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -86,6 +86,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [PipeSD: An Efficient Cloud-Edge Collaborative Pipeline Inference Framework with Speculative Decoding](https://proceedings.mlr.press/v306/han26k.html) | ICML 2026 | Cloud–Edge 端协同采用 Token Batch Pipeline 与双阈值 Verify 触发以重叠计算/网络。 |
 | 2026 | [RaidServe: High-performance Resilient Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/507b4aacefe5325908e24f042617b741-Abstract-Conference.html) | MLSys 2026 | RaidServe 面向 tensor-parallel serving 中的 GPU 故障，通过 cyclic KVCache placement 均衡显存、hybrid attention 消除 straggler、fine-grained load-aware routing 动态分配请求，并主动备份 KVCac… |
 | 2026 | [REMIX: Dynamic Partitioning for Fine-Grained Heterogeneous LLM Serving](https://mlsys.org/virtual/2026/poster/10182) | MLSys 2026 | 以细粒度动态 Partition 调整异构设备上的计算和内存利用。 |
+| 2026 | [ReMP: Low-Downtime Runtime Model-Parallelism Reconfiguration for LLM Serving](https://arxiv.org/abs/2606.18741) | arXiv 2026 (preprint) | 在运行时保留 KV/权重状态并进行二维 KV Migration，支持 TP/PP Topology 在线变更；论文报告真实模型 7B–70B 的切换停顿及服务性能。 |
 | 2026 | [Revealing the Challenges of Attention-FFN Disaggregation for Modern MoE Models and Hardware Systems](https://arxiv.org/abs/2602.09721) | arXiv 2026 (preprint) | 通信感知 Roofline 分析 AFD 的带宽死区和离散扩缩容损失，澄清其适用边界。 |
 | 2026 | [Revisiting Pipeline Parallelism for LLM Serving](https://www.usenix.org/conference/osdi26/presentation/hwang) | OSDI 2026 | 针对动态 Prefill/Decode 负载重新设计 Chunk Size 与阶段负载平衡。 |
 | 2026 | [RTP-LLM: High-Performance Alibaba LLM Inference Engine](https://arxiv.org/abs/2605.29639) | arXiv 2026 (technical report) | 阿里巴巴生产推理引擎：权重加载并行 I/O、PD Disaggregation、多层 KV、Modular Speculation 与多模态执行协同，报道真实生产负载及对 vLLM/SGLang 的系统对照。 |

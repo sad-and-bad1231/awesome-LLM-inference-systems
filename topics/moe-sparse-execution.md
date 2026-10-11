@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (43)
+## Papers (44)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -36,6 +36,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution](https://arxiv.org/abs/2605.17889) | arXiv 2026 (preprint) | 将 Expert Microbatches 合并为常规 Batch，利用 CPU AMX 与 GPU 同步执行 Expert/Attention，并按热点分层放置专家减少 PCIe 迁移；与 MoE-Lightning、FlexGen 做端到端吞吐对照。 |
 | 2026 | [CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/3a7f9e485845dac27423375c934cb4db-Abstract-Conference.html) | MLSys 2026 | CRAFT（MLSys 2026）在给定内存预算下对大规模 MoE 模型做细粒度的逐层专家复制（expert replication），把热门专家复制到多个设备以缓解专家负载不均，从而在不超预算的前提下提升 serving goodput |
 | 2026 | [Director: Accelerating Distributed MoE Serving via Online Proactive Expert Placement](https://arxiv.org/abs/2607.08782) | arXiv 2026 (preprint) | 预测请求的 Expert 激活并在计算窗口内迁移专家，在线更新分布式 Expert Placement。 |
+| 2026 | [Efficient Mixture-of-Experts LLM Inference with Apple Silicon NPUs (NPUMoE)](https://arxiv.org/abs/2604.18788) | arXiv 2026 (preprint) | 利用静态 Expert Capacity Tiers、Grouped Execution 与 Load-aware Graph Residency 将 MoE Prefill 卸载至 Apple ANE；在真实 M-series 设备评测时延和能耗。 |
 | 2026 | [Expert Streaming: Accelerating Low-Batch MoE Inference via Multi-chiplet Architecture and Dynamic Expert Trajectory Scheduling](https://arxiv.org/abs/2603.27624) | arXiv 2026 (preprint) | FSE-DP 在多 Chiplet 互联上按动态专家轨迹流式分配 MoE 执行并重叠通信。 |
 | 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 模型跳连变换与推理系统协同设计，将 EP 阻塞通信隐藏在计算之下。 |
 | 2026 | [Least-Loaded Expert Parallelism: Load Balancing An Imbalanced Mixture-of-Experts](https://proceedings.mlr.press/v306/nguyen26m.html) | ICML 2026 | 将超载设备的 Token 及关联 Expert 参数动态重路由至闲置设备，减少 Collective Straggler。 |
