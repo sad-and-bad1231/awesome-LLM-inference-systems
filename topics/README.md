@@ -7,12 +7,12 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 96 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 97 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 30 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 43 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 80 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 94 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 44 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 81 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 95 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 32 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
@@ -33,7 +33,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Further verifiable KV, MoE and inter-regional systems (2026-10-11) | 6 |
 | Verified LoRA disaggregation systems (2026-10-11) | 2 |
 | Legacy primary paper identity & evaluation review (2026-10-11) | 3 |
-| **Canonical topic entries** | **452** |
+| Additional verified execution mechanisms (2026-10-11) | 4 |
+| **Canonical topic entries** | **456** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -121,3 +122,8 @@ Two previously unverified historical entries were source-checked and admitted: I
 ## Legacy source checks (2026-10-11)
 
 TetriInfer was located under its full preprint title with working disaggregated serving evaluation. AlayaDB has a verified SIGMOD 2025 DOI and industrial plus inference benchmark reports, and thus belongs in KV Memory despite its vector database name. `On Evaluating Performance...` provides a serving-specific baseline/workload/metric audit and speculative decoding case study. `RAGBoost` was cross-checked and **not** added as an independent duplicate: the closely matching MLSys 2026 `ContextPilot` by the same authors is already present; publication version identity requires further reconciliation. SPAD remained withheld under the physical-serving gate because its new chips and clusters are modeled/simulated rather than actually measured. Other historical pending candidates remain to be individually audited.
+
+
+## Additional source-reviewed execution systems (2026-10-11)
+
+Four long-pending works admitted from original arXiv abstracts with concrete claimed implementations and measured real devices/serving: CacheFlow (3D parallel KV restoration), ReMP (state-preserving TP/PP reconfiguration), NPUMoE (Apple ANE MoE execution), and SCORPIO (heterogeneous-SLO admission and batching). All remain **preprints** unless publisher evidence changes. Paper-reported gains are not independently replicated; the remaining legacy queue is not characterized as rejected merely for lacking metadata.

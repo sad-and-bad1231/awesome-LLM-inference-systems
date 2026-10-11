@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (80)
+## Papers (81)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -33,6 +33,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |
 | 2025 | [PrefillOnly: An Inference Engine for Prefill-only Workloads in Large Language Model Applications](https://doi.org/10.1145/3731569.3764834) | SOSP 2025 | 针对只需少量输出的 Prefill-only 应用移除无用 Decode/KV 工作，设计专用 Batch 与请求排序。 |
 | 2025 | [Resource Multiplexing in Tuning and Serving Large Language Models](https://www.usenix.org/conference/atc25/presentation/he-yongjun) | USENIX ATC 2025 | LLMStation 将 Fine-tuning 拆为可挂起 Pipeline，与推理 Batch 做迭代级 GPU 时空复用并保证 Serving SLO。 |
+| 2025 | [SCORPIO: Serving the Right Requests at the Right Time for Heterogeneous SLOs in LLM Inference](https://arxiv.org/abs/2505.23022) | arXiv 2025 (preprint) | 利用 TTFT Guard、TPOT Guard 与 Credit-based Batching 对异构 SLO 请求做 Admission/Queue/Batch 联合控制；作者报告 Goodput 和 SLO 达成率。 |
 | 2025 | [SLOs-Serve: Optimized Serving of Multi-SLO LLMs](https://arxiv.org/abs/2504.08784) | arXiv 2025 (preprint) | 以动态规划联合分配 Chunked Prefill 和 Speculative Decoding 的 Token Budget，按多阶段 SLO 动态路由多副本；六类应用场景实测服务容量。 |
 | 2025 | [SOLA: Optimizing SLO Attainment for Large Language Model Serving with State-Aware Scheduling](https://proceedings.mlsys.org/paper_files/paper/2025/hash/bc82dbfbfa43232be85b8d9838f49c3e-Abstract-Conference.html) | MLSys 2025 | 按请求和全局状态动态调节 Iteration 调度以协调 TTFT 与 TPOT。 |
 | 2025 | [TokenScale: Timely and Accurate Autoscaling for Disaggregated LLM Serving with Token Velocity](https://arxiv.org/abs/2512.03416) | arXiv 2025 (preprint) | 用跨 Prefill/Transfer/Decode 的 Token Velocity 作为 Backpressure 前馈，并让 Decoder GPU 在突发负载时暂执行 Prefill；生产 Trace GPU Cluster 对照 DistServe/AIBrix/BlitzScale 的 SLO 与成本。 |

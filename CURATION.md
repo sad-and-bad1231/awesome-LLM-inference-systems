@@ -134,3 +134,8 @@ Admitted InfiniLoRA and LoRAServe only after inspecting author primary abstracts
 ## Further verified source & identity reconciliation (2026-10-11)
 
 Three more independent items were admitted on formal publisher or author-origin primary sources and paper-reported implementation/evaluation: TetriInfer (arXiv 2024 phase disaggregation), AlayaDB (formal SIGMOD 2025 DOI, inference-optimized KV/attention query system), and a preprint on rigorous LLM serving benchmark methodology with speculative decoding case study. RAGBoost has a strong paper-identity overlap with already-catalogued MLSys 2026 ContextPilot and is withheld for alias reconciliation rather than counted twice. Simulated SPAD hardware claims were not misrepresented as physical serving evaluations. Current review is still incomplete for the other historical records.
+
+
+## Four system-execution source verifications (2026-10-11)
+
+CacheFlow, ReMP, NPUMoE and SCORPIO report inference-native mechanisms, executable system implementations, and GPU/NPU serving evaluations in primary arXiv sources, justifying distinct admissions. Their published performance is author-reported rather than reproduced; preprint status remains explicit. Pending other records still need individual review, not keyword rejection.
