@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (95)
+## Papers (96)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -25,6 +25,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2024 | [SnapKV: LLM Knows What You are Looking for Before Generation](https://proceedings.neurips.cc/paper_files/paper/2024/hash/28ab418242603e0f7323e54185d19bde-Abstract-Conference.html) | NeurIPS 2024 | 通过观察窗口中的 Head-specific 重要位置，压缩未来 Decode 要保留的 KV。 |
 | 2025 | [Accelerating LLM Serving for Multi-turn Dialogues with Efficient Resource Management](https://doi.org/10.1145/3676641.3716245) | ASPLOS 2025 | FlashGen 面向多轮会话在 GPU/CPU/SSD 三层保留与搬运 KV Cache，并重排请求降低跨轮 Prefill 重计算。 |
 | 2025 | [AdaptCache: KV Cache Native Storage Hierarchy for Low-Delay and High-Quality Language Model Serving](https://www.microsoft.com/en-us/research/publication/adaptcache-kv-cache-native-storage-hierarchy-for-low-delay-and-high-quality-language-model-serving/) | SOSP BigMem Workshop 2025 | 以每条 KV Entry 的有损压缩算法、压缩率和 DRAM/SSD 分层放置联合优化缓存 Load Delay 与生成质量；三类任务报告固定质量下延迟改善，明确仅为 Workshop。 |
+| 2025 | [AlayaDB: The Data Foundation for Efficient and Effective Long-context LLM Inference](https://doi.org/10.1145/3722212.3724428) | SIGMOD 2025 | 将 KV Cache 与 Attention 计算抽象为数据库 Query Processing，并以独立 Query Optimizer 为长上下文推理选择执行计划；包含工业案例和推理系统实验。 |
 | 2025 | [Cache-Craft: Managing Chunk-Caches for Efficient Retrieval-Augmented Generation](https://doi.org/10.1145/3725273) | PACMMOD 2025 | 跨 RAG Query 复用非连续 Chunk KV，按位置与依赖修正少量重计算，结合 Cache Admission/Eviction 控制质量。 |
 | 2025 | [CacheBlend: Fast Large Language Model Serving for RAG with Cached Knowledge Fusion](https://doi.org/10.1145/3689031.3696098) | EuroSys 2025 | 支持非连续知识块 KV 复用，降低 RAG 请求的 Prefill 重计算。 |
 | 2025 | [ChunkKV: Semantic-Preserving KV Cache Compression for Efficient Long-Context LLM Inference](https://proceedings.neurips.cc/paper_files/paper/2025/hash/2987f911151b39cd3a1761e212319e8e-Abstract-Conference.html) | NeurIPS 2025 | 以语义完整 Chunk 作为 KV 保留单元，并复用跨层保留索引。 |

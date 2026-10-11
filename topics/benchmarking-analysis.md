@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (31)
+## Papers (32)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -19,6 +19,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2024 | [Vidur: A Large-Scale Simulation Framework for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/b74a8de47d2b3c928360e0a011f48351-Abstract-Conference.html) | MLSys 2024 | 基于算子 Profiling 与预测模型模拟 Batch/Parallelism/负载，使用真实推理数据校验仿真误差。 |
 | 2025 | [BurstGPT: A Real-World Workload Dataset to Optimize LLM Serving Systems](https://doi.org/10.1145/3711896.3737413) | KDD 2025 | 基于云端 LLM 请求日志发布 Bursty Traffic/长度/失败 Trace，并在真实负载特征下评估 Serving 调度与缓存设计。 |
 | 2025 | [KVCache Cache in the Wild: Characterizing and Optimizing KVCache Cache at a Large Cloud Provider](https://www.usenix.org/conference/atc25/presentation/wang-jiahao) | USENIX ATC 2025 | 基于云厂商真实请求 Trace 刻画跨轮/单轮 KV 命中、复用时间和容量需求，评估工作负载感知的缓存决策。 |
+| 2025 | [On Evaluating Performance of LLM Inference Serving Systems](https://arxiv.org/abs/2507.09019) | arXiv 2025 (preprint) | 系统分析 Baseline Fairness、工作负载设置与 Serving Metric 设计的测量反模式，通过 Speculative Decoding Case Study 展示评估混淆及可复用核验清单。 |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
 | 2025 | [Towards Efficient Large Multimodal Model Serving](https://arxiv.org/abs/2502.00937) | arXiv 2025 (preprint) | 对真实多模态服务 Trace 和六类模型进行分阶段 Profiling，评估编码/Prefill/Decode 解耦及资源分配的 SLO 影响。 |
 | 2026 | [A First Look at Bugs in LLM Inference Engines](https://doi.org/10.1145/3788873) | ACM TOSEM 2026 | 对 llama.cpp、vLLM、DeepSpeed、MLC-LLM、TensorRT-LLM 的 929 个真实 Bug 手工标注，归纳六类症状、28 类根因并开放缺陷数据集，指导运行时故障定位。 |
