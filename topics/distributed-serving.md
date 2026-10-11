@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (95)
+## Papers (96)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -59,6 +59,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Analytical Provisioning for Attention-FFN Disaggregated LLM Serving under Stochastic Workloads](https://arxiv.org/abs/2601.21351) | arXiv 2026 (preprint) | 显式刻画动态长度、步级 Barrier 与资源配比，分析 AFD 的 Attention/FFN 最优 Provisioning。 |
 | 2026 | [ASAP: A Disaggregated and Asynchronous Inference System for MoE Prefill](https://arxiv.org/abs/2606.22541) | arXiv 2026 (preprint) | 针对 Attention-DP 与 Expert-EP 跨组全局同步屏障，在 Ascend CloudMatrix384 上异步化 MoE Prefill 流水。 |
 | 2026 | [Connex: Endpoint Mobility Primitives for Dynamic LLM Serving](https://doi.org/10.1145/3789240.3829200) | SIGCOMM 2026 | 为动态 Serving 实例迁移提供 Endpoint Mobility 与通信重定向原语，将连接身份与执行位置解耦。 |
+| 2026 | [CrossPool: Efficient Multi-LLM Serving for Cold MoE Models through KV-Cache and Weight Disaggregation](https://arxiv.org/abs/2606.24506) | arXiv 2026 (preprint) | 把多个低频 MoE 的 Expert 权重与 KV 状态拆到共享 GPU Pool，结合 KV Virtualizer、Layer-wise Pipeline 和 Persistent Kernel 支持突发长上下文推理；作者报告 P99 TBT。 |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://conferences.sigcomm.org/sigcomm/2026/program/papers/) | SIGCOMM 2026 (official program) | 打通 Storage→Decode→Prefill 第二条 KV 数据路径，利用 Decode NIC 闲置带宽与全局负载调度加速 Agentic 多轮服务。 |
 | 2026 | [Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration (EcoServe)](https://www.usenix.org/conference/osdi26/presentation/du) | OSDI 2026 | 以 Macro-instance 协作与自适应分配，缓解低带宽 GPU 集群跨实例传输。 |
 | 2026 | [Efficient Multi-round LLM Inference over Disaggregated Serving](https://proceedings.mlr.press/v306/he26r.html) | ICML 2026 | 对多轮增量 Prefill/Decode 实行阶段和并行方案的动态部署。 |

@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (44)
+## Papers (45)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -32,6 +32,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design](https://www.usenix.org/conference/osdi26/presentation/wang-wenxin) | OSDI 2026 | 该 CPU-GPU 混合方案以流式/分布式加载 prefill（1200、1800 tokens/s）、节点内 P/D 分离与双批 overlap（延迟增 <15%、吞吐 +50%）、AVX-512 FP8 GEMV（CPU 延迟降 4–5×）和细粒度 CPU 并行（INT4 DeepSeek-V3 达 28 toke… |
 | 2026 | [AFORE: Attention-FFN Disaggregation with Overlapped Reconfiguration of Experts](https://arxiv.org/abs/2610.03203) | arXiv 2026 (preprint) | 利用 AFD Microbatch 前瞻负载信号，在流水窗口内重配与迁移 Hot Experts。 |
 | 2026 | [Balancing and Beyond: Communication-Centric Optimizations in Expert Parallelism](https://doi.org/10.1145/3789240.3829201) | SIGCOMM 2026 | 面向大规模 Expert Parallelism 联合调整 Expert Placement、跨机数据传输及算通重叠，而非仅优化负载均衡。 |
+| 2026 | [BrownoutServe: SLO-Aware Inference Serving Under Bursty Workloads for MoE-Based LLMs](https://doi.org/10.1109/TC.2026.3655019) | IEEE Transactions on Computers 2026 | 采用 United Experts 与受控 Brownout 对 Burst MoE 请求动态调整 Expert 访问和精度/SLO 预算，并公开 Serving Runtime、比较真实 vLLM 吞吐及 SLO Violation。 |
 | 2026 | [Capacity-Aware Inference: Mitigating the Straggler Effect in Mixture of Experts](https://proceedings.iclr.cc/paper_files/paper/2026/hash/94e845868a9ace4bc239d0c529d32f4c-Abstract-Conference.html) | ICLR 2026 | 通过 Expert Capacity 约束和本地候选扩展缓解 EP 负载不均；存在精度/加速权衡。 |
 | 2026 | [CoX-MoE: Coalesced Expert Execution for High-Throughput MoE Inference with AMX-Enabled CPU-GPU Co-Execution](https://arxiv.org/abs/2605.17889) | arXiv 2026 (preprint) | 将 Expert Microbatches 合并为常规 Batch，利用 CPU AMX 与 GPU 同步执行 Expert/Attention，并按热点分层放置专家减少 PCIe 迁移；与 MoE-Lightning、FlexGen 做端到端吞吐对照。 |
 | 2026 | [CRAFT: Fine-Grained Cost-Aware Expert Replication For Efficient Mixture-of-Experts Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/3a7f9e485845dac27423375c934cb4db-Abstract-Conference.html) | MLSys 2026 | CRAFT（MLSys 2026）在给定内存预算下对大规模 MoE 模型做细粒度的逐层专家复制（expert replication），把热门专家复制到多个设备以缓解专家负载不均，从而在不超预算的前提下提升 serving goodput |

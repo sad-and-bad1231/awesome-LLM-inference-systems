@@ -154,3 +154,8 @@ HILOS, SmallKV, Mirage, AttenIO, SpecMemo and Mirror-SD passed primary-paper ide
 ## Three further verifiable compiler/hardware runtime works (2026-10-11)
 
 KPerfIR (OSDI 2025), NeuronMM (Trainium matmul system preprint) and BaseRT (Metal-native inference engine preprint) have verified primary sources, distinguishable execution architectures and hardware measurements/code; broad generic GPU performance tools only qualify when they clearly affect the inference kernel toolchain. Speedup and overhead are author-reported and not independently reproduced.
+
+
+## MoE primary-source verification (2026-10-11)
+
+BrownoutServe's formally published IEEE TC 2026 method and open code demonstrate runtime burst/SLO handling, while CrossPool's 2026 preprint shows weight/KV GPU pool separation with measured long-context service latency; admitted under separate MoE Execution and Distributed Serving homes respectively. No model-quality-only or generic training paper imported, and neither author-provided result is an independent replication.
