@@ -139,3 +139,8 @@ Three more independent items were admitted on formal publisher or author-origin 
 ## Four system-execution source verifications (2026-10-11)
 
 CacheFlow, ReMP, NPUMoE and SCORPIO report inference-native mechanisms, executable system implementations, and GPU/NPU serving evaluations in primary arXiv sources, justifying distinct admissions. Their published performance is author-reported rather than reproduced; preprint status remains explicit. Pending other records still need individual review, not keyword rejection.
+
+
+## Six further per-source checked inferences (2026-10-11)
+
+DeepSpeed-FastGen, LeMix, AIRS, CXL-SpecKV, ITME and VeriAttn have verified paper identities plus reusable inference execution, runtime or memory mechanisms, and described physical serving/system evaluations or publicly inspectable artifacts. Conference proceedings are distinguished from arXiv sources. Benchmark speedups remain attributed to papers, not independent replication; missing historical source URLs are not rejected by default.

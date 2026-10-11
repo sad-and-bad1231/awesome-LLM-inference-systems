@@ -8,11 +8,12 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (81)
+## Papers (84)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2024 | [Andes: Defining and Enhancing Quality-of-Experience in LLM-Based Text Streaming Services](https://arxiv.org/abs/2404.16283) | arXiv 2024 (preprint) | 为 Text Streaming 定义面向用户的 QoE，并以 Token-level Preemption 和到达流量感知调度协调首 Token 与平滑输出。 |
+| 2024 | [DeepSpeed-FastGen: High-throughput Text Generation for LLMs via MII and DeepSpeed-Inference](https://arxiv.org/abs/2401.08671) | arXiv 2024 (preprint) | Dynamic SplitFuse 以统一 Token Budget 混合 Chunked Prefill 与 Decode，并提供 DeepSpeed-MII/Inference 实现及对 vLLM 的服务吞吐-延迟评估。 |
 | 2024 | [dLoRA: Dynamically Orchestrating Requests and Adapters for LoRA LLM Serving](https://www.usenix.org/conference/osdi24/presentation/wu-bingyang) | OSDI 2024 | Credit-based LoRA Batching 与 Adapter/Request 协同迁移，提高多租户低秩适配器 Serving 效率。 |
 | 2024 | [ExeGPT: Constraint-Aware Resource Scheduling for LLM Inference](https://arxiv.org/abs/2404.07947) | ASPLOS 2024 | 将推理资源配置与约束条件共同纳入调度，比较部署配置的延迟与吞吐。 |
 | 2024 | [Fairness in Serving Large Language Models](https://www.usenix.org/conference/osdi24/presentation/sheng) | OSDI 2024 | Virtual Token Counter 把 Prefill/Decode 的 Token Cost 计入公平服务定义和连续批处理调度。 |
@@ -25,6 +26,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
+| 2025 | [LeMix: Unified Scheduling for LLM Training and Inference on Multi-GPU Systems](https://arxiv.org/abs/2507.21276) | arXiv 2025 (preprint) | 利用 Profile、执行预测和动态多 GPU 调度协调持续训练与在线 Serving 资源，对照共置干扰、请求响应和 SLO。 |
 | 2025 | [MaverIQ: Fingerprint-Guided Extrapolation and Fragmentation-Aware Layering for Intent-Based LLM Serving](https://doi.org/10.1145/3712285.3759867) | SC 2025 | 以轻量 Model Fingerprint 和配置性能解析模型外推真实 LLM 延迟，并采用不均匀 Layer Placement 利用碎片 GPU 容量；TensorRT-LLM 代码及真实集群模型和负载测量。 |
 | 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
 | 2025 | [Optimizing LLM Queries in Relational Data Analytics Workloads](https://proceedings.mlsys.org/paper_files/paper/2025/hash/b5dc49f44db2fadc5c4d717c57f4a424-Abstract-Conference.html) | MLSys 2025 | 针对表格批量 LLM 调用按行与字段重排序，借助关系依赖最大化 Prefix KV 命中并缩短分析作业完成时间。 |
@@ -41,6 +43,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Tropical: Enhancing SLO Attainment in Disaggregated LLM Serving via SLO-Aware Multiplexing](https://doi.org/10.1109/DAC63849.2025.11132617) | DAC 2025 (NOT 2026 preprint year) | 根据 TTFT/TPOT SLO 动态融合 Colocated 与 P/D-disaggregated 两类执行，权衡 Prefill-Decode Interference 和分离架构排队；在实际数据集和 Serving Baselines 上验证 P90 Latency/SLO 达标。 |
 | 2025 | [XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models](https://proceedings.mlsys.org/paper_files/paper/2025/hash/5c20ca4b0b20b0bd2f1d839dc605e70f-Abstract-Conference.html) | MLSys 2025 | 词表静态预检、持久 Grammar Stack 与 CPU/GPU 重叠减少结构化生成开销。 |
 | 2026 | [Agentix: An Efficient Serving Engine for LLM Agents as General Programs](https://www.usenix.org/conference/nsdi26/presentation/luo) | NSDI 2026 | 将 Agent 程序依赖纳入服务调度，降低请求和程序级 Head-of-line Blocking。 |
+| 2026 | [AIRS: Scaling Live Inference in Resource Constrained Environments](https://proceedings.mlsys.org/paper_files/paper/2026/hash/547108084f0c2af39b956f8eadb75d1b-Abstract-Conference.html) | MLSys 2026 | Google AI Rater Service 在共享 TPU 资源下协调高/低优先级 LLM 评分推理流水线，利用任务资源编排提升吞吐与延迟可靠性。 |
 | 2026 | [AlignedServe: Orchestrating Prefix-aware Batching to Build a High-throughput and Computing-efficient LLM Serving System](https://doi.org/10.1145/3802009) | PACMMOD 2026 | 按 KV Prefix 长度组织批次避免 Decode Iteration Bubble，并用 GPU-to-GPU 预取与批级调度降低延迟。 |
 | 2026 | [AUM: Unleashing the Efficiency Potential of Shared Processors with Accelerator Units for LLM Serving](https://2026.hpca-conf.org/details/hpca-2026-main-conference/36/AUM-Unleashing-the-Efficiency-Potential-of-Shared-Processors-with-Accelerator-Units-) | HPCA 2026 | 建模共享矩阵加速资源与频率干扰，调度服务执行。 |
 | 2026 | [BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan) | OSDI 2026 | BatchGen 以「序列协程」计算模型把每条序列表示为细粒度事件驱动协程，让运行时动态重组工作（更大专家级 batch、缓解掉队、跨设备重分配），在 128-GPU 集群上把批完成时间最多缩短 2.3×，在内存受限加速器上比最强卸载基线快至多 9.6× |
