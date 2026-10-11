@@ -116,3 +116,8 @@ RouteBalance and Models Take Notes passed source/evidence admission with explici
 ## Additional source-verification wave (2026-10-11)
 
 Nine disaggregated serving, elastically scheduled and KV-memory systems (semi-PD, HydraInfer, TraCT, TokenScale, RTP-LLM, TokenDance, KernelFlume, SAC and Festina) were admitted following paper-specific source lookup and evaluation/implementation screening. All arXiv-only papers are labeled **preprint/technical report** rather than being upgraded from the historical dataset's status. TraCT's public paper and thesis report partially different workloads and benchmark improvements; the canonical entry states only the shared mechanism and measured evidence rather than an inflated single speedup. The previous per-paper pending queue continues separately; no total-corpus completion is claimed.
+
+
+## Agentic KV and runtime re-verification (2026-10-11)
+
+Pythia, TokenCake, AdaptCache, SwiftCache, CacheWise, SAW-INT4 and JetSpec were individually checked against original publication pages, project code and author reports. TokenCake's early 2025 arXiv record and 2026 revision are not treated as a formally published 2027 conference volume; its primary venue remains arXiv until proceedings exist. JetFlow in the legacy data was revised/renamed JetSpec in current arXiv and project pages; the same arXiv identifier prevents duplicate imports. SAW-INT4 is admitted for real SGLang/PagedAttention co-design, not because model quality alone is sufficient. The older pending categories are not reclassified as scientific rejects.
