@@ -149,3 +149,8 @@ DeepSpeed-FastGen, LeMix, AIRS, CXL-SpecKV, ITME and VeriAttn have verified pape
 ## Six strictly source-verified kernel, KV and decoding systems (2026-10-11)
 
 HILOS, SmallKV, Mirage, AttenIO, SpecMemo and Mirror-SD passed primary-paper identity, distinct systems mechanism and reported measured inference/accelerator evaluation. HILOS provides full synthesis and real-hardware deployment artifacts; Mirage has an open µGraph superoptimizer. SpecMemo/Mirror-SD are preserved as arXiv preprints rather than assigned unverifiable conference claims. AttenIO/SmallKV have verified formal publisher proceedings. This is selective admission, not a blanket inclusion of all technique papers, and does not imply independent reproduction.
+
+
+## Three further verifiable compiler/hardware runtime works (2026-10-11)
+
+KPerfIR (OSDI 2025), NeuronMM (Trainium matmul system preprint) and BaseRT (Metal-native inference engine preprint) have verified primary sources, distinguishable execution architectures and hardware measurements/code; broad generic GPU performance tools only qualify when they clearly affect the inference kernel toolchain. Speedup and overhead are author-reported and not independently reproduced.
