@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (31)
+## Papers (35)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -23,7 +23,9 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2025 | [LServe: Efficient Long-sequence LLM Serving with Unified Sparse Attention](https://proceedings.mlsys.org/paper_files/paper/2025/hash/cc8c6b9d89f7a898a29f58869b238e46-Abstract-Conference.html) | MLSys 2025 | 统一 Prefill/Decode 的结构化稀疏 Attention，并设计分层 KV Page 选择。 |
 | 2025 | [MoE-Lightning: High-Throughput MoE Inference on Memory-constrained GPUs](https://doi.org/10.1145/3669940.3707267) | ASPLOS 2025 | 面向显存受限设备的 Expert 加载与流水执行，缓解 MoE 权重驻留瓶颈。 |
 | 2025 | [SampleAttention: Near-Lossless Acceleration of Long Context LLM Inference with Adaptive Structured Sparse Attention](https://proceedings.mlsys.org/paper_files/paper/2025/hash/2d04d97593c8c33d415337f408ed0e1b-Abstract-Conference.html) | MLSys 2025 | 按 Head 和输入自适应选取稀疏结构，以 Cumulative Residual Attention 控制稀疏率与精度。 |
+| 2025 | [Shortcut-connected Expert Parallelism for Accelerating Mixture of Experts](https://proceedings.mlr.press/v267/cai25c.html) | ICML 2025 | ScMoE 用 Shortcut-connected 结构与 EP 计算/通信 Overlap 缓解 All-to-All 串行依赖，并包含分布式推理实测。 |
 | 2025 | [SpargeAttention: Accurate and Training-free Sparse Attention Accelerating Any Model Inference](https://proceedings.mlr.press/v267/zhang25ch.html) | ICML 2025 | 无需重训的训练无关稀疏 Attention，与计算执行策略协同保持效果。 |
+| 2025 | [Stratum: System-Hardware Co-Design with Tiered Monolithic 3D-Stackable DRAM for Efficient MoE Serving](https://doi.org/10.1145/3725843.3756043) | MICRO 2025 | 结合 Mono3D DRAM/NMP/GPU 的 Hot/Cold Expert 多级放置，利用主题感知路由管理推理吞吐与 SLO。 |
 | 2025 | [XAttention: Block Sparse Attention with Antidiagonal Scoring](https://proceedings.mlr.press/v267/xu25ag.html) | ICML 2025 | 用 Antidiagonal Scoring 快速识别高价值 Attention Block 并以块稀疏 Kernel 减少 Prefill。 |
 | 2026 | [Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design](https://www.usenix.org/conference/osdi26/presentation/wang-wenxin) | OSDI 2026 | 该 CPU-GPU 混合方案以流式/分布式加载 prefill（1200、1800 tokens/s）、节点内 P/D 分离与双批 overlap（延迟增 <15%、吞吐 +50%）、AVX-512 FP8 GEMV（CPU 延迟降 4–5×）和细粒度 CPU 并行（INT4 DeepSeek-V3 达 28 toke… |
 | 2026 | [AFORE: Attention-FFN Disaggregation with Overlapped Reconfiguration of Experts](https://arxiv.org/abs/2610.03203) | arXiv 2026 (preprint) | 利用 AFD Microbatch 前瞻负载信号，在流水窗口内重配与迁移 Hot Experts。 |
@@ -35,6 +37,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 模型跳连变换与推理系统协同设计，将 EP 阻塞通信隐藏在计算之下。 |
 | 2026 | [Least-Loaded Expert Parallelism: Load Balancing An Imbalanced Mixture-of-Experts](https://proceedings.mlr.press/v306/nguyen26m.html) | ICML 2026 | 将超载设备的 Token 及关联 Expert 参数动态重路由至闲置设备，减少 Collective Straggler。 |
 | 2026 | [MoE-APEX: An Efficient MoE Inference System with Adaptive Precision Expert Offloading](https://doi.org/10.1145/3779212.3790187) | ASPLOS 2026 | 按 Token/Layer/Sequence 分层管理 Expert 的精度、预取和缓存，减轻显存受限设备的 Expert Loading。 |
+| 2026 | [MoE-Lens: Towards the Hardware Limit of High-Throughput MoE LLM Serving Under Resource Constraints](https://doi.org/10.1145/3806645.3807594) | HPDC 2026 | CPU/GPU 混合执行结合硬件上界模型推导 Expert Placement/执行策略，实验比较性能模型与真实吞吐。 |
 | 2026 | [MoEntwine: Unleashing the Potential of Wafer-scale Chips for Large-scale Expert Parallel Inference](https://2026.hpca-conf.org/details/hpca-2026-main-conference/25/MoEntwine-Unleashing-the-Potential-of-Wafer-scale-Chips-for-Large-scale-Expert-Paral) | HPCA 2026 | 根据 Wafer-scale 互联重组 MoE Expert Parallel 执行和通信。 |
 | 2026 | [Patterns Behind Chaos: Forecasting Data Movement for Efficient Large-Scale MoE LLM Inference](https://doi.org/10.1109/ISCA66397.2026.00021) | ISCA 2026 | 预测 MoE 专家访问与搬运模式，减少跨设备专家交换。 |
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
@@ -43,5 +46,6 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods](https://doi.org/10.1145/3789240.3829183) | SIGCOMM 2026 | 面向 SuperPod 拓扑重构 MoE Expert All-to-All 的通信和同步路径，减少 EP 调度的跨节点序列化。 |
 | 2026 | [UEP: Portable Expert-Parallel Communication](https://www.usenix.org/conference/osdi26/presentation/mao-ziming-uep) | OSDI 2026 | UEP 用 GPU-CPU 控制通道取代 GPU 发起的 RDMA，由 CPU 代理发 GPUDirect RDMA 以 immediate data 模拟保序，在 EFA 上 dispatch/combine 吞吐提升 2.1×、SGLang token 吞吐提升至多 40% |
 | 2026 | [Unified Static–Dynamic Pruning for Efficient LLM Inference](https://doi.org/10.14778/3836663.3836665) | PVLDB 2026 | SPDP 将静态权重与动态激活剪枝映射到 Tiled-CBC 稀疏存储及 Prefill SpMM/Decode SpMspV 专用 GPU Kernel。 |
+| 2026 | [ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling](https://proceedings.mlr.press/v306/yang26ds.html) | ICML 2026 | 联合无损 Expert 权重压缩、缓存亲和调度与边缘硬件特性，实现低显存 MoE Serving 原型。 |
 
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*

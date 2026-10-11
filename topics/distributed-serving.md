@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (70)
+## Papers (75)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -27,6 +27,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Efficient MoE Inference with Fine-Grained Scheduling of Disaggregated Expert Parallelism (FinDEP)](https://arxiv.org/abs/2512.21487) | arXiv 2025 (preprint) | 把 Disaggregated Expert Parallelism 的计算和通信拆成可调粒度任务，搜索流水与重叠顺序。 |
 | 2025 | [Enabling Efficient GPU Communication over Multiple NICs with FuseLink](https://www.usenix.org/conference/osdi25/presentation/ren) | OSDI 2025 | 利用 GPU Relay 和 NIC Pooling 缓解跨节点热点，论文含 LLM Serving TTFT 实际评估。 |
 | 2025 | [FlexInfer: Flexible LLM Inference with CPU Computations](https://proceedings.mlsys.org/paper_files/paper/2025/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html) | MLSys 2025 | 按硬件配置和序列形状动态选择 CPU/GPU Prefill/Decode 执行策略。 |
+| 2025 | [gLLM: Global Balanced Pipeline Parallelism System for Distributed LLM Serving with Token Throttling](https://arxiv.org/abs/2504.14775) | SC 2025 | 在 Pipeline Parallel Serving 中动态限制 Prefill/Decode Token 数量，结合全局队列与 KV 容量减少 Pipeline Bubble。 |
 | 2025 | [Helix: Serving Large Language Models over Heterogeneous GPUs and Network via Max-Flow](https://www.cs.cmu.edu/~rvinayak/papers/Helix_ASPLOS_2025_Serving_LLMs_over_Heterogeneous_GPUs_and_Network_via_Max_Flow.pdf) | ASPLOS 2025 | 将异构 GPU 算力与网络带宽建模为有容量的有向图，以 Max-Flow 求解跨节点模型划分及请求路径。 |
 | 2025 | [HexGen-2: Disaggregated Generative Inference of LLMs in Heterogeneous Environment](https://openreview.net/pdf?id=Cs6MrbFuMq) | ICLR 2025 | 以图划分和最大流联合规划异构 GPU、P/D 并行与跨阶段 KV 通信。 |
 | 2025 | [Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod](https://arxiv.org/abs/2508.02520) | arXiv 2025 (technical report) | xDeepServe 在 Ascend CloudMatrix384 上采用 Transformerless 分离执行、XCCL 与去中心化 DP 组。 |
@@ -57,11 +58,13 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [fabric-lib: RDMA Point-to-Point Communication for LLM Systems](https://proceedings.mlsys.org/paper_files/paper/2026/hash/dea9b4b6f55ae611c54065d6fc750755-Abstract-Conference.html) | MLSys 2026 | 跨 NIC 的 WriteImm / ImmCounter 原语用于跨节点 KV Transfer 与 MoE Dispatch。 |
 | 2026 | [FACE: Fully PD Overlapped Scheduling and Multi-Level Architecture Co-Exploration on Wafer](https://2026.hpca-conf.org/details/hpca-2026-main-conference/14/FACE-Fully-PD-Overlapped-Scheduling-and-Multi-Level-Architecture-Co-Exploration-on-W) | HPCA 2026 | 联合晶圆级多层拓扑与 Prefill–Decode 计算重叠。 |
 | 2026 | [FlexPipe: Adapting Dynamic LLM Serving Through Inflight Pipeline Refactoring in Fragmented Serverless Clusters](https://doi.org/10.1145/3767295.3769316) | EuroSys 2026 | 不中断请求地动态调整分布式 Pipeline 划分与资源映射。 |
+| 2026 | [FLYING SERVING: On-the-Fly Parallelism Switching for Large Language Model Serving](https://doi.org/10.1145/3797905.3800525) | ICS 2026 | 在混合长度与动态负载下在线切换 TP/DP 并保留可复用运行状态，减少重配停顿。 |
 | 2026 | [GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving](https://openreview.net/forum?id=xKjYiUgeOK) | MLSys 2026 | GhostServe 在 host memory 中以 erasure coding 为 streaming KV cache 生成 parity shards，故障时重建丢失 KV 状态并继续推理，避免完整重算或全量状态复制 |
 | 2026 | [HBM Is Not All You Need: Efficient Disaggregated LLM Serving across Memory-heterogeneous Accelerators](https://arxiv.org/abs/2606.29986) | arXiv 2026 (preprint) | HMA-Serve 跨厂商 GDDR-Prefill/HBM-Decode 部署，采用阶段量化、按层传 KV 和延迟解量化。 |
 | 2026 | [HexGen-3: A Fully Disaggregated LLM Serving Framework with Fine-Grained Heterogeneous Resource Autoscaling](https://icml.cc/virtual/2026/poster/62564) | ICML 2026 | HexGen-3（ICML 2026）提出全分离（fully disaggregated）的 LLM serving 框架，把推理的各阶段解耦独立部署，并以分层调度器配合异构资源的自动扩缩（autoscaling），在成本与性能之间取得更优平衡 |
 | 2026 | [HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou) | NSDI 2026 | 模型预分布、阶段重叠、无网络热点放置和 Pipeline Consolidation。 |
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
+| 2026 | [MSCCL++: Rethinking GPU Communication Abstractions for AI Inference](https://www.microsoft.com/en-us/research/publication/msccl-rethinking-gpu-communication-abstractions-for-ai-inference/) | ASPLOS 2026 | 将 Collective 的底层通信原语与上层可移植算法分离，支持异构互联优化并有生产推理负载实测。 |
 | 2026 | [Multi-stage Flow Scheduling for LLM Serving](https://arxiv.org/abs/2603.17456) | arXiv 2026 (preprint) | 面向多阶段 KV Retrieval、Collective 与 P→D 传输，以 Reverse Multi-Level Queue 协调网络流与 TTFT。 |
 | 2026 | [Not All Prefills Are Equal: PPD Disaggregation for Multi-turn LLM Serving](https://icml.cc/virtual/2026/poster/64036) | ICML 2026 | 针对多轮 serving 采用 prompt 长度感知的 prefill-decode 分离，把增量 prefill 按长度路由以减少争用、提升 SLO 达成率 |
 | 2026 | [OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving](https://www.usenix.org/conference/osdi26/presentation/yao) | OSDI 2026 | 在跨 Slurm/HPC/异构计算环境提供发现、路由与故障控制平面。 |
@@ -75,10 +78,12 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Shift Parallelism: Low-Latency, High-Throughput LLM Inference for Dynamic Workloads](https://doi.org/10.1145/3779212.3790219) | ASPLOS 2026 | 利用推理 Sequence Parallelism 的 KV 状态不变性，动态切换 TP/SP 以兼顾低负载时延和高负载吞吐。 |
 | 2026 | [SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9c20f16b05f5e5e70fa07e2a4364b80e-Abstract-Conference.html) | MLSys 2026 | SHIP 总结 Groq 基于 LPUv1 SRAM 的大规模 LLM serving：以低直径同步互联和静态编译 pipeline 扩展到数千芯片，并在受限 SRAM 中实现 PagedAttention、prefix caching、speculative decoding 及动态 chunked prefill，… |
 | 2026 | [SwiftSpec: Disaggregated Speculative Decoding and Fused Kernels for Low-Latency LLM Inference](https://doi.org/10.1145/3779212.3790246) | ASPLOS 2026 | 通过异步 Draft/Verify 分离、并行树生成和 Kernel Fusion 降低小批量分布式解码延迟。 |
+| 2026 | [Symbiotic MLLM Serving: Dynamically Balancing Parallelism Across GPUs and Resources Within GPUs](https://doi.org/10.1109/ISCA66397.2026.00173) | ISCA 2026 | 动态调节视觉编码与文本生成的跨 GPU Parallelism 和 GPU 内时空共享，缓解多模态阶段资源错配。 |
 | 2026 | [SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal) | NSDI 2026 | 将 KV Memory 与 Compute 分离，针对长上下文请求设计内存与执行协同。 |
 | 2026 | [Tetris: Efficient Long-context LLM Serving with Chunkwise Dynamic Sequence Parallelism](https://doi.org/10.1109/ISCA66397.2026.00098) | ISCA 2026 | 在分离式集群按 Chunk 动态扩缩 Sequence Parallelism，使用碎片资源。 |
 | 2026 | [TokenWeave: Efficient Compute-Communication Overlap for Distributed LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/73ba81c7b25134a559c8a9c39ec1a4c3-Abstract-Conference.html) | MLSys 2026 | 使用融合 AllReduce–RMSNorm 和 Multimem 降低 TP 小批次通信开销。 |
 | 2026 | [Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving](https://arxiv.org/abs/2607.02043) | arXiv 2026 (preprint) | 在 Prefill Pool 拥塞时将部分 Chunked Prefill 导向 Decode Worker，约束已有 Decode 的 TBT SLO。 |
+| 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [Turbo: Efficiently Serving Long-Context Large Language Models with In-Network Aggregation](https://doi.org/10.1145/3789240.3829140) | SIGCOMM 2026 | 将 Long-context 分布式 Attention 的部分 Aggregation 下沉至网络设备，减少 Context Parallel 跨节点归约瓶颈。 |
 | 2026 | [TurboBus: Pooling PCIe Bandwidth for LLM Workloads via Scale-Up Fabrics](https://doi.org/10.1145/3789240.3829130) | SIGCOMM 2026 | 通过 Scale-up Fabric 借用空闲 PCIe Link 带宽并对 GPU 传输重路由，优化权重加载和推理状态搬运。 |

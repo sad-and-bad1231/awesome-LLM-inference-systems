@@ -6,14 +6,14 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 41 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 63 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 18 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 21 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 31 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 65 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 70 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 25 | Validated models, traces, benchmarks and production diagnosis |
+| [Kernels & Compilers](kernels-compilers.md) | 48 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 76 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 20 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 23 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 35 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 68 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 75 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 27 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
 
@@ -26,7 +26,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | 2026 top-conference additions (strict-source tranche) | 53 |
 | Distributed-inference literature expansion (2026-10-09) | 33 |
 | 2025–2026 landmark systems sweep (2026-10-11) | 48 |
-| **Canonical topic entries** | **334** |
+| Legacy JSONL reconciliation (2026-10-11) | 38 |
+| **Canonical topic entries** | **372** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -58,3 +59,8 @@ Added **33 canonical entries** (2024–2026), including **24 papers from 2026**,
 ## 2025–2026 landmark inference-systems sweep (2026-10-11)
 
 This reviewed wave adds **48** distinct primary papers (**26 from 2025; 22 from 2026**), placing every entry in its existing primary mechanism home. Sources were checked against official SOSP 2025, SIGCOMM 2026, FAST 2026, USENIX ATC 2025, ASPLOS 2025/2026, MLSys 2025, PACMMOD 2026 and PVLDB 2026 publication/session records, with ACM DOI/USENIX paper-specific links preferred. The one SIGCOMM program-only link is explicitly flagged as such in its venue cell. The wave emphasizes durable implementation mechanisms: workload-specific execution engines, P/D multiplexing, MoE expert communication, KV network/storage paths, low-precision compiler primitives, and production traces. Training-only, general GPU/network studies without LLM inference evidence, and uncertain paper identities were not imported. These descriptions rely on primary abstracts and official technical records; they do **not** represent independent replication or an exhaustive claim about every 2025–2026 publication.
+
+
+## Historical 1,003-record JSONL reconciliation (2026-10-11)
+
+The supplied legacy JSONL contains **1,003 candidate records**; it is a discovery dataset, not primary publication evidence. An exact normalized-title comparison against the pre-wave eight-topic bibliography found 206 direct overlaps; fuzzy/alternate-title, homepage and survey matches are handled conservatively separately. A strict primary-source and systems-evidence check admitted **38 additional papers** (**21 dated 2025; 17 dated 2026**), placed in their existing mechanism categories. Important legacy errors corrected at admission: **MagicDec is ICLR 2025**, **Shortcut-connected Expert Parallelism is ICML 2025**, **HotPrefix and DepCache are PACMMOD 2025**, **LMCache's verified paper is arXiv 2025 rather than a verified MLSys 2026 publication**, and HACK's SIGCOMM appearance is a poster rather than an assumed full paper. Publisher or official conference identity and paper abstracts/author implementation claims were corroborated for admitted entries; no independent benchmark reproduction is implied. Entries without enough evidence remain outside the library. The one-row-per-source audit is delivered separately, not committed as a redundant catalog.
