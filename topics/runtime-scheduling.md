@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (63)
+## Papers (64)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -23,6 +23,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
 | 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
+| 2025 | [Optimizing LLM Queries in Relational Data Analytics Workloads](https://proceedings.mlsys.org/paper_files/paper/2025/hash/b5dc49f44db2fadc5c4d717c57f4a424-Abstract-Conference.html) | MLSys 2025 | 针对表格批量 LLM 调用按行与字段重排序，借助关系依赖最大化 Prefix KV 命中并缩短分析作业完成时间。 |
 | 2025 | [Past-Future Scheduler for LLM Serving under SLA Guarantees](https://doi.org/10.1145/3676641.3716011) | ASPLOS 2025 | 结合历史响应长度与未来 Decode/KV 需求估计控制排队优先级，缓解动态请求造成的 SLO 违约。 |
 | 2025 | [Pie: A Programmable Serving System for Emerging LLM Applications](https://doi.org/10.1145/3731569.3764814) | SOSP 2025 | 将推理服务控制从固定 Decode Loop 转为可编程执行单元，支持应用自定义请求编排与策略。 |
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |

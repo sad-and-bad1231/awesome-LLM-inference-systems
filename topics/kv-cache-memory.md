@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (60)
+## Papers (61)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -22,6 +22,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2024 | [Prompt Cache: Modular Attention Reuse for Low-Latency Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2024 | 通过显式 Prompt Module 与位置约束实现跨请求 Attention State 复用，降低重复前缀处理。 |
 | 2024 | [Quest: Query-Aware Sparsity for Efficient Long-Context LLM Inference](https://proceedings.mlr.press/v235/tang24l.html) | ICML 2024 | 按当前 Query 粗筛 KV Page 再精确算 Attention，降低长上下文 Decode 访存量。 |
 | 2024 | [SnapKV: LLM Knows What You are Looking for Before Generation](https://proceedings.neurips.cc/paper_files/paper/2024/hash/28ab418242603e0f7323e54185d19bde-Abstract-Conference.html) | NeurIPS 2024 | 通过观察窗口中的 Head-specific 重要位置，压缩未来 Decode 要保留的 KV。 |
+| 2025 | [Accelerating LLM Serving for Multi-turn Dialogues with Efficient Resource Management](https://doi.org/10.1145/3676641.3716245) | ASPLOS 2025 | FlashGen 面向多轮会话在 GPU/CPU/SSD 三层保留与搬运 KV Cache，并重排请求降低跨轮 Prefill 重计算。 |
 | 2025 | [CacheBlend: Fast Large Language Model Serving for RAG with Cached Knowledge Fusion](https://doi.org/10.1145/3689031.3696098) | EuroSys 2025 | 支持非连续知识块 KV 复用，降低 RAG 请求的 Prefill 重计算。 |
 | 2025 | [ChunkKV: Semantic-Preserving KV Cache Compression for Efficient Long-Context LLM Inference](https://proceedings.neurips.cc/paper_files/paper/2025/hash/2987f911151b39cd3a1761e212319e8e-Abstract-Conference.html) | NeurIPS 2025 | 以语义完整 Chunk 作为 KV 保留单元，并复用跨层保留索引。 |
 | 2025 | [DiffKV: Differentiated Memory Management for Large Language Models with Parallel KV Compaction](https://doi.org/10.1145/3731569.3764810) | SOSP 2025 | 按 KV 类型、Head 与 Token 非均匀分配缓存预算，并行压缩和布局整理减少 Cache Compaction 关键路径。 |

@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (38)
+## Papers (41)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -21,7 +21,10 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/96894468eb44631a32d7ebd56f9892c7-Abstract-Conference.html) | MLSys 2025 | 联合设计 Radix Tree Prefix Share Attention Kernel 与树划分 Runtime。 |
 | 2025 | [FlexAttention: A Programming Model for Generating Fused Attention Variants](https://proceedings.mlsys.org/paper_files/paper/2025/hash/61a9278dfef5f871b5e472389f8d6fa1-Abstract-Conference.html) | MLSys 2025 | 以 PyTorch 组合式表达实现并编译融合 Attention 变体。 |
 | 2025 | [GeneralSparse: Bridging the Gap in SpMM for Pruned Large Language Model Inference on GPUs](https://www.usenix.org/conference/atc25/presentation/wang-yaoyu) | USENIX ATC 2025 | 在 Memory-access Space 与 Reduction Space 上抽象可变稀疏模式，生成适应 GPU 层级的通用 SpMM Kernel。 |
+| 2025 | [LeanAttention: Hardware-Aware Scalable Attention Mechanism for the Decode-Phase of Transformers](https://proceedings.mlsys.org/paper_files/paper/2025/hash/16ec6494e9b5a4138de7238761d715b4-Abstract-Conference.html) | MLSys 2025 | 为 Long-context Decode 重排 Exact Attention 的 Split-K 和跨 CTA Reduction，提升长序列并行度及 GPU 利用率。 |
 | 2025 | [MAS-ATTENTION: MEMORY-AWARE STREAM PROCESSING FOR ATTENTION ACCELERATION ON RESOURCE-CONSTRAINED EDGE DEVICES](https://proceedings.mlsys.org/paper_files/paper/2025/hash/d3cf1559a8795eb1ed2b3ad52409ac7d-Abstract-Conference.html) | MLSys 2025 | 协调边缘加速器的向量与矩阵执行流水，以多级 Tiling 和缓存覆盖减少片上空间开销；含真实 NPU 验证。 |
+| 2025 | [MEADOW: Memory-efficient Dataflow and Data Packing for Low Power Edge LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/259a5df46308d60f8454bd4adcc3b462-Abstract-Conference.html) | MLSys 2025 | 在低功耗 FPGA 上采用 Token-parallel/Head-sequential Dataflow 与无损 Weight Packing，减少 Prefill/Decode 外存访问。 |
+| 2025 | [Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking](https://doi.org/10.1145/3676642.3736114) | ASPLOS 2025 | 基于 Neuron Co-Activation 重排手机 Flash 上的稀疏权重，联合预取和访问模式优化减少 IOPS。 |
 | 2025 | [POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference](https://doi.org/10.1145/3676641.3715996) | ASPLOS 2025 | 在共享 SM 中重叠计算密集 Prefill 与访存密集 Decode Attention。 |
 | 2025 | [QFactory: Accelerating Quantized Large Language Model Serving with Qtile Graphs](https://www.usenix.org/conference/atc25/presentation/zhang-qihao) | USENIX ATC 2025 | 以 Qtile Graph 描述量化张量变换与 Dequantize/Fused GEMM，联合图变换和 Tile Scheduling 生成 Kernel。 |
 | 2025 | [SageAttention: Accurate 8-Bit Attention for Plug-and-play Inference Acceleration](https://proceedings.iclr.cc/paper_files/paper/2025/hash/b286c344d38e10d2466c0514b78e2f36-Abstract-Conference.html) | ICLR 2025 | INT8 Attention Quantization 与 GPU Kernel 优化协同，保持高效推理所需数值精度。 |

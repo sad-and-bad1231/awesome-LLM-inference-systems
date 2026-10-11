@@ -6,12 +6,12 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 38 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 60 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Kernels & Compilers](kernels-compilers.md) | 41 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 61 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 18 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 21 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 30 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 63 | Batching, routing, SLO, fairness and request-level control |
+| [Runtime & Scheduling](runtime-scheduling.md) | 64 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 70 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 25 | Validated models, traces, benchmarks and production diagnosis |
 
@@ -25,8 +25,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Broad literature sweep: source-screened additional papers | 80 |
 | 2026 top-conference additions (strict-source tranche) | 53 |
 | Distributed-inference literature expansion (2026-10-09) | 33 |
-| 2025–2026 landmark systems sweep (2026-10-11) | 39 |
-| **Canonical topic entries** | **325** |
+| 2025–2026 landmark systems sweep (2026-10-11) | 44 |
+| **Canonical topic entries** | **330** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -57,4 +57,4 @@ Added **33 canonical entries** (2024–2026), including **24 papers from 2026**,
 
 ## 2025–2026 landmark inference-systems sweep (2026-10-11)
 
-This reviewed wave adds **39** distinct primary papers (**21 from 2025; 18 from 2026**), placing every entry in its existing primary mechanism home. Sources were checked against official SOSP 2025, SIGCOMM 2026, FAST 2026, USENIX ATC 2025 and ASPLOS 2025/2026 publication/session records, with ACM DOI/USENIX paper-specific links preferred. The one SIGCOMM program-only link is explicitly flagged as such in its venue cell. The wave emphasizes durable implementation mechanisms: workload-specific execution engines, P/D multiplexing, MoE expert communication, KV network/storage paths, low-precision compiler primitives, and production traces. Training-only, general GPU/network studies without LLM inference evidence, and uncertain paper identities were not imported. These descriptions rely on primary abstracts and official technical records; they do **not** represent independent replication or an exhaustive claim about every 2025–2026 publication.
+This reviewed wave adds **44** distinct primary papers (**26 from 2025; 18 from 2026**), placing every entry in its existing primary mechanism home. Sources were checked against official SOSP 2025, SIGCOMM 2026, FAST 2026, USENIX ATC 2025 and ASPLOS 2025/2026 publication/session records, with ACM DOI/USENIX paper-specific links preferred. The one SIGCOMM program-only link is explicitly flagged as such in its venue cell. The wave emphasizes durable implementation mechanisms: workload-specific execution engines, P/D multiplexing, MoE expert communication, KV network/storage paths, low-precision compiler primitives, and production traces. Training-only, general GPU/network studies without LLM inference evidence, and uncertain paper identities were not imported. These descriptions rely on primary abstracts and official technical records; they do **not** represent independent replication or an exhaustive claim about every 2025–2026 publication.
