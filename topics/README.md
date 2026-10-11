@@ -6,7 +6,7 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 53 | Attention kernels, GEMM, compilers and hardware mappings |
+| [Kernels & Compilers](kernels-compilers.md) | 56 | Attention kernels, GEMM, compilers and hardware mappings |
 | [KV Cache & Context Memory](kv-cache-memory.md) | 101 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 32 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
@@ -36,7 +36,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Additional verified execution mechanisms (2026-10-11) | 4 |
 | Primary-source six-paper architecture/runtime review (2026-10-11) | 6 |
 | Primary-source kernel and speculative-system review (2026-10-11) | 6 |
-| **Canonical topic entries** | **468** |
+| Primary-source GPU/Trainium/Metal execution verification (2026-10-11) | 3 |
+| **Canonical topic entries** | **471** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -139,3 +140,8 @@ Six papers passed the original gate on primary sources: DeepSpeed-FastGen (Dynam
 ## Strong evaluated hardware and compiler systems (2026-10-11)
 
 The 1,003-entry corpus has six more **primary-source verified** admissions: HILOS (ASPLOS 2026, SmartSSD hardware and released HLS/deployment source), SmallKV (NeurIPS 2025, compression with measured inference throughput), Mirage (OSDI 2025, released µGraph superoptimizer and measured Tensor execution), AttenIO (ASPLOS 2026, long-sequence exact Attention I/O and acceleration), SpecMemo (2025 preprint, Titan RTX and eight MI250 GPU batched speculative implementation), and Mirror-SD (2025 preprint, Apple-origin heterogeneous GPU/NPU speculative execution with wall-clock measurements). Formal publications are distinguished from arXiv preprints. Baselines and speedups are author-reported; external replication not claimed. The many remaining unresolved papers remain genuinely pending rather than quality-rejected.
+
+
+## Hardware-specific inference toolchain review (2026-10-11)
+
+Three missing historical records pass strict system relevance and hardware/evaluation checks: KPerfIR (OSDI 2025 Triton compiler-linked performance analysis, quantified overhead and error), NeuronMM (2025 preprint, real AWS Trainium LLM kernel and end-to-end inference evaluation, public code), and BaseRT (2026 preprint, native Metal runtime and public M3/M4 reproducible baselines). Each is kernel/compiler-centered with no new category. Do not conflate preprint and peer-reviewed status; measured gains are authors' results, not replicated locally. More historical corpus items remain pending.
