@@ -7,12 +7,12 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 50 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 85 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 88 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 29 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 26 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 42 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 76 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 86 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Runtime & Scheduling](runtime-scheduling.md) | 78 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 90 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 31 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
@@ -28,7 +28,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | 2025–2026 landmark systems sweep (2026-10-11) | 48 |
 | Legacy JSONL reconciliation (2026-10-11) | 52 |
 | Strict re-verification of legacy holdouts (2026-10-11) | 39 |
-| **Canonical topic entries** | **425** |
+| Follow-up legacy primary-source verification (2026-10-11) | 9 |
+| **Canonical topic entries** | **434** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -91,3 +92,8 @@ Further primary-source admissions: SLOs-Serve (multi-SLO token budgeting), SVF g
 
 
 RouteBalance is admitted on actual heterogenous 28-GPU cluster measurements of joint model selection and instance load balancing, including router-baseline isolation and source release. Models Take Notes at Prefill is admitted for editable/position-portable cache composition, public implementation and an online vLLM system evaluation; enormous reported P90 TTFT improvements apply to specific recomputation baselines and must not be generalized across all workloads. The economic proposal Can I Buy Your KV Cache? is held out as a general-serving architecture admission, as its token-level/compute microbenchmark and monetary model are insufficient proof of a deployed cross-party cache-delivery system.
+
+
+## Follow-up primary-source verification: disaggregation and elastic serving (2026-10-11)
+
+Nine additional source-checked high-impact systems are admitted (2025: 4; 2026: 5). Details are placed in the existing Distributed Serving, KV/Memory and Runtime/Scheduling classes: semi-PD, HydraInfer, TraCT, TokenScale, RTP-LLM, TokenDance, KernelFlume, SAC and Festina. Each has an original paper source and author-reported real GPU/prototype or production-trace Serving results. KernelFlume's real A6000/H100 measurements are intentionally distinguished from its larger simulated scenarios. The original 1,003-record holdouts **remain pending except specifically rechecked records**; they are not wholesale rejected.
