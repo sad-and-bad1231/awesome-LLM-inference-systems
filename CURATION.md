@@ -76,3 +76,8 @@ For the 2026 large-volume request, **2026 must describe the accepted formal conf
 ## Distributed-inference curation wave (2026-10-09)
 
 Added 33 screened papers within the existing mechanism pages, with particular attention to DP/EP scheduling metadata, asynchronous synchronization, collectives, topology-aware state movement, MoE attention/FFN disaggregation and skeptical design-space studies. Formal publication and preprint/technical-report status are distinguished in each row. The previous 53-item formal-2026-conference tranche has **not** been retroactively expanded using preprints. This wave checks paper identity and the authors' stated mechanism/evidence, **not** full reproducibility or exhaustive 2026 completeness.
+
+
+## 2025–2026 landmark systems sweep (2026-10-11)
+
+**39 newly admitted, nonduplicate papers** (21 published in 2025; 18 in 2026) were reviewed from selected primary conference sessions/proceedings and paper-specific publication records: SOSP, SIGCOMM, FAST, USENIX ATC and ASPLOS, including cross-checks against existing eight mechanism classes. Admission required an identifiable inference-time bottleneck, a novel execution/system mechanism, and paper-reported implementation plus evaluation; top-venue labels alone did not qualify. Each paper has exactly one canonical entry and a publication-year venue citation. Do not confuse source/abstract screening with replication or guarantee that all notable research has been discovered; continuously audit newly released venue records and exclude unresolved titles.
