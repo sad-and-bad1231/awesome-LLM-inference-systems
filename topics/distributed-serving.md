@@ -8,12 +8,13 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (93)
+## Papers (94)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2024 | [DéjàVu: KV-cache Streaming for Fast, Fault-tolerant Generative LLM Serving](https://proceedings.mlr.press/v235/strati24a.html) | ICML 2024 | DéjàVuLib 实现跨 GPU 的 KV 流式传输，同时支持 Prompt/Token Disaggregation、Microbatch Swapping 与状态复制容错。 |
 | 2024 | [HeteGen: Efficient Heterogeneous Parallel Inference for Large Language Models on Resource-Constrained Devices](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5431dca75a8d2abc1fb51e89e8324f10-Abstract-Conference.html) | MLSys 2024 | 针对 GPU/CPU 异构设备规划推理执行与参数转移，实现受限资源大模型部署。 |
+| 2024 | [Inference without Interference: Disaggregate LLM Inference for Mixed Downstream Workloads (TetriInfer)](https://arxiv.org/abs/2401.11181) | arXiv 2024 (preprint) | 将 Prompt 分块、Prefill/Decode 计算实例分离与资源预测两级调度结合，论文报告真实系统 TTFT、JCT 和成本对照。 |
 | 2024 | [Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache](https://arxiv.org/abs/2401.02669) | arXiv 2024 (preprint) | DistAttention 与弹性分布式 KV Pool 分离 Attention 计算/状态驻留，在多 GPU 间扩展 Long-context Serving。 |
 | 2024 | [LoongServe: Efficiently Serving Long-Context Large Language Models with Elastic Sequence Parallelism](https://doi.org/10.1145/3694715.3695948) | SOSP 2024 | Elastic Sequence Parallelism 随上下文长度和负载变化动态调整跨 GPU 并行度。 |
 | 2024 | [MemServe: Context Caching for Disaggregated LLM Serving with Elastic Memory Pool](https://arxiv.org/abs/2406.17565) | arXiv 2024 (preprint) | 以 MemPool 统一跨 Worker 分布式 KV 内存，再用全局 Prefix-tree Cache-aware Scheduler 联结 Context Reuse 和 P/D 分离。 |
