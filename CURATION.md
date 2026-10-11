@@ -124,3 +124,8 @@ Pythia, TokenCake, AdaptCache, SwiftCache, CacheWise, SAW-INT4 and JetSpec were 
 
 
 Six further source-verified admissions (MaverIQ, EVICPRESS, WANSpec, VeriCache, Joint KV Encoding and CoX-MoE) were checked against publisher DOI, primary arXiv pages, release artifacts and real system benchmark summaries. MaverIQ's formal SC 2025 status was confirmed rather than imported from its legacy title alone; other preprints remain labeled as such. These meet the same inference-specific mechanism and implementation/evaluation gate, without any claim of independent result reproduction.
+
+
+## Re-inspected formal 2025 systems papers (2026-10-11)
+
+After publication-specific DOI/USENIX and original arXiv experiment checks, admitted nine pre-existing legacy discoveries: RTSS LeMix, MICRO Chameleon, OSDI Mirage/KPerfIR/PipeThreader, NeuronMM on actual Trainium, LoRAServe, GreenLLM, and SCORPIO. This illustrates the failure of historical source-link heuristics; truly runnable GQA/attention compilers and real GPU serving/runtime evaluation were required. The MICRO 2025 DECA paper is legitimate architecture research with a distinct design, but projected timing of its unbuilt near-core accelerator is from a Sniper simulation, **not** physically measured silicon acceleration; it was not represented as a verified production kernel in this library. No change to the existing quality requirements.

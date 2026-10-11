@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (80)
+## Papers (84)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -23,8 +23,11 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Aegaeon: Effective GPU Pooling for Concurrent LLM Serving on the Market](https://doi.org/10.1145/3731569.3764815) | SOSP 2025 | Token 粒度复用 GPU 承载模型长尾，低开销弹性调整并验证生产服务。 |
 | 2025 | [AI Metropolis: Scaling Large Language Model-based Multi-Agent Simulation with Out-of-order Execution](https://proceedings.mlsys.org/paper_files/paper/2025/hash/4f31327e046913c7238d5b671f5d820e-Abstract-Conference.html) | MLSys 2025 | 跟踪多 Agent 的真实依赖并乱序触发 LLM 请求，消除全局同步引起的虚假依赖与低利用率。 |
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
+| 2025 | [Chameleon: Adaptive Caching and Scheduling for Many-Adapter LLM Inference Environments](https://doi.org/10.1145/3725843.3756083) | MICRO 2025 | 使用 GPU 闲置显存维护 LoRA Adapter Hot Cache，基于 Adapter Rank、装载延迟和公平性的多队列 Scheduling 防止 HoL 阻塞；真实生产 Trace 与开源 LLM 实测 P99 TTFT 和吞吐。 |
+| 2025 | [GreenLLM: SLO-Aware Dynamic Frequency Scaling for Energy-Efficient LLM Serving](https://arxiv.org/abs/2508.16449) | arXiv 2025 (preprint) | 在 TensorRT-LLM/NVIDIA Dynamo 上独立控制 Prefill 和 Decode GPU Clock，结合输入长度队列、在线功耗模型和 TBT Feedback；8×A100 DGX 实测 Alibaba/Azure Trace 的能耗/SLO 折中。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
+| 2025 | [LeMix: Unified Scheduling for LLM Training and Inference on Multi-GPU Systems](https://doi.org/10.1109/RTSS66672.2025.00052) | RTSS 2025 | 跨 Pipeline Stage 共享训练和推理 GPU 资源，使用 Offline Profiling、Task-aware Execution Planning、Runtime Memory-aware Scheduling 控制混合负载干扰；8×A100/A6000 的真实 LMSYS Trace 测 Serving SLO、吞吐及训练有效性。 |
 | 2025 | [MaverIQ: Fingerprint-Guided Extrapolation and Fragmentation-Aware Layering for Intent-Based LLM Serving](https://doi.org/10.1145/3712285.3759867) | SC 2025 | 以轻量 Model Fingerprint 和配置性能解析模型外推真实 LLM 延迟，并采用不均匀 Layer Placement 利用碎片 GPU 容量；TensorRT-LLM 代码及真实集群模型和负载测量。 |
 | 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
 | 2025 | [Optimizing LLM Queries in Relational Data Analytics Workloads](https://proceedings.mlsys.org/paper_files/paper/2025/hash/b5dc49f44db2fadc5c4d717c57f4a424-Abstract-Conference.html) | MLSys 2025 | 针对表格批量 LLM 调用按行与字段重排序，借助关系依赖最大化 Prefix KV 命中并缩短分析作业完成时间。 |
@@ -33,6 +36,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |
 | 2025 | [PrefillOnly: An Inference Engine for Prefill-only Workloads in Large Language Model Applications](https://doi.org/10.1145/3731569.3764834) | SOSP 2025 | 针对只需少量输出的 Prefill-only 应用移除无用 Decode/KV 工作，设计专用 Batch 与请求排序。 |
 | 2025 | [Resource Multiplexing in Tuning and Serving Large Language Models](https://www.usenix.org/conference/atc25/presentation/he-yongjun) | USENIX ATC 2025 | LLMStation 将 Fine-tuning 拆为可挂起 Pipeline，与推理 Batch 做迭代级 GPU 时空复用并保证 Serving SLO。 |
+| 2025 | [SCORPIO: Serving the Right Requests at the Right Time for Heterogeneous SLOs in LLM Inference](https://arxiv.org/abs/2505.23022) | arXiv 2025 (preprint; WISE 2026 authors' note) | TTFT Guard 用 Deadline 和拒绝不可行请求，TPOT Guard 用预测、Credit-based Batch 与 Admission 控制多级 SLO；4×A100 对 Llama-3.1/Gemma 的 ShareGPT/LMSYS Trace 实测 Goodput 和违约率。 |
 | 2025 | [SLOs-Serve: Optimized Serving of Multi-SLO LLMs](https://arxiv.org/abs/2504.08784) | arXiv 2025 (preprint) | 以动态规划联合分配 Chunked Prefill 和 Speculative Decoding 的 Token Budget，按多阶段 SLO 动态路由多副本；六类应用场景实测服务容量。 |
 | 2025 | [SOLA: Optimizing SLO Attainment for Large Language Model Serving with State-Aware Scheduling](https://proceedings.mlsys.org/paper_files/paper/2025/hash/bc82dbfbfa43232be85b8d9838f49c3e-Abstract-Conference.html) | MLSys 2025 | 按请求和全局状态动态调节 Iteration 调度以协调 TTFT 与 TPOT。 |
 | 2025 | [TokenScale: Timely and Accurate Autoscaling for Disaggregated LLM Serving with Token Velocity](https://arxiv.org/abs/2512.03416) | arXiv 2025 (preprint) | 用跨 Prefill/Transfer/Decode 的 Token Velocity 作为 Backpressure 前馈，并让 Decoder GPU 在突发负载时暂执行 Prefill；生产 Trace GPU Cluster 对照 DistServe/AIBrix/BlitzScale 的 SLO 与成本。 |

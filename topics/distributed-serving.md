@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (91)
+## Papers (92)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -45,6 +45,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Prefill-Decode Aggregation or Disaggregation? Unifying Both for Goodput-Optimized LLM Serving](https://arxiv.org/abs/2508.01989) | arXiv 2025 (preprint) | TaiChi 用混合阶段部署与 Latency Shifting 按 TTFT/TPOT SLO 选择聚合、分离或混合执行。 |
 | 2025 | [Seesaw: High-throughput LLM Inference via Model Re-sharding](https://proceedings.mlsys.org/paper_files/paper/2025/hash/cbc4ab80cd77aa0eb87da062fbcddb46-Abstract-Conference.html) | MLSys 2025 | 跨 Prefill/Decode 动态调整模型 Sharding，配合分层 KV 缓冲减少转换开销。 |
 | 2025 | [semi-PD: Towards Efficient LLM Serving via Phase-Wise Disaggregated Computation and Unified Storage](https://arxiv.org/abs/2504.19867) | arXiv 2025 (preprint) | 在 SM 级分离 Prefill 与 Decode Compute、共享模型权重与 KV Storage，结合统一 Memory Manager/SLO-aware Partitioning；在 DeepSeek/Llama GPU Serving 工作负载实测请求延迟和 SLO。 |
+| 2025 | [Serving Heterogeneous LoRA Adapters in Distributed LLM Inference Systems](https://arxiv.org/abs/2511.22880) | arXiv 2025 (preprint; LoRAServe system) | LoRAServe 根据 Adapter Rank Diversity 联合 Placement、负载感知跨 GPU Routing 和 GPU Direct RDMA 远程适配层加载；4–12 台 Serving 节点真实生产 Trace 测吞吐、TTFT 与 GPU 数量。 |
 | 2025 | [Star Attention: Efficient LLM Inference over Long Sequences](https://proceedings.mlr.press/v267/acharya25a.html) | ICML 2025 | 通过分布式上下文 Block Attention 与 Anchor Token 降低多 GPU Long-context 通信。 |
 | 2025 | [Step-3 is Large yet Affordable: Model-system Co-design for Cost-effective Decoding](https://arxiv.org/abs/2507.19427) | arXiv 2025 (technical report) | MFA Attention 与 Attention-FFN Disaggregation 协同设计，联动 KV 表示、专家并行及通信。 |
 | 2025 | [TAPAS: Thermal- and Power-Aware Scheduling for LLM Inference in Cloud Platforms](https://doi.org/10.1145/3676641.3716025) | ASPLOS 2025 | 将动态功耗、温度和服务请求纳入云端 LLM 集群调度。 |

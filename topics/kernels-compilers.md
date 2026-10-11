@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (50)
+## Papers (54)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -23,11 +23,15 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/96894468eb44631a32d7ebd56f9892c7-Abstract-Conference.html) | MLSys 2025 | 联合设计 Radix Tree Prefix Share Attention Kernel 与树划分 Runtime。 |
 | 2025 | [FlexAttention: A Programming Model for Generating Fused Attention Variants](https://proceedings.mlsys.org/paper_files/paper/2025/hash/61a9278dfef5f871b5e472389f8d6fa1-Abstract-Conference.html) | MLSys 2025 | 以 PyTorch 组合式表达实现并编译融合 Attention 变体。 |
 | 2025 | [GeneralSparse: Bridging the Gap in SpMM for Pruned Large Language Model Inference on GPUs](https://www.usenix.org/conference/atc25/presentation/wang-yaoyu) | USENIX ATC 2025 | 在 Memory-access Space 与 Reduction Space 上抽象可变稀疏模式，生成适应 GPU 层级的通用 SpMM Kernel。 |
+| 2025 | [KPerfIR: Towards a Open and Compiler-centric Ecosystem for GPU Kernel Performance Tooling on Modern AI Workloads](https://www.usenix.org/conference/osdi25/presentation/guan) | OSDI 2025 | 把 Region Timing 和同步/Overlap Profiling 嵌入多层 Triton IR，针对 FlashAttention-3 找到编译 Pipeline Bubble；NVIDIA/AMD 实机评估偏差与测量开销并开源编译器集成。 |
 | 2025 | [LeanAttention: Hardware-Aware Scalable Attention Mechanism for the Decode-Phase of Transformers](https://proceedings.mlsys.org/paper_files/paper/2025/hash/16ec6494e9b5a4138de7238761d715b4-Abstract-Conference.html) | MLSys 2025 | 为 Long-context Decode 重排 Exact Attention 的 Split-K 和跨 CTA Reduction，提升长序列并行度及 GPU 利用率。 |
 | 2025 | [LUT Tensor Core: A Software-Hardware Co-Design for LUT-Based Low-Bit LLM Inference](https://doi.org/10.1145/3695053.3731057) | ISCA 2025 | LUT-based Mixed-precision GEMM 的融合、表项对称化与低比特 Tile 专用硬件共同设计。 |
 | 2025 | [MAS-ATTENTION: MEMORY-AWARE STREAM PROCESSING FOR ATTENTION ACCELERATION ON RESOURCE-CONSTRAINED EDGE DEVICES](https://proceedings.mlsys.org/paper_files/paper/2025/hash/d3cf1559a8795eb1ed2b3ad52409ac7d-Abstract-Conference.html) | MLSys 2025 | 协调边缘加速器的向量与矩阵执行流水，以多级 Tiling 和缓存覆盖减少片上空间开销；含真实 NPU 验证。 |
 | 2025 | [MEADOW: Memory-efficient Dataflow and Data Packing for Low Power Edge LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/259a5df46308d60f8454bd4adcc3b462-Abstract-Conference.html) | MLSys 2025 | 在低功耗 FPGA 上采用 Token-parallel/Head-sequential Dataflow 与无损 Weight Packing，减少 Prefill/Decode 外存访问。 |
+| 2025 | [Mirage: A Multi-Level Superoptimizer for Tensor Programs](https://www.usenix.org/conference/osdi25/presentation/wu-mengdi) | OSDI 2025 | 用 μGraphs 统一代数图、Kernel/Thread-block/Thread 的联合搜索与概率等价验证，自动发现 GQA/FlashAttention Decode Kernel 的可执行优化；公开编译器与 Llama-3 GQA 实机测评。 |
 | 2025 | [Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking](https://doi.org/10.1145/3676642.3736114) | ASPLOS 2025 | 基于 Neuron Co-Activation 重排手机 Flash 上的稀疏权重，联合预取和访问模式优化减少 IOPS。 |
+| 2025 | [NeuronMM: High-Performance Matrix Multiplication for LLM Inference on AWS Trainium](https://arxiv.org/abs/2510.25977) | arXiv 2025 (preprint) | 在真实 AWS Trainium NeuronCore 中结合 SVD Factorization、Fusion、SRAM Tile Cache 和免转置布局降低数据搬运；公开 NKI/NeuronX 代码，测 MatMul 与 Llama/Qwen 端到端推理性能。 |
+| 2025 | [PipeThreader: Software-Defined Pipelining for Efficient DNN Execution](https://www.usenix.org/conference/osdi25/presentation/cheng) | OSDI 2025 | 以 sTask Graph 和硬件执行单元抽象由编译器自动探索 Warp/TMA/TensorCore 软件流水，公开 TileLang 集成；H100 上测 FlashAttention-3 和 Mamba2 Kernel，注意不是全部形状都胜过手写最优实现。 |
 | 2025 | [POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference](https://doi.org/10.1145/3676641.3715996) | ASPLOS 2025 | 在共享 SM 中重叠计算密集 Prefill 与访存密集 Decode Attention。 |
 | 2025 | [QFactory: Accelerating Quantized Large Language Model Serving with Qtile Graphs](https://www.usenix.org/conference/atc25/presentation/zhang-qihao) | USENIX ATC 2025 | 以 Qtile Graph 描述量化张量变换与 Dequantize/Fused GEMM，联合图变换和 Tile Scheduling 生成 Kernel。 |
 | 2025 | [SageAttention: Accurate 8-Bit Attention for Plug-and-play Inference Acceleration](https://proceedings.iclr.cc/paper_files/paper/2025/hash/b286c344d38e10d2466c0514b78e2f36-Abstract-Conference.html) | ICLR 2025 | INT8 Attention Quantization 与 GPU Kernel 优化协同，保持高效推理所需数值精度。 |
