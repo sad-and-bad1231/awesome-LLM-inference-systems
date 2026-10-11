@@ -12,7 +12,7 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | [Quantization & Compression](quantization-compression.md) | 27 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 43 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 80 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 91 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 93 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 31 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
@@ -31,7 +31,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Follow-up legacy primary-source verification (2026-10-11) | 9 |
 | Agentic cache, quantization & speculation verification (2026-10-11) | 7 |
 | Further verifiable KV, MoE and inter-regional systems (2026-10-11) | 6 |
-| **Canonical topic entries** | **447** |
+| Verified LoRA disaggregation systems (2026-10-11) | 2 |
+| **Canonical topic entries** | **449** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has seven selected surveys, including one new distributed-collectives survey.
@@ -109,3 +110,8 @@ Seven more historical source entries were individually checked and admitted: Pyt
 ## Further verified cache, MoE and scheduling mechanisms (2026-10-11)
 
 Six additional original-corpus records independently passed the same admission gate: formal **SC 2025 MaverIQ**, arXiv **2025 EVICPRESS**, and arXiv **2026** WANSpec, VeriCache, Joint Encoding of KV Cache Blocks, and CoX-MoE. Every paper has a distinct serving-specific implementation or architectural mechanism and authors' reported actual code or cluster/GPU/cloud deployment evaluation. WANSpec combines measured real-cloud deployment with simulated extrapolation; no simulator output is represented as physical hardware measurement. VeriCache's output-equivalence claim is attributed to the original experimental protocol. The prior pending queue remains unfinished.
+
+
+## Evidence-gated LoRA verification (2026-10-11)
+
+Two previously unverified historical entries were source-checked and admitted: InfiniLoRA (independent LoRA-server execution, GPU-initiated transfers, system-level SLO tests) and LoRAServe (rank-aware cross-GPU adapter routing with production-trace TTFT and throughput evaluation). Both remain correctly identified as arXiv preprints, not proven archival conference papers. Other unverified candidate identities remain pending.

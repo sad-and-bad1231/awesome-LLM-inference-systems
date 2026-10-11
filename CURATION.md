@@ -124,3 +124,8 @@ Pythia, TokenCake, AdaptCache, SwiftCache, CacheWise, SAW-INT4 and JetSpec were 
 
 
 Six further source-verified admissions (MaverIQ, EVICPRESS, WANSpec, VeriCache, Joint KV Encoding and CoX-MoE) were checked against publisher DOI, primary arXiv pages, release artifacts and real system benchmark summaries. MaverIQ's formal SC 2025 status was confirmed rather than imported from its legacy title alone; other preprints remain labeled as such. These meet the same inference-specific mechanism and implementation/evaluation gate, without any claim of independent result reproduction.
+
+
+## Source-verified LoRA systems (2026-10-11)
+
+Admitted InfiniLoRA and LoRAServe only after inspecting author primary abstracts reporting actual disaggregated serving mechanisms and GPU/production-trace SLO comparisons. Their preprint status remains explicit. Screening does not imply independent reproduction. Other historical candidates remain pending rather than rejected for absent metadata.
