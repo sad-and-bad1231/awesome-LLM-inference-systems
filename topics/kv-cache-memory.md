@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (99)
+## Papers (101)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -45,9 +45,11 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2025 | [RocketKV: Accelerating Long-Context LLM Inference via Two-Stage KV Cache Compression](https://proceedings.mlr.press/v267/behnam25a.html) | ICML 2025 | 先永久裁剪 KV 再作细粒度 Query-aware 稀疏访问，提供可执行的长上下文 Decode 加速。 |
 | 2025 | [SALS: Sparse Attention in Latent Space for KV Cache Compression](https://proceedings.neurips.cc/paper_files/paper/2025/hash/00a0ebcad584c59dbc439c2af8793638-Abstract-Conference.html) | NeurIPS 2025 | 在 RoPE 友好潜空间实现稀疏 KV 表示以减少缓存恢复计算。 |
 | 2025 | [ShadowKV: KV Cache in Shadows for High-Throughput Long-Context LLM Inference](https://proceedings.mlr.press/v267/sun25b.html) | ICML 2025 | 保留低秩 Key/索引在 GPU，Value Offload 到 CPU 并按 Query 稀疏取回 KV，平衡长上下文质量与吞吐。 |
+| 2025 | [SmallKV: Small Model Assisted Compensation of KV Cache Compression for Efficient LLM Inference](https://papers.neurips.cc/paper_files/paper/2025/hash/45790132b9f91b5787232e1cbe0712fc-Abstract-Conference.html) | NeurIPS 2025 | 利用小模型 Attention 估计补偿大模型 KV Eviction 的 Saliency Shift 与边缘信息损失，并报告长序列质量与真实吞吐基线对照。 |
 | 2025 | [Stateful Large Language Model Serving with Pensieve](https://doi.org/10.1145/3689031.3696086) | EuroSys 2025 | 面向会话延续的状态管理与复用，避免每轮请求重复加载/重算上下文。 |
 | 2025 | [TokenCake: A KV-Cache-centric Serving Framework for LLM-based Multi-Agent Applications](https://arxiv.org/abs/2510.18586) | arXiv 2025 (updated 2026; NOT 2027 proceedings) | 以 Agent DAG 的 Critical Path/Tool-call Stalls 驱动 KV Spatial Partition、Event-triggered Offload 与预测性 Upload；在多 Agent Workload 和公开 vLLM Integration 比较 JCT 与显存利用率。 |
 | 2025 | [TraCT: Disaggregated LLM Serving with CXL Shared Memory KV Cache at Rack-Scale](https://arxiv.org/abs/2512.18194) | arXiv 2025 (preprint) | 以跨主机 CXL Shared Memory 取代网络 RDMA 作为 P/D KV Transfer 与 Prefix Cache，补上跨机 Lock/Consistency/Shared Directory；Dynamo 原型及论文和技术报告均提供真实 Serving 测量。 |
+| 2026 | [A Cost-Effective Near-Storage Processing Solution for Offline Inference of Long-Context LLMs (HILOS)](https://doi.org/10.1145/3779212.3790119) | ASPLOS 2026 | 在 16 块真实 SmartSSD 上把长上下文 Attention 下沉到 Near-Storage，协同 X-cache 和延迟 KV Writeback；论文提供 HLS 与端到端推理部署/基线复现代码。 |
 | 2026 | [AdaCache: Adaptive Caching and Context Augmentation for Efficient LLM Serving](https://iclr.cc/virtual/2026/poster/10010915) | ICLR 2026 | AdaCache 把缓存感知的部分重计算与自适应检索深度结合用于 RAG serving，在保留生成质量的同时减少长输入的冗余处理 |
 | 2026 | [ArborKV: Structure-Aware KV Cache Management for Scaling Tree-based LLM Reasoning](https://icml.cc/virtual/2026/poster/63539) | ICML 2026 | ArborKV（ICML 2026）利用推理任务本身的树状结构来组织 KV cache，对树中共享前缀做复用、对分支节点有选择地保留与回收，以在分支式（tree-based）LLM 推理中提升显存效率与吞吐 |
 | 2026 | [BeaconKV: Key-Value Cache Compression Guided by Beacon Queries for Efficient Large Reasoning Model Inference](https://proceedings.mlr.press/v306/kim26af.html) | ICML 2026 | 识别长推理回访 Token，为远端历史状态分配缓存预算。 |

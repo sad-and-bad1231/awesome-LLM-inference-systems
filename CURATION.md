@@ -144,3 +144,8 @@ CacheFlow, ReMP, NPUMoE and SCORPIO report inference-native mechanisms, executab
 ## Six further per-source checked inferences (2026-10-11)
 
 DeepSpeed-FastGen, LeMix, AIRS, CXL-SpecKV, ITME and VeriAttn have verified paper identities plus reusable inference execution, runtime or memory mechanisms, and described physical serving/system evaluations or publicly inspectable artifacts. Conference proceedings are distinguished from arXiv sources. Benchmark speedups remain attributed to papers, not independent replication; missing historical source URLs are not rejected by default.
+
+
+## Six strictly source-verified kernel, KV and decoding systems (2026-10-11)
+
+HILOS, SmallKV, Mirage, AttenIO, SpecMemo and Mirror-SD passed primary-paper identity, distinct systems mechanism and reported measured inference/accelerator evaluation. HILOS provides full synthesis and real-hardware deployment artifacts; Mirage has an open µGraph superoptimizer. SpecMemo/Mirror-SD are preserved as arXiv preprints rather than assigned unverifiable conference claims. AttenIO/SmallKV have verified formal publisher proceedings. This is selective admission, not a blanket inclusion of all technique papers, and does not imply independent reproduction.
