@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (75)
+## Papers (76)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -74,6 +74,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50% |
 | 2026 | [QoServe: Breaking the Silos of LLM Inference Serving](https://doi.org/10.1145/3779212.3790206) | ASPLOS 2026 | 针对独立 Serving 部署的资源孤岛，研究跨服务资源共享与 QoS。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
+| 2026 | [RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving](https://arxiv.org/abs/2606.17949) | arXiv 2026 (preprint) | 融合 Model Quality/Cost Router 与实例级负载平衡，以低开销预测和实时 Queue State 做统一在线映射；13 实例、28 GPU 异构集群对照 Quality–Cost–Throughput Frontiers，并公开系统源码。 |
 | 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | 基于真实生产语义搜索评估 Serving 的模型、硬件及执行优化。 |
 | 2026 | [Scheduling LLM Inference with Uncertainty-Aware Output Length Predictions](https://proceedings.mlr.press/v306/zheng26ae.html) | ICML 2026 | 将输出长度分布的尾部风险纳入在线调度策略。 |
 | 2026 | [Serving Hybrid LLM Loads with SLO Guarantees Using CPU-GPU Attention Piggybacking](https://doi.org/10.1145/3802107) | PACMMOD 2026 | OmniServe 将 Best-effort Attention 异步卸载至 CPU，并对 Dense Layers 进行 Layer-wise Batching，保障混布 LS SLO。 |

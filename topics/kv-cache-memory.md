@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (84)
+## Papers (85)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -73,6 +73,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [LouisKV: Efficient KV Cache Retrieval for Long Input-Output Sequences](https://proceedings.iclr.cc/paper_files/paper/2026/hash/6b241c515433caae3051266668d808b7-Abstract-Conference.html) | ICLR 2026 | 使用语义边界触发长输入长输出的 KV 检索与换入。 |
 | 2026 | [MAC-Attention: a Match--Amend--Complete scheme for fast and accurate attention computation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/7398289396de403d7d0505ed791e704a-Abstract-Conference.html) | MLSys 2026 | 对相似 Query 的 Attention 结果进行 Match/Amend/Complete 修正与合并，在不丢弃 KV 的情况下复用计算。 |
 | 2026 | [MiniPIC: Flexible Position-Independent Caching in <100LOC](https://arxiv.org/abs/2606.13126) | arXiv 2026 (preprint) | vLLM 缓存未旋转 Key，算 Attention 时才应用对应 RoPE，并增加 Span Separator/Prompt Depend 等用户 KV 复用原语；在 2WikiMultihopQA 实测 Prefill 吞吐/TTFT。 |
+| 2026 | [Models Take Notes at Prefill: KV Cache Can Be Editable and Composable](https://arxiv.org/abs/2606.17107) | arXiv 2026 (preprint) | 将 Prefill KV 解释为可编辑、可 RoPE 重定位的结构化 Notes，利用 Append-only Erratum 和预编译 Segment 复用，提供可执行 KV Editing/Composition 实现及在线 vLLM P90 TTFT、跨模型质量对照；极端收益须结合所选重算基线理解。 |
 | 2026 | [No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs](https://www.usenix.org/conference/osdi26/presentation/luo) | OSDI 2026 | DirectKV 以 Zero-copy 数据路径取消 Offloading Buffer 拷贝与冗余显存。 |
 | 2026 | [OBCache: Optimal Brain KV Cache Pruning for Efficient Long-Context LLM Inference](https://icml.cc/virtual/2026/poster/62607) | ICML 2026 | OBCache（ICML 2026）把 optimal brain 的剪枝思想迁移到 KV cache，按其重要性评估并剪除低贡献的 KV 条目，在长上下文推理中同时削减 KV 显存与 attention 计算量，并尽量保持生成质量 |
 | 2026 | [OPKV: A High-Throughput Plugin-Driven Framework for Recallable Sparsity in Paged KV Cache Systems](https://openreview.net/forum?id=EB5bgzv4qA) | MLSys 2026 | OPKV 为 paged KV cache 提供可插拔稀疏召回框架，使不同稀疏策略能在高吞吐 serving runtime 中复用同一数据通路 |
