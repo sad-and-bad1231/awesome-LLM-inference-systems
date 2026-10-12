@@ -12,7 +12,8 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight technical categories, 478 canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight technical categories, 486 canonical topic entries and a concise admission history. |
+| [Emerging research frontiers](frontiers/README.md) | Six starting papers for emerging workloads, with a narrow cross-domain admission boundary. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
 | [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
@@ -20,6 +21,8 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 **One primary home per paper.** The homepage keeps historic foundations and surveys; technical additions live under [eight topic categories](topics/README.md). The former 50-paper Serving cohort has been reviewed: 49 were moved to their technical home, and 1 general AI-serving work was held out under the stricter LLM-specific boundary.
 
 **Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. Paper mechanisms are summarized from source materials; reported speedups are not treated as independently reproduced results. See [Curation policy](CURATION.md).
+
+The emerging [research frontiers](frontiers/README.md) provide a **six-paper starter reading path** for agentic systems, omni-modal serving, interactive world models, VLA, agentic kernels and diffusion inference. Canonical papers still live under their primary systems mechanism; adjacent video/embodied work is admitted only with inference-time mechanisms and measured execution evidence.
 
 ## Organizations
 
