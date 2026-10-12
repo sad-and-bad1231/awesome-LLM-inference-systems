@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (32)
+## Papers (34)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -28,6 +28,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [Accelerating Large-Scale Reasoning Model Inference with Sparse Self-Speculative Decoding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html) | MLSys 2026 | SpecGen 利用 PillarAttn 稀疏 Draft、延迟验证和运行时 KV 管理。 |
 | 2026 | [AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding](https://dl.acm.org/doi/10.1145/3767295.3769315) | EuroSys 2026 | 按请求 SLO 设计 Speculative Draft/Verify 策略，将加速与服务目标联动。 |
 | 2026 | [Breaking the Reward Barrier: Accelerating Tree-of-Thought Reasoning via Speculative Exploration](https://www.usenix.org/conference/osdi26/presentation/zhong) | OSDI 2026 | SPEX 以查询内推测性路径选择、查询间预算分配与自适应早停破除 Tree-of-Thought 的奖励同步壁垒，在 SGLang 上使各类 ToT 算法加速 1.2×–3×，与 token 级 speculative decoding 叠加最高累计加速 4.1× |
+| 2026 | [BWCache: Accelerating Video Diffusion Transformers through Block-Wise Caching](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ac8ec9b4d94c03f0af8c4fe3d5fad4fd-Abstract-Conference.html) | ICLR 2026 | 训练无关地跨 Denoising Step 缓存并复用 DiT Block Feature，以相似性阈值触发重算，实测视频扩散推理延迟与视觉质量权衡（邻接领域；非 KV Cache）。 |
 | 2026 | [Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding](https://doi.org/10.1109/ISCA66397.2026.00022) | ISCA 2026 | 使用剪枝和尾数截断实现无需训练的轻量 Self-speculative Drafter，并在消费级 GPU 验证。 |
 | 2026 | [D-cut: Adaptive Verification Depth Pruning for Batched Speculative Decoding](https://arxiv.org/abs/2607.14647) | arXiv 2026 (preprint) | 跨请求按 Draft Confidence 分配 Verification Budget，以设备和 Parallelism Cost Model 自适应裁剪 Depth；Dense 和 MoE 高并发实测 Speculation 验证开销与吞吐。 |
 | 2026 | [DSB: Dynamic Sliding Block Scheduling for Diffusion LLMs](https://proceedings.mlr.press/v306/luo26o.html) | ICML 2026 | 自适应滑动 Block 和配套 KV Cache 提升扩散语言模型的并行生成效率。 |
@@ -39,6 +40,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [JetSpec: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting](https://arxiv.org/abs/2606.18394) | arXiv 2026 (formerly JetFlow) | 训练基于 Frozen Target Fused Hidden States 的 Causal Parallel Draft Head，单次 Forward 并行生成树并整体 Verify；H100/B200 GPU 与 vLLM 集成实测 Speculative Acceptance、延迟和端到端解码。 |
 | 2026 | [NanoSpec: Accelerating Speculative Decoding using Minimalist In-Context Vocabularies](https://proceedings.mlr.press/v306/chen26fm.html) | ICML 2026 | 动态收缩 Draft 词表，并以异步 Gather/GPU 驻留状态克服稀疏访存瓶颈，报告端到端推测解码收益。 |
 | 2026 | [PRISM: Parametrically Refactor Inference for Speculative Decoding Draft Models](https://openreview.net/forum?id=cvU2HuuxEf) | MLSys 2026 | PRISM（MLSys 2026）对 speculative decoding 中的 draft 模型推理做参数化重构，在保持验证阶段正确性的前提下降低草稿生成的算力与延迟开销，从而提升草稿生成效率与验证吞吐量 |
+| 2026 | [Rolling Forcing: Autoregressive Long Video Diffusion in Real Time](https://proceedings.iclr.cc/paper_files/paper/2026/hash/935151cc6cb5d8b6816133b75233775a-Abstract-Conference.html) | ICLR 2026 | 用多帧联合去噪与 Rolling Window 减少自回归视频生成的误差积累，以 Attention Sink 稳定跨窗口状态；单 GPU 实测多分钟实时视频生成（邻接领域）。 |
 | 2026 | [SpecDiff-2: Scaling Diffusion Drafter Alignment For Faster Speculative Decoding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/041dad5ed2191b44ba3ed0e00cdc3187-Abstract-Conference.html) | MLSys 2026 | 使用离散扩散并行 Drafter 与自回归验证器对齐，提高接受率。 |
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。 |
