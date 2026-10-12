@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (103)
+## Papers (105)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -66,6 +66,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [Efficient Remote KV Cache Reuse with GPU-native Video Codec](https://doi.org/10.1145/3789240.3829120) | SIGCOMM 2026 | 复用 GPU Video Codec 压缩并传输远端 KV Cache，在解码端快速还原以降低跨节点 Cache 加载开销。 |
 | 2026 | [ELORA: Efficient LoRA and KV Cache Management for Multi-LoRA LLM Serving](https://2026.hpca-conf.org/details/hpca-2026-main-conference/13/ELORA-Efficient-LoRA-and-KV-Cache-Management-for-Multi-LoRA-LLM-Serving) | HPCA 2026 | 统一缓存管理器协调 LoRA Adapter 与 KV 驻留及替换。 |
 | 2026 | [FAFO: Lossy KV Cache Compression for Lossless Inference Acceleration via Draftless Fumble Decoding](https://proceedings.mlr.press/v306/le26g.html) | ICML 2026 | 结合有损 KV 压缩与 Draftless 验证恢复无损生成分布。 |
+| 2026 | [FAST-AR: Fast Autoregressive Video Diffusion and World Models with Temporal Cache Compression and Sparse Attention](https://proceedings.mlr.press/v306/samuel26a.html) | ICML 2026 | 面向 Video World Model 的长时流式推理，以 TempCache 时间对应压缩 KV、ANN Cross/Self-Attention 限制冗余访问；作者实测长 Rollout 时延和 Peak GPU Memory（邻接领域，非文本 LLM）。 |
 | 2026 | [FlexiCache: Leveraging Temporal Stability of Attention Heads for Efficient KV Cache Management](https://proceedings.mlsys.org/paper_files/paper/2026/hash/94bcb01789fccf15afe2764d8fe0f40e-Abstract-Conference.html) | MLSys 2026 | FlexiCache 利用 attention head 重要性的时间稳定性动态管理 KV cache，减少长上下文生成中不必要的保留和加载 |
 | 2026 | [FreeKV: Boosting KV Cache Retrieval for Efficient LLM Inference](https://iclr.cc/virtual/2026/poster/10006722) | ICLR 2026 | FreeKV 以推测式检索、CPU/GPU 混合布局与双缓冲流式传输把 KV 选择移出关键路径，报告最高 13× 加速且质量近无损 |
 | 2026 | [HERALD: High-Throughput Block Diffusion LLM Serving via CPU-GPU Cooperative KV Cache Retrieval](https://arxiv.org/abs/2606.21633) | arXiv 2026 (preprint) | 在 Block dLLM 中将每 Block 一次的 Sparse KV Selection 移至 CPU，多次 Denoise 留在 GPU，采用 Draft Block 与双流缓冲重叠；两类实际 Block dLLM 上测吞吐与精度。 |
@@ -116,4 +117,5 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [VeriCache: Turning Lossy KV Cache into Lossless LLM Inference](https://arxiv.org/abs/2605.17613) | arXiv 2026 (preprint) | 将压缩 KV Decode 作为 Drafter，Full KV 在 CPU/远端以 PCIe/Network 搬回并 Verify，以 HBM Decode/数据传输并行覆盖开销；报告 Full KV 输出一致性与长上下文吞吐。 |
 | 2026 | [VLMCache: Efficient On-Device Vision-Language Model Inference](https://doi.org/10.1145/3745756.3809243) | MobiSys 2026 | 将稳定视觉区域编码为可复用 KV Prefix，对动态前景重算后以 Isolate-then-fuse 保留 Attention 与位置一致性。 |
 
+| 2026 | [WorldPlay: Towards Long-Term Geometric Consistency for Real-Time Interactive World Modeling](https://proceedings.mlr.press/v306/sun26az.html) | ICML 2026 | 交互式视频 World Model 通过 Reconstituted Context Memory 动态重建历史帧上下文并控制长期漂移，配合 Context Forcing 蒸馏实现实测实时流式生成；属于模型-推理状态协同设计（邻接领域）。 |
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*
