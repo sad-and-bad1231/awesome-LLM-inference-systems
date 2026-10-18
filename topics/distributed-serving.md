@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (111)
+## Papers (114)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -71,6 +71,8 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [db-SP: Accelerating Sparse Attention for Visual Generative Models with Dual-Balanced Sequence Parallelism](https://proceedings.mlsys.org/paper_files/paper/2026/hash/db988b089d8d97d0f159c15ed0be6a71-Abstract-Conference.html) | MLSys 2026 | 对视觉生成 DiT 稀疏 Attention 做 Head/Block 双维负载平衡与动态 Sequence Parallelism，减少去噪步骤中的资源不均；相邻多模态推理而非文本 LLM。 |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://conferences.sigcomm.org/sigcomm/2026/program/papers/) | SIGCOMM 2026 (official program) | 打通 Storage→Decode→Prefill 第二条 KV 数据路径，利用 Decode NIC 闲置带宽与全局负载调度加速 Agentic 多轮服务。 |
 | 2026 | [DynoPipe: Heterogeneous Edge-Cloud LLM Serving with Dynamically Orchestrated Pipeline Boundaries](https://doi.org/10.1109/ISCA66397.2026.00077) | ISCA 2026 | 根据边缘设备资源和链路波动动态改变跨 Edge/Cloud 的 Pipeline Boundary，协调模型阶段放置及通信；正式系统论文，真实部署/模拟比例及 Baseline 公平性仍待全文复核。 |
+| 2026 | [EdgeTP: Enabling Distributed Full-size Large Language Model Inference on Edge Devices with Tensor Parallelism](https://doi.org/10.1109/2575-8411.2026.00134) | ICDCS 2026 | 面向多台性能不同的端侧设备划分全参数 LLM 张量，并以设备完成时间差与通信同步开销引导 TP 放置；IEEE 报告真实端侧设备运行，非数据中心 TP 替代品。 |
+| 2026 | [Efficient KV Cache Migration for Geo-Distributed LLM Inference in Collaborative Edge Computing](https://doi.org/10.1109/2575-8411.2026.00033) | ICDCS 2026 | EdgeFlow 在带宽有限异构边缘之间联合选择直接传输 KV 与 Activation-based Recomputation，通过 LP 近似分配迁移工作；IEEE 报告真实分布式推理平台故障/迁移实验。 |
 | 2026 | [Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration (EcoServe)](https://www.usenix.org/conference/osdi26/presentation/du) | OSDI 2026 | 以 Macro-instance 协作与自适应分配，缓解低带宽 GPU 集群跨实例传输。 |
 | 2026 | [Efficient Multi-round LLM Inference over Disaggregated Serving](https://proceedings.mlr.press/v306/he26r.html) | ICML 2026 | 对多轮增量 Prefill/Decode 实行阶段和并行方案的动态部署。 |
 | 2026 | [Efficient, VRAM-Constrained xLM Inference on Clients](https://proceedings.mlsys.org/paper_files/paper/2026/hash/7cd265ae802235b8d5778a4a96ff22dd-Abstract-Conference.html) | MLSys 2026 | 面向低 VRAM 客户端以子层级 CPU–GPU Pipelined Sharding、Tensor Placement 和 Copy/Compute 重叠执行 LLM/VLM。 |
@@ -106,6 +108,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [RTP-LLM: High-Performance Alibaba LLM Inference Engine](https://arxiv.org/abs/2605.29639) | arXiv 2026 (technical report) | 阿里巴巴生产推理引擎：权重加载并行 I/O、PD Disaggregation、多层 KV、Modular Speculation 与多模态执行协同，报道真实生产负载及对 vLLM/SGLang 的系统对照。 |
 | 2026 | [SAGE: A Dataflow-Native Framework for Modular, Controllable, and Transparent LLM-Augmented Reasoning](https://proceedings.mlr.press/v306/liu26co.html) | ICML 2026 | 将分布式 LLM/检索/工具执行建模为带 Backpressure 的声明式 Dataflow，联合 Admission 与多阶段资源调度。 |
 | 2026 | [Sangam: Efficiently Serving Diffusion LLMs with the AR Stack](https://arxiv.org/abs/2607.04206) | arXiv 2026 (preprint) | 为 dLLM 的不可拆 Prefill 和 Block-size Decode 实现 Deficit Token-budget Scheduling 及 Hybrid P/D Execution；公开可执行 H100 Serving，在 ShareGPT/arXiv 长度分布上对照 LLaDA、Dream 时延。 |
+| 2026 | [ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving](https://doi.org/10.1109/2575-8411.2026.00051) | ICDCS 2026 | 通过风险驱动 Shadow Replica 启用、异构设备能力匹配和后台增量追赶，在 Jetson/手机测试床保证有状态 LLM 故障接管；直接衡量恢复时间和稳态影子开销。 |
 | 2026 | [ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference](https://doi.org/10.1145/3745756.3809205) | MobiSys 2026 | 针对移动 NPU Attention 量化失准引起的 CPU/GPU 回退设计稀疏 Shadow Attention；有 Qualcomm Hexagon NPU 实机实验和 Artifact，硬件适用范围需另验。 |
 | 2026 | [Shift Parallelism: Low-Latency, High-Throughput LLM Inference for Dynamic Workloads](https://doi.org/10.1145/3779212.3790219) | ASPLOS 2026 | 利用推理 Sequence Parallelism 的 KV 状态不变性，动态切换 TP/SP 以兼顾低负载时延和高负载吞吐。 |
 | 2026 | [SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9c20f16b05f5e5e70fa07e2a4364b80e-Abstract-Conference.html) | MLSys 2026 | SHIP 总结 Groq 基于 LPUv1 SRAM 的大规模 LLM serving：以低直径同步互联和静态编译 pipeline 扩展到数千芯片，并在受限 SRAM 中实现 PagedAttention、prefix caching、speculative decoding 及动态 chunked prefill，… |
