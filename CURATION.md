@@ -2,7 +2,7 @@
 
 ## Strict second-pass handoff (2026-10-18)
 
-**Use [STRICT_REVIEW.md](STRICT_REVIEW.md) before the next curation batch.** The provisional broad intake has been screened by identity/target, **not** accepted after an independent methods or reproduction audit. Original historical pool: **1,003 distinct records**, **762 with directional decisions**, **241 still evidence-pending**. Public topic inventory: **678 canonical Markdown rows**; this is a **different denominator** and includes broad first-pass admissions. Audit G0–G5, preserve author-claimed-vs-measured-vs-simulated boundaries, and remove weak or mis-scoped entries. PR-level review and reviewer approval remain mandatory.
+**Use [STRICT_REVIEW.md](STRICT_REVIEW.md) before the next curation batch.** The provisional broad intake has been screened by identity/target, **not** accepted after an independent methods or reproduction audit. Original historical pool: **1,003 distinct records**, **762 with directional decisions**, **241 still evidence-pending**. Historical pre-audit inventory: **678 canonical Markdown rows**. After the merged #45–#48 strict review, category cleanup and targeted capture, the current inventory is **669 canonical Markdown rows** (15 removals, 6 net new paper identities, and one KV-to-Kernels reclassification). Both inventory counts use a **different denominator** from the original 1,003 JSONL candidates; not every current row has passed full G0–G5 review. Audit G0–G5, preserve author-claimed-vs-measured-vs-simulated boundaries, and remove weak or mis-scoped entries. PR-level review and reviewer approval remain mandatory.
 
 ## Goal
 
