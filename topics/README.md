@@ -2,6 +2,8 @@
 
 Eight research categories. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
 
+**Audit status:** the October 18 broad intake is **provisional** and awaits G0–G5 method/evidence review. Neither all 678 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
 | Mechanism | Canonical entries | Scope |
@@ -15,7 +17,7 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 122 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | Validated models, traces, benchmarks and production diagnosis |
 
-## Admission summary (2026-10-08)
+## Admission summary (through 2026-10-18)
 
 | Decision | Count |
 |---|---:|
@@ -40,7 +42,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Verified MoE system architectures (2026-10-11) | 2 |
 | Strict 50-record legacy verification batch (2026-10-11) | 5 |
 | Selective emerging frontiers seed (2026-10-12) | 8 |
-| **Canonical topic entries** | **486** |
+| October 18 historical intake: 6 stricter + 186 provisional | 192 |
+| **Canonical topic entries** | **678** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
