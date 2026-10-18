@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (53)
+## Papers (54)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [Director: Accelerating Distributed MoE Serving via Online Proactive Expert Placement](https://arxiv.org/abs/2607.08782) | arXiv 2026 (preprint) | 预测请求的 Expert 激活并在计算窗口内迁移专家，在线更新分布式 Expert Placement。 |
 | 2026 | [Dynamo-MoE: Accelerating Sparse Large Model Inference with Dynamic Parallelization](https://doi.org/10.1145/3806645.3807820) | HPDC 2026 | 针对 MoE 稀疏 Expert 动态激活造成的负载不均，结合 Token Sorting、动态并行和按需 Expert Loading；有正式论文与作者开源实现，大规模实测/模拟比例待全文复核。 |
 | 2026 | [Efficient Mixture-of-Experts LLM Inference with Apple Silicon NPUs (NPUMoE)](https://arxiv.org/abs/2604.18788) | arXiv 2026 (preprint) | 利用静态 Expert Capacity Tiers、Grouped Execution 与 Load-aware Graph Residency 将 MoE Prefill 卸载至 Apple ANE；在真实 M-series 设备评测时延和能耗。 |
+| 2026 | [Efficient MoE Inference on Single Consumer-grade GPU with Dynamic Expert Caching](https://doi.org/10.1109/IPDPS65963.2026.00101) | IPDPS 2026 | 正式全文标题包含 Consumer-grade；在有限显存单卡上协同 Expert Cache、异构卸载与负载均衡，评估大规模 MoE 端到端推理而不是仅模拟不存在的 NPU/PIM。 |
 | 2026 | [Expert Streaming: Accelerating Low-Batch MoE Inference via Multi-chiplet Architecture and Dynamic Expert Trajectory Scheduling](https://arxiv.org/abs/2603.27624) | arXiv 2026 (preprint) | FSE-DP 在多 Chiplet 互联上按动态专家轨迹流式分配 MoE 执行并重叠通信。 |
 | 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 模型跳连变换与推理系统协同设计，将 EP 阻塞通信隐藏在计算之下。 |
 | 2026 | [LayerScope: Predictive Cross-Layer Scheduling for Efficient Multi-Batch MoE Inference on Legacy Servers](https://doi.org/10.1145/3797905.3807834) | ICS 2026 | PreScope 采用层级 Expert Activation 预测、跨层 Prefetch Scheduling 和异步 CPU–GPU I/O 协调，在普通服务器上隐藏 MoE Expert Offload 延迟；作者报告推理吞吐/延迟实验。 |
