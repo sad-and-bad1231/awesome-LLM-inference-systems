@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (114)
+## Papers (115)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -90,6 +90,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [InfiniLoRA: Disaggregated Multi-LoRA Serving for Large Language Models](https://arxiv.org/abs/2604.07173) | arXiv 2026 (preprint) | 将 LoRA Adapter 执行与 Base Model 分离为共享 LoRA Server；并行感知执行、GPU-initiated 通信与 SLO Provisioning 通过在线服务评价。 |
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
 | 2026 | [KernelFlume: Elastic Core-Attention Scaling for Agentic Long-Context Decoding](https://arxiv.org/abs/2606.29207) | arXiv 2026 (preprint) | 将 Dense Projection/FFN 与仅托管按 Token Range 分片 KV 的 Weightless Attention Nodes 分离，以 UCX + Inter-layer Pipeline 动态扩容；A6000/H100 实机测试延迟和成本，明确区分后续模拟规模外推。 |
+| 2026 | [Layer-Wise CPU-GPU Scheduling for LLM Inference on Memory-Limited Consumer GPUs](https://doi.org/10.1007/978-3-032-35251-4_21) | Euro-Par 2026 | 将 Decode 时部分 Layer 的 CPU 执行与下一 Layer 的 GPU 权重 DMA 传输重叠，以掩蔽超显存模型的权重搬运瓶颈；正式 Springer 章节，需核 CPU 多线程和 PCIe 带宽基线。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
 | 2026 | [MixServe: An Automatic Distributed Serving System for MoE Models with Hybrid Parallelism Based on Fused Communication Algorithm](https://doi.org/10.1109/2575-8411.2026.00076) | ICDCS 2026 | 根据模型与网络参数选 TP–EP Hybrid Strategy，将节点内 AllReduce 与节点间 All-to-All 融合/重叠，报告 DeepSeek-R1/Qwen3 多 GPU 推理的 TTFT、ITL、吞吐对照。 |
 | 2026 | [MSCCL++: Rethinking GPU Communication Abstractions for AI Inference](https://www.microsoft.com/en-us/research/publication/msccl-rethinking-gpu-communication-abstractions-for-ai-inference/) | ASPLOS 2026 | 将 Collective 的底层通信原语与上层可移植算法分离，支持异构互联优化并有生产推理负载实测。 |
