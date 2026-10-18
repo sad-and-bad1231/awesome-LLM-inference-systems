@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (46)
+## Papers (47)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [ES-dLLM: Efficient Inference for Diffusion Large Language Models by Early-Skipping](https://proceedings.iclr.cc/paper_files/paper/2026/hash/6fc63067ef32cfda806afbd8328ab27e-Abstract-Conference.html) | ICLR 2026 | 基于相邻去噪步的 Hidden-State 变化和 Token Confidence 决定早期 Layer Token Skipping；H200 实机推理实验兼顾吞吐与质量。 |
 | 2026 | [Fast-dLLM: Training-free Acceleration of Diffusion LLM by Enabling KV Cache and Parallel Decoding](https://nvlabs.github.io/Fast-dLLM/) | ICLR 2026 | 为双向 Diffusion LLM 设计 Block-wise Approximate KV Cache，并以置信度策略并行提交 Token；提供 LLaDA/Dream 质量与端到端生成性能对照及公开实现，注意非严格等价解码。 |
 | 2026 | [FlashDLM: Accelerating Diffusion Language Model Inference via Efficient KV Caching and Guided Diffusion](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f930c6e1292a1160189a0734f22b465b-Abstract-Conference.html) | ICLR 2026 | 以 FreeCache 复用稳定 Denoising-step KV，Guided Diffusion 采用轻量 AR 模型减少去噪迭代；作者开源端到端实验，但需计入辅助模型运行开销。 |
+| 2026 | [HeteroSpec: Leveraging Contextual Heterogeneity for Efficient Speculative Decoding](https://aclanthology.org/2026.acl-long.589/) | ACL 2026 | 根据候选 Token 的预测 Entropy 分组，动态决定 Speculative Draft 深度及验证预算，减少高置信 Token 的冗余 Verification；作者报告四模型解码加速且保持输出分布。 |
 | 2026 | [JetSpec: Breaking the Scaling Ceiling of Speculative Decoding with Parallel Tree Drafting](https://arxiv.org/abs/2606.18394) | arXiv 2026 (formerly JetFlow) | 训练基于 Frozen Target Fused Hidden States 的 Causal Parallel Draft Head，单次 Forward 并行生成树并整体 Verify；H100/B200 GPU 与 vLLM 集成实测 Speculative Acceptance、延迟和端到端解码。 |
 | 2026 | [Learning To Draft: Adaptive Speculative Decoding with Reinforcement Learning](https://proceedings.iclr.cc/paper_files/paper/2026/hash/34345e243156da67605d4b63d71c8d98-Abstract-Conference.html) | ICLR 2026 | 通过两个协同 RL Policy 直接优化 Draft/Verify 实际执行时间，而非仅优化 Acceptance Length；多模型解码评估，政策训练成本需计入。 |
 | 2026 | [Long-Context Modeling with Dynamic Hierarchical Sparse Attention for Memory-Constrained LLM Inference](https://proceedings.mlr.press/v306/xiong26q.html) | ICML 2026 | DHSA 按 Chunk→Token 动态预测 Attention 稀疏性，包含 GPU/CPU Tiled Backend；提供 100K/128K 长上下文推理性能和任务精度，需计入掩码预测成本。 |
