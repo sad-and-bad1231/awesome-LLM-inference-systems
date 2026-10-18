@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (124)
+## Papers (126)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -64,6 +64,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [Channel-Aware Mixed-Precision Quantization for Efficient Long-Context Inference](https://proceedings.iclr.cc/paper_files/paper/2026/hash/55f5aa8d997a8071d0651e0009ec49a2-Abstract-Conference.html) | ICLR 2026 | ChanMix 通过敏感度驱动的逐 Channel Bit Reallocation 支持 2-bit KV 量化与 Triton Kernel，作者报告更高 Batch/更长 Context；需核质量和设备边界。 |
 | 2026 | [ConServe: Contiguity-Preserving Memory Management for Multi-Turn LLM Serving](https://doi.org/10.1109/ISCA66397.2026.00075) | ISCA 2026 | 按会话保留虚拟地址连续性、通过 CUDA VMM 按需映射/懒重映射物理 KV Pages，规避块表访存和地址转换开销；作者报告相对 vLLM/vAttention 的多轮 TTFT/吞吐实测，区别于同名 Online/Offline Co-serving 项目。 |
 | 2026 | [ContextPilot: Fast Long-Context Inference via Context Reuse](https://proceedings.mlsys.org/paper_files/paper/2026/hash/b0131b6ee02a00b03fc3320176fec8f5-Abstract-Conference.html) | MLSys 2026 | ContextPilot 识别可复用上下文片段并规划复用路径，把长上下文请求转化为更少的 prefill 和 cache 恢复操作 |
+| 2026 | [ContrastKV: Robust KV Cache Eviction via Contrastive Signal Fusion for Multi-Query Generalization](https://aclanthology.org/2026.acl-long.417/) | ACL 2026 | 面向同一知识库多 Query 的 Prefix KV Eviction，融合语义/结构对比信号和跨 Head/Layer 的 Score，在 20% KV 预算下报告质量保留与 Decode Latency；未核实在线 vLLM 工作负载。 |
 | 2026 | [CriticalKV: Optimizing KV Cache Eviction from an Output Perturbation Perspective](https://proceedings.mlr.press/v306/feng26j.html) | ICML 2026 | 以 Attention Output Perturbation 约束修正仅按 Attention Weight 选择 KV 的不足；正式出版题名 CriticalKV，作者评估多种 Eviction 基线，非 Serving 端到端认证。 |
 | 2026 | [CXL-SpecKV: A Disaggregated FPGA Speculative KV-Cache for Datacenter LLM Serving](https://doi.org/10.1145/3748173.3779188) | FPGA 2026 | 将 CXL 远端 KV Pool、预测式 Cache Prefetch 与 FPGA 压缩/解压整合到 LLM 服务路径，提供硬件 RTL/Driver 代码及论文性能对照。 |
 | 2026 | [DroidSpeak: KV Cache Sharing Across Fine-tuned Model Variants](https://www.usenix.org/conference/nsdi26/presentation/liu-yuhan) | NSDI 2026 | DroidSpeak 是首个跨不同 LLM（同架构）复用前缀 KV cache 的分布式推理系统：选择性重算另一模型产生的少数层、复用其余层，并以流水线叠加重算与加载 |
@@ -133,6 +134,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [Unifying Sparse Attention with Hierarchical Memory for Scalable Long-Context LLM Serving (SPIN)](https://arxiv.org/abs/2604.26837) | arXiv 2026 (preprint) | 以统一 KV Partition 和两级 Metadata 兼容多种 Sparse Attention Granularity，GPU-friendly Bucketed LRU 自适应 HBM Budget 并削减 PCIe 小块搬运；在 vLLM 和三种 Sparse Attention 路径实测吞吐、TTFT、TPOT。 |
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 | 2026 | [V-Rex: Real-Time Streaming Video LLM Acceleration via Dynamic KV Cache Retrieval](https://2026.hpca-conf.org/details/hpca-2026-main-conference/55/V-Rex-Real-Time-Streaming-Video-LLM-Acceleration-via-Dynamic-KV-Cache-Retrieval) | HPCA 2026 | 针对视频流的时间相关性动态选择 KV 状态。 |
+| 2026 | [VecInfer: Efficient LLM Inference with Low-Bit KV Cache via Outlier-Suppressed Vector Quantization](https://aclanthology.org/2026.acl-long.1454/) | ACL 2026 | 采用 Smooth/Hadamard 抑制 K 的异常值提升低 Bit Codebook 利用率，并设计 CUDA Fused Dequant–Attention Kernel；论文在 Llama-3.1-8B 196K 上报告 2-bit 单批完整推理延迟收益与质量，仍需独立复现。 |
 | 2026 | [VeriCache: Turning Lossy KV Cache into Lossless LLM Inference](https://arxiv.org/abs/2605.17613) | arXiv 2026 (preprint) | 将压缩 KV Decode 作为 Drafter，Full KV 在 CPU/远端以 PCIe/Network 搬回并 Verify，以 HBM Decode/数据传输并行覆盖开销；报告 Full KV 输出一致性与长上下文吞吐。 |
 | 2026 | [VLMCache: Efficient On-Device Vision-Language Model Inference](https://doi.org/10.1145/3745756.3809243) | MobiSys 2026 | 将稳定视觉区域编码为可复用 KV Prefix，对动态前景重算后以 Isolate-then-fuse 保留 Attention 与位置一致性。 |
 

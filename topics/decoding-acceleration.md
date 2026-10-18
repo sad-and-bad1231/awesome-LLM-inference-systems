@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (47)
+## Papers (50)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -28,6 +28,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [Accelerating Large-Scale Reasoning Model Inference with Sparse Self-Speculative Decoding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html) | MLSys 2026 | SpecGen 利用 PillarAttn 稀疏 Draft、延迟验证和运行时 KV 管理。 |
 | 2026 | [AdaBlock-dLLM: Semantic-Aware Diffusion LLM Inference via Adaptive Block Size](https://openreview.net/pdf?id=0Cv9PwL7cI) | ICLR 2026 | 以语义分隔符置信度和 Volatility Band 动态选择半自回归 DLM 的 Block Size；训练免改造，有 Dream/LLaDA 可执行代码，质量-吞吐需要配套审查。 |
 | 2026 | [AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding](https://dl.acm.org/doi/10.1145/3767295.3769315) | EuroSys 2026 | 按请求 SLO 设计 Speculative Draft/Verify 策略，将加速与服务目标联动。 |
+| 2026 | [ASPIRE: Asynchronous Batched Self-Speculative Decoding for Long-Context LLM Inference](https://arxiv.org/abs/2609.17943) | COLM 2026 | 统一 Mixed Forward 允许不同请求异步 Draft/Verify，按 Acceptance Rate 自适应 Draft 长度并在中间层刷新 Sparse Context；正式 COLM 2026 名单与公开 Benchmark+逐请求计时/Token Hash 工程已查证，速度提升仍为作者报告。 |
 | 2026 | [Breaking the Reward Barrier: Accelerating Tree-of-Thought Reasoning via Speculative Exploration](https://www.usenix.org/conference/osdi26/presentation/zhong) | OSDI 2026 | SPEX 以查询内推测性路径选择、查询间预算分配与自适应早停破除 Tree-of-Thought 的奖励同步壁垒，在 SGLang 上使各类 ToT 算法加速 1.2×–3×，与 token 级 speculative decoding 叠加最高累计加速 4.1× |
 | 2026 | [BWCache: Accelerating Video Diffusion Transformers through Block-Wise Caching](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ac8ec9b4d94c03f0af8c4fe3d5fad4fd-Abstract-Conference.html) | ICLR 2026 | 训练无关地跨 Denoising Step 缓存并复用 DiT Block Feature，以相似性阈值触发重算，实测视频扩散推理延迟与视觉质量权衡（邻接领域；非 KV Cache）。 |
 | 2026 | [Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding](https://doi.org/10.1109/ISCA66397.2026.00022) | ISCA 2026 | 使用剪枝和尾数截断实现无需训练的轻量 Self-speculative Drafter，并在消费级 GPU 验证。 |
@@ -56,7 +57,9 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [Stochastic Sparse Attention for Memory-Bound Inference](https://proceedings.mlr.press/v306/lee26j.html) | ICML 2026 | SANTA 采用方差受控的 Softmax 分布采样减少 Value-cache 全量读取，实现 GPU Stratified/Systematic Sampling Attention；有 RTX 6000 Ada Kernel 和端到端 Decode 测量。 |
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Token Sparse Attention: Efficient Long-Context Inference with Interleaved Token Selection](https://proceedings.mlr.press/v306/jo26a.html) | ICML 2026 | 跨 Head/Layer 动态选择 Token 执行 Attention，后续 Layer 可重新考虑此前 Token；与既有 FlashAttention 兼容，作者报告 128K Attention Kernel 和质量对照。 |
+| 2026 | [TokenTiming: A Dynamic Alignment Method for Universal Speculative Decoding Model Pairs](https://aclanthology.org/2026.acl-long.1983/) | ACL 2026 | 以 Dynamic Time Warping 对齐不同 Tokenizer 的 Draft/Target 序列，并重新映射概率以避免重训练专用 Draft Model；作者报告约 1.57× 加速，Tokenizer 对齐成本和精确采样约束待复核。 |
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。 |
+| 2026 | [UniSpec: Training-Free Speculative Decoding for Robust LLM Acceleration Across Languages and Hardware](https://aclanthology.org/2026.acl-long.285/) | ACL 2026 | 设备校准的 Draft 大小、N-gram Confidence Scoring 与 Speculation Tree Expansion，跨语言多硬件免训练投机解码；作者发布代码与 Benchmark，并声称保持自回归输出质量，未复现。 |
 | 2026 | [Vegas: Self-Speculative Decoding with Verification-Guided Sparse Attention](https://proceedings.mlr.press/v306/yue26a.html) | ICML 2026 | Verify 阶段复用 KV 重要性信息，为后续 Self-speculative Draft 加速。 |
 | 2026 | [WeDLM: Reconciling Diffusion Language Models with Standard Causal Attention for Fast Inference](https://proceedings.mlr.press/v306/liu26av.html) | ICML 2026 | 用 Topological Reordering 将已知 Token 移至物理 Prefix，同时保持逻辑位置和 Causal Mask，使 Diffusion 解码兼容标准 Prefix KV Cache；Streaming Commit 在与 vLLM 同部署条件下比较生成速度。 |
 
