@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (120)
+## Papers (119)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -27,7 +27,6 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [AI Metropolis: Scaling Large Language Model-based Multi-Agent Simulation with Out-of-order Execution](https://proceedings.mlsys.org/paper_files/paper/2025/hash/4f31327e046913c7238d5b671f5d820e-Abstract-Conference.html) | MLSys 2025 | 跟踪多 Agent 的真实依赖并乱序触发 LLM 请求，消除全局同步引起的虚假依赖与低利用率。 |
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
 | 2025 | [Chameleon: Adaptive Caching and Scheduling for Many-Adapter LLM Inference Environments](https://doi.org/10.1145/3725843.3756083) | MICRO 2025 | 利用空闲 GPU 显存缓存热门 LoRA Adapter，联合 Adapter-aware 非抢占多队列调度抑制 HoL Blocking；真实生产 Trace 的 TTFT/吞吐评测。 |
-| 2025 | [DiffServe: Efficiently Serving Text-to-Image Diffusion Models with Query-Aware Model Scaling](https://proceedings.mlsys.org/paper_files/paper/2025/hash/414fd191b3246a19a55741b938380136-Abstract-Conference.html) | MLSys 2025 | 面向相邻文生图推理服务，构建不同规模模型的 Query-aware Cascade 并按负载动态扩缩容，联合约束质量与 SLO 违约率；不是 Text LLM Serving。 |
 | 2025 | [DyOrc: Efficient Serving of Dynamic Machine Learning Workflows](https://doi.org/10.1145/3772052.3772218) | SoCC 2025 | 对动态 LLM Agent/多模态执行 DAG 做依赖感知 Speculative Scheduling、跨工作流 Batching 和预加载；在 128 张 A800 的真实集群对照 Ray Serve/Triton。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
