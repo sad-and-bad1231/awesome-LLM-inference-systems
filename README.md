@@ -12,7 +12,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight technical categories, 678 canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight technical categories, 675 canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Six starting papers for emerging workloads, with a narrow cross-domain admission boundary. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
@@ -21,7 +21,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 
 **One primary home per paper.** The homepage keeps historic foundations and surveys; technical additions live under [eight topic categories](topics/README.md). The former 50-paper Serving cohort has been reviewed: 49 were moved to their technical home, and 1 general AI-serving work was held out under the stricter LLM-specific boundary.
 
-**Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. **The October 18 breadth intake includes 186 provisional entries** that require full-publication and experimental scrutiny; all 678 canonical topic rows should not be mistaken for independently verified or reproducible studies. The original 1,003-record screening ledger has 241 still evidence-pending. Reported speedups remain source-attributed, not independently reproduced. See [Curation policy](CURATION.md) and [Strict review protocol](STRICT_REVIEW.md).
+**Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. **The October 18 breadth intake includes 186 provisional entries** that require full-publication and experimental scrutiny; all 675 canonical topic rows should not be mistaken for independently verified or reproducible studies. The original 1,003-record screening ledger has 241 still evidence-pending. Reported speedups remain source-attributed, not independently reproduced. See [Curation policy](CURATION.md) and [Strict review protocol](STRICT_REVIEW.md).
 
 The emerging [research frontiers](frontiers/README.md) provide a **six-paper starter reading path** for agentic systems, omni-modal serving, interactive world models, VLA, agentic kernels and diffusion inference. Canonical papers still live under their primary systems mechanism; adjacent video/embodied work is admitted only with inference-time mechanisms and measured execution evidence.
 
