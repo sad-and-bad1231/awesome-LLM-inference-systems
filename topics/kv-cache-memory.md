@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (105)
+## Papers (106)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -59,6 +59,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [CacheFlow: Efficient LLM Serving with 3D-Parallel KV Cache Restoration](https://arxiv.org/abs/2604.25080) | arXiv 2026 (preprint) | 对 KV Restore 统一 Token/Layer/GPU 三维计算-I/O 并行，加入 Batch-aware 双指针资源调度；论文报告多模型、负载与硬件 TTFT 对照。 |
 | 2026 | [CacheSlide: Unlocking Cross Position-Aware KV Cache Reuse for Accelerating LLM Serving](https://www.usenix.org/conference/fast26/presentation/liu-yang) | FAST 2026 | 识别 Agent Prompt 中相对位置不变的可复用片段，用 Chunk Positional Encoding 与修正 Attention 处理位置漂移。 |
 | 2026 | [CacheWise: Understanding Workloads and Optimizing KVCache Management for Efficiently Serving LLM Coding Agents](https://arxiv.org/abs/2606.16824) | arXiv 2026 (preprint) | 基于真实 Coding Agent Session Traces，利用工具调用元数据进行 Prefix-aware Scheduling 与 Reuse-aware Eviction；在 vLLM 实现后对照 Agent 完整 Session 时间、驱逐次数。 |
+| 2026 | [ConServe: Contiguity-Preserving Memory Management for Multi-Turn LLM Serving](https://doi.org/10.1109/ISCA66397.2026.00075) | ISCA 2026 | 按会话保留虚拟地址连续性、通过 CUDA VMM 按需映射/懒重映射物理 KV Pages，规避块表访存和地址转换开销；作者报告相对 vLLM/vAttention 的多轮 TTFT/吞吐实测，区别于同名 Online/Offline Co-serving 项目。 |
 | 2026 | [ContextPilot: Fast Long-Context Inference via Context Reuse](https://proceedings.mlsys.org/paper_files/paper/2026/hash/b0131b6ee02a00b03fc3320176fec8f5-Abstract-Conference.html) | MLSys 2026 | ContextPilot 识别可复用上下文片段并规划复用路径，把长上下文请求转化为更少的 prefill 和 cache 恢复操作 |
 | 2026 | [CXL-SpecKV: A Disaggregated FPGA Speculative KV-Cache for Datacenter LLM Serving](https://doi.org/10.1145/3748173.3779188) | FPGA 2026 | 将 CXL 远端 KV Pool、预测式 Cache Prefetch 与 FPGA 压缩/解压整合到 LLM 服务路径，提供硬件 RTL/Driver 代码及论文性能对照。 |
 | 2026 | [DroidSpeak: KV Cache Sharing Across Fine-tuned Model Variants](https://www.usenix.org/conference/nsdi26/presentation/liu-yuhan) | NSDI 2026 | DroidSpeak 是首个跨不同 LLM（同架构）复用前缀 KV cache 的分布式推理系统：选择性重算另一模型产生的少数层、复用其余层，并以流水线叠加重算与加载 |
