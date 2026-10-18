@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (107)
+## Papers (111)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -72,6 +72,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Energy-Aware Scheduling for Serverless LLM Serving on Shared GPUs](https://arxiv.org/abs/2606.30391) | arXiv 2026 (preprint; Festina) | Festina 联合全局 Request Placement、GPU SM Partitioning、DVFS 与 SLO-aware Consolidation，面向 TTFT/TBT 的 Serverless Serving 抑制静态和动态耗电；报告实际 SLO/能耗系统对照。 |
 | 2026 | [ExecuTorch - A Unified PyTorch Solution to Run ML Models On-Device](https://proceedings.mlsys.org/paper_files/paper/2026/hash/236f915dd02af4f11927f67330b21d4b-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生 Edge Runtime 与多 SoC Backend/量化部署工具链；属于通用端侧推理系统基础设施，不主张专门的 LLM 在线调度提速。 |
 | 2026 | [FastTTS: Accelerating Test-Time Scaling for Edge LLM Reasoning](https://doi.org/10.1145/3779212.3790161) | ASPLOS 2026 | 面向 Verifier-guided TTS 的 Speculative Beam Extension、Prefix-aware Scheduling 与 Generator/Verifier 非对称 KV 资源配置；单卡端侧 vLLM 端到端评测和 Artifact。 |
+| 2026 | [FLARE: Fine-Grained Length-Aware Routing for Resource-Efficient Heterogeneous LLM Serving](https://aclanthology.org/2026.acl-long.1018/) | ACL 2026 | 根据预测的 Output Length/硬件成本，在异构多 LLM Pool 中进行质量、Latency、Cost 多目标 Query Routing；论文报告端到端查询表现，但非 GPU Kernel 或单一模型 P/D 排队器。 |
 | 2026 | [FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) | MLSys 2026 | FlashAgents 用 agent 间 token streaming、增量 prefill 和 prefix-aware coordination 重叠多智能体调用链中的等待与计算 |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
 | 2026 | [From Tokens to Layers: Redefining Stall-Free Scheduling for MoE Serving with Layered Prefill](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c0f460c6d63599ea870ba9db63dc96a9-Abstract-Conference.html) | MLSys 2026 | 改用模型层分组而非 Token Chunk 执行 Prefill，减少 Expert Weight 重载。 |
@@ -94,11 +95,14 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Online Linear Programming for Multi-Objective Routing in LLM Serving](https://proceedings.mlr.press/v306/chen26ft.html) | ICML 2026 | 以在线线性规划的 Shadow Price 决定多 Decode Worker 的 Admission/Routing；实验基于 Vidur 仿真。 |
 | 2026 | [Optimizing Deployment Configurations for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/97dc07f1253ab33ee514f395a82fa7cc-Abstract-Conference.html) | MLSys 2026 | 研究服务部署方案的资源与性能配置空间，指导高性能推理服务选型。 |
 | 2026 | [PASCAL: A Phase-Aware Scheduling Algorithm for Serving Reasoning-based Large Language Models](https://2026.hpca-conf.org/details/hpca-2026-main-conference/19/PASCAL-A-Phase-Aware-Scheduling-Algorithm-for-Serving-Reasoning-based-Large-Language) | HPCA 2026 | 分离 Reasoning/Answering 阶段的执行优先级与抢占规则。 |
+| 2026 | [PEACE: Preemptive and Efficient Cluster Scheduling for LLM Inference with Mixed Prompts](https://doi.org/10.1109/IPDPS65963.2026.00105) | IPDPS 2026 | 对长短 Prompt 混合到达实施长 Prefill 可抢占执行、短请求 P/D 协同放置与 Fast Sequence Parallelism；公开基于真实 Server+Trace 的对照和消融 Artifact。 |
+| 2026 | [Phase-aware Peak Power Reduction for Minimizing the Capital Expense of LLM Inference](https://doi.org/10.1145/3797905.3815788) | ICS 2026 | PPPR 利用 Prefill 峰值和 Decode 稳态交替规律，协同服务器超级电容与机架 UPS 电池削减机房供电峰值；正式论文含功耗硬件实验与大规模 Trace Simulation，应区分测得 Peak Power 与推算的 CapEx 收益。 |
 | 2026 | [PKAS: Predictive KVCache-Aware Scheduling for Faster LLM and Transformer Inferences](https://doi.org/10.1145/3806645.3807819) | HPDC 2026 | Admission 前预测 Batch 后续 KV 容量需求和输出长度，避免 Decode 阶段 OOM、Preemption 和 Recompute；以真实推理工作负载验证吞吐/延迟，区别于 Prefix Eviction 算法。 |
 | 2026 | [PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG) | MLSys 2026 | 按 Prompt Prefill 长度协调请求分配，处理长短输入混合下的资源干扰。 |
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50% |
 | 2026 | [Pythia: Exploiting Workflow Predictability for Efficient Agent-Native LLM Serving](https://arxiv.org/abs/2604.25899) | arXiv 2026 (preprint) | 在 SGLang 暴露 Agent Workflow DAG，协同做 Speculative Cache Management、Lookahead Request Scheduling 和 Phase-Adaptive Autoscaling；8×A100 实测 SWE-bench Pro/Deep Research JCT、P95 JCT 与吞吐。 |
 | 2026 | [QoServe: Breaking the Silos of LLM Inference Serving](https://doi.org/10.1145/3779212.3790206) | ASPLOS 2026 | 针对独立 Serving 部署的资源孤岛，研究跨服务资源共享与 QoS。 |
+| 2026 | [Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference](https://doi.org/10.1109/CCGrid68966.2026.00014) | CCGrid 2026 | 按 LLM Decode Iteration 的算力/带宽阶段调整 GPU DVFS，以 Pareto 选择减少 EDP，同时限制 Latency 回退；作者有单 GPU 物理推理测量，适用范围受驱动与频率控制接口限制。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving](https://arxiv.org/abs/2606.17949) | arXiv 2026 (preprint) | 融合 Model Quality/Cost Router 与实例级负载平衡，以低开销预测和实时 Queue State 做统一在线映射；13 实例、28 GPU 异构集群对照 Quality–Cost–Throughput Frontiers，并公开系统源码。 |
 | 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | 基于真实生产语义搜索评估 Serving 的模型、硬件及执行优化。 |

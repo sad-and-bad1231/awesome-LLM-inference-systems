@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (40)
+## Papers (43)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -26,6 +26,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [A First Look at Bugs in LLM Inference Engines](https://doi.org/10.1145/3788873) | ACM TOSEM 2026 | 对 llama.cpp、vLLM、DeepSpeed、MLC-LLM、TensorRT-LLM 的 929 个真实 Bug 手工标注，归纳六类症状、28 类根因并开放缺陷数据集，指导运行时故障定位。 |
 | 2026 | [A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints](https://proceedings.mlr.press/v306/nie26a.html) | ICML 2026 | 在队列稳定性模型中同时引入 GPU 计算和 KV 内存约束，推导稳定到达率/容量界，并在真实 GPU Serving 环境核验预测误差和 Provisioning 边界。 |
 | 2026 | [Beyond the Buzz: A Pragmatic Take on Inference Disaggregation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/d49cee5f3a79d97d719df255689d83d7-Abstract-Conference.html) | MLSys 2026 | 通过不同规模部署评估 P/D 分离的价值和资源、传输及调度边界。 |
+| 2026 | [Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators](https://doi.org/10.1109/IPDPS65963.2026.00083) | IPDPS 2026 | 真实物理加速器比较：六款 NVIDIA/AMD/Intel GPU 及两类 Cerebras/SambaNova Dataflow Accelerator、14 个开源模型，测量 Prefill/Decode、Batch/并行度、能耗 Pareto；作者公开 vLLM/功耗脚本（异构厂商依赖仍需注意）。 |
 | 2026 | [Breaking the Ice: Analyzing Cold Start Latency in vLLM](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29416b66c2149872b9d1415a3fd2c5e0-Abstract-Conference.html) | MLSys 2026 | 剖析 vLLM 冷启动的初始化、权重加载和图捕获关键路径。 |
 | 2026 | [Characterizing Cloud-Native LLM Inference at ByteDance and Exposing Optimization Challenges and Opportunities for Future AI Accelerators](https://doi.org/10.1109/HPCA68181.2026.11408526) | HPCA 2026 (Industry Track) | 以 Doubao 生产负载与跨 Instruction/Kernel/Model 多级评估刻画异构 LLM 推理瓶颈及硬件选型边界。 |
 | 2026 | [Characterizing Parallelism Strategies in LLM Inference: Fundamental Compute-Communication Trade-offs](https://arxiv.org/abs/2610.05305) | arXiv 2026 (preprint) | 解析 TP/PP/Hybrid 的 Collective、点对点通信与 Pipeline Bubble，比较 Prefill/Decode 不同瓶颈。 |
@@ -39,6 +40,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [How Far Can Disaggregation Go? A Design-Space Exploration of Attention-FFN Disaggregation for Efficient MoE LLM Serving](https://arxiv.org/abs/2605.28302) | arXiv 2026 (preprint) | 以实测 Kernel 与网络仿真对比聚合、P/D 与 AFD，在多工作负载和 SLO 下刻画拆分收益边界。 |
 | 2026 | [KernelCraft: Benchmarking for Agentic Close-to-Metal Kernel Generation on Emerging Hardware](https://proceedings.mlr.press/v306/nie26c.html) | ICML 2026 | 面向新兴 NPU ISA 的 Agentic Kernel 编译、正确性反馈与性能评测；涵盖真实 AMD NPU、PLENA 模拟器与 Verilator RTL，基准代码的公开状态需复核，不是生产 Serving 加速。 |
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
+| 2026 | [Performance Characterization and Optimization of LLM Inference on Tenstorrent AI Accelerators](https://doi.org/10.1007/978-3-032-35251-4_32) | Euro-Par 2026 (Springer LNCS imprint 2027) | 真实 Tenstorrent Wormhole 的 Tensix Decode 剖析与 Chip-Pipe 跨芯片 Pipeline Parallel 调度；作者报告 Llama-3.1-8B 等四模型相对 TP 吞吐改善，需保留芯片专用编程与实验范围；会议于 2026 年举行、Springer 正式书卷标记 2027 出版。 |
 | 2026 | [ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof) | MLSys 2026 | ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading |
 | 2026 | [Reasoning Language Model Inference Serving Unveiled: An Empirical Study](https://iclr.cc/virtual/2026/poster/10011393) | ICLR 2026 | 该研究通过内存波动、掉队者与自适应运行时刻画推理模型 serving，并在真实负载下评估量化、KV 量化、speculative decoding 与前缀缓存 |
 | 2026 | [Scaling Up, Speeding Up: A Benchmark of Speculative Decoding for Efficient LLM Test-Time Scaling](https://openreview.net/forum?id=DjOmnwX4wJ) | ICLR 2026 | 标准化比较 Best-of-N/多轮推理中的模型型、训练型与 N-Gram Speculative Decoding，对重复推理轨迹的加速边界做实证研究；Benchmark 而非新 Runtime Scheduler。 |
@@ -48,6 +50,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding](https://proceedings.mlr.press/v306/abramovich26a.html) | ICML 2026 | 在 vLLM/TensorRT-LLM 的真实 Batch/吞吐负载下量化 Speculative Decoding 对数据分布和 Draft 长度的敏感性。 |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
+| 2026 | [The Pitfalls of KV Cache Compression](https://aclanthology.org/2026.acl-long.1926/) | ACL 2026 | 实证审计 StreamingLLM/SnapKV/TOVA/H2O/K-Norm 在复杂多指令 Prompt 上的 KV 驱逐语义损失与指令忽略/系统 Prompt 泄露；是部署质量风险评测而非新增 GPU 加速算法。 |
 | 2026 | [TritonGym: A Benchmark for Agentic LLM Workflows in Triton GPU Code Generation](https://proceedings.mlr.press/v306/guan26d.html) | ICML 2026 | 以可复现的工具调用/编译/正确性与速度反馈环境评估多轮 Triton Kernel Agent，覆盖 OOD 与扩展 DSL；是真实 Kernel 执行 Benchmark，不等于 LLM Serving Speedup。 |
 | 2026 | [Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles](https://doi.org/10.1109/ISCA66397.2026.00084) | ISCA 2026 (Industry Track) | 在真实 GPU Cluster 上刻画 8B–671B 推理的 DP/TP/PP、长 CoT KV 容量陷阱与 MoE 同步瓶颈；提供部署权衡测量而非单一加速算法。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设。 |
