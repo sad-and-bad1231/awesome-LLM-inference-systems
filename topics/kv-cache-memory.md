@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (145)
+## Papers (144)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -58,7 +58,6 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [ArborKV: Structure-Aware KV Cache Management for Scaling Tree-based LLM Reasoning](https://icml.cc/virtual/2026/poster/63539) | ICML 2026 | ArborKV（ICML 2026）利用推理任务本身的树状结构来组织 KV cache，对树中共享前缀做复用、对分支节点有选择地保留与回收，以在分支式（tree-based）LLM 推理中提升显存效率与吞吐 |
 | 2026 | [BeaconKV: Key-Value Cache Compression Guided by Beacon Queries for Efficient Large Reasoning Model Inference](https://proceedings.mlr.press/v306/kim26af.html) | ICML 2026 | 识别长推理回访 Token，为远端历史状态分配缓存预算。 |
 | 2026 | [Bidaw: Enhancing Key-Value Caching for Interactive LLM Serving via Bidirectional Computation–Storage Awareness](https://www.usenix.org/conference/fast26/presentation/hu-shipeng) | FAST 2026 | 让 KV 加载延迟参与 Serving 排队，并用生成响应预测 Host/SSD 层次缓存重用和驱逐。 |
-| 2026 | [BitDecoding: Unlocking Tensor Cores for Long-Context LLMs with Low-Bit KV Cache](https://2026.hpca-conf.org/details/hpca-2026-main-conference/92/BitDecoding-Unlocking-Tensor-Cores-for-Long-Context-LLMs-with-Low-Bit-KV-Cache) | HPCA 2026 | 低比特 KV 布局与 Warp 解量化让 Decode Attention 利用 Tensor Core。 |
 | 2026 | [Cache What Lasts: Token Retention for Memory-Bounded KV Cache in LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/c3887741ee4e655494770be95303383f-Abstract-Conference.html) | ICLR 2026 | TRIM-KV 以蒸馏得到的逐 Token Retention Gate 和时间衰减分数管理容量受限 KV Cache；作者评测长推理/长上下文质量，尚不能据此声称生产 Serving Goodput 提升。 |
 | 2026 | [CacheFlow: Efficient LLM Serving with 3D-Parallel KV Cache Restoration](https://arxiv.org/abs/2604.25080) | arXiv 2026 (preprint) | 对 KV Restore 统一 Token/Layer/GPU 三维计算-I/O 并行，加入 Batch-aware 双指针资源调度；论文报告多模型、负载与硬件 TTFT 对照。 |
 | 2026 | [CacheSlide: Unlocking Cross Position-Aware KV Cache Reuse for Accelerating LLM Serving](https://www.usenix.org/conference/fast26/presentation/liu-yang) | FAST 2026 | 识别 Agent Prompt 中相对位置不变的可复用片段，用 Chunk Positional Encoding 与修正 Attention 处理位置漂移。 |
