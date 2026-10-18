@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (105)
+## Papers (107)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -46,6 +46,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Multiplexed Heterogeneous LLM Serving via Stage-Aligned Parallelism](https://doi.org/10.1145/3772052.3772207) | SoCC 2025 | ParaFlex 不强制异构模型拥有相同 Pipeline 结构，而对齐 GPU Stage Execution Time 实现多模型空间/时间复用；含多模型执行实验，但大型集群仿真与实机小规模结论应分开审查。 |
 | 2025 | [NEO: Saving GPU Memory Crisis with CPU Offloading for Online LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/66a026c0d17040889b50f0dfa650e5e0-Abstract-Conference.html) | MLSys 2025 | 将部分 Attention 计算和 KV 状态转至 CPU，并执行异步流水与负载感知调度。 |
 | 2025 | [Nexus: Proactive Intra-GPU Disaggregation of Prefill and Decode in LLM Serving](https://arxiv.org/abs/2507.06608) | arXiv 2025 (preprint) | 同一 GPU 内前瞻分配 SM/带宽/显存，作为跨 GPU P/D 分离的资源开销对照。 |
+| 2025 | [PhoenixOS: Concurrent OS-level GPU Checkpoint and Restore with Validated Speculation](https://doi.org/10.1145/3731569.3764813) | SOSP 2025 | 以 Kernel 参数推测读写集并通过运行时二进制插桩验证，使 GPU 进程运行与 Checkpoint/Restore 并发；作者开源 CUDA 原型并测量 Llama2；不同于 FAST 2026 GCR 的控制/数据路径优化。 |
 | 2025 | [Prefill-Decode Aggregation or Disaggregation? Unifying Both for Goodput-Optimized LLM Serving](https://arxiv.org/abs/2508.01989) | arXiv 2025 (preprint) | TaiChi 用混合阶段部署与 Latency Shifting 按 TTFT/TPOT SLO 选择聚合、分离或混合执行。 |
 | 2025 | [Seesaw: High-throughput LLM Inference via Model Re-sharding](https://proceedings.mlsys.org/paper_files/paper/2025/hash/cbc4ab80cd77aa0eb87da062fbcddb46-Abstract-Conference.html) | MLSys 2025 | 跨 Prefill/Decode 动态调整模型 Sharding，配合分层 KV 缓冲减少转换开销。 |
 | 2025 | [semi-PD: Towards Efficient LLM Serving via Phase-Wise Disaggregated Computation and Unified Storage](https://arxiv.org/abs/2504.19867) | arXiv 2025 (preprint) | 在 SM 级分离 Prefill 与 Decode Compute、共享模型权重与 KV Storage，结合统一 Memory Manager/SLO-aware Partitioning；在 DeepSeek/Llama GPU Serving 工作负载实测请求延迟和 SLO。 |
@@ -85,6 +86,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
 | 2026 | [KernelFlume: Elastic Core-Attention Scaling for Agentic Long-Context Decoding](https://arxiv.org/abs/2606.29207) | arXiv 2026 (preprint) | 将 Dense Projection/FFN 与仅托管按 Token Range 分片 KV 的 Weightless Attention Nodes 分离，以 UCX + Inter-layer Pipeline 动态扩容；A6000/H100 实机测试延迟和成本，明确区分后续模拟规模外推。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
+| 2026 | [MixServe: An Automatic Distributed Serving System for MoE Models with Hybrid Parallelism Based on Fused Communication Algorithm](https://doi.org/10.1109/2575-8411.2026.00076) | ICDCS 2026 | 根据模型与网络参数选 TP–EP Hybrid Strategy，将节点内 AllReduce 与节点间 All-to-All 融合/重叠，报告 DeepSeek-R1/Qwen3 多 GPU 推理的 TTFT、ITL、吞吐对照。 |
 | 2026 | [MSCCL++: Rethinking GPU Communication Abstractions for AI Inference](https://www.microsoft.com/en-us/research/publication/msccl-rethinking-gpu-communication-abstractions-for-ai-inference/) | ASPLOS 2026 | 将 Collective 的底层通信原语与上层可移植算法分离，支持异构互联优化并有生产推理负载实测。 |
 | 2026 | [Multi-stage Flow Scheduling for LLM Serving](https://arxiv.org/abs/2603.17456) | arXiv 2026 (preprint) | 面向多阶段 KV Retrieval、Collective 与 P→D 传输，以 Reverse Multi-Level Queue 协调网络流与 TTFT。 |
 | 2026 | [Not All Prefills Are Equal: PPD Disaggregation for Multi-turn LLM Serving](https://icml.cc/virtual/2026/poster/64036) | ICML 2026 | 针对多轮 serving 采用 prompt 长度感知的 prefill-decode 分离，把增量 prefill 按长度路由以减少争用、提升 SLO 达成率 |
