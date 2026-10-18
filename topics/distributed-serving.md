@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (97)
+## Papers (100)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -50,6 +50,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Serving Heterogeneous LoRA Adapters in Distributed LLM Inference Systems (LoRAServe)](https://arxiv.org/abs/2511.22880) | arXiv 2025 (preprint) | 按 Adapter Rank 波动动态跨 GPU 放置与路由，利用 GPU Direct RDMA 实现共享，按生产 Trace 实测吞吐/TTFT/显卡需求。 |
 | 2025 | [Star Attention: Efficient LLM Inference over Long Sequences](https://proceedings.mlr.press/v267/acharya25a.html) | ICML 2025 | 通过分布式上下文 Block Attention 与 Anchor Token 降低多 GPU Long-context 通信。 |
 | 2025 | [Step-3 is Large yet Affordable: Model-system Co-design for Cost-effective Decoding](https://arxiv.org/abs/2507.19427) | arXiv 2025 (technical report) | MFA Attention 与 Attention-FFN Disaggregation 协同设计，联动 KV 表示、专家并行及通信。 |
+| 2025 | [Symbiosis: Multi-Adapter Inference and Fine-Tuning](https://doi.org/10.1145/3772052.3772230) | SoCC 2025 | 将共享 Frozen Base Model 与客户端 PEFT Adapter 分离执行，支持多个独立推理/微调作业复用底座和异构 GPU；论文包含 Gemma2 多 Adapter 实际执行实验。 |
 | 2025 | [TAPAS: Thermal- and Power-Aware Scheduling for LLM Inference in Cloud Platforms](https://doi.org/10.1145/3676641.3716025) | ASPLOS 2025 | 将动态功耗、温度和服务请求纳入云端 LLM 集群调度。 |
 | 2025 | [ThunderServe: High-performance and Cost-efficient LLM Serving in Cloud Environments](https://proceedings.mlsys.org/paper_files/paper/2025/hash/c2a0e26dd9ee7d57e92bb1c24b39659a-Abstract-Conference.html) | MLSys 2025 | 联立异构 GPU 分组、P/D 配置与轻量在线重调度，降低重启和迁移成本。 |
 | 2025 | [WaferLLM: Large Language Model Inference at Wafer Scale](https://www.usenix.org/conference/osdi25/presentation/he) | OSDI 2025 | 用 PLMR 硬件模型驱动晶圆级 Mesh 并行、MeshGEMM/GEMV，验证非共享内存加速器上的端到端推理。 |
@@ -60,6 +61,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Analytical Provisioning for Attention-FFN Disaggregated LLM Serving under Stochastic Workloads](https://arxiv.org/abs/2601.21351) | arXiv 2026 (preprint) | 显式刻画动态长度、步级 Barrier 与资源配比，分析 AFD 的 Attention/FFN 最优 Provisioning。 |
 | 2026 | [ASAP: A Disaggregated and Asynchronous Inference System for MoE Prefill](https://arxiv.org/abs/2606.22541) | arXiv 2026 (preprint) | 针对 Attention-DP 与 Expert-EP 跨组全局同步屏障，在 Ascend CloudMatrix384 上异步化 MoE Prefill 流水。 |
 | 2026 | [Connex: Endpoint Mobility Primitives for Dynamic LLM Serving](https://doi.org/10.1145/3789240.3829200) | SIGCOMM 2026 | 为动态 Serving 实例迁移提供 Endpoint Mobility 与通信重定向原语，将连接身份与执行位置解耦。 |
+| 2026 | [Cortex: Achieving Low-Latency, Cost-Efficient Remote Data Access For LLM via Semantic-Aware Knowledge Caching](https://www.usenix.org/conference/nsdi26/presentation/ruan-cortex) | NSDI 2026 | 面向跨 Region Agentic LLM 数据访问，引入 Semantic Element/Index、两阶段语义判断和缓存驱逐/预取，并共址调度轻量 Judger；评估搜索与代码 Agent 工作负载。不是 KV Cache。 |
 | 2026 | [CrossPool: Efficient Multi-LLM Serving for Cold MoE Models through KV-Cache and Weight Disaggregation](https://arxiv.org/abs/2606.24506) | arXiv 2026 (preprint) | 把多个低频 MoE 的 Expert 权重与 KV 状态拆到共享 GPU Pool，结合 KV Virtualizer、Layer-wise Pipeline 和 Persistent Kernel 支持突发长上下文推理；作者报告 P99 TBT。 |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://conferences.sigcomm.org/sigcomm/2026/program/papers/) | SIGCOMM 2026 (official program) | 打通 Storage→Decode→Prefill 第二条 KV 数据路径，利用 Decode NIC 闲置带宽与全局负载调度加速 Agentic 多轮服务。 |
 | 2026 | [Efficient LLM Serving on Commodity GPU Clusters with Data-Reduced Cross-Instance Orchestration (EcoServe)](https://www.usenix.org/conference/osdi26/presentation/du) | OSDI 2026 | 以 Macro-instance 协作与自适应分配，缓解低带宽 GPU 集群跨实例传输。 |
@@ -97,6 +99,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Shift Parallelism: Low-Latency, High-Throughput LLM Inference for Dynamic Workloads](https://doi.org/10.1145/3779212.3790219) | ASPLOS 2026 | 利用推理 Sequence Parallelism 的 KV 状态不变性，动态切换 TP/SP 以兼顾低负载时延和高负载吞吐。 |
 | 2026 | [SHIP: SRAM-Based Huge Inference Pipelines for Fast LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9c20f16b05f5e5e70fa07e2a4364b80e-Abstract-Conference.html) | MLSys 2026 | SHIP 总结 Groq 基于 LPUv1 SRAM 的大规模 LLM serving：以低直径同步互联和静态编译 pipeline 扩展到数千芯片，并在受限 SRAM 中实现 PagedAttention、prefix caching、speculative decoding 及动态 chunked prefill，… |
 | 2026 | [SiFAR: Synchronization-Free All-Reduce for Low-Latency LLM Inference](https://arxiv.org/abs/2607.08973) | arXiv 2026 (preprint) | 以 Dual Buffering、In-switch Redundant Pull 和 Speculative Reduction 移除 TP AllReduce 的阻塞同步；在 H200 TP8 实测 Collective、Llama 和 Qwen 端到端 Decode 吞吐。 |
+| 2026 | [StreamDiffusionV2: A Streaming System for Dynamic and Interactive Video Generation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html) | MLSys 2026 | 相邻视频生成推理：逐帧 SLO-aware/Block 调度、Rolling KV Cache 与跨 Denoising Step/Layer 的多 GPU Pipeline；报告真实 H100 Streaming FPS 和首帧延迟，非文本 LLM。 |
 | 2026 | [SwiftSpec: Disaggregated Speculative Decoding and Fused Kernels for Low-Latency LLM Inference](https://doi.org/10.1145/3779212.3790246) | ASPLOS 2026 | 通过异步 Draft/Verify 分离、并行树生成和 Kernel Fusion 降低小批量分布式解码延迟。 |
 | 2026 | [Symbiotic MLLM Serving: Dynamically Balancing Parallelism Across GPUs and Resources Within GPUs](https://doi.org/10.1109/ISCA66397.2026.00173) | ISCA 2026 | 动态调节视觉编码与文本生成的跨 GPU Parallelism 和 GPU 内时空共享，缓解多模态阶段资源错配。 |
 | 2026 | [SYMPHONY: Enabling Compute-Memory Disaggregation in LLM Serving Systems](https://www.usenix.org/conference/nsdi26/presentation/agarwal) | NSDI 2026 | 将 KV Memory 与 Compute 分离，针对长上下文请求设计内存与执行协同。 |
