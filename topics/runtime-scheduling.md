@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (91)
+## Papers (92)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [SCORPIO: Serving the Right Requests at the Right Time for Heterogeneous SLOs in LLM Inference](https://arxiv.org/abs/2505.23022) | arXiv 2025 (preprint) | 利用 TTFT Guard、TPOT Guard 与 Credit-based Batching 对异构 SLO 请求做 Admission/Queue/Batch 联合控制；作者报告 Goodput 和 SLO 达成率。 |
 | 2025 | [SLOs-Serve: Optimized Serving of Multi-SLO LLMs](https://arxiv.org/abs/2504.08784) | arXiv 2025 (preprint) | 以动态规划联合分配 Chunked Prefill 和 Speculative Decoding 的 Token Budget，按多阶段 SLO 动态路由多副本；六类应用场景实测服务容量。 |
 | 2025 | [SOLA: Optimizing SLO Attainment for Large Language Model Serving with State-Aware Scheduling](https://proceedings.mlsys.org/paper_files/paper/2025/hash/bc82dbfbfa43232be85b8d9838f49c3e-Abstract-Conference.html) | MLSys 2025 | 按请求和全局状态动态调节 Iteration 调度以协调 TTFT 与 TPOT。 |
+| 2025 | [throttLL’eM: Predictive GPU Throttling for Energy Efficient LLM Inference Serving](https://doi.org/10.1109/HPCA61900.2025.00103) | HPCA 2025 | 通过推理迭代与负载预测指导 GPU DVFS/功耗调节，在生成服务中联合考虑能源开销和请求 SLO；作者报告 LLM Serving 实验，设备与采样方法有待详细复核。 |
 | 2025 | [TokenScale: Timely and Accurate Autoscaling for Disaggregated LLM Serving with Token Velocity](https://arxiv.org/abs/2512.03416) | arXiv 2025 (preprint) | 用跨 Prefill/Transfer/Decode 的 Token Velocity 作为 Backpressure 前馈，并让 Decoder GPU 在突发负载时暂执行 Prefill；生产 Trace GPU Cluster 对照 DistServe/AIBrix/BlitzScale 的 SLO 与成本。 |
 | 2025 | [Toppings: CPU-Assisted, Rank-Aware Adapter Serving for LLM Inference](https://www.usenix.org/conference/atc25/presentation/li-suyi-toppings) | USENIX ATC 2025 | LoRA 加载期间先在 CPU 执行适配层、完成 GPU Residency 后切回，并采用 Adapter Rank-aware SLO 调度。 |
 | 2025 | [Tropical: Enhancing SLO Attainment in Disaggregated LLM Serving via SLO-Aware Multiplexing](https://doi.org/10.1109/DAC63849.2025.11132617) | DAC 2025 (NOT 2026 preprint year) | 根据 TTFT/TPOT SLO 动态融合 Colocated 与 P/D-disaggregated 两类执行，权衡 Prefill-Decode Interference 和分离架构排队；在实际数据集和 Serving Baselines 上验证 P90 Latency/SLO 达标。 |
