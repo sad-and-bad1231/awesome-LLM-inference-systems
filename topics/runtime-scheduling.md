@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (121)
+## Papers (120)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -91,7 +91,6 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [LaTune: Lightweight and Adaptive Configuration Tuning for LLM Inference on Edge Devices](https://doi.org/10.1145/3774904.3792382) | WWW 2026 (ACM full paper) | 边缘 LLM 推理参数敏感性筛选、跨配置知识迁移、两阶段自适应调参；作者在四种 Edge Device 测试资源波动下的 TPS、搜索开销和配置鲁棒性，并[公开代码](https://github.com/pkuaiweb/LaTune)。与强静态/在线调优器的等预算比较、质量一致性和端到端 SLO Goodput 待审。 |
 | 2026 | [LEGO: Supporting LLM-enhanced Games with One Gaming GPU](https://2026.hpca-conf.org/details/hpca-2026-main-conference/6/LEGO-Supporting-LLM-enhanced-Games-with-One-Gaming-GPU) | HPCA 2026 (Main Conference) | 在 RTX 4090 上共址游戏渲染与 LLM 推理，通过可蒸馏 Layer Skipping 降低计算量，并用渲染 Headroom 感知调度减轻资源冲突；作者报告延迟目标和准确率权衡。该方案 **MODEL_CHANGED**，不能视作输出等价的 Drop-in Serving 加速。 |
 | 2026 | [Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads](https://www.usenix.org/conference/nsdi26/presentation/ruan-libra) | NSDI 2026 | 以 Micro-request 分解动态 Prefill/Decode 工作量，在不均衡负载下调度并满足 SLO。 |
-| 2026 | [LLM Router: Rethinking Routing with Prefill Activations](https://colmweb.org/AcceptedPapers.html#llm-router-rethinking-routing-with-prefill-activations) | 2026 official program | 根据 Prefill Activation 做不同模型/节点的请求路由；快速准入（会议节目/书目索引），实机执行、Strong Baseline 与端到端服务指标待二审。 |
 | 2026 | [Locality-Aware Beam Scheduling for Efficient Test-Time Compute with a Consumer-grade GPU](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c74b624843218d9b6713fcf299d6d5e4-Abstract-Conference.html) | MLSys 2026 | 按照 Beam 间共享 Prefix 和 Token 局部性分组调度并预取，降低消费级 GPU 的 KV Offload。 |
 | 2026 | [Meeting SLOs, Slashing Hours: Automated Enterprise LLM Optimization with OptiKIT](https://proceedings.mlsys.org/paper_files/paper/2026/hash/4904fad153f6434a7bcf04465d4be2cc-Abstract-Conference.html) | MLSys 2026 | 自动调节企业推理部署和资源配置以满足 SLO。 |
 | 2026 | [MemSpec: Memory-Aware Runtime for Adaptive Draft Scheduling in Speculative Decoding on Edge Devices](https://doi.org/10.1145/3814943.3816174) | LCTES 2026 (PLDI co-located, not PLDI main) | 在边缘设备受限显存下将 Draft 选择与 Draft Resident Set 管理解耦，通过轻量预测与预加载减少切换成本；作者在 Jetson Orin Nano 实测，原始来源误写成 PLDI Main。 |
