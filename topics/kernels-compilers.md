@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (72)
+## Papers (73)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -76,6 +76,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2026 | [PAT: Accelerating LLM Decoding via Prefix-Aware Attention with Resource Efficient Multi-Tile Kernel](https://doi.org/10.1145/3779212.3790200) | ASPLOS 2026 | 按共享 Prefix 组织 Decode Query 和 CTA，执行 Pack-Forward-Merge 以减少重复 KV 读取并消除 Tile 资源空洞。 |
 | 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
+| 2026 | [Realizable N:M Sparse Transformer Inference via Search–Kernel Co-Design](https://2026.euro-par.org/fileadmin/2026/images/program/Euro-Par26_accepted_papers.html#realizable-n-m-sparse-transformer-inference-via-search-kernel-co-design) | Euro-Par 2026 | N:M 稀疏 Transformer 推理的搜索与 Kernel 联合设计；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation](https://doi.org/10.1145/3760250.3762219) | ASPLOS 2026 | 通过 Tile-level DSL、层次寄存器/共享内存及 Layout Algebra 生成 1–8 bit GEMM，含 LLM 低精度内核实测。 |
