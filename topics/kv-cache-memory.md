@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (123)
+## Papers (124)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -115,6 +115,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [ReST-KV: Robust KV Cache Eviction with Layer-wise Output Reconstruction and Spatial-Temporal Smoothing](https://proceedings.iclr.cc/paper_files/paper/2026/hash/8be9c134bb193d8bd3827d4df8488228-Abstract-Conference.html) | ICLR 2026 | 优化 KV 驱逐后 Layer Output Reconstruction Error，并以时空平滑稳定选择；作者报告长上下文质量及 128K Decode Latency，完整 vLLM 端到端路径待审。 |
 | 2026 | [RetroInfer: A Vector Storage Engine for Scalable Long-Context LLM Inference](https://doi.org/10.14778/3796195.3796212) | PVLDB 2026 | 以 Attention-aware Wave Index 对远端 KV 执行候选检索，并通过 GPU/CPU Wave Buffer 联合降低稀疏 Attention 的索引与数据搬运开销。 |
 | 2026 | [SAC: Disaggregated KV Cache System for Sparse Attention LLMs with CXL](https://arxiv.org/abs/2606.19746) | arXiv 2026 (preprint) | 将 DeepSeek-V3.2 稀疏 Attention KV Payload 放 CXL Pool，按索引选中的 Top-k 向量粒度搬运，而非 RDMA 整段传输；SGLang/HiSparse 和 H20+CXL 实机测 TTFT/TBT/吞吐。 |
+| 2026 | [Scaling Attention Beyond GPUs for LLM Inference](https://doi.org/10.1145/3806645.3807596) | HPDC 2026 | Beyond 使用 GPU 最近 KV 上的 Dense Attention 与 CPU 重要历史 KV 上的 Sparse Attention 并发执行，再以 LogSumExp 合并，减少 PCIe 搬运并扩大 Batch/Context；实机 CPU–GPU 系统。 |
 | 2026 | [SkipKV: Selective Skipping of KV Generation and Storage for Efficient Inference with Large Reasoning Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html) | MLSys 2026 | SkipKV 以句子级冗余评分进行 KV 存储淘汰，并用隐空间自适应 steering 跳过冗余句生成，再通过按 prefill 长度重排提升多 batch 的有效 KV 预算 |
 | 2026 | [SmartGen: Seamless Disaggregated LLM Inference with Selective KV Cache Transfer](https://arxiv.org/abs/2607.28150) | arXiv 2026 (preprint) | 主动推送重要 KV、按需并行读取及后续推送全部状态，缩短 P/D 交接等待。 |
 | 2026 | [SolidAttention: Low-Latency SSD-based Serving on Memory-Constrained PCs](https://www.usenix.org/conference/fast26/presentation/zheng) | FAST 2026 | 对稀疏 Attention 的 KV 访问按大块写入 SSD 并做时序局部性预测预取，重叠 Attention 与 SSD I/O。 |
