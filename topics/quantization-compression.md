@@ -8,7 +8,7 @@ Low-bit model representation integrated with actual inference execution and memo
 
 **Foundational context.** See also: [QServe (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (34)
+## Papers (33)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -37,11 +37,10 @@ Low-bit model representation integrated with actual inference execution and memo
 | 2026 | [High-Throughput Non-Uniformly Quantized 3-bit LLM Inference](https://doi.org/10.1145/3774934.3786423) | PPoPP 2026 | Quantix 将非均匀 3-bit 量化的硬件对齐 Bit Shuffle 与 Dequant-Multiply Fusion 映射到 L40 GPU CUDA/TensorCores，报告实际 Kernel 与端到端低精度推理吞吐。 |
 | 2026 | [JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference](https://doi.org/10.1145/3774934.3786428) | PPoPP 2026 | RtSmooth 运行时平滑离群值，配合 Fast Absmax、Recent-token 分层表示和 Mixed-precision Attention Kernel；报告 KV 质量、显存与端到端 Decode 吞吐对照。 |
 | 2026 | [LILo: Harnessing the On-chip Accelerators in Intel CPUs for Compressed LLM Inference Acceleration](https://doi.org/10.1109/HPCA68181.2026.11408577) | HPCA 2026 | Intel IAA 无损权重解压与 AMX/AVX 推理计算重叠，并按 MoE 特征选择性压缩以减少超大模型存储卸载；作者公开了 Xeon IAA 实验 Artifact，复现依赖特定 CPU。 |
-| 2026 | [LO-BCQ: Locally Optimal Block Clustered Quantization for 4-bit (W4A4) LLM Inference](https://icml.cc/virtual/2026/poster/68796) | ICML 2026 | W4A4 分块聚类量化与实际算子效率；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [MixLLM: LLM Quantization with Global Mixed-precision between Output-features and Highly-efficient System Design](https://proceedings.mlsys.org/paper_files/paper/2026/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2026 | 跨层按输出特征重要性分配量化位宽，设计反量化与 GEMM 重叠流水。 |
 | 2026 | [PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization](https://arxiv.org/abs/2607.16184) | arXiv 2026 (preprint) | 根据在线 KV 容量压力调节 MoE Expert Weights 的精度，将模型质量、显存与 Batch 吞吐联合优化；真实 MoE Serving 工作负载报告 GPU 内存与端到端性能。 |
-| 2026 | [ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference](https://iclr.cc/virtual/2026/poster/10011824) | ICLR 2026 | 旋转量化与推理数值保真度；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
-| 2026 | [Reducing Memory Requirements of LLM Inference Through Online rANS Decompression](https://services.conferences.computer.org/2026/cloud-program/#reducing-memory-requirements-of-llm-inference-through-online-rans-decompression) | IEEE CLOUD 2026 | 在线熵解码与 LLM 权重存储、计算的解压开销；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
+| 2026 | [ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference](https://openreview.net/forum?id=1USeVjsKau) | ICLR 2026 (full paper) | 以 Givens Pairwise Rotation + Channel Scaling 抑制 Reasoning LLM Outliers，用 AWQ W4A16 GEMM 加自有变换 Kernel；附录在 RTX A6000、RTX 6000 Ada、RTX 4090、PyTorch 2.6/CUDA Graph、**Batch=1** 逐模型报告 Tokens/s：如 Llama-3-8B **AWQ 120 vs ParoQ 112 tok/s**（A6000），主要收益是较高任务准确率而非优于 AWQ 的运行速度。作者 [GitHub](https://github.com/z-lab/paroquant) 当前开发头已演化，README 要求 `legacy` Branch 重现原论文；在线 Goodput 未验证。 |
+| 2026 | [Reducing Memory Requirements of LLM Inference Through Online rANS Decompression](https://doi.org/10.1109/CLOUD72782.2026.00039) | IEEE CLOUD 2026 (full paper) | 对 CPU/磁盘 Weight Offloading 路径执行**无损 rANS** 压缩与在线解码，并将解压融合 GEMM；论文报告集成 vLLM，受权重搬运限制时有效内存容量最高约 +30%、吞吐收益约 2.5–4.4%（作者报告）。**LOSSLESS_OUTPUT** 仅在完整精度路径成立；实际 GPU、Online Decode Microbenchmark、Memory Overhead 与相比 CUDA/Fused Gemm Baseline 仍待严格审计。 |
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。 |
 | 2026 | [Search Your Block Floating Point Scales!](https://proceedings.mlsys.org/paper_files/paper/2026/hash/633b0e871a48d542280c3ad03928e60d-Abstract-Conference.html) | MLSys 2026 | 优化 BFP Scale 并通过 FP4 Attention Kernel 验证低精度执行。 |
 | 2026 | [TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5c802ef38ab6e366c2ea06eee554c088-Abstract-Conference.html) | ICLR 2026 | 旋转与向量量化用于低比特 KV 表示；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
