@@ -14,15 +14,15 @@ Nine internal groups, **66 canonical entries in total**. Subsections are a readi
 
 | Research mechanism | Papers |
 |---|---:|
-| [Attention & KV-aware Kernels](#attention-kv-aware-kernels) | 12 |
-| [Sparse & Irregular Execution](#sparse-irregular-execution) | 5 |
-| [GEMM & Low-Precision Kernels](#gemm-low-precision-kernels) | 9 |
-| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir-layout) | 12 |
-| [Fusion, Pipelining & Megakernels](#fusion-pipelining-megakernels) | 10 |
-| [Communication-Aware Kernels](#communication-aware-kernels) | 3 |
-| [Memory, I/O & Hardware Co-design](#memory-io-hardware-co-design) | 10 |
-| [Agentic Kernel Optimization](#agentic-kernel-optimization) | 3 |
-| [Kernel Profiling & Correctness](#kernel-profiling-correctness) | 2 |
+| [Attention & KV-aware Kernels](#attention--kv-aware-kernels-12) | 12 |
+| [Sparse & Irregular Execution](#sparse--irregular-execution-5) | 5 |
+| [GEMM & Low-Precision Kernels](#gemm--low-precision-kernels-9) | 9 |
+| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir--layout-12) | 12 |
+| [Fusion, Pipelining & Megakernels](#fusion-pipelining--megakernels-10) | 10 |
+| [Communication-Aware Kernels](#communication-aware-kernels-3) | 3 |
+| [Memory, I/O & Hardware Co-design](#memory-io--hardware-co-design-10) | 10 |
+| [Agentic Kernel Optimization](#agentic-kernel-optimization-3) | 3 |
+| [Kernel Profiling & Correctness](#kernel-profiling--correctness-2) | 2 |
 | **Total** | **66** |
 
 ### Where this taxonomy came from
