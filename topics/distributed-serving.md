@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (117)
+## Papers (119)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -91,7 +91,9 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [Kairox: Adaptive GPU-CPU Hybrid LLM Inference via Online Neuron Balancing](https://www.usenix.org/conference/osdi26/presentation/jiang-yapeng) | OSDI 2026 | 按在线神经元负载重分配 CPU/GPU 推理计算，缓解设备利用率失衡。 |
 | 2026 | [KernelFlume: Elastic Core-Attention Scaling for Agentic Long-Context Decoding](https://arxiv.org/abs/2606.29207) | arXiv 2026 (preprint) | 将 Dense Projection/FFN 与仅托管按 Token Range 分片 KV 的 Weightless Attention Nodes 分离，以 UCX + Inter-layer Pipeline 动态扩容；A6000/H100 实机测试延迟和成本，明确区分后续模拟规模外推。 |
 | 2026 | [Layer-Wise CPU-GPU Scheduling for LLM Inference on Memory-Limited Consumer GPUs](https://doi.org/10.1007/978-3-032-35251-4_21) | Euro-Par 2026 | 将 Decode 时部分 Layer 的 CPU 执行与下一 Layer 的 GPU 权重 DMA 传输重叠，以掩蔽超显存模型的权重搬运瓶颈；正式 Springer 章节，需核 CPU 多线程和 PCIe 带宽基线。 |
+| 2026 | [LLM-PILOT: SLO-Aware and Cost-Efficient LLM Serving on Public Cloud VM Clusters via Offloading](https://doi.org/10.1109/CCGRID68966.2026.00023) | CCGrid 2026 | 联合搜索云 VM 实例、KV Cache Offload 与 Attention Offload，线性回归校准解析模型，兼顾吞吐/时延 SLO 与成本；作者正式全文包含真实 AWS 工作负载而非纯模拟配置选择。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
+| 2026 | [MIDAS: A Dynamic Cross-GPU KV Cache Offloading Framework for LLM on GPU Cluster Systems](https://doi.org/10.1109/ICASSP55912.2026.11461518) | ICASSP 2026 | 在真实 8×A100 集群上通过 NVLink 把请求 KV 借用到空闲 GPU，遇到出借端突增负载时执行撤回/重分布；IEEE 实测相对 Offload 系统的吞吐，需关注 Mixed Tenant 干扰与独立代码 Artifact 是否开放。 |
 | 2026 | [MixServe: An Automatic Distributed Serving System for MoE Models with Hybrid Parallelism Based on Fused Communication Algorithm](https://doi.org/10.1109/2575-8411.2026.00076) | ICDCS 2026 | 根据模型与网络参数选 TP–EP Hybrid Strategy，将节点内 AllReduce 与节点间 All-to-All 融合/重叠，报告 DeepSeek-R1/Qwen3 多 GPU 推理的 TTFT、ITL、吞吐对照。 |
 | 2026 | [MSCCL++: Rethinking GPU Communication Abstractions for AI Inference](https://www.microsoft.com/en-us/research/publication/msccl-rethinking-gpu-communication-abstractions-for-ai-inference/) | ASPLOS 2026 | 将 Collective 的底层通信原语与上层可移植算法分离，支持异构互联优化并有生产推理负载实测。 |
 | 2026 | [Multi-stage Flow Scheduling for LLM Serving](https://arxiv.org/abs/2603.17456) | arXiv 2026 (preprint) | 面向多阶段 KV Retrieval、Collective 与 P→D 传输，以 Reverse Multi-Level Queue 协调网络流与 TTFT。 |
