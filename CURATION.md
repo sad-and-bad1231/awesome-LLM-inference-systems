@@ -357,3 +357,24 @@ Within the **same 202 unique historical records screened earlier in this PR**, t
 - **#936 PPPR / Phase-aware Peak Power Reduction for Minimizing the Capital Expense of LLM Inference** ([ICS 2026](https://doi.org/10.1145/3797905.3815788)): uses the phase-specific Prefill power spike vs Decode low steady power to coordinate server **supercapacitors** and rack **UPS batteries** for datacenter power capacity. The source distinguishes **measured hardware peak-power reduction** from **trace-simulated CapEx/lifetime projections**; these should not be conflated with direct serving goodput improvements.
 
 The following remain pending, with a concrete reason: #933 **NovaServe vs Select-N** same-title DOI discrepancy, #930 VoLLM verified IPDPS proceedings but insufficient inspectable baseline/full hardware detail, other physical/simulated hardware research. The publisher identity and real-system evidence in this wave remain author claims, not independent reproduction. Final acceptance still depends on later quality pruning and explanation value.
+
+## Complete first-pass screening of all previously unresolved history (2026-10-18)
+
+The maintainers requested **broad first-pass intake before deep paper-by-paper vetting**. Every one of the prior **314** historically nonfinal `source_index` records from the original 1,003-entry user-provided JSONL was screened **exactly once in this pass**. The full evidence receipts are delivered separately rather than committed as a second machine-generated metadata database.
+
+| Scope outcome | Unique source records | Evidence threshold |
+|---|---:|---|
+| Fast, **provisional** canonical topic admission | **58** | Official archival paper page or official accepted-program/DBLP index; name + plausible inference execution mechanism, **no** independent artifact or physical-GPU performance reproduction |
+| Editorial scope exclusion | **15** | Unambiguously generic DNN kernel/storage infrastructure, training/data creation, privacy/security, survey/perspective, or output-hyperparameter tuning; title/goal screen **not full-paper scientific ranking** |
+| Screened but still **evidence pending** | **241** | Title, venue/imported identity and likely bottleneck classified; insufficient full paper, official publication or implementation/benchmark evidence to make a final directional decision |
+| Total unique screened this pass | **314** | Exhaustive by distinct source_index, not exhaustive full-paper audits |
+
+**Historical accounting:** Of 1,003 source records, **762** now have a directional admission/exclusion/alias decision; **241 remain unresolved for in-depth verification**. Every previously outstanding record nevertheless has an explicit first-pass category, rationale and next-evidence requirement in the external receipts. **Screening coverage is 314/314; final resolution is not 314/314.** Do not say that the 241 have been 'admitted', 'rejected', or 'independently verified'.
+
+This stacked proposal expands the canonical Markdown bibliography **620 → 678** using one canonical topic per source-qualified provisional entry: 1 Kernel/compiler, 4 Quantization, 15 KV Memory, 14 Decoding, 5 MoE, 10 Runtime, 3 Distributed Serving and 6 Benchmarking. Topic headings/index and global unique-title/URL checks must pass before merging; `main` remains at its prior state unless the maintainer merges stacked PRs in order.
+
+**Important distinction:** A PMLR/ACL Anthology/ICLR/CVF paper page is stronger identity evidence than an official conference **program**, and a DBLP proceedings *listing* is weaker evidence than actually inspecting the corresponding publisher full paper. Entries with only program/index evidence have an explicit note `快速准入（会议节目／索引）`. Even directly archived papers receive only `source/mechanism screen`, not a claim of stable, reproducible Serving Goodput/TTFT/TPOT or safe lossless execution. In the later method-level pass, remove any paper whose actual experimental value is weak or whose inference mechanism is marginal; do not invent device speedups.
+
+A few consciously deferred examples: historical #933 NovaServe/Select-N disputed paper identity and conflicting reported results; #215 RAGBoost requires a confirmed archival MLSys identity despite an author preprint and code; #288 DefensiveKV has an ICLR source and open code but its direct paper/experiment identity was not populated in the import; novel GPU-PIM/NAND/chiplet/wafer-scale systems remain pending fabricated-versus-simulated hardware evidence. The nonadmitted records are not all scientifically low quality.
+
+The repo remains **Markdown-only as its canonical reading library**, no crawler/automatic eligibility decision pipeline or separate JSONL catalogue has been committed. The downloadables contain (a) complete 314-row first-pass decision file, (b) complete reconciled 1,003-row status ledger, and (c) audit-ready report including all 241 outstanding evidence gaps.
