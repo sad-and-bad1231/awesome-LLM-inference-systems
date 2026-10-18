@@ -12,7 +12,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight technical categories, 589 canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight technical categories, 610 canonical topic entries and a concise admission history. |
 | [Emerging research frontiers](frontiers/README.md) | Six starting papers for emerging workloads, with a narrow cross-domain admission boundary. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
