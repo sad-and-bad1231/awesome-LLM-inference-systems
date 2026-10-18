@@ -10,20 +10,20 @@ Efficient LLM inference execution from hardware-conscious operators to compiler 
 
 ## Mechanism map
 
-Nine internal groups, **66 canonical entries in total**. Subsections are a reading/navigation structure, **not nine new public categories** and not G0–G5 admission verdicts.
+Nine internal groups, **71 canonical entries in total**. Subsections are a reading/navigation structure, **not nine new public categories** and not G0–G5 admission verdicts.
 
 | Research mechanism | Papers |
 |---|---:|
-| [Attention & KV-aware Kernels](#attention--kv-aware-kernels-12) | 12 |
+| [Attention & KV-aware Kernels](#attention--kv-aware-kernels-13) | 13 |
 | [Sparse & Irregular Execution](#sparse--irregular-execution-5) | 5 |
-| [GEMM & Low-Precision Kernels](#gemm--low-precision-kernels-9) | 9 |
-| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir--layout-12) | 12 |
-| [Fusion, Pipelining & Megakernels](#fusion-pipelining--megakernels-10) | 10 |
+| [GEMM & Low-Precision Kernels](#gemm--low-precision-kernels-10) | 10 |
+| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir--layout-13) | 13 |
+| [Fusion, Pipelining & Megakernels](#fusion-pipelining--megakernels-12) | 12 |
 | [Communication-Aware Kernels](#communication-aware-kernels-3) | 3 |
 | [Memory, I/O & Hardware Co-design](#memory-io--hardware-co-design-10) | 10 |
 | [Agentic Kernel Optimization](#agentic-kernel-optimization-3) | 3 |
 | [Kernel Profiling & Correctness](#kernel-profiling--correctness-2) | 2 |
-| **Total** | **66** |
+| **Total** | **71** |
 
 ### Where this taxonomy came from
 
@@ -33,11 +33,11 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 - **Operator implementations:** [FlashInfer](https://github.com/flashinfer-ai/flashinfer), [FlashAttention](https://github.com/Dao-AILab/flash-attention), [DeepSeek FlashMLA/DeepGEMM/DeepEP/DeepSelect](../organizations/DeepSeek.md), [ROCm AITER / Composable Kernel](../organizations/AMD.md), and [NVIDIA CUTLASS / CuTe / NCCL](../organizations/NVIDIA.md) expose distinct computation, communication and programming-model concerns.
 - **Portability and hardware evidence:** [Ascend C / CANN and vLLM Ascend](../organizations/Huawei.md), [AWS Neuron/Trainium](../organizations/AWS.md), plus the [research lab map](../communities/README.md) motivate cross-backend compiler, architecture-specific kernels and rigorous real-device-vs-simulator labeling.
 
-**Coverage gaps for later discovery — not new admissions:** model-specific Fused MoE/Grouped GEMM and Expert Dispatch, Token-level Sampling/TopK/TopP, RoPE/RMSNorm/Activation Fusion, KV Layout/Copy/Quantize kernels, and JIT/Graph Capture/Backend Dispatch integration. These matter in real serving runtimes even if this curated paper list has few dedicated landmark papers. A missing mechanism does **not** justify importing implementation-only material as a peer-reviewed paper. Papers whose main contribution is policy/scheduling/KV management still belong in their other existing canonical topic.
+**Coverage gaps for later discovery — not new admissions:** broader Fused MoE/Grouped GEMM and Expert Dispatch beyond the admitted MonoMoE preprint, Token-level Sampling/TopK/TopP, RoPE/RMSNorm/Activation Fusion, KV Layout/Copy/Quantize kernels, and JIT/Graph Capture/Backend Dispatch integration. These matter in real serving runtimes even if this curated paper list has few dedicated landmark papers. A missing mechanism does **not** justify importing implementation-only material as a peer-reviewed paper. Papers whose main contribution is policy/scheduling/KV management still belong in their other existing canonical topic.
 
-## Papers (66)
+## Papers (71)
 
-### Attention & KV-aware Kernels (12)
+### Attention & KV-aware Kernels (13)
 
 **Attention 的执行与 KV 布局相互作用**：Dense/MLA、Prefill/Decode、共享 Prefix、低比特 Attention；对照 FA/FlashInfer 与 Serving Batch/KV 格式。
 
@@ -52,6 +52,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2025 | [SageAttention: Accurate 8-Bit Attention for Plug-and-play Inference Acceleration](https://proceedings.iclr.cc/paper_files/paper/2025/hash/b286c344d38e10d2466c0514b78e2f36-Abstract-Conference.html) | ICLR 2025 | INT8 Attention Quantization 与 GPU Kernel 优化协同，保持高效推理所需数值精度。 |
 | 2025 | [SageAttention2: Efficient Attention with Thorough Outlier Smoothing and Per-thread INT4 Quantization](https://proceedings.mlr.press/v267/zhang25ae.html) | ICML 2025 | 结合 Outlier Smoothing 与 per-thread INT4 算子，更深入地利用 GPU 低精度执行。 |
 | 2025 | [TurboAttention: Efficient Attention Approximation for High-Throughput LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/f4f55846501f3336f293fd8b6de10770-Abstract-Conference.html) | MLSys 2025 | FlashQ 与整数 Softmax 近似融合量化 Attention 算子，避免 KV 解量化并评估端到端吞吐。 |
+| 2026 | [BitDecoding: Unlocking Tensor Cores for Long-Context LLMs with Low-Bit KV Cache](https://doi.org/10.1109/HPCA68181.2026.11408481) | HPCA 2026 | 长上下文低比特 KV Decode 中协同 CUDA Core/Tensor Core：自动 Layout 生成、Warp-level Dequantization 与混合精度流水；作者在 A100/H100/RTX 4090 实机比较 FlashDecoding-v2、QServe，并公开 [BitDecoding](https://github.com/OpenBitSys/BitDecoding)。报告的模型 Decode Latency 不代表多并发 SLO Goodput，量化质量另需核对。 |
 | 2026 | [FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html) | MLSys 2026 | 针对 Blackwell 的算力与非矩阵单元不对称扩展，重构异步 MMA、Softmax 流水及 CuTe-DSL 实现。 |
 | 2026 | [Flashlight: PyTorch Compiler Extensions to Accelerate Attention Variants](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bc52716d13d2d72ea0f335667d86c0f8-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生编译器为多种数据相关 Attention 自动生成 Fusion/Tiling Kernel。 |
 | 2026 | [PAT: Accelerating LLM Decoding via Prefix-Aware Attention with Resource Efficient Multi-Tile Kernel](https://doi.org/10.1145/3779212.3790200) | ASPLOS 2026 | 按共享 Prefix 组织 Decode Query 和 CTA，执行 Pack-Forward-Merge 以减少重复 KV 读取并消除 Tile 资源空洞。 |
@@ -68,13 +69,14 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2026 | [BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2026 | 利用 Online Softmax 统计直接跳过可忽略的 Attention Block。 |
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 
-### GEMM & Low-Precision Kernels (9)
+### GEMM & Low-Precision Kernels (10)
 
 **实际低比特算术路径**：GEMM/GEMV、量化/反量化融合、LUT、Codebook 与按 Batch/Shape 切换的 Kernel；区分 Kernel Speedup 和 Serving Goodput。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2025 | [LiquidGEMM: Hardware-Efficient W4A8 GEMM Kernel for High-Performance LLM Serving](https://doi.org/10.1145/3712285.3759852) | SC 2025 | LiquidQuant 的低开销 W4A8 解量化配合跨 Warp-group 的加载/解量化/MMA 隐式流水；报告 GPU Kernel 与端到端 Serving 实测，官方代码发布状态未确认。 |
+| 2025 | [MARLIN: Mixed-Precision Auto-Regressive Parallel Inference on Large Language Models](https://doi.org/10.1145/3710848.3710871) | PPoPP 2025 | 面向 **batched** INT4×FP16 LLM Decode，以异步访存、权重布局和流水保持量化 GEMM 接近带宽上限；作者报告 vLLM 端到端加速（最高 2.8×），提供 [可执行 Artifact](https://github.com/IST-DASLab/marlin_artifact)。收益取决于 Batch/形状，不能把单层理论加速视作所有 Serving 场景通用结论。 |
 | 2025 | [NeuronMM: High-Performance Matrix Multiplication for LLM Inference on AWS Trainium](https://arxiv.org/abs/2510.25977) | arXiv 2025 (preprint) | 利用 Trainium Systolic Array 与 Software-managed SRAM 的缓存、数据排布、融合规避转置；公开 Kernel 实现并测量 LLM End-to-end 延迟。 |
 | 2025 | [QFactory: Accelerating Quantized Large Language Model Serving with Qtile Graphs](https://www.usenix.org/conference/atc25/presentation/zhang-qihao) | USENIX ATC 2025 | 以 Qtile Graph 描述量化张量变换与 Dequantize/Fused GEMM，联合图变换和 Tile Scheduling 生成 Kernel。 |
 | 2025 | [T-MAC: CPU Renaissance via Table Lookup for Low-Bit LLM Deployment on Edge](https://doi.org/10.1145/3689031.3696099) | EuroSys 2025 | 以 Group-wise Lookup Table 替换低比特 CPU Decode 的反量化乘加，利用 SIMD 改善边缘 LLM 推理。 |
@@ -84,7 +86,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
-### Kernel DSL, Compiler IR & Layout (12)
+### Kernel DSL, Compiler IR & Layout (13)
 
 **如何表达、降级、验证 Kernel**：Tile/Dataflow、IR、Linear Layout、Tensorization、代码生成和跨 ISA 翻译；以可生成的真实算子及代码作为核心证据。
 
@@ -92,6 +94,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 |---|---|---|---|
 | 2018 | [TVM: An Automated End-to-End Optimizing Compiler for Deep Learning](https://www.usenix.org/conference/osdi18/presentation/chen) | OSDI 2018 | 端到端张量编译、算子调度与自动调优；作为现代 LLM Kernel Compiler 的体系结构前驱。 |
 | 2020 | [Ansor: Generating High-Performance Tensor Programs for Deep Learning](https://www.usenix.org/conference/osdi20/presentation/zheng) | OSDI 2020 | 以搜索空间和 Cost Model 代替人工模板调参，实现跨硬件张量程序自动生成。 |
+| 2023 | [Hidet: Task-Mapping Programming Paradigm for Deep Learning Tensor Programs](https://doi.org/10.1145/3575693.3575702) | ASPLOS 2023 | 以 Task Mapping 显式表达细粒度线程/计算分配与顺序，配合 Post-scheduling Fusion、低搜索成本调优；在真实 GPU 上与 TVM/Ansor/ONNX Runtime 比较，并公开 [ASPLOS Artifact](https://github.com/yaoyaoding/hidet-artifacts)。**KEEP_FOUNDATIONAL**：通用 Transformer/DNN Compiler 前驱，不冒充现代 LLM Serving 系统。 |
 | 2023 | [TensorIR: An Abstraction for Automatic Tensorized Program Optimization](https://doi.org/10.1145/3575693.3576933) | ASPLOS 2023 | 张量化计算块和数据变换的结构化 IR，支撑 Tensor Core 自动映射。 |
 | 2024 | [Ladder: Enabling Efficient Low-Precision Deep Learning Computing through Hardware-aware Tensor Transformation](https://www.usenix.org/conference/osdi24/presentation/wang-lei) | OSDI 2024 | 数据布局变换与硬件原生低精度张量指令协同，避免低位宽执行的转换开销。 |
 | 2025 | [Mirage: A Multi-Level Superoptimizer for Tensor Programs](https://www.usenix.org/conference/osdi25/presentation/wu-mengdi) | OSDI 2025 | 以 Kernel/Thread-block/Thread 三层 µGraph 搜索代数变换与 GPU Kernel Schedule，辅以等价性验证；公开编译器并实测 Transformer Tensor Programs。 |
@@ -103,7 +106,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2026 | [Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation](https://doi.org/10.1145/3760250.3762219) | ASPLOS 2026 | 通过 Tile-level DSL、层次寄存器/共享内存及 Layout Algebra 生成 1–8 bit GEMM，含 LLM 低精度内核实测。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 
-### Fusion, Pipelining & Megakernels (10)
+### Fusion, Pipelining & Megakernels (12)
 
 **跨算子执行路径**：Persistent/Mega Kernel、Warp Specialization、软件流水、算子融合、动态 Shape/Graph 和启动开销；重点对照真实请求路径与执行图。
 
@@ -114,7 +117,9 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2026 | [BaseRT: Best-in-Class LLM Inference on Apple Silicon via Native Metal](https://arxiv.org/abs/2607.00501) | arXiv 2026 (preprint) | Metal-native Runtime 采用零分配 Decode Loop、Chip-specialized Fusion 与 Unified-memory-aware Scheduling；公开实现并在 M3/M4 Pro 对照 llama.cpp/MLX。 |
 | 2026 | [DynaFlow: Transparent and Flexible Intra-Device Parallelism via Programmable Operator Scheduling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bbd7d8bd780fcf7143add2317ba04638-Abstract-Conference.html) | MLSys 2026 | 分离计算定义与物理算子调度，并使用异步数据流优化 GPU 并发执行。 |
 | 2026 | [Event Tensor: A Unified Abstraction for Compiling Dynamic Megakernel](https://proceedings.mlsys.org/paper_files/paper/2026/hash/53d3f45797970d323bd8a0d379c525aa-Abstract-Conference.html) | MLSys 2026 | 将动态 Shape/数据依赖的细粒度 Task Dependency 表示为 Event Tensor，并静/动态调度生成 Persistent Megakernel，解决动态 LLM Serving 的 Launch/同步及 Warmup 开销；作者报告 Serving Latency 对照，尚未独立复现。 |
+| 2026 | [GraCE: Unlocking CUDA Graphs with Compiler Support for ML Workloads](https://www.usenix.org/conference/osdi26/presentation/ghosh) | OSDI 2026 | 通过 PyTorch2 编译期代码变换扩大 CUDA Graph Capture 可用性，消除 Graph Kernel Parameter Copy 并依成本模型选择 Replay；有公开 [OSDI Artifact](https://github.com/csl-iisc/GraCE-OSDI26-Artifact)。**KEEP_ADJACENT**：通用 ML Graph Compiler，论文 TorchBench/HuggingFace/TIMM 收益不等于已验证 vLLM 在线服务收益。 |
 | 2026 | [LLMFolder: Revisiting Constant Folding in Large Language Models](https://doi.org/10.1145/3767295.3769339) | EuroSys 2026 | 从编译器 constant folding 视角重新审视 LLM 推理，将可预计算结构识别与模型推理执行结合，属于执行编译与模型服务交界的系统优化方向 |
+| 2026 | [MonoMoE: An Efficient Fused Mega-kernel for Quantized MoE Decoding](https://arxiv.org/abs/2609.04244) | arXiv 2026 (preprint) | 把小 Batch MoE Decode 改为 Weight-major Persistent Megakernel，在一次 Launch 中融合 Routing/TopK、Quantization、两个 Expert GEMM、Activation 与 Combine，减少 Expert-local Tile Padding；作者在 H200、vLLM 路径报告 Operator 和 TPOT 收益，[FlashInfer Kernel 代码](https://github.com/flashinfer-ai/flashinfer/tree/main/csrc/fused_moe/monomoe)可查。**无正式顶会身份**，Accuracy、Batch/硬件边界与可移植性待进一步严格核验。 |
 | 2026 | [MPK: A Compiler and Runtime for Mega-Kernelizing Tensor Programs](https://www.usenix.org/conference/osdi26/presentation/cheng) | OSDI 2026 | MPK 用 SM 级图表示把多 GPU 推理编译为单一 mega-kernel，实现跨算子软件流水与计算-通信重叠，并以持久内核内运行时执行，端到端 latency 降低至多 1.7× |
 | 2026 | [Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs](https://www.usenix.org/conference/osdi26/presentation/soi) | OSDI 2026 | Twill 把软件流水（SWP）与 warp 特化（WS）建模为可由约束求解器整体优化的联合问题，为迭代程序自动推导最优且无启发式的调度，并证明 Hopper/Blackwell 上 Flash Attention 调度的最优性 |
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
