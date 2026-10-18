@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (48)
+## Papers (49)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -43,6 +43,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 模型跳连变换与推理系统协同设计，将 EP 阻塞通信隐藏在计算之下。 |
 | 2026 | [LayerScope: Predictive Cross-Layer Scheduling for Efficient Multi-Batch MoE Inference on Legacy Servers](https://doi.org/10.1145/3797905.3807834) | ICS 2026 | PreScope 采用层级 Expert Activation 预测、跨层 Prefetch Scheduling 和异步 CPU–GPU I/O 协调，在普通服务器上隐藏 MoE Expert Offload 延迟；作者报告推理吞吐/延迟实验。 |
 | 2026 | [Least-Loaded Expert Parallelism: Load Balancing An Imbalanced Mixture-of-Experts](https://proceedings.mlr.press/v306/nguyen26m.html) | ICML 2026 | 将超载设备的 Token 及关联 Expert 参数动态重路由至闲置设备，减少 Collective Straggler。 |
+| 2026 | [Libra: Effective yet Efficient Load Balancing for Large-scale MoE Inference](https://proceedings.iclr.cc/paper_files/paper/2026/hash/9ff1ac9a659085fed0735362cafe5e53-Abstract-Conference.html) | ICLR 2026 | 预测未来 Expert Activation 并在 MoE Execution Flow 中重排与重叠负载均衡开销；8×H200 上真实大模型 MoE 推理验证，作者代码开源，优先二次核查其吞吐和质量基线。 |
 | 2026 | [LycheeDecode: Accelerating Long-Context LLM Inference via Hybrid-Head Sparse Decoding](https://arxiv.org/abs/2602.04541) | arXiv 2026 (authors indicate ICLR 2026) | HardKuma 将 Head 划为 Retrieval 和复用其 Top-k 的 Sparse Heads，在 128K Decode 上报告 GPU 加速，并针对 LongBench、RULER、AIME 比较精度。 |
 | 2026 | [MoE-APEX: An Efficient MoE Inference System with Adaptive Precision Expert Offloading](https://doi.org/10.1145/3779212.3790187) | ASPLOS 2026 | 按 Token/Layer/Sequence 分层管理 Expert 的精度、预取和缓存，减轻显存受限设备的 Expert Loading。 |
 | 2026 | [MoE-Lens: Towards the Hardware Limit of High-Throughput MoE LLM Serving Under Resource Constraints](https://doi.org/10.1145/3806645.3807594) | HPDC 2026 | CPU/GPU 混合执行结合硬件上界模型推导 Expert Placement/执行策略，实验比较性能模型与真实吞吐。 |
