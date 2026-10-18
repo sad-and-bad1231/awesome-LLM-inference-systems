@@ -239,3 +239,19 @@ Nine previously pending records from the user-supplied 1,003-paper JSONL receive
 **Withheld candidates reviewed but not promoted:** Insum (ASPLOS 2026) is a credible general-purpose sparse GPU compiler yet its evaluated workloads do not clearly pass this collection's narrow LLM-inference-specific gate; WISP (SIGMETRICS 2026) has documented analytic/numerical distributed speculative-serving results, but the extent of measured physical edge/server evaluation is not established here. Program/accepted-title-only 2026 listings and generic serverless-inference systems likewise do not automatically meet this admission boundary. Missing evidence does not mean poor research quality.
 
 All rows were checked against existing topic titles/links before insertion. One primary mechanism category per paper. The source-index evidence decisions are kept as separate private/user-delivered artifacts, not a machine-generated secondary catalog committed into the public repository.
+
+## Rapid evidence-qualified historical sweep — seven additions (2026-10-18)
+
+Seven **previously unresolved** source-index records (#138, #232, #322, #384, #459, #475, #476) were compared against publisher records, confirmed as new canonical identities and given one mechanism-home each. This is a rapid **primary-publication / mechanism / author-reported evaluation** intake, not a reproduction or a comprehensive full-methodology audit. The stacked branch now has **542** topic entries (previously 535).
+
+- **KV:** KV Cache Transform Coding / KVTC (ICLR 2026) performs transform + quantization + entropy coding for stored KV; its large storage compression ratios are **not** directly measured inference goodput gains. PM-KVQ (ICLR 2026) uses progressive bitwidth reduction, sensitivity-aware per-block allocation and interpolation-based long-CoT calibration, with public code and performance/quality comparisons.
+- **Decoding:** CDLM (MLSys 2026) jointly trains for fewer diffusion refinement steps and blockwise causal KV cache compatibility. Its speedup requires model training/fine-tuning, unlike drop-in inference runtime changes.
+- **MoE:** Libra (ICLR 2026) forecasts expert load and overlaps routing overhead, evaluated on a real 8×H200 deployment with an author artifact.
+- **Historical kernel library:** LightSeq (NAACL **2021 Industry Track**) was evaluated on machine translation / early transformer inference. It is a distinct historical kernel/runtime foundation, not a current autoregressive LLM serving benchmark.
+- **Adjacent multimodal inference:** DiffServe (MLSys 2025) optimizes query-aware cascades for text-to-image, while ScaleFusion (MLSys 2025) pipelines distributed spatial-temporal attention for long video diffusion on physical 32×A100. Neither is attributed text LLM deployment results.
+
+**Existing canonical paper identities (no duplicate rows):** Original #47 BEAM (MLSys 2026), #55 SchedFlow → DynaFlow (MLSys 2026 publisher name), #56 EcoServe (OSDI 2026), #127 RDMA Point-to-Point → fabric-lib (MLSys 2026 publisher name), and #230 RefreshKV (ACL 2025). These imported records already had previous final dispositions in the user's JSONL; this sweep merely revalidated the alias links and did not inflate processed counts.
+
+**Scope hold:** SkyServe (EuroSys 2025) has real published systems research and deployment results but is general AI cross-cloud spot-instance placement. Its prior **scope-excluded** status is preserved as the technical mechanism is not specialized for LLM inference; an excellent paper is not automatically a fit for this particular bibliography. Hardware-simulation-only and generalized ASIC cost-prediction papers remain held for future evidence review.
+
+Topic Markdown tables stay the one canonical public catalog. Separate dated disposition tracking remains outside the repository. All claims are from published/author evidence, not independently repeated.
