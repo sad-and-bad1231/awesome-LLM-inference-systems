@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (110)
+## Papers (111)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -96,6 +96,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [Optimizing Deployment Configurations for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/97dc07f1253ab33ee514f395a82fa7cc-Abstract-Conference.html) | MLSys 2026 | 研究服务部署方案的资源与性能配置空间，指导高性能推理服务选型。 |
 | 2026 | [PASCAL: A Phase-Aware Scheduling Algorithm for Serving Reasoning-based Large Language Models](https://2026.hpca-conf.org/details/hpca-2026-main-conference/19/PASCAL-A-Phase-Aware-Scheduling-Algorithm-for-Serving-Reasoning-based-Large-Language) | HPCA 2026 | 分离 Reasoning/Answering 阶段的执行优先级与抢占规则。 |
 | 2026 | [PEACE: Preemptive and Efficient Cluster Scheduling for LLM Inference with Mixed Prompts](https://doi.org/10.1109/IPDPS65963.2026.00105) | IPDPS 2026 | 对长短 Prompt 混合到达实施长 Prefill 可抢占执行、短请求 P/D 协同放置与 Fast Sequence Parallelism；公开基于真实 Server+Trace 的对照和消融 Artifact。 |
+| 2026 | [Phase-aware Peak Power Reduction for Minimizing the Capital Expense of LLM Inference](https://doi.org/10.1145/3797905.3815788) | ICS 2026 | PPPR 利用 Prefill 峰值和 Decode 稳态交替规律，协同服务器超级电容与机架 UPS 电池削减机房供电峰值；正式论文含功耗硬件实验与大规模 Trace Simulation，应区分测得 Peak Power 与推算的 CapEx 收益。 |
 | 2026 | [PKAS: Predictive KVCache-Aware Scheduling for Faster LLM and Transformer Inferences](https://doi.org/10.1145/3806645.3807819) | HPDC 2026 | Admission 前预测 Batch 后续 KV 容量需求和输出长度，避免 Decode 阶段 OOM、Preemption 和 Recompute；以真实推理工作负载验证吞吐/延迟，区别于 Prefix Eviction 算法。 |
 | 2026 | [PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG) | MLSys 2026 | 按 Prompt Prefill 长度协调请求分配，处理长短输入混合下的资源干扰。 |
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50% |
