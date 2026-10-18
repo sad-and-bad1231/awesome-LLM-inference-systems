@@ -10,20 +10,20 @@ Efficient LLM inference execution from hardware-conscious operators to compiler 
 
 ## Mechanism map
 
-Nine internal groups, **71 canonical entries in total**. Subsections are a reading/navigation structure, **not nine new public categories** and not G0–G5 admission verdicts.
+Nine internal groups, **73 canonical entries in total**. Subsections are a reading/navigation structure, **not nine new public categories** and not G0–G5 admission verdicts.
 
 | Research mechanism | Papers |
 |---|---:|
 | [Attention & KV-aware Kernels](#attention--kv-aware-kernels-13) | 13 |
 | [Sparse & Irregular Execution](#sparse--irregular-execution-5) | 5 |
 | [GEMM & Low-Precision Kernels](#gemm--low-precision-kernels-10) | 10 |
-| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir--layout-13) | 13 |
+| [Kernel DSL, Compiler IR & Layout](#kernel-dsl-compiler-ir--layout-15) | 15 |
 | [Fusion, Pipelining & Megakernels](#fusion-pipelining--megakernels-12) | 12 |
 | [Communication-Aware Kernels](#communication-aware-kernels-3) | 3 |
 | [Memory, I/O & Hardware Co-design](#memory-io--hardware-co-design-10) | 10 |
 | [Agentic Kernel Optimization](#agentic-kernel-optimization-3) | 3 |
 | [Kernel Profiling & Correctness](#kernel-profiling--correctness-2) | 2 |
-| **Total** | **71** |
+| **Total** | **73** |
 
 ### Where this taxonomy came from
 
@@ -35,7 +35,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 
 **Coverage gaps for later discovery — not new admissions:** broader Fused MoE/Grouped GEMM and Expert Dispatch beyond the admitted MonoMoE preprint, Token-level Sampling/TopK/TopP, RoPE/RMSNorm/Activation Fusion, KV Layout/Copy/Quantize kernels, and JIT/Graph Capture/Backend Dispatch integration. These matter in real serving runtimes even if this curated paper list has few dedicated landmark papers. A missing mechanism does **not** justify importing implementation-only material as a peer-reviewed paper. Papers whose main contribution is policy/scheduling/KV management still belong in their other existing canonical topic.
 
-## Papers (71)
+## Papers (73)
 
 ### Attention & KV-aware Kernels (13)
 
@@ -86,7 +86,7 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
-### Kernel DSL, Compiler IR & Layout (13)
+### Kernel DSL, Compiler IR & Layout (15)
 
 **如何表达、降级、验证 Kernel**：Tile/Dataflow、IR、Linear Layout、Tensorization、代码生成和跨 ISA 翻译；以可生成的真实算子及代码作为核心证据。
 
@@ -103,7 +103,9 @@ The structure is cross-checked against actual operator/backend boundaries, not d
 | 2025 | [TileLang: A Composable Tiled Programming Model for AI Systems](https://arxiv.org/abs/2504.17577) | arXiv 2025 (preprint) | 将 Tile Dataflow 与线程映射、Tensorization、Layout 及 Pipeline Scheduling 解耦，在 GEMM/FlashAttention/MLA 等 GPU 推理 Kernel 上提供可执行编译器及实测。 |
 | 2026 | [HipKittens: Fast and Furious AMD Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bc75fa9843a7905bbed9d83895a88f7f-Abstract-Conference.html) | MLSys 2026 | 把 Tile/Async Execution 编程抽象迁至 CDNA3/CDNA4 AMD GPU，针对 AMD 布局和指令约束重设算法；作者公开 [HipKittens](https://github.com/HazyResearch/HipKittens) 并报告真实 AMD GEMM/Attention Kernel 性能，部分集成到 AITER。不是泛化的 LLM Serving Goodput 证明。 |
 | 2026 | [Linear Layouts: Robust Code Generation of Efficient Tensor Computation Using F₂](https://doi.org/10.1145/3760250.3762221) | ASPLOS 2026 | 以 F₂ 线性映射统一 Triton Tensor Layout 与 Layout Conversion，减少编译器特殊分支并修正布局缺陷；实现已进入 Triton，含真实 GPU Kernel 评测。 |
+| 2026 | [TileLoom: Automatic Dataflow Planning for Tile-Based Languages on Spatial Dataflow Accelerators](https://www.usenix.org/conference/osdi26/presentation/li-wei) | OSDI 2026 | 基于 MLIR 与硬件拓扑/内存/NoC 表示，将 Triton 类 Tile Kernel 映射到空间分布的计算核心，自动规划跨核数据复用与通信；作者在 Tenstorrent Wormhole/Blackhole **真实硬件**对比厂商库的 Attention/GEMM。属于跨架构 Compiler 基础设施（KEEP_ADJACENT），不推定 Ascend/CUDA 可直接运行或现代 Serving Goodput 收益。 |
 | 2026 | [Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation](https://doi.org/10.1145/3760250.3762219) | ASPLOS 2026 | 通过 Tile-level DSL、层次寄存器/共享内存及 Layout Algebra 生成 1–8 bit GEMM，含 LLM 低精度内核实测。 |
+| 2026 | [VTC: DNN Compilation with Virtual Tensors for Data Movement Elimination](https://www.usenix.org/conference/osdi26/presentation/hu-muyan) | OSDI 2026 | 以 Virtual Tensor 的 Index Mapping 表示 Reshape/Slice/Concat/Permute 等纯数据搬运，推迟或消除显式 Global Memory Materialization；整合 [PyTorch Inductor Artifact](https://github.com/ADAPT-uiuc/VTC)，作者报告 A100/H100 推理任务的性能/内存收益。**KEEP_ADJACENT**：主要为通用 DNN Compiler，不能把平均加速直接归因为 vLLM/SGLang Serving 提升。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 
 ### Fusion, Pipelining & Megakernels (12)
