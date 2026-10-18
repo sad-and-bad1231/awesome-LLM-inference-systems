@@ -1,5 +1,9 @@
 # Curation policy
 
+## Strict second-pass handoff (2026-10-18)
+
+**Use [STRICT_REVIEW.md](STRICT_REVIEW.md) before the next curation batch.** The provisional broad intake has been screened by identity/target, **not** accepted after an independent methods or reproduction audit. Original historical pool: **1,003 distinct records**, **762 with directional decisions**, **241 still evidence-pending**. Public topic inventory: **678 canonical Markdown rows**; this is a **different denominator** and includes broad first-pass admissions. Audit G0–G5, preserve author-claimed-vs-measured-vs-simulated boundaries, and remove weak or mis-scoped entries. PR-level review and reviewer approval remain mandatory.
+
 ## Goal
 
 Maintain an approachable, **selectively edited Awesome bibliography**, not a paper database, monitoring platform, knowledge graph, ranking site or per-paper note repository. `README.md` is the editorial entrance; each topic or organization Markdown page is a directly maintained, human-reviewed list. No machine-generated parallel catalog. Updates should remain small and attributable to primary sources.
