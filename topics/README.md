@@ -2,7 +2,7 @@
 
 Eight research categories. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
 
-**Audit status:** the October 18 broad intake is **provisional** and awaits G0–G5 method/evidence review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
 
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
@@ -42,7 +42,9 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | Verified MoE system architectures (2026-10-11) | 2 |
 | Strict 50-record legacy verification batch (2026-10-11) | 5 |
 | Selective emerging frontiers seed (2026-10-12) | 8 |
-| October 18 historical intake: 6 stricter + 186 provisional | 192 |
+| October 18 historical intake: 6 stricter + 186 provisional (historical intake) | 192 |
+| Strict audit removals, PR #45 + #46 | -15 |
+| Targeted kernel/compiler captures, PR #48 (7 Kernel rows including 1 KV migration; 6 new identities) | +6 |
 | **Canonical topic entries** | **669** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
