@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (147)
+## Papers (145)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -69,7 +69,6 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [ContrastKV: Robust KV Cache Eviction via Contrastive Signal Fusion for Multi-Query Generalization](https://aclanthology.org/2026.acl-long.417/) | ACL 2026 | 面向同一知识库多 Query 的 Prefix KV Eviction，融合语义/结构对比信号和跨 Head/Layer 的 Score，在 20% KV 预算下报告质量保留与 Decode Latency；未核实在线 vLLM 工作负载。 |
 | 2026 | [CriticalKV: Optimizing KV Cache Eviction from an Output Perturbation Perspective](https://proceedings.mlr.press/v306/feng26j.html) | ICML 2026 | 以 Attention Output Perturbation 约束修正仅按 Attention Weight 选择 KV 的不足；正式出版题名 CriticalKV，作者评估多种 Eviction 基线，非 Serving 端到端认证。 |
 | 2026 | [CXL-SpecKV: A Disaggregated FPGA Speculative KV-Cache for Datacenter LLM Serving](https://doi.org/10.1145/3748173.3779188) | FPGA 2026 | 将 CXL 远端 KV Pool、预测式 Cache Prefetch 与 FPGA 压缩/解压整合到 LLM 服务路径，提供硬件 RTL/Driver 代码及论文性能对照。 |
-| 2026 | [Decouple and Cache: KV Cache Construction for Streaming Video Understanding](https://icml.cc/virtual/2026/poster/64752) | ICML 2026 | 流式视频理解中的 KV 存储、压缩及时间窗口；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [DroidSpeak: KV Cache Sharing Across Fine-tuned Model Variants](https://www.usenix.org/conference/nsdi26/presentation/liu-yuhan) | NSDI 2026 | DroidSpeak 是首个跨不同 LLM（同架构）复用前缀 KV cache 的分布式推理系统：选择性重算另一模型产生的少数层、复用其余层，并以流水线叠加重算与加载 |
 | 2026 | [Dual-Blade: Dual-Path NVMe-Direct KV-Cache Offloading for Edge LLM Inference](https://doi.org/10.1109/2575-8411.2026.00065) | ICDCS 2026 | 按内存压力将 KV 映射至 Linux Page Cache 或 NVMe 直接 LBA 路径，同时 Pipeline SSD I/O 与 GPU DMA；论文报告真实边缘 GPU+NVMe Prefill/Decode 延迟，需审查正确性与缓存污染。 |
 | 2026 | [ECHO: Efficient KV Cache Offloading with Lossless Prefetching for Serving Native Sparse Attention LLMs](https://www.usenix.org/conference/osdi26/presentation/liu-guangda) | OSDI 2026 | 原生 Sparse Attention 的图兼容 KV 淘汰与无损预测预取，把 Recall 与 Indexer 计算流水重叠。 |
@@ -95,7 +94,6 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [Joint Encoding of KV-Cache Blocks for Scalable LLM Serving](https://arxiv.org/abs/2601.03067) | arXiv 2026 (preprint) | 跨请求与 Prompt Chunk 共享相似 KV Block 的融合表示，并保持标准缓存布局；有公开实现和单机 vLLM Token Throughput 测试，区分有损压缩和量化精度折中。 |
 | 2026 | [KEEP: A KV-Cache-Centric Memory Management System for Efficient Embodied Planning](https://arxiv.org/abs/2602.23592) | arXiv 2026 (preprint) | 对 Embodied Planning 的静态/动态记忆分组缓存 KV，以 Multi-hop 局部重算和 Layer-balanced Loading 避免失效/流水失衡；有代码和 ALFRED 真实推理实验，对比 CacheBlend 的 TTFT 与任务成功率。 |
 | 2026 | [Kitty: Accurate and Efficient 2-bit KV Cache Quantization with Dynamic Channel-wise Precision Boost](https://proceedings.mlsys.org/paper_files/paper/2026/hash/e4d8d1b5120be349d3fff8878650cf45-Abstract-Conference.html) | MLSys 2026 | 量化敏感 KV 通道动态保留高精度，使用分页低精度布局与 Triton Kernel。 |
-| 2026 | [KQ-SVD: Compressing the KV Cache with Provable Guarantees on Attention Fidelity](https://virtual.aistats.org/virtual/2026/poster/13850) | AISTATS 2026 | 低比特量化或低秩表示下的 KV 体积、保真与访问开销；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [KV Cache Reuse for Elastic LLM Inference on Edge Devices](https://doi.org/10.1109/2575-8411.2026.00035) | ICDCS 2026 | ElastKV 在端侧不同量化精度模型间保留混精度 KV，按估计贡献局部重算以降低设备精度切换代价；正式 IEEE 论文，需复核物理边缘设备与量化转换开销。 |
 | 2026 | [KV Cache Transform Coding for Compact Storage in LLM Inference](https://openreview.net/pdf?id=aNVKROYpLB) | ICLR 2026 | KVTC 将 PCA 特征去相关、分配精度的量化和熵编码组合用于可复用 KV Cache 的 GPU/Offload 压缩；报告跨 Llama/Mistral 模型的准确率-空间开销比较，压缩比不直接等价于 Serving Goodput。 |
 | 2026 | [KVDrive: A Holistic Multi-Tier KV Cache Management System for Long-Context LLM Inference](https://doi.org/10.1145/3802077) | PACMMOD 2026 | 联合管理 GPU/DRAM/SSD KV 驻留、注意力访问模式与跨层 I/O Pipeline，避免稀疏访问被缓存传输阻塞。 |
@@ -122,7 +120,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [PackKV: Reducing KV Cache Memory Footprint through LLM-Aware Lossy Compression](https://ssl.linklings.net/conferences/ipdps/ipdps2026_program/views/at_a_glance.html#packkv-reducing-kv-cache-memory-footprint-through-llm-aware-lossy-compression) | IPDPS 2026 | 低比特量化或低秩表示下的 KV 体积、保真与访问开销；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [PatternKV: Flattening KV Representation Expands Quantization Headroom](https://proceedings.mlr.press/v306/zhang26ci.html) | ICML 2026 | 调整 KV 数值分布以提高低比特缓存量化可行性。 |
 | 2026 | [PM-KVQ: Progressive Mixed-precision KV Cache Quantization for Long-CoT LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/afb8caec018d3c8f6ef8b81fa52386fe-Abstract-Conference.html) | ICLR 2026 | 将长 CoT 的 KV 随生成进度渐进降 Bitwidth，以 Block 敏感度分配精度，并通过位置插值改进长序列校准；有公开代码与 LLM 推理吞吐/推理质量对照。 |
-| 2026 | [Predicting Future KV Utility: Global Combinatorial Optimization for Task-Agnostic KV Cache Eviction](https://icml.cc/virtual/2026/poster/65241) | ICML 2026 | 长上下文的 KV 重要性估计、容量管理与驱逐精度；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
+| 2026 | [Predicting Future Utility: Global Combinatorial Optimization for Task-Agnostic KV Cache Eviction](https://proceedings.mlr.press/v306/tang26i.html) | ICML 2026 (PMLR 306) | LU-KV 针对不同 Attention Heads 的长期效用差异，用凸包松弛与贪心优化分配 KV Budget，并通过离线 Profiling/在线预算查表结合 SnapKV、KeyDiff、EA；作者报告 LongBench/RULER 的缓存、精度和延迟权衡。正式论文身份已核对；Serving Goodput 与 Baseline 公平性仍待严格复审。 |
 | 2026 | [PrefillShare: A Shared Prefill Module for KV Reuse in Multi-LLM Disaggregated Serving](https://arxiv.org/abs/2602.12029) | arXiv 2026 (preprint) | 共享冻结 Prefill Module，通过 Cache-conditioned Decode 微调与路由实现多模型跨任务 KV 复用。 |
 | 2026 | [Prefix-Cache-Aware Data Reordering for LLM-Augmented Database Analytics](https://proceedings.mlr.press/v306/li26gn.html) | ICML 2026 | SOLO 基于 Prefix Radix Tree 同构关系重排行列 Prompt，让 LLM 增强型数据库分析更容易命中 Prefix KV Cache；有实测 Prefill 吞吐和规划开销。 |
 | 2026 | [ProphetKV: User-Query-Driven Selective Recomputation for Efficient KV Cache Reuse in Retrieval-Augmented Generation](https://proceedings.mlr.press/v306/wang26y.html) | ICML 2026 | Query-aware Token Recompute Budget 与 Layer Attention 合并，缓解 RAG KV 复用中 Query-irrelevant Token 的预算挤出；作者报告准确率改善，GPU TTFT 证据待全文审查。 |
