@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (64)
+## Papers (65)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -75,6 +75,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2026 | [Triton-Sanitizer: A Fast and Device-Agnostic Memory Sanitizer for Triton with Rich Diagnostic Context](https://doi.org/10.1145/3779212.3790241) | ASPLOS 2026 | 面向真实 Triton Kernel 的设备无关内存错误检测、定位及诊断上下文；有作者实验 Artifact，属于推理 Kernel 正确性工具而非 LLM Serving 加速论文。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
+| 2026 | [XtraMAC: An Efficient MAC Architecture for Mixed-Precision LLM Inference on FPGA](https://doi.org/10.1109/ISCA66397.2026.00177) | ISCA 2026 | 在 FPGA DSP48E2 上用共享 Mantissa Product 与 Runtime Data-type Packing 支持整数/浮点混精 MAC；公开 Verilog Testbench/综合流程和 U55C 资源测量，端到端 LLM 推理扩展收益含建模/模拟，非物理部署证明。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
 
 *Publication source and mechanism screened; speedup claims are not independently reproduced.*
