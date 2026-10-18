@@ -1,21 +1,22 @@
 # Papers by systems mechanism
 
-Eight research categories. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
+Eight research categories, each carrying an internal, industry-grounded taxonomy of sub-groups. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
 
-**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. A later **first-pass taxonomy and screening sweep (2026-10-18)** re-grouped all eight pages into 69 sub-groups but **removed nothing and corrected exactly one venue cell**, so the canonical total is still **669**. 176 of those rows (26%) now carry an explicit inline screening tag — a tag records an unresolved question or a disclosed caveat, **not** a rejection. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
 
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
-| Mechanism | Canonical entries | Scope |
-|---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 73 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 144 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 71 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 33 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 59 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 119 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 121 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | Validated models, traces, benchmarks and production diagnosis |
+| Mechanism | Canonical entries | Sub-groups | Scope |
+|---|---:|---:|---|
+| [Kernels & Compilers](kernels-compilers.md) | 73 | 9 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 144 | 8 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 71 | 9 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 33 | 8 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 59 | 8 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 119 | 9 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 121 | 9 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | 9 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **669** | **69** | |
 
 ## Admission summary (through 2026-10-18)
 
@@ -45,6 +46,7 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | October 18 historical intake: 6 stricter + 186 provisional (historical intake) | 192 |
 | Strict audit removals, PR #45 + #46 | -15 |
 | Targeted kernel/compiler captures, PR #48 (7 Kernel rows including 1 KV migration; 6 new identities) | +6 |
+| First-pass taxonomy & screening sweep (2026-10-18): 69 sub-groups, 0 removed, 0 added, 1 venue correction | ±0 |
 | **Canonical topic entries** | **669** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
@@ -166,4 +168,18 @@ Original source indices **#28–#230** (the first **50** previously pending entr
 
 ## Emerging frontier foundation-first seed (2026-10-12)
 
-Eight new canonical entries were individually source-screened: **KernelBench (ICML 2025)** as a foundational general GPU-kernel evaluation prerequisite; **KernelBand (ICML 2026)** for measured hardware-aware agentic kernel search; **AgentSysBench (arXiv 2026 preprint)** for end-to-end agent workload characterization; **FAST-AR and WorldPlay (ICML 2026)** for interactive video temporal memory; **Rolling Forcing and BWCache (ICLR 2026)** for measured streaming / diffusion execution; and **VLA across XPUs (ICML 2026)** for measured embodied inference bottlenecks and acceleration. Already listed FlashAgents, Cornserve, vLLM-Omni, AccelOpt, Fast-dLLM and Sangam were *not* re-admitted or double counted. World-model/VLA/video DiT works are explicitly marked **adjacent foundation-model inference** rather than misrepresented as standard LLM serving. Acceptance used official proceedings or primary preprints, identifiable execution mechanisms, and author-reported hardware or runtime measurements; it is **not** independent reproduction. The [frontier reading map](../frontiers/README.md) deliberately limits the recommended entry reading load to six.
+Eight new canonical entries were individually source-screened: **KernelBench (ICML 2025)** as a foundational general GPU-kernel evaluation prerequisite; **KernelBand (ICML 2026)** for measured hardware-aware agentic kernel search; **AgentSysBench (arXiv 2026 preprint)** for end-to-end agent workload characterization; **FAST-AR and WorldPlay (ICML 2026)** for interactive video temporal memory; **Rolling Forcing and BWCache (ICLR 2026)** for measured streaming / diffusion execution; and **VLA across XPUs (ICML 2026)** for measured embodied inference bottlenecks and acceleration. Already listed FlashAgents, Cornserve, vLLM-Omni, AccelOpt, Fast-dLLM and Sangam were *not* re-admitted or double counted. World-model/VLA/video DiT works are explicitly marked **adjacent foundation-model inference** rather than misrepresented as standard LLM serving. Acceptance used official proceedings or primary preprints, identifiable execution mechanisms, and author-reported hardware or runtime measurements; it is **not** independent reproduction. The [frontier reading map](../frontiers/README.md) deliberately limits the recommended entry reading load to **nine**.
+
+## Taxonomy and first-pass screening sweep (2026-10-18)
+
+All eight categories were re-derived from **industry sub-directions** — the knobs that serving stacks actually ship and document (vLLM's scheduler, KV-offloading connector and quantization registry; SGLang's tiered HiCache and its separate quantized-KV-cache page; TensorRT-LLM's quantization and KV-cache-connector docs; NVIDIA Dynamo's KV Block Manager, Flash Indexer and conditional disaggregation; llm-d's three-tier KV hierarchy, predicted-latency scheduling and wide-EP recipes; DeepSpeed-MoE and Tutel; the OCP MX and NVFP4 formats) — rather than from venue, hardware or workload labels. The eight pages now carry **69 sub-groups** over the same 669 rows; each group opens with a one-line definition and has a resolving entry in its `Mechanism map`. [Kernels & Compilers](kernels-compilers.md) was already built this way and supplied the reference format.
+
+**Outcome: 0 rows removed, 0 added, 1 venue cell corrected.** Every row was tested against four removal grounds — out of inference-systems scope, a duplicate or alias of another row, an identity with no traceable primary source, or an incremental derivative with neither a distinct mechanism nor a credible venue. None cleared them. Venue prestige is explicitly not an admission criterion ([CURATION.md](../CURATION.md)), so "not a top venue" was never on its own a reason to drop a row. Borderline rows were **kept and tagged** instead. This is a precision-first outcome, not a claim that all 669 rows are strong.
+
+**One sourced correction.** *One Queue Is All You Need* (Runtime & Scheduling) was relabelled from `arXiv 2024 (preprint)` to `SoCC 2024`, published as *Queue Management for SLO-Oriented Large Language Model Serving* — [DOI 10.1145/3698038.3698523](https://doi.org/10.1145/3698038.3698523); the row keeps its arXiv link. No other venue, title, year or URL changed across the eight pages, and every other mechanism cell is byte-identical to its pre-sweep text apart from appended tags.
+
+**Screening tags.** 176 of 669 rows (26%) carry an explicit tag, 189 tag instances in total: `HOLD_EVIDENCE` 76, `KEEP_ADJACENT` 44, `APPROXIMATE_QUALITY_CHECKED` 23, `KEEP_FOUNDATIONAL` 21, `HOLD_IDENTITY` 10, `MODEL_CHANGED` 8, `REQUIRES_FINETUNING` 6, `LOSSLESS_OUTPUT` 1. A tag is a disclosed caveat, **not** a verdict: `HOLD_EVIDENCE` marks evidence that is not auditable as the row is currently written (simulator-only results, program-page-only identity, baselines the paper defers), and `APPROXIMATE_QUALITY_CHECKED` marks a speedup that is not output-preserving. The vocabulary is defined in [STRICT_REVIEW.md](../STRICT_REVIEW.md).
+
+**Cross-category candidates were recorded, not moved.** More than a hundred rows were identified whose *decisive reusable mechanism* could be argued to belong elsewhere — for example KV-only quantization (Oaken, JanusQuant, SAW-INT4, TurboQuant) toward KV Cache & Context Memory; multi-model and multi-adapter co-tenancy (Symbiosis, InfiniLoRA, LoRAServe) and the power/thermal policies (TAPAS, DynamoLLM, AdaGen) toward Runtime & Scheduling; companion sparse-attention kernels (MInference, LServe, SpargeAttention, XAttention) and automated-kernel benchmarks (KernelBench, TritonGym) toward Kernels & Compilers; and the P/D placement studies toward Distributed & Disaggregated Serving. **No row was moved between categories in this sweep.** The eight pages were produced independently, so a cross-category move would invalidate a source and a destination count at the same time; those moves are deferred to one dedicated pass that can re-verify both sides together. Decoding Acceleration therefore ends this sweep with one explicitly labelled holding group, *Adjacent Modality & Cross-Topic Boundary*, every row of which carries `KEEP_ADJACENT`. Per [STRICT_REVIEW.md](../STRICT_REVIEW.md), the full record-level ledger is deliberately kept **outside** the published repo, so the per-row candidate lists stay in the working screening reports rather than here.
+
+**What this sweep did not establish.** No full paper text was read: each keep/flag verdict rests on the row's own mechanism text plus primary index, proceedings or project pages. No speedup, accuracy, TTFT/TPOT or energy figure was independently reproduced. Link health was not crawled URL by URL, and 117 rows (17.5%) still link to arXiv. `KEEP_FOUNDATIONAL` marks the originator of a sub-direction as a **domain judgement**, not a checked citation-priority claim.
