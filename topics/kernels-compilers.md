@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (62)
+## Papers (64)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -18,6 +18,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2024 | [FlashDecoding++: Faster Large Language Model Inference with Asynchronization, Flat GEMM Optimization, and Heuristics](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5321b1dabcd2be188d796c21b733e8c7-Abstract-Conference.html) | MLSys 2024 | 解码 Softmax 的异步化、Flat GEMM 专项优化与形状感知 Dataflow；跨 NVIDIA/AMD 的 Operator + Engine 评测。 |
 | 2024 | [Hydragen: High-Throughput LLM Inference with Shared Prefixes](https://arxiv.org/abs/2402.05099) | arXiv 2024 (preprint) | 将共享 Prefix 与独有 Suffix 的 Exact Attention 分解执行，把重复 Query 合并为高效矩阵计算并支持 Tree Prefix。 |
 | 2024 | [Ladder: Enabling Efficient Low-Precision Deep Learning Computing through Hardware-aware Tensor Transformation](https://www.usenix.org/conference/osdi24/presentation/wang-lei) | OSDI 2024 | 数据布局变换与硬件原生低精度张量指令协同，避免低位宽执行的转换开销。 |
+| 2025 | [Coruscant: Co-Designing GPU Kernel and Sparse Tensor Core to Advocate Unstructured Sparsity in Efficient LLM Inference](https://doi.org/10.1145/3725843.3756065) | MICRO 2025 | 针对不规则非结构化稀疏 GEMM 协同设计 GPU Sparse Kernel 与 Sparse Tensor Core；有 CUDA Kernel 和对照运行脚本，但作者仓库尚未发布端到端复现脚本，勿将模拟 STC 视为已实机部署。 |
 | 2025 | [FACIL: Flexible DRAM Address Mapping for SoC-PIM Cooperative On-device LLM Inference](https://doi.org/10.1109/HPCA61900.2025.00127) | HPCA 2025 | 对 SoC GEMM 与 PIM GEMV 提供不同虚实地址映射，在 Prefill/Decode 切换时避免权重 Memory Relayout。 |
 | 2025 | [Fast On-device LLM Inference with NPUs](https://doi.org/10.1145/3669940.3707239) | ASPLOS 2025 | llm.npu 将模型子图映射到手机 NPU/CPU/GPU 并流水化执行，处理 NPU 不支持算子及动态 LLM Decode。 |
 | 2025 | [FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/96894468eb44631a32d7ebd56f9892c7-Abstract-Conference.html) | MLSys 2025 | 联合设计 Radix Tree Prefix Share Attention Kernel 与树划分 Runtime。 |
@@ -44,6 +45,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [TurboAttention: Efficient Attention Approximation for High-Throughput LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/f4f55846501f3336f293fd8b6de10770-Abstract-Conference.html) | MLSys 2025 | FlashQ 与整数 Softmax 近似融合量化 Attention 算子，避免 KV 解量化并评估端到端吞吐。 |
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://arxiv.org/abs/2503.02236) | HPCA 2025 | 以 Codebook Cache、融合数据流和自适应 Tile 生成向量量化 LLM Kernel，减少码本与权重访存。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 通过实测反馈和优化记忆改善 Trainium NKI Kernel 搜索。 |
+| 2026 | [Agentic Operator Generation for ML ASICs](https://proceedings.mlsys.org/paper_files/paper/2026/hash/8c54e9bfed4119c873f575d1d1e2f0a0-Abstract-Conference.html) | MLSys 2026 | TritorX 对 MTIA 的 PyTorch ATen 算子进行 Agentic 生成、静态 Lint、JIT 编译和 OpInfo 正确性反馈；实际加速器与模拟环境测量的是 Kernel 覆盖率/正确性，非 LLM Serving 端到端加速。 |
 | 2026 | [BaseRT: Best-in-Class LLM Inference on Apple Silicon via Native Metal](https://arxiv.org/abs/2607.00501) | arXiv 2026 (preprint) | Metal-native Runtime 采用零分配 Decode Loop、Chip-specialized Fusion 与 Unified-memory-aware Scheduling；公开实现并在 M3/M4 Pro 对照 llama.cpp/MLX。 |
 | 2026 | [BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2026 | 利用 Online Softmax 统计直接跳过可忽略的 Attention Block。 |
 | 2026 | [Communication-Efficient Verifiable Attention for LLM Inference (VeriAttn)](https://arxiv.org/abs/2606.16352) | arXiv 2026 (preprint) | 将 Attention 计算迁至 GPU、TEE 保留完整性验证，通过 Prefill Pipeline 和 Decode 分区减轻 TEE–GPU 通信；Intel TDX 平台实测。 |
