@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (39)
+## Papers (40)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
 | 2026 | [ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof) | MLSys 2026 | ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading |
 | 2026 | [Reasoning Language Model Inference Serving Unveiled: An Empirical Study](https://iclr.cc/virtual/2026/poster/10011393) | ICLR 2026 | 该研究通过内存波动、掉队者与自适应运行时刻画推理模型 serving，并在真实负载下评估量化、KV 量化、speculative decoding 与前缀缓存 |
+| 2026 | [Scaling Up, Speeding Up: A Benchmark of Speculative Decoding for Efficient LLM Test-Time Scaling](https://openreview.net/forum?id=DjOmnwX4wJ) | ICLR 2026 | 标准化比较 Best-of-N/多轮推理中的模型型、训练型与 N-Gram Speculative Decoding，对重复推理轨迹的加速边界做实证研究；Benchmark 而非新 Runtime Scheduler。 |
 | 2026 | [Semantic Integrity Matters: Benchmarking and Preserving High-Density Reasoning in KV Cache Compression](https://proceedings.mlr.press/v306/liu26dz.html) | ICML 2026 | KVFundaBench 强调评估 KV 压缩对密集推理语义的真实影响。 |
 | 2026 | [ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) | NSDI 2026 | 基于真实云服务 Trace 刻画多类型推理负载并合成代表性请求流。 |
 | 2026 | [Speculative Decoding: Performance or Illusion?](https://proceedings.mlsys.org/paper_files/paper/2026/hash/554e056fe2b6d9fd27ffcd3367ae1267-Abstract-Conference.html) | MLSys 2026 | 在现实 vLLM Batch/负载下复测多类推测解码，并对比理论上限。 |
