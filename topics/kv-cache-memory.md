@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (110)
+## Papers (111)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -71,6 +71,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [FAST-AR: Fast Autoregressive Video Diffusion and World Models with Temporal Cache Compression and Sparse Attention](https://proceedings.mlr.press/v306/samuel26a.html) | ICML 2026 | 面向 Video World Model 的长时流式推理，以 TempCache 时间对应压缩 KV、ANN Cross/Self-Attention 限制冗余访问；作者实测长 Rollout 时延和 Peak GPU Memory（邻接领域，非文本 LLM）。 |
 | 2026 | [FlexiCache: Leveraging Temporal Stability of Attention Heads for Efficient KV Cache Management](https://proceedings.mlsys.org/paper_files/paper/2026/hash/94bcb01789fccf15afe2764d8fe0f40e-Abstract-Conference.html) | MLSys 2026 | FlexiCache 利用 attention head 重要性的时间稳定性动态管理 KV cache，减少长上下文生成中不必要的保留和加载 |
 | 2026 | [FreeKV: Boosting KV Cache Retrieval for Efficient LLM Inference](https://iclr.cc/virtual/2026/poster/10006722) | ICLR 2026 | FreeKV 以推测式检索、CPU/GPU 混合布局与双缓冲流式传输把 KV 选择移出关键路径，报告最高 13× 加速且质量近无损 |
+| 2026 | [From Prefix Cache to Fusion RAG Cache: Accelerating LLM Inference in Retrieval-Augmented Generation](https://doi.org/10.1145/3786655) | Proc. ACM Manag. Data 2026 (SIGMOD) | FusionRAG 离线注入跨 Chunk 上下文信息，在线按 Attention 选择性重算失效 KV，以压缩 RAG Prefill TTFT 同时限制复用造成的答案质量下降；作者报告真实端到端推理实验。 |
 | 2026 | [HERALD: High-Throughput Block Diffusion LLM Serving via CPU-GPU Cooperative KV Cache Retrieval](https://arxiv.org/abs/2606.21633) | arXiv 2026 (preprint) | 在 Block dLLM 中将每 Block 一次的 Sparse KV Selection 移至 CPU，多次 Denoise 留在 GPU，采用 Draft Block 与双流缓冲重叠；两类实际 Block dLLM 上测吞吐与精度。 |
 | 2026 | [High Throughput and Low Latency LLM Serving via Adaptive KV Caching](https://doi.org/10.1145/3767295.3803570) | EuroSys 2026 | 动态平衡 KV 保留、重算与 Decode 数据传输。 |
 | 2026 | [HYPIC: Accelerating Hybrid-Attention LLM Serving with Position-Independent Caching](https://arxiv.org/abs/2607.01299) | arXiv 2026 (preprint) | 对 Hybrid Attention 的 Linear Layers 缓存每 Segment 的 State Transition 与 Zero-start End-state，对 Full Attention 只重算边界 Seam Window，冷 Segment 并行 Prefill；四模型五工作负载实测 TTFT/QPS 与准确率。 |

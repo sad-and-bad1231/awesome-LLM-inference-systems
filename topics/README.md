@@ -6,13 +6,13 @@ Eight research categories. Each accepted paper has **one primary home** based on
 
 | Mechanism | Canonical entries | Scope |
 |---|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 66 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 110 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Kernels & Compilers](kernels-compilers.md) | 67 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 111 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 34 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 29 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 48 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 95 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 105 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Runtime & Scheduling](runtime-scheduling.md) | 100 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 107 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 39 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)

@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (66)
+## Papers (67)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -55,6 +55,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2026 | [Event Tensor: A Unified Abstraction for Compiling Dynamic Megakernel](https://openreview.net/forum?id=PJqFhAbUHa) | MLSys 2026 | Event Tensor 用统一事件张量抽象编译动态 megakernel，减少 LLM inference 中 kernel launch 和跨算子同步开销 |
 | 2026 | [FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html) | MLSys 2026 | 针对 Blackwell 的算力与非矩阵单元不对称扩展，重构异步 MMA、Softmax 流水及 CuTe-DSL 实现。 |
 | 2026 | [Flashlight: PyTorch Compiler Extensions to Accelerate Attention Variants](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bc52716d13d2d72ea0f335667d86c0f8-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生编译器为多种数据相关 Attention 自动生成 Fusion/Tiling Kernel。 |
+| 2026 | [FlashServe: Adaptive Kernel Provision for Quantized LLM Serving](https://doi.org/10.1109/2575-8411.2026.00078) | ICDCS 2026 | 面向动态 Batch Size，为不同量化 GEMM Kernel 建模选择成本与切换开销，使用异步预备/切换避免静态 Kernel 固化；原始来源 Dynamic GEMM 标题不等于正式出版 Adaptive Kernel Provision。 |
 | 2026 | [HipKittens: Fast and Furious AMD Kernels](https://openreview.net/forum?id=xxSSrndQrI) | MLSys 2026 | HipKittens 面向 AMD GPU 提供高性能 kernel 编程与优化路径，补齐 AI 推理/训练算子在非 CUDA 平台上的性能生态 |
 | 2026 | [I/O Analysis is All You Need: An I/O Analysis for Long-Sequence Attention](https://doi.org/10.1145/3779212.3790174) | ASPLOS 2026 | AttenIO 推导长序列 Exact Attention 的 I/O-optimal Tiling/Scheduling，融合多级通信计算 Overlap 与 Softmax 并行，并报告加速器实现对照。 |
 | 2026 | [IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ea5ffdf7da91256ecd2770f9fd2dade9-Abstract-Conference.html) | MLSys 2026 | 用 IndexSoftmax 和整数查表消除边缘 Attention 中反量化、Softmax、再量化的执行往返；Armv8 实测。 |
