@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (109)
+## Papers (110)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -101,6 +101,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50% |
 | 2026 | [Pythia: Exploiting Workflow Predictability for Efficient Agent-Native LLM Serving](https://arxiv.org/abs/2604.25899) | arXiv 2026 (preprint) | 在 SGLang 暴露 Agent Workflow DAG，协同做 Speculative Cache Management、Lookahead Request Scheduling 和 Phase-Adaptive Autoscaling；8×A100 实测 SWE-bench Pro/Deep Research JCT、P95 JCT 与吞吐。 |
 | 2026 | [QoServe: Breaking the Silos of LLM Inference Serving](https://doi.org/10.1145/3779212.3790206) | ASPLOS 2026 | 针对独立 Serving 部署的资源孤岛，研究跨服务资源共享与 QoS。 |
+| 2026 | [Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference](https://doi.org/10.1109/CCGrid68966.2026.00014) | CCGrid 2026 | 按 LLM Decode Iteration 的算力/带宽阶段调整 GPU DVFS，以 Pareto 选择减少 EDP，同时限制 Latency 回退；作者有单 GPU 物理推理测量，适用范围受驱动与频率控制接口限制。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving](https://arxiv.org/abs/2606.17949) | arXiv 2026 (preprint) | 融合 Model Quality/Cost Router 与实例级负载平衡，以低开销预测和实时 Queue State 做统一在线映射；13 实例、28 GPU 异构集群对照 Quality–Cost–Throughput Frontiers，并公开系统源码。 |
 | 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | 基于真实生产语义搜索评估 Serving 的模型、硬件及执行优化。 |
