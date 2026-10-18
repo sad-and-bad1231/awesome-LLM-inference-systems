@@ -8,7 +8,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 
 **Foundational context.** See also: [Serving systems](serving-systems.md) for workload-focused execution studies.
 
-## Papers (40)
+## Papers (41)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -48,6 +48,7 @@ Measuring real inference workloads, modeling system performance, validating simu
 | 2026 | [SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding](https://proceedings.mlr.press/v306/abramovich26a.html) | ICML 2026 | 在 vLLM/TensorRT-LLM 的真实 Batch/吞吐负载下量化 Speculative Decoding 对数据分布和 Draft 长度的敏感性。 |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
+| 2026 | [The Pitfalls of KV Cache Compression](https://aclanthology.org/2026.acl-long.1926/) | ACL 2026 | 实证审计 StreamingLLM/SnapKV/TOVA/H2O/K-Norm 在复杂多指令 Prompt 上的 KV 驱逐语义损失与指令忽略/系统 Prompt 泄露；是部署质量风险评测而非新增 GPU 加速算法。 |
 | 2026 | [TritonGym: A Benchmark for Agentic LLM Workflows in Triton GPU Code Generation](https://proceedings.mlr.press/v306/guan26d.html) | ICML 2026 | 以可复现的工具调用/编译/正确性与速度反馈环境评估多轮 Triton Kernel Agent，覆盖 OOD 与扩展 DSL；是真实 Kernel 执行 Benchmark，不等于 LLM Serving Speedup。 |
 | 2026 | [Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles](https://doi.org/10.1109/ISCA66397.2026.00084) | ISCA 2026 (Industry Track) | 在真实 GPU Cluster 上刻画 8B–671B 推理的 DP/TP/PP、长 CoT KV 容量陷阱与 MoE 同步瓶颈；提供部署权衡测量而非单一加速算法。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设。 |
