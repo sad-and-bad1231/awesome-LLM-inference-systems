@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (49)
+## Papers (50)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -49,6 +49,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [MoE-Lens: Towards the Hardware Limit of High-Throughput MoE LLM Serving Under Resource Constraints](https://doi.org/10.1145/3806645.3807594) | HPDC 2026 | CPU/GPU 混合执行结合硬件上界模型推导 Expert Placement/执行策略，实验比较性能模型与真实吞吐。 |
 | 2026 | [MoEntwine: Unleashing the Potential of Wafer-scale Chips for Large-scale Expert Parallel Inference](https://2026.hpca-conf.org/details/hpca-2026-main-conference/25/MoEntwine-Unleashing-the-Potential-of-Wafer-scale-Chips-for-Large-scale-Expert-Paral) | HPCA 2026 | 根据 Wafer-scale 互联重组 MoE Expert Parallel 执行和通信。 |
 | 2026 | [oFFN: Outlier and Neuron-aware Structured FFN for Fast yet Accurate LLM Inference](https://doi.org/10.1145/3779212.3790194) | ASPLOS 2026 | 同时重排 FFN Weight 行列实现 Outlier-aware 预测和 Hot/Cold Neuron 分流，在 ReLU LLM 的真实自回归 Decode 中优化稀疏 FFN 算子与端到端性能。 |
+| 2026 | [Opportunistic Expert Activation: Batch-Aware Expert Routing for Faster Decode Without Retraining](https://proceedings.mlr.press/v306/oncescu26a.html) | ICML 2026 | Batch-aware Expert Piggybacking 将部分 Token 路由到 Batch 中已加载的 Expert，降低 MoE Decode 活跃 Expert 数；作者在 Qwen3 报告 Layer Latency 下降，必须注明可能有质量退化。 |
 | 2026 | [Patterns Behind Chaos: Forecasting Data Movement for Efficient Large-Scale MoE LLM Inference](https://doi.org/10.1109/ISCA66397.2026.00021) | ISCA 2026 | 预测 MoE 专家访问与搬运模式，减少跨设备专家交换。 |
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
 | 2026 | [SERE: Similarity-based Expert Re-routing for Efficient Batch Decoding in MoE Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5d07eb2335d88b1dfcefcc3d2da2a230-Abstract-Conference.html) | ICLR 2026 | 利用 Batch 中的 Expert 相似性，将 Secondary Expert Token 重新路由到可替代 Primary Expert，辅以 CUDA Kernel/vLLM 集成；需分别审查速度收益、专家语义变化和模型质量。 |
