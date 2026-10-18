@@ -8,7 +8,7 @@ Scheduling tokens, requests and model instances within online inference services
 
 **Foundational context.** See also: [Orca (2022), Sarathi-Serve (2024), Llumnix (2024), NanoFlow (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (87)
+## Papers (89)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -24,6 +24,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2025 | [Aegaeon: Effective GPU Pooling for Concurrent LLM Serving on the Market](https://doi.org/10.1145/3731569.3764815) | SOSP 2025 | Token 粒度复用 GPU 承载模型长尾，低开销弹性调整并验证生产服务。 |
 | 2025 | [AI Metropolis: Scaling Large Language Model-based Multi-Agent Simulation with Out-of-order Execution](https://proceedings.mlsys.org/paper_files/paper/2025/hash/4f31327e046913c7238d5b671f5d820e-Abstract-Conference.html) | MLSys 2025 | 跟踪多 Agent 的真实依赖并乱序触发 LLM 请求，消除全局同步引起的虚假依赖与低利用率。 |
 | 2025 | [Apt-Serve: Adaptive Request Scheduling on Hybrid Cache for Scalable LLM Inference Serving](https://doi.org/10.1145/3725394) | ACM SIGMOD 2025 | 在混合缓存层次内联合考虑请求计算、缓存复用及驻留成本，动态调整 LLM Batch/Serving 调度。 |
+| 2025 | [Chameleon: Adaptive Caching and Scheduling for Many-Adapter LLM Inference Environments](https://doi.org/10.1145/3725843.3756083) | MICRO 2025 | 利用空闲 GPU 显存缓存热门 LoRA Adapter，联合 Adapter-aware 非抢占多队列调度抑制 HoL Blocking；真实生产 Trace 的 TTFT/吞吐评测。 |
 | 2025 | [DyOrc: Efficient Serving of Dynamic Machine Learning Workflows](https://doi.org/10.1145/3772052.3772218) | SoCC 2025 | 对动态 LLM Agent/多模态执行 DAG 做依赖感知 Speculative Scheduling、跨工作流 Batching 和预加载；在 128 张 A800 的真实集群对照 Ray Serve/Triton。 |
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [IC-Cache: Efficient Large Language Model Serving via In-context Caching](https://doi.org/10.1145/3731569.3764829) | SOSP 2025 | 复用历史 In-context Examples/响应并通过缓存辅助模型选择降低重复请求推理成本。 |
@@ -59,6 +60,7 @@ Scheduling tokens, requests and model instances within online inference services
 | 2026 | [DualMap: Enabling Both Cache Affinity and Load Balancing for Distributed LLM Serving](https://arxiv.org/abs/2602.06502) | ICLR 2026 | 在两套 Prefix Hash Mapping 间根据 SLO 与负载路由请求，使用双环扩缩容与热点迁移平衡 KV Locality。 |
 | 2026 | [DuetServe: Harmonizing Prefill and Decode for LLM Serving via Adaptive GPU Multiplexing](https://proceedings.mlr.press/v306/gao26m.html) | ICML 2026 | 通过 SM 级动态分区隔离 Prefill/Decode，并根据 SLO 预测选择是否共享。 |
 | 2026 | [Energy-Aware Scheduling for Serverless LLM Serving on Shared GPUs](https://arxiv.org/abs/2606.30391) | arXiv 2026 (preprint; Festina) | Festina 联合全局 Request Placement、GPU SM Partitioning、DVFS 与 SLO-aware Consolidation，面向 TTFT/TBT 的 Serverless Serving 抑制静态和动态耗电；报告实际 SLO/能耗系统对照。 |
+| 2026 | [FastTTS: Accelerating Test-Time Scaling for Edge LLM Reasoning](https://doi.org/10.1145/3779212.3790161) | ASPLOS 2026 | 面向 Verifier-guided TTS 的 Speculative Beam Extension、Prefix-aware Scheduling 与 Generator/Verifier 非对称 KV 资源配置；单卡端侧 vLLM 端到端评测和 Artifact。 |
 | 2026 | [FlashAgents: Accelerating Multi-Agent LLM Systems via Streaming Prefill Overlap](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) | MLSys 2026 | FlashAgents 用 agent 间 token streaming、增量 prefill 和 prefix-aware coordination 重叠多智能体调用链中的等待与计算 |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
 | 2026 | [From Tokens to Layers: Redefining Stall-Free Scheduling for MoE Serving with Layered Prefill](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c0f460c6d63599ea870ba9db63dc96a9-Abstract-Conference.html) | MLSys 2026 | 改用模型层分组而非 Token Chunk 执行 Prefill，减少 Expert Weight 重载。 |

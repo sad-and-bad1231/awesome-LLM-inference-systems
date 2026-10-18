@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (45)
+## Papers (46)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -18,6 +18,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2024 | [PowerInfer-2: Fast Large Language Model Inference on a Smartphone](https://arxiv.org/abs/2406.06282) | arXiv 2024 (preprint) | Neural Cluster 级 NPU/CPU 异构执行与分段权重缓存把稀疏 MoE/LLM 部署到内存不足的智能手机。 |
 | 2024 | [SiDA: Sparsity-Inspired Data-Aware Serving for Efficient and Scalable Large Mixture-of-Experts Models](https://proceedings.mlsys.org/paper_files/paper/2024/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html) | MLSys 2024 | 利用专家激活稀疏性，在 GPU/主存间数据感知地调度 MoE 权重以提升可部署规模。 |
 | 2025 | [COMET: Fine-grained Computation-communication Overlapping for Mixture-of-Experts](https://proceedings.mlsys.org/paper_files/paper/2025/hash/e27ea0cd50b798ff8942caf9203f0992-Abstract-Conference.html) | MLSys 2025 | 细粒度 MoE 任务调度与通信/计算重叠，含生产环境执行证据。 |
+| 2025 | [Diff-MoE: Efficient Batched MoE Inference with Priority-Driven Differential Expert Caching](https://doi.org/10.1145/3712285.3759903) | SC 2025 | 依据跨请求全局热度和解码局部热度维护分层 GPU Expert Cache，结合预测式 Prefetch 隐藏 CPU–GPU Expert 搬运；报告实机 Batched MoE Inference 评测。 |
 | 2025 | [Efficient LLM Inference using Dynamic Input Pruning and Cache-Aware Masking](https://proceedings.mlsys.org/paper_files/paper/2025/hash/afd6374c7f2839cba22f537f15f4f760-Abstract-Conference.html) | MLSys 2025 | 在移动端按 SwiGLU 输入激活进行预测器无关的剪枝，并根据缓存位置调整 Mask。 |
 | 2025 | [Fiddler: CPU-GPU Orchestration for Fast Inference of Mixture-of-Experts Models](https://proceedings.iclr.cc/paper_files/paper/2025/hash/8cd1ce03ea58b3d7dfd809e4d42f08ea-Abstract-Conference.html) | ICLR 2025 | 以 CPU-GPU 协同执行减少专家权重搬运和空闲 GPU Stall。 |
 | 2025 | [Kascade: A Practical Sparse Attention Method for Long-Context LLM Inference](https://arxiv.org/abs/2512.16391) | arXiv 2025 (preprint; NOT MLSys 2026 main proceedings) | 按 Head 在少量 Anchor Layers 求精确 Top-k Attention Index，并在相邻 Reuse Layers 共享；有公开 H100 CUDA Kernel、与 FlashAttention-3 的 Prefill/Decode 基准、LongBench/AIME 精度验证。 |

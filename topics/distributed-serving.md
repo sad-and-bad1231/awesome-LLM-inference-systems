@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (96)
+## Papers (97)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -38,6 +38,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2025 | [Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod](https://arxiv.org/abs/2508.02520) | arXiv 2025 (technical report) | xDeepServe 在 Ascend CloudMatrix384 上采用 Transformerless 分离执行、XCCL 与去中心化 DP 组。 |
 | 2025 | [HydraInfer: Hybrid Disaggregated Scheduling for Multimodal Large Language Model Serving](https://arxiv.org/abs/2505.12658) | arXiv 2025 (preprint) | 将多模态 Encode/Prefill/Decode 映射至异构推理实例，联合阶段级 Batching 与动态资源分配；8×H800 实测多模态 SLO 和吞吐。 |
 | 2025 | [Janus: Disaggregating Attention and Experts for Scalable MoE Inference](https://arxiv.org/abs/2512.13525) | arXiv 2025 (preprint) | 独立伸缩 Attention/Expert GPU 池，GPU 端负载平衡与两阶段分层通信。 |
+| 2025 | [LIA: A Single-GPU LLM Inference Acceleration with Cooperative AMX-Enabled CPU-GPU Computation and CXL Offloading](https://doi.org/10.1145/3695053.3731092) | ISCA 2025 | Intel AMX CPU–GPU 协同执行与 CXL/DDR 分级权重卸载，减少受限显存场景的数据搬运；单 GPU 真实系统评测及作者公开实现。 |
 | 2025 | [Medha: Efficient LLM Inference on Multi-Million Context Lengths Without Approximation](https://www.microsoft.com/en-us/research/publication/medha-efficient-llm-inference-on-multi-million-context-lengths-without-approximation/) | arXiv 2025 (preprint) | 通过 Adaptive Prefill Chunking、Sequence Pipeline Parallelism 和 KV-cache Parallelism 处理多百万 Token 的动态长度与跨节点执行。 |
 | 2025 | [MegaScale-Infer: Efficient Mixture-of-Experts Model Serving with Disaggregated Expert Parallelism](https://doi.org/10.1145/3718958.3750506) | SIGCOMM 2025 | Attention/FFN 分离、Ping-pong Microbatch Pipeline 与 M2N 通信，独立配置 Attention/Expert 资源。 |
 | 2025 | [Mercury: Unlocking Multi-GPU Operator Optimization for LLMs via Remote Memory Scheduling](https://doi.org/10.1145/3731569.3764798) | SOSP 2025 | 在算子级调度远端 GPU Memory Access，联合多 GPU 的数据放置、计算与互联通信。 |
