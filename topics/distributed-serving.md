@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (103)
+## Papers (102)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -72,7 +72,6 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [FaaScale: Unlocking Fast LLM Scaling for Serverless Inference](https://openreview.net/forum?id=jgL8LuOVyT) | MLSys 2026 | 优化 Serverless 模型扩缩容关键路径，实现低延迟容量调整。 |
 | 2026 | [fabric-lib: RDMA Point-to-Point Communication for LLM Systems](https://proceedings.mlsys.org/paper_files/paper/2026/hash/dea9b4b6f55ae611c54065d6fc750755-Abstract-Conference.html) | MLSys 2026 | 跨 NIC 的 WriteImm / ImmCounter 原语用于跨节点 KV Transfer 与 MoE Dispatch。 |
 | 2026 | [FACE: Fully PD Overlapped Scheduling and Multi-Level Architecture Co-Exploration on Wafer](https://2026.hpca-conf.org/details/hpca-2026-main-conference/14/FACE-Fully-PD-Overlapped-Scheduling-and-Multi-Level-Architecture-Co-Exploration-on-W) | HPCA 2026 | 联合晶圆级多层拓扑与 Prefill–Decode 计算重叠。 |
-| 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 通过 MoE 结构跳连改变通信依赖，令 Collective 与计算重叠；在真实 SGLang Expert Parallelism 推理中测量 TTFT，代价是需要对模型进行结构调整/蒸馏。 |
 | 2026 | [FlexPipe: Adapting Dynamic LLM Serving Through Inflight Pipeline Refactoring in Fragmented Serverless Clusters](https://doi.org/10.1145/3767295.3769316) | EuroSys 2026 | 不中断请求地动态调整分布式 Pipeline 划分与资源映射。 |
 | 2026 | [FLYING SERVING: On-the-Fly Parallelism Switching for Large Language Model Serving](https://doi.org/10.1145/3797905.3800525) | ICS 2026 | 在混合长度与动态负载下在线切换 TP/DP 并保留可复用运行状态，减少重配停顿。 |
 | 2026 | [GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving](https://openreview.net/forum?id=xKjYiUgeOK) | MLSys 2026 | GhostServe 在 host memory 中以 erasure coding 为 streaming KV cache 生成 parity shards，故障时重建丢失 KV 状态并继续推理，避免完整重算或全量状态复制 |
