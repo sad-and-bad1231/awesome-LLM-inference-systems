@@ -1,22 +1,22 @@
 # Papers by systems mechanism
 
-Eight research categories, each carrying an internal, industry-grounded taxonomy of sub-groups. Each accepted paper has **one primary home** based on its decisive reusable mechanism, not by author, application, hardware platform or conference.
+Eight research topics, now organized as **43 practical engineering directions**: what an inference engineer would actually optimize next. Every paper has one canonical home; this is a navigation map, not a rigid academic ontology.
 
-**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. A later **first-pass taxonomy and screening sweep (2026-10-18)** re-grouped all eight pages into 69 sub-groups but **removed nothing and corrected exactly one venue cell**, so the canonical total is still **669**. 176 of those rows (26%) now carry an explicit inline screening tag — a tag records an unresolved question or a disclosed caveat, **not** a rejection. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. The prior first-pass sweep created 69 sub-groups and corrected one venue field; this **engineering-direction cleanup compresses them to 43**, rehomes six clearly misplaced papers, and **does not add or remove** any of the **669** canonical papers. 176 of those rows (26%) now carry an explicit inline screening tag — a tag records an unresolved question or a disclosed caveat, **not** a rejection. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
 
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 73 | 9 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 144 | 8 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 71 | 9 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 33 | 8 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 59 | 8 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 119 | 9 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 121 | 9 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | 9 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **669** | **69** | |
+| [Kernels & Compilers](kernels-compilers.md) | 73 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 144 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 65 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 33 | 5 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 64 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 120 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 121 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **669** | **43** | |
 
 ## Admission summary (through 2026-10-18)
 
@@ -47,6 +47,7 @@ Eight research categories, each carrying an internal, industry-grounded taxonomy
 | Strict audit removals, PR #45 + #46 | -15 |
 | Targeted kernel/compiler captures, PR #48 (7 Kernel rows including 1 KV migration; 6 new identities) | +6 |
 | First-pass taxonomy & screening sweep (2026-10-18): 69 sub-groups, 0 removed, 0 added, 1 venue correction | ±0 |
+| Engineering-direction simplification: 69 → 43 tracks, six rows re-homed, 0 net additions/deletions | ±0 |
 | **Canonical topic entries** | **669** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
@@ -172,7 +173,7 @@ Eight new canonical entries were individually source-screened: **KernelBench (IC
 
 ## Taxonomy and first-pass screening sweep (2026-10-18)
 
-All eight categories were re-derived from **industry sub-directions** — the knobs that serving stacks actually ship and document (vLLM's scheduler, KV-offloading connector and quantization registry; SGLang's tiered HiCache and its separate quantized-KV-cache page; TensorRT-LLM's quantization and KV-cache-connector docs; NVIDIA Dynamo's KV Block Manager, Flash Indexer and conditional disaggregation; llm-d's three-tier KV hierarchy, predicted-latency scheduling and wide-EP recipes; DeepSpeed-MoE and Tutel; the OCP MX and NVFP4 formats) — rather than from venue, hardware or workload labels. The eight pages now carry **69 sub-groups** over the same 669 rows; each group opens with a one-line definition and has a resolving entry in its `Mechanism map`. [Kernels & Compilers](kernels-compilers.md) was already built this way and supplied the reference format.
+All eight categories were re-derived from **industry sub-directions** — the knobs that serving stacks actually ship and document (vLLM's scheduler, KV-offloading connector and quantization registry; SGLang's tiered HiCache and its separate quantized-KV-cache page; TensorRT-LLM's quantization and KV-cache-connector docs; NVIDIA Dynamo's KV Block Manager, Flash Indexer and conditional disaggregation; llm-d's three-tier KV hierarchy, predicted-latency scheduling and wide-EP recipes; DeepSpeed-MoE and Tutel; the OCP MX and NVFP4 formats) — rather than from venue, hardware or workload labels. That first pass created **69 sub-groups**; a later simplicity pass re-grouped them into **43 practical engineering tracks** with a short 'what to optimize' guide on each page. The same 669 paper identities remain. [Kernels & Compilers](kernels-compilers.md) was already built this way and supplied the reference format.
 
 **Outcome: 0 rows removed, 0 added, 1 venue cell corrected.** Every row was tested against four removal grounds — out of inference-systems scope, a duplicate or alias of another row, an identity with no traceable primary source, or an incremental derivative with neither a distinct mechanism nor a credible venue. None cleared them. Venue prestige is explicitly not an admission criterion ([CURATION.md](../CURATION.md)), so "not a top venue" was never on its own a reason to drop a row. Borderline rows were **kept and tagged** instead. This is a precision-first outcome, not a claim that all 669 rows are strong.
 
