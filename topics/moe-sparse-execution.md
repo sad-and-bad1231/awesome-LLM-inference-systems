@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (50)
+## Papers (52)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -32,6 +32,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2025 | [XAttention: Block Sparse Attention with Antidiagonal Scoring](https://proceedings.mlr.press/v267/xu25ag.html) | ICML 2025 | 用 Antidiagonal Scoring 快速识别高价值 Attention Block 并以块稀疏 Kernel 减少 Prefill。 |
 | 2026 | [Achieving Cloud-Grade SLOs for Local Mixture-of-Experts Inference through CPU-GPU Hybrid Design](https://www.usenix.org/conference/osdi26/presentation/wang-wenxin) | OSDI 2026 | 该 CPU-GPU 混合方案以流式/分布式加载 prefill（1200、1800 tokens/s）、节点内 P/D 分离与双批 overlap（延迟增 <15%、吞吐 +50%）、AVX-512 FP8 GEMV（CPU 延迟降 4–5×）和细粒度 CPU 并行（INT4 DeepSeek-V3 达 28 toke… |
 | 2026 | [AFORE: Attention-FFN Disaggregation with Overlapped Reconfiguration of Experts](https://arxiv.org/abs/2610.03203) | arXiv 2026 (preprint) | 利用 AFD Microbatch 前瞻负载信号，在流水窗口内重配与迁移 Hot Experts。 |
+| 2026 | [Attribution-based Sparse Activation in Large Language Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29591f355702c3f4436991335784b503-Abstract-Conference.html) | MLSys 2026 | 校正神经元 Attribution 相互依赖，用低贡献神经元跳过减少推理计算；作者报告延迟/内存改善但方法非严格无损。 |
 | 2026 | [Balancing and Beyond: Communication-Centric Optimizations in Expert Parallelism](https://doi.org/10.1145/3789240.3829201) | SIGCOMM 2026 | 面向大规模 Expert Parallelism 联合调整 Expert Placement、跨机数据传输及算通重叠，而非仅优化负载均衡。 |
 | 2026 | [BrownoutServe: SLO-Aware Inference Serving Under Bursty Workloads for MoE-Based LLMs](https://doi.org/10.1109/TC.2026.3655019) | IEEE Transactions on Computers 2026 | 采用 United Experts 与受控 Brownout 对 Burst MoE 请求动态调整 Expert 访问和精度/SLO 预算，并公开 Serving Runtime、比较真实 vLLM 吞吐及 SLO Violation。 |
 | 2026 | [Capacity-Aware Inference: Mitigating the Straggler Effect in Mixture of Experts](https://proceedings.iclr.cc/paper_files/paper/2026/hash/94e845868a9ace4bc239d0c529d32f4c-Abstract-Conference.html) | ICLR 2026 | 通过 Expert Capacity 约束和本地候选扩展缓解 EP 负载不均；存在精度/加速权衡。 |
@@ -51,6 +52,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [oFFN: Outlier and Neuron-aware Structured FFN for Fast yet Accurate LLM Inference](https://doi.org/10.1145/3779212.3790194) | ASPLOS 2026 | 同时重排 FFN Weight 行列实现 Outlier-aware 预测和 Hot/Cold Neuron 分流，在 ReLU LLM 的真实自回归 Decode 中优化稀疏 FFN 算子与端到端性能。 |
 | 2026 | [Opportunistic Expert Activation: Batch-Aware Expert Routing for Faster Decode Without Retraining](https://proceedings.mlr.press/v306/oncescu26a.html) | ICML 2026 | Batch-aware Expert Piggybacking 将部分 Token 路由到 Batch 中已加载的 Expert，降低 MoE Decode 活跃 Expert 数；作者在 Qwen3 报告 Layer Latency 下降，必须注明可能有质量退化。 |
 | 2026 | [Patterns Behind Chaos: Forecasting Data Movement for Efficient Large-Scale MoE LLM Inference](https://doi.org/10.1109/ISCA66397.2026.00021) | ISCA 2026 | 预测 MoE 专家访问与搬运模式，减少跨设备专家交换。 |
+| 2026 | [PuzzleMoE: Efficient Compression of Large Mixture-of-Experts Models via Fine-Grained Expert Merging and Bit-packed Inference](https://proceedings.mlr.press/v306/zhao26ay.html) | ICML 2026 | 细粒度 Element-wise Expert Merging 配合指数字段复用的 Bit-packed 编码，使压缩后 Expert 可以在 GPU 上直接推理；包含实际端到端吞吐/质量权衡。 |
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
 | 2026 | [SERE: Similarity-based Expert Re-routing for Efficient Batch Decoding in MoE Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5d07eb2335d88b1dfcefcc3d2da2a230-Abstract-Conference.html) | ICLR 2026 | 利用 Batch 中的 Expert 相似性，将 Secondary Expert Token 重新路由到可替代 Primary Expert，辅以 CUDA Kernel/vLLM 集成；需分别审查速度收益、专家语义变化和模型质量。 |
 | 2026 | [Surviving Partial Rank Failures in Wide Expert-Parallel MoE Inference](https://arxiv.org/abs/2605.10670) | arXiv 2026 (preprint) | 研究宽 EP 组单 Rank 故障后重建通信成员、专家布局和 CUDA Graph Routing Metadata。 |

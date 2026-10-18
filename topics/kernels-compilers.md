@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (68)
+## Papers (72)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -34,6 +34,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [Mirage: A Multi-Level Superoptimizer for Tensor Programs](https://www.usenix.org/conference/osdi25/presentation/wu-mengdi) | OSDI 2025 | 以 Kernel/Thread-block/Thread 三层 µGraph 搜索代数变换与 GPU Kernel Schedule，辅以等价性验证；公开编译器并实测 Transformer Tensor Programs。 |
 | 2025 | [Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking](https://doi.org/10.1145/3676642.3736114) | ASPLOS 2025 | 基于 Neuron Co-Activation 重排手机 Flash 上的稀疏权重，联合预取和访问模式优化减少 IOPS。 |
 | 2025 | [NeuronMM: High-Performance Matrix Multiplication for LLM Inference on AWS Trainium](https://arxiv.org/abs/2510.25977) | arXiv 2025 (preprint) | 利用 Trainium Systolic Array 与 Software-managed SRAM 的缓存、数据排布、融合规避转置；公开 Kernel 实现并测量 LLM End-to-end 延迟。 |
+| 2025 | [PipeThreader: Software-Defined Pipelining for Efficient DNN Execution](https://www.usenix.org/conference/osdi25/presentation/cheng) | OSDI 2025 | 通过 sTask Graph 对 GPU TensorCore/TMA 依赖建模，将 Kernel Pipelining 转为软件定义的编译期流水调度；以 FlashAttention/Mamba2 的真实 GPU Kernel 和 TileLang Artifact 验证。 |
 | 2025 | [POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference](https://doi.org/10.1145/3676641.3715996) | ASPLOS 2025 | 在共享 SM 中重叠计算密集 Prefill 与访存密集 Decode Attention。 |
 | 2025 | [QFactory: Accelerating Quantized Large Language Model Serving with Qtile Graphs](https://www.usenix.org/conference/atc25/presentation/zhang-qihao) | USENIX ATC 2025 | 以 Qtile Graph 描述量化张量变换与 Dequantize/Fused GEMM，联合图变换和 Tile Scheduling 生成 Kernel。 |
 | 2025 | [QiMeng-Xpiler: Transcompiling Tensor Programs for Deep Learning Systems with a Neural-Symbolic Approach](https://www.usenix.org/conference/osdi25/presentation/dong) | OSDI 2025 | LLM-guided Tensor Program Translation 配合受限 Symbolic Repair 和层次化 Auto-tuning，在 CUDA/HIP/VNNI/BANG 平台执行与核对编译结果；有作者 Artifact，但为通用 DNN Compiler，未证明 LLM Serving 端到端提速。 |
@@ -46,8 +47,10 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [TileLink: Generating Efficient Compute-Communication Overlapping Kernels using Tile-Centric Primitives](https://proceedings.mlsys.org/paper_files/paper/2025/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2025 | 以 Tile 为接口生成重叠通信与计算的分布式 Kernel。 |
 | 2025 | [TurboAttention: Efficient Attention Approximation for High-Throughput LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/f4f55846501f3336f293fd8b6de10770-Abstract-Conference.html) | MLSys 2025 | FlashQ 与整数 Softmax 近似融合量化 Attention 算子，避免 KV 解量化并评估端到端吞吐。 |
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://arxiv.org/abs/2503.02236) | HPCA 2025 | 以 Codebook Cache、融合数据流和自适应 Tile 生成向量量化 LLM Kernel，减少码本与权重访存。 |
+| 2026 | [Accelerating Sparse Transformer Inference on GPU](https://doi.org/10.1145/3774934.3786434) | PPoPP 2026 | STOF 根据稀疏 Mask、MHA 结构选择 Row/Block Kernel，融合下游算子并做两阶段 Autotuning；有 GPU 实测和 Transformer 推理对照。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 通过实测反馈和优化记忆改善 Trainium NKI Kernel 搜索。 |
 | 2026 | [Agentic Operator Generation for ML ASICs](https://proceedings.mlsys.org/paper_files/paper/2026/hash/8c54e9bfed4119c873f575d1d1e2f0a0-Abstract-Conference.html) | MLSys 2026 | TritorX 对 MTIA 的 PyTorch ATen 算子进行 Agentic 生成、静态 Lint、JIT 编译和 OpInfo 正确性反馈；实际加速器与模拟环境测量的是 Kernel 覆盖率/正确性，非 LLM Serving 端到端加速。 |
+| 2026 | [ApproxMLIR: Accuracy-Aware Compiler for Compound ML System](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bbd3e0e9913824bbc46e7e87b11461ae-Abstract-Conference.html) | MLSys 2026 | 统一表达 LLM/Retrieval/Tools 跨软件栈的近似策略，使用 MLIR Dialect 和 approx-opt 寻找质量–性能 Pareto 点；真实 Compound AI 组合负载评测。 |
 | 2026 | [BaseRT: Best-in-Class LLM Inference on Apple Silicon via Native Metal](https://arxiv.org/abs/2607.00501) | arXiv 2026 (preprint) | Metal-native Runtime 采用零分配 Decode Loop、Chip-specialized Fusion 与 Unified-memory-aware Scheduling；公开实现并在 M3/M4 Pro 对照 llama.cpp/MLX。 |
 | 2026 | [BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2026 | 利用 Online Softmax 统计直接跳过可忽略的 Attention Block。 |
 | 2026 | [Communication-Efficient Verifiable Attention for LLM Inference (VeriAttn)](https://arxiv.org/abs/2606.16352) | arXiv 2026 (preprint) | 将 Attention 计算迁至 GPU、TEE 保留完整性验证，通过 Prefill Pipeline 和 Decode 分区减轻 TEE–GPU 通信；Intel TDX 平台实测。 |
@@ -72,6 +75,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2026 | [ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ff997469ac66cf893c4183efeb22212a-Abstract-Conference.html) | MLSys 2026 | 用可重用通信与同步原语编写 TP/SP/EP 跨卡重叠 Kernel。 |
 | 2026 | [PAT: Accelerating LLM Decoding via Prefix-Aware Attention with Resource Efficient Multi-Tile Kernel](https://doi.org/10.1145/3779212.3790200) | ASPLOS 2026 | 按共享 Prefix 组织 Decode Query 和 CTA，执行 Pack-Forward-Merge 以减少重复 KV 读取并消除 Tile 资源空洞。 |
 | 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
+| 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation](https://doi.org/10.1145/3760250.3762219) | ASPLOS 2026 | 通过 Tile-level DSL、层次寄存器/共享内存及 Layout Algebra 生成 1–8 bit GEMM，含 LLM 低精度内核实测。 |
