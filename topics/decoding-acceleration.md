@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (72)
+## Papers (71)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -75,7 +75,6 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [SSSD: Simply-Scalable Speculative Decoding](https://aclanthology.org/2026.acl-long.1530/) | ACL 2026 | 无训练 N-gram Matching 搭配 Hardware-aware Speculation，降低引入辅助 Draft 模型的部署门槛；作者在多领域和长上下文报告延迟收益，非自动保证线上 Goodput。 |
 | 2026 | [Stochastic Sparse Attention for Memory-Bound Inference](https://proceedings.mlr.press/v306/lee26j.html) | ICML 2026 | SANTA 采用方差受控的 Softmax 分布采样减少 Value-cache 全量读取，实现 GPU Stratified/Systematic Sampling Attention；有 RTX 6000 Ada Kernel 和端到端 Decode 测量。 |
 | 2026 | [Talon: Breaking the Synchronization Barrier in Speculative Decoding with Hybrid Model-based and Retrieve-based Drafting](https://doi.org/10.1609/aaai.v40i25.39266) | AAAI 2026 (Full Paper) | 通过 Asynchronous Draft/Verify 执行与混合 Model-based/Retrieval-based Drafting 减轻同步等待并改善不同领域接受率；作者报告 Vicuna/DeepSeek/LLaMA 多任务与 EAGLE/Hydra/Medusa 等对照。推理分布等价性、硬件并发开销及与现代批处理 Serving Goodput 仍待审。 |
-| 2026 | [Throughput Optimization for Multi-level Speculative Decoding](https://2026.euro-par.org/fileadmin/2026/images/program/Euro-Par26_accepted_papers.html#throughput-optimization-for-multi-level-speculative-decoding) | Euro-Par 2026 | Draft/Verify 候选树或多 Token 解码的执行/验证开销；快速准入（会议节目／索引）。实际设备、强基线、精度与端到端 Serving 指标留待二审。 |
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Token Sparse Attention: Efficient Long-Context Inference with Interleaved Token Selection](https://proceedings.mlr.press/v306/jo26a.html) | ICML 2026 | 跨 Head/Layer 动态选择 Token 执行 Attention，后续 Layer 可重新考虑此前 Token；与既有 FlashAttention 兼容，作者报告 128K Attention Kernel 和质量对照。 |
 | 2026 | [TokenTiming: A Dynamic Alignment Method for Universal Speculative Decoding Model Pairs](https://aclanthology.org/2026.acl-long.1983/) | ACL 2026 | 以 Dynamic Time Warping 对齐不同 Tokenizer 的 Draft/Target 序列，并重新映射概率以避免重训练专用 Draft Model；作者报告约 1.57× 加速，Tokenizer 对齐成本和精确采样约束待复核。 |
