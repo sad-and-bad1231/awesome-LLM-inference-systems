@@ -8,7 +8,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (65)
+## Papers (66)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -35,6 +35,7 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 | 2025 | [NeuronMM: High-Performance Matrix Multiplication for LLM Inference on AWS Trainium](https://arxiv.org/abs/2510.25977) | arXiv 2025 (preprint) | 利用 Trainium Systolic Array 与 Software-managed SRAM 的缓存、数据排布、融合规避转置；公开 Kernel 实现并测量 LLM End-to-end 延迟。 |
 | 2025 | [POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference](https://doi.org/10.1145/3676641.3715996) | ASPLOS 2025 | 在共享 SM 中重叠计算密集 Prefill 与访存密集 Decode Attention。 |
 | 2025 | [QFactory: Accelerating Quantized Large Language Model Serving with Qtile Graphs](https://www.usenix.org/conference/atc25/presentation/zhang-qihao) | USENIX ATC 2025 | 以 Qtile Graph 描述量化张量变换与 Dequantize/Fused GEMM，联合图变换和 Tile Scheduling 生成 Kernel。 |
+| 2025 | [QiMeng-Xpiler: Transcompiling Tensor Programs for Deep Learning Systems with a Neural-Symbolic Approach](https://www.usenix.org/conference/osdi25/presentation/dong) | OSDI 2025 | LLM-guided Tensor Program Translation 配合受限 Symbolic Repair 和层次化 Auto-tuning，在 CUDA/HIP/VNNI/BANG 平台执行与核对编译结果；有作者 Artifact，但为通用 DNN Compiler，未证明 LLM Serving 端到端提速。 |
 | 2025 | [SageAttention: Accurate 8-Bit Attention for Plug-and-play Inference Acceleration](https://proceedings.iclr.cc/paper_files/paper/2025/hash/b286c344d38e10d2466c0514b78e2f36-Abstract-Conference.html) | ICLR 2025 | INT8 Attention Quantization 与 GPU Kernel 优化协同，保持高效推理所需数值精度。 |
 | 2025 | [SageAttention2: Efficient Attention with Thorough Outlier Smoothing and Per-thread INT4 Quantization](https://proceedings.mlr.press/v267/zhang25ae.html) | ICML 2025 | 结合 Outlier Smoothing 与 per-thread INT4 算子，更深入地利用 GPU 低精度执行。 |
 | 2025 | [SpInfer: Leveraging Low-Level Sparsity for Efficient Large Language Model Inference on GPUs](https://doi.org/10.1145/3689031.3717481) | EuroSys 2025 | 以 SpMM 和新稀疏格式利用推理 GEMM 的低级稀疏性，减少存储和计算开销。 |

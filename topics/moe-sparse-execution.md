@@ -8,7 +8,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 
 **Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
 
-## Papers (46)
+## Papers (48)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -41,6 +41,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [Efficient Mixture-of-Experts LLM Inference with Apple Silicon NPUs (NPUMoE)](https://arxiv.org/abs/2604.18788) | arXiv 2026 (preprint) | 利用静态 Expert Capacity Tiers、Grouped Execution 与 Load-aware Graph Residency 将 MoE Prefill 卸载至 Apple ANE；在真实 M-series 设备评测时延和能耗。 |
 | 2026 | [Expert Streaming: Accelerating Low-Batch MoE Inference via Multi-chiplet Architecture and Dynamic Expert Trajectory Scheduling](https://arxiv.org/abs/2603.27624) | arXiv 2026 (preprint) | FSE-DP 在多 Chiplet 互联上按动态专家轨迹流式分配 MoE 执行并重叠通信。 |
 | 2026 | [FarSkip-Collective: Unhobbling Blocking Communication in Mixture of Experts Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/6feb9b30798abcfae937760d183605e1-Abstract-Conference.html) | MLSys 2026 | 模型跳连变换与推理系统协同设计，将 EP 阻塞通信隐藏在计算之下。 |
+| 2026 | [LayerScope: Predictive Cross-Layer Scheduling for Efficient Multi-Batch MoE Inference on Legacy Servers](https://doi.org/10.1145/3797905.3807834) | ICS 2026 | PreScope 采用层级 Expert Activation 预测、跨层 Prefetch Scheduling 和异步 CPU–GPU I/O 协调，在普通服务器上隐藏 MoE Expert Offload 延迟；作者报告推理吞吐/延迟实验。 |
 | 2026 | [Least-Loaded Expert Parallelism: Load Balancing An Imbalanced Mixture-of-Experts](https://proceedings.mlr.press/v306/nguyen26m.html) | ICML 2026 | 将超载设备的 Token 及关联 Expert 参数动态重路由至闲置设备，减少 Collective Straggler。 |
 | 2026 | [LycheeDecode: Accelerating Long-Context LLM Inference via Hybrid-Head Sparse Decoding](https://arxiv.org/abs/2602.04541) | arXiv 2026 (authors indicate ICLR 2026) | HardKuma 将 Head 划为 Retrieval 和复用其 Top-k 的 Sparse Heads，在 128K Decode 上报告 GPU 加速，并针对 LongBench、RULER、AIME 比较精度。 |
 | 2026 | [MoE-APEX: An Efficient MoE Inference System with Adaptive Precision Expert Offloading](https://doi.org/10.1145/3779212.3790187) | ASPLOS 2026 | 按 Token/Layer/Sequence 分层管理 Expert 的精度、预取和缓存，减轻显存受限设备的 Expert Loading。 |
@@ -49,6 +50,7 @@ Sparse expert activation, token dispatch, sparse attention and conditional compu
 | 2026 | [oFFN: Outlier and Neuron-aware Structured FFN for Fast yet Accurate LLM Inference](https://doi.org/10.1145/3779212.3790194) | ASPLOS 2026 | 同时重排 FFN Weight 行列实现 Outlier-aware 预测和 Hot/Cold Neuron 分流，在 ReLU LLM 的真实自回归 Decode 中优化稀疏 FFN 算子与端到端性能。 |
 | 2026 | [Patterns Behind Chaos: Forecasting Data Movement for Efficient Large-Scale MoE LLM Inference](https://doi.org/10.1109/ISCA66397.2026.00021) | ISCA 2026 | 预测 MoE 专家访问与搬运模式，减少跨设备专家交换。 |
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
+| 2026 | [SERE: Similarity-based Expert Re-routing for Efficient Batch Decoding in MoE Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5d07eb2335d88b1dfcefcc3d2da2a230-Abstract-Conference.html) | ICLR 2026 | 利用 Batch 中的 Expert 相似性，将 Secondary Expert Token 重新路由到可替代 Primary Expert，辅以 CUDA Kernel/vLLM 集成；需分别审查速度收益、专家语义变化和模型质量。 |
 | 2026 | [Surviving Partial Rank Failures in Wide Expert-Parallel MoE Inference](https://arxiv.org/abs/2605.10670) | arXiv 2026 (preprint) | 研究宽 EP 组单 Rank 故障后重建通信成员、专家布局和 CUDA Graph Routing Metadata。 |
 | 2026 | [SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading](https://www.usenix.org/conference/nsdi26/presentation/li-xingyi) | NSDI 2026 | 将 Expert All-to-All 的多次缓冲复制融合，并利用 TMA/NVLink 实现低占用的 MoE 通信。 |
 | 2026 | [Tactic: Adaptive Sparse Attention with Clustering and Distribution Fitting for Long-Context LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/33f94d79acf71051d6a27f4d8889e20e-Abstract-Conference.html) | ICLR 2026 | 根据累计 Attention Score 占比自适应选择 KV 而非固定 Top-k，以聚类排序/分布拟合减轻筛选开销；评估 Decode Kernel、端到端时延和质量。 |
