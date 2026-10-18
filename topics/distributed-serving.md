@@ -8,7 +8,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 
 **Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
 
-## Papers (104)
+## Papers (105)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -77,6 +77,7 @@ Organizing compute, state movement and parallelism across accelerators, nodes an
 | 2026 | [FlexPipe: Adapting Dynamic LLM Serving Through Inflight Pipeline Refactoring in Fragmented Serverless Clusters](https://doi.org/10.1145/3767295.3769316) | EuroSys 2026 | 不中断请求地动态调整分布式 Pipeline 划分与资源映射。 |
 | 2026 | [FLYING SERVING: On-the-Fly Parallelism Switching for Large Language Model Serving](https://doi.org/10.1145/3797905.3800525) | ICS 2026 | 在混合长度与动态负载下在线切换 TP/DP 并保留可复用运行状态，减少重配停顿。 |
 | 2026 | [GhostServe: A Lightweight Checkpointing System in the Shadow for Fault-Tolerant LLM Serving](https://openreview.net/forum?id=xKjYiUgeOK) | MLSys 2026 | GhostServe 在 host memory 中以 erasure coding 为 streaming KV cache 生成 parity shards，故障时重建丢失 KV 状态并继续推理，避免完整重算或全量状态复制 |
+| 2026 | [GPU Checkpoint/Restore Made Fast and Lightweight](https://www.usenix.org/conference/fast26/presentation/zeng) | FAST 2026 | GCR 以控制/数据分离、CPU Shadow Execution 和 Dirty Template 降低 GPU Checkpoint/Restore 及增量快照开销；开源 Artifact 支持 vLLM，属于通用 GPU 弹性迁移/恢复基础设施而非特定 KV Cache 算法。 |
 | 2026 | [HBM Is Not All You Need: Efficient Disaggregated LLM Serving across Memory-heterogeneous Accelerators](https://arxiv.org/abs/2606.29986) | arXiv 2026 (preprint) | HMA-Serve 跨厂商 GDDR-Prefill/HBM-Decode 部署，采用阶段量化、按层传 KV 和延迟解量化。 |
 | 2026 | [HexGen-3: A Fully Disaggregated LLM Serving Framework with Fine-Grained Heterogeneous Resource Autoscaling](https://icml.cc/virtual/2026/poster/62564) | ICML 2026 | HexGen-3（ICML 2026）提出全分离（fully disaggregated）的 LLM serving 框架，把推理的各阶段解耦独立部署，并以分层调度器配合异构资源的自动扩缩（autoscaling），在成本与性能之间取得更优平衡 |
 | 2026 | [HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou) | NSDI 2026 | 模型预分布、阶段重叠、无网络热点放置和 Pipeline Consolidation。 |
