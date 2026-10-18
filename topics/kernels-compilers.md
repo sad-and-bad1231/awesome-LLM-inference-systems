@@ -8,12 +8,13 @@ Efficient execution of model operators: attention, GEMM, tiling, fusion, hardwar
 
 **Foundational context.** See also: [FlashAttention (2022), FlashAttention-2 (2024), FlashAttention-3 (2024), FlashInfer (2025)](../README.md#foundational-and-influential-papers).
 
-## Papers (67)
+## Papers (68)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2018 | [TVM: An Automated End-to-End Optimizing Compiler for Deep Learning](https://www.usenix.org/conference/osdi18/presentation/chen) | OSDI 2018 | 端到端张量编译、算子调度与自动调优；作为现代 LLM Kernel Compiler 的体系结构前驱。 |
 | 2020 | [Ansor: Generating High-Performance Tensor Programs for Deep Learning](https://www.usenix.org/conference/osdi20/presentation/zheng) | OSDI 2020 | 以搜索空间和 Cost Model 代替人工模板调参，实现跨硬件张量程序自动生成。 |
+| 2021 | [LightSeq: A High Performance Inference Library for Transformers](https://aclanthology.org/2021.naacl-industry.15/) | NAACL 2021 Industry Track | 早期工业级 Transformer GPU 推理库，通过算子融合、Kernel 与内存优化实现跨模型框架高效推理；有公开 CUDA 实现，实验以 Transformer/机器翻译为主，不宣称现代自回归 LLM Serving。 |
 | 2023 | [TensorIR: An Abstraction for Automatic Tensorized Program Optimization](https://doi.org/10.1145/3575693.3576933) | ASPLOS 2023 | 张量化计算块和数据变换的结构化 IR，支撑 Tensor Core 自动映射。 |
 | 2024 | [FlashDecoding++: Faster Large Language Model Inference with Asynchronization, Flat GEMM Optimization, and Heuristics](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5321b1dabcd2be188d796c21b733e8c7-Abstract-Conference.html) | MLSys 2024 | 解码 Softmax 的异步化、Flat GEMM 专项优化与形状感知 Dataflow；跨 NVIDIA/AMD 的 Operator + Engine 评测。 |
 | 2024 | [Hydragen: High-Throughput LLM Inference with Shared Prefixes](https://arxiv.org/abs/2402.05099) | arXiv 2024 (preprint) | 将共享 Prefix 与独有 Suffix 的 Exact Attention 分解执行，把重复 Query 合并为高效矩阵计算并支持 Tree Prefix。 |

@@ -8,7 +8,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 
 **Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers).
 
-## Papers (111)
+## Papers (113)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -82,6 +82,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [Joint Encoding of KV-Cache Blocks for Scalable LLM Serving](https://arxiv.org/abs/2601.03067) | arXiv 2026 (preprint) | 跨请求与 Prompt Chunk 共享相似 KV Block 的融合表示，并保持标准缓存布局；有公开实现和单机 vLLM Token Throughput 测试，区分有损压缩和量化精度折中。 |
 | 2026 | [KEEP: A KV-Cache-Centric Memory Management System for Efficient Embodied Planning](https://arxiv.org/abs/2602.23592) | arXiv 2026 (preprint) | 对 Embodied Planning 的静态/动态记忆分组缓存 KV，以 Multi-hop 局部重算和 Layer-balanced Loading 避免失效/流水失衡；有代码和 ALFRED 真实推理实验，对比 CacheBlend 的 TTFT 与任务成功率。 |
 | 2026 | [Kitty: Accurate and Efficient 2-bit KV Cache Quantization with Dynamic Channel-wise Precision Boost](https://proceedings.mlsys.org/paper_files/paper/2026/hash/e4d8d1b5120be349d3fff8878650cf45-Abstract-Conference.html) | MLSys 2026 | 量化敏感 KV 通道动态保留高精度，使用分页低精度布局与 Triton Kernel。 |
+| 2026 | [KV Cache Transform Coding for Compact Storage in LLM Inference](https://openreview.net/pdf?id=aNVKROYpLB) | ICLR 2026 | KVTC 将 PCA 特征去相关、分配精度的量化和熵编码组合用于可复用 KV Cache 的 GPU/Offload 压缩；报告跨 Llama/Mistral 模型的准确率-空间开销比较，压缩比不直接等价于 Serving Goodput。 |
 | 2026 | [KVDrive: A Holistic Multi-Tier KV Cache Management System for Long-Context LLM Inference](https://doi.org/10.1145/3802077) | PACMMOD 2026 | 联合管理 GPU/DRAM/SSD KV 驻留、注意力访问模式与跨层 I/O Pipeline，避免稀疏访问被缓存传输阻塞。 |
 | 2026 | [KVEraser: Learning to Steer KV Cache for Efficient Localized Context Erasing](https://arxiv.org/abs/2606.17034) | arXiv 2026 (preprint) | 对已缓存对话局部删除执行 Learned KV State Steering，复用未受影响的后缀状态而非全量重 Prefill；报告 1K–32K 上下文的实际延迟与质量权衡。 |
 | 2026 | [KVServe: Service-Aware KV Cache Compression for Communication-Efficient Disaggregated LLM Serving](https://doi.org/10.1145/3789240.3829139) | SIGCOMM 2026 | 按网络/服务 SLO 与质量损失预算自适应选择 KV Compression 及远端复用策略。 |
@@ -98,6 +99,7 @@ Inference-time state: cache reuse, placement, offloading, compression, eviction 
 | 2026 | [OPKV: A High-Throughput Plugin-Driven Framework for Recallable Sparsity in Paged KV Cache Systems](https://openreview.net/forum?id=EB5bgzv4qA) | MLSys 2026 | OPKV 为 paged KV cache 提供可插拔稀疏召回框架，使不同稀疏策略能在高吞吐 serving runtime 中复用同一数据通路 |
 | 2026 | [OrbitFlow: SLO-Aware Long-Context LLM Serving with Fine-Grained KV Cache Reconfiguration](https://doi.org/10.14778/3796195.3796214) | PVLDB 2026 | 用轻量 ILP 动态决定每个请求在 GPU 上保留哪些 Layer KV，运行时反馈更新 Offloading 计划以满足 TPOT SLO。 |
 | 2026 | [PatternKV: Flattening KV Representation Expands Quantization Headroom](https://proceedings.mlr.press/v306/zhang26ci.html) | ICML 2026 | 调整 KV 数值分布以提高低比特缓存量化可行性。 |
+| 2026 | [PM-KVQ: Progressive Mixed-precision KV Cache Quantization for Long-CoT LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/afb8caec018d3c8f6ef8b81fa52386fe-Abstract-Conference.html) | ICLR 2026 | 将长 CoT 的 KV 随生成进度渐进降 Bitwidth，以 Block 敏感度分配精度，并通过位置插值改进长序列校准；有公开代码与 LLM 推理吞吐/推理质量对照。 |
 | 2026 | [PrefillShare: A Shared Prefill Module for KV Reuse in Multi-LLM Disaggregated Serving](https://arxiv.org/abs/2602.12029) | arXiv 2026 (preprint) | 共享冻结 Prefill Module，通过 Cache-conditioned Decode 微调与路由实现多模型跨任务 KV 复用。 |
 | 2026 | [QuoKA: Query-Oriented KV Selection for Efficient LLM Prefill](https://iclr.cc/virtual/2026/poster/10008892) | ICLR 2026 | QuoKA 在分块 prefill 中用面向 query 的稀疏 attention，只评估 88% 更少的 KV 对即把 TTFT 降低 3×、GPU attention 快 5×、CPU attention 快近 7× |
 | 2026 | [RaBitQCache: Rotated Binary Quantization for KVCache in Long Context LLM Inference](https://proceedings.mlr.press/v306/li26al.html) | ICML 2026 | 随机旋转二值量化与二值-INT4 算法加速 KV 重要性预估。 |

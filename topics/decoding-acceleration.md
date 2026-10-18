@@ -8,7 +8,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 
 **Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers).
 
-## Papers (34)
+## Papers (35)
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
@@ -30,6 +30,7 @@ Breaking sequential decode bottlenecks through draft/verify, parallel prediction
 | 2026 | [Breaking the Reward Barrier: Accelerating Tree-of-Thought Reasoning via Speculative Exploration](https://www.usenix.org/conference/osdi26/presentation/zhong) | OSDI 2026 | SPEX 以查询内推测性路径选择、查询间预算分配与自适应早停破除 Tree-of-Thought 的奖励同步壁垒，在 SGLang 上使各类 ToT 算法加速 1.2×–3×，与 token 级 speculative decoding 叠加最高累计加速 4.1× |
 | 2026 | [BWCache: Accelerating Video Diffusion Transformers through Block-Wise Caching](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ac8ec9b4d94c03f0af8c4fe3d5fad4fd-Abstract-Conference.html) | ICLR 2026 | 训练无关地跨 Denoising Step 缓存并复用 DiT Block Feature，以相似性阈值触发重算，实测视频扩散推理延迟与视觉质量权衡（邻接领域；非 KV Cache）。 |
 | 2026 | [Cassandra: Enabling Reasoning LLMs at Edge via Self-Speculative Decoding](https://doi.org/10.1109/ISCA66397.2026.00022) | ISCA 2026 | 使用剪枝和尾数截断实现无需训练的轻量 Self-speculative Drafter，并在消费级 GPU 验证。 |
+| 2026 | [CDLM: Consistency Diffusion Language Models for Faster Sampling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/054de805fcceb78a201f5e9d53c85908-Abstract-Conference.html) | MLSys 2026 | 通过一致性建模降低 Diffusion LM 的 Refinement Steps，并通过 Block Causal Mask 与微调实现可复用 KV；训练-推理协同加速，开源实验代码，非无需重训练的纯 Runtime 系统。 |
 | 2026 | [D-cut: Adaptive Verification Depth Pruning for Batched Speculative Decoding](https://arxiv.org/abs/2607.14647) | arXiv 2026 (preprint) | 跨请求按 Draft Confidence 分配 Verification Budget，以设备和 Parallelism Cost Model 自适应裁剪 Depth；Dense 和 MoE 高并发实测 Speculation 验证开销与吞吐。 |
 | 2026 | [DSB: Dynamic Sliding Block Scheduling for Diffusion LLMs](https://proceedings.mlr.press/v306/luo26o.html) | ICML 2026 | 自适应滑动 Block 和配套 KV Cache 提升扩散语言模型的并行生成效率。 |
 | 2026 | [Dustin: Draft-Augmented Sparse Verification for Efficient Long-Context Generation with Speculative Decoding](https://proceedings.mlr.press/v306/lee26d.html) | ICML 2026 | 利用 Draft Lookahead 和目标历史 Attention 在长上下文 Speculation 中识别必要 KV，限制重要性评分 Head 数以降低 Verify 的 KV 加载；在 Qwen2.5-72B、32K 上报告端到端实测。 |
