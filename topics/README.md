@@ -11,8 +11,8 @@ Eight research categories. Each accepted paper has **one primary home** based on
 | [Decoding Acceleration](decoding-acceleration.md) | 59 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 30 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 54 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 110 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 117 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Runtime & Scheduling](runtime-scheduling.md) | 111 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 119 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 43 | Validated models, traces, benchmarks and production diagnosis |
 
 ## Admission summary (2026-10-08)
