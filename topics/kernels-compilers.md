@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Attention & Sparse Kernels](#attention--sparse-kernels-20) | 20 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
-| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-13) | 13 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
+| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-14) | 14 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-6) | 6 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **82** | |
+| **Total** | **80** | |
 
-## Papers (82)
+## Papers (80)
 
 ### Attention & Sparse Kernels (20)
 
@@ -51,13 +51,12 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [TyphoonMLA: A Mixed Naive-Absorb MLA Kernel For Shared Prefix](https://iclr.cc/virtual/2026/poster/10008790) | ICLR 2026 | 混合 MLA 的 naive 与 absorb 两种实现，对共享前缀用 naive 形式复用数据、其余用 absorb 形式降低带宽，NPU 与 GPU 上 Attention 吞吐最高提升 3 倍与 3.24 倍。 |
 | 2026 | [FSA: An Alternative Efficient Implementation of Native Sparse Attention Kernel](https://proceedings.iclr.cc/paper_files/paper/2026/hash/428ceef2cd8a53add7213e04d1746479-Abstract-Conference.html) | ICLR 2026 | 重写NSA原生稀疏注意力kernel的循环分块顺序，使其在GQA每组query head数较少的主流LLM上高效执行，kernel延迟最高降3.5倍、生成推理prefill最高提速1.36倍。 |
 
-### GEMM & Low-Bit Kernels (13)
+### GEMM & Low-Bit Kernels (11)
 
 矩阵计算、量化 GEMM 和硬件原生低比特执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2025 | [AxCore: A Quantization-Aware Approximate GEMM Unit for LLM Inference](https://doi.org/10.1145/3725843.3756094) | MICRO 2025 | 完全去掉乘法器，用低比特整数加法构成脉动阵列近似浮点乘法，并以支持压缩权重与高精度激活的混合精度 PE、次正规数处理与误差补偿、共享校正逻辑保住精度，较传统 FP GEMM 单元算力密度提升 6.3–12.5 倍。 |
 | 2025 | [CodeGEMM: A Codebook-Centric Approach to Efficient GEMM in Quantized LLMs](https://neurips.cc/virtual/2025/poster/118305) | NeurIPS 2025 | 用预计算的质心与激活内积 Psumbook 取代逐元素反量化，推理时由码本索引直接收集部分和并缩小片上占用，Llama-3 的 2 比特配置较现有 codebook 量化 GEMM 加速 1.83 倍与 8.93 倍。 |
 | 2025 | [LiquidGEMM: Hardware-Efficient W4A8 GEMM Kernel for High-Performance LLM Serving](https://doi.org/10.1145/3712285.3759852) | SC 2025 | LiquidQuant 的低开销 W4A8 解量化配合跨 Warp-group 的加载/解量化/MMA 隐式流水；报告 GPU Kernel 与端到端 Serving 实测，官方代码发布状态未确认。 |
 | 2025 | [MARLIN: Mixed-Precision Auto-Regressive Parallel Inference on Large Language Models](https://doi.org/10.1145/3710848.3710871) | PPoPP 2025 | 面向 **batched** INT4×FP16 LLM Decode，以异步访存、权重布局和流水保持量化 GEMM 接近带宽上限；作者报告 vLLM 端到端加速（最高 2.8×），提供 [可执行 Artifact](https://github.com/IST-DASLab/marlin_artifact)。收益取决于 Batch/形状，不能把单层理论加速视作所有 Serving 场景通用结论。 |
@@ -67,7 +66,6 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://doi.org/10.1109/HPCA61900.2025.00112) | HPCA 2025 | 针对 Vector-Quantized LLM 的 Codebook-cache 跨寄存器/Shared Memory/Global Memory 分层布局，结合 Codebook-centric Dataflow 和融合 Kernel 生成降低查表/量化计算开销；作者报告低比特 LLM 推理算子性能，非无条件的端到端 Serving Goodput 改进。 |
 | 2026 | [FlashServe: Adaptive Kernel Provision for Quantized LLM Serving](https://doi.org/10.1109/2575-8411.2026.00078) | ICDCS 2026 | 面向动态 Batch Size，为不同量化 GEMM Kernel 建模选择成本与切换开销，使用异步预备/切换避免静态 Kernel 固化；原始来源 Dynamic GEMM 标题不等于正式出版 Adaptive Kernel Provision。 |
 | 2026 | [IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ea5ffdf7da91256ecd2770f9fd2dade9-Abstract-Conference.html) | MLSys 2026 | 用 IndexSoftmax 和整数查表消除边缘 Attention 中反量化、Softmax、再量化的执行往返；Armv8 实测。 |
-| 2026 | [OASIS: Outlier-Aware LUT-Based GEMM with Dual-Side Quantization for LLM Inference Acceleration](https://arxiv.org/abs/2507.23035) | ISCA 2026 | 用预计算笛卡尔积查找表直接完成非均匀量化权重与激活的 GEMM，免除反量化开销并将 LUT 规模缩小 64 倍、并行度提升 1024 倍，配合离群值感知量化与 Orizuru top-k 检测，相对 FIGLUT 加速 3.00 倍。 |
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
