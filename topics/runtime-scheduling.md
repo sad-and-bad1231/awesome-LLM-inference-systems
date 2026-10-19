@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-37) | 37 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-36) | 36 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-12) | 12 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **137** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-23) | 23 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **131** | |
 
-## Papers (137)
+## Papers (131)
 
-### Batching, Queues & SLOs (37)
+### Batching, Queues & SLOs (36)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -50,7 +50,6 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [APEX: Asynchronous Parallel CPU-GPU Execution for Online LLM Inference on Constrained GPUs](https://arxiv.org/abs/2506.03296) | IPDPS 2026 (IEEE published) | 以 **Async Overlap** 让 CPU 上的 Decode Attention/KV 与 GPU Linear/FFN 计算并行，依赖离线 Profiling 的 Cost Model 避免 NEO 的两组 Batch Splitting；作者在物理 T4/A10、Llama-2-7B/Llama-3.1-8B、Azure/LiveBench/OSC/Dolphin 负载对比 NEO、vLLM、SwiftLLM，报告 T4 最高 96% 相对 vLLM 吞吐增长，A10 为 11–89%；G3 尚需核对版本、CPU 资源成本及 P95/P99 SLO Goodput。 |
 | 2026 | [BatchGen: An Architecture for Scalable and Efficient Batch Inference](https://www.usenix.org/conference/osdi26/presentation/xu-tairan) | OSDI 2026 | BatchGen 以「序列协程」计算模型把每条序列表示为细粒度事件驱动协程，让运行时动态重组工作（更大专家级 batch、缓解掉队、跨设备重分配），在 128-GPU 集群上把批完成时间最多缩短 2.3×，在内存受限加速器上比最强卸载基线快至多 9.6× |
 | 2026 | [BatchLLM: Optimizing Large Batched LLM Inference with Global Prefix Sharing and Throughput-oriented Token Batching](https://proceedings.mlsys.org/paper_files/paper/2026/hash/5b7ae1758452854dee4e962207d38304-Abstract-Conference.html) | MLSys 2026 | 对离线大批量任务跨请求共享全局 Prefix，并采用吞吐导向 Token Batching。 |
-| 2026 | [Batchmon: Exploiting Serverless Functions for Cost-Effective, SLO-Driven Batch Inference Serving](https://ieeexplore.ieee.org/document/11619093) | ICDCS 2026 | 把批量推理提交给无服务器函数执行，按 SLO 驱动地拆分与调度批任务，用弹性函数实例替代常驻 GPU 资源以降低批量推理的每请求成本（HOLD_EVIDENCE）。 |
 | 2026 | [Beyond Prediction: Tail-Aware Scheduling for LLM Inference](https://proceedings.mlr.press/v306/li26n.html) | ICML 2026 | 无需精确长度预测，联合尾延迟风险与 Cache-aware Preemption 调度。 |
 | 2026 | [BlendServe: Optimizing Offline Inference with Resource-Aware Batching](https://doi.org/10.1145/3779212.3790133) | ASPLOS 2026 | 离线推理批次中协调 Prefill/Decode 的资源差异以提升 GPU 使用效率。 |
 | 2026 | [BYSTANDER: State-Aware Execution-Time Prediction for Heterogeneous LLM Inference Scheduling](https://services.conferences.computer.org/2026/cloud-program/) | CLOUD 2026 | 用推理请求的运行时状态预测其执行时间，以预测时长为依据在异构 GPU 上排序与调度 LLM 请求，减少排队等待与资源空转（HOLD_EVIDENCE）。 |
@@ -68,7 +67,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [TetriServe: Efficiently Serving Mixed DiT Workloads](https://doi.org/10.1145/3779212.3790233) | ASPLOS 2026 | 相邻 DiT Serving：按 Denoising Step 动态调整 Sequence Parallelism、Round-based Deadline Scheduling 与多请求 Packing；有 8×H100 Benchmark 工程，不是文本 LLM。（KEEP_ADJACENT） |
 | 2026 | [VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption](https://doi.org/10.1109/IPDPS65963.2026.00037) | IPDPS 2026 (IEEE full paper) | 优化流式语音问答生成的**播放连续性**与基于 LLM 的请求服务抢占，而非单纯平均 Token/s；出版 DOI 和作者身份已核对。实际在线并发、音频/文本端到端播放延迟、对照 vLLM/SGLang 与真实设备结果尚未全文核验，**HOLD_METHOD**。（HOLD_EVIDENCE） |
 
-### Routing & Load Balancing (14)
+### Routing & Load Balancing (12)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
@@ -79,7 +78,6 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [DualMap: Enabling Both Cache Affinity and Load Balancing for Distributed LLM Serving](https://arxiv.org/abs/2602.06502) | ICLR 2026 | 在两套 Prefix Hash Mapping 间根据 SLO 与负载路由请求，使用双环扩缩容与热点迁移平衡 KV Locality。 |
 | 2026 | [FLARE: Fine-Grained Length-Aware Routing for Resource-Efficient Heterogeneous LLM Serving](https://aclanthology.org/2026.acl-long.1018/) | ACL 2026 | 根据预测的 Output Length/硬件成本，在异构多 LLM Pool 中进行质量、Latency、Cost 多目标 Query Routing；论文报告端到端查询表现，但非 GPU Kernel 或单一模型 P/D 排队器。 |
 | 2026 | [HELIOS: Adaptive Model And Early-Exit Selection for Efficient LLM Inference Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/096b1019463f34eb241e87cfce8dfe16-Abstract-Conference.html) | MLSys 2026 | 动态预测 Early Exit 并跨模型切换以减少加载层数和延迟。 |
-| 2026 | [LLM Router: Rethinking Routing with Prefill Activations](https://arxiv.org/abs/2603.20895) | arXiv 2026 (preprint) | 用 prefill 阶段残差流激活代替语义特征做路由，Encoder-Target 解耦让开源编码器预测闭源目标模型正确率，SharedTrunkNet 多输出 MLP 同时估计各候选模型；成本较最贵模型省 74.31%。 |
 | 2026 | [Online Linear Programming for Multi-Objective Routing in LLM Serving](https://proceedings.mlr.press/v306/chen26ft.html) | ICML 2026 | 以在线线性规划的 Shadow Price 决定多 Decode Worker 的 Admission/Routing；实验基于 Vidur 仿真。（HOLD_EVIDENCE） |
 | 2026 | [PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving](https://www.usenix.org/conference/nsdi26/presentation/fang) | NSDI 2026 | PlanetServe 构建去中心化 LLM serving 覆盖网络，结合资源感知转发、隐私机制与质量验证，原型相比基线覆盖网络把延迟降低超过 50%（KEEP_ADJACENT） |
 | 2026 | [RouteBalance: Fused Model Routing and Load Balancing for Heterogeneous LLM Serving](https://arxiv.org/abs/2606.17949) | arXiv 2026 (preprint) | 融合 Model Quality/Cost Router 与实例级负载平衡，以低开销预测和实时 Queue State 做统一在线映射；13 实例、28 GPU 异构集群对照 Quality–Cost–Throughput Frontiers，并公开系统源码。 |
@@ -87,9 +85,8 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://doi.org/10.1145/3767295.3769353) | EuroSys 2026 | 跨 Region 根据 Prefix Cache Locality 和排队状态动态迁移请求。 |
 | 2026 | [STAR: Decode-Phase Rescheduling for LLM Inference](https://doi.org/10.1145/3806645.3807813) | HPDC 2026 | 利用 LLM Hidden State 在线预测 Remaining Output Length，并对 P/D 分离的 Decode Workers 重新分配请求，抑制长 CoT Decode 偏斜与 P99 TPOT；作者报告端到端 Goodput/SLO 对照。 |
 | 2026 | [The Price of Anarchy in Disaggregated Inference](https://arxiv.org/abs/2606.17081) | arXiv 2026 (preprint) | 分析 Disaggregated P/D Serving 的 KV Locality–拥塞耦合，以 Dynamo 实现 Saturation-aware Routing 并在三节点 B200 服务器验证；P/D 资源博弈仍属解析模型。 |
-| 2026 | [Universal Model Routing for Efficient LLM Inference](https://iclr.cc/virtual/2026/poster/10007775) | ICLR 2026 | 把每个 LLM 表示为在代表 prompt 集上预测结果构成的定长特征向量，用聚类路由与可学习聚类图把请求分配给最小可行模型，支持测试时新增未见模型；在公共基准上对 30 余个未见 LLM 验证并给出超额风险界。 |
 
-### P/D Allocation & Autoscaling (22)
+### P/D Allocation & Autoscaling (21)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
@@ -105,7 +102,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Bullet: Boosting GPU Utilization for LLM Serving via Dynamic Spatial-Temporal Orchestration](https://doi.org/10.1145/3779212.3790135) | ASPLOS 2026 | 联合时间与空间调度降低在线推理的 GPU 空闲与资源碎片。 |
 | 2026 | [dLLM-Serve: Bridging the Memory Gap in Diffusion Language Model Serving](https://doi.org/10.1145/3797905.3800532) | ICS 2026 | 针对 Diffusion LLM 大型 Logit Tensor 与 Refresh/Reuse 资源振荡，结合 Logit-aware Activation Budgeting、Phase-multiplexed Scheduling 与 Head-centric Sparse Attention；公开代码，作者在 RTX 4090/L40S 报告端到端实验。（KEEP_ADJACENT） |
 | 2026 | [DuetServe: Harmonizing Prefill and Decode for LLM Serving via Adaptive GPU Multiplexing](https://proceedings.mlr.press/v306/gao26m.html) | ICML 2026 | 通过 SM 级动态分区隔离 Prefill/Decode，并根据 SLO 预测选择是否共享。 |
-| 2026 | [InferScale: Kubernetes-Native Predictive Autoscaling for SLO-Aware AI Inference](https://ieeexplore.ieee.org/document/11662493) | CLOUD 2026 | 以 Kubernetes 原生方式对 SLO 敏感的 AI 推理服务做预测式扩缩容，用负载预测提前调整推理实例副本数，兼顾时延目标与资源效率（HOLD_EVIDENCE）。 |
 | 2026 | [LaTune: Lightweight and Adaptive Configuration Tuning for LLM Inference on Edge Devices](https://doi.org/10.1145/3774904.3792382) | WWW 2026 (ACM full paper) | 边缘 LLM 推理参数敏感性筛选、跨配置知识迁移、两阶段自适应调参；作者在四种 Edge Device 测试资源波动下的 TPS、搜索开销和配置鲁棒性，并[公开代码](https://github.com/pkuaiweb/LaTune)。与强静态/在线调优器的等预算比较、质量一致性和端到端 SLO Goodput 待审。（HOLD_EVIDENCE） |
 | 2026 | [Libra: Flexible Request Partitioning and Scheduling for Serving Unbalanced and Dynamic LLM Workloads](https://www.usenix.org/conference/nsdi26/presentation/ruan-libra) | NSDI 2026 | 以 Micro-request 分解动态 Prefill/Decode 工作量，在不均衡负载下调度并满足 SLO。 |
 | 2026 | [Meeting SLOs, Slashing Hours: Automated Enterprise LLM Optimization with OptiKIT](https://proceedings.mlsys.org/paper_files/paper/2026/hash/4904fad153f6434a7bcf04465d4be2cc-Abstract-Conference.html) | MLSys 2026 | 自动调节企业推理部署和资源配置以满足 SLO。 |
@@ -118,7 +114,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 | THETA 按 Prefill/Decode 干扰阈值选择 Mixed/Exclusive Batch。 |
 | 2026 | [Towards High-Goodput LLM Serving with Prefill-decode Multiplexing](https://doi.org/10.1145/3779212.3790236) | ASPLOS 2026 | MuxWise 在同一 GPU 上对 Prefill/Decode 计算和空间进行细粒度 Multiplexing，为物理 P/D 分离提供强对照。 |
 
-### Preemption & Multi-Tenancy (30)
+### Preemption & Multi-Tenancy (29)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -139,7 +135,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [AUM: Unleashing the Efficiency Potential of Shared Processors with Accelerator Units for LLM Serving](https://2026.hpca-conf.org/details/hpca-2026-main-conference/36/AUM-Unleashing-the-Efficiency-Potential-of-Shared-Processors-with-Accelerator-Units-) | HPCA 2026 | 建模共享矩阵加速资源与频率干扰，调度服务执行。（HOLD_EVIDENCE） |
 | 2026 | [ExecuTorch - A Unified PyTorch Solution to Run ML Models On-Device](https://proceedings.mlsys.org/paper_files/paper/2026/hash/236f915dd02af4f11927f67330b21d4b-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生 Edge Runtime 与多 SoC Backend/量化部署工具链；属于通用端侧推理系统基础设施，不主张专门的 LLM 在线调度提速。（KEEP_ADJACENT） |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
-| 2026 | [GFS: A Preemption-aware Scheduling Framework for GPU Clusters with Predictive Spot Instance Management](https://arxiv.org/abs/2509.11134) | ASPLOS 2026 | 用轻量预测模型估计各租户 GPU 需求，动态调整低优先级任务的 spot 配额并给出保证时长，抢占时优先保高优先级任务 SLO；万卡生产集群驱逐率降 33.0%，排队延迟降 44.1%。 |
 | 2026 | [Hummingbird: SLO-Oriented GPU Preemption at Microsecond-scale](https://arxiv.org/abs/2601.04071) | arXiv 2026 (preprint) | 面向 SLO 的微秒级 GPU 抢占：把请求级执行切成可抢占单元并配套即时的执行上下文保存与恢复，使高优先级请求能在微秒尺度插入正在运行的批次，替代整批等待或长时间排队的粗粒度让路方式。 |
 | 2026 | [Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin) | OSDI 2026 | SERENO 发现并发 LLM 推理使前台卡顿率升 153% 而自身吞吐仅降约 1%，遂复用 speculative decoding 插入细粒度让步点实现可抢占执行，在检测到带宽争用时把带宽让给前台 |
 | 2026 | [KUNSERVE: Parameter-centric Memory Management for Efficient Memory Overloading Handling in LLM Serving](https://dl.acm.org/doi/10.1145/3767295.3769348) | EuroSys 2026 | 以参数为中心处理 Serving 的显存超额占用，减少模型切换及请求停顿。 |
@@ -172,7 +167,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference](https://doi.org/10.1109/CCGrid68966.2026.00014) | CCGrid 2026 | 按 LLM Decode Iteration 的算力/带宽阶段调整 GPU DVFS，以 Pareto 选择减少 EDP，同时限制 Latency 回退；作者有单 GPU 物理推理测量，适用范围受驱动与频率控制接口限制。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 
-### Agent & Workflow Serving (24)
+### Agent & Workflow Serving (23)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -184,7 +179,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2025 | [HedraRAG: Co-Optimizing Generation and Retrieval for Heterogeneous RAG Workflows](https://doi.org/10.1145/3731569.3764806) | SOSP 2025 | 对 Retrieval 与 Generation 的异构流水实行协同编排与资源分配，避免 RAG 阶段孤立优化。 |
 | 2025 | [METIS: Fast Quality-Aware RAG Systems with Configuration Adaptation](https://doi.org/10.1145/3731569.3764855) | SOSP 2025 | 联合选择检索与生成执行配置，在 RAG 输出质量约束下动态调整资源和关键路径。 |
 | 2025 | [Pie: A Programmable Serving System for Emerging LLM Applications](https://doi.org/10.1145/3731569.3764814) | SOSP 2025 | 将推理服务控制从固定 Decode Loop 转为可编程执行单元，支持应用自定义请求编排与策略。 |
-| 2026 | [AAFLOW: Scalable Patterns for Agentic AI Workflows](https://arxiv.org/abs/2605.02162) | arXiv 2026 (preprint) | 把 agentic workflow 建模为算子抽象并生成通信高效执行计划，基于 Apache Arrow 与 Cylon 建零拷贝数据面免去序列化开销，用资源确定性调度与异步批处理降低协调成本；流水线最高加速 4.64 倍。 |
 | 2026 | [AgenticCache: Cache-Driven Asynchronous Planning for Embodied AI Agents](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c66a9db149261435664284a20b6f1d42-Abstract-Conference.html) | MLSys 2026 | 利用 Embodied Agent 计划转换局部性缓存完整 Plan，并由后台异步 LLM 校验/刷新以减少逐步 LLM 调用；作者主要通过 Agent 模拟任务验证延迟，不是 KV Cache 算法。 |
 | 2026 | [Agentix: An Efficient Serving Engine for LLM Agents as General Programs](https://www.usenix.org/conference/nsdi26/presentation/luo) | NSDI 2026 | 将 Agent 程序依赖纳入服务调度，降低请求和程序级 Head-of-line Blocking。 |
 | 2026 | [Breaking the Reward Barrier: Accelerating Tree-of-Thought Reasoning via Speculative Exploration](https://www.usenix.org/conference/osdi26/presentation/zhong) | OSDI 2026 | SPEX 以查询内推测性路径选择、查询间预算分配与自适应早停破除 Tree-of-Thought 的奖励同步壁垒，在 SGLang 上使各类 ToT 算法加速 1.2×–3×，与 token 级 speculative decoding 叠加最高累计加速 4.1×（KEEP_ADJACENT） |
