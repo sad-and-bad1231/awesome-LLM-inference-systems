@@ -14,7 +14,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
 | [Papers by mechanism](topics/README.md) | Eight practical topic areas in 43 engineering tracks, 745 canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
-| [Emerging research frontiers](frontiers/README.md) | Nine starting papers for emerging workloads, with a narrow cross-domain admission boundary. |
+| [Emerging research frontiers](frontiers/README.md) | Six selected emerging execution problems; mature KV and hybrid attention work remains in the eight topic areas. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
 | [Research labs & open source](communities/README.md) | Maintainers, labs and open systems worth following for inference research. |
@@ -23,7 +23,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 
 **Editorial standard:** primary publication or project sources, a concrete systems contribution, and explicit provenance. **The October 18 breadth intake originally introduced 186 provisional entries**, some of which have since been removed through strict-review PRs #45–#46; all 745 canonical topic rows should not be mistaken for independently verified or reproducible studies. A **first-pass taxonomy and screening sweep (2026-10-18)** tagged 176 entries with explicit review caveats; its original 69 sub-groups were later streamlined into 43 practical engineering tracks without adding or dropping papers. The October 19 R0/R1 source-based mainline screening recommends removing 51 of the 127 new entries (17 R0 + 34 R1) and retaining 76 for the selective bibliography; independent experiment replication is not claimed. The original 1,003-record screening ledger has 241 still evidence-pending. Reported speedups remain source-attributed, not independently reproduced. See [Curation policy](CURATION.md) and [Strict review protocol](STRICT_REVIEW.md).
 
-The emerging [research frontiers](frontiers/README.md) provide a **nine-paper starter reading path** for agentic systems, RL rollout co-tenancy, distributed KV state, sparse and hybrid attention, omni-modal serving, interactive world models, VLA, agentic kernels and diffusion inference. Canonical papers still live under their primary systems mechanism; adjacent video/embodied work is admitted only with inference-time mechanisms and measured execution evidence.
+The [research frontiers](frontiers/README.md) now highlight **six new inference execution contracts**: agent-native serving, real-time omni-modal serving, diffusion-language-model serving, interactive world models, embodied/VLA action loops, and agentic kernel engineering. **KV hierarchy, sparse/hybrid attention and routine heterogeneous deployment are established engineering tracks—not frontiers.** Reasoning-budget scheduling and rollout/online-serving convergence remain evidence-gated watches. Canonical papers stay exclusively in their primary topic categories.
 
 ## Organizations
 
