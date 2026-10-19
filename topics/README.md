@@ -2,21 +2,21 @@
 
 Eight research topics, now organized as **43 practical engineering directions**: what an inference engineer would actually optimize next. Every paper has one canonical home; this is a navigation map, not a rigid academic ontology.
 
-**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. The prior first-pass sweep created 69 sub-groups and corrected one venue field; this **engineering-direction cleanup compresses them to 43**, rehomes six clearly misplaced papers, and **does not add or remove** any of the **669** canonical papers that existed at the time. The 2026-10-18 industry-signal expansion added **127** entries (669 → 796). A follow-up **2026-10-19 R0 strict audit** proposed removing **17** low-fit, insufficiently evidenced or editorially low-value entries and re-homing six others. The revised working catalog therefore contains **779** entries and **43** practical directions; **191** rows carry one or more review caveats. Remaining new papers are still provisional until G0–G5 detailed review. Most remaining entries still await individual G0–G5 review. Neither all 779 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. The prior first-pass sweep created 69 sub-groups and corrected one venue field; this **engineering-direction cleanup compresses them to 43**, rehomes six clearly misplaced papers, and **does not add or remove** any of the **669** canonical papers that existed at the time. The October 18 industry-signal expansion added **127** entries (669 → 796). The October 19 **R0 + R1 LLM-inference-mainline editorial screening** removed **51** (17 in R0, 34 in R1), with six category re-homes, leaving **745** canonical entries and the same **43** engineering directions. **76 of the 127 new papers** remain admitted to the selective reading map, with source-derived evidence limits; no claim of independent numerical/hardware reproduction or complete G3/G4 experimental parity audit. Most remaining entries still await individual G0–G5 review. Neither all 745 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
 
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 82 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 171 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 84 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 40 | 5 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 80 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 131 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 131 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 60 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **779** | **43** | |
+| [Kernels & Compilers](kernels-compilers.md) | 80 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 157 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 81 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 37 | 5 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 74 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 129 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 128 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 59 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **745** | **43** | |
 
 ## Admission summary (through 2026-10-18)
 
@@ -51,7 +51,8 @@ Eight research topics, now organized as **43 practical engineering directions**:
 | Weighted industry-signal expansion (2026-10-18): top-venue, company/lab and open-source sources | +115 |
 | Venue-verified gap closure (2026-10-18): pre-2026 top venues, 2025–2026 preprints | +12 |
 | Strict R0 pruning of October 19 additions (17 removals, 6 re-homes) | -17 |
-| **Canonical topic entries** | **779** |
+| R1 LLM-inference-mainline editorial gate (34 further removals; corrected BYSTANDER, Apple Silicon and WISP publication records) | -34 |
+| **Canonical topic entries** | **745** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
@@ -182,7 +183,7 @@ All eight categories were re-derived from **industry sub-directions** — the kn
 
 **One sourced correction.** *One Queue Is All You Need* (Runtime & Scheduling) was relabelled from `arXiv 2024 (preprint)` to `SoCC 2024`, published as *Queue Management for SLO-Oriented Large Language Model Serving* — [DOI 10.1145/3698038.3698523](https://doi.org/10.1145/3698038.3698523); the row keeps its arXiv link. No other venue, title, year or URL changed across the eight pages, and every other mechanism cell is byte-identical to its pre-sweep text apart from appended tags.
 
-**Current screening tags.** After the October 19 R0 changes, **191 of 779 rows** have one or more explicit inline caveat tags (205 tag instances): `HOLD_EVIDENCE` 87, `KEEP_ADJACENT` 47, `KEEP_FOUNDATIONAL` 21, `HOLD_IDENTITY` 10, `APPROXIMATE_QUALITY_CHECKED` 23, `REQUIRES_FINETUNING` 7, `MODEL_CHANGED` 7, `LOSSLESS_OUTPUT` 1, `HOLD_METHOD` 1, and `HOLD_REPRO` 1. These tags are evidence or scope disclosures—not independent G0–G5 verdicts.
+**Current screening tags.** **196 of 745 rows** carry one or more explicit evidence or scope caveats (214 tag instances): `HOLD_EVIDENCE` 82, `KEEP_ADJACENT` 50, `KEEP_FOUNDATIONAL` 21, `HOLD_IDENTITY` 10, `APPROXIMATE_QUALITY_CHECKED` 30, `REQUIRES_FINETUNING` 9, `MODEL_CHANGED` 9, `LOSSLESS_OUTPUT` 1, `HOLD_METHOD` 1, and `HOLD_REPRO` 1. A tag records a known limitation, not a reproduction PASS or a guaranteed acceptance by all G0–G5 gates.
 
 **Cross-category candidates were recorded, not moved.** More than a hundred rows were identified whose *decisive reusable mechanism* could be argued to belong elsewhere — for example KV-only quantization (Oaken, JanusQuant, SAW-INT4, TurboQuant) toward KV Cache & Context Memory; multi-model and multi-adapter co-tenancy (Symbiosis, InfiniLoRA, LoRAServe) and the power/thermal policies (TAPAS, DynamoLLM, AdaGen) toward Runtime & Scheduling; companion sparse-attention kernels (MInference, LServe, SpargeAttention, XAttention) and automated-kernel benchmarks (KernelBench, TritonGym) toward Kernels & Compilers; and the P/D placement studies toward Distributed & Disaggregated Serving. **No row was moved between categories in this sweep.** The eight pages were produced independently, so a cross-category move would invalidate a source and a destination count at the same time; those moves are deferred to one dedicated pass that can re-verify both sides together. Decoding Acceleration therefore ended that sweep with one explicitly labelled holding group, *Adjacent Modality & Cross-Topic Boundary*, every row of which carried `KEEP_ADJACENT`; the later 69 → 43 simplification dissolved it, moving five sparse-attention rows into MoE & Sparse Execution and one scheduling row into Runtime & Scheduling. Per [STRICT_REVIEW.md](../STRICT_REVIEW.md), the full record-level ledger is deliberately kept **outside** the published repo, so the per-row candidate lists stay in the working screening reports rather than here.
 
@@ -208,7 +209,7 @@ The pre-R0 expansion added **127 papers** into the existing 43 directions — **
 
 **Per-row discipline.** Each added row names the *decisive reusable mechanism* rather than the venue, hardware or workload. Every identity was normalized-title- and URL-deduplicated against all 669 pre-existing rows **and** against every other page in the same batch, so no paper gained a second home; where two pages claimed the same paper, the home was resolved by mechanism and the losing claim dropped. Venue was cross-checked against the URL's publisher domain wherever the venue was a conference.
 
-**What this round did not establish.** No full paper text was read and no speedup, accuracy, TTFT/TPOT or energy figure was independently reproduced. Admission rests on publication identity plus the mechanism and reported results in the paper's own abstract or introduction. Preprints remain labelled as preprints; a top-venue label is a sourcing signal, not a quality verdict, and [CURATION.md](../CURATION.md) continues to say that venue prestige is not an admission criterion. Following R0, 191 of 779 rows now carry explicit caveat tags.
+**What this round did not establish.** No full paper text was read and no speedup, accuracy, TTFT/TPOT or energy figure was independently reproduced. Admission rests on publication identity plus the mechanism and reported results in the paper's own abstract or introduction. Preprints remain labelled as preprints; a top-venue label is a sourcing signal, not a quality verdict, and [CURATION.md](../CURATION.md) continues to say that venue prestige is not an admission criterion. After R0 and R1, 196 of 745 rows carry explicit caveat tags.
 
 ## Gap closure and tag-census correction (2026-10-18)
 
@@ -239,7 +240,7 @@ excluded as generic static-neural-network compilation rather than LLM-serving wo
 **Tag-census correction.** The previous line above propagated a hand-counted baseline
 (190 of 784 rows, 203 instances). The census is now re-derived from the pages by one
 stated rule — a row is tagged if it contains a full-width parenthesised token from the
-vocabulary in [STRICT_REVIEW.md](../STRICT_REVIEW.md) — giving **191 of 779 rows
+vocabulary in [STRICT_REVIEW.md](../STRICT_REVIEW.md) — giving **196 of 745 rows
 (23%) and 188 instances**. The corrected figure is lower because five rows
 compose two tags in one parenthesis (for example `KEEP_ADJACENT / HOLD_EVIDENCE`) and were
 previously mis-tallied, and because `LOSSLESS_OUTPUT` appears only in section prose, not in
@@ -248,4 +249,4 @@ pipelining) are explicitly **not** counted as tags.
 
 ## October 19 strict R0 handoff
 
-The 127 newly added papers received a **scope/identity/editorial triage**, not 127 independent full-paper experimental audits. The first review proposed **17 removals**, **6 corrections of canonical category home**, and targeted caveats for analytical/simulated or model-changing results. **110 new identities remain provisionally in the list**, not certified as G0–G5 PASS. The user-reviewed GitHub PR documents the reason and public source for every removal; the original 1,003-paper external screening ledger is not modified. Do not infer hardware speedup from simulation, partial arithmetic modeling, or a standalone attention kernel. The pre-R0 snapshot was **796** and the proposed post-R0 snapshot **779**.
+Across **127** new identities, R0 and the follow-on selective mainline review generated a per-paper KEEP/REMOVE receipt in PR #51: **51 removals (17+34), 76 retained**. The six primary-home corrections preserve identities. The 76 retained entries have publisher/preprint identity, problem, mechanism, and source-reported evidence sufficient for **editorial mainline inclusion**, but they are **not 76 independently reproduced G3/G4 audits**. Four exemplar publication corrections and model-/simulation-related caveats are documented. The original external 1,003-paper screening ledger was not rewritten. Historical inventory: **669 → 796 → 779 → 745**.
