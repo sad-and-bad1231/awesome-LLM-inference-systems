@@ -2,21 +2,21 @@
 
 Eight research topics, now organized as **43 practical engineering directions**: what an inference engineer would actually optimize next. Every paper has one canonical home; this is a navigation map, not a rigid academic ontology.
 
-**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. The prior first-pass sweep created 69 sub-groups and corrected one venue field; this **engineering-direction cleanup compresses them to 43**, rehomes six clearly misplaced papers, and **does not add or remove** any of the **669** canonical papers. 176 of those rows (26%) now carry an explicit inline screening tag — a tag records an unresolved question or a disclosed caveat, **not** a rejection. Most remaining entries still await individual G0–G5 review. Neither all 669 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
+**Audit status:** the October 18 broad intake was **provisional**; the merged #45–#48 changes removed weak entries, recovered six distinct papers and moved BitDecoding from KV to its Kernel execution home. The prior first-pass sweep created 69 sub-groups and corrected one venue field; this **engineering-direction cleanup compresses them to 43**, rehomes six clearly misplaced papers, and **does not add or remove** any of the **669** canonical papers that existed at the time. A later weighted industry-signal expansion (recorded below) added **115**, so the catalog now holds **784** entries and 190 rows (24%) carry an explicit inline screening tag — a tag records an unresolved question or a disclosed caveat, **not** a rejection. Most remaining entries still await individual G0–G5 review. Neither all 784 topic entries nor the 241 unresolved historical candidates have been independently reproduced. See [Strict review plan](../STRICT_REVIEW.md).
 
 [← Home](../README.md) · [Research frontiers](../frontiers/README.md) · [Curation policy](../CURATION.md)
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 73 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 144 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 65 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 33 | 5 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 64 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 120 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 121 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 49 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **669** | **43** | |
+| [Kernels & Compilers](kernels-compilers.md) | 86 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 172 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 83 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 40 | 5 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 82 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 135 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 128 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 58 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **784** | **43** | |
 
 ## Admission summary (through 2026-10-18)
 
@@ -48,7 +48,8 @@ Eight research topics, now organized as **43 practical engineering directions**:
 | Targeted kernel/compiler captures, PR #48 (7 Kernel rows including 1 KV migration; 6 new identities) | +6 |
 | First-pass taxonomy & screening sweep (2026-10-18): 69 sub-groups, 0 removed, 0 added, 1 venue correction | ±0 |
 | Engineering-direction simplification: 69 → 43 tracks, six rows re-homed, 0 net additions/deletions | ±0 |
-| **Canonical topic entries** | **669** |
+| Weighted industry-signal expansion (2026-10-18): top-venue, company/lab and open-source sources | +115 |
+| **Canonical topic entries** | **784** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
 The [Serving migration record](serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
@@ -179,8 +180,30 @@ All eight categories were re-derived from **industry sub-directions** — the kn
 
 **One sourced correction.** *One Queue Is All You Need* (Runtime & Scheduling) was relabelled from `arXiv 2024 (preprint)` to `SoCC 2024`, published as *Queue Management for SLO-Oriented Large Language Model Serving* — [DOI 10.1145/3698038.3698523](https://doi.org/10.1145/3698038.3698523); the row keeps its arXiv link. No other venue, title, year or URL changed across the eight pages, and every other mechanism cell is byte-identical to its pre-sweep text apart from appended tags.
 
-**Screening tags.** 176 of 669 rows (26%) carry an explicit tag, 189 tag instances in total: `HOLD_EVIDENCE` 76, `KEEP_ADJACENT` 44, `APPROXIMATE_QUALITY_CHECKED` 23, `KEEP_FOUNDATIONAL` 21, `HOLD_IDENTITY` 10, `MODEL_CHANGED` 8, `REQUIRES_FINETUNING` 6, `LOSSLESS_OUTPUT` 1. A tag is a disclosed caveat, **not** a verdict: `HOLD_EVIDENCE` marks evidence that is not auditable as the row is currently written (simulator-only results, program-page-only identity, baselines the paper defers), and `APPROXIMATE_QUALITY_CHECKED` marks a speedup that is not output-preserving. The vocabulary is defined in [STRICT_REVIEW.md](../STRICT_REVIEW.md).
+**Screening tags.** 190 of 784 rows (24%) carry an explicit tag, 203 tag instances in total: `HOLD_EVIDENCE` 89, `KEEP_ADJACENT` 45, `APPROXIMATE_QUALITY_CHECKED` 23, `KEEP_FOUNDATIONAL` 21, `HOLD_IDENTITY` 10, `MODEL_CHANGED` 8, `REQUIRES_FINETUNING` 6, `LOSSLESS_OUTPUT` 1. A tag is a disclosed caveat, **not** a verdict: `HOLD_EVIDENCE` marks evidence that is not auditable as the row is currently written (simulator-only results, program-page-only identity, baselines the paper defers), and `APPROXIMATE_QUALITY_CHECKED` marks a speedup that is not output-preserving. The vocabulary is defined in [STRICT_REVIEW.md](../STRICT_REVIEW.md).
 
-**Cross-category candidates were recorded, not moved.** More than a hundred rows were identified whose *decisive reusable mechanism* could be argued to belong elsewhere — for example KV-only quantization (Oaken, JanusQuant, SAW-INT4, TurboQuant) toward KV Cache & Context Memory; multi-model and multi-adapter co-tenancy (Symbiosis, InfiniLoRA, LoRAServe) and the power/thermal policies (TAPAS, DynamoLLM, AdaGen) toward Runtime & Scheduling; companion sparse-attention kernels (MInference, LServe, SpargeAttention, XAttention) and automated-kernel benchmarks (KernelBench, TritonGym) toward Kernels & Compilers; and the P/D placement studies toward Distributed & Disaggregated Serving. **No row was moved between categories in this sweep.** The eight pages were produced independently, so a cross-category move would invalidate a source and a destination count at the same time; those moves are deferred to one dedicated pass that can re-verify both sides together. Decoding Acceleration therefore ends this sweep with one explicitly labelled holding group, *Adjacent Modality & Cross-Topic Boundary*, every row of which carries `KEEP_ADJACENT`. Per [STRICT_REVIEW.md](../STRICT_REVIEW.md), the full record-level ledger is deliberately kept **outside** the published repo, so the per-row candidate lists stay in the working screening reports rather than here.
+**Cross-category candidates were recorded, not moved.** More than a hundred rows were identified whose *decisive reusable mechanism* could be argued to belong elsewhere — for example KV-only quantization (Oaken, JanusQuant, SAW-INT4, TurboQuant) toward KV Cache & Context Memory; multi-model and multi-adapter co-tenancy (Symbiosis, InfiniLoRA, LoRAServe) and the power/thermal policies (TAPAS, DynamoLLM, AdaGen) toward Runtime & Scheduling; companion sparse-attention kernels (MInference, LServe, SpargeAttention, XAttention) and automated-kernel benchmarks (KernelBench, TritonGym) toward Kernels & Compilers; and the P/D placement studies toward Distributed & Disaggregated Serving. **No row was moved between categories in this sweep.** The eight pages were produced independently, so a cross-category move would invalidate a source and a destination count at the same time; those moves are deferred to one dedicated pass that can re-verify both sides together. Decoding Acceleration therefore ended that sweep with one explicitly labelled holding group, *Adjacent Modality & Cross-Topic Boundary*, every row of which carried `KEEP_ADJACENT`; the later 69 → 43 simplification dissolved it, moving five sparse-attention rows into MoE & Sparse Execution and one scheduling row into Runtime & Scheduling. Per [STRICT_REVIEW.md](../STRICT_REVIEW.md), the full record-level ledger is deliberately kept **outside** the published repo, so the per-row candidate lists stay in the working screening reports rather than here.
 
 **What this sweep did not establish.** No full paper text was read: each keep/flag verdict rests on the row's own mechanism text plus primary index, proceedings or project pages. No speedup, accuracy, TTFT/TPOT or energy figure was independently reproduced. Link health was not crawled URL by URL, and 117 rows (17.5%) still link to arXiv. `KEEP_FOUNDATIONAL` marks the originator of a sub-direction as a **domain judgement**, not a checked citation-priority claim.
+
+## Weighted industry-signal expansion (2026-10-18)
+
+This round added **115 papers** into the existing 43 directions — **no new directions** were created. Effort was deliberately **not** spread evenly: the additions track where production inference actually concentrates engineering effort, so KV Cache & Context Memory, Decoding Acceleration, MoE & Sparse Execution absorbed the largest shares while Distributed & Disaggregated Serving and Quantization & Compression absorbed the smallest.
+
+| Category | Added | Before | Now |
+|---|---:|---:|---:|
+| Kernels & Compilers | +13 | 73 | 86 |
+| KV Cache & Context Memory | +28 | 144 | 172 |
+| Decoding Acceleration | +18 | 65 | 83 |
+| Quantization & Compression | +7 | 33 | 40 |
+| MoE & Sparse Execution | +18 | 64 | 82 |
+| Runtime & Scheduling | +15 | 120 | 135 |
+| Distributed & Disaggregated Serving | +7 | 121 | 128 |
+| Benchmarking & Systems Analysis | +9 | 49 | 58 |
+| **Total** | **+115** | **669** | **784** |
+
+**Where the rows came from.** Retrieval used the sources named in the working brief: (1) top-venue proceedings and program pages — OSDI, NSDI, ATC, FAST, ASPLOS, ISCA, MICRO, HPCA, MLSys, ICML, ICLR, ACL/EMNLP, VLDB/SIGMOD/PACMMOD and the 2026 program pages for each; (2) first-party company and project documentation — vLLM, SGLang, TensorRT-LLM, NVIDIA Dynamo, llm-d, Mooncake and model-vendor material; (3) open-source communities; (4) research-lab publications; and (5) curated aggregator bibliographies, used strictly as **candidate pools** rather than as evidence. A row still had to carry a traceable primary source before admission.
+
+**Per-row discipline.** Each added row names the *decisive reusable mechanism* rather than the venue, hardware or workload. Every identity was normalized-title- and URL-deduplicated against all 669 pre-existing rows **and** against every other page in the same batch, so no paper gained a second home; where two pages claimed the same paper, the home was resolved by mechanism and the losing claim dropped. Venue was cross-checked against the URL's publisher domain wherever the venue was a conference.
+
+**What this round did not establish.** No full paper text was read and no speedup, accuracy, TTFT/TPOT or energy figure was independently reproduced. Admission rests on publication identity plus the mechanism and reported results in the paper's own abstract or introduction. Preprints remain labelled as preprints; a top-venue label is a sourcing signal, not a quality verdict, and [CURATION.md](../CURATION.md) continues to say that venue prestige is not an admission criterion. 190 of 784 rows (24%) now carry an explicit inline screening tag.

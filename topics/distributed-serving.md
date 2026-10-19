@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Parallelism & Scale-Up](#parallelism--scale-up-24) | 24 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
-| [Disaggregated Compute Stages](#disaggregated-compute-stages-31) | 31 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-21) | 21 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
+| [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
+| [KV Transfer & Communication](#kv-transfer--communication-22) | 22 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-21) | 21 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **121** | |
+| **Total** | **128** | |
 
-## Papers (121)
+## Papers (128)
 
-### Parallelism & Scale-Up (24)
+### Parallelism & Scale-Up (28)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -31,12 +31,15 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 |---|---|---|---|
 | 2024 | [LoongServe: Efficiently Serving Long-Context Large Language Models with Elastic Sequence Parallelism](https://doi.org/10.1145/3694715.3695948) | SOSP 2024 | Elastic Sequence Parallelism 随上下文长度和负载变化动态调整跨 GPU 并行度。 |
 | 2024 | [RingAttention with Blockwise Transformers for Near-Infinite Context](https://proceedings.iclr.cc/paper_files/paper/2024/hash/1119587863e78451f080da2a768c4935-Abstract-Conference.html) | ICLR 2024 | Blockwise Attention 与跨设备 Ring KV 传输流水，改善超长序列可扩展执行（兼含训练）。 |
+| 2025 | [Block-Diagonal LoRA for Eliminating Communication Overhead in Tensor Parallel LoRA Serving](https://openreview.net/forum?id=1cjLvtFOmL) | NeurIPS 2025 | 同时服务多个 LoRA 适配器时适配器必须与主干分离计算，S-LoRA 的张量并行分片虽对齐主干却引入额外通信；Block-Diagonal LoRA 把部分适配器因子约束为分块对角，从而采用无需额外通信的分片方式，八卡 A100 上服务 Llama-3.1-70B 端到端最高提速 1.79×。 |
 | 2025 | [Context Parallelism for Scalable Million-Token Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/78834433edc3291f4c6cbbd2759324db-Abstract-Conference.html) | MLSys 2025 | 以 Pass-KV/Pass-Q 环形 Attention 和多节点通信优化百万上下文精确计算。 |
+| 2025 | [DynaPipe: Dynamic Layer Redistribution for Efficient Serving of LLMs with Pipeline Parallelism](https://openreview.net/forum?id=D6w7wIN360) | NeurIPS 2025 | 流水线并行服务中尾阶段还要承担采样等后处理，均分层数会导致上游阶段空转；DynaPipe 实时预测各层执行时延以动态重划分层负载，并用异步 KV cache 迁移协调器让再分配期间的推理不中断，端到端请求平均时延降低 8%–49%。 |
 | 2025 | [gLLM: Global Balanced Pipeline Parallelism System for Distributed LLM Serving with Token Throttling](https://arxiv.org/abs/2504.14775) | SC 2025 | 在 Pipeline Parallel Serving 中动态限制 Prefill/Decode Token 数量，结合全局队列与 KV 容量减少 Pipeline Bubble。 |
 | 2025 | [Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod](https://arxiv.org/abs/2508.02520) | arXiv 2025 (technical report) | xDeepServe 在 Ascend CloudMatrix384 上采用 Transformerless 分离执行、XCCL 与去中心化 DP 组。 |
 | 2025 | [Medha: Efficient LLM Inference on Multi-Million Context Lengths Without Approximation](https://www.microsoft.com/en-us/research/publication/medha-efficient-llm-inference-on-multi-million-context-lengths-without-approximation/) | arXiv 2025 (preprint) | 通过 Adaptive Prefill Chunking、Sequence Pipeline Parallelism 和 KV-cache Parallelism 处理多百万 Token 的动态长度与跨节点执行。 |
 | 2025 | [Seesaw: High-throughput LLM Inference via Model Re-sharding](https://proceedings.mlsys.org/paper_files/paper/2025/hash/cbc4ab80cd77aa0eb87da062fbcddb46-Abstract-Conference.html) | MLSys 2025 | 跨 Prefill/Decode 动态调整模型 Sharding，配合分层 KV 缓冲减少转换开销。 |
 | 2025 | [Star Attention: Efficient LLM Inference over Long Sequences](https://proceedings.mlr.press/v267/acharya25a.html) | ICML 2025 | 通过分布式上下文 Block Attention 与 Anchor Token 降低多 GPU Long-context 通信。 |
+| 2025 | [Tensor-Parallelism with Partially Synchronized Activations](https://openreview.net/forum?id=fyeSq3m8CY) | NeurIPS 2025 | 张量并行需要大量通信来同步各 rank 的激活；CAAT-Net 对现有做法做少量调整，使 LLM 训练与推理不必完全同步激活，把张量并行的通信需求最多降低 50% 且预训练精度无显著损失，并以 7B 模型验证训练与推理均可加速（需按该架构重新预训练）（KEEP_ADJACENT）。 |
 | 2025 | [WaferLLM: Large Language Model Inference at Wafer Scale](https://www.usenix.org/conference/osdi25/presentation/he) | OSDI 2025 | 用 PLMR 硬件模型驱动晶圆级 Mesh 并行、MeshGEMM/GEMV，验证非共享内存加速器上的端到端推理（HOLD_EVIDENCE）。 |
 | 2026 | [Dataflow Is All You Need](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f502981cbe221d857ad409450a7917c3-Abstract-Conference.html) | MLSys 2026 | 在真实 SambaNova SN40 RDU 上通过 KernelLooping、BatchStreaming、ScheduleOffloading 缓解 Decode 的 CPU 调度、同步与计算通信重叠瓶颈；作者报告生产推理和多芯片结果。 |
 | 2026 | [db-SP: Accelerating Sparse Attention for Visual Generative Models with Dual-Balanced Sequence Parallelism](https://proceedings.mlsys.org/paper_files/paper/2026/hash/db988b089d8d97d0f159c15ed0be6a71-Abstract-Conference.html) | MLSys 2026 | 对视觉生成 DiT 稀疏 Attention 做 Head/Block 双维负载平衡与动态 Sequence Parallelism，减少去噪步骤中的资源不均；相邻多模态推理而非文本 LLM（KEEP_ADJACENT）。 |
@@ -53,8 +56,9 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [StreamDiffusionV2: A Streaming System for Dynamic and Interactive Video Generation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html) | MLSys 2026 | 相邻视频生成推理：逐帧 SLO-aware/Block 调度、Rolling KV Cache 与跨 Denoising Step/Layer 的多 GPU Pipeline；报告真实 H100 Streaming FPS 和首帧延迟，非文本 LLM（KEEP_ADJACENT）。 |
 | 2026 | [Tetris: Efficient Long-context LLM Serving with Chunkwise Dynamic Sequence Parallelism](https://doi.org/10.1109/ISCA66397.2026.00098) | ISCA 2026 | 在分离式集群按 Chunk 动态扩缩 Sequence Parallelism，使用碎片资源。 |
 | 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
+| 2026 | [Untied Ulysses: Memory-Efficient Context Parallelism via Headwise Chunking](https://proceedings.mlr.press/v306/ghadia26a.html) | ICML 2026 | 在 attention head 粒度做细粒度 chunk 切分的上下文并行（UPipe），显著降低 self-attention 的激活显存，突破激活内存墙以支撑更长序列的跨加速器切分。 |
 
-### Disaggregated Compute Stages (31)
+### Disaggregated Compute Stages (32)
 
 P/D、Attention–FFN 与多阶段资源解耦。
 
@@ -64,6 +68,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2024 | [P/D-Serve: Serving Disaggregated Large Language Model at Scale](https://arxiv.org/abs/2408.08147) | arXiv 2024 (preprint) | 以中心化全局调度、异步通信与连续 KV 搬运协调大规模 P/D 分离部署。 |
 | 2025 | [Cornserve: Efficiently Serving Any-to-Any Multimodal Models](https://arxiv.org/abs/2512.14098) | arXiv 2025 (preprint) | 为 Any-to-Any 多模态组件构建推理 DAG，根据编解码阶段的异构特性自动规划 Disaggregation，并由分布式 Runtime 执行。 |
 | 2025 | [Efficient MoE Inference with Fine-Grained Scheduling of Disaggregated Expert Parallelism (FinDEP)](https://arxiv.org/abs/2512.21487) | arXiv 2025 (preprint) | 把 Disaggregated Expert Parallelism 的计算和通信拆成可调粒度任务，搜索流水与重叠顺序。 |
+| 2025 | [ElasticMM: Efficient Multimodal LLMs Serving with Elastic Multimodal Parallelism](https://openreview.net/forum?id=Zd6VyjmN1S) | NeurIPS 2025 | 多模态 LLM 服务把编码器与主干紧耦合，难以区分混合请求类型也难以按阶段切换并行策略；ElasticMM 用模态感知负载均衡把请求拆成独立模态组并动态分配资源，以弹性分片调度解耦推理阶段、支持并行度调整与自适应扩缩，配合统一多模态前缀缓存与非阻塞编码，TTFT 最多降低 4.2×、吞吐提升 3.2–4.5×。 |
 | 2025 | [HydraInfer: Hybrid Disaggregated Scheduling for Multimodal Large Language Model Serving](https://arxiv.org/abs/2505.12658) | arXiv 2025 (preprint) | 将多模态 Encode/Prefill/Decode 映射至异构推理实例，联合阶段级 Batching 与动态资源分配；8×H800 实测多模态 SLO 和吞吐。 |
 | 2025 | [Janus: Disaggregating Attention and Experts for Scalable MoE Inference](https://arxiv.org/abs/2512.13525) | arXiv 2025 (preprint) | 独立伸缩 Attention/Expert GPU 池，GPU 端负载平衡与两阶段分层通信。 |
 | 2025 | [MegaScale-Infer: Efficient Mixture-of-Experts Model Serving with Disaggregated Expert Parallelism](https://doi.org/10.1145/3718958.3750506) | SIGCOMM 2025 | Attention/FFN 分离、Ping-pong Microbatch Pipeline 与 M2N 通信，独立配置 Attention/Expert 资源。 |
@@ -92,7 +97,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 
-### KV Transfer & Communication (21)
+### KV Transfer & Communication (22)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
@@ -118,9 +123,10 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TokenWeave: Efficient Compute-Communication Overlap for Distributed LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/73ba81c7b25134a559c8a9c39ec1a4c3-Abstract-Conference.html) | MLSys 2026 | 使用融合 AllReduce–RMSNorm 和 Multimem 降低 TP 小批次通信开销。 |
 | 2026 | [Turbo: Efficiently Serving Long-Context Large Language Models with In-Network Aggregation](https://doi.org/10.1145/3789240.3829140) | SIGCOMM 2026 | 将 Long-context 分布式 Attention 的部分 Aggregation 下沉至网络设备，减少 Context Parallel 跨节点归约瓶颈。 |
 | 2026 | [TurboBus: Pooling PCIe Bandwidth for LLM Workloads via Scale-Up Fabrics](https://doi.org/10.1145/3789240.3829130) | SIGCOMM 2026 | 通过 Scale-up Fabric 借用空闲 PCIe Link 带宽并对 GPU 传输重路由，优化权重加载和推理状态搬运。 |
+| 2026 | [UCCL-Tran: An Extensible Software Transport Layer for GPU Networking](https://www.usenix.org/conference/osdi26/presentation/zhou-yang) | OSDI 2026 | 现有 RDMA 网卡的主机传输层难以演进，单路径流量冲突会严重拖慢集合通信；UCCL-Tran 把网卡数据路径与控制路径解耦、把控制路径传输放到主机 CPU 上以软件方式演进，提供多路径传输消除流冲突，ML 集合通信性能最高提升 4.5×。 |
 | 2026 | [Understanding and Improving Communication Performance in Multi-node LLM Inference](https://doi.org/10.1145/3786335.3813165) | CAIS 2026 | 在 Slingshot/InfiniBand 多节点 405B 推理上剖析 TP/PP 的 AllReduce 瓶颈；NVSHMEM 的 NVRAR 针对小消息 Recursive-Doubling 做分层优化，作者将其集成到 YALIS/vLLM 实机对照（最高 1.72× End-to-end Batch Latency 改善），公开研究代码，区别于泛用 NCCL Microbenchmark。 |
 
-### Fleet Scaling & Reliability (24)
+### Fleet Scaling & Reliability (25)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -144,6 +150,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [HexGen-3: A Fully Disaggregated LLM Serving Framework with Fine-Grained Heterogeneous Resource Autoscaling](https://icml.cc/virtual/2026/poster/62564) | ICML 2026 | HexGen-3（ICML 2026）提出全分离（fully disaggregated）的 LLM serving 框架，把推理的各阶段解耦独立部署，并以分层调度器配合异构资源的自动扩缩（autoscaling），在成本与性能之间取得更优平衡（HOLD_IDENTITY） |
 | 2026 | [HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou) | NSDI 2026 | 模型预分布、阶段重叠、无网络热点放置和 Pipeline Consolidation。 |
 | 2026 | [LLM-PILOT: SLO-Aware and Cost-Efficient LLM Serving on Public Cloud VM Clusters via Offloading](https://doi.org/10.1109/CCGRID68966.2026.00023) | CCGrid 2026 | 联合搜索云 VM 实例、KV Cache Offload 与 Attention Offload，线性回归校准解析模型，兼顾吞吐/时延 SLO 与成本；作者正式全文包含真实 AWS 工作负载而非纯模拟配置选择。 |
+| 2026 | [Machine Learning Fleet Efficiency: Improving TPU Systems at Scale with ML Productivity Goodput](https://openreview.net/forum?id=y31QSL9yMG) | MLSys 2026 | 针对 Google 生产 TPU 集群（数千加速器、工作负载多样）提出 ML Productivity Goodput 指标，把集群效率拆成调度、运行时与程序三部分以精确定位瓶颈层；实测通过抢占调优使各类作业规模的调度 goodput 均超过 95%，并借框架现代化、异步 checkpoint 与通信-计算重叠取得运行时与程序层收益。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
 | 2026 | [OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving](https://www.usenix.org/conference/osdi26/presentation/yao) | OSDI 2026 | 在跨 Slurm/HPC/异构计算环境提供发现、路由与故障控制平面。 |
 | 2026 | [RaidServe: High-performance Resilient Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/507b4aacefe5325908e24f042617b741-Abstract-Conference.html) | MLSys 2026 | RaidServe 面向 tensor-parallel serving 中的 GPU 故障，通过 cyclic KVCache placement 均衡显存、hybrid attention 消除 straggler、fine-grained load-aware routing 动态分配请求，并主动备份 KVCac…（HOLD_EVIDENCE） |
