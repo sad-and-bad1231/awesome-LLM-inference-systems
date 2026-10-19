@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
+| [Parallelism & Scale-Up](#parallelism--scale-up-29) | 29 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-22) | 22 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-21) | 21 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **129** | |
+| [KV Transfer & Communication](#kv-transfer--communication-23) | 23 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-22) | 22 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **131** | |
 
-## Papers (129)
+## Papers (131)
 
-### Parallelism & Scale-Up (28)
+### Parallelism & Scale-Up (29)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -57,6 +57,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [Tetris: Efficient Long-context LLM Serving with Chunkwise Dynamic Sequence Parallelism](https://doi.org/10.1109/ISCA66397.2026.00098) | ISCA 2026 | 在分离式集群按 Chunk 动态扩缩 Sequence Parallelism，使用碎片资源。 |
 | 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
 | 2026 | [Untied Ulysses: Memory-Efficient Context Parallelism via Headwise Chunking](https://proceedings.mlr.press/v306/ghadia26a.html) | ICML 2026 | 在 attention head 粒度做细粒度 chunk 切分的上下文并行（UPipe），显著降低 self-attention 的激活显存，突破激活内存墙以支撑更长序列的跨加速器切分。 |
+| 2025 | [PipeFusion: Patch-level Pipeline Parallelism for Diffusion Transformers Inference](https://openreview.net/forum?id=5xwyxupsLL) | NeurIPS 2025 | 针对高分辨率扩散 Transformer 的多卡推理，把图像切分为 patch 并把模型层分布到多个 GPU，用 patch 级流水线编排通信与计算；利用相邻扩散步输入高度相似，复用上一步的过期特征图为当前流水线提供上下文，通信开销低于张量并行、序列并行与 DistriFusion，8×L40 上 Flux.1 等模型达到 SOTA。 |
 
 ### Disaggregated Compute Stages (33)
 
@@ -98,7 +99,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 
-### KV Transfer & Communication (22)
+### KV Transfer & Communication (23)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
@@ -126,8 +127,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TurboBus: Pooling PCIe Bandwidth for LLM Workloads via Scale-Up Fabrics](https://doi.org/10.1145/3789240.3829130) | SIGCOMM 2026 | 通过 Scale-up Fabric 借用空闲 PCIe Link 带宽并对 GPU 传输重路由，优化权重加载和推理状态搬运。 |
 | 2026 | [UCCL-Tran: An Extensible Software Transport Layer for GPU Networking](https://www.usenix.org/conference/osdi26/presentation/zhou-yang) | OSDI 2026 | 现有 RDMA 网卡的主机传输层难以演进，单路径流量冲突会严重拖慢集合通信；UCCL-Tran 把网卡数据路径与控制路径解耦、把控制路径传输放到主机 CPU 上以软件方式演进，提供多路径传输消除流冲突，ML 集合通信性能最高提升 4.5×。 |
 | 2026 | [Understanding and Improving Communication Performance in Multi-node LLM Inference](https://doi.org/10.1145/3786335.3813165) | CAIS 2026 | 在 Slingshot/InfiniBand 多节点 405B 推理上剖析 TP/PP 的 AllReduce 瓶颈；NVSHMEM 的 NVRAR 针对小消息 Recursive-Doubling 做分层优化，作者将其集成到 YALIS/vLLM 实机对照（最高 1.72× End-to-end Batch Latency 改善），公开研究代码，区别于泛用 NCCL Microbenchmark。 |
+| 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 |
 
-### Fleet Scaling & Reliability (25)
+### Fleet Scaling & Reliability (24)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -151,7 +153,6 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [HexGen-3: A Fully Disaggregated LLM Serving Framework with Fine-Grained Heterogeneous Resource Autoscaling](https://icml.cc/virtual/2026/poster/62564) | ICML 2026 | HexGen-3（ICML 2026）提出全分离（fully disaggregated）的 LLM serving 框架，把推理的各阶段解耦独立部署，并以分层调度器配合异构资源的自动扩缩（autoscaling），在成本与性能之间取得更优平衡（HOLD_IDENTITY） |
 | 2026 | [HydraServe: Minimizing Cold Start Latency for Serverless LLM Serving in Public Clouds](https://www.usenix.org/conference/nsdi26/presentation/lou) | NSDI 2026 | 模型预分布、阶段重叠、无网络热点放置和 Pipeline Consolidation。 |
 | 2026 | [LLM-PILOT: SLO-Aware and Cost-Efficient LLM Serving on Public Cloud VM Clusters via Offloading](https://doi.org/10.1109/CCGRID68966.2026.00023) | CCGrid 2026 | 联合搜索云 VM 实例、KV Cache Offload 与 Attention Offload，线性回归校准解析模型，兼顾吞吐/时延 SLO 与成本；作者正式全文包含真实 AWS 工作负载而非纯模拟配置选择。 |
-| 2026 | [Machine Learning Fleet Efficiency: Improving TPU Systems at Scale with ML Productivity Goodput](https://openreview.net/forum?id=y31QSL9yMG) | MLSys 2026 | 针对 Google 生产 TPU 集群（数千加速器、工作负载多样）提出 ML Productivity Goodput 指标，把集群效率拆成调度、运行时与程序三部分以精确定位瓶颈层；实测通过抢占调优使各类作业规模的调度 goodput 均超过 95%，并借框架现代化、异步 checkpoint 与通信-计算重叠取得运行时与程序层收益。 |
 | 2026 | [Making MoE based LLM inference resilient with Tarragon](https://arxiv.org/abs/2601.01310) | arXiv 2026 (preprint) | 为 Attention Workers 和 Expert Workers 建立独立故障域及可重构 Data Path；Attention 侧异步增量 KV Checkpoint，Expert 侧部署 Shadow Expert；实测相对 MegaScale-Infer 的故障停顿缩短及无故障时开销。 |
 | 2026 | [OpenTela: Unifying Decentralized Computing Resources for Heterogeneous LLM Serving](https://www.usenix.org/conference/osdi26/presentation/yao) | OSDI 2026 | 在跨 Slurm/HPC/异构计算环境提供发现、路由与故障控制平面。 |
 | 2026 | [RaidServe: High-performance Resilient Serving](https://proceedings.mlsys.org/paper_files/paper/2026/hash/507b4aacefe5325908e24f042617b741-Abstract-Conference.html) | MLSys 2026 | RaidServe 面向 tensor-parallel serving 中的 GPU 故障，通过 cyclic KVCache placement 均衡显存、hybrid attention 消除 straggler、fine-grained load-aware routing 动态分配请求，并主动备份 KVCac…（HOLD_EVIDENCE） |
@@ -159,7 +160,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving](https://doi.org/10.1109/2575-8411.2026.00051) | ICDCS 2026 | 通过风险驱动 Shadow Replica 启用、异构设备能力匹配和后台增量追赶，在 Jetson/手机测试床保证有状态 LLM 故障接管；直接衡量恢复时间和稳态影子开销。 |
 | 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
 
-### Heterogeneous & Edge Serving (21)
+### Heterogeneous & Edge Serving (22)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
@@ -186,5 +187,6 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [PipeSD: An Efficient Cloud-Edge Collaborative Pipeline Inference Framework with Speculative Decoding](https://proceedings.mlr.press/v306/han26k.html) | ICML 2026 | Cloud–Edge 端协同采用 Token Batch Pipeline 与双阈值 Verify 触发以重叠计算/网络。 |
 | 2026 | [REMIX: Dynamic Partitioning for Fine-Grained Heterogeneous LLM Serving](https://mlsys.org/virtual/2026/poster/10182) | MLSys 2026 | 以细粒度动态 Partition 调整异构设备上的计算和内存利用（HOLD_IDENTITY）。 |
 | 2026 | [ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference](https://doi.org/10.1145/3745756.3809205) | MobiSys 2026 | 针对移动 NPU Attention 量化失准引起的 CPU/GPU 回退设计稀疏 Shadow Attention；有 Qualcomm Hexagon NPU 实机实验和 Artifact，硬件适用范围需另验（KEEP_ADJACENT）。 |
+| 2026 | [Automated Tensor Scheduling for Hybrid CPU-GPU LLM Inference on Consumer Devices](https://arxiv.org/abs/2607.10183) | arXiv 2026 (preprint) | 把卸载粒度从整层或整专家细化到单个张量，用静态张量放置配合负载感知的动态传输，并以异步 CPU-GPU 协调统一调度存储、数据搬运与计算，消费级平台上 prefill 吞吐最高提升 1.94 倍、decode 3.29 倍。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
