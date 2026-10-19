@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-17) | 17 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
-| [Profiling & Diagnosis](#profiling--diagnosis-5) | 5 | 性能分析器、Tracing、可观测性和异常定位。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-18) | 18 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Profiling & Diagnosis](#profiling--diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
-| [Correctness & Reliability](#correctness--reliability-8) | 8 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
+| [Correctness & Reliability](#correctness--reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-4) | 4 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **59** | |
+| **Total** | **60** | |
 
-## Papers (59)
+## Papers (60)
 
 ### Serving Benchmarks & Workloads (14)
 
@@ -45,7 +45,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) | NSDI 2026 | 基于真实云服务 Trace 刻画多类型推理负载并合成代表性请求流。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 
-### Performance & Efficiency Studies (17)
+### Performance & Efficiency Studies (18)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -68,8 +68,9 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TokenPowerBench: Benchmarking the Power Consumption of LLM Inference](https://doi.org/10.1609/aaai.v40i38.40535) | AAAI 2026 (Full Paper) | 多层级 GPU/Node/System 能耗测量与请求级 Prefill/Decode Phase Attribution，覆盖四种模型系列及 Batch/Context/Parallelism/Quantization 的 J/token 对比；作者发布基准。测量校准、传感器精度和 Serving QoS/能效 Pareto 前沿待审（HOLD_EVIDENCE）。 |
 | 2026 | [Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles](https://doi.org/10.1109/ISCA66397.2026.00084) | ISCA 2026 (Industry Track) | 在真实 GPU Cluster 上刻画 8B–671B 推理的 DP/TP/PP、长 CoT KV 容量陷阱与 MoE 同步瓶颈；提供部署权衡测量而非单一加速算法。 |
 | 2026 | [When NPUs Are Not Always Faster: A Stage-Level Analysis of Mobile LLM Inference](https://arxiv.org/abs/2605.27435) | arXiv 2026 (preprint) | 按阶段分离移动端 LLM 推理的量化、通信与计算开销，定位 NPU 在 prefill/decode 中因算子 fallback 与调度开销反而慢于 CPU 的条件。 |
+| 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 
-### Profiling & Diagnosis (5)
+### Profiling & Diagnosis (4)
 
 性能分析器、Tracing、可观测性和异常定位。
 
@@ -78,7 +79,6 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Breaking the Ice: Analyzing Cold Start Latency in vLLM](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29416b66c2149872b9d1415a3fd2c5e0-Abstract-Conference.html) | MLSys 2026 | 剖析 vLLM 冷启动的初始化、权重加载和图捕获关键路径。 |
 | 2026 | [ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof) | MLSys 2026 | ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
-| 2026 | [Think Before You Grid-Search: Floor-First Triage for LLM Serving](https://arxiv.org/abs/2607.05876) | arXiv 2026 (preprint) | 将 decode step 建模为 HBM 字节、FLOPs、网络字节、网络消息与 KV 容量五维向量，用各维最大值与总和构成 [max,sum] 区间判断重叠质量，仅残差超阈值才启用 profiler。 |
 | 2026 | [XProf: An Open, Scalable, and Extensible Profiling System for the Modern ML Stack](https://proceedings.mlsys.org/paper_files/paper/2026/hash/280776fda5970060e6a5efcfd43e5d2d-Abstract-Conference.html) | MLSys 2026 | OpenXLA/PJRT Full-stack CPU–TPU/GPU Profiling、Roofline 与跨千卡低开销分布式 Trace；开源生产级性能分析基础设施，但不是 LLM Serving 专用评测（KEEP_ADJACENT）。 |
 
 ### Models & Simulators (11)
@@ -93,13 +93,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2025 | [TokenSim: Enabling Hardware and Software Exploration for Large Language Model Inference Systems](https://arxiv.org/abs/2503.08415) | arXiv 2025 (preprint) | 面向 LLM 推理的软硬件协同探索模拟器：把调度策略与显存管理建模为可扩展模块，支持在设计阶段替换不同调度/内存方案；对真实系统校验误差低于 1%，用于部署前评估新调度与显存管理的收益。 |
 | 2026 | [A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints](https://proceedings.mlr.press/v306/nie26a.html) | ICML 2026 | 在队列稳定性模型中同时引入 GPU 计算和 KV 内存约束，推导稳定到达率/容量界，并在真实 GPU Serving 环境核验预测误差和 Provisioning 边界。 |
 | 2026 | [Charon: A Unified and Fine-Grained Simulator for Large-Scale LLM Training and Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/dbc8ce0fdfcd55172d73fb05dbae07fc-Abstract-Conference.html) | MLSys 2026 | 精细化推理性能模拟并用跨模型/配置与真实部署验证预测误差。 |
-| 2026 | [GPU-Tile-Sim: A Tile-Centric GPU Simulation Framework for LLM Hardware-Software Co-Design](https://arxiv.org/abs/2607.11262) | MICRO 2026 | 以 warp 级 tile graph（节点为 tile 算子、边为依赖）驱动 GPU 模拟，用于 LLM 软硬件协同设计；在 H100 上用 8 个 GEMM 与 6 个 FA3 用例验证，报告 MAPE 与相关性。 |
+| 2026 | [GPU-Tile-Sim: A Tile-Centric GPU Simulation Framework for LLM Hardware-Software Co-Design](https://arxiv.org/abs/2607.11262) | MICRO 2026 | 以 warp 级 tile graph（节点为 tile 算子、边为依赖）驱动 GPU 模拟，用于 LLM 软硬件协同设计；在 H100 上用 8 个 GEMM 与 6 个 FA3 用例验证，报告 MAPE 与相关性。 （KEEP_ADJACENT；模拟器结果有 A100/H100 校准；公开 v0.1.0 Artifact 仅覆盖部分前端与算例，不是完整论文所有特性。） |
 | 2026 | [How Far Can Disaggregation Go? A Design-Space Exploration of Attention-FFN Disaggregation for Efficient MoE LLM Serving](https://arxiv.org/abs/2605.28302) | arXiv 2026 (preprint) | 以实测 Kernel 与网络仿真对比聚合、P/D 与 AFD，在多工作负载和 SLO 下刻画拆分收益边界。 |
 | 2026 | [KernelSight-LM: A Kernel-Level LLM Inference Simulator](https://arxiv.org/abs/2606.28565) | arXiv 2026 (preprint) | 用 roofline 内核模型、通信模型与 host 开销模型构成 token 级离散事件模拟器，仅需少量目标 GPU 测量即可预测 TTFT/TPOT/吞吐并给出内核瓶颈分解。 |
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设（HOLD_EVIDENCE）。 |
 
-### Correctness & Reliability (8)
+### Correctness & Reliability (9)
 
 输出一致性、运行时 Bug、可靠性及数值语义检查。
 
@@ -113,6 +113,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Semantic Integrity Matters: Benchmarking and Preserving High-Density Reasoning in KV Cache Compression](https://proceedings.mlr.press/v306/liu26dz.html) | ICML 2026 | KVFundaBench 强调评估 KV 压缩对密集推理语义的真实影响（HOLD_EVIDENCE）。 |
 | 2026 | [The Pitfalls of KV Cache Compression](https://aclanthology.org/2026.acl-long.1926/) | ACL 2026 | 实证审计 StreamingLLM/SnapKV/TOVA/H2O/K-Norm 在复杂多指令 Prompt 上的 KV 驱逐语义损失与指令忽略/系统 Prompt 泄露；是部署质量风险评测而非新增 GPU 加速算法（HOLD_EVIDENCE）。 |
 | 2026 | [When KV Cache Reuse Fails in Multi-Agent Systems: Cross-Candidate Interaction is Crucial for LLM Judges](https://aclanthology.org/2026.acl-long.327/) | ACL 2026 (Long Paper) | 在 GSM8K、MMLU、HumanEval 的 Multi-Agent Judge 场景，以 Dense Prefill 为参考测量 KV 复用导致的 Judge Consistency Rate (JCR) 下降；包含 KVCOMM 对照与复现实验代码。属于 KV 复用正确性反例研究，论文明确不宣称系统级 TTFT/吞吐改进；G3/G5 仍待复审（HOLD_EVIDENCE）。 |
+| 2026 | [Bit-Accurate Modeling of GPU Matrix Multiply-Accumulate Units: Demystifying Numerical Discrepancy and Accuracy](https://arxiv.org/abs/2511.10909) | MICRO 2026 | 提出闭环特征探测 CLFP，把 MMA 指令当黑盒反复探测以反推其内部浮点运算行为，为 Volta 到 RTX Blackwell 等十种 GPU 架构建立首个位精确 MMA 算术模型，并定位四类精度瓶颈与一类数值不对称。 |
 
 ### Kernel Benchmarks (4)
 
