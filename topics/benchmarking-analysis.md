@@ -15,10 +15,10 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-17) | 17 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
-| [Profiling & Diagnosis](#profiling--diagnosis-5) | 5 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
-| [Correctness & Reliability](#correctness--reliability-8) | 8 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-18) | 18 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Profiling & Diagnosis](#profiling--diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
+| [Models & Simulators](#models--simulators-10) | 10 | 性能建模、容量估计、仿真和边界分析。 |
+| [Correctness & Reliability](#correctness--reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-4) | 4 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **59** | |
 
@@ -37,7 +37,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2025 | [On Evaluating Performance of LLM Inference Serving Systems](https://arxiv.org/abs/2507.09019) | arXiv 2025 (preprint) | 系统分析 Baseline Fairness、工作负载设置与 Serving Metric 设计的测量反模式，通过 Speculative Decoding Case Study 展示评估混淆及可复用核验清单。 |
 | 2025 | [Towards Efficient Large Multimodal Model Serving](https://arxiv.org/abs/2502.00937) | arXiv 2025 (preprint) | 对真实多模态服务 Trace 和六类模型进行分阶段 Profiling，评估编码/Prefill/Decode 解耦及资源分配的 SLO 影响（KEEP_ADJACENT）。 |
 | 2026 | [Architecture-Aware LLM Inference Optimization on AMD Instinct GPUs: A Comprehensive Benchmark and Deployment Study](https://arxiv.org/abs/2603.10031) | arXiv 2026 (preprint) | 在 MI325X 上统一对比 MLA、GQA、MoE 与多模态模型，量化 AITER 内核、KV offload 与 block size 等配置对吞吐与延迟的影响，指出部署参数须按架构选择。 |
-| 2026 | [Benchmarking and Characterization of Large Language Model Inference on Apple Silicon](https://www.sigmetrics.org/sigmetrics2026/accepted.html#benchmarking-and-characterization-of-large-language-model-inference-on-apple-silicon) | SIGMETRICS 2026 | 用延迟/吞吐对比与 ALU 利用率、内存带宽、cache 驻留等底层指标剖析，比较 Apple Silicon 统一内存与 NVIDIA GPU 的端侧 LLM 推理；在 M 系列与 RTX A6000 上覆盖 8B–405B、14 种量化方案。 |
+| 2026 | [Benchmarking and Characterization of Large Language Model Inference on Apple Silicon](https://doi.org/10.1145/3771563) | PACM/POMACS 2025 (SIGMETRICS 2026) | 用延迟/吞吐对比与 ALU 利用率、内存带宽、cache 驻留等底层指标剖析，比较 Apple Silicon 统一内存与 NVIDIA GPU 的端侧 LLM 推理；在 M 系列与 RTX A6000 上覆盖 8B–405B、14 种量化方案。 （正式 POMACS 9(3), Article 48, 26 页；五个真实硬件平台、8B–405B 和 14 种量化格式。） |
 | 2026 | [Characterizing Cloud-Native LLM Inference at ByteDance and Exposing Optimization Challenges and Opportunities for Future AI Accelerators](https://doi.org/10.1109/HPCA68181.2026.11408526) | HPCA 2026 (Industry Track) | 以 Doubao 生产负载与跨 Instruction/Kernel/Model 多级评估刻画异构 LLM 推理瓶颈及硬件选型边界。 |
 | 2026 | [Characterizing Vision-Language-Action Models across XPUs: Constraints and Acceleration for On-Robot Deployment](https://proceedings.mlr.press/v306/zhou26e.html) | ICML 2026 | 在 GPU/NPU 等异构设备上实测 VLA Backbone 与 Action Expert 的不同 Roofline/资源瓶颈，以 DP-Cache 和异步 V-AE Pipeline 优化控制延迟与能效（邻接 Embodied Inference）（KEEP_ADJACENT）。 |
 | 2026 | [From LLM Inference to Agentic Workloads: Characterization and Implications for Serving Systems](https://arxiv.org/abs/2608.15127) | arXiv 2026 (preprint; AgentSysBench) | 用十类 Agent 应用、受控部署与真实 Trace 分离 GPU Inference、CPU Sandbox、Retrieval 和持久会话的系统成本，提供任务感知调度、状态卸载等可执行设计探索；未经独立复现。 |
@@ -45,7 +45,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) | NSDI 2026 | 基于真实云服务 Trace 刻画多类型推理负载并合成代表性请求流。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 
-### Performance & Efficiency Studies (17)
+### Performance & Efficiency Studies (18)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -58,7 +58,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators](https://doi.org/10.1109/IPDPS65963.2026.00083) | IPDPS 2026 | 真实物理加速器比较：六款 NVIDIA/AMD/Intel GPU 及两类 Cerebras/SambaNova Dataflow Accelerator、14 个开源模型，测量 Prefill/Decode、Batch/并行度、能耗 Pareto；作者公开 vLLM/功耗脚本（异构厂商依赖仍需注意）。 |
 | 2026 | [Characterizing LLM Inference Energy-Performance Tradeoffs across Workloads and GPU Scaling](https://doi.org/10.1109/CCGrid68966.2026.00013) | CCGrid 2026 (full paper) | 基于不同 LLM Workload、GPU 规模、并行策略分析功耗、延迟和吞吐的实机权衡，为 GPU Scaling 的性能/能效选择提供测量参考；IEEE 正式论文身份已证实，但具体设备/模型矩阵、能耗传感器校准、GPU 动态功率限制和 SLO-constrained Energy Pareto 尚待核验（HOLD_EVIDENCE）。 |
 | 2026 | [Characterizing Parallelism Strategies in LLM Inference: Fundamental Compute-Communication Trade-offs](https://arxiv.org/abs/2610.05305) | arXiv 2026 (preprint) | 解析 TP/PP/Hybrid 的 Collective、点对点通信与 Pipeline Bubble，比较 Prefill/Decode 不同瓶颈。 |
-| 2026 | [Characterizing Performance-Energy Trade-offs of Large Language Models in Multi-Request Workflows](https://doi.org/10.1145/3801489.3806907) | SIGMETRICS 2026 | 在 NVIDIA A100 上用 vLLM 与 Parrot 对顺序、交互、agentic 与复合四类多请求工作负载做性能-能耗刻画，量化 batch size、GPU power cap 与输出长度对延迟、吞吐及 CPU/GPU/DRAM 能耗的影响。 |
+| 2026 | [Characterizing Performance-Energy Trade-offs of Large Language Models in Multi-Request Workflows](https://doi.org/10.1145/3801489.3806907) | PACM/POMACS 2026 (SIGMETRICS Abstract) | 在 NVIDIA A100 上用 vLLM 与 Parrot 对顺序、交互、agentic 与复合四类多请求工作负载做性能-能耗刻画，量化 batch size、GPU power cap 与输出长度对延迟、吞吐及 CPU/GPU/DRAM 能耗的影响。 （另有 POMACS 10(1) 长文与 SIGMETRICS 三页摘要；作者在真实 A100 + vLLM/Parrot 比较多请求 Workflows。） |
 | 2026 | [Demystifying the Mixture of Experts Serving Tax](https://proceedings.mlsys.org/paper_files/paper/2026/hash/42a452cbafa9dd64e9ba4aa95cc1ef21-Abstract-Conference.html) | MLSys 2026 | 将 MoE 的 Prefill/Decode 开销分解为可量化执行税项。 |
 | 2026 | [On the Diminishing Returns of Expert Load Balancing in MoE LLM Serving](https://mlsys.org/virtual/2026/poster/10193) | MLSys 2026 | 对 MoE Expert 负载均衡收益进行反向实证分析；快速准入（会议节目/书目索引），实机执行、Strong Baseline 与端到端服务指标待二审（HOLD_EVIDENCE）。 |
 | 2026 | [Performance Characterization and Optimization of LLM Inference on Tenstorrent AI Accelerators](https://doi.org/10.1007/978-3-032-35251-4_32) | Euro-Par 2026 (Springer LNCS imprint 2027) | 真实 Tenstorrent Wormhole 的 Tensix Decode 剖析与 Chip-Pipe 跨芯片 Pipeline Parallel 调度；作者报告 Llama-3.1-8B 等四模型相对 TP 吞吐改善，需保留芯片专用编程与实验范围；会议于 2026 年举行、Springer 正式书卷标记 2027 出版。 |
@@ -68,8 +68,9 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TokenPowerBench: Benchmarking the Power Consumption of LLM Inference](https://doi.org/10.1609/aaai.v40i38.40535) | AAAI 2026 (Full Paper) | 多层级 GPU/Node/System 能耗测量与请求级 Prefill/Decode Phase Attribution，覆盖四种模型系列及 Batch/Context/Parallelism/Quantization 的 J/token 对比；作者发布基准。测量校准、传感器精度和 Serving QoS/能效 Pareto 前沿待审（HOLD_EVIDENCE）。 |
 | 2026 | [Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles](https://doi.org/10.1109/ISCA66397.2026.00084) | ISCA 2026 (Industry Track) | 在真实 GPU Cluster 上刻画 8B–671B 推理的 DP/TP/PP、长 CoT KV 容量陷阱与 MoE 同步瓶颈；提供部署权衡测量而非单一加速算法。 |
 | 2026 | [When NPUs Are Not Always Faster: A Stage-Level Analysis of Mobile LLM Inference](https://arxiv.org/abs/2605.27435) | arXiv 2026 (preprint) | 按阶段分离移动端 LLM 推理的量化、通信与计算开销，定位 NPU 在 prefill/decode 中因算子 fallback 与调度开销反而慢于 CPU 的条件。 |
+| 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 
-### Profiling & Diagnosis (5)
+### Profiling & Diagnosis (4)
 
 性能分析器、Tracing、可观测性和异常定位。
 
@@ -78,10 +79,9 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Breaking the Ice: Analyzing Cold Start Latency in vLLM](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29416b66c2149872b9d1415a3fd2c5e0-Abstract-Conference.html) | MLSys 2026 | 剖析 vLLM 冷启动的初始化、权重加载和图捕获关键路径。 |
 | 2026 | [ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof) | MLSys 2026 | ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
-| 2026 | [Think Before You Grid-Search: Floor-First Triage for LLM Serving](https://arxiv.org/abs/2607.05876) | arXiv 2026 (preprint) | 将 decode step 建模为 HBM 字节、FLOPs、网络字节、网络消息与 KV 容量五维向量，用各维最大值与总和构成 [max,sum] 区间判断重叠质量，仅残差超阈值才启用 profiler。 |
 | 2026 | [XProf: An Open, Scalable, and Extensible Profiling System for the Modern ML Stack](https://proceedings.mlsys.org/paper_files/paper/2026/hash/280776fda5970060e6a5efcfd43e5d2d-Abstract-Conference.html) | MLSys 2026 | OpenXLA/PJRT Full-stack CPU–TPU/GPU Profiling、Roofline 与跨千卡低开销分布式 Trace；开源生产级性能分析基础设施，但不是 LLM Serving 专用评测（KEEP_ADJACENT）。 |
 
-### Models & Simulators (11)
+### Models & Simulators (10)
 
 性能建模、容量估计、仿真和边界分析。
 
@@ -90,16 +90,15 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2024 | [LLMCompass: Enabling Efficient Hardware Design for Large Language Model Inference](https://ieeexplore.ieee.org/abstract/document/10609604) | ISCA 2024 | 映射搜索、硬件面积/成本模型及延迟预测联合评估 LLM 推理硬件设计，并与实测延迟对齐。 |
 | 2024 | [LLMServingSim: A HW/SW Co-Simulation Infrastructure for LLM Inference Serving at Scale](https://doi.org/10.1109/IISWC63097.2024.00012) | IISWC 2024 | 构建 LLM 服务调度与硬件执行协同模拟，实现不同硬件/软件配置定量分析。 |
 | 2024 | [Vidur: A Large-Scale Simulation Framework for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/b74a8de47d2b3c928360e0a011f48351-Abstract-Conference.html) | MLSys 2024 | 基于算子 Profiling 与预测模型模拟 Batch/Parallelism/负载，使用真实推理数据校验仿真误差。 |
-| 2025 | [TokenSim: Enabling Hardware and Software Exploration for Large Language Model Inference Systems](https://arxiv.org/abs/2503.08415) | arXiv 2025 (preprint) | 面向 LLM 推理的软硬件协同探索模拟器：把调度策略与显存管理建模为可扩展模块，支持在设计阶段替换不同调度/内存方案；对真实系统校验误差低于 1%，用于部署前评估新调度与显存管理的收益。 |
+| 2025 | [TokenSim: Enabling Hardware and Software Exploration for Large Language Model Inference Systems](https://arxiv.org/abs/2503.08415) | arXiv 2025 (preprint) | 面向 LLM 推理的软硬件协同探索模拟器：把调度策略与显存管理建模为可扩展模块，支持在设计阶段替换不同调度/内存方案；对真实系统校验误差低于 1%，用于部署前评估新调度与显存管理的收益。 （KEEP_ADJACENT；作者报告真实推理负载校准的模拟误差小于 1%，非全形状/硬件通用保证。） |
 | 2026 | [A Queueing-Theoretic Framework for Stability Analysis of LLM Inference with KV Cache Memory Constraints](https://proceedings.mlr.press/v306/nie26a.html) | ICML 2026 | 在队列稳定性模型中同时引入 GPU 计算和 KV 内存约束，推导稳定到达率/容量界，并在真实 GPU Serving 环境核验预测误差和 Provisioning 边界。 |
 | 2026 | [Charon: A Unified and Fine-Grained Simulator for Large-Scale LLM Training and Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/dbc8ce0fdfcd55172d73fb05dbae07fc-Abstract-Conference.html) | MLSys 2026 | 精细化推理性能模拟并用跨模型/配置与真实部署验证预测误差。 |
-| 2026 | [GPU-Tile-Sim: A Tile-Centric GPU Simulation Framework for LLM Hardware-Software Co-Design](https://arxiv.org/abs/2607.11262) | MICRO 2026 | 以 warp 级 tile graph（节点为 tile 算子、边为依赖）驱动 GPU 模拟，用于 LLM 软硬件协同设计；在 H100 上用 8 个 GEMM 与 6 个 FA3 用例验证，报告 MAPE 与相关性。 |
+| 2026 | [GPU-Tile-Sim: A Tile-Centric GPU Simulation Framework for LLM Hardware-Software Co-Design](https://arxiv.org/abs/2607.11262) | MICRO 2026 | 以 warp 级 tile graph（节点为 tile 算子、边为依赖）驱动 GPU 模拟，用于 LLM 软硬件协同设计；在 H100 上用 8 个 GEMM 与 6 个 FA3 用例验证，报告 MAPE 与相关性。 （KEEP_ADJACENT；模拟器结果有 A100/H100 校准；公开 v0.1.0 Artifact 仅覆盖部分前端与算例，不是完整论文所有特性。） （模拟器研究本身有效，A100/H100 物理校准不等于模型/性能功能均已实物实现。） |
 | 2026 | [How Far Can Disaggregation Go? A Design-Space Exploration of Attention-FFN Disaggregation for Efficient MoE LLM Serving](https://arxiv.org/abs/2605.28302) | arXiv 2026 (preprint) | 以实测 Kernel 与网络仿真对比聚合、P/D 与 AFD，在多工作负载和 SLO 下刻画拆分收益边界。 |
-| 2026 | [KernelSight-LM: A Kernel-Level LLM Inference Simulator](https://arxiv.org/abs/2606.28565) | arXiv 2026 (preprint) | 用 roofline 内核模型、通信模型与 host 开销模型构成 token 级离散事件模拟器，仅需少量目标 GPU 测量即可预测 TTFT/TPOT/吞吐并给出内核瓶颈分解。 |
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设（HOLD_EVIDENCE）。 |
 
-### Correctness & Reliability (8)
+### Correctness & Reliability (9)
 
 输出一致性、运行时 Bug、可靠性及数值语义检查。
 
@@ -113,6 +112,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Semantic Integrity Matters: Benchmarking and Preserving High-Density Reasoning in KV Cache Compression](https://proceedings.mlr.press/v306/liu26dz.html) | ICML 2026 | KVFundaBench 强调评估 KV 压缩对密集推理语义的真实影响（HOLD_EVIDENCE）。 |
 | 2026 | [The Pitfalls of KV Cache Compression](https://aclanthology.org/2026.acl-long.1926/) | ACL 2026 | 实证审计 StreamingLLM/SnapKV/TOVA/H2O/K-Norm 在复杂多指令 Prompt 上的 KV 驱逐语义损失与指令忽略/系统 Prompt 泄露；是部署质量风险评测而非新增 GPU 加速算法（HOLD_EVIDENCE）。 |
 | 2026 | [When KV Cache Reuse Fails in Multi-Agent Systems: Cross-Candidate Interaction is Crucial for LLM Judges](https://aclanthology.org/2026.acl-long.327/) | ACL 2026 (Long Paper) | 在 GSM8K、MMLU、HumanEval 的 Multi-Agent Judge 场景，以 Dense Prefill 为参考测量 KV 复用导致的 Judge Consistency Rate (JCR) 下降；包含 KVCOMM 对照与复现实验代码。属于 KV 复用正确性反例研究，论文明确不宣称系统级 TTFT/吞吐改进；G3/G5 仍待复审（HOLD_EVIDENCE）。 |
+| 2026 | [Bit-Accurate Modeling of GPU Matrix Multiply-Accumulate Units: Demystifying Numerical Discrepancy and Accuracy](https://arxiv.org/abs/2511.10909) | MICRO 2026 | 提出闭环特征探测 CLFP，把 MMA 指令当黑盒反复探测以反推其内部浮点运算行为，为 Volta 到 RTX Blackwell 等十种 GPU 架构建立首个位精确 MMA 算术模型，并定位四类精度瓶颈与一类数值不对称。 |
 
 ### Kernel Benchmarks (4)
 
