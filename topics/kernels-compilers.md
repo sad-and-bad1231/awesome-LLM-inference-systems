@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Attention & Sparse Kernels](#attention--sparse-kernels-20) | 20 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
-| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-14) | 14 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
+| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-13) | 13 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **86** | |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-14) | 14 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Kernel Automation & Tools](#kernel-automation--tools-6) | 6 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **82** | |
 
-## Papers (86)
+## Papers (82)
 
 ### Attention & Sparse Kernels (20)
 
@@ -46,12 +46,12 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [BLASST: Dynamic BLocked Attention Sparsity via Softmax Thresholding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2026 | 利用 Online Softmax 统计直接跳过可忽略的 Attention Block。 |
 | 2026 | [FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html) | MLSys 2026 | 针对 Blackwell 的算力与非矩阵单元不对称扩展，重构异步 MMA、Softmax 流水及 CuTe-DSL 实现。 |
 | 2026 | [Flashlight: PyTorch Compiler Extensions to Accelerate Attention Variants](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bc52716d13d2d72ea0f335667d86c0f8-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生编译器为多种数据相关 Attention 自动生成 Fusion/Tiling Kernel。 |
-| 2026 | [HiFA4: Training-Free 4-bit FlashAttention on Ascend HIF4 NPUs for LLM Inference](https://arxiv.org/abs/2607.04302) | arXiv 2026 (preprint) | 在 Ascend HIF4 NPU 上将 FlashAttention 的 QK^T 与 PV 全部改为 4 位 Cube GEMM、在线 softmax 状态保留 FP16，并用 Smooth-QK 与 P-Reordering 消除归一化误差；作者仅以指令调度分析预计关键路径延迟降 35.4%，片上实测未完成（HOLD_EVIDENCE）。 |
 | 2026 | [PAT: Accelerating LLM Decoding via Prefix-Aware Attention with Resource Efficient Multi-Tile Kernel](https://doi.org/10.1145/3779212.3790200) | ASPLOS 2026 | 按共享 Prefix 组织 Decode Query 和 CTA，执行 Pack-Forward-Merge 以减少重复 KV 读取并消除 Tile 资源空洞。 |
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 | 2026 | [TyphoonMLA: A Mixed Naive-Absorb MLA Kernel For Shared Prefix](https://iclr.cc/virtual/2026/poster/10008790) | ICLR 2026 | 混合 MLA 的 naive 与 absorb 两种实现，对共享前缀用 naive 形式复用数据、其余用 absorb 形式降低带宽，NPU 与 GPU 上 Attention 吞吐最高提升 3 倍与 3.24 倍。 |
+| 2026 | [FSA: An Alternative Efficient Implementation of Native Sparse Attention Kernel](https://proceedings.iclr.cc/paper_files/paper/2026/hash/428ceef2cd8a53add7213e04d1746479-Abstract-Conference.html) | ICLR 2026 | 重写NSA原生稀疏注意力kernel的循环分块顺序，使其在GQA每组query head数较少的主流LLM上高效执行，kernel延迟最高降3.5倍、生成推理prefill最高提速1.36倍。 |
 
-### GEMM & Low-Bit Kernels (14)
+### GEMM & Low-Bit Kernels (13)
 
 矩阵计算、量化 GEMM 和硬件原生低比特执行。
 
@@ -70,7 +70,6 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [OASIS: Outlier-Aware LUT-Based GEMM with Dual-Side Quantization for LLM Inference Acceleration](https://arxiv.org/abs/2507.23035) | ISCA 2026 | 用预计算笛卡尔积查找表直接完成非均匀量化权重与激活的 GEMM，免除反量化开销并将 LUT 规模缩小 64 倍、并行度提升 1024 倍，配合离群值感知量化与 Orizuru top-k 检测，相对 FIGLUT 加速 3.00 倍。 |
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
-| 2026 | [XtraMAC: An Efficient MAC Architecture for Mixed-Precision LLM Inference on FPGA](https://arxiv.org/abs/2605.06052) | ISCA 2026 | 将整型、浮点与混合精度 MAC 统一分解为共享整数尾数乘积加轻量符号与指数处理，支持动态操作数打包与 DSP 复用，在 AMD Xilinx U55c 上算力密度提升 1.4–2.0 倍、能效最高 1.9 倍。 |
 
 ### Kernel DSL & Compilers (16)
 
@@ -95,7 +94,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [VTC: DNN Compilation with Virtual Tensors for Data Movement Elimination](https://www.usenix.org/conference/osdi26/presentation/hu-muyan) | OSDI 2026 | 以 Virtual Tensor 的 Index Mapping 表示 Reshape/Slice/Concat/Permute 等纯数据搬运，推迟或消除显式 Global Memory Materialization；整合 [PyTorch Inductor Artifact](https://github.com/ADAPT-uiuc/VTC)，作者报告 A100/H100 推理任务的性能/内存收益。**KEEP_ADJACENT**：主要为通用 DNN Compiler，不能把平均加速直接归因为 vLLM/SGLang Serving 提升。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 
-### Fusion, Pipelines & Megakernels (14)
+### Fusion, Pipelines & Megakernels (13)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -104,7 +103,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2021 | [LightSeq: A High Performance Inference Library for Transformers](https://aclanthology.org/2021.naacl-industry.15/) | NAACL 2021 Industry Track | 早期工业级 Transformer GPU 推理库，通过算子融合、Kernel 与内存优化实现跨模型框架高效推理；有公开 CUDA 实现，实验以 Transformer/机器翻译为主，不宣称现代自回归 LLM Serving。 |
 | 2025 | [ClusterFusion: Expanding Operator Fusion Scope for LLM Inference via Cluster-Level Collective Primitive](https://neurips.cc/virtual/2025/poster/116910) | NeurIPS 2025 | 在 Hopper 簇内引入 ClusterReduce 与 ClusterGather 原语，让规约与收集都在片上完成，把 QKV、Attention 与输出投影融合成单个 Kernel，解码延迟平均降低 1.61 倍。 |
 | 2025 | [PipeThreader: Software-Defined Pipelining for Efficient DNN Execution](https://www.usenix.org/conference/osdi25/presentation/cheng) | OSDI 2025 | 通过 sTask Graph 对 GPU TensorCore/TMA 依赖建模，将 Kernel Pipelining 转为软件定义的编译期流水调度；以 FlashAttention/Mamba2 的真实 GPU Kernel 和 TileLang Artifact 验证。 |
-| 2026 | [Automated Tensor Scheduling for Hybrid CPU-GPU LLM Inference on Consumer Devices](https://arxiv.org/abs/2607.10183) | arXiv 2026 (preprint) | 把卸载粒度从整层或整专家细化到单个张量，用静态张量放置配合负载感知的动态传输，并以异步 CPU-GPU 协调统一调度存储、数据搬运与计算，消费级平台上 prefill 吞吐最高提升 1.94 倍、decode 3.29 倍。 |
 | 2026 | [BaseRT: Best-in-Class LLM Inference on Apple Silicon via Native Metal](https://arxiv.org/abs/2607.00501) | arXiv 2026 (preprint) | Metal-native Runtime 采用零分配 Decode Loop、Chip-specialized Fusion 与 Unified-memory-aware Scheduling；公开实现并在 M3/M4 Pro 对照 llama.cpp/MLX。 |
 | 2026 | [DynaFlow: Transparent and Flexible Intra-Device Parallelism via Programmable Operator Scheduling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/bbd7d8bd780fcf7143add2317ba04638-Abstract-Conference.html) | MLSys 2026 | 分离计算定义与物理算子调度，并使用异步数据流优化 GPU 并发执行。 |
 | 2026 | [Event Tensor: A Unified Abstraction for Compiling Dynamic Megakernel](https://proceedings.mlsys.org/paper_files/paper/2026/hash/53d3f45797970d323bd8a0d379c525aa-Abstract-Conference.html) | MLSys 2026 | 将动态 Shape/数据依赖的细粒度 Task Dependency 表示为 Event Tensor，并静/动态调度生成 Persistent Megakernel，解决动态 LLM Serving 的 Launch/同步及 Warmup 开销；作者报告 Serving Latency 对照，尚未独立复现。 |
@@ -116,7 +114,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
 
-### Communication, Memory & I/O (15)
+### Communication, Memory & I/O (14)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
@@ -134,11 +132,10 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [I/O Analysis is All You Need: An I/O Analysis for Long-Sequence Attention](https://doi.org/10.1145/3779212.3790174) | ASPLOS 2026 | 从 Tall-and-Skinny GEMM 推导 Exact Long-context Attention I/O 界，并设计 AttenIO 三层算通重叠、Tiling/Scheduling 和 Softmax 并行；这是 I/O 分析和专用 Accelerator 设计，不能替代真实 GPU/Serving Kernel Bench，完整物理评测待审（HOLD_EVIDENCE）。 |
 | 2026 | [MoonBright: A GPU Memory Allocator with Device-Side Page Table Materialization and Deferred TLB Coherence](https://www.usenix.org/conference/osdi26/presentation/zhang-yangyu) | OSDI 2026 | MoonBright 在商品 GPU 上实现设备侧页表物化与延迟 TLB 一致性：元数据留主机、批量页表构建移到 GPU，并以新虚拟地址避免热路径上的 TLB shootdown，降低分配延迟、提升 LLM 推理性能并缓解分配器级外部碎片，纯软件改动即可跑在 NVIDIA/AMD GPU |
 | 2026 | [ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ff997469ac66cf893c4183efeb22212a-Abstract-Conference.html) | MLSys 2026 | 用可重用通信与同步原语编写 TP/SP/EP 跨卡重叠 Kernel。 |
-| 2026 | [PIMphony: Overcoming Bandwidth and Capacity Inefficiency in PIM-based Long-Context LLM Inference System](https://arxiv.org/abs/2412.20166) | HPCA 2026 | 以 Token 中心 PIM 分区、动态 PIM 指令调度与动态访存控制三项协同技术，消除长上下文 PIM 推理的通道闲置、I/O 瓶颈与静态 KV 内存浪费，MLIR 实现下吞吐最高提升 11.3 倍。 |
 | 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
 | 2026 | [Syncopate: Efficient Multi-GPU AI Kernels via Automatic Chunk-Centric Compute-Communication Overlap](https://www.usenix.org/conference/osdi26/presentation/qiang) | OSDI 2026 | 在单个融合 Triton Kernel 内引入通信 chunk 抽象，把通信粒度与 Kernel 结构及后端机制解耦，再用源到源变换让计算对齐 chunk 可用时刻，实现多 GPU 细粒度算通重叠，端到端平均加速 1.3 倍、最高 4.7 倍。 |
 
-### Kernel Automation & Tools (7)
+### Kernel Automation & Tools (6)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -146,7 +143,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 |---|---|---|---|
 | 2025 | [KPerfIR: Towards a Open and Compiler-centric Ecosystem for GPU Kernel Performance Tooling on Modern AI Workloads](https://www.usenix.org/conference/osdi25/presentation/guan) | OSDI 2025 | 在 Triton 编译流程插入可编程 Profiling Pass，把微架构流水事件与源级 IR 关联，作者报告约 8.2% 测量开销、2% 相对误差；为通用 Kernel Profiling **工具**，不是 LLM 推理优化器，作为可迁移性能分析基础保留（KEEP_ADJACENT）。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 针对 Trainium NKI Kernel 的迭代优化与慢/快 Kernel 经验记忆，作者提供 [AccelOpt](https://github.com/zhang677/AccelOpt) 和 LLM-derived NKIBench，在 Trainium 1/2 实机测量 % peak；属于专用 Agentic Kernel Optimization 而非在线 Serving 性能。 |
-| 2026 | [Bit-Accurate Modeling of GPU Matrix Multiply-Accumulate Units: Demystifying Numerical Discrepancy and Accuracy](https://arxiv.org/abs/2511.10909) | MICRO 2026 | 提出闭环特征探测 CLFP，把 MMA 指令当黑盒反复探测以反推其内部浮点运算行为，为 Volta 到 RTX Blackwell 等十种 GPU 架构建立首个位精确 MMA 算术模型，并定位四类精度瓶颈与一类数值不对称。 |
 | 2026 | [K-Search: LLM Kernel Generation via Co-Evolving Intrinsic World Model](https://arxiv.org/abs/2602.19128) | arXiv 2026 (preprint) | 用与搜索共同演化的世界模型替代静态启发式，把高层算法规划与低层程序实例化显式解耦，使 LLM 在非单调优化路径上不丢弃暂不完善的中间实现，FlashInfer 的 GQA/MLA/MoE Kernel 平均提升 2.10 倍、MoE 最高 14.3 倍。 |
 | 2026 | [KernelBand: Steering LLM-based Kernel Optimization via Hardware-Aware Multi-Armed Bandits](https://proceedings.mlr.press/v306/ran26b.html) | ICML 2026 | 使用 Multi-Armed Bandit、Profiling Bound 剪枝和 Runtime Behavior Clustering 控制 Kernel Search；作者在三种 GPU 架构的 TritonBench-G 实机验证并开源，未验证在线 LLM Serving Goodput。与 KernelFoundry 的 QD Evolution、AccelOpt 的 Optimization Memory 区别明确，作为 Agentic Kernel 前沿待 G5 精审。 |
 | 2026 | [KernelFoundry: Hardware-Aware Evolutionary GPU Kernel Optimization](https://proceedings.mlr.press/v306/wiedemann26a.html) | ICML 2026 | Quality-Diversity MAP-Elites、Prompt Co-evolution 与 Template Parameter Search，在 SYCL/CUDA 的 KernelBench/robust-kbench 上实测；虽有跨设备工具价值，但没有 LLM Serving Goodput 证据，暂保留为 Agentic Kernel 前沿例外待 G5 去同质化。 |
