@@ -2,7 +2,7 @@
 
 **A short reading map, not a second paper database.** The [eight mechanism categories](../topics/README.md) remain the canonical bibliography. Frontiers connect reusable systems mechanisms to new workloads; the links below are pointers, not duplicate canonical admissions.
 
-[← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Curation policy](../CURATION.md)
+[← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Curation policy](../CURATION.md) · [Frontier scan, October 2026](2026-10-frontier-scan.md)
 
 ## What the industry is shipping right now (2026-10 refresh)
 
@@ -85,7 +85,7 @@ Read **one anchor per frontier**, not the entire archive. These represent distin
 
 ### KV as a distributed object (new)
 - [llm-d — Native KV Cache Offloading to Any Filesystem](https://llm-d.ai/blog/native-kv-cache-offloading-to-any-file-system-with-llm-d) and [vLLM KV Offloading Connector](https://blog.vllm.ai/2026/01/08/kv-offloading-connector.html): the interface layer.
-- **Semantic caching is arriving as a serving tier:** [SmartCache](https://proceedings.neurips.cc//paper_files/paper/2025/hash/fb74b63d225f846e6032bf3e3ab0f4ec-Abstract-Conference.html) (NeurIPS 2025) and [CacheSense: Freshness-Aware Semantic Caching with Selective Invalidation](https://ieeexplore.ieee.org/document/11621808) (2026). The open question is *invalidation*, not hit rate — a stale semantic hit is worse than a miss.
+- **Semantic caching is arriving as a serving tier:** [SmartCache](https://proceedings.neurips.cc/paper_files/paper/2025/hash/fb74b63d225f846e6032bf3e3ab0f4ec-Abstract-Conference.html) (NeurIPS 2025) and [CacheSense: Freshness-Aware Semantic Caching with Selective Invalidation](https://ieeexplore.ieee.org/document/11621808) (2026). The open question is *invalidation*, not hit rate — a stale semantic hit is worse than a miss.
 - *Missing research question:* correctness under approximate/semantic KV reuse, and cache coherence across tenants.
 
 ### Sparse & hybrid attention at production scale (new)
@@ -107,4 +107,4 @@ Read **one anchor per frontier**, not the entire archive. These represent distin
 4. **Adjacent scope is narrow:** real-time world models, video diffusion and VLA enter only when their *inference-time* memory, scheduling, computation or serving mechanism is both reusable and measured. Not a general computer-vision or robotics paper list.
 5. **Bound the reading load:** nine entry papers first; optional follow-ups are a menu, not a reading assignment.
 
-This is a **selective seed refreshed 2026-10-19 from first-party industry signals**, not a claim of exhaustive coverage or independently reproduced results.
+This is a **selective seed refreshed 2026-10-18 from first-party industry signals**, not a claim of exhaustive coverage or independently reproduced results. For the dated, lighter-weight scan of signals that have *not* been admitted here, see [Frontier scan — October 2026](2026-10-frontier-scan.md).
