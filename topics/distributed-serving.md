@@ -15,13 +15,13 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
-| [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
+| [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-22) | 22 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-21) | 21 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **128** | |
+| **Total** | **129** | |
 
-## Papers (128)
+## Papers (129)
 
 ### Parallelism & Scale-Up (28)
 
@@ -58,7 +58,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
 | 2026 | [Untied Ulysses: Memory-Efficient Context Parallelism via Headwise Chunking](https://proceedings.mlr.press/v306/ghadia26a.html) | ICML 2026 | 在 attention head 粒度做细粒度 chunk 切分的上下文并行（UPipe），显著降低 self-attention 的激活显存，突破激活内存墙以支撑更长序列的跨加速器切分。 |
 
-### Disaggregated Compute Stages (32)
+### Disaggregated Compute Stages (33)
 
 P/D、Attention–FFN 与多阶段资源解耦。
 
@@ -79,6 +79,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2025 | [Step-3 is Large yet Affordable: Model-system Co-design for Cost-effective Decoding](https://arxiv.org/abs/2507.19427) | arXiv 2025 (technical report) | MFA Attention 与 Attention-FFN Disaggregation 协同设计，联动 KV 表示、专家并行及通信。 |
 | 2025 | [Symbiosis: Multi-Adapter Inference and Fine-Tuning](https://doi.org/10.1145/3772052.3772230) | SoCC 2025 | 将共享 Frozen Base Model 与客户端 PEFT Adapter 分离执行，支持多个独立推理/微调作业复用底座和异构 GPU；论文包含 Gemma2 多 Adapter 实际执行实验。 |
 | 2025 | [Weaver: Efficient Multi-LLM Serving with Attention Offloading](https://www.usenix.org/conference/atc25/presentation/gao) | USENIX ATC 2025 | 通过 Hot Model Attention 向 Cold Model GPU 卸载、GPU-driven Control Flow 和 Kernel Splitting 改善多模型显存利用率。 |
+| 2025 | [WindServe: Efficient Phase-Disaggregated LLM Serving with Stream-based Dynamic Scheduling](https://dl.acm.org/doi/10.1145/3695053.3730999) | ISCA 2025 | 面向阶段解耦服务的流式动态调度：把请求抽象为持续到达的 token 流，跨 prefill 与 decode 实例做细粒度微批编排与算力再分配，抑制阶段间负载错配造成的实例空转与排队堆积。 |
 | 2026 | [Analytical Power-Aware Provisioning for Prefill-Decode Disaggregated AI Inference](https://arxiv.org/abs/2609.24639) | arXiv 2026 (preprint) | 结合长度分布、KV 预留、排队与功率模型求解 P/D 实例容量-能耗 Pareto 配置（HOLD_EVIDENCE）。 |
 | 2026 | [Analytical Provisioning for Attention-FFN Disaggregated LLM Serving under Stochastic Workloads](https://arxiv.org/abs/2601.21351) | arXiv 2026 (preprint) | 显式刻画动态长度、步级 Barrier 与资源配比，分析 AFD 的 Attention/FFN 最优 Provisioning（HOLD_EVIDENCE）。 |
 | 2026 | [ASAP: A Disaggregated and Asynchronous Inference System for MoE Prefill](https://arxiv.org/abs/2606.22541) | arXiv 2026 (preprint) | 针对 Attention-DP 与 Expert-EP 跨组全局同步屏障，在 Ascend CloudMatrix384 上异步化 MoE Prefill 流水。 |

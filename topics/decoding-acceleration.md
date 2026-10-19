@@ -15,13 +15,13 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Draft Models & Candidate Generation](#draft-models--candidate-generation-19) | 19 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
-| [Training-Free & Self-Speculation](#training-free--self-speculation-17) | 17 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
-| [Tree & Parallel Verification](#tree--parallel-verification-10) | 10 | Candidate Tree、并行候选和 Target Verification 效率。 |
-| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-17) | 17 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
+| [Training-Free & Self-Speculation](#training-free--self-speculation-18) | 18 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
+| [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
+| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-18) | 18 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-20) | 20 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **83** | |
+| **Total** | **86** | |
 
-## Papers (83)
+## Papers (86)
 
 ### Draft Models & Candidate Generation (19)
 
@@ -49,7 +49,7 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [TokenTiming: A Dynamic Alignment Method for Universal Speculative Decoding Model Pairs](https://aclanthology.org/2026.acl-long.1983/) | ACL 2026 | 以 Dynamic Time Warping 对齐不同 Tokenizer 的 Draft/Target 序列，并重新映射概率以避免重训练专用 Draft Model；作者报告约 1.57× 加速，Tokenizer 对齐成本和精确采样约束待复核。（HOLD_EVIDENCE） |
 | 2026 | [Variational Speculative Decoding: Rethinking Draft Training from Token Likelihood to Sequence Acceptance](https://openreview.net/forum?id=7xO0ADKJu8) | ICML 2026 | 把草稿训练从贪心轨迹的 token 似然改为对潜在草稿路径做变分推断，直接最大化目标模型接受概率并减小与目标分布的散度，使解码相对 EAGLE-3 加速 9.58%。 |
 
-### Training-Free & Self-Speculation (17)
+### Training-Free & Self-Speculation (18)
 
 N-gram/检索/自投机与模型自身的低成本草稿路径。
 
@@ -57,6 +57,7 @@ N-gram/检索/自投机与模型自身的低成本草稿路径。
 |---|---|---|---|
 | 2024 | [Break the Sequential Dependency of LLM Inference Using Lookahead Decoding](https://proceedings.mlr.press/v235/fu24a.html) | ICML 2024 | 以 Jacobi 风格的并行序列修正与 N-gram 验证加速自回归推理，减少独立 Draft Model 依赖。 |
 | 2024 | [LayerSkip: Enabling Early Exit Inference and Self-Speculative Decoding](https://aclanthology.org/2024.acl-long.681/) | ACL 2024 | 训练时对浅层施加低 dropout 并共享 early-exit 损失，推理时从浅层退出草稿、用剩余层自推测验证修正，无需额外草稿模型且共享草稿与验证计算；Llama 上摘要最高 2.16 倍、编码 1.82 倍加速，代码开源。 |
+| 2024 | [TriForce: Lossless Acceleration of Long Sequence Generation with Hierarchical Speculative Decoding](https://arxiv.org/abs/2404.11912) | COLM 2024 | 用目标模型自身的 4-bit 量化 KV 缓存充当草稿：草稿阶段只读量化 KV 并配合稀疏注意力快速产生候选，验证阶段用全精度 KV 校验，从而在长序列上无损加速且无需额外训练草稿模型。 |
 | 2025 | [MagicDec: Breaking the Latency-Throughput Tradeoff for Long Context Generation with Speculative Decoding](https://proceedings.iclr.cc/paper_files/paper/2025/hash/13f972adf12bdf886583d48cd528002f-Abstract-Conference.html) | ICLR 2025 | 采用 Sparse-KV Draft Model 在高并发 Long-context Serving 中进行 Draft-Verify，并以性能模型选取 Draft 策略。 |
 | 2025 | [QSpec: Speculative Decoding with Complementary Quantization Schemes](https://aclanthology.org/2025.emnlp-main.240/) | EMNLP 2025 | 用低精度权重+激活 Draft 与高精度 Weight-only Verify 共享权重及 KV，避免独立 Draft 模型/重训练；作者测试 Batch Decode 质量与性能，旧账本误记 EMNLP 2026。 |
 | 2025 | [RAPID: Long-Context Inference with Retrieval-Augmented Speculative Decoding](https://proceedings.mlr.press/v267/chen25s.html) | ICML 2025 | 构建基于检索短上下文的 Draft LLM 来推测长上下文 Target 的生成结果。 |
@@ -73,13 +74,14 @@ N-gram/检索/自投机与模型自身的低成本草稿路径。
 | 2026 | [UniSpec: Training-Free Speculative Decoding for Robust LLM Acceleration Across Languages and Hardware](https://aclanthology.org/2026.acl-long.285/) | ACL 2026 | 设备校准的 Draft 大小、N-gram Confidence Scoring 与 Speculation Tree Expansion，跨语言多硬件免训练投机解码；作者发布代码与 Benchmark，并声称保持自回归输出质量，未复现。 |
 | 2026 | [Vegas: Self-Speculative Decoding with Verification-Guided Sparse Attention](https://proceedings.mlr.press/v306/yue26a.html) | ICML 2026 | Verify 阶段复用 KV 重要性信息，为后续 Self-speculative Draft 加速。 |
 
-### Tree & Parallel Verification (10)
+### Tree & Parallel Verification (11)
 
 Candidate Tree、并行候选和 Target Verification 效率。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2024 | [EAGLE-2: Faster Inference of Language Models with Dynamic Draft Trees](https://aclanthology.org/2024.emnlp-main.422/) | EMNLP 2024 | 依据上下文相关的接受率动态构造 Draft Tree，区别于静态树推测路径。 |
+| 2024 | [Sequoia: Scalable and Robust Speculative Decoding](https://proceedings.neurips.cc/paper_files/paper/2024/hash/ea1f5f0878d43ff4fb8bf64ef4a2326c-Abstract-Conference.html) | NeurIPS 2024 | 把投机解码的候选树构造与验证形式化为动态规划：依据目标硬件特性与采样温度离线推导最优树拓扑，使树形验证在多 batch、多温度下保持鲁棒，避免手工设计的固定树在新场景下命中率塌陷。 |
 | 2025 | [Traversal Verification for Speculative Tree Decoding](https://openreview.net/forum?id=8nOMhDFpkU) | NeurIPS 2025 | 把投机树自根向下的逐层验证改为自叶向根遍历，用候选序列到根的联合接受概率保留会被父节点提前否决的子序列，并证明输出分布与目标模型一致。 |
 | 2026 | [Accelerating Speculative Decoding with Block Diffusion Draft Trees](https://arxiv.org/abs/2604.12989) | COLM 2026 (accepted; author preprint) | **DDTree** 以 Block Diffusion *Drafter* 的逐位置概率构造固定节点预算的 Best-first Speculation Tree，使用祖先掩码单次验证 AR Target；不同于直接服务 Diffusion LM。作者提供 [CUDA/PyTorch Benchmark](https://github.com/liranringel/ddtree)，与 DFlash、EAGLE-3 等 Draft Baseline 比较；仅作者报告的单请求/Benchmark 速度，在线 Batch/SLO Goodput 未核验。（HOLD_EVIDENCE） |
 | 2026 | [Calibrated Speculative Decoding: Frequency-Guided Candidate Selection for Efficient Inference](https://aclanthology.org/2026.acl-long.1369/) | ACL 2026 | Draft/Verify 候选树或多 Token 解码的执行/验证开销；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（HOLD_EVIDENCE） |
@@ -90,7 +92,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。（APPROXIMATE_QUALITY_CHECKED） |
 
-### Adaptive Speculation in Serving (17)
+### Adaptive Speculation in Serving (18)
 
 动态 Draft 长度、启停决策及异构/分布式部署。
 
@@ -100,6 +102,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2025 | [Dovetail: A CPU/GPU Heterogeneous Speculative Decoding for LLM inference](https://aclanthology.org/2025.emnlp-main.879/) | EMNLP 2025 | 在消费级异构设备上将 Draft 部署 GPU、Target Verification 放于 CPU，设计减小验证通信粒度的无损投机解码；真实设备 13B 推理，旧账本误记 EMNLP 2026。 |
 | 2025 | [Mirror Speculative Decoding: Breaking the Serial Barrier in LLM Inference](https://arxiv.org/abs/2510.13161) | arXiv 2025 (preprint) | 在 GPU/NPU 异构并行执行 Draft 早退路径与 Target 后缀，并用多 Token Speculative Streaming 打破串行 Draft 路径；作者用 14B–66B 模型端到端实测。 |
 | 2025 | [SpecMemo: Speculative Decoding is in Your Pocket](https://arxiv.org/abs/2506.01986) | arXiv 2025 (preprint) | 以细粒度 Token/Mem Allocation 抑制投机失败造成的冗余 KV 显存占用，并扩展分布式 Batched Draft-Verify；作者在 Titan RTX 与八卡 AMD MI250 实测。 |
+| 2025 | [SpecRouter: Adaptive Routing for Multi-Level Speculative Decoding in Large Language Models](https://arxiv.org/abs/2505.07680) | arXiv 2025 (preprint) | 把推理改写为多级投机的自适应路由问题：用执行时间画像与 token 分布相似度在线构造“模型链”，让中间模型分担验证以减轻目标模型负担，并同步异构模型间的 KV 状态与低开销回滚。 |
 | 2026 | [Adaptive Draft Sequence Length: Enhancing Speculative Decoding Throughput on PIM-Enabled Systems](https://2026.hpca-conf.org/details/hpca-2026-main-conference/112/Adaptive-Draft-Sequence-Length-Enhancing-Speculative-Decoding-Throughput-on-PIM-Enab) | HPCA 2026 | SADDLE 依据累计接受概率在运行时为每个请求调整 draft 长度，配合异步推测解码流水线与算术强度感知的算子调度器，在 GPU+PIM 异构系统上消除同步气泡，实测较 GPU-only 与 GPU+PIM 基线平均加速 2.88/1.71 倍。 |
 | 2026 | [AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding](https://dl.acm.org/doi/10.1145/3767295.3769315) | EuroSys 2026 | 按请求 SLO 设计 Speculative Draft/Verify 策略，将加速与服务目标联动。 |
 | 2026 | [Beat the long tail: Distribution-Aware Speculative Decoding for RL Training](https://openreview.net/forum?id=kMeqqPBjSl) | MLSys 2026 | 用增量维护的后缀树从近期 rollout 构建非参数草稿器，并按轨迹长度分配投机预算、把更激进的草稿额度给主导 makespan 的长轨迹，使 RL rollout 时间最多下降 50% 且训练曲线不变。 |

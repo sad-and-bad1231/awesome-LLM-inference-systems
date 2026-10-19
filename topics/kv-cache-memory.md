@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-40) | 40 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-61) | 61 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
-| [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-30) | 30 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-63) | 63 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Sparse KV Retrieval](#sparse-kv-retrieval-17) | 17 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-31) | 31 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-17) | 17 | 跨实例共享、P/D 传输和 KV 状态池。 |
-| [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **172** | |
+| [Paging & Cache Allocation](#paging--cache-allocation-9) | 9 | KV Block 布局、分页、分配、压实和生命周期。 |
+| **Total** | **177** | |
 
-## Papers (172)
+## Papers (177)
 
 ### Prefix & Session Reuse (40)
 
@@ -71,17 +71,19 @@
 | 2026 | [VLMCache: Efficient On-Device Vision-Language Model Inference](https://doi.org/10.1145/3745756.3809243) | MobiSys 2026 | 将稳定视觉区域编码为可复用 KV Prefix，对动态前景重算后以 Isolate-then-fuse 保留 Attention 与位置一致性。（KEEP_ADJACENT） |
 | 2026 | [WorldPlay: Towards Long-Term Geometric Consistency for Real-Time Interactive World Modeling](https://proceedings.mlr.press/v306/sun26az.html) | ICML 2026 | 交互式视频 World Model 通过 Reconstituted Context Memory 动态重建历史帧上下文并控制长期漂移，配合 Context Forcing 蒸馏实现实测实时流式生成；属于模型-推理状态协同设计（邻接领域）。（KEEP_ADJACENT） |
 
-### Eviction, Compression & Quantization (61)
+### Eviction, Compression & Quantization (63)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2023 | [H2O: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models](https://proceedings.neurips.cc/paper_files/paper/2023/hash/6ceefa7b15572587b78ecfcebb2827f8-Abstract-Conference.html) | NeurIPS 2023 | 基于注意力重尾分布识别 Heavy-Hitter KV，并与 Recent Token 构建高效保留策略。（KEEP_FOUNDATIONAL） |
+| 2024 | [ArkVale: Efficient Generative LLM Inference with Recallable Key-Value Eviction](https://proceedings.neurips.cc/paper_files/paper/2024/hash/cd4b49379efac6e84186a3ffce108c37-Abstract-Conference.html) | NeurIPS 2024 | 把 KV 驱逐做成可召回的两级结构：由注意力分数与近期性共同决定哪些 KV 常驻显存，被换出的部分以低精度副本留在低成本存储，需要时按需重建，从而在长上下文生成中同时压住显存占用与重算开销。 |
 | 2024 | [Efficient Streaming Language Models with Attention Sinks](https://openreview.net/forum?id=NG7sS51zVF) | ICLR 2024 | Attention Sinks + 滑动窗口缓存使长流式生成无需反复重计算完整上下文。（KEEP_FOUNDATIONAL） |
 | 2024 | [Keyformer: KV Cache reduction through key tokens selection for Efficient Generative Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/48fecef47b19fe501d27d338b6d52582-Abstract-Conference.html) | MLSys 2024 | 以关键 Token 选择压缩 KV 访存；同时评估生成性能与质量，属于近似状态保留而非精确缓存。 |
 | 2024 | [KIVI: A Tuning-Free Asymmetric 2bit Quantization for KV Cache](https://proceedings.mlr.press/v235/liu24bz.html) | ICML 2024 | 根据 K/V 分布差异实行 Key 按通道和 Value 按 Token 量化，低精度保留推理状态。（KEEP_FOUNDATIONAL） |
 | 2024 | [KVQuant: Towards 10 Million Context Length LLM Inference with KV Cache Quantization](https://proceedings.neurips.cc/paper_files/paper/2024/hash/028fcbcf85435d39a40c4d61b42c99a4-Abstract-Conference.html) | NeurIPS 2024 | 针对 KV Outlier 和分布设计非均匀低比特量化，加速极长上下文 Decode。（KEEP_FOUNDATIONAL） |
+| 2024 | [MiniCache: KV Cache Compression in Depth Dimension for Large Language Models](https://proceedings.neurips.cc/paper_files/paper/2024/hash/fd0705710bf01b88a60a3d479ea341d9-Abstract-Conference.html) | NeurIPS 2024 | 在层间“深度”维度而非序列维度压缩 KV：利用相邻层 KV 状态的高相似度把跨层 KV 合并为共享表示，再对合并后的状态做低秩与低比特保留，在不改动注意力计算的前提下降低 KV 显存与传输量。 |
 | 2024 | [SnapKV: LLM Knows What You are Looking for Before Generation](https://proceedings.neurips.cc/paper_files/paper/2024/hash/28ab418242603e0f7323e54185d19bde-Abstract-Conference.html) | NeurIPS 2024 | 通过观察窗口中的 Head-specific 重要位置，压缩未来 Decode 要保留的 KV。（KEEP_FOUNDATIONAL） |
 | 2025 | [ChunkKV: Semantic-Preserving KV Cache Compression for Efficient Long-Context LLM Inference](https://proceedings.neurips.cc/paper_files/paper/2025/hash/2987f911151b39cd3a1761e212319e8e-Abstract-Conference.html) | NeurIPS 2025 | 以语义完整 Chunk 作为 KV 保留单元，并复用跨层保留索引。 |
 | 2025 | [EVICPRESS: Joint KV-Cache Compression and Eviction for Efficient LLM Serving](https://arxiv.org/abs/2512.14946) | arXiv 2025 (preprint) | 使用联合 Delay/Quality Utility 决定每条 KV Cache 的 Compress/Evict 与 DRAM/SSD Placement，并在 12 数据集、5 模型上对照同精度下的 TTFT；不是仅测压缩率。 |
@@ -139,12 +141,13 @@
 | 2026 | [VecInfer: Efficient LLM Inference with Low-Bit KV Cache via Outlier-Suppressed Vector Quantization](https://aclanthology.org/2026.acl-long.1454/) | ACL 2026 | 采用 Smooth/Hadamard 抑制 K 的异常值提升低 Bit Codebook 利用率，并设计 CUDA Fused Dequant–Attention Kernel；论文在 Llama-3.1-8B 196K 上报告 2-bit 单批完整推理延迟收益与质量，仍需独立复现。 |
 | 2026 | [Which Heads Matter for Reasoning? RL-Guided KV Cache Compression](https://icml.cc/virtual/2026/poster/62599) | ICML 2026 | RLKV 用强化学习作探针，按生成正确性直接优化各注意力头缓存占用，识别维持推理链一致性的关键头并独留全精度 KV，其余激进压缩；内存省 20%–60% 且近乎无损。 |
 
-### Sparse KV Retrieval (16)
+### Sparse KV Retrieval (17)
 
 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2024 | [ALISA: Accelerating Large Language Model Inference via Sparsity-Aware KV Caching](https://dl.acm.org/doi/10.1109/ISCA59077.2024.00077) | ISCA 2024 | 把注意力稀疏性与 KV 缓存分配联动：按层与 token 的动态稀疏度预测结果分配缓存预算，只保留真正会被激活的 KV，并做稀疏感知的加载与调度，在长上下文下同时降低显存压力与被浪费的带宽。 |
 | 2024 | [PQCache: Product Quantization-based KVCache for Long Context LLM Inference](https://arxiv.org/abs/2407.12820) | arXiv 2024 (preprint) | 把 KV cache 的存与取当作嵌入检索问题：预填充阶段对每层每头的 key 做乘积量化，解码时用 PQ 码与质心近似定位重要的前序 token 再取回对应 KV 参与注意力，并用重叠与缓存设计摊薄额外算力与通信；InfiniteBench 得分较现有方法提升 4.60%。 |
 | 2024 | [Quest: Query-Aware Sparsity for Efficient Long-Context LLM Inference](https://proceedings.mlr.press/v235/tang24l.html) | ICML 2024 | 按当前 Query 粗筛 KV Page 再精确算 Attention，降低长上下文 Decode 访存量。（KEEP_FOUNDATIONAL） |
 | 2025 | [AlayaDB: The Data Foundation for Efficient and Effective Long-context LLM Inference](https://doi.org/10.1145/3722212.3724428) | SIGMOD 2025 | 将 KV Cache 与 Attention 计算抽象为数据库 Query Processing，并以独立 Query Optimizer 为长上下文推理选择执行计划；包含工业案例和推理系统实验。 |
@@ -162,7 +165,7 @@
 | 2026 | [STARC: Selective Token Access with Remapping and Clustering for Efficient LLM Decoding on PIM Systems](https://research.ibm.com/publications/starc-selective-token-access-with-remapping-and-clustering-for-efficient-llm-decoding-on-pim-systems) | ASPLOS 2026 | 通过 token 选择、重映射与聚类，让 PIM 系统解码时只访问对当前 token 关键的 KV 数据，减少无效访存。 |
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 
-### Offloading & Tiered Storage (30)
+### Offloading & Tiered Storage (31)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -197,6 +200,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [SparseServe: Unlocking Parallelism for Dynamic Sparse Attention in Long-Context LLM Serving](https://arxiv.org/abs/2509.24626) | ICS 2026 | 针对动态稀疏 Attention 实现碎片感知 KV 传输、Working-set-aware Batch 和分层 Prefill，缓解 HBM 容量瓶颈。 |
 | 2026 | [Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token](https://openreview.net/forum?id=FuRo7Ur5Ib) | MLSys 2026 | Stream2LLM 将上下文流式加载与 prefill 计算重叠，把长 prompt 的数据到达时间隐藏到首 token 前的执行流水中 |
 | 2026 | [Tutti: Making SSD-Backed KV Cache Practical for Long-Context LLM Serving](https://arxiv.org/abs/2605.03375) | arXiv 2026 (preprint) | 以 GPU-native KV Object Store、GPU io_uring 和 Slack-aware I/O Scheduling 避开 SSD KV Restore 的 CPU 小 I/O 控制路径，已集成 vLLM 并开源，实测对 GDS-enabled SSD LMCache 的 TTFT、QPS 和 GPU Stall。 |
+| 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 | 2026 | [UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads](https://doi.org/10.1145/3805652) | Proc. ACM Meas. Anal. Comput. Syst. 2026 (SIGMETRICS 2026) | 基于多轮对话与单轮 API 请求的异质 Prefix Reuse 特征设计 Eviction，提供 vLLM 控制面 Trace Simulator 与 GPU Demo；大规模结果以模拟 Trace 为主，不能直接代表实机 Serving 收益。（HOLD_EVIDENCE） |
 
 ### Distributed KV Sharing & Transfer (17)
@@ -223,12 +227,13 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [SmartGen: Seamless Disaggregated LLM Inference with Selective KV Cache Transfer](https://arxiv.org/abs/2607.28150) | arXiv 2026 (preprint) | 主动推送重要 KV、按需并行读取及后续推送全部状态，缩短 P/D 交接等待。 |
 | 2026 | [SwiftCache: Efficient LLM Serving for Multi-turn Conversations with Heterogeneous KV Cache Sharing](https://arxiv.org/abs/2606.16135) | arXiv 2026 (preprint) | 让多个异构模型跨 NVLink 捐赠空闲 GPU HBM 作为会话 Prefix KV Cache，并令本地只保持活动层 KV；在真实多轮 Serving 负载对比 vLLM/SGLang 的 P99 TTFT、上下文长度及干扰。 |
 
-### Paging & Cache Allocation (8)
+### Paging & Cache Allocation (9)
 
 KV Block 布局、分页、分配、压实和生命周期。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2024 | [vTensor: Flexible Virtual Tensor Management for Efficient LLM Serving](https://arxiv.org/abs/2407.15309) | arXiv 2024 (preprint) | 基于 GPU 虚拟内存管理把张量抽象为可动态映射的 vTensor：计算与显存整理解耦，按需扩展或回收物理页以消除分页碎片，并用 CPU-GPU 异构路径维护映射表；作者报告较 vLLM 平均 1.86× 提速、多轮对话最高 2.42×。 |
 | 2025 | [DiffKV: Differentiated Memory Management for Large Language Models with Parallel KV Compaction](https://doi.org/10.1145/3731569.3764810) | SOSP 2025 | 按 KV 类型、Head 与 Token 非均匀分配缓存预算，并行压缩和布局整理减少 Cache Compaction 关键路径。 |
 | 2025 | [Jenga: Effective Memory Management for Serving LLM with Heterogeneity](https://doi.org/10.1145/3731569.3764823) | SOSP 2025 | 统一管理 Hybrid LLM 的异构推理状态及跨请求缓存驻留，适配 Attention/SSM 等不同内存需求。 |
 | 2025 | [Oneiros: KV Cache Optimization through Parameter Remapping for Multi-tenant LLM Serving](https://doi.org/10.1145/3772052.3772215) | SoCC 2025 | 在 CPU/GPU 快互联上单向迁移静态模型层参数以腾出 KV 常驻容量，而非频繁双向交换 KV Cache。 |
