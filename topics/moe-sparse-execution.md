@@ -17,10 +17,10 @@
 | [Expert Routing & Communication](#expert-routing--communication-20) | 20 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-13) | 13 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-25) | 25 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-24) | 24 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **82** | |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-22) | 22 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **80** | |
 
-## Papers (82)
+## Papers (80)
 
 ### Expert Routing & Communication (20)
 
@@ -101,7 +101,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Taming Latency-Memory Trade-Off in MoE-Based LLM Serving via Fine-Grained Expert Offloading](https://doi.org/10.1145/3767295.3769319) | EuroSys 2026 | FineMoE 从 Prompt 语义及细粒度 Expert 激活模式驱动 Expert 预取、缓存与 CPU Offload，在六 GPU 原型和真实 MoE 工作负载中对照时延及 Cache Hit。 |
 | 2026 | [ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling](https://proceedings.mlr.press/v306/yang26ds.html) | ICML 2026 | 联合无损 Expert 权重压缩、缓存亲和调度与边缘硬件特性，实现低显存 MoE Serving 原型。 |
 
-### Sparse Attention & Conditional Compute (24)
+### Sparse Attention & Conditional Compute (22)
 
 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。
 
@@ -115,8 +115,6 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2025 | [SpargeAttention: Accurate and Training-free Sparse Attention Accelerating Any Model Inference](https://proceedings.mlr.press/v267/zhang25ch.html) | ICML 2025 | 无需重训的训练无关稀疏 Attention，与计算执行策略协同保持效果。（APPROXIMATE_QUALITY_CHECKED） |
 | 2025 | [XAttention: Block Sparse Attention with Antidiagonal Scoring](https://proceedings.mlr.press/v267/xu25ag.html) | ICML 2025 | 用 Antidiagonal Scoring 快速识别高价值 Attention Block 并以块稀疏 Kernel 减少 Prefill。（APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [Attribution-based Sparse Activation in Large Language Models](https://proceedings.mlsys.org/paper_files/paper/2026/hash/29591f355702c3f4436991335784b503-Abstract-Conference.html) | MLSys 2026 | 校正神经元 Attribution 相互依赖，用低贡献神经元跳过减少推理计算；作者报告延迟/内存改善但方法非严格无损。（APPROXIMATE_QUALITY_CHECKED） |
-| 2026 | [FSA: An Alternative Efficient Implementation of Native Sparse Attention Kernel](https://proceedings.iclr.cc/paper_files/paper/2026/hash/428ceef2cd8a53add7213e04d1746479-Abstract-Conference.html) | ICLR 2026 | 重写NSA原生稀疏注意力kernel的循环分块顺序，使其在GQA每组query head数较少的主流LLM上高效执行，kernel延迟最高降3.5倍、生成推理prefill最高提速1.36倍。 |
-| 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 |
 | 2026 | [Long-Context Modeling with Dynamic Hierarchical Sparse Attention for Memory-Constrained LLM Inference](https://proceedings.mlr.press/v306/xiong26q.html) | ICML 2026 | DHSA 按 Chunk→Token 动态预测 Attention 稀疏性，包含 GPU/CPU Tiled Backend；提供 100K/128K 长上下文推理性能和任务精度，需计入掩码预测成本。（KEEP_ADJACENT） |
 | 2026 | [LycheeDecode: Accelerating Long-Context LLM Inference via Hybrid-Head Sparse Decoding](https://arxiv.org/abs/2602.04541) | arXiv 2026 (authors indicate ICLR 2026) | HardKuma 将 Head 划为 Retrieval 和复用其 Top-k 的 Sparse Heads，在 128K Decode 上报告 GPU 加速，并针对 LongBench、RULER、AIME 比较精度。（APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [oFFN: Outlier and Neuron-aware Structured FFN for Fast yet Accurate LLM Inference](https://doi.org/10.1145/3779212.3790194) | ASPLOS 2026 | 同时重排 FFN Weight 行列实现 Outlier-aware 预测和 Hot/Cold Neuron 分流，在 ReLU LLM 的真实自回归 Decode 中优化稀疏 FFN 算子与端到端性能。（APPROXIMATE_QUALITY_CHECKED） |
