@@ -17,11 +17,11 @@
 | [Draft Models & Candidate Generation](#draft-models--candidate-generation-19) | 19 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-18) | 18 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
-| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-18) | 18 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
-| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-20) | 20 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **86** | |
+| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-17) | 17 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
+| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-19) | 19 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
+| **Total** | **84** | |
 
-## Papers (86)
+## Papers (84)
 
 ### Draft Models & Candidate Generation (19)
 
@@ -92,7 +92,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。（APPROXIMATE_QUALITY_CHECKED） |
 
-### Adaptive Speculation in Serving (18)
+### Adaptive Speculation in Serving (17)
 
 动态 Draft 长度、启停决策及异构/分布式部署。
 
@@ -102,7 +102,6 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2025 | [Dovetail: A CPU/GPU Heterogeneous Speculative Decoding for LLM inference](https://aclanthology.org/2025.emnlp-main.879/) | EMNLP 2025 | 在消费级异构设备上将 Draft 部署 GPU、Target Verification 放于 CPU，设计减小验证通信粒度的无损投机解码；真实设备 13B 推理，旧账本误记 EMNLP 2026。 |
 | 2025 | [Mirror Speculative Decoding: Breaking the Serial Barrier in LLM Inference](https://arxiv.org/abs/2510.13161) | arXiv 2025 (preprint) | 在 GPU/NPU 异构并行执行 Draft 早退路径与 Target 后缀，并用多 Token Speculative Streaming 打破串行 Draft 路径；作者用 14B–66B 模型端到端实测。 |
 | 2025 | [SpecMemo: Speculative Decoding is in Your Pocket](https://arxiv.org/abs/2506.01986) | arXiv 2025 (preprint) | 以细粒度 Token/Mem Allocation 抑制投机失败造成的冗余 KV 显存占用，并扩展分布式 Batched Draft-Verify；作者在 Titan RTX 与八卡 AMD MI250 实测。 |
-| 2025 | [SpecRouter: Adaptive Routing for Multi-Level Speculative Decoding in Large Language Models](https://arxiv.org/abs/2505.07680) | arXiv 2025 (preprint) | 把推理改写为多级投机的自适应路由问题：用执行时间画像与 token 分布相似度在线构造“模型链”，让中间模型分担验证以减轻目标模型负担，并同步异构模型间的 KV 状态与低开销回滚。 |
 | 2026 | [Adaptive Draft Sequence Length: Enhancing Speculative Decoding Throughput on PIM-Enabled Systems](https://2026.hpca-conf.org/details/hpca-2026-main-conference/112/Adaptive-Draft-Sequence-Length-Enhancing-Speculative-Decoding-Throughput-on-PIM-Enab) | HPCA 2026 | SADDLE 依据累计接受概率在运行时为每个请求调整 draft 长度，配合异步推测解码流水线与算术强度感知的算子调度器，在 GPU+PIM 异构系统上消除同步气泡，实测较 GPU-only 与 GPU+PIM 基线平均加速 2.88/1.71 倍。 |
 | 2026 | [AdaServe: Accelerating Multi-SLO LLM Serving with SLO-Customized Speculative Decoding](https://dl.acm.org/doi/10.1145/3767295.3769315) | EuroSys 2026 | 按请求 SLO 设计 Speculative Draft/Verify 策略，将加速与服务目标联动。 |
 | 2026 | [Beat the long tail: Distribution-Aware Speculative Decoding for RL Training](https://openreview.net/forum?id=kMeqqPBjSl) | MLSys 2026 | 用增量维护的后缀树从近期 rollout 构建非参数草稿器，并按轨迹长度分配投机预算、把更激进的草稿额度给主导 makespan 的长轨迹，使 RL rollout 时间最多下降 50% 且训练曲线不变。 |
@@ -117,13 +116,12 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Throughput Optimization for Multi-level Speculative Decoding](https://perso.ens-lyon.fr/adrien.obrecht/publications/2026-08-europar/) | Euro-Par 2026 | 对多级推测解码做概率建模，用动态规划推导各层最优 draft 长度，并提出基于 token 置信度的自适应草稿与离散积分阈值估计，在开源 LLM 实测仿真中提升吞吐。 |
 | 2026 | [WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching](https://www.sigmetrics.org/sigmetrics2026/accepted.html#wisp-waste-and-interference-suppressed-distributed-speculative-llm-serving-at-the-edge-via-dynamic-drafting-and-slo-aware-batching) | SIGMETRICS 2026 | 把边缘设备纳入推测解码服务，用 speculation controller、验证时延估计与验证批调度抑制无效 drafting 与验证干扰，实测系统容量与 goodput 较中心化服务及 SLED 最高提升 2.1/4.1 与 1.94/3.7 倍。 |
 
-### Diffusion & Non-AR Generation (20)
+### Diffusion & Non-AR Generation (19)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2025 | [PipeFusion: Patch-level Pipeline Parallelism for Diffusion Transformers Inference](https://openreview.net/forum?id=5xwyxupsLL) | NeurIPS 2025 | 针对高分辨率扩散 Transformer 的多卡推理，把图像切分为 patch 并把模型层分布到多个 GPU，用 patch 级流水线编排通信与计算；利用相邻扩散步输入高度相似，复用上一步的过期特征图为当前流水线提供上下文，通信开销低于张量并行、序列并行与 DistriFusion，8×L40 上 Flux.1 等模型达到 SOTA。 |
 | 2026 | [AdaBlock-dLLM: Semantic-Aware Diffusion LLM Inference via Adaptive Block Size](https://openreview.net/pdf?id=0Cv9PwL7cI) | ICLR 2026 | 以语义分隔符置信度和 Volatility Band 动态选择半自回归 DLM 的 Block Size；训练免改造，有 Dream/LLaDA 可执行代码，质量-吞吐需要配套审查。 |
 | 2026 | [Attention Is All You Need for KV Cache in Diffusion LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/3afaa2102fb8ea44cbadc13e45bba718-Abstract-Conference.html) | ICLR 2026 | Diffusion LM 的并行解码、缓存复用与去噪迭代压缩；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（HOLD_EVIDENCE） |
 | 2026 | [Beyond Scattered Acceptance: Fast and Coherent Inference for DLMs via Longest Stable Prefixes](https://proceedings.iclr.cc/paper_files/paper/2026/hash/91a23b3e6a2ebaad62e17d0269f88c6b-Abstract-Conference.html) | ICLR 2026 | Diffusion LM 的并行解码、缓存复用与去噪迭代压缩；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（HOLD_EVIDENCE） |
