@@ -1,110 +1,60 @@
 # Emerging inference research frontiers
 
-**A short reading map, not a second paper database.** The [eight mechanism categories](../topics/README.md) remain the canonical bibliography. Frontiers connect reusable systems mechanisms to new workloads; the links below are pointers, not duplicate canonical admissions.
+**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** As of **2026-10-19**. The [eight practical topic areas](../topics/README.md) and their **43 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
 
-[← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Curation policy](../CURATION.md) · [Frontier scan, October 2026](2026-10-frontier-scan.md)
+[← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Historical October 2026 signals](2026-10-frontier-scan.md)
 
-## What the industry is shipping right now (2026-10 refresh)
+## The frontier test
 
-Read the first-party signals before the papers — they say what the frontier *is*.
+A direction earns a place here when **all three** hold:
 
-- **vLLM's own roadmap** names the coming quarter's work directly: [vLLM Roadmap Q4 2026](https://github.com/vllm-project/vllm/issues/61024).
-- **KV became a distributed, first-class object.** [llm-d v0.5 — Sustaining Performance at Scale](https://llm-d.ai/blog/llm-d-v0.5-sustaining-performance-at-scale) runs a three-tier GPU → CPU → **filesystem** KV hierarchy on top of [vLLM's KV offloading connector](https://blog.vllm.ai/2026/01/08/kv-offloading-connector.html), so replicas *hydrate* instead of re-prefilling; [Peer-to-Peer KV Cache Sharing](https://llm-d.ai/blog/p2p-kv-cache-sharing-llm-d) turns one instance's eviction into another's prefix hit; [NVIDIA Dynamo's Flash Indexer](https://docs.dynamo.nvidia.com/dynamo/v1.4.0/digest/flash-indexer) treats KV location as the routing substrate.
-- **Scheduling policy is now the product surface.** [llm-d's Token-Aware Routing](https://llm-d.ai/blog/sticky-until-saturated-token-aware-routing) and [Predicted-Latency Based Scheduling](https://llm-d.ai/blog/predicted-latency-based-scheduling-for-llms) shift the control variable from queue depth to predicted TTFT/TPOT; [BLIS](https://llm-d.ai/blog/blis-evolving-llm-d-at-simulation-speed) evolves the whole policy offline in simulation before shipping it.
-- **Rollout fleets and serving fleets are the same hardware.** [llm-d's RL time-slicing](https://llm-d.ai/blog/rl-post-training-co-operative-time-slicing) reports ~40% more post-training experiments on identical GPUs by co-tenanting rollout with online serving.
-- **Heterogeneity is normal, not exceptional.** [llm-d across three GPU vendors](https://llm-d.ai/blog/heterogeneous-inference-3-vendor-sovereign-cluster), [vision-heavy Kimi-VL with heterogeneous E/PD](https://llm-d.ai/blog/scaling-vision-heavy-kimi-vl-with-heterogeneous-epd), [GLM-5.1-FP8 wide-EP on 64 MI300X](https://rocm.blogs.amd.com/software-tools-optimization/di-glm-wideep/README.html), [MoE inference with Dynamo on Google Cloud A4X](https://cloud.google.com/blog/products/compute/scaling-moe-inference-with-nvidia-dynamo-on-google-cloud-a4x), [MoE performance leaps on Blackwell](https://developer.nvidia.com/blog/delivering-massive-performance-leaps-for-mixture-of-experts-inference-on-nvidia-blackwell/).
+1. **New execution contract:** the workload challenges the request → prefill → autoregressive decode loop (or substantially changes how its kernels are built). Merely improving an existing KV policy, sparse attention algorithm, or GPU backend does not qualify.
+2. **Two kinds of evidence:** a traceable systems paper **and** a public implementation/credible industry serving signal, where possible. Distinguish deployed code, research prototype, preprint and hardware simulation.
+3. **An unsettled systems question:** there is a meaningful unresolved scheduling, memory, correctness, communication, throughput or latency question, and a way to test it with real workloads.
 
-Three cross-cutting shifts are visible across independent first-party sources:
+**Not frontiers by themselves:** KV caching/offloading/sharing, sparse/hybrid/MLA attention, ordinary MoE/parallelism, P/D disaggregation, quantization, heterogeneous CUDA/ROCm/Ascend porting, and generic semantic response caching. These are **important active engineering tracks** in the topic pages, not new fields. Particularly, *response reuse* is not equivalent to exact *KV reuse*.
 
-1. **The unit of optimisation moved from the request to the session.** Cache-aware *and* session-aware routing ship together; prefix reuse is the default path and the open problems are eviction, freshness and fairness.
-2. **The memory hierarchy, not FLOPS, is the binding constraint.** Tiered KV, P2P KV sharing, semantic caches and 4-bit KV offload are one idea: decouple cache capacity from HBM.
-3. **The fleet is heterogeneous and co-tenanted.** Mixed vendors, mixed E/PD roles, RL rollouts sharing GPUs with online serving — SLO protection under co-tenancy is the new scheduling problem.
+## Six active frontiers — one anchor each
 
-## Nine anchors, one per frontier
-
-Read **one anchor per frontier**, not the entire archive. These represent distinct systems questions rather than a popularity ranking.
-
-| Frontier | Start here | Core systems question |
+| Frontier | Start here | New systems contract / unresolved decision |
 |---|---|---|
-| **Agent-native serving** | [AgentSysBench — *From LLM Inference to Agentic Workloads*](https://arxiv.org/abs/2608.15127) (2026 **preprint**) | What is the real critical path when a session includes LLM calls, tools, sandboxes, retrieval and persistent state? |
-| **Omni-modal serving** | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) (2026 **technical report**) | How should a runtime place, connect and schedule heterogeneous modality stages? |
-| **World models / interactive video** | [FAST-AR: Fast Autoregressive Video Diffusion and World Models](https://proceedings.mlr.press/v306/samuel26a.html) (ICML 2026) | Can temporal KV compression and sparse attention bound memory and latency during long rollouts? |
-| **Embodied / VLA inference** | [Characterizing Vision-Language-Action Models across XPUs](https://proceedings.mlr.press/v306/zhou26e.html) (ICML 2026) | How do VLM backbone and action expert create different real-time hardware bottlenecks on robots? |
-| **Agentic kernel engineering** | [KernelBench: Can LLMs Write Efficient GPU Kernels?](https://proceedings.mlr.press/v267/ouyang25a.html) (ICML 2025) | How should automated kernel generation be measured for correctness **and** execution speed? |
-| **Non-AR / diffusion inference** | [BWCache: Accelerating Video Diffusion Transformers through Block-Wise Caching](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ac8ec9b4d94c03f0af8c4fe3d5fad4fd-Abstract-Conference.html) (ICLR 2026) | Which intermediate features can be reused across denoising steps without harming quality? |
-| **RL rollout × serving co-tenancy** | [Weave: Efficient Co-Scheduling for Disaggregated RL Post-Training](https://www.usenix.org/conference/osdi26/presentation/wu-tianyuan) (OSDI 2026) | Who yields compute, KV and bandwidth when rollout and online serving share one fleet? |
-| **KV as a distributed object** | [llm-d v0.5 — Sustaining Performance at Scale](https://llm-d.ai/blog/llm-d-v0.5-sustaining-performance-at-scale) (2026 engineering blog) | What is the right index, placement and freshness policy when KV lives across GPU, CPU, disk and peers? |
-| **Sparse & hybrid attention at production scale** | [Native Hybrid Attention for Efficient Sequence Modeling](https://aclanthology.org/2026.acl-long.176/) (ACL 2026) | Which attention layers can be linear/sparse without breaking long-context serving, and what does that do to the KV hierarchy? |
+| **Agent-native inference** | [ThunderAgent](https://proceedings.mlr.press/v306/kang26j.html) (ICML 2026; [code](https://github.com/ThunderAgent-org/ThunderAgent)) | Schedule the **entire agent program**, not isolated token requests. Who owns the long-lived session state, tool sandbox, KV residency and end-to-end critical path? |
+| **Real-time omni-modal serving** | [vLLM-Omni Technical Report](https://arxiv.org/abs/2610.09307) (2026 **technical report**; [runtime](https://docs.vllm.ai/projects/vllm-omni/en/latest/)) | Serve asynchronous audio/video/text/action stages with **duplex streaming, backpressure, stage placement and inter-stage transfers**, not one text generation loop. |
+| **Diffusion-language-model serving** | [dLLM-Serve](https://doi.org/10.1145/3797905.3800532) (ICS 2026) | Token/step/block-parallel decoding changes compute and memory demand. How should an **iteration-aware, block-aware** scheduler admit, batch and allocate memory versus an AR baseline? |
+| **Interactive world-model inference** | [StreamDiffusionV2](https://mlsys.org/virtual/2026/oral/3750) (MLSys 2026; [vLLM-Omni world-model path](https://github.com/vllm-project/vllm-omni)) | An interactive, continuous environment consumes actions and emits frames over many steps. Bound **action-to-first-frame, sustained FPS, jitter, memory growth and state drift** together. |
+| **Embodied / VLA action-loop inference** | [Characterizing VLA Models across XPUs](https://proceedings.mlr.press/v306/zhou26e.html) (ICML 2026) | The vision backbone and action expert have dissimilar hardware bottlenecks; meet a **hard perception-to-action deadline** on power-limited heterogeneous edge hardware. |
+| **Agentic kernel engineering** | [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) (ICML 2026; [code](https://github.com/TongmingLAIC/KernelBand)) | Search and *verify* kernels across shapes and devices; separate **semantic correctness, fair timing, memory footprint** and engine-level value from benchmark score. |
 
-## Go deeper only when the bottleneck interests you
+The anchors are a **starter reading path, not new canonical admission**. An ICML paper with a kernel benchmark is not evidence of vLLM end-to-end Goodput; a video model demo is not proof of multi-session production serving.
 
-### Agent-native serving
-- [FlashAgents](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) (MLSys 2026, **existing canonical**): overlap upstream Agent tokens with downstream incremental prefill instead of treating calls as isolated requests.
-- [SMetric — Balanced Session-centric Scheduling](https://arxiv.org/abs/2607.08565) (2026 **preprint**): the scheduling unit becomes the session, not the request.
-- [Helios: Exposing Context Lifecycles for Memory-Efficient Agentic LLM Serving](https://dl.acm.org/doi/10.1145/3816891.3834846) (ICPP 2026 workshop): context has a lifecycle (open → grow → idle → dead); serving systems that cannot see it over-provision KV.
-- [NVIDIA Dynamo — Full-Stack Optimizations for Agentic Inference](https://docs.dynamo.nvidia.com/dynamo/dev/digest/agentic-inference) and [llm-d — Serving GLM-5.2 for Agentic Workloads](https://llm-d.ai/blog/serving-glm-5-2-agentic-workloads-on-llm-d): the two big control planes describe their agentic paths.
-- *Missing research question:* session-aware scheduling and non-LLM compute costs versus single-request TTFT/TPOT.
+## What remains open (researcher-facing)
 
-### Omni-modal serving
-- [Cornserve](https://arxiv.org/abs/2512.14098) (2025 **preprint**, **existing canonical**): stage DAG, modality-aware disaggregation and distributed runtime.
-- [llm-d — Serving Multimodal at Scale](https://llm-d.ai/blog/serving-multimodal-at-scale-in-llm-d): production framing of the same problem.
-- *Missing research question:* full-duplex audio/video backpressure, cross-stage data movement, heterogeneous SLOs.
+| If you work on... | First engineering question | Minimal defensible experiment |
+|---|---|---|
+| Agent-native inference | What state survives LLM → tool → LLM and who pays for eviction/rebuild? | Multi-turn agent trace; session completion time/P95, cached tokens, GPU idle, tool startup, GPU memory, and interference at equal quality |
+| Omni-modal serving | Which stage stalls the live session when frame/audio arrivals become bursty? | Stage-by-stage timeline; P95 event-to-first-output, interruption latency, jitter, backpressure, dropped/late chunks and E2E quality |
+| dLLM | Does AR batch/KV scheduling remain optimal when one request emits/updates whole token blocks? | Equal model/quality constraints; memory curve per step, batch efficiency, latency, throughput and output quality against native dLLM runtime |
+| Interactive worlds | When must old latent/attention state be refreshed to prevent visual drift? | Long interactive action trace; sustained FPS, action latency P95, memory, consistency/drift checks and controlled action changes |
+| VLA execution | Can the compute-bound backbone overlap with the memory-bound action expert within deadline? | Hardware-traced stage latency, missed deadline rate, energy/action and action quality on embedded devices |
+| Agentic kernels | Does the generated code remain correct and fast outside public test tensors? | Hidden distributions + precision parity, multi-shape benchmarks, real profiler evidence, compilation cost and downstream serving impact |
 
-### Interactive world models
-- [Rolling Forcing](https://proceedings.iclr.cc/paper_files/paper/2026/hash/935151cc6cb5d8b6816133b75233775a-Abstract-Conference.html) (ICLR 2026): rolling-window joint denoising and attention-sink state, with measured single-GPU real-time streaming.
-- [WorldPlay](https://proceedings.mlr.press/v306/sun26az.html) (ICML 2026): history-frame context reconstruction to retain geometric consistency in real-time controllable generation.
-- [StreamDiffusionV2](https://mlsys.org/virtual/2026/oral/3750) (MLSys 2026 oral): a streaming *system* for dynamic and interactive video generation, not just a model.
-- [LongLive: Real-time Interactive Long Video Generation](https://proceedings.iclr.cc/paper_files/paper/2026/hash/91a1610c6ed9e02d33f826b46f472b92-Abstract-Conference.html) (ICLR 2026): long-horizon real-time interactivity.
-- [MoWorld: A Flash World Model](https://www.semanticscholar.org/paper/MoWorld%3A-A-Flash-World-Model-Moxin-Ji/5b2d839de22b93c8609f5103d01daeca6001eda0): MoE applied to world modelling — sparsity meets rollout.
-- [FLEX-WAM: Flexible Block-Causal World–Action Models](https://arxiv.org/abs/2610.05483) (2026 **preprint**): world–action coupling for long-horizon imagination.
-- ["The Cost of Dreaming" survey](https://ieeexplore.ieee.org/document/11663588) (2026): computational constraints across generative and latent world models — the best single map of this frontier's systems limits.
-- *Caution:* these mix model/algorithm design with execution mechanisms; they are **adjacent foundation-model inference** papers, not evidence that current LLM serving stacks already support interactive world models.
+## Watching, not yet promoting
 
-### Embodied / VLA
-- The ICML 2026 XPU characterization above is the **single starting paper** in this wave. Do not pad the category with robotics benchmarks lacking inference-time hardware evidence.
-- [A Scalable VLA Edge Processor with Token Filtering and Hybrid Processing-Near-Memory for 6.7-ms Perception-to-Action Latency](https://ieeexplore.ieee.org/document/11577377) (2026): the silicon end of the same question.
-- *Missing research question:* bounded action latency, edge placement, persistent visual state and vision-to-action pipeline scheduling.
+- **Reasoning/test-time-compute control.** [Plan and Budget](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ae8d4084f418bb51575c2ca6c658a05b-Abstract-Conference.html) (ICLR 2026) demonstrates adaptive reasoning budgets, but it is primarily a **model-level quality–compute algorithm**. Promote when a real inference runtime jointly optimizes correctness/quality, token budgets, SLO and co-tenant requests across workloads; avoid mistaking fewer tokens for a proven serving-system breakthrough.
+- **RL rollout / online-serving infrastructure convergence.** [Weave](https://www.usenix.org/conference/osdi26/presentation/wu-tianyuan) (OSDI 2026) and [llm-d time-slicing](https://llm-d.ai/blog/rl-post-training-co-operative-time-slicing) provide serious systems evidence for **RL rollout–training job co-scheduling**, not proof of simultaneously protecting **live user-serving SLOs**. Keep as an inference/training crossover watch until that boundary is evaluated.
+- **Kernel-agent benchmark trust.** [KernelBench-Verified](https://arxiv.org/abs/2607.16241) (2026 **preprint**) is a high-priority *evaluation check* under agentic kernels, **not** a seventh frontier. Reward hacking, baseline precision and hidden input tests are admission criteria.
 
-### Agentic kernels
-- [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) (ICML 2026): hardware-aware bandit search, profile-based pruning and runtime-behavior clustering.
-- [AccelOpt](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) (MLSys 2026, **existing canonical**): closed-loop Trainium NKI optimization with measured feedback.
-- [AlphaCu: Transformation-Driven Synthesis for LLM-Based GPU Kernel Generation](https://dl.acm.org/doi/10.1145/3832783.3837433) (2026) and [Towards Automated Kernel Generation in the Era of LLMs](https://www.ijcai.org/proceedings/2026/895) (IJCAI 2026): synthesis frameworks and a field survey.
-- *Evaluation guardrail:* [KernelBench-Verified](https://arxiv.org/abs/2607.16241) (2026 **preprint**, **methodology watch; not canonically admitted here**) flags benchmark exploitation, hidden-test correctness and baseline-timing biases. Kernel microbenchmarks must not be presented as LLM end-to-end speedups.
+## Where the previously named "frontiers" went
 
-### Diffusion / non-autoregressive inference
-- [Fast-dLLM](https://nvlabs.github.io/Fast-dLLM/) (ICLR 2026, **existing canonical**): approximate KV retention and parallel token commit in diffusion language models.
-- [Sangam](https://arxiv.org/abs/2607.04206) (2026 **preprint**, **existing canonical**): dLLM-specific token-budget scheduling on a serving stack.
-- [dLLM-Serve: Bridging the Memory Gap in Diffusion Language Model Serving](https://dl.acm.org/doi/full/10.1145/3797905.3800532) (ICS 2026): the first *serving-system* treatment — diffusion decoding changes the memory curve, and AR-tuned KV managers mis-predict it.
-- [DiffusionGemma: The Developer Guide](https://developers.googleblog.com/en/diffusiongemma-the-developer-guide/) (Google, 2026): a major vendor shipping a dLLM with developer-facing inference guidance.
-- *Distinction:* discrete diffusion **language** decoding and continuous latent video **DiT** denoising have different state and compute patterns; neither should silently be treated as ordinary AR token serving.
+| Removed frontier heading | Its proper home |
+|---|---|
+| **KV as a distributed object** | [KV Cache & Context Memory](../topics/kv-cache-memory.md) → Distributed KV Sharing & Transfer / Offloading & Tiered Storage |
+| **Sparse & hybrid attention at production scale** | [Kernels & Compilers](../topics/kernels-compilers.md), [MoE & Sparse Execution](../topics/moe-sparse-execution.md), and existing KV tracks |
+| **Vendor/edge heterogeneity as a standalone frontier** | [Distributed & Disaggregated Serving](../topics/distributed-serving.md), [Runtime & Scheduling](../topics/runtime-scheduling.md); edge **VLA control loops** remain distinct |
+| **Semantic caching as a new KV frontier** | A separate *response-quality/freshness* concern; not an exact Attention KV system nor independently frontier-worthy without a new execution contract |
 
-### RL rollout × serving co-tenancy (new)
-- [ROSE: Rollout On Serving GPUs via Cooperative Elasticity for Agentic RL](https://preprints.kavlimeetings.org/2026/05/07/all/nano/caltech/261830/) (2026): elasticity across the serving/rollout boundary.
-- [llm-d — RL Post-Training: Co-Operative Time-Slicing](https://llm-d.ai/blog/rl-post-training-co-operative-time-slicing) and [Run 40% more post-training experiments on the same GPUs](https://llm-d.ai/blog/increase-researcher-velocity-rl-llm-d-time-slicing): production time-slicing results.
-- *Why it matters:* preemption, KV residency and SLO protection under co-tenancy are unresolved — and every lab that serves *and* trains hits them daily.
+## Update rule
 
-### KV as a distributed object (new)
-- [llm-d — Native KV Cache Offloading to Any Filesystem](https://llm-d.ai/blog/native-kv-cache-offloading-to-any-file-system-with-llm-d) and [vLLM KV Offloading Connector](https://blog.vllm.ai/2026/01/08/kv-offloading-connector.html): the interface layer.
-- **Semantic caching is arriving as a serving tier:** [SmartCache](https://proceedings.neurips.cc/paper_files/paper/2025/hash/fb74b63d225f846e6032bf3e3ab0f4ec-Abstract-Conference.html) (NeurIPS 2025) and [CacheSense: Freshness-Aware Semantic Caching with Selective Invalidation](https://ieeexplore.ieee.org/document/11621808) (2026). The open question is *invalidation*, not hit rate — a stale semantic hit is worse than a miss.
-- *Missing research question:* correctness under approximate/semantic KV reuse, and cache coherence across tenants.
+**Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/contract*, a primary systems paper, a usable public stack or real hardware receipt, strong existing baselines, and a testable unresolved bottleneck. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
 
-### Sparse & hybrid attention at production scale (new)
-- [MISA: Mixture of Indexer Sparse Attention for Long-Context LLM Inference](https://arxiv.org/abs/2605.07363) (2026 **preprint**).
-- [NVIDIA TensorRT-LLM — Temporal Correlation Meets Sparse Attention: Guess-Verify-Refine Top-K for Blackwell](https://nvidia.github.io/TensorRT-LLM/blogs/tech_blog/blog21_Temporal_Correlation_Meets_Sparse_Attention.html): a vendor shipping learned/temporal sparsity in its production stack.
-- [DeepSeek-V3.2 DSA / lightning indexer](https://github.com/deepseek-ai) is the production anchor for learned sparse attention; [AMD's 64M-token context with 4-bit KV offloading](https://devcommunity.amd.com/t/llm-inference-at-scale-on-amd-instinct-multi-node-moe-64m-token-context-and-4-bit-kv-offloading/939) shows the memory side.
-- *Missing research question:* how hybrid/sparse attention changes the KV cache hierarchy — sparse attention makes *some* KV cheap and makes eviction policy harder, not easier.
-
-### Watch list (too early to anchor)
-- **Test-time-scaling serving:** [ThinkBooster](https://aclanthology.org/2026.acl-demo.70/) (ACL 2026 demo), [FastTTS](https://dlnext.acm.org/doi/10.1145/3779212.3790161) (ASPLOS 2026) — reasoning budgets as a first-class scheduling dimension.
-- **Observability:** [llm-d — End-to-End and Fine-Grained Tracing](https://llm-d.ai/blog/end-to-end-and-fine-grained-tracing-in-llm-d), [Opik: durable LLM observability at scale](https://ieeexplore.ieee.org/document/11502391) — session-level tracing is becoming table stakes.
-- **On-device:** [MLPerf Mobile v6.0 — new GenAI benchmarks for on-device LLMs](https://mlcommons.org/2026/06/mlperf-mobile-v6/) — measurement finally catching up with on-device deployment.
-
-## Admission boundary
-
-1. **Foundation first:** start with one high-leverage mechanism or measurement anchor per frontier; add follow-ons only when they expose a distinct bottleneck or execution abstraction.
-2. **Keep one canonical home:** [topic pages](../topics/README.md) contain the full admissions. This page is a lightweight cross-index with no separate counts.
-3. **Prefer credible execution evidence:** distinguish real accelerator / end-to-end experiments from quality-only model comparisons, synthetic extrapolations and hardware simulations. Cite official proceedings when available; label preprints explicitly.
-4. **Adjacent scope is narrow:** real-time world models, video diffusion and VLA enter only when their *inference-time* memory, scheduling, computation or serving mechanism is both reusable and measured. Not a general computer-vision or robotics paper list.
-5. **Bound the reading load:** nine entry papers first; optional follow-ups are a menu, not a reading assignment.
-
-This is a **selective seed refreshed 2026-10-18 from first-party industry signals**, not a claim of exhaustive coverage or independently reproduced results. For the dated, lighter-weight scan of signals that have *not* been admitted here, see [Frontier scan — October 2026](2026-10-frontier-scan.md).
+*Research judgement as of 2026-10-19. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
