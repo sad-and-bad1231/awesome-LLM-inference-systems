@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-20) | 20 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-21) | 21 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-14) | 14 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-6) | 6 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **80** | |
+| **Total** | **81** | |
 
-## Papers (80)
+## Papers (81)
 
-### Attention & Sparse Kernels (20)
+### Attention & Sparse Kernels (21)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -50,6 +50,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 | 2026 | [TyphoonMLA: A Mixed Naive-Absorb MLA Kernel For Shared Prefix](https://iclr.cc/virtual/2026/poster/10008790) | ICLR 2026 | 混合 MLA 的 naive 与 absorb 两种实现，对共享前缀用 naive 形式复用数据、其余用 absorb 形式降低带宽，NPU 与 GPU 上 Attention 吞吐最高提升 3 倍与 3.24 倍。 |
 | 2026 | [FSA: An Alternative Efficient Implementation of Native Sparse Attention Kernel](https://proceedings.iclr.cc/paper_files/paper/2026/hash/428ceef2cd8a53add7213e04d1746479-Abstract-Conference.html) | ICLR 2026 | 重写NSA原生稀疏注意力kernel的循环分块顺序，使其在GQA每组query head数较少的主流LLM上高效执行，kernel延迟最高降3.5倍、生成推理prefill最高提速1.36倍。 |
+| 2026 | [DoSA: Dots Sparse Attention](https://arxiv.org/abs/2610.13990) | arXiv 2026 (preprint) | 用 Seed Threshold 与可认证分数上界提前排除不可能进入 Top-K 的 Indexer 候选，仅对剩余候选完整计分；保持原 Indexer 的 Top-K 选择语义，减少 DSA Indexer 的计算与访存。作者报告 Indexer 最高 2.74×，并公开 [Flash Indexer](https://github.com/llm-sys/flash-indexer) 与 [SGLang 集成/TTFT 复现](https://github.com/llm-sys/dosa-sglang)；端到端结果仍待独立复现。（KEEP_STRICT） |
 
 ### GEMM & Low-Bit Kernels (11)
 
