@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-21) | 21 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-26) | 26 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-14) | 14 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-16) | 16 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-6) | 6 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **81** | |
+| **Total** | **88** | |
 
-## Papers (81)
+## Papers (88)
 
-### Attention & Sparse Kernels (21)
+### Attention & Sparse Kernels (26)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -50,6 +50,11 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [SAS: Sparse Attention Synthesizer for Efficient Language Model Inference](https://doi.org/10.1145/3767295.3769364) | EuroSys 2026 | 可组合静态/动态 Sparse Attention 原语，自动推导最小 KV 状态并生成面向 GPU 的稀疏 Kernel。 |
 | 2026 | [TyphoonMLA: A Mixed Naive-Absorb MLA Kernel For Shared Prefix](https://iclr.cc/virtual/2026/poster/10008790) | ICLR 2026 | 混合 MLA 的 naive 与 absorb 两种实现，对共享前缀用 naive 形式复用数据、其余用 absorb 形式降低带宽，NPU 与 GPU 上 Attention 吞吐最高提升 3 倍与 3.24 倍。 |
 | 2026 | [FSA: An Alternative Efficient Implementation of Native Sparse Attention Kernel](https://proceedings.iclr.cc/paper_files/paper/2026/hash/428ceef2cd8a53add7213e04d1746479-Abstract-Conference.html) | ICLR 2026 | 重写NSA原生稀疏注意力kernel的循环分块顺序，使其在GQA每组query head数较少的主流LLM上高效执行，kernel延迟最高降3.5倍、生成推理prefill最高提速1.36倍。 |
+| 2026 | [HISA: Efficient Hierarchical Indexing for Fine-Grained Sparse Attention](https://arxiv.org/abs/2603.28458) | COLM 2026 | 两阶段 Indexer：先做 Block-level coarse filtering，再在保留块内用原始 Indexer 精排，保持原始 token-level Top-K 选择且无需训练；作者报告 32K Kernel 约 2×、128K 约 4×，在 DeepSeek-V3.2/GLM-5 上评测。公开 TileLang GPU、SGLang 集成及 [Ascend TileLang implementation](https://github.com/leavelet/hisa-ascend)；性能为作者报告。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE） |
+| 2026 | [IndexCache: Accelerating Sparse Attention via Cross-Layer Index Reuse](https://arxiv.org/abs/2603.12201) | arXiv 2026 (preprint) | 利用相邻 DSA 层 Top-K token 高重合，按层选择 Full/Shared indexer，以缓存索引替代重复计算；作者报告最多减少 75% indexer 计算，H100 上 200K context prefill 1.82×、decode 1.48×，并报告 GLM-5 端到端验证。公开 [SGLang/vLLM patches](https://github.com/THUDM/IndexCache)；结果未独立复现。（KEEP_STRICT; PREPRINT; PUBLIC_CODE） |
+| 2026 | [Guess-Verify-Refine: Data-Aware Top-K for Sparse-Attention Decoding on Blackwell via Temporal Correlation](https://arxiv.org/abs/2604.22312) | arXiv 2026 (preprint) | Decode-time exact Top-K：以前一步 Top-K 作为 hint，经阈值验证与共享内存精排减少全行扫描；作者报告平均单算子 1.88×、端到端 TPOT 最多降低 7.52%。[TensorRT-LLM V1 source/blog](https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/blogs/tech_blog/blog21_Temporal_Correlation_Meets_Sparse_Attention.md)；注意当前 [GVR V2](https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/blogs/tech_blog/blog29_GVR_V2_Self_Sampling_Exact_TopK_for_Sparse_Attention.md) 已改为 self-sampling + multi-thresholding，不应将 V1 论文等同当前实现。（KEEP_STRICT; PREPRINT; EXACT_TOPK; IMPLEMENTATION_EVOLVED） |
+| 2026 | [MISA: Mixture of Indexer Sparse Attention for Long-Context LLM Inference](https://arxiv.org/abs/2605.07363) | arXiv 2026 (preprint) | 将 DSA indexer heads 视作专家池，以轻量 Router 为每个 Query 选择少量 heads；两阶段变体再用原始 Indexer 重排扩展候选集。作者报告 H200 indexer Kernel 约 3.82×、8 个 active heads，并称每层恢复 >92% DSA 选中 token、LongBench 质量接近 dense DSA。公开 [vLLM patch](https://github.com/MuLabPKU/TransArch/tree/main/MISA_preprint)；属于近似筛选，非 exact Top-K。（KEEP_STRICT; PREPRINT; APPROXIMATE_SELECTION; PUBLIC_CODE） |
+| 2026 | [LiteTopK: Exploiting the Curse of Dimensionality for a Fused Indexer-TopK Kernel in Long-Context Sparse Attention](https://arxiv.org/abs/2607.11976) | arXiv 2026 (preprint) | 利用 Indexer 分数集中性估计在线阈值，融合打分、候选过滤和 Top-K，避免物化完整分数矩阵并保持 exact Top-K；配套 LiteDSA 对邻近 Query 分组以降低访存。作者报告 1M context 下 Kernel 相对官方 DSA 路径最高 3.38×、相对优化 vLLM 1.24×，GLM-5.2 Prefill 端到端 1.35×。公开 [CUDA source and four-arm vLLM benchmarks](https://github.com/Heisenberg-Yin/LiteTopK)；结果未独立复现。（KEEP_STRICT; PREPRINT; EXACT_TOPK; PUBLIC_CODE） |
 | 2026 | [DoSA: Dots Sparse Attention](https://arxiv.org/abs/2610.13990) | arXiv 2026 (preprint) | 用 Seed Threshold 与可认证分数上界提前排除不可能进入 Top-K 的 Indexer 候选，仅对剩余候选完整计分；保持原 Indexer 的 Top-K 选择语义，减少 DSA Indexer 的计算与访存。作者报告 Indexer 最高 2.74×，并公开 [Flash Indexer](https://github.com/llm-sys/flash-indexer) 与 [SGLang 集成/TTFT 复现](https://github.com/llm-sys/dosa-sglang)；端到端结果仍待独立复现。（KEEP_STRICT） |
 
 ### GEMM & Low-Bit Kernels (11)
@@ -113,7 +118,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
 
-### Communication, Memory & I/O (14)
+### Communication, Memory & I/O (16)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
@@ -133,6 +138,9 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ff997469ac66cf893c4183efeb22212a-Abstract-Conference.html) | MLSys 2026 | 用可重用通信与同步原语编写 TP/SP/EP 跨卡重叠 Kernel。 |
 | 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
 | 2026 | [Syncopate: Efficient Multi-GPU AI Kernels via Automatic Chunk-Centric Compute-Communication Overlap](https://www.usenix.org/conference/osdi26/presentation/qiang) | OSDI 2026 | 在单个融合 Triton Kernel 内引入通信 chunk 抽象，把通信粒度与 Kernel 结构及后端机制解耦，再用源到源变换让计算对齐 chunk 可用时刻，实现多 GPU 细粒度算通重叠，端到端平均加速 1.3 倍、最高 4.7 倍。 |
+
+| 2026 | [DeltaLog: Deferred Materialization of Recurrent States for Linear Attention Decoding](https://arxiv.org/abs/2608.15533) | arXiv 2026 (preprint) | 将状态表示为 dense base + 有界 compact-update log，多数 Decode step 只追加更新，周期性 merge 回完整状态，保持原递推语义并减少每 Token 的全状态写回。作者报告 GDN/KDA/RWKV6 上状态更新 Kernel 最高 1.86×、写流量降低最高 7.83×、端到端 serving 1.05–1.20×。未找到作者公开代码；论文给出模型、Kernel 和 serving 评测边界，结果仍为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
+| 2026 | [KVBuffer: IO-aware Serving for Linear Attention](https://arxiv.org/abs/2605.19049) | arXiv 2026 (preprint) | 缓冲最近 K/V，将递推状态更新改为 chunkwise 批处理；支持 speculative verification 并行验证 draft tokens，短上下文时直接从缓冲 K/V 计算而不创建/更新状态。作者在 Qwen3-Next 的 SGLang 实现中报告线性 Attention Decode 延迟最高降低 45.17%，四 Token speculative verification 下最大可服务请求数提升至 5×。未找到作者公开代码，结果为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
 
 ### Kernel Automation & Tools (6)
 
