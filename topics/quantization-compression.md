@@ -89,7 +89,7 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2026 | [LeapQuant: Efficient Linear Attention with Accurate Recurrent State Quantization](https://arxiv.org/abs/2609.38166) | arXiv 2026 (preprint) | 对 Gated DeltaNet/Kimi Delta Attention 等递推状态采用窗口级量化，并用高精度 Compensator Tokens 与 Residual Smoothing 控制误差累积和离群值；作者在 NVIDIA B200、RTX PRO 6000、RTX 5090 报告 Kernel 加速 2.05–3.70×、端到端输出吞吐提升 1.23–1.65×，状态存储流量约降低 3.4×、特定模型端到端内存减少 41–56%。未找到作者公开完整复现代码；结果为作者报告，非独立复现。（KEEP_STRICT; PREPRINT; AUTHOR_ONLY_CLAIM） |
+| 2026 | [LeapQuant: Efficient Linear Attention with Accurate Recurrent State Quantization](https://arxiv.org/abs/2609.38166) | arXiv 2026 (preprint) | 对 Gated DeltaNet/Kimi Delta Attention 等递推状态采用窗口级量化，并用高精度 Compensator Tokens 与 Residual Smoothing 控制误差累积和离群值；作者在 NVIDIA B200、RTX PRO 6000、RTX 5090 报告 Kernel 加速 2.05–3.70×、端到端输出吞吐提升 1.23–1.65×，状态存储流量约降低 3.4×、特定模型端到端内存减少 41–56%。未找到作者公开完整复现代码；结果为作者报告，非独立复现。（KEEP_STRICT; PREPRINT; REAL_GPU; APPROXIMATE_QUALITY_CHECKED） |
 
 ### Lossless & Delta Compression (6)
 
