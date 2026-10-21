@@ -8,7 +8,7 @@
 
 **Foundational context.** See also: [QServe (2025)](../README.md#foundational-and-influential-papers); rows that anchor a sub-direction of this taxonomy carry an inline `KEEP_FOUNDATIONAL` tag.
 
-## Research directions (5)
+## Research directions (6)
 
 这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
 
@@ -18,10 +18,11 @@
 | [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-12) | 12 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
 | [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-3) | 3 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-4) | 4 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
+| [Recurrent State Quantization](#recurrent-state-quantization-3) | 3 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **37** | |
+| **Total** | **40** | |
 
-## Papers (37)
+## Papers (40)
 
 ### Weight-Only & Rotation (12)
 
@@ -81,6 +82,17 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 | 2026 | [JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference](https://doi.org/10.1145/3774934.3786428) | PPoPP 2026 | RtSmooth 运行时平滑离群值，配合 Fast Absmax、Recent-token 分层表示和 Mixed-precision Attention Kernel；报告 KV 质量、显存与端到端 Decode 吞吐对照。（KEEP_ADJACENT） |
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。（KEEP_ADJACENT） |
 | 2026 | [TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5c802ef38ab6e366c2ea06eee554c088-Abstract-Conference.html) | ICLR 2026 | 旋转与向量量化用于低比特 KV 表示；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（KEEP_ADJACENT） |
+
+### Recurrent State Quantization (3)
+
+线性 Attention / Hybrid LLM 的持久 Recurrent State 低比特表示；关注递推误差、状态读写流量与并发 Serving 内存，不等同于 KV Cache Quantization。
+
+| Year | Paper | Venue | Distinct mechanism |
+|---|---|---|---|
+| 2026 | [LeapQuant: Efficient Linear Attention with Accurate Recurrent State Quantization](https://arxiv.org/abs/2609.38166) | arXiv 2026 (preprint) | 对 Gated DeltaNet/Kimi Delta Attention 等递推状态采用窗口级量化，并用高精度 Compensator Tokens 与 Residual Smoothing 控制误差累积和离群值；作者在 NVIDIA B200、RTX PRO 6000、RTX 5090 报告 Kernel 加速 2.05–3.70×、端到端输出吞吐提升 1.23–1.65×，状态存储流量约降低 3.4×、特定模型端到端内存减少 41–56%。未找到作者公开完整复现代码；结果为作者报告，非独立复现。（KEEP_STRICT; PREPRINT; REAL_GPU; APPROXIMATE_QUALITY_CHECKED） |
+
+| 2026 | [STEPQuant: When and Where Errors Matter in Delta-Rule Recurrent State Quantization](https://arxiv.org/abs/2609.38169) | arXiv 2026 (preprint) | 按时间误差持续性和空间 Key-row/Value-column 敏感度分配精度，采用 packed state 与异步写回；与 LeapQuant 的窗口级量化/补偿 Token 属于不同误差预算策略。作者报告 nominal 6-bit 状态接近 FP32 质量、状态压缩超过 5×、总 serving memory 最高减少 68.7%。公开 [STEPQuant source, SGLang integration, tests and reproduction scripts](https://github.com/Dreamer-Toby/STEPQuant)；结果未独立复现。（KEEP_STRICT; PREPRINT; PUBLIC_CODE; AUTHOR_REPORTED） |
+| 2026 | [DAMP: Decay-Aware Mixed-Precision Recurrent-State Quantization](https://arxiv.org/abs/2608.27513) | arXiv 2026 (preprint) | 离线结合量化误差能量与 learned decay 对误差的保留程度识别高风险 Key channels，将其保留 FP16、其余状态使用 INT8，并融合状态更新。作者报告状态存储减少 69.1%、更新 Kernel 最高 2.59×、full-model TPOT 最高降低 19.0%。未找到作者维护的公开代码；论文披露校准、Kernel 与 serving 评测细节，性能仍为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND; AUTHOR_REPORTED） |
 
 ### Lossless & Delta Compression (6)
 
