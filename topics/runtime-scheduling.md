@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-39) | 39 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-40) | 40 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-15) | 15 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-28) | 28 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-23) | 23 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **137** | |
+| **Total** | **138** | |
 
-## Papers (137)
+## Papers (138)
 
-### Batching, Queues & SLOs (39)
+### Batching, Queues & SLOs (40)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -69,6 +69,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption](https://doi.org/10.1109/IPDPS65963.2026.00037) | IPDPS 2026 (IEEE full paper) | 优化流式语音问答生成的**播放连续性**与基于 LLM 的请求服务抢占，而非单纯平均 Token/s；出版 DOI 和作者身份已核对。实际在线并发、音频/文本端到端播放延迟、对照 vLLM/SGLang 与真实设备结果尚未全文核验，**HOLD_METHOD**。（HOLD_EVIDENCE） |
 | 2026 | [SageSched: Efficient LLM Scheduling Confronting Demand Uncertainty and Hybridity](https://arxiv.org/abs/2603.07917) | NeurIPS 2026 (authors confirm; proceedings pending) | 用 Prompt + 历史输出估计生成长度**分布**而非固定长度，并联合 GPU Compute/Memory Cost 做不确定性感知排队；作者真实 Testbed 报告服务效率提升超过 28.7%。尚未核验代码发布、相同 SLO Goodput 和在现代 vLLM/Ascend 上的复现。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [Delta Tokenizer: Reference-Identical Tokenization of Session Deltas and Segment-Parallelism for Long Prompts on Multicore CPUs](https://arxiv.org/abs/2610.19801) | arXiv 2026-10-14 (preprint) | LLM Serving CPU Frontend 的增量 Exact BPE：以稳定 Split Boundary 重编码变更尾部，长 Prompt 分段多核编码并让短 Session Delta 优先穿插执行；作者宣称 **Reference-Identical Token IDs**，SGLang Agent 长上下文 100K Median TTFT −59%、P99 TTFT 最大 9.5×。公开 [toktier](https://github.com/asu-idi/toktier) **仅增量路径与 Encoder**，分段并行、CPU 调度器与 SGLang Adapter 在文中仍属待公开组件；无法将完整服务收益视为已可复现。(KEEP_STRICT; REAL_CPU/GPU_AUTHOR_REPORTED; PARTIAL_ARTIFACT) |
+| 2026 | [Taking Tokenization off the Host for Agentic LLM Serving (GraphTok)](https://arxiv.org/abs/2610.13325) | arXiv 2026-10-09 (preprint) | **完整 GPU Tokenizer，非 Token Cache**：Pre-tokenization → Parallel Exact BPE → Token-ID Assembly 合并为可 Replay 的 **CUDA Graph**，短输入回退 CPU；对 GPT-2/Llama3/Qwen2.5/DeepSeek-V3/Gemma3 均执行 Reference Bit-identical Token-ID Oracle。作者在 **H100 NVL + vLLM/Dynamo** 和 121K Cached-Agent Prompts 下报告单 Frontend 的 2s P99 下最大处理量 **518 req/s vs CPU gigatoken 296、默认 Tokenizer 18.5**，对命中前缀的请求 Mean TTFT 最多降低 2.4×；此收益受极长 Context 和 Cache-Hit 驱动，不适用于短输入或 GPU 无空余资源的场景。[公开 CUDA、vLLM Plugin、Dynamo Backend](https://github.com/Msiavashi/GraphTok)（v0.3.0）；未独立验证包括所有 Unicode 边界、部署开销或 Ascend 迁移。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; LOSSLESS_TOKEN_IDS_CLAIM) |
 
 ### Routing & Load Balancing (15)
 
