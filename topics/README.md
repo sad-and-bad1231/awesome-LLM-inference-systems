@@ -9,14 +9,14 @@ Eight research topics, now organized as **44 practical engineering directions**:
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 94 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 161 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 162 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 84 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 41 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 81 | 4 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 138 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 134 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 62 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **795** | **44** | |
+| **Total** | **796** | **44** | |
 
 ## Admission summary (through 2026-10-18)
 
