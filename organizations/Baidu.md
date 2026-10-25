@@ -4,13 +4,6 @@ Baidu/PaddlePaddle's open inference engine and deployment toolchain. Broader Pad
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-| Public work | Inference relevance | Primary source |
-|---|---|---|
-| **FastDeploy** | Production-facing inference deployment toolkit with hardware/backend integration. | [Official source](https://github.com/PaddlePaddle/FastDeploy) |
-| **PaddleNLP** | Includes LLM model implementations and inference/deployment paths; wider than inference alone. | [Official source](https://github.com/PaddlePaddle/PaddleNLP) |
-
-**Scope:** a brief technical map of publicly documented results and first-party components; not an exhaustive release history, ownership claim for independent runtimes, or independently reproduced benchmark.
-
 ## Official ERNIE / Paddle model-family crosswalk (2026-10-24)
 
 **First-party catalog:** [Baidu ERNIE model overview](https://cloud.baidu.com/product/model.html) and [Qianfan ModelBuilder](https://cloud.baidu.com/product/wenxinworkshop.html). **Third-party models merely hosted on Qianfan are excluded from Baidu-owned models**.
@@ -25,3 +18,10 @@ Baidu/PaddlePaddle's open inference engine and deployment toolchain. Broader Pad
 | Baidu speech models / MuseSteamer and iRAG | Speech/text/audio and image/video generation lines; document presence but outside core autoregressive LLM serving | [Qianfan models](https://cloud.baidu.com/qianfan/dev_center/home) |
 
 [FastDeploy](https://github.com/PaddlePaddle/FastDeploy) and [PaddleNLP](https://github.com/PaddlePaddle/PaddleNLP) are deployment/toolchains, **not** individual model releases.
+
+## Selected first-party architecture and execution sources
+
+| Public work | Inference relevance | Primary source |
+|---|---|---|
+| **FastDeploy** | Production-facing inference deployment toolkit with hardware/backend integration. | [Official source](https://github.com/PaddlePaddle/FastDeploy) |
+| **PaddleNLP** | Includes LLM model implementations and inference/deployment paths; wider than inference alone. | [Official source](https://github.com/PaddlePaddle/PaddleNLP) |
