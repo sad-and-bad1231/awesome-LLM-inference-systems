@@ -14,11 +14,11 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks-workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance-efficiency-studies-15) | 15 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
-| [Profiling & Diagnosis](#profiling-diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models-simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
-| [Correctness & Reliability](#correctness-reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-15) | 15 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Profiling & Diagnosis](#profiling--diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
+| [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
+| [Correctness & Reliability](#correctness--reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-5) | 5 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **58** | |
 
