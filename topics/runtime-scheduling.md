@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-36) | 36 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-37) | 37 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-28) | 28 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **131** | |
+| **Total** | **132** | |
 
-## Papers (131)
+## Papers (132)
 
-### Batching, Queues & SLOs (36)
+### Batching, Queues & SLOs (37)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Pacing Branch Parallelism in LLM Serving (PACE/TAPER)](https://arxiv.org/abs/2605.06914) | NeurIPS 2026 (author-verified; proceedings title) | 同一请求多个并行 Branch 与其他请求共 Batch 时，按 **Branch Externality / SLO Slack** 每 Decode Step 动态 Admit，避免 Eager/固定 Cap 拖慢其他请求；作者 Qwen3-32B **Goodput 1.77×/1.48× vs IRP-Off/Eager**、>95% SLO 达标（作者报告）。公开 [SGLang Fork、校准脚本、正确性测试](https://github.com/Swapnil-Gandhi/PACE)。**G0 alias：会议题名为 Pacing；arXiv/代码题名 Regulating（同作者同机制）**，不重复收录；未复现 NPU。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2021 | [TurboTransformers: An Efficient GPU Serving System for Transformer Models](https://doi.org/10.1145/3437801.3441578) | PPoPP 2021 | 早期 Transformer Serving 系统：可变长输入的 Smart Batching、动态规划批调度、GPU Softmax/LayerNorm 与内存分配器；Tencent 有开源实现及 BERT 在线部署，属于现代自回归 Serving 前驱，非 2026 LLM 评测。 |
 | 2024 | [Andes: Defining and Enhancing Quality-of-Experience in LLM-Based Text Streaming Services](https://arxiv.org/abs/2404.16283) | arXiv 2024 (preprint) | 为 Text Streaming 定义面向用户的 QoE，并以 Token-level Preemption 和到达流量感知调度协调首 Token 与平滑输出。 |
 | 2024 | [DeepSpeed-FastGen: High-throughput Text Generation for LLMs via MII and DeepSpeed-Inference](https://arxiv.org/abs/2401.08671) | arXiv 2024 (preprint) | Dynamic SplitFuse 以统一 Token Budget 混合 Chunked Prefill 与 Decode，并提供 DeepSpeed-MII/Inference 实现及对 vLLM 的服务吞吐-延迟评估。 |
