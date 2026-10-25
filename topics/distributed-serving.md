@@ -15,13 +15,13 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
-| [Disaggregated Compute Stages](#disaggregated-compute-stages-31) | 31 | P/D、Attention–FFN 与多阶段资源解耦。 |
+| [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-23) | 23 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-19) | 19 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **123** | |
+| **Total** | **125** | |
 
-## Papers (123)
+## Papers (125)
 
 ### Parallelism & Scale-Up (26)
 
@@ -56,7 +56,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [Spexis: Speculative Lookahead Scheduling for LLM Inference](https://arxiv.org/abs/2609.34370) | EMNLP 2026 Main (author/ACL listing; proceedings detail pending) | **Speculative Parallelism (SP)** 作为 TP/PP 之外的新执行维度：早期层 Drafter 与后续层 Target Verification 跨 Pipeline Stage 并发，辅以 Confidence Selective Speculation 与剩余长度预测抑制 KV Eviction。作者用 [vLLM v0.8.4 Fork](https://github.com/mlsys-seo/spexis) 于 A40/A100/H100/L40S/RTX PRO 6000 实测，部分低互联场景请求率最高 +34%。**反例：H100 SXM + Qwen3-32B，SP/TP Throughput 仅 0.47×；论文所需 Early-exit 权重尚未发布，不能即刻复现完整结果**。非现代 vLLM v0.23 / Ascend 的 Drop-in 优化。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; INCOMPLETE_ARTIFACT; MODEL_COMPONENT_TRAINING) |
 | 2026 | [SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving](https://arxiv.org/abs/2609.37626) | arXiv 2026-09 (preprint) | **Runtime Attention Layout Switching (TP/DP/CP/DOP)**：将 Attention Weight Sharding 与 KV Request Ownership 解耦，提出 Decoupled Ownership Parallelism，以后台 State Transfer 与 Batch-boundary Handoff 迁移当前正在执行的请求；决策由当前 Prompt/Concurrency/Memory Pressure 驱动。作者在 **B200+GLM-5.3** 报告相对固定 Layout 的 **E2E Throughput 1.3–1.73×**，中位切换额外成本小于当前 Step 0.51%，**H200+DeepSeek-V3.2/DCU+GLM-Flash** 用于验证不同布局的适用区间；公开 [SGLang Fork](https://github.com/ict-agent/SPLASH-sglang)。需要提前 Capture 多 Layout Graph 且切换需短暂内存余量；该数字**不是 Ascend vLLM0.23 的可移植收益**。(KEEP_STRICT; REAL_ACCELERATOR_AUTHOR_REPORTED; PUBLIC_ARTIFACT; GRAPH_MEMORY_OVERHEAD) |
 
-### Disaggregated Compute Stages (31)
+### Disaggregated Compute Stages (32)
 
 P/D、Attention–FFN 与多阶段资源解耦。
 
@@ -93,6 +93,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Towards Load-Aware Prefill Deflection for Disaggregated LLM Serving](https://arxiv.org/abs/2607.02043) | arXiv 2026 (preprint) | 在 Prefill Pool 拥塞时将部分 Chunked Prefill 导向 Decode Worker，约束已有 Decode 的 TBT SLO。 |
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
+| 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
 
 ### KV Transfer & Communication (23)
 
@@ -124,7 +125,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Understanding and Improving Communication Performance in Multi-node LLM Inference](https://doi.org/10.1145/3786335.3813165) | CAIS 2026 | 在 Slingshot/InfiniBand 多节点 405B 推理上剖析 TP/PP 的 AllReduce 瓶颈；NVSHMEM 的 NVRAR 针对小消息 Recursive-Doubling 做分层优化，作者将其集成到 YALIS/vLLM 实机对照（最高 1.72× End-to-end Batch Latency 改善），公开研究代码，区别于泛用 NCCL Microbenchmark。 |
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
 
-### Fleet Scaling & Reliability (24)
+### Fleet Scaling & Reliability (25)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -154,6 +155,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving](https://doi.org/10.1109/2575-8411.2026.00051) | ICDCS 2026 | 通过风险驱动 Shadow Replica 启用、异构设备能力匹配和后台增量追赶，在 Jetson/手机测试床保证有状态 LLM 故障接管；直接衡量恢复时间和稳态影子开销。 |
 | 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
 | 2026 | [Fast Recovery for LLM Serving via Decoupled Device Memory Lifetime in Dynamo](https://arxiv.org/abs/2609.25451) | arXiv 2026-09 (preprint) | **GMS** 将权重 GPU Allocation 生命周期与 Engine Process 解耦，用初始化 Runtime Snapshot + Shared-model **Shadow Engine** 做原位 Failover。作者在 4 Model / vLLM/SGLang / GPU 系统上测得故障恢复 **<7s、较 Warm Restart 13–29×**，代价 **每卡 4–8 GiB** 显存；[Dynamo](https://github.com/ai-dynamo/dynamo) / [Snapshot](https://github.com/ai-dynamo/snapshot) 源码公开。生产 **18 周 Trace 推算**可挽回 79% 故障 GPU-hours，**不是已经实测节省 79%**；仅覆盖安全的 Device-preserving Case。(KEEP_STRICT; REAL_GPU_PRODUCTION_TRACE; PUBLIC_ARTIFACT; NO_INDEPENDENT_REPRO) |
+| 2026 | [Foundry: Template-Based CUDA Graph Context Materialization for Fast LLM Serving Cold Start](https://arxiv.org/abs/2604.06664) | arXiv 2026 (preprint) | 离线保存 CUDA Graph Topology + Driver Context/Kernel Binary/Deterministic Address Layout，启动时直接 Restore 并修补跨 Rank 通信状态，避免分布式 Scale-up 的反复 Graph Capture；[作者实现](https://github.com/foundry-org/foundry) 已公开 SGLang 8×H100 测试（TP2/EP2、256 Decode Graphs，Capture 26.7–56s → Restore 2.1–3.5s，/health 63–93s→41–45s，TPOT 近持平）；论文 Qwen3-235B 10min→3.9s 是**特定全栈冷启动配置**，公开 vLLM/TRT-LLM Fork 尚未全部就绪。（KEEP_STRICT; PUBLIC_SGLANG_PATCH; REAL_H100; CODE_PAPER_SCOPE_DIFFERENCE） |
 
 ### Heterogeneous & Edge Serving (19)
 
