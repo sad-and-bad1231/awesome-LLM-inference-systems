@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-26) | 26 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-27) | 27 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-16) | 16 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-6) | 6 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **88** | |
+| **Total** | **89** | |
 
-## Papers (88)
+## Papers (89)
 
-### Attention & Sparse Kernels (26)
+### Attention & Sparse Kernels (27)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [CompactAttention: Accelerating Chunked Prefill with Block-Union KV Selection](https://arxiv.org/abs/2605.16839) | NeurIPS 2026 Spotlight (author-verified; proceedings pending) | Chunked Prefill 中将 2D Sparse Mask 转为 GQA-aware KV Block Union/Table，直接读取 Paged KV、避免显式复制；作者在 Llama-3.1-8B/RULER 128K 报告 **Attention Kernel 最高 2.72×**、近似质量，**非端到端 Serving Speedup**。公开 [代码与基准](https://github.com/jiwonsong-dev/CompactAttention)；Ascend 未复现。（KEEP_STRICT; REAL_GPU; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
 | 2024 | [FlashDecoding++: Faster Large Language Model Inference with Asynchronization, Flat GEMM Optimization, and Heuristics](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5321b1dabcd2be188d796c21b733e8c7-Abstract-Conference.html) | MLSys 2024 | 解码 Softmax 的异步化、Flat GEMM 专项优化与形状感知 Dataflow；跨 NVIDIA/AMD 的 Operator + Engine 评测。 |
 | 2024 | [Hydragen: High-Throughput LLM Inference with Shared Prefixes](https://arxiv.org/abs/2402.05099) | arXiv 2024 (preprint) | 将共享 Prefix 与独有 Suffix 的 Exact Attention 分解执行，把重复 Query 合并为高效矩阵计算并支持 Tree Prefix。 |
 | 2025 | [FastTree: Optimizing Attention Kernel and Runtime for Tree-Structured LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2025/hash/96894468eb44631a32d7ebd56f9892c7-Abstract-Conference.html) | MLSys 2025 | 联合设计 Radix Tree Prefix Share Attention Kernel 与树划分 Runtime。 |
