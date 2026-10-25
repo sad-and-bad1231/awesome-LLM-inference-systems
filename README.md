@@ -4,7 +4,7 @@
 
 An edited bibliography of the ideas and implementations that shape efficient large language model inference: attention kernels, KV memory, request scheduling, disaggregated execution, and production serving.
 
-**Current selective audit (2026-10-25): 722 canonical papers; all former 92 HOLD-labeled records adjudicated (16 retained on source-backed evidence, 76 retired), two additional unclear papers retired, four targeted additions.** See [the item-level decision ledger](reviews/HOLD_RESOLUTION_20261025.md). Canonical status is a bibliographic/editorial decision, **not 722 independent reproductions**.
+**Selective review baseline (2026-10-25): 722 canonical papers after HOLD resolution; 14 lab-origin source-reviewed papers subsequently admitted, bringing the current inventory to **736**; all former 92 HOLD-labeled records adjudicated (16 retained on source-backed evidence, 76 retired), two additional unclear papers retired, four targeted additions.** See [the item-level decision ledger](reviews/HOLD_RESOLUTION_20261025.md). Canonical status is a bibliographic/editorial decision, **not 722 independent reproductions**.
 
 Selection follows the **systems question, the mechanism, and the evidence**. We favor work that establishes a lasting abstraction, demonstrates convincing end-to-end value, or changes how real inference systems are built. Venue and affiliation are useful context, never admission criteria on their own. This list is deliberately selective—not a leaderboard or an exhaustive paper dump.
 
@@ -14,7 +14,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 722 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 736 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Six selected emerging execution problems; mature KV and hybrid attention work remains in the eight topic areas. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
