@@ -4,6 +4,16 @@ Selected **Llama architectural choices and first-party execution components**. M
 
 [← Organizations](../README.md#organizations)
 
+## Official Llama / on-device model-family coverage (2026-10-24)
+
+| Publicly disclosed family | What to include in the model-engineering map | Primary source |
+|---|---|---|
+| Llama 4 | **Scout and Maverick** MoE and multimodal model variants, sparse expert execution vs Llama 3 baseline | [Official Llama 4 announcement](https://ai.meta.com/blog/llama-4-multimodal-intelligence/) |
+| Llama 3 / 3.1 / 3.2 / 3.3 | Dense/GQA, edge/multimodal sizes, 405B deployment history, documented historical variants | [Official Llama 3.1 release](https://ai.meta.com/blog/meta-llama-3-1/) |
+| Open model runtimes | [ExecuTorch](https://github.com/pytorch/executorch), [torchao](https://github.com/pytorch/ao), [xFormers](https://github.com/facebookresearch/xformers), FBGEMM | [First-party GitHub](https://github.com/pytorch/executorch) |
+
+This is the **public Llama model-family** inventory, not an unsupported enumeration of Meta proprietary production/consumer endpoints. No newer Llama base architecture is asserted without a first-party release.
+
 ## Llama model families
 
 | Work | Inference relevance | Primary source |
@@ -22,13 +32,3 @@ Selected **Llama architectural choices and first-party execution components**. M
 | **FBGEMM** | High-performance CPU/GPU matrix and embedding operations, including lower-precision computation. | [GitHub](https://github.com/pytorch/FBGEMM) |
 
 **Boundary.** PyTorch ecosystem components are included for their widely used open-source inference capabilities; the page does not claim all PyTorch contributors or each component's work is exclusively Meta's.
-
-## Official Llama / on-device model-family coverage (2026-10-24)
-
-| Publicly disclosed family | What to include in the model-engineering map | Primary source |
-|---|---|---|
-| Llama 4 | **Scout and Maverick** MoE and multimodal model variants, sparse expert execution vs Llama 3 baseline | [Official Llama 4 announcement](https://ai.meta.com/blog/llama-4-multimodal-intelligence/) |
-| Llama 3 / 3.1 / 3.2 / 3.3 | Dense/GQA, edge/multimodal sizes, 405B deployment history, documented historical variants | [Official Llama 3.1 release](https://ai.meta.com/blog/meta-llama-3-1/) |
-| Open model runtimes | [ExecuTorch](https://github.com/pytorch/executorch), [torchao](https://github.com/pytorch/ao), [xFormers](https://github.com/facebookresearch/xformers), FBGEMM | [First-party GitHub](https://github.com/pytorch/executorch) |
-
-This is the **public Llama model-family** inventory, not an unsupported enumeration of Meta proprietary production/consumer endpoints. No newer Llama base architecture is asserted without a first-party release.
