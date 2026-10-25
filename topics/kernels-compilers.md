@@ -18,11 +18,11 @@
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-16) | 16 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-17) | 17 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **90** | |
+| **Total** | **91** | |
 
-## Papers (90)
+## Papers (91)
 
 ### Attention & Sparse Kernels (27)
 
@@ -119,12 +119,13 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
 
-### Communication, Memory & I/O (16)
+### Communication, Memory & I/O (17)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [uGDS: A User-Space Development Kit for High-Performance GPU Direct Storage](https://arxiv.org/abs/2610.30868) | arXiv 2026 (technical report) | CPU 用户态 NVMe Submission/Completion + PCIe P2P DMA，避开每次 I/O Kernel 控制路径；分离 Sync/Batch 队列，兼容 NVIDIA CUDA/AMD ROCm。真实 A100+Samsung 990 PRO、Qwen3-0.6B/vLLM0.20.1/LMCache0.5.1.dev35 SSD-only replay，作者报告 **TTFT 中位数最高 -62.7%、Serving Goodput 2.63×**（特定小 I/O 条件）。公开 [实现](https://github.com/ScaleX-IO/uGDS)，[LMCache Adapter PR #4420 已合并](https://github.com/LMCache/LMCache/pull/4420)；对独占裸 NVMe 的风险与 910B2 不可移植性作限制。（KEEP_STRICT; REAL_GPU; E2E_AUTHOR_ONLY; PUBLIC_UPSTREAM_CODE） |
 | 2025 | [FACIL: Flexible DRAM Address Mapping for SoC-PIM Cooperative On-device LLM Inference](https://doi.org/10.1109/HPCA61900.2025.00127) | HPCA 2025 | SoC GEMM/PIM GEMV 针对 Prefill/Decode 不同访问模式设计 DRAM 地址重映射以降低权重 Relayout；定制 PIM 硬件性能归因和物理芯片验证尚未确认，不等同商品 GPU/NPU 推理提速（HOLD_EVIDENCE）。 |
 | 2025 | [Fast On-device LLM Inference with NPUs](https://doi.org/10.1145/3669940.3707239) | ASPLOS 2025 | llm.npu 将模型子图映射到手机 NPU/CPU/GPU 并流水化执行，处理 NPU 不支持算子及动态 LLM Decode。 |
 | 2025 | [LUT Tensor Core: A Software-Hardware Co-Design for LUT-Based Low-Bit LLM Inference](https://doi.org/10.1145/3695053.3731057) | ISCA 2025 | 低比特 LUT-GEMM 的 Fusion、表项对称化及特殊 Tile/指令集设计；论文关注定制硬件计算密度/能效，**不能当作 NVIDIA/Ascend 真实 Tensor Core Kernel 加速**。物理芯片/模拟验证边界与 End-to-end LLM 指标待复核（HOLD_EVIDENCE）。 |

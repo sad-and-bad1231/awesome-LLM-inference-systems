@@ -17,12 +17,12 @@
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-18) | 18 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-10) | 10 | 性能建模、容量估计、仿真和边界分析。 |
-| [Correctness & Reliability](#correctness--reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
+| [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
+| [Correctness & Reliability](#correctness--reliability-10) | 10 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-4) | 4 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **59** | |
+| **Total** | **61** | |
 
-## Papers (59)
+## Papers (61)
 
 ### Serving Benchmarks & Workloads (14)
 
@@ -81,12 +81,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
 | 2026 | [XProf: An Open, Scalable, and Extensible Profiling System for the Modern ML Stack](https://proceedings.mlsys.org/paper_files/paper/2026/hash/280776fda5970060e6a5efcfd43e5d2d-Abstract-Conference.html) | MLSys 2026 | OpenXLA/PJRT Full-stack CPU–TPU/GPU Profiling、Roofline 与跨千卡低开销分布式 Trace；开源生产级性能分析基础设施，但不是 LLM Serving 专用评测（KEEP_ADJACENT）。 |
 
-### Models & Simulators (10)
+### Models & Simulators (11)
 
 性能建模、容量估计、仿真和边界分析。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Simulate Before You Scale: High-Fidelity LLM Inference Planning Without GPUs (BLIS)](https://arxiv.org/abs/2610.14255) | ACM SIGMETRICS 2027 accepted / arXiv 2026 (DOI:10.1145/3857382; final proceedings pending) | **Deterministic CPU Serving Simulator** 建模 Admission、llm-d Routing、Batching、KV/Preemption 与 P/D；36 组 **6 模型 × 3 GPU** 对真实 vLLM/llm-d 配置中位 E2E 误差 **6.7%**（作者报告），两项模拟器发现的策略在真实 GPU 验证，不能把其余配置扫描当实机实验。开源 [Simulator + Latency Kernel/Catalog](https://github.com/inference-sim/inference-sim)，llm-d Policy Merge 尚待具体 PR 核实。（KEEP_STRICT; REAL_GPU_VALIDATION; PUBLIC_SIM; AUTHOR_REPORTED） |
 | 2024 | [LLMCompass: Enabling Efficient Hardware Design for Large Language Model Inference](https://ieeexplore.ieee.org/abstract/document/10609604) | ISCA 2024 | 映射搜索、硬件面积/成本模型及延迟预测联合评估 LLM 推理硬件设计，并与实测延迟对齐。 |
 | 2024 | [LLMServingSim: A HW/SW Co-Simulation Infrastructure for LLM Inference Serving at Scale](https://doi.org/10.1109/IISWC63097.2024.00012) | IISWC 2024 | 构建 LLM 服务调度与硬件执行协同模拟，实现不同硬件/软件配置定量分析。 |
 | 2024 | [Vidur: A Large-Scale Simulation Framework for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/b74a8de47d2b3c928360e0a011f48351-Abstract-Conference.html) | MLSys 2024 | 基于算子 Profiling 与预测模型模拟 Batch/Parallelism/负载，使用真实推理数据校验仿真误差。 |
@@ -98,12 +99,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
 | 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 (preprint) | HeteroPanacea 联合模拟阶段量化、并行分配及 P/D/A/F 异构芯片，结论依赖硬件模型假设（HOLD_EVIDENCE）。 |
 
-### Correctness & Reliability (9)
+### Correctness & Reliability (10)
 
 输出一致性、运行时 Bug、可靠性及数值语义检查。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [KV-Repurpose: A Testbed for Evaluating Non-Prefix KV-Cache Reuse](https://arxiv.org/abs/2610.13060) | arXiv 2026 (preprint) | [vLLM Testbed](https://github.com/taiga333/eval-kv-repurpose) 将非 Prefix 文档 Segment 复用与 Workload/Capacity/Cache-Aware Scheduling 结合，固定 **30GB/Zipf RAG** 报告 Token Hit Rate **63.9% vs Prefix 3.3%** 并缩短 TTFT；但非前缀复用破坏因果状态，**跨文档推理质量显著失效**，不能视作无损优化。作为可复现的语义正确性反例而非普适加速方法收录。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; APPROXIMATE_QUALITY_REGRESSION; PUBLIC_CODE） |
 | 2026 | [A First Look at Bugs in LLM Inference Engines](https://doi.org/10.1145/3788873) | ACM TOSEM 2026 | 对 llama.cpp、vLLM、DeepSpeed、MLC-LLM、TensorRT-LLM 的 929 个真实 Bug 手工标注，归纳六类症状、28 类根因并开放缺陷数据集，指导运行时故障定位。 |
 | 2026 | [Deterministic Inference across Tensor Parallel Sizes That Eliminates Training-Inference Mismatch](https://proceedings.mlr.press/v306/zhang26ag.html) | ICML 2026 | 剖析不同 Tensor Parallel Size 的归约顺序并实现确定性推理。 |
 | 2026 | [DriftBench: Measuring and Predicting Infrastructure Drift in LLM Serving Systems](https://openreview.net/forum?id=Xfzzp6grRP) | MLSys 2026 | DriftBench 用成体系的 prompt-response 集测量基础设施变化对 LLM serving 输出一致性的影响，并预测高风险变更 |
