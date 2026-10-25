@@ -24,6 +24,12 @@ This document is the **entry point for the second, strict audit**. [Topic index]
 
 **Further RAG/MoE full-experiment review (2026-10-25):** three latest arXiv 2026 papers accepted into selective canonical mechanisms: CacheSmith (KV Prefix/Session; real RTX PRO 6000, vLLM 0.10.2, quality-gated SLO across 4 RAG tasks), ThunderEP (MoE Expert Routing/Communication; real no-P2P RTX 4090/5090 PCIe, not an NVLink or Ascend drop-in), FastEEP (MoE Expert Placement/Elasticity; vLLM 0.27.0 / NIXL 1.2.0 dual 8×H20 nodes). **Proposed total: 791**, with KV 161, MoE 79. G3 caution: CacheSmith’s untuned Triton query signal is uniformly implemented but may disadvantage baseline published implementations; FastEEP's 4.5–11.7× is *EP resizing latency* not per-token throughput; ThunderEP's kernel/collective performance is distinct from its up-to-1.66× end-to-end ratio. **Public versioned implementation for all three not independently verified; none reproduced here.**
 
+
+
+**Latest paper/artifact cross-check (2026-10-25):** four further source-mechanism accepted: VAMP (dynamic MoE expert-weight↔KV HBM reprioritization; 2,103 SWE-agent turns; **TPOT +31.1% despite large TTFT P90 gain**); GraphTok (complete exact BPE GPU CUDA Graph with author [source](https://github.com/Msiavashi/GraphTok), CUDA-only; differentiates cached long-context vs cold/short inputs); SPLASH (B200/H200/DCU dynamic TP/DP/CP/DOP attention ownership transitions; [SGLang fork](https://github.com/ict-agent/SPLASH-sglang); Graph pre-capture and switch memory overhead); vSkipper (SGLang fork supporting token-wise trained dynamic layer skipping; [code](https://github.com/AKafakA/sglang-vskipper/tree/vskipper-ref); **REQUIRES_TRAINED_MODEL** and no exact base-model output equivalence). **Proposed 795** (MoE 81, Runtime 138, Distributed 134). Source-side performance results have not been independently reproduced.
+
+**G3 claim correction:** CacheSmith original abstract/table describes **up to 27.5% improvement in quality-gated SLO attainment**; it does not certify 27.5 *percentage points*. Corrected the canonical row to preserve the source's unit and metric.
+
 ## Non-negotiable audit gates
 
 | Gate | Question | What passes | What fails / stays on hold |
