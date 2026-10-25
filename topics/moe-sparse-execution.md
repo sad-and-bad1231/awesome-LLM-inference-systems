@@ -16,11 +16,11 @@
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-15) | 15 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
-| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-17) | 17 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
+| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-18) | 18 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-23) | 23 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **66** | |
+| **Total** | **67** | |
 
-## Papers (66)
+## Papers (67)
 
 ### Expert Routing & Communication (15)
 
@@ -62,7 +62,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
-### Expert Offload & Heterogeneous Execution (17)
+### Expert Offload & Heterogeneous Execution (18)
 
 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。
 
@@ -85,6 +85,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Taming Latency-Memory Trade-Off in MoE-Based LLM Serving via Fine-Grained Expert Offloading](https://doi.org/10.1145/3767295.3769319) | EuroSys 2026 | FineMoE 从 Prompt 语义及细粒度 Expert 激活模式驱动 Expert 预取、缓存与 CPU Offload，在六 GPU 原型和真实 MoE 工作负载中对照时延及 Cache Hit。 |
 | 2026 | [ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling](https://proceedings.mlr.press/v306/yang26ds.html) | ICML 2026 | 联合无损 Expert 权重压缩、缓存亲和调度与边缘硬件特性，实现低显存 MoE Serving 原型。 |
 | 2026 | [Dynamic HBM Repartitioning for Multi-Turn MoE Serving (VAMP)](https://arxiv.org/abs/2609.13537) | arXiv 2026-09 (preprint) | **Expert Weight ↔ KV Cache 动态 HBM 重新划分**：MoE 稀疏激活允许将部分 Expert Weight 迁到 Host，把 CUDA VMM Page 映射给 KV；由 Controller 比较 Expert Reload、KV Eviction/Re-prefill、Request Preemption 预测损失。**vLLM 0.15.1 / Qwen3-Next-80B-A3B**、2×H100 PCIe / 4×H200 NVLink、2,103 轮 SWE-agent 五次 Replay：相对原版 vLLM **TTFT P90 26.1→1.10 s；请求吞吐 +20.7%；但 TPOT 170.9→224.0 ms（恶化 31.1%）**。收益主要靠避开 Prefix/KV 容量崩溃阈值；不同并发/Offload Ratio 可逆转优势，Closed-loop Agent 负载并非一一匹配的请求 Replay；模型正确性与开源实现未独立核查。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; CAPACITY_THRESHOLD_SCOPED; TPOT_REGRESSION) |
+| 2026 | [FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution](https://arxiv.org/abs/2608.16157) | arXiv 2026 (preprint) | 面向单机消费者 RTX GPU+CPU/Host RAM 的 MoE Serving：Bandwidth-aware CPU–GPU Co-execution、Expert Residency、Double-buffered Prefill、Agent KV/Recurrent State Cache、弹性 Memory Partition；[开源 Runtime](https://github.com/FlashML-org/FreeToken) 支持多 MoE/Claude Code 风格 API，作者报告从 8GB Laptop 到 Workstation 部署巨量模型。**可跑大模型不等于相同硬件/质量/SLO 下优于 vLLM/SGLang；吞吐收益基线及可复现权重布局依配置而异**。（KEEP_STRICT; PUBLIC_RUNTIME; REAL_EDGE_HARDWARE_AUTHOR_REPORTED; PREPRINT; TOPOLOGY_SCOPED） |
 
 ### Sparse Attention & Conditional Compute (23)
 
