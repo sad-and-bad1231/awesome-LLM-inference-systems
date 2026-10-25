@@ -15,12 +15,12 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-19) | 19 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
-| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-12) | 12 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
+| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-13) | 13 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-22) | 22 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **74** | |
+| **Total** | **75** | |
 
-## Papers (74)
+## Papers (75)
 
 ### Expert Routing & Communication (19)
 
@@ -48,12 +48,13 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods](https://doi.org/10.1145/3789240.3829183) | SIGCOMM 2026 | 面向 SuperPod 拓扑重构 MoE Expert All-to-All 的通信和同步路径，减少 EP 调度的跨节点序列化。 |
 | 2026 | [UEP: Portable Expert-Parallel Communication](https://www.usenix.org/conference/osdi26/presentation/mao-ziming-uep) | OSDI 2026 | UEP 用 GPU-CPU 控制通道取代 GPU 发起的 RDMA，由 CPU 代理发 GPUDirect RDMA 以 immediate data 模拟保序，在 EFA 上 dispatch/combine 吞吐提升 2.1×、SGLang token 吞吐提升至多 40% |
 
-### Placement, Balance & MoE Serving (12)
+### Placement, Balance & MoE Serving (13)
 
 专家放置/复制/动态负载均衡与 MoE 服务容量。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [MegaFlux: Skew-Resilient MoE Megakernels via Pipelined Expert Replication](https://arxiv.org/abs/2610.00671) | arXiv 2026 (preprint) | 用 On-device Planner 将热点专家复制与 Token Tile 重映射嵌入 Persistent MoE Megakernel，**不改变 Router 选专家结果**，在 Copy/Compute/Gradient Reduce 中重叠通信；作者报告 8×B200、147 种 Forward 配置平均 1.45×，并在 vLLM DeepSeek-V4-Pro Prefill **E2E 1.13–1.26×**。Kernel 合成权重实验与 vLLM E2E 实验需分开解读；**作者 MegaFlux 补丁尚未公开**，TensorRT-LLM MegaMoE 仅为基础代码。（KEEP_STRICT; REAL_GPU; E2E_AUTHOR_ONLY; NO_PUBLIC_PATCH） |
 | 2025 | [Stratum: System-Hardware Co-Design with Tiered Monolithic 3D-Stackable DRAM for Efficient MoE Serving](https://doi.org/10.1145/3725843.3756043) | MICRO 2025 | 结合 Mono3D DRAM/NMP/GPU 的 Hot/Cold Expert 多级放置，利用主题感知路由管理推理吞吐与 SLO。 |
 | 2026 | [AFORE: Attention-FFN Disaggregation with Overlapped Reconfiguration of Experts](https://arxiv.org/abs/2610.03203) | arXiv 2026 (preprint) | 利用 AFD Microbatch 前瞻负载信号，在流水窗口内重配与迁移 Hot Experts。（HOLD_EVIDENCE） |
 | 2026 | [BrownoutServe: SLO-Aware Inference Serving Under Bursty Workloads for MoE-Based LLMs](https://doi.org/10.1109/TC.2026.3655019) | IEEE Transactions on Computers 2026 | 采用 United Experts 与受控 Brownout 对 Burst MoE 请求动态调整 Expert 访问和精度/SLO 预算，并公开 Serving Runtime、比较真实 vLLM 吞吐及 SLO Violation。 |
