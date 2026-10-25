@@ -42,3 +42,19 @@
 **V2 MLA → V3 MoE/MTP → V3.2 DSA → V4.1 asymmetric architecture → DeepInfer runtime/scheduling → TileKernels/TileLang + FlashMLA/DeepGEMM/DeepEP → supported Ascend backend.** This traces the path from algorithmic state representation to device kernels and inter-GPU communication.
 
 **Scope boundary.** This is not an exhaustive index of DeepSeek model checkpoints, releases, OCR/RL work or community forks. A formal research paper, an official technical report and an open-source implementation are distinct evidence types. Features and supported models evolve rapidly; follow each repository's version notes before interpreting the code.
+
+## Official model-family crosswalk (2026-10-24)
+
+**First-party catalog:** [DeepSeek official research/releases](https://www.deepseek.com/en/news/) and [API changelog](https://api-docs.deepseek.com/updates/). Model weights, API aliases and experimental releases are not interchangeable.
+
+| Official model or family | Lifecycle / inference significance | Source |
+|---|---|---|
+| DeepSeek-V2 / V2.5 | Historical MLA + DeepSeekMoE architecture and serving-state foundation | [V2 code/report](https://github.com/deepseek-ai/DeepSeek-V2) |
+| DeepSeek-V3 / V3.1 / V3.1-Terminus | MLA/MoE + MTP lineage; distinct model revisions rather than new serving frameworks | [V3 official code](https://github.com/deepseek-ai/DeepSeek-V3) · [API updates](https://api-docs.deepseek.com/updates/) |
+| DeepSeek-R1 / R1-0528 | Reasoning/long-output *workload* evolution; do not count as kernel papers | [R1 official repository](https://github.com/deepseek-ai/DeepSeek-R1) |
+| DeepSeek-V3.2-Exp / V3.2 / V3.2-Speciale | DSA sparse indexer and MLA serving kernel demand; Speciale is a model variant | [V3.2 code](https://github.com/deepseek-ai/DeepSeek-V3.2) · [official news](https://www.deepseek.com/en/news/) |
+| DeepSeek-V4 Preview / V4-Flash / V4-Pro | 2026 V4 generation, long-context and high-throughput model releases; model availability and alias state require release-specific documentation | [Official April 2026 V4 preview release](https://www.deepseek.com/en/news/) · [API changelog](https://api-docs.deepseek.com/updates/) |
+| DeepSeek-V4-Flash-Vision-Exp | August 2026 experimental visual model; now **retired** from API, alias maps to V4.1 Flash | [API changelog](https://api-docs.deepseek.com/updates/) |
+| DeepSeek-V4.1-Flash / V4.1-Flash-1017 | Causal encoder–decoder asymmetric MoE, native vision and sharply lower KV footprint; `deepseek-flash` is an API alias, not a separate architecture | [Official model news](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [Oct 17 model update](https://api-docs.deepseek.com/updates/) |
+
+**Systems map:** model dataflow → [DeepInfer](https://github.com/deepseek-ai/DeepInfer) (public offline path) → [TileKernels](https://github.com/deepseek-ai/TileKernels) / independently maintained [TileLang](https://github.com/tile-ai/tilelang) → [FlashMLA](https://github.com/deepseek-ai/FlashMLA), [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM), [DeepEP](https://github.com/deepseek-ai/DeepEP). Do not infer that commercial API models, open-weight checkpoints and open-sourced runtime features have identical deployment scope.
