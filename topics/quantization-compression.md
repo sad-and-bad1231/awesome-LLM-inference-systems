@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
-| [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-12) | 12 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
+| [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-13) | 13 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
 | [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-3) | 3 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-4) | 4 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-3) | 3 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **40** | |
+| **Total** | **41** | |
 
-## Papers (40)
+## Papers (41)
 
 ### Weight-Only & Rotation (12)
 
@@ -43,7 +43,7 @@ GPTQ/AWQ、Codebook 与旋转变换后的权重量化。
 | 2026 | [GyRot: Leveraging Hidden Synergy between Rotation and Fine-grained Group Quantization for Low-bit LLM Inference](https://2026.hpca-conf.org/details/hpca-2026-main-conference/38/GyRot-Leveraging-Hidden-Synergy-between-Rotation-and-Fine-grained-Group-Quantization) | HPCA 2026 | 旋转与细粒度分组量化协同，结合低位宽 GEMM 执行。 |
 | 2026 | [ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference](https://openreview.net/forum?id=1USeVjsKau) | ICLR 2026 (full paper) | 以 Givens Pairwise Rotation + Channel Scaling 抑制 Reasoning LLM Outliers，用 AWQ W4A16 GEMM 加自有变换 Kernel；附录在 RTX A6000、RTX 6000 Ada、RTX 4090、PyTorch 2.6/CUDA Graph、**Batch=1** 逐模型报告 Tokens/s：如 Llama-3-8B **AWQ 120 vs ParoQ 112 tok/s**（A6000），主要收益是较高任务准确率而非优于 AWQ 的运行速度。作者 [GitHub](https://github.com/z-lab/paroquant) 当前开发头已演化，README 要求 `legacy` Branch 重现原论文；在线 Goodput 未验证。（HOLD_EVIDENCE） |
 
-### Weight-Activation & Hardware Formats (12)
+### Weight-Activation & Hardware Formats (13)
 
 W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 
@@ -61,6 +61,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [High-Throughput Non-Uniformly Quantized 3-bit LLM Inference](https://doi.org/10.1145/3774934.3786423) | PPoPP 2026 | Quantix 将非均匀 3-bit 量化的硬件对齐 Bit Shuffle 与 Dequant-Multiply Fusion 映射到 L40 GPU CUDA/TensorCores，报告实际 Kernel 与端到端低精度推理吞吐。 |
 | 2026 | [Search Your Block Floating Point Scales!](https://proceedings.mlsys.org/paper_files/paper/2026/hash/633b0e871a48d542280c3ad03928e60d-Abstract-Conference.html) | MLSys 2026 | 优化 BFP Scale 并通过 FP4 Attention Kernel 验证低精度执行。 |
 | 2026 | [TWLA: Achieving Ternary Weights and Low-Bit Activations for LLMs via Post-Training Quantization](https://openreview.net/forum?id=s1WSLFmnr8) | ICML 2026 | 用欧氏初始化到流形重定位的非对称三值量化器，加 Kronecker 结构正交旋转把权重整形成三峰分布并抑制激活离群，再以层间二阶交互代价做激活混合位宽分配，在 W1.58A4 下保持精度。 （APPROXIMATE_QUALITY_CHECKED；W1.58A4 与原精度模型须做质量-延迟同条件比较，非逐 Token 完全一致。） |
+| 2026 | [Disaggregated Quantization: Specializing LLM Prefill and Decode](https://arxiv.org/abs/2609.26333) | arXiv 2026 (preprint) | 将 Prefill 与 Decode 的**权重量化/算术格式**解耦：另训 NVFP4 Prefiller，与 GGUF 低比特 Decoder 配合；ODP 从 SSD 流式加载 Prefill 权重。作者在 DGX Spark / llama.cpp 的 Qwen3.8-27B 8K Prompt 报告相对 weight-only TTFT 1.78×，vLLM 评估主要用于质量/精度，**不是同一条 vLLM Online-Serving 加速结果**。公开 [研究代码](https://github.com/IST-DASLab/disaggregated-quantization)；额外模型训练、短输入加载开销、架构限制必须保留。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; REQUIRES_FINETUNING; MODEL_CHANGED) |
 
 ### Mixed Precision & Bit Allocation (3)
 
