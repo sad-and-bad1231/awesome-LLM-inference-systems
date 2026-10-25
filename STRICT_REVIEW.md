@@ -20,6 +20,10 @@ This document is the **entry point for the second, strict audit**. [Topic index]
 
 **EMNLP 2026 follow-up (2026-10-25):** Spexis speculative lookahead parallelism in distributed LLM inference added to Parallelism & Scale-Up; **proposed total: 788** (Distributed 133). EMNLP Main official venue identity subject to archived anthology publication; author [paper](https://arxiv.org/abs/2609.34370) and [implementation](https://github.com/mlsys-seo/spexis) checked. **Counterevidence explicitly retained:** on H100 SXM with Qwen3-32B, authors report speculative parallelism at **0.47× TP-only throughput**; early-exit model weights remain unreleased, and implementation targets vLLM 0.8.4 CUDA rather than current vLLM 0.23 Ascend. Do not market as general Serving speedup.
 
+
+
+**Further RAG/MoE full-experiment review (2026-10-25):** three latest arXiv 2026 papers accepted into selective canonical mechanisms: CacheSmith (KV Prefix/Session; real RTX PRO 6000, vLLM 0.10.2, quality-gated SLO across 4 RAG tasks), ThunderEP (MoE Expert Routing/Communication; real no-P2P RTX 4090/5090 PCIe, not an NVLink or Ascend drop-in), FastEEP (MoE Expert Placement/Elasticity; vLLM 0.27.0 / NIXL 1.2.0 dual 8×H20 nodes). **Proposed total: 791**, with KV 161, MoE 79. G3 caution: CacheSmith’s untuned Triton query signal is uniformly implemented but may disadvantage baseline published implementations; FastEEP's 4.5–11.7× is *EP resizing latency* not per-token throughput; ThunderEP's kernel/collective performance is distinct from its up-to-1.66× end-to-end ratio. **Public versioned implementation for all three not independently verified; none reproduced here.**
+
 ## Non-negotiable audit gates
 
 | Gate | Question | What passes | What fails / stays on hold |
