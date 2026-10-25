@@ -17,12 +17,12 @@
 | [Attention & Sparse Kernels](#attention--sparse-kernels-27) | 27 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-13) | 13 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-17) | 17 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **91** | |
+| **Total** | **92** | |
 
-## Papers (91)
+## Papers (92)
 
 ### Attention & Sparse Kernels (27)
 
@@ -99,12 +99,13 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [VTC: DNN Compilation with Virtual Tensors for Data Movement Elimination](https://www.usenix.org/conference/osdi26/presentation/hu-muyan) | OSDI 2026 | 以 Virtual Tensor 的 Index Mapping 表示 Reshape/Slice/Concat/Permute 等纯数据搬运，推迟或消除显式 Global Memory Materialization；整合 [PyTorch Inductor Artifact](https://github.com/ADAPT-uiuc/VTC)，作者报告 A100/H100 推理任务的性能/内存收益。**KEEP_ADJACENT**：主要为通用 DNN Compiler，不能把平均加速直接归因为 vLLM/SGLang Serving 提升。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 
-### Fusion, Pipelines & Megakernels (13)
+### Fusion, Pipelines & Megakernels (14)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [CODA: Rewriting Transformer Blocks as GEMM-Epilogue Programs](https://arxiv.org/abs/2605.19269) | arXiv 2026 (NeurIPS 2026 listing; Track 未核定) | 用 **GEMM Mainloop + 可组合 Epilogue DSL** 将 SwiGLU、QKNorm/RoPE、Residual/Reduction 放进输出 Tile，消除多次中间 Tensor HBM 写读；公开 [CuTeDSL H100 Kernel 与测试](https://github.com/open-lm-engine/coda-kernels)，含 Forward/Backward，真实 GPU Kernel 性能作者报告。**论文主实验为 Transformer Training/Operator**，未证明原生 vLLM Decoder TTFT/TPOT/Goodput，作为少数可迁移融合编译抽象 **KEEP_ADJACENT**，不可认作 Ascend 910B2 可运行。（KEEP_ADJACENT; REAL_GPU_KERNEL; TRAINING_HEAVY; PUBLIC_CODE; NOT_SERVING_E2E） |
 | 2021 | [LightSeq: A High Performance Inference Library for Transformers](https://aclanthology.org/2021.naacl-industry.15/) | NAACL 2021 Industry Track | 早期工业级 Transformer GPU 推理库，通过算子融合、Kernel 与内存优化实现跨模型框架高效推理；有公开 CUDA 实现，实验以 Transformer/机器翻译为主，不宣称现代自回归 LLM Serving。 |
 | 2025 | [ClusterFusion: Expanding Operator Fusion Scope for LLM Inference via Cluster-Level Collective Primitive](https://neurips.cc/virtual/2025/poster/116910) | NeurIPS 2025 | 在 Hopper 簇内引入 ClusterReduce 与 ClusterGather 原语，让规约与收集都在片上完成，把 QKV、Attention 与输出投影融合成单个 Kernel，解码延迟平均降低 1.61 倍。 |
 | 2025 | [PipeThreader: Software-Defined Pipelining for Efficient DNN Execution](https://www.usenix.org/conference/osdi25/presentation/cheng) | OSDI 2025 | 通过 sTask Graph 对 GPU TensorCore/TMA 依赖建模，将 Kernel Pipelining 转为软件定义的编译期流水调度；以 FlashAttention/Mamba2 的真实 GPU Kernel 和 TileLang Artifact 验证。 |
