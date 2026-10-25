@@ -4,6 +4,19 @@ NVIDIA's **first-party inference software stack**, from serving engines and clus
 
 [← Organizations](../README.md#organizations)
 
+## Official NVIDIA model-family crosswalk (2026-10-24)
+
+**First-party model registry:** [NVIDIA-hosted model cards](https://build.nvidia.com/nvidia) and [official Nemotron family overview](https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/llm-info/). This is different from the **TensorRT-LLM / Dynamo / NIXL** software stack.
+
+| Published model family | Named variants and inference relevance | Source |
+|---|---|---|
+| Nemotron 3 | **Nano (30B-A3B / 4B), Nano Omni, Super (120B-A12B), Ultra (550B-A55B)**; hybrid Mamba/Transformer MoE and low-latency Agent workloads | [Official Nemotron family](https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/llm-info/) |
+| Nemotron 3.5 | **Lightning 30B-A3B**, **Bolt E4B**, **Super-VL 120B-A12B early access**; 3.5 extensions, not independent new inference systems | [Official model catalog](https://build.nvidia.com/nvidia) |
+| Nemotron retrieval / document | Nemotron 3/3.5 Embed, Rerank, OCR, Parse; distinct encoder/retrieval/document workloads from text decoding | [Official model catalog](https://build.nvidia.com/nvidia) |
+| Other NVIDIA models | Speech/safety/content-specific Nemotron and non-LLM physical/vision foundation models live in the **provider catalog**; do not imply the 67 catalog records are 67 new LLM architectures | [Official model catalog](https://build.nvidia.com/nvidia) |
+
+**Do not confuse model ownership with support:** NVIDIA NIM can *host* DeepSeek or Qwen models, but that does not make them NVIDIA-designed model families. NVIDIA's runtime/kernel artifacts belong above this line under Execution.
+
 ## Inference and serving
 
 | Project | Role | Official source |

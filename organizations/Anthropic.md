@@ -4,6 +4,20 @@ Anthropic publishes **model-family tradeoffs and serving API behavior**, but com
 
 [← Organizations](../README.md#organizations)
 
+## Official Claude model-family / API catalog (2026-10-24)
+
+The [Claude Platform model overview](https://platform.claude.com/docs/en/models/overview) is the authority for active models, platform-specific IDs, retirement schedules and caching/effort specifications.
+
+| Model line | Current named model / status | Primary source |
+|---|---|---|
+| Claude Fable | **Fable 5.1**, current demanding-reasoning/long-agent tier; older Fable 5 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
+| Claude Opus | **Opus 5.5**, current long-horizon reasoning tier; previous Opus 5/4.8/4.7/4.6 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
+| Claude Sonnet | **Sonnet 5.5**, current speed/intelligence compromise; previous Sonnet 5/4.x historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
+| Claude Haiku | **Haiku 5.5**, current low-latency tier; earlier Haiku 4.5/3 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
+| Claude Mythos | Mythos 5/5.1 **restricted availability**, not a universal public-serving model | [Official Claude model documentation](https://platform.claude.com/docs/en/models/overview) |
+
+**Systems evidence rule:** context, pricing, caching, Batch, reasoning effort and latency expose a model's **client-visible execution contract** only. Claude scheduler, attention kernels and cluster topology remain undocumented; no inference-system claims from API menus.
+
 ## Models and observable inference characteristics
 
 | Work | Inference relevance | Official source |
