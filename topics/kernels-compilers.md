@@ -17,12 +17,12 @@
 | [Attention & Sparse Kernels](#attention--sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-15) | 15 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **92** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-8) | 8 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **94** | |
 
-## Papers (92)
+## Papers (94)
 
 ### Attention & Sparse Kernels (28)
 
@@ -101,7 +101,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 | 2026 | [Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents](https://arxiv.org/abs/2606.06453) | NeurIPS 2026 (authors confirm; official program short title, proceedings pending) | Python-embedded page-centric Sparse-Attention DSL + JIT Indexer/Kernel Backend; [SGLang-integrated code](https://github.com/Infini-AI-Lab/vortex_torch) supports GQA/MLA and algorithm-agent iteration. Authors report end-to-end B200 inference throughput up to 4.7× on a specific GLM-4.7-Flash configuration, with sparse-attention quality tradeoffs; **not exact dense outputs, not independently reproduced or Ascend-ready**. (KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED) |
 
-### Fusion, Pipelines & Megakernels (14)
+### Fusion, Pipelines & Megakernels (15)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -121,6 +121,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Optimal Software Pipelining and Warp Specialization for Tensor Core GPUs](https://www.usenix.org/conference/osdi26/presentation/soi) | OSDI 2026 | Twill 把软件流水（SWP）与 warp 特化（WS）建模为可由约束求解器整体优化的联合问题，为迭代程序自动推导最优且无启发式的调度，并证明 Hopper/Blackwell 上 Flash Attention 调度的最优性 |
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
+| 2026 | [FlashFuser: Expanding the Scale of Kernel Fusion for Compute-Intensive Operators via Inter-Core Connection](https://arxiv.org/abs/2512.12949) | HPCA 2026 (Main Conference) | 以 Hopper Cluster Distributed Shared Memory (DSM) 扩展 FFN 等中间张量超出单 CTA Scratchpad 的跨算子融合范围；DSM 通信 IR + 跨存储层级 Dataflow/Tile Search，作者 H100 真机报告 Memory Access −58%、Kernel 最多 3.3×（vs 高度优化库）、会议摘要 End-to-end 1.12×（arXiv v1 报 1.24×，**版本口径不一致**）。[会议身份](https://2026.hpca-conf.org/details/hpca-2026-main-conference/33/FlashFuser-Expanding-the-Scale-of-Kernel-Fusion-for-Compute-Intensive-operators-via-)；未验证公开完整 compiler artifact 或 910B2 兼容性。（KEEP_STRICT; REAL_H100; CONFERENCE_ARXIV_VERSION_DIFFERENCE; AUTHOR_REPORTED） |
 
 ### Communication, Memory & I/O (15)
 
@@ -145,7 +146,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KVBuffer: IO-aware Serving for Linear Attention](https://arxiv.org/abs/2605.19049) | arXiv 2026 (preprint) | 缓冲最近 K/V，将递推状态更新改为 chunkwise 批处理；支持 speculative verification 并行验证 draft tokens，短上下文时直接从缓冲 K/V 计算而不创建/更新状态。作者在 Qwen3-Next 的 SGLang 实现中报告线性 Attention Decode 延迟最高降低 45.17%，四 Token speculative verification 下最大可服务请求数提升至 5×。未找到作者公开代码，结果为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
 | 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 
-### Kernel Automation & Tools (7)
+### Kernel Automation & Tools (8)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -158,5 +159,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KernelBand: Steering LLM-based Kernel Optimization via Hardware-Aware Multi-Armed Bandits](https://proceedings.mlr.press/v306/ran26b.html) | ICML 2026 | 使用 Multi-Armed Bandit、Profiling Bound 剪枝和 Runtime Behavior Clustering 控制 Kernel Search；作者在三种 GPU 架构的 TritonBench-G 实机验证并开源，未验证在线 LLM Serving Goodput。与 KernelFoundry 的 QD Evolution、AccelOpt 的 Optimization Memory 区别明确，作为 Agentic Kernel Search 对比候选保留（KEEP_ADJACENT；实机 Kernel Benchmark，非在线 LLM Serving）！ |
 | 2026 | [KernelFoundry: Hardware-Aware Evolutionary GPU Kernel Optimization](https://proceedings.mlr.press/v306/wiedemann26a.html) | ICML 2026 | Quality-Diversity MAP-Elites、Prompt Co-evolution 与 Template Parameter Search，在 SYCL/CUDA 的 KernelBench/robust-kbench 上实测；虽有跨设备工具价值，但没有 LLM Serving Goodput 证据，暂保留为 Agentic Kernel 前沿例外待 G5 去同质化。 |
 | 2026 | [Triton-Sanitizer: A Fast and Device-Agnostic Memory Sanitizer for Triton with Rich Diagnostic Context](https://doi.org/10.1145/3779212.3790241) | ASPLOS 2026 | 针对真实 Triton Kernel 的内存越界/竞争检测提供跨设备 Instrumentation 与源码诊断定位；是可直接用于推理 Kernel Correctness 调试的通用工具，不是推理加速。作为极少数调试基础设施例外保留（KEEP_ADJACENT），Artifact 未复现。 |
+| 2026 | [VibeServe: Can AI Agents Build Bespoke LLM Serving Systems?](https://arxiv.org/abs/2605.06068) | arXiv 2026 (preprint) | 多 Agent 外层系统设计搜索 + 内层写码/Correctness Judge/真实负载 Bench，自动生成面向特定模型/硬件的 Serving Stack（非单 Kernel 自动调优）；[作者代码](https://github.com/uw-syfi/vibe-serve) 和 H100 Llama3.1-8B 对比 vLLM/SGLang、六类非标准场景，作者报 1.69–6.27× 专用场景提速；标准场景基本持平。依赖 Agent Search/Bench Budget、没有证明广泛生产可靠性。（KEEP_ADJACENT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED; NOT_GENERIC_SERVING_GAIN） |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
