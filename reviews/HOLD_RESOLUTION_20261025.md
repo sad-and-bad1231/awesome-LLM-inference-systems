@@ -145,3 +145,11 @@ Summary: 16 KEEP; 76 REMOVE; 3 newly source-audited additions in adjacent weak a
 ## Evidence boundary
 
 Zero public HOLD labels is a **bibliography-disposition result**, not a guarantee that all surviving entries have independently validated benchmarks. The remaining preexisting non-HOLD corpus may still contain dated or overbroad claims; audits should continue via targeted regression/identity checks without bulk intake.
+
+## Second-pass dispositions and follow-up adds
+
+- **REMOVE** [ProphetKV](https://proceedings.mlr.press/v306/wang26y.html): original record lacked same-quality Serving TTFT / recomputation cost proof; better source-evidenced RAG serving references already in catalog. This is an editorial value decision, not an invalid-paper finding.
+- **REMOVE** [TurboQuant](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5c802ef38ab6e366c2ea06eee554c088-Abstract-Conference.html): original record still requested full runtime/quality review, and provided no distinct equivalent-quality Serving speed receipt relative to mature native quantization/kernel baselines. Not a claim that the quantizer itself lacks value.
+- **ADD** [ProMCP](https://aclanthology.org/2026.findings-acl.1967/) (ACL Findings 2026, not main): [public code](https://github.com/ResponsibleAILab/ProMCP), 20 MCP Servers and 169 tools in distinct topologies, six-stage token/latency attribution. Relevant to Agent *workflow* profiling, **not** GPU Kernel/Serving Throughput acceleration.
+
+**Final arithmetic:** 796 original − 76 previously flagged REMOVE − 2 second-pass REMOVE + 4 selective ADD = **722 canonical papers**, 44 directions, zero public HOLD entries. 16 previously held papers are INCLUDED in the 722, not counted as new papers. Reviewed source/abstract claims are **not** independent hardware reproductions.
