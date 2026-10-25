@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-14) | 14 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-15) | 15 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
-| [Profiling & Diagnosis](#profiling--diagnosis-4) | 4 | 性能分析器、Tracing、可观测性和异常定位。 |
+| [Profiling & Diagnosis](#profiling--diagnosis-5) | 5 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-9) | 9 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-5) | 5 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **58** | |
+| **Total** | **59** | |
 
-## Papers (58)
+## Papers (59)
 
 ### Serving Benchmarks & Workloads (14)
 
@@ -67,7 +67,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [When NPUs Are Not Always Faster: A Stage-Level Analysis of Mobile LLM Inference](https://arxiv.org/abs/2605.27435) | arXiv 2026 (preprint) | 按阶段分离移动端 LLM 推理的量化、通信与计算开销，定位 NPU 在 prefill/decode 中因算子 fallback 与调度开销反而慢于 CPU 的条件。 |
 | 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 
-### Profiling & Diagnosis (4)
+### Profiling & Diagnosis (5)
 
 性能分析器、Tracing、可观测性和异常定位。
 
@@ -77,6 +77,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ProfInfer: An eBPF-based Fine-Grained LLM Inference Profiler](https://openreview.net/forum?id=tYHWS7YPof) | MLSys 2026 | ProfInfer 使用 eBPF 在不修改或重编译 llama.cpp 的情况下，对 token、计算图、算子和硬件计数器进行多粒度追踪，提供 ProfDAG、ProfTime、ProfStat 视图，覆盖 dense、MoE routing 与 offloading |
 | 2026 | [StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference (Operational Systems)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan) | OSDI 2026 | 按关键同步点和异常触发跟踪降低生产推理诊断开销，结合关键路径与 Roofline 回归定位故障。 |
 | 2026 | [XProf: An Open, Scalable, and Extensible Profiling System for the Modern ML Stack](https://proceedings.mlsys.org/paper_files/paper/2026/hash/280776fda5970060e6a5efcfd43e5d2d-Abstract-Conference.html) | MLSys 2026 | OpenXLA/PJRT Full-stack CPU–TPU/GPU Profiling、Roofline 与跨千卡低开销分布式 Trace；开源生产级性能分析基础设施，但不是 LLM Serving 专用评测（KEEP_ADJACENT）。 |
+| 2026 | [ProMCP: Profiling Token Flows and Latency Costs in Model Context Protocol–Based LLM Agents](https://aclanthology.org/2026.findings-acl.1967/) | ACL Findings 2026 (NOT ACL Main) | 对 LLM Agent **MCP Host–Client–Server** 端到端六阶段执行做请求级 Token/Latency Attribution，公开 [代码](https://github.com/ResponsibleAILab/ProMCP)；作者在 20 Servers / 169 Tools、不同部署 Topology 上表明 Planning/Schema Injection vs Generation 的主要瓶颈随 Client 形态变化。**属于 Agent Workflow Profiling，不是 GPU/NPU Kernel Profiler，也不证明 Token/s 加速**。（KEEP_ADJACENT; REAL_WORKFLOW_PROFILING; PUBLIC_CODE; AUTHOR_REPORTED） |
 
 ### Models & Simulators (11)
 
