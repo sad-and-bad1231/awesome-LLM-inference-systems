@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
+| [Parallelism & Scale-Up](#parallelism--scale-up-27) | 27 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-23) | 23 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **132** | |
+| **Total** | **133** | |
 
-## Papers (132)
+## Papers (133)
 
-### Parallelism & Scale-Up (26)
+### Parallelism & Scale-Up (27)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -55,6 +55,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [StreamDiffusionV2: A Streaming System for Dynamic and Interactive Video Generation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/698cfaf72a208aef2e78bcac55b74328-Abstract-Conference.html) | MLSys 2026 | 相邻视频生成推理：逐帧 SLO-aware/Block 调度、Rolling KV Cache 与跨 Denoising Step/Layer 的多 GPU Pipeline；报告真实 H100 Streaming FPS 和首帧延迟，非文本 LLM（KEEP_ADJACENT）。 |
 | 2026 | [Tetris: Efficient Long-context LLM Serving with Chunkwise Dynamic Sequence Parallelism](https://doi.org/10.1109/ISCA66397.2026.00098) | ISCA 2026 | 在分离式集群按 Chunk 动态扩缩 Sequence Parallelism，使用碎片资源。 |
 | 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
+| 2026 | [Spexis: Speculative Lookahead Scheduling for LLM Inference](https://arxiv.org/abs/2609.34370) | EMNLP 2026 Main (author/ACL listing; proceedings detail pending) | **Speculative Parallelism (SP)** 作为 TP/PP 之外的新执行维度：早期层 Drafter 与后续层 Target Verification 跨 Pipeline Stage 并发，辅以 Confidence Selective Speculation 与剩余长度预测抑制 KV Eviction。作者用 [vLLM v0.8.4 Fork](https://github.com/mlsys-seo/spexis) 于 A40/A100/H100/L40S/RTX PRO 6000 实测，部分低互联场景请求率最高 +34%。**反例：H100 SXM + Qwen3-32B，SP/TP Throughput 仅 0.47×；论文所需 Early-exit 权重尚未发布，不能即刻复现完整结果**。非现代 vLLM v0.23 / Ascend 的 Drop-in 优化。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; INCOMPLETE_ARTIFACT; MODEL_COMPONENT_TRAINING) |
 
 ### Disaggregated Compute Stages (33)
 
