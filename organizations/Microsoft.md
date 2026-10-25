@@ -21,3 +21,16 @@ Microsoft's main **LLM inference software and systems engineering**; a small sub
 | **BitNet / bitnet.cpp** | Low-bit LLM architectures and CPU-oriented reference inference software. | [GitHub](https://github.com/microsoft/BitNet) |
 
 **Boundary.** The projects above concern local execution or inference architecture; they are not a complete map of Azure's commercial services or Microsoft model releases.
+
+## Official Microsoft-owned model-family crosswalk (2026-10-24)
+
+**Authority:** [Microsoft Phi official models](https://azure.microsoft.com/en-us/products/phi), [official Phi-4 collection](https://huggingface.co/collections/microsoft/phi-4).
+
+| Microsoft model family | Workload / low-level relevance | Primary source |
+|---|---|---|
+| Phi-4 | Phi-4 dense 14B; Phi-4-reasoning / reasoning-plus | [Microsoft Phi-4 collection](https://huggingface.co/collections/microsoft/phi-4) |
+| Phi-4 mini | Phi-4-mini / mini-reasoning / mini-flash-reasoning; memory- and token-throughput-constrained deployments | [Microsoft Phi-4 collection](https://huggingface.co/collections/microsoft/phi-4) |
+| Phi-4 multimodal | Phi-4-multimodal text/image/audio inputs; separate modal preprocessing/kernel path | [Microsoft Phi-4 collection](https://huggingface.co/collections/microsoft/phi-4) |
+| Phi-3.5 / Phi-3 / Phi-2 / Phi-1.x | Historical family lineage and varying deployment budgets | [Microsoft Phi overview](https://azure.microsoft.com/en-us/products/phi) |
+
+Azure Foundry **hosts other providers'** models, including OpenAI and Meta; these are not Microsoft-authored Phi families. DeepSpeed/ONNX Runtime remain software, not separately named foundation checkpoints.
