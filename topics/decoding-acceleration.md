@@ -18,10 +18,10 @@
 | [Training-Free & Self-Speculation](#training-free--self-speculation-18) | 18 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-15) | 15 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
-| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-18) | 18 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **81** | |
+| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-19) | 19 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
+| **Total** | **82** | |
 
-## Papers (81)
+## Papers (82)
 
 ### Draft Models & Candidate Generation (19)
 
@@ -114,12 +114,13 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Not-a-Bandit: Provably No-Regret Drafter Selection in Speculative Decoding for LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/20563b8508ba42e1b688d922e926ee26-Abstract-Conference.html) | ICLR 2026 | 利用一次 Target Verification 的反馈估计多个 Draft 模型，并建立有无遗憾保证的在线选择策略；有算法/系统开销和解码实验，适用多 Drafter 场景。 |
 | 2026 | [WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching](https://doi.org/10.1145/3805653) | PACM/POMACS 2026 (SIGMETRICS) | 把边缘设备纳入推测解码服务，用 speculation controller、验证时延估计与验证批调度抑制无效 drafting 与验证干扰，实测系统容量与 goodput 较中心化服务及 SLED 最高提升 2.1/4.1 与 1.94/3.7 倍。 （真实正式出版版本：PACM/POMACS 2026 10(2), Article 55, DOI 10.1145/3805653；区别于三页 SIGMETRICS 摘要。） |
 
-### Diffusion & Non-AR Generation (18)
+### Diffusion & Non-AR Generation (19)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SparseD: Sparse Attention for Diffusion Language Models](https://openreview.net/forum?id=dwbrZtYP04) | ICLR 2026 | 缓存早期去噪步骤的 Sparse Attention Pattern 并跨 Denoising Iteration 复用；Dream/LLaDA + 64K/1024 step 作者报告 **生成最高 1.50× 加速**、近似质量保持，非严格输出等价。公开 [FlexAttention 实现](https://github.com/INV-WZQ/SparseD)，不是现成 vLLM-Ascend AR Serving 优化。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
 | 2026 | [AdaBlock-dLLM: Semantic-Aware Diffusion LLM Inference via Adaptive Block Size](https://openreview.net/pdf?id=0Cv9PwL7cI) | ICLR 2026 | 以语义分隔符置信度和 Volatility Band 动态选择半自回归 DLM 的 Block Size；训练免改造，有 Dream/LLaDA 可执行代码，质量-吞吐需要配套审查。 |
 | 2026 | [Attention Is All You Need for KV Cache in Diffusion LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/3afaa2102fb8ea44cbadc13e45bba718-Abstract-Conference.html) | ICLR 2026 | Diffusion LM 的并行解码、缓存复用与去噪迭代压缩；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（HOLD_EVIDENCE） |
 | 2026 | [Beyond Scattered Acceptance: Fast and Coherent Inference for DLMs via Longest Stable Prefixes](https://proceedings.iclr.cc/paper_files/paper/2026/hash/91a23b3e6a2ebaad62e17d0269f88c6b-Abstract-Conference.html) | ICLR 2026 | Diffusion LM 的并行解码、缓存复用与去噪迭代压缩；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（HOLD_EVIDENCE） |
