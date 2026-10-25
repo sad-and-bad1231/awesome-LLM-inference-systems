@@ -16,12 +16,12 @@
 |---|---:|---|
 | [Draft Models & Candidate Generation](#draft-models--candidate-generation-19) | 19 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-18) | 18 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
-| [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
+| [Tree & Parallel Verification](#tree--parallel-verification-12) | 12 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-15) | 15 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-20) | 20 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **83** | |
+| **Total** | **84** | |
 
-## Papers (83)
+## Papers (84)
 
 ### Draft Models & Candidate Generation (19)
 
@@ -74,7 +74,7 @@ N-gram/检索/自投机与模型自身的低成本草稿路径。
 | 2026 | [UniSpec: Training-Free Speculative Decoding for Robust LLM Acceleration Across Languages and Hardware](https://aclanthology.org/2026.acl-long.285/) | ACL 2026 | 设备校准的 Draft 大小、N-gram Confidence Scoring 与 Speculation Tree Expansion，跨语言多硬件免训练投机解码；作者发布代码与 Benchmark，并声称保持自回归输出质量，未复现。 |
 | 2026 | [Vegas: Self-Speculative Decoding with Verification-Guided Sparse Attention](https://proceedings.mlr.press/v306/yue26a.html) | ICML 2026 | Verify 阶段复用 KV 重要性信息，为后续 Self-speculative Draft 加速。 |
 
-### Tree & Parallel Verification (11)
+### Tree & Parallel Verification (12)
 
 Candidate Tree、并行候选和 Target Verification 效率。
 
@@ -91,6 +91,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Talon: Breaking the Synchronization Barrier in Speculative Decoding with Hybrid Model-based and Retrieve-based Drafting](https://doi.org/10.1609/aaai.v40i25.39266) | AAAI 2026 (Full Paper) | 通过 Asynchronous Draft/Verify 执行与混合 Model-based/Retrieval-based Drafting 减轻同步等待并改善不同领域接受率；作者报告 Vicuna/DeepSeek/LLaMA 多任务与 EAGLE/Hydra/Medusa 等对照。推理分布等价性、硬件并发开销及与现代批处理 Serving Goodput 仍待审。（HOLD_EVIDENCE） |
 | 2026 | [TiDAR: Think in Diffusion, Talk in Autoregression](https://proceedings.mlsys.org/paper_files/paper/2026/hash/1367d856028f65a9555b0274db09e608-Abstract-Conference.html) | MLSys 2026 | 在一次 Forward Pass 中执行 Diffusion Draft 与自回归采样，用结构化 Attention Mask 实现推测式并行生成。 |
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。（APPROXIMATE_QUALITY_CHECKED） |
+| 2026 | [Inference-Cost-Aware Dynamic Tree Construction for Efficient Inference in Large Language Models (CAST)](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7f9923be721e32592466d9a49c6364e1-Abstract-Conference.html) | ICLR 2026 (formal conference paper) | 在 EAGLE-2/3 的动态 Draft Tree 基础上，显式感知 GPU 配置与 Batch Size 的 Draft/Verification 成本以调整 Tree 结构；作者在六任务/六 LLM 报告相对同类最优方法约 5%–20% 收益，公开 [EAGLE/SGLang 代码入口](https://github.com/EAGLE-Research/sglang-eagle4)。未独立复现在线动态批处理及 Ascend 性能。(KEEP_STRICT; AUTHOR_REPORTED) |
 
 ### Adaptive Speculation in Serving (15)
 

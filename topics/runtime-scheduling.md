@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-37) | 37 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-38) | 38 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-28) | 28 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **132** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-23) | 23 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **134** | |
 
-## Papers (132)
+## Papers (134)
 
-### Batching, Queues & SLOs (37)
+### Batching, Queues & SLOs (38)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -67,6 +67,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [SuperInfer: SLO-Aware Rotary Scheduling and Memory Management for LLM Inference on Superchips](https://openreview.net/forum?id=RuslSHdIHa) | MLSys 2026 | SuperInfer 面向 GH200 的 NVLink-C2C 设计请求轮转调度和全双工 KV 搬运，缓解高负载下的 HOL blocking |
 | 2026 | [TetriServe: Efficiently Serving Mixed DiT Workloads](https://doi.org/10.1145/3779212.3790233) | ASPLOS 2026 | 相邻 DiT Serving：按 Denoising Step 动态调整 Sequence Parallelism、Round-based Deadline Scheduling 与多请求 Packing；有 8×H100 Benchmark 工程，不是文本 LLM。（KEEP_ADJACENT） |
 | 2026 | [VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption](https://doi.org/10.1109/IPDPS65963.2026.00037) | IPDPS 2026 (IEEE full paper) | 优化流式语音问答生成的**播放连续性**与基于 LLM 的请求服务抢占，而非单纯平均 Token/s；出版 DOI 和作者身份已核对。实际在线并发、音频/文本端到端播放延迟、对照 vLLM/SGLang 与真实设备结果尚未全文核验，**HOLD_METHOD**。（HOLD_EVIDENCE） |
+| 2026 | [SageSched: Efficient LLM Scheduling Confronting Demand Uncertainty and Hybridity](https://arxiv.org/abs/2603.07917) | NeurIPS 2026 (authors confirm; proceedings pending) | 用 Prompt + 历史输出估计生成长度**分布**而非固定长度，并联合 GPU Compute/Memory Cost 做不确定性感知排队；作者真实 Testbed 报告服务效率提升超过 28.7%。尚未核验代码发布、相同 SLO Goodput 和在现代 vLLM/Ascend 上的复现。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
 ### Routing & Load Balancing (14)
 
@@ -169,7 +170,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Quicktopia: Iteration-Level GPU Frequency Control for Energy-Latency Co-Optimization in LLM Inference](https://doi.org/10.1109/CCGrid68966.2026.00014) | CCGrid 2026 | 按 LLM Decode Iteration 的算力/带宽阶段调整 GPU DVFS，以 Pareto 选择减少 EDP，同时限制 Latency 回退；作者有单 GPU 物理推理测量，适用范围受驱动与频率控制接口限制。 |
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 
-### Agent & Workflow Serving (22)
+### Agent & Workflow Serving (23)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -197,5 +198,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [TeleRAG: Efficient Retrieval-Augmented Generation Inference with Lookahead Retrieval](https://proceedings.mlsys.org/paper_files/paper/2026/hash/7fd522b89ac21009b7bbe7560a9a5add-Abstract-Conference.html) | MLSys 2026 | 预测 Retrieval Data 并与 LLM Generation 重叠，配合 Cache-aware Scheduling 降低 RAG 推理关键路径。 |
 | 2026 | [TimelyLLM: Time-sensitive LLM Serving System for Physical-I/O Limited Agents](https://doi.org/10.1145/3745756.3809203) | MobiSys 2026 | 将具物理 I/O 瓶颈的 Agent 的输出生成与动作执行分段对齐，通过时序调度利用执行空隙；有机器人/无人机工作负载和作者代码。 |
 | 2026 | [VectorLiteRAG: Latency-Aware and Fine-Grained Resource Partitioning for Efficient RAG](https://doi.org/10.1109/HPCA68181.2026.11408552) | HPCA 2026 | 联合分配 GPU HBM 给 LLM Runtime 与 GPU/CPU 向量索引，在 FAISS C++/Python 实现并评估 RAG 端到端 SLO 合规率；公开系统 Artifact。 |
+| 2026 | [Justitia: Fair and Efficient Scheduling of Task-parallel LLM Agents with Selective Pampering](https://arxiv.org/abs/2510.17015) | NeurIPS 2026 (author-confirmed final title; proceedings pending) | 为并行 Agent 计算 Memory-centric Service Cost，按 Virtual-time Fair Queue 估计公平完成顺序，并以 **Selective Pampering** 优先完成关键 Agent 以缩短整体 JCT、约束最坏延迟；作者报告 [vLLM 实现](https://chenc10.github.io/publications/)及多 Agent Testbed。arXiv 早期题名为 *Justitia: Fair and Efficient Scheduling for LLM Applications*；公开代码与独立复现未核验。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED; TITLE_ALIAS) |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*

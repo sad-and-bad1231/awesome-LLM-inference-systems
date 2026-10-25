@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Prefix & Session Reuse](#prefix--session-reuse-38) | 38 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
+| [Prefix & Session Reuse](#prefix--session-reuse-39) | 39 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-57) | 57 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-26) | 26 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **159** | |
+| **Total** | **160** | |
 
-## Papers (159)
+## Papers (160)
 
-### Prefix & Session Reuse (38)
+### Prefix & Session Reuse (39)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -68,6 +68,7 @@
 | 2026 | [VeriCache: Turning Lossy KV Cache into Lossless LLM Inference](https://arxiv.org/abs/2605.17613) | arXiv 2026 (preprint) | 将压缩 KV Decode 作为 Drafter，Full KV 在 CPU/远端以 PCIe/Network 搬回并 Verify，以 HBM Decode/数据传输并行覆盖开销；报告 Full KV 输出一致性与长上下文吞吐。 |
 | 2026 | [VLMCache: Efficient On-Device Vision-Language Model Inference](https://doi.org/10.1145/3745756.3809243) | MobiSys 2026 | 将稳定视觉区域编码为可复用 KV Prefix，对动态前景重算后以 Isolate-then-fuse 保留 Attention 与位置一致性。（KEEP_ADJACENT） |
 | 2026 | [WorldPlay: Towards Long-Term Geometric Consistency for Real-Time Interactive World Modeling](https://proceedings.mlr.press/v306/sun26az.html) | ICML 2026 | 交互式视频 World Model 通过 Reconstituted Context Memory 动态重建历史帧上下文并控制长期漂移，配合 Context Forcing 蒸馏实现实测实时流式生成；属于模型-推理状态协同设计（邻接领域）。（KEEP_ADJACENT） |
+| 2026 | [Efficient Serving for Dynamic Agent Workflows with Prediction-based KV-Cache Management (PBKV)](https://arxiv.org/abs/2605.06472) | NeurIPS 2026 (author-confirmed; proceedings pending) | 对动态 Agent DAG 融合历史调用与当前上下文预测后续 Agent Invocation，估计 Prefix KV 再用概率并保守地 Evict/Prefetch；作者在三种 Workflows 评测，相比 LRU 最高 1.85×、相比静态工作流的 KVFlow 最高 1.26×（**不同对比负载，不能混称**）。公开可复现 Serving 代码与 Ascend 收益未核验。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
 ### Eviction, Compression & Quantization (57)
 

@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Attention & Sparse Kernels](#attention--sparse-kernels-27) | 27 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
-| [Kernel DSL & Compilers](#kernel-dsl--compilers-16) | 16 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
+| [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-17) | 17 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **92** | |
+| **Total** | **93** | |
 
-## Papers (92)
+## Papers (93)
 
 ### Attention & Sparse Kernels (27)
 
@@ -76,7 +76,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
-### Kernel DSL & Compilers (16)
+### Kernel DSL & Compilers (17)
 
 Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 
@@ -98,6 +98,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Tilus: A Tile-Level GPGPU Programming Language for Low-Precision Computation](https://doi.org/10.1145/3760250.3762219) | ASPLOS 2026 | 通过 Tile-level DSL、层次寄存器/共享内存及 Layout Algebra 生成 1–8 bit GEMM，含 LLM 低精度内核实测。 |
 | 2026 | [VTC: DNN Compilation with Virtual Tensors for Data Movement Elimination](https://www.usenix.org/conference/osdi26/presentation/hu-muyan) | OSDI 2026 | 以 Virtual Tensor 的 Index Mapping 表示 Reshape/Slice/Concat/Permute 等纯数据搬运，推迟或消除显式 Global Memory Materialization；整合 [PyTorch Inductor Artifact](https://github.com/ADAPT-uiuc/VTC)，作者报告 A100/H100 推理任务的性能/内存收益。**KEEP_ADJACENT**：主要为通用 DNN Compiler，不能把平均加速直接归因为 vLLM/SGLang Serving 提升。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
+| 2026 | [Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents](https://arxiv.org/abs/2606.06453) | NeurIPS 2026 (authors confirm; official program short title, proceedings pending) | Python-embedded page-centric Sparse-Attention DSL + JIT Indexer/Kernel Backend; [SGLang-integrated code](https://github.com/Infini-AI-Lab/vortex_torch) supports GQA/MLA and algorithm-agent iteration. Authors report end-to-end B200 inference throughput up to 4.7× on a specific GLM-4.7-Flash configuration, with sparse-attention quality tradeoffs; **not exact dense outputs, not independently reproduced or Ascend-ready**. (KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED) |
 
 ### Fusion, Pipelines & Megakernels (14)
 
