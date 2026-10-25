@@ -1,6 +1,6 @@
 # Emerging inference research frontiers
 
-**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** As of **2026-10-19**. The [eight practical topic areas](../topics/README.md) and their **43 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
+**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** As of **2026-10-19**. The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
 
 [← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Historical October 2026 signals](2026-10-frontier-scan.md)
 
