@@ -16,6 +16,10 @@ As of 2026-10-20, the DoSA/LeapQuant admission was expanded with nine related wo
 
 This document is the **entry point for the second, strict audit**. [Topic index](topics/README.md) remains the sole public canonical bibliography; the external 1,003-row JSONL is a private evidence and identity tracking source, **not a second public catalog**. Do not edit it without receiving the actual latest user file.
 
+
+
+**EMNLP 2026 follow-up (2026-10-25):** Spexis speculative lookahead parallelism in distributed LLM inference added to Parallelism & Scale-Up; **proposed total: 788** (Distributed 133). EMNLP Main official venue identity subject to archived anthology publication; author [paper](https://arxiv.org/abs/2609.34370) and [implementation](https://github.com/mlsys-seo/spexis) checked. **Counterevidence explicitly retained:** on H100 SXM with Qwen3-32B, authors report speculative parallelism at **0.47× TP-only throughput**; early-exit model weights remain unreleased, and implementation targets vLLM 0.8.4 CUDA rather than current vLLM 0.23 Ascend. Do not market as general Serving speedup.
+
 ## Non-negotiable audit gates
 
 | Gate | Question | What passes | What fails / stays on hold |
