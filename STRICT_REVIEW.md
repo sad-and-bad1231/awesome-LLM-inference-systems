@@ -8,6 +8,8 @@ As of 2026-10-20, the DoSA/LeapQuant admission was expanded with nine related wo
 
 **Batch 2 (2026-10-25, industry source audit):** six additions (remote KV penalty/PCP, HAWK heterogeneous RDMA, uGDS production-integrated NVMe, BLIS calibrated serving simulator, Range object-independent I/O, KV-Repurpose quality-regression testbed). **Live total: 772 canonical entries.** Full method/artifact parity is not independently replicated. uGDS LMCache PR #4420 merged, unlike still-open LMCache KV sharding PR #5545; BLIS is an **ACM SIGMETRICS 2027 accepted arXiv 2026** work (not 2026 proceedings). HAWK's NPU is **Tenstorrent**, not Ascend, and its code is not public. No 2027 venue claims are inferred for other arXiv reports.
 
+**Final current scan addition (2026-10-25):** +2 source-qualified records: DAWN (training-free diffusion decoding with real H100 and public evaluation) and CODA (**KEEP_ADJACENT**, training-centric H100 GEMM-epilogue compiler with reusable forward Kernel and no LLM Serving E2E). Existing JetSpec was already present under the same arXiv ID as early JetFlow, so we **updated the existing row, not added an alias**. Live total is **774**; all claimed speedups remain author reports with no independent benchmark reproduction. Formal NeurIPS track for CODA not verified from the general events listing.
+
 This document is the **entry point for the second, strict audit**. [Topic index](topics/README.md) remains the sole public canonical bibliography; the external 1,003-row JSONL is a private evidence and identity tracking source, **not a second public catalog**. Do not edit it without receiving the actual latest user file.
 
 ## Non-negotiable audit gates
