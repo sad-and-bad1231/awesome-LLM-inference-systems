@@ -14,12 +14,12 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention-sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
-| [GEMM & Low-Bit Kernels](#gemm-low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
-| [Kernel DSL & Compilers](#kernel-dsl-compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines-megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory-io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation-tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
+| [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **92** | |
 
 ## Papers (92)
@@ -155,7 +155,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2025 | [KPerfIR: Towards a Open and Compiler-centric Ecosystem for GPU Kernel Performance Tooling on Modern AI Workloads](https://www.usenix.org/conference/osdi25/presentation/guan) | OSDI 2025 | 在 Triton 编译流程插入可编程 Profiling Pass，把微架构流水事件与源级 IR 关联，作者报告约 8.2% 测量开销、2% 相对误差；为通用 Kernel Profiling **工具**，不是 LLM 推理优化器，作为可迁移性能分析基础保留（KEEP_ADJACENT）。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 针对 Trainium NKI Kernel 的迭代优化与慢/快 Kernel 经验记忆，作者提供 [AccelOpt](https://github.com/zhang677/AccelOpt) 和 LLM-derived NKIBench，在 Trainium 1/2 实机测量 % peak；属于专用 Agentic Kernel Optimization 而非在线 Serving 性能。 |
 | 2026 | [K-Search: LLM Kernel Generation via Co-Evolving Intrinsic World Model](https://arxiv.org/abs/2602.19128) | arXiv 2026 (preprint) | 用与搜索共同演化的世界模型替代静态启发式，把高层算法规划与低层程序实例化显式解耦，使 LLM 在非单调优化路径上不丢弃暂不完善的中间实现，FlashInfer 的 GQA/MLA/MoE Kernel 平均提升 2.10 倍、MoE 最高 14.3 倍。 |
-| 2026 | [KernelBand: Steering LLM-based Kernel Optimization via Hardware-Aware Multi-Armed Bandits](https://proceedings.mlr.press/v306/ran26b.html) | ICML 2026 | 使用 Multi-Armed Bandit、Profiling Bound 剪枝和 Runtime Behavior Clustering 控制 Kernel Search；作者在三种 GPU 架构的 TritonBench-G 实机验证并开源，未验证在线 LLM Serving Goodput。与 KernelFoundry 的 QD Evolution、AccelOpt 的 Optimization Memory 区别明确，作为 Agentic Kernel 前沿待 G5 精审。 |
+| 2026 | [KernelBand: Steering LLM-based Kernel Optimization via Hardware-Aware Multi-Armed Bandits](https://proceedings.mlr.press/v306/ran26b.html) | ICML 2026 | 使用 Multi-Armed Bandit、Profiling Bound 剪枝和 Runtime Behavior Clustering 控制 Kernel Search；作者在三种 GPU 架构的 TritonBench-G 实机验证并开源，未验证在线 LLM Serving Goodput。与 KernelFoundry 的 QD Evolution、AccelOpt 的 Optimization Memory 区别明确，作为 Agentic Kernel Search 对比候选保留（KEEP_ADJACENT；实机 Kernel Benchmark，非在线 LLM Serving）！ |
 | 2026 | [KernelFoundry: Hardware-Aware Evolutionary GPU Kernel Optimization](https://proceedings.mlr.press/v306/wiedemann26a.html) | ICML 2026 | Quality-Diversity MAP-Elites、Prompt Co-evolution 与 Template Parameter Search，在 SYCL/CUDA 的 KernelBench/robust-kbench 上实测；虽有跨设备工具价值，但没有 LLM Serving Goodput 证据，暂保留为 Agentic Kernel 前沿例外待 G5 去同质化。 |
 | 2026 | [Triton-Sanitizer: A Fast and Device-Agnostic Memory Sanitizer for Triton with Rich Diagnostic Context](https://doi.org/10.1145/3779212.3790241) | ASPLOS 2026 | 针对真实 Triton Kernel 的内存越界/竞争检测提供跨设备 Instrumentation 与源码诊断定位；是可直接用于推理 Kernel Correctness 调试的通用工具，不是推理加速。作为极少数调试基础设施例外保留（KEEP_ADJACENT），Artifact 未复现。 |
 
