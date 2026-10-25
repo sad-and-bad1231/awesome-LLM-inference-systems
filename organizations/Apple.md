@@ -4,15 +4,6 @@
 
 [← Organizations](../README.md#organizations)
 
-| Project | Role | Official source |
-|---|---|---|
-| **MLX** | Array and autodiff framework optimized for Apple silicon and unified memory. | [GitHub](https://github.com/ml-explore/mlx) |
-| **MLX LM** | Model loading, text generation, quantization and local LLM inference on MLX. | [GitHub](https://github.com/ml-explore/mlx-lm) |
-| **MLX Swift LM** | Swift ecosystem implementations of on-device LLM/VLM generation. | [GitHub](https://github.com/ml-explore/mlx-swift-lm) |
-| **Core ML Tools** | Conversion and optimization of neural networks for Apple's on-device inference runtime. | [GitHub](https://github.com/apple/coremltools) |
-
-**Boundary.** This indexes public SDKs and execution libraries, not the unpublished internal serving behavior of Apple Intelligence.
-
 ## Official Apple Foundation Models crosswalk (2026-10-24)
 
 Apple's [June 2026 third-generation AFM technical introduction](https://machinelearning.apple.com/research/introducing-third-generation-of-apple-foundation-models) explicitly names **five** first-party model roles.
@@ -26,3 +17,14 @@ Apple's [June 2026 third-generation AFM technical introduction](https://machinel
 | **AFM 3 Cloud Pro** | Complex reasoning/tool-use server model; first-party architecture details limited | [Apple ML Research](https://machinelearning.apple.com/research/introducing-third-generation-of-apple-foundation-models) |
 
 These are publicly described **product models**, not evidence of downloadable complete weights, and not proof that MLX/ExecuTorch/Core ML reproduce Apple production PCC paths.
+
+## Selected first-party architecture and execution sources
+
+| Project | Role | Official source |
+|---|---|---|
+| **MLX** | Array and autodiff framework optimized for Apple silicon and unified memory. | [GitHub](https://github.com/ml-explore/mlx) |
+| **MLX LM** | Model loading, text generation, quantization and local LLM inference on MLX. | [GitHub](https://github.com/ml-explore/mlx-lm) |
+| **MLX Swift LM** | Swift ecosystem implementations of on-device LLM/VLM generation. | [GitHub](https://github.com/ml-explore/mlx-swift-lm) |
+| **Core ML Tools** | Conversion and optimization of neural networks for Apple's on-device inference runtime. | [GitHub](https://github.com/apple/coremltools) |
+
+**Boundary.** This indexes public SDKs and execution libraries, not the unpublished internal serving behavior of Apple Intelligence.
