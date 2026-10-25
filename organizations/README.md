@@ -8,14 +8,14 @@ Concise, source-linked maps of **public work with direct consequences for LLM in
 
 | Organization | Public work |
 |---|---|
-| [DeepSeek](DeepSeek.md) | MLA/DSA · FlashMLA · DeepGEMM · DeepEP |
-| [Tencent](Tencent.md) | Hunyuan MoE models |
-| [Qwen (Alibaba)](Qwen-Alibaba.md) | Qwen3 · code and multimodal architectures · MNN |
-| [Huawei / Ascend](Huawei.md) | CANN · MindIE · vLLM Ascend ecosystem |
+| [DeepSeek](DeepSeek.md) | V4.1 causal encoder–decoder · DeepInfer · TileKernels / TileLang · MLA/DSA · DeepEP |
+| [Tencent](Tencent.md) | Hy3 / Hy4-preview · Gated DSA / IndexCache · MoE / MTP |
+| [Qwen (Alibaba)](Qwen-Alibaba.md) | Qwen3.5–3.8 · Gated DeltaNet / QSA · multimodal models · MNN |
+| [Huawei / Ascend](Huawei.md) | CANN · MindIE · vLLM Ascend · third-party TileLang Ascend 950 backend |
 | [StepFun](StepFun.md) | Step3 MFA + Attention–FFN Disaggregation |
-| [MiniMax](MiniMax.md) | Long-context model architectures |
-| [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake disaggregated KV serving · Kimi |
-| [Zhipu AI / GLM](Zhipu-GLM.md) | GLM model architectures and deployments |
+| [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
+| [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · K3 / K3.1 Pro · KDA / Gated MLA · AttnRes |
+| [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | Seed-OSS · ByteTransformer · ByteIR |
 | [Baidu / Paddle](Baidu.md) | FastDeploy · PaddleNLP |
