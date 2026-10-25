@@ -17,11 +17,11 @@
 | [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-23) | 23 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **131** | |
+| **Total** | **132** | |
 
-## Papers (131)
+## Papers (132)
 
 ### Parallelism & Scale-Up (26)
 
@@ -128,7 +128,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Understanding and Improving Communication Performance in Multi-node LLM Inference](https://doi.org/10.1145/3786335.3813165) | CAIS 2026 | 在 Slingshot/InfiniBand 多节点 405B 推理上剖析 TP/PP 的 AllReduce 瓶颈；NVSHMEM 的 NVRAR 针对小消息 Recursive-Doubling 做分层优化，作者将其集成到 YALIS/vLLM 实机对照（最高 1.72× End-to-end Batch Latency 改善），公开研究代码，区别于泛用 NCCL Microbenchmark。 |
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
 
-### Fleet Scaling & Reliability (24)
+### Fleet Scaling & Reliability (25)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -158,6 +158,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [SAGE: A Dataflow-Native Framework for Modular, Controllable, and Transparent LLM-Augmented Reasoning](https://proceedings.mlr.press/v306/liu26co.html) | ICML 2026 | 将分布式 LLM/检索/工具执行建模为带 Backpressure 的声明式 Dataflow，联合 Admission 与多阶段资源调度。 |
 | 2026 | [ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving](https://doi.org/10.1109/2575-8411.2026.00051) | ICDCS 2026 | 通过风险驱动 Shadow Replica 启用、异构设备能力匹配和后台增量追赶，在 Jetson/手机测试床保证有状态 LLM 故障接管；直接衡量恢复时间和稳态影子开销。 |
 | 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
+| 2026 | [Fast Recovery for LLM Serving via Decoupled Device Memory Lifetime in Dynamo](https://arxiv.org/abs/2609.25451) | arXiv 2026-09 (preprint) | **GMS** 将权重 GPU Allocation 生命周期与 Engine Process 解耦，用初始化 Runtime Snapshot + Shared-model **Shadow Engine** 做原位 Failover。作者在 4 Model / vLLM/SGLang / GPU 系统上测得故障恢复 **<7s、较 Warm Restart 13–29×**，代价 **每卡 4–8 GiB** 显存；[Dynamo](https://github.com/ai-dynamo/dynamo) / [Snapshot](https://github.com/ai-dynamo/snapshot) 源码公开。生产 **18 周 Trace 推算**可挽回 79% 故障 GPU-hours，**不是已经实测节省 79%**；仅覆盖安全的 Device-preserving Case。(KEEP_STRICT; REAL_GPU_PRODUCTION_TRACE; PUBLIC_ARTIFACT; NO_INDEPENDENT_REPRO) |
 
 ### Heterogeneous & Edge Serving (23)
 
