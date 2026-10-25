@@ -30,6 +30,10 @@ This document is the **entry point for the second, strict audit**. [Topic index]
 
 **G3 claim correction:** CacheSmith original abstract/table describes **up to 27.5% improvement in quality-gated SLO attainment**; it does not certify 27.5 *percentage points*. Corrected the canonical row to preserve the source's unit and metric.
 
+
+
+**Latest AKV (2026-10-25):** [Cache Engineering for Agents](https://arxiv.org/abs/2610.28577) newly included in Prefix/Session cache class. Official [code](https://github.com/thu-nics/AKV), SGLang v0.5.20, 8×A800 BF16, GPT-OSS-120B split P/D; explicit operation-history-sensitive prefix correctness, agent `drop` and `repos`. **Author 1.18× output throughput / 1.51× lower P95 request latency compared at different chosen optimal concurrencies (AKV 14, Standard 12)**; agent policy changes generated semantics and reported 27.7% mean API-equivalent *estimated* price is not measured cloud billed cost. Treat as APPROXIMATE_MODEL_BEHAVIOR, not lossless model-speed optimization. **Proposed canonical 796.**
+
 ## Non-negotiable audit gates
 
 | Gate | Question | What passes | What fails / stays on hold |
