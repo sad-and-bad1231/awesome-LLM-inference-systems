@@ -21,3 +21,18 @@ Only **publicly documented inference-relevant model designs, execution tooling a
 | **tiktoken** | Tokenization library used in input processing and token budgeting. | [GitHub](https://github.com/openai/tiktoken) |
 
 **Boundary.** No claims about unpublished model architecture, distributed inference topology, GPU fleet or internal batching policies. The Responses API is an external interface, not evidence of the underlying implementation.
+
+## Official model-family / API listing (2026-10-24)
+
+**Authority:** [OpenAI API model catalog](https://developers.openai.com/api/docs/models/all). These are **published product/model interfaces**, not a public specification of internal training, attention architecture or serving engines.
+
+| Family | Named first-party models / inference relevance | Source |
+|---|---|---|
+| GPT-6 | **GPT-6 Astra; GPT-6.1 Sol; GPT-6 Sol; GPT-6 Luna** with distinct cost/effort/concurrency tiers | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+| GPT-5.x | GPT-5.6 Sol / Terra / Luna and GPT-5.5, GPT-5.4, GPT-5.2 legacy families, including dated snapshots and coding-focused variants | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+| gpt-oss | **gpt-oss-120b; gpt-oss-20b** open-weight MoE; code/backends and checkpoint-level evidence distinct from closed GPT-6 internals | [Official model repository](https://github.com/openai/gpt-oss) |
+| GPT-Image | GPT-Image-2.5 Sunburst, GPT-Image-2.5 Flare, GPT-Image-2; image generation is outside autoregressive text serving | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+| GPT-Live / Realtime / Audio | GPT-Live 1, Realtime-2.x/Mini/Translate, Audio-1.5, speech recognition/transcription; low-latency bidirectional audio workload | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+| Embeddings and specialized | text-embedding-3-large/small, GPT-5.6 Cyber, GPT-Rosalind and task-specific models | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+
+**Coverage limit:** the API supports many exact dated model strings and deprecations; the canonical model page is the complete live **endpoint registry**. Do not present consumer marketing names, alias IDs, publicly downloaded checkpoints or unpublished internal serving stacks as equivalent.
