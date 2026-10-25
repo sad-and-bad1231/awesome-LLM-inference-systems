@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-36) | 36 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-12) | 12 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-37) | 37 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-28) | 28 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **129** | |
+| **Total** | **132** | |
 
-## Papers (129)
+## Papers (132)
 
-### Batching, Queues & SLOs (36)
+### Batching, Queues & SLOs (37)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Pacing Branch Parallelism in LLM Serving (PACE/TAPER)](https://arxiv.org/abs/2605.06914) | NeurIPS 2026 (author-verified; proceedings title) | 同一请求多个并行 Branch 与其他请求共 Batch 时，按 **Branch Externality / SLO Slack** 每 Decode Step 动态 Admit，避免 Eager/固定 Cap 拖慢其他请求；作者 Qwen3-32B **Goodput 1.77×/1.48× vs IRP-Off/Eager**、>95% SLO 达标（作者报告）。公开 [SGLang Fork、校准脚本、正确性测试](https://github.com/Swapnil-Gandhi/PACE)。**G0 alias：会议题名为 Pacing；arXiv/代码题名 Regulating（同作者同机制）**，不重复收录；未复现 NPU。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2021 | [TurboTransformers: An Efficient GPU Serving System for Transformer Models](https://doi.org/10.1145/3437801.3441578) | PPoPP 2021 | 早期 Transformer Serving 系统：可变长输入的 Smart Batching、动态规划批调度、GPU Softmax/LayerNorm 与内存分配器；Tencent 有开源实现及 BERT 在线部署，属于现代自回归 Serving 前驱，非 2026 LLM 评测。 |
 | 2024 | [Andes: Defining and Enhancing Quality-of-Experience in LLM-Based Text Streaming Services](https://arxiv.org/abs/2404.16283) | arXiv 2024 (preprint) | 为 Text Streaming 定义面向用户的 QoE，并以 Token-level Preemption 和到达流量感知调度协调首 Token 与平滑输出。 |
 | 2024 | [DeepSpeed-FastGen: High-throughput Text Generation for LLMs via MII and DeepSpeed-Inference](https://arxiv.org/abs/2401.08671) | arXiv 2024 (preprint) | Dynamic SplitFuse 以统一 Token Budget 混合 Chunked Prefill 与 Decode，并提供 DeepSpeed-MII/Inference 实现及对 vLLM 的服务吞吐-延迟评估。 |
@@ -67,12 +68,14 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [TetriServe: Efficiently Serving Mixed DiT Workloads](https://doi.org/10.1145/3779212.3790233) | ASPLOS 2026 | 相邻 DiT Serving：按 Denoising Step 动态调整 Sequence Parallelism、Round-based Deadline Scheduling 与多请求 Packing；有 8×H100 Benchmark 工程，不是文本 LLM。（KEEP_ADJACENT） |
 | 2026 | [VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption](https://doi.org/10.1109/IPDPS65963.2026.00037) | IPDPS 2026 (IEEE full paper) | 优化流式语音问答生成的**播放连续性**与基于 LLM 的请求服务抢占，而非单纯平均 Token/s；出版 DOI 和作者身份已核对。实际在线并发、音频/文本端到端播放延迟、对照 vLLM/SGLang 与真实设备结果尚未全文核验，**HOLD_METHOD**。（HOLD_EVIDENCE） |
 
-### Routing & Load Balancing (12)
+### Routing & Load Balancing (14)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [TokenRouter: Efficient Serving System for Token-Level LLM Routing](https://arxiv.org/abs/2610.12242) | NeurIPS 2026 (author-verified; proceedings pending) | 跨不同 LLM 的 Token-level Routing 采用 **Request-centric API + 异步 Model Subserver + Delayed Batching**，避免同步 Step 和频繁 Admission Stall。作者在 Qwen3-0.6B/32B 与 AIME、SWE-smith 等报告 2.01–64.15× Decode Throughput，相对于现有跨模型路由服务，**倍数受比较实现与并发强烈影响**；公开 [可启动 Server/评测脚本](https://github.com/thu-nics/TokenRouter)，CUDA MPS，未独立复现。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; PUBLIC_CODE; AUTHOR_REPORTED） |
+| 2026 | [Tackling the Data-Parallel Load Balancing Bottleneck in LLM Serving: Practical Online Routing at Scale (BalanceRoute)](https://arxiv.org/abs/2605.06113) | NeurIPS 2026 (author-verified; proceedings pending) | DP Decode 同步屏障与 Sticky KV 限制请求迁移；BR-0 用非对称 Admission F-score，BR-H 增加预测窗口；**论文作者报告在 144 NPU 集群与生产/Azure Trace 上的吞吐收益**。公开 [代码](https://github.com/b010001y/BalanceRoute) 目前只有 CPU Simulator 与合成基准，真实 NPU Serving 集成/Trace **未开放**；禁止把模拟吞吐写成实测。（KEEP_STRICT; REAL_NPU_AUTHOR_ONLY; PARTIAL_CODE; REPRO_NOT_ATTEMPTED） |
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |
 | 2026 | [Cascadia: An Efficient Cascade Serving System for Large Language Models](https://proceedings.iclr.cc/paper_files/paper/2026/hash/b76105b94a8c1286c860ad885ec588f1-Abstract-Conference.html) | ICLR 2026 | 以模型级联和跨实例路由优化 SLO 条件下的多模型 Serving。 |
 | 2026 | [DualMap: Enabling Both Cache Affinity and Load Balancing for Distributed LLM Serving](https://arxiv.org/abs/2602.06502) | ICLR 2026 | 在两套 Prefix Hash Mapping 间根据 SLO 与负载路由请求，使用双环扩缩容与热点迁移平衡 KV Locality。 |

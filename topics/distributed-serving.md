@@ -16,12 +16,12 @@
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-23) | 23 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [KV Transfer & Communication](#kv-transfer--communication-24) | 24 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-22) | 22 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **128** | |
+| **Total** | **129** | |
 
-## Papers (128)
+## Papers (129)
 
 ### Parallelism & Scale-Up (26)
 
@@ -96,12 +96,13 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 
-### KV Transfer & Communication (23)
+### KV Transfer & Communication (24)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SplitZip: Ultra Fast Lossless KV Compression for Disaggregated LLM Serving](https://arxiv.org/abs/2605.01708) | NeurIPS 2026 (author-verified; proceedings pending) | P/D KV 传输：BF16 指数 Top-16 定长编码 + Sparse Escape，**bitwise lossless**；作者报告 H200 Codec 613.3/2181.8 GB/s 压/解码、TTFT 最高 1.30×、Request Throughput 1.23×。公开 [Triton Codec/Oracle](https://github.com/Intelligent-Microsystems-Lab/SplitZip)，但 SGLang/Mooncake E2E 集成**未公开**；未在 Ascend 复现。（KEEP_STRICT; LOSSLESS_OUTPUT; REAL_GPU; PUBLIC_CODEC_ONLY; AUTHOR_REPORTED） |
 | 2024 | [Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache](https://arxiv.org/abs/2401.02669) | arXiv 2024 (preprint) | DistAttention 与弹性分布式 KV Pool 分离 Attention 计算/状态驻留，在多 GPU 间扩展 Long-context Serving。 |
 | 2024 | [MemServe: Context Caching for Disaggregated LLM Serving with Elastic Memory Pool](https://arxiv.org/abs/2406.17565) | arXiv 2024 (preprint) | 以 MemPool 统一跨 Worker 分布式 KV 内存，再用全局 Prefix-tree Cache-aware Scheduler 联结 Context Reuse 和 P/D 分离。 |
 | 2025 | [Aqua: Network-Accelerated Memory Offloading for LLMs in Scale-Up GPU Domains](https://doi.org/10.1145/3676641.3715983) | ASPLOS 2025 | 利用 Scale-up GPU 网络与远端显存提供高带宽内存卸载，联合组织计算及跨 GPU 数据传输。 |

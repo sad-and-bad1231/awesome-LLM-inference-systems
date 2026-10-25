@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-38) | 38 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-57) | 57 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
-| [Sparse KV Retrieval](#sparse-kv-retrieval-15) | 15 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
+| [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-25) | 25 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **157** | |
+| **Total** | **158** | |
 
-## Papers (157)
+## Papers (158)
 
 ### Prefix & Session Reuse (38)
 
@@ -133,12 +133,13 @@
 | 2026 | [V-Rex: Real-Time Streaming Video LLM Acceleration via Dynamic KV Cache Retrieval](https://2026.hpca-conf.org/details/hpca-2026-main-conference/55/V-Rex-Real-Time-Streaming-Video-LLM-Acceleration-via-Dynamic-KV-Cache-Retrieval) | HPCA 2026 | 针对视频流的时间相关性动态选择 KV 状态。（KEEP_ADJACENT） |
 | 2026 | [VecInfer: Efficient LLM Inference with Low-Bit KV Cache via Outlier-Suppressed Vector Quantization](https://aclanthology.org/2026.acl-long.1454/) | ACL 2026 | 采用 Smooth/Hadamard 抑制 K 的异常值提升低 Bit Codebook 利用率，并设计 CUDA Fused Dequant–Attention Kernel；论文在 Llama-3.1-8B 196K 上报告 2-bit 单批完整推理延迟收益与质量，仍需独立复现。 |
 
-### Sparse KV Retrieval (15)
+### Sparse KV Retrieval (16)
 
 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Sparse Attention as a Range Searching Problem: Towards an Inference-Efficient Index for KV Cache (Louver)](https://arxiv.org/abs/2605.06763) | NeurIPS 2026 (author-verified; proceedings pending) | 将逐步变化的 KV Attention Threshold 选择转为半空间 Range Search，借助可更新索引保证 **超过指定 score 阈值的 Key 无漏召回**，并通过 CPU/GPU Kernel 查询；**不等于与 Dense Attention 输出逐位相同**。作者在 RTX 5090、Threadripper 上报告真实 Attention Latency/LongBench/RULER，公开 [Index、CUDA Kernel、CPU Offload、复现实验](https://github.com/UIC-InDeXLab/Louver)。索引额外元数据/选择阈值成本需算入，非现成 vLLM-Ascend E2E。（KEEP_STRICT; REAL_GPU_CPU; THRESHOLD_RECALL_ONLY; PUBLIC_CODE） |
 | 2024 | [ALISA: Accelerating Large Language Model Inference via Sparsity-Aware KV Caching](https://dl.acm.org/doi/10.1109/ISCA59077.2024.00077) | ISCA 2024 | 把注意力稀疏性与 KV 缓存分配联动：按层与 token 的动态稀疏度预测结果分配缓存预算，只保留真正会被激活的 KV，并做稀疏感知的加载与调度，在长上下文下同时降低显存压力与被浪费的带宽。 |
 | 2024 | [PQCache: Product Quantization-based KVCache for Long Context LLM Inference](https://arxiv.org/abs/2407.12820) | arXiv 2024 (preprint) | 把 KV cache 的存与取当作嵌入检索问题：预填充阶段对每层每头的 key 做乘积量化，解码时用 PQ 码与质心近似定位重要的前序 token 再取回对应 KV 参与注意力，并用重叠与缓存设计摊薄额外算力与通信；InfiniteBench 得分较现有方法提升 4.60%。 |
 | 2024 | [Quest: Query-Aware Sparsity for Efficient Long-Context LLM Inference](https://proceedings.mlr.press/v235/tang24l.html) | ICML 2024 | 按当前 Query 粗筛 KV Page 再精确算 Attention，降低长上下文 Decode 访存量。（KEEP_FOUNDATIONAL） |
