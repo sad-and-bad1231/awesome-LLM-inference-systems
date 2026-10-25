@@ -14,15 +14,15 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Weight-Only & Rotation](#weight-only-rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
-| [Weight-Activation & Hardware Formats](#weight-activation-hardware-formats-10) | 10 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
-| [Mixed Precision & Bit Allocation](#mixed-precision-bit-allocation-3) | 3 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
-| [KV Cache Quantization](#kv-cache-quantization-4) | 4 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
+| [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
+| [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-10) | 10 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
+| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-3) | 3 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
+| [KV Cache Quantization](#kv-cache-quantization-3) | 3 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-3) | 3 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
-| [Lossless & Delta Compression](#lossless-delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **37** | |
+| [Lossless & Delta Compression](#lossless--delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
+| **Total** | **36** | |
 
-## Papers (37)
+## Papers (36)
 
 ### Weight-Only & Rotation (12)
 
@@ -70,7 +70,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [MixLLM: LLM Quantization with Global Mixed-precision between Output-features and Highly-efficient System Design](https://proceedings.mlsys.org/paper_files/paper/2026/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2026 | 跨层按输出特征重要性分配量化位宽，设计反量化与 GEMM 重叠流水。 |
 | 2026 | [PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization](https://arxiv.org/abs/2607.16184) | arXiv 2026 (preprint) | 根据在线 KV 容量压力调节 MoE Expert Weights 的精度，将模型质量、显存与 Batch 吞吐联合优化；真实 MoE Serving 工作负载报告 GPU 内存与端到端性能。 **复审证据：**[arXiv](https://arxiv.org/abs/2607.16184)：KV Pressure 驱动动态 Expert Weight Quantization；作者报告 FP16-equivalent Accuracy 条件下最多 72% Memory Saving / 1.94× Throughput。MODEL_CHANGED/QUALITY_TRADEOFF。 （KEEP_SOURCE_VERIFIED; AUTHOR_REPORTED; NOT_INDEPENDENTLY_REPRODUCED） |
 
-### KV Cache Quantization (4)
+### KV Cache Quantization (3)
 
 KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 
@@ -79,7 +79,6 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 | 2025 | [Oaken: Fast and Efficient LLM Serving with Online-Offline Hybrid KV Cache Quantization](https://doi.org/10.1145/3695053.3731019) | ISCA 2025 | 离线确定 KV Outlier Threshold，在线低成本量化并协同 KV MMU/硬件引擎，减少长 Batch Attention 带宽。（KEEP_ADJACENT） |
 | 2026 | [JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference](https://doi.org/10.1145/3774934.3786428) | PPoPP 2026 | RtSmooth 运行时平滑离群值，配合 Fast Absmax、Recent-token 分层表示和 Mixed-precision Attention Kernel；报告 KV 质量、显存与端到端 Decode 吞吐对照。（KEEP_ADJACENT） |
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。（KEEP_ADJACENT） |
-| 2026 | [TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate](https://proceedings.iclr.cc/paper_files/paper/2026/hash/5c802ef38ab6e366c2ea06eee554c088-Abstract-Conference.html) | ICLR 2026 | 旋转与向量量化用于低比特 KV 表示；快速准入（正式出版论文入口）。实际设备、强基线、精度与端到端 Serving 指标留待二审。（KEEP_ADJACENT） |
 
 ### Recurrent State Quantization (3)
 
