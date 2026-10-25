@@ -18,10 +18,10 @@
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-24) | 24 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-22) | 22 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **130** | |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-23) | 23 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **131** | |
 
-## Papers (130)
+## Papers (131)
 
 ### Parallelism & Scale-Up (26)
 
@@ -159,12 +159,13 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [ShadowLLM: Resource-Efficient Hot Standby for Heterogeneous Edge LLM Serving](https://doi.org/10.1109/2575-8411.2026.00051) | ICDCS 2026 | 通过风险驱动 Shadow Replica 启用、异构设备能力匹配和后台增量追赶，在 Jetson/手机测试床保证有状态 LLM 故障接管；直接衡量恢复时间和稳态影子开销。 |
 | 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
 
-### Heterogeneous & Edge Serving (22)
+### Heterogeneous & Edge Serving (23)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [HAWK: Heterogeneity-Aware KV Cache Transfer for Efficient GPU-NPU Phase-Disaggregated LLM Inference](https://arxiv.org/abs/2610.29873) | arXiv 2026 (preprint) | GPU Prefill → NPU Decode 的 P/D KV 传输中，构造跨设备 RDMA 和 **目标 NPU Layout-aware DMA buffers**，避免到达后 Tensor 转置/Channel Fragmentation。作者在真实 **NVIDIA A100 + Tenstorrent p150a** 和 vLLM/Mooncake 系统测得同 SLO 下相对 GPU-only 性能差距 7.88%、能效最高 1.26×/成本效率 1.72×。**不是 Ascend NPU 实测**，无可验证公开作者代码，性能为论文报告。（KEEP_STRICT; REAL_GPU_OTHER_NPU; G4_NO_PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2024 | [HeteGen: Efficient Heterogeneous Parallel Inference for Large Language Models on Resource-Constrained Devices](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5431dca75a8d2abc1fb51e89e8324f10-Abstract-Conference.html) | MLSys 2024 | 针对 GPU/CPU 异构设备规划推理执行与参数转移，实现受限资源大模型部署。 |
 | 2025 | [Attention-Level Speculation](https://proceedings.mlr.press/v267/cai25g.html) | ICML 2025 | 以 Attention 输出预测提前执行后续层，在异构 NPU 上重叠 Attention 与非 Attention 计算。 |
 | 2025 | [Cauchy: A Cost-Efficient LLM Serving System through Adaptive Heterogeneous Deployment](https://doi.org/10.1145/3772052.3772264) | SoCC 2025 | 针对异构资源与 Workload 变化动态调整部署以降低成本。 |
