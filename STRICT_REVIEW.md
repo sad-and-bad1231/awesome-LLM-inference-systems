@@ -1,5 +1,8 @@
 # Strict Review: evidence-first curation
 
+**CURRENT INVENTORY (2026-10-25): 736 canonical paper rows, 44 research directions, no unresolved HOLD rows.** The October 25 base selective library had 722 entries after a 92-row HOLD adjudication. The later [lab-origin research review](reviews/LAB_ORIGIN_REVIEW_20261025.md) accepted 14 more source-qualified papers (2025–2026 formal venues or clearly labeled preprints), with verified mechanisms, author-reported real-execution/benchmark evidence and explicit artifact/model-change limits. **No independent 736-paper full-text baseline audit or benchmark reproduction is claimed.** CHIME remains outside the canon pending verification of DIMM-PIM physical/simulated evaluation scope.
+
+
 **ACTIVE STATUS (2026-10-25; post-HOLD editorial gate): 722 canonical entries / 44 engineering directions / 0 public HOLD-labeled paper rows.** [All 92 per-paper decisions](reviews/HOLD_RESOLUTION_20261025.md) are recorded with original source links: 16 source-evidenced KEEP, 76 REMOVE_NOT_QUALIFIED. Two further vague rows removed; four selectively added (ICML memory-processing pipeline, ICML TwinQuant, ACL Findings AscendKernelGen, ACL Findings ProMCP). **No broad renaming of HOLD to KEEP was performed.** This status denotes explicit *curation disposition*, not a certification that each surviving paper has independently audited baselines, verified code or reproduced speedups. The earlier 796-row snapshot below is historical.
 
 
