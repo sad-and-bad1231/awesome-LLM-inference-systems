@@ -17,10 +17,10 @@
 | [Expert Routing & Communication](#expert-routing--communication-19) | 19 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-13) | 13 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-22) | 22 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **75** | |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-23) | 23 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **76** | |
 
-## Papers (75)
+## Papers (76)
 
 ### Expert Routing & Communication (19)
 
@@ -96,12 +96,13 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Taming Latency-Memory Trade-Off in MoE-Based LLM Serving via Fine-Grained Expert Offloading](https://doi.org/10.1145/3767295.3769319) | EuroSys 2026 | FineMoE 从 Prompt 语义及细粒度 Expert 激活模式驱动 Expert 预取、缓存与 CPU Offload，在六 GPU 原型和真实 MoE 工作负载中对照时延及 Cache Hit。 |
 | 2026 | [ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling](https://proceedings.mlr.press/v306/yang26ds.html) | ICML 2026 | 联合无损 Expert 权重压缩、缓存亲和调度与边缘硬件特性，实现低显存 MoE Serving 原型。 |
 
-### Sparse Attention & Conditional Compute (22)
+### Sparse Attention & Conditional Compute (23)
 
 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SparDA: Sparse Decoupled Attention for Efficient Long-Context LLM Inference](https://arxiv.org/abs/2606.04511) | NeurIPS 2026 (author-verified; proceedings pending) | 由当前层 **Forecast Projection** 提前预测下一层所需 KV Block，允许 CPU→GPU Offload Prefetch 与本层 Attention 重叠；GQA Group 共享 Forecast Head 减少 Indexer 计算。作者在 **MiniCPM4.1-8B/NOSA-8B、A100/H100** 报告相对 Sparse-Offload 最高 Prefill 1.25×/Decode 1.7×，大 Batch 对比非卸载稀疏基线 5.3× 吞吐；**需训练附加 <0.5% Forecast 参数（MODEL_CHANGED）**，不是原模型无损算子替换。公开 [CUDA Extensions、训练与真实推理 Benchmark](https://github.com/NVlabs/SparDA)。（KEEP_STRICT; REAL_GPU; REQUIRES_FINETUNING; MODEL_CHANGED; PUBLIC_CODE） |
 | 2024 | [MInference 1.0: Accelerating Pre-filling for Long-Context LLMs via Dynamic Sparse Attention](https://proceedings.neurips.cc/paper_files/paper/2024/hash/5dfbe6f5671e82c76841ba687a8a9ecb-Abstract-Conference.html) | NeurIPS 2024 | 按 Head 动态识别长文本 Attention 稀疏模式并配套高效 Sparse Prefill Kernel。（APPROXIMATE_QUALITY_CHECKED） |
 | 2025 | [Efficient LLM Inference using Dynamic Input Pruning and Cache-Aware Masking](https://proceedings.mlsys.org/paper_files/paper/2025/hash/afd6374c7f2839cba22f537f15f4f760-Abstract-Conference.html) | MLSys 2025 | 在移动端按 SwiGLU 输入激活进行预测器无关的剪枝，并根据缓存位置调整 Mask。（APPROXIMATE_QUALITY_CHECKED） |
 | 2025 | [Kascade: A Practical Sparse Attention Method for Long-Context LLM Inference](https://arxiv.org/abs/2512.16391) | arXiv 2025 (preprint; NOT MLSys 2026 main proceedings) | 按 Head 在少量 Anchor Layers 求精确 Top-k Attention Index，并在相邻 Reuse Layers 共享；有公开 H100 CUDA Kernel、与 FlashAttention-3 的 Prefill/Decode 基准、LongBench/AIME 精度验证。（APPROXIMATE_QUALITY_CHECKED） |
