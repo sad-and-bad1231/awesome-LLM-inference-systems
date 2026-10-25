@@ -14,15 +14,15 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
-| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
-| [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-17) | 17 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **94** | |
+| [Attention & Sparse Kernels](#attention-sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [GEMM & Low-Bit Kernels](#gemm-low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
+| [Kernel DSL & Compilers](#kernel-dsl-compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines-megakernels-14) | 14 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Communication, Memory & I/O](#communication-memory-io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Kernel Automation & Tools](#kernel-automation-tools-7) | 7 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **92** | |
 
-## Papers (94)
+## Papers (92)
 
 ### Attention & Sparse Kernels (28)
 
@@ -122,23 +122,20 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Taming Dynamic Diffusion LLM Inference through Virtual Static Execution](https://doi.org/10.1145/3797905.3800520) | ICS 2026 | Prism 通过 Physical Bucket、跨迭代 Budget-aware 调度与跳过 Padding 的专用 Kernel，将动态 Diffusion LLM 推理映射为稳定执行计划；论文报告 LLaDA/MoE 推理性能。 |
 | 2026 | [XY-Serve: End-to-End Versatile Production Serving for Dynamic LLM Workloads](https://doi.org/10.1145/3760250.3762228) | ASPLOS 2026 | 在 Ascend NPU 上把动态 Prefill/Decode 分解为可复用 Meta-kernels 和虚拟 Padding，减少 Dynamic Shape 执行开销。 |
 
-### Communication, Memory & I/O (17)
+### Communication, Memory & I/O (15)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
 | 2026 | [uGDS: A User-Space Development Kit for High-Performance GPU Direct Storage](https://arxiv.org/abs/2610.30868) | arXiv 2026 (technical report) | CPU 用户态 NVMe Submission/Completion + PCIe P2P DMA，避开每次 I/O Kernel 控制路径；分离 Sync/Batch 队列，兼容 NVIDIA CUDA/AMD ROCm。真实 A100+Samsung 990 PRO、Qwen3-0.6B/vLLM0.20.1/LMCache0.5.1.dev35 SSD-only replay，作者报告 **TTFT 中位数最高 -62.7%、Serving Goodput 2.63×**（特定小 I/O 条件）。公开 [实现](https://github.com/ScaleX-IO/uGDS)，[LMCache Adapter PR #4420 已合并](https://github.com/LMCache/LMCache/pull/4420)；对独占裸 NVMe 的风险与 910B2 不可移植性作限制。（KEEP_STRICT; REAL_GPU; E2E_AUTHOR_ONLY; PUBLIC_UPSTREAM_CODE） |
-| 2025 | [FACIL: Flexible DRAM Address Mapping for SoC-PIM Cooperative On-device LLM Inference](https://doi.org/10.1109/HPCA61900.2025.00127) | HPCA 2025 | SoC GEMM/PIM GEMV 针对 Prefill/Decode 不同访问模式设计 DRAM 地址重映射以降低权重 Relayout；定制 PIM 硬件性能归因和物理芯片验证尚未确认，不等同商品 GPU/NPU 推理提速（HOLD_EVIDENCE）。 |
 | 2025 | [Fast On-device LLM Inference with NPUs](https://doi.org/10.1145/3669940.3707239) | ASPLOS 2025 | llm.npu 将模型子图映射到手机 NPU/CPU/GPU 并流水化执行，处理 NPU 不支持算子及动态 LLM Decode。 |
-| 2025 | [LUT Tensor Core: A Software-Hardware Co-Design for LUT-Based Low-Bit LLM Inference](https://doi.org/10.1145/3695053.3731057) | ISCA 2025 | 低比特 LUT-GEMM 的 Fusion、表项对称化及特殊 Tile/指令集设计；论文关注定制硬件计算密度/能效，**不能当作 NVIDIA/Ascend 真实 Tensor Core Kernel 加速**。物理芯片/模拟验证边界与 End-to-end LLM 指标待复核（HOLD_EVIDENCE）。 |
 | 2025 | [MAS-ATTENTION: MEMORY-AWARE STREAM PROCESSING FOR ATTENTION ACCELERATION ON RESOURCE-CONSTRAINED EDGE DEVICES](https://proceedings.mlsys.org/paper_files/paper/2025/hash/d3cf1559a8795eb1ed2b3ad52409ac7d-Abstract-Conference.html) | MLSys 2025 | 协调边缘加速器的向量与矩阵执行流水，以多级 Tiling 和缓存覆盖减少片上空间开销；含真实 NPU 验证。 |
 | 2025 | [MEADOW: Memory-efficient Dataflow and Data Packing for Low Power Edge LLMs](https://proceedings.mlsys.org/paper_files/paper/2025/hash/259a5df46308d60f8454bd4adcc3b462-Abstract-Conference.html) | MLSys 2025 | 在低功耗 FPGA 上采用 Token-parallel/Head-sequential Dataflow 与无损 Weight Packing，减少 Prefill/Decode 外存访问。 |
 | 2025 | [Neuralink: Fast on-Device LLM Inference with Neuron Co-Activation Linking](https://doi.org/10.1145/3676642.3736114) | ASPLOS 2025 | 基于 Neuron Co-Activation 重排手机 Flash 上的稀疏权重，联合预取和访问模式优化减少 IOPS。 |
 | 2025 | [TileLink: Generating Efficient Compute-Communication Overlapping Kernels using Tile-Centric Primitives](https://proceedings.mlsys.org/paper_files/paper/2025/hash/c6ee784cbe46d854843e4c883a3321ef-Abstract-Conference.html) | MLSys 2025 | 以 Tile 为接口生成重叠通信与计算的分布式 Kernel。 |
 | 2026 | [Communication-Efficient Verifiable Attention for LLM Inference (VeriAttn)](https://arxiv.org/abs/2606.16352) | arXiv 2026 (preprint) | 将 Attention 计算迁至 GPU、TEE 保留完整性验证，通过 Prefill Pipeline 和 Decode 分区减轻 TEE–GPU 通信；Intel TDX 平台实测。 |
 | 2026 | [CoPilotIO: CPU as a Co-Pilot for GPU I/O to Free GPU Compute](https://www.usenix.org/conference/osdi26/presentation/chen-guanyi) | OSDI 2026 | GPU 发起异步 I/O，由 CPU 代理轮询并以设备硬件 Barrier 同步；包含 MoE 推理实测。 |
-| 2026 | [I/O Analysis is All You Need: An I/O Analysis for Long-Sequence Attention](https://doi.org/10.1145/3779212.3790174) | ASPLOS 2026 | 从 Tall-and-Skinny GEMM 推导 Exact Long-context Attention I/O 界，并设计 AttenIO 三层算通重叠、Tiling/Scheduling 和 Softmax 并行；这是 I/O 分析和专用 Accelerator 设计，不能替代真实 GPU/Serving Kernel Bench，完整物理评测待审（HOLD_EVIDENCE）。 |
 | 2026 | [MoonBright: A GPU Memory Allocator with Device-Side Page Table Materialization and Deferred TLB Coherence](https://www.usenix.org/conference/osdi26/presentation/zhang-yangyu) | OSDI 2026 | MoonBright 在商品 GPU 上实现设备侧页表物化与延迟 TLB 一致性：元数据留主机、批量页表构建移到 GPU，并以新虚拟地址避免热路径上的 TLB shootdown，降低分配延迟、提升 LLM 推理性能并缓解分配器级外部碎片，纯软件改动即可跑在 NVIDIA/AMD GPU |
 | 2026 | [ParallelKittens: Systematic and Practical Simplification of Multi-GPU AI Kernels](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ff997469ac66cf893c4183efeb22212a-Abstract-Conference.html) | MLSys 2026 | 用可重用通信与同步原语编写 TP/SP/EP 跨卡重叠 Kernel。 |
 | 2026 | [Purlin: Separating Orchestration from the Datapath of Collectives](https://arxiv.org/abs/2609.36954) | arXiv 2026 (preprint) | 以 SNAC 编排层和硬件特定 Copy/Reduce Atom 解耦 Collective 语义、同步与数据通路，并集成 SGLang 评估。 |
@@ -146,6 +143,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 
 | 2026 | [DeltaLog: Deferred Materialization of Recurrent States for Linear Attention Decoding](https://arxiv.org/abs/2608.15533) | arXiv 2026 (preprint) | 将状态表示为 dense base + 有界 compact-update log，多数 Decode step 只追加更新，周期性 merge 回完整状态，保持原递推语义并减少每 Token 的全状态写回。作者报告 GDN/KDA/RWKV6 上状态更新 Kernel 最高 1.86×、写流量降低最高 7.83×、端到端 serving 1.05–1.20×。未找到作者公开代码；论文给出模型、Kernel 和 serving 评测边界，结果仍为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
 | 2026 | [KVBuffer: IO-aware Serving for Linear Attention](https://arxiv.org/abs/2605.19049) | arXiv 2026 (preprint) | 缓冲最近 K/V，将递推状态更新改为 chunkwise 批处理；支持 speculative verification 并行验证 draft tokens，短上下文时直接从缓冲 K/V 计算而不创建/更新状态。作者在 Qwen3-Next 的 SGLang 实现中报告线性 Attention Decode 延迟最高降低 45.17%，四 Token speculative verification 下最大可服务请求数提升至 5×。未找到作者公开代码，结果为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
+| 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 
 ### Kernel Automation & Tools (7)
 
