@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-38) | 38 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-40) | 40 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-15) | 15 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-28) | 28 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-10) | 10 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-23) | 23 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **134** | |
+| **Total** | **138** | |
 
-## Papers (134)
+## Papers (138)
 
-### Batching, Queues & SLOs (38)
+### Batching, Queues & SLOs (40)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -68,8 +68,10 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [TetriServe: Efficiently Serving Mixed DiT Workloads](https://doi.org/10.1145/3779212.3790233) | ASPLOS 2026 | 相邻 DiT Serving：按 Denoising Step 动态调整 Sequence Parallelism、Round-based Deadline Scheduling 与多请求 Packing；有 8×H100 Benchmark 工程，不是文本 LLM。（KEEP_ADJACENT） |
 | 2026 | [VoLLM: Smoothness-aware Serving of LLM-powered Voice Q&A via Adaptive Preemption](https://doi.org/10.1109/IPDPS65963.2026.00037) | IPDPS 2026 (IEEE full paper) | 优化流式语音问答生成的**播放连续性**与基于 LLM 的请求服务抢占，而非单纯平均 Token/s；出版 DOI 和作者身份已核对。实际在线并发、音频/文本端到端播放延迟、对照 vLLM/SGLang 与真实设备结果尚未全文核验，**HOLD_METHOD**。（HOLD_EVIDENCE） |
 | 2026 | [SageSched: Efficient LLM Scheduling Confronting Demand Uncertainty and Hybridity](https://arxiv.org/abs/2603.07917) | NeurIPS 2026 (authors confirm; proceedings pending) | 用 Prompt + 历史输出估计生成长度**分布**而非固定长度，并联合 GPU Compute/Memory Cost 做不确定性感知排队；作者真实 Testbed 报告服务效率提升超过 28.7%。尚未核验代码发布、相同 SLO Goodput 和在现代 vLLM/Ascend 上的复现。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
+| 2026 | [Delta Tokenizer: Reference-Identical Tokenization of Session Deltas and Segment-Parallelism for Long Prompts on Multicore CPUs](https://arxiv.org/abs/2610.19801) | arXiv 2026-10-14 (preprint) | LLM Serving CPU Frontend 的增量 Exact BPE：以稳定 Split Boundary 重编码变更尾部，长 Prompt 分段多核编码并让短 Session Delta 优先穿插执行；作者宣称 **Reference-Identical Token IDs**，SGLang Agent 长上下文 100K Median TTFT −59%、P99 TTFT 最大 9.5×。公开 [toktier](https://github.com/asu-idi/toktier) **仅增量路径与 Encoder**，分段并行、CPU 调度器与 SGLang Adapter 在文中仍属待公开组件；无法将完整服务收益视为已可复现。(KEEP_STRICT; REAL_CPU/GPU_AUTHOR_REPORTED; PARTIAL_ARTIFACT) |
+| 2026 | [Taking Tokenization off the Host for Agentic LLM Serving (GraphTok)](https://arxiv.org/abs/2610.13325) | arXiv 2026-10-09 (preprint) | **完整 GPU Tokenizer，非 Token Cache**：Pre-tokenization → Parallel Exact BPE → Token-ID Assembly 合并为可 Replay 的 **CUDA Graph**，短输入回退 CPU；对 GPT-2/Llama3/Qwen2.5/DeepSeek-V3/Gemma3 均执行 Reference Bit-identical Token-ID Oracle。作者在 **H100 NVL + vLLM/Dynamo** 和 121K Cached-Agent Prompts 下报告单 Frontend 的 2s P99 下最大处理量 **518 req/s vs CPU gigatoken 296、默认 Tokenizer 18.5**，对命中前缀的请求 Mean TTFT 最多降低 2.4×；此收益受极长 Context 和 Cache-Hit 驱动，不适用于短输入或 GPU 无空余资源的场景。[公开 CUDA、vLLM Plugin、Dynamo Backend](https://github.com/Msiavashi/GraphTok)（v0.3.0）；未独立验证包括所有 Unicode 边界、部署开销或 Ascend 迁移。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; LOSSLESS_TOKEN_IDS_CLAIM) |
 
-### Routing & Load Balancing (14)
+### Routing & Load Balancing (15)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
@@ -89,8 +91,9 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://doi.org/10.1145/3767295.3769353) | EuroSys 2026 | 跨 Region 根据 Prefix Cache Locality 和排队状态动态迁移请求。 |
 | 2026 | [STAR: Decode-Phase Rescheduling for LLM Inference](https://doi.org/10.1145/3806645.3807813) | HPDC 2026 | 利用 LLM Hidden State 在线预测 Remaining Output Length，并对 P/D 分离的 Decode Workers 重新分配请求，抑制长 CoT Decode 偏斜与 P99 TPOT；作者报告端到端 Goodput/SLO 对照。 |
 | 2026 | [The Price of Anarchy in Disaggregated Inference](https://arxiv.org/abs/2606.17081) | arXiv 2026 (preprint) | 分析 Disaggregated P/D Serving 的 KV Locality–拥塞耦合，以 Dynamo 实现 Saturation-aware Routing 并在三节点 B200 服务器验证；P/D 资源博弈仍属解析模型。 |
+| 2026 | [PackServe: SLO-Aware Request Scheduling for Agentic LLM Serving at Scale](https://arxiv.org/abs/2609.33224) | arXiv 2026 (preprint) | 白盒 Prefill/Decode Interference Latency Model + KV Affinity 约束将 Agent Requests 安排到更少实例；在 **64×H20** 与生产 Trace 上相对 llm-d+/LMetric 减少 GPU-hours 并满足指定 **TPOT SLO**，另提供 **1000+ GPU 生产同类策略**的资源分析。**生产期平均 TTFT 较负载均衡增加 66.4%**；生产部署称为共享设计原则的调度策略，不能等同所有实验条件与代码完全相同。作者结果、无独立复制。(KEEP_STRICT; REAL_GPU_PRODUCTION_AUTHOR_REPORTED; TTFT_TRADEOFF) |
 
-### P/D Allocation & Autoscaling (21)
+### P/D Allocation & Autoscaling (22)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
@@ -117,6 +120,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [SplitScaling: Adaptive Scaling for Disaggregated LLM Serving Against Traffic Bursts via DRL](https://www.ijcai.org/proceedings/2026/568) | IJCAI 2026 (Main Track) | 结合 P/D Pool 的 DRL Autoscaling 与扩容后的 Immediate Queue Rescheduling，处理 Arrival Rate 和 Prompt/Output Ratio 同时突变；作者以 Azure Bursty Traces 报告 SLO 下成本相对 Static/HeteroScale 的降低。**Trace-driven 不自动等于实物集群验证**，策略训练成本、不同负载泛化仍待复审。（HOLD_EVIDENCE） |
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 | THETA 按 Prefill/Decode 干扰阈值选择 Mixed/Exclusive Batch。 |
 | 2026 | [Towards High-Goodput LLM Serving with Prefill-decode Multiplexing](https://doi.org/10.1145/3779212.3790236) | ASPLOS 2026 | MuxWise 在同一 GPU 上对 Prefill/Decode 计算和空间进行细粒度 Multiplexing，为物理 P/D 分离提供强对照。 |
+| 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
 ### Preemption & Multi-Tenancy (28)
 

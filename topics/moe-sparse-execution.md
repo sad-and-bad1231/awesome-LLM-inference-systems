@@ -14,15 +14,15 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Expert Routing & Communication](#expert-routing--communication-19) | 19 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
-| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-13) | 13 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
-| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-23) | 23 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **76** | |
+| [Expert Routing & Communication](#expert-routing--communication-20) | 20 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
+| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-15) | 15 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
+| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-22) | 22 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-24) | 24 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **81** | |
 
-## Papers (76)
+## Papers (81)
 
-### Expert Routing & Communication (19)
+### Expert Routing & Communication (20)
 
 Token Dispatch、Expert Parallel 和计算通信重叠。
 
@@ -47,8 +47,9 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [SwiftEP: Accelerating MoE Inference with Buffer Fusion and TMA Offloading](https://www.usenix.org/conference/nsdi26/presentation/li-xingyi) | NSDI 2026 | 将 Expert All-to-All 的多次缓冲复制融合，并利用 TMA/NVLink 实现低占用的 MoE 通信。 |
 | 2026 | [UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods](https://doi.org/10.1145/3789240.3829183) | SIGCOMM 2026 | 面向 SuperPod 拓扑重构 MoE Expert All-to-All 的通信和同步路径，减少 EP 调度的跨节点序列化。 |
 | 2026 | [UEP: Portable Expert-Parallel Communication](https://www.usenix.org/conference/osdi26/presentation/mao-ziming-uep) | OSDI 2026 | UEP 用 GPU-CPU 控制通道取代 GPU 发起的 RDMA，由 CPU 代理发 GPUDirect RDMA 以 immediate data 模拟保序，在 EFA 上 dispatch/combine 吞吐提升 2.1×、SGLang token 吞吐提升至多 40% |
+| 2026 | [Efficient Expert-Parallel Communication on PCIe-Connected Consumer GPUs (ThunderEP)](https://arxiv.org/abs/2609.40093) | arXiv 2026-09 (preprint) | 在**无 GPU P2P** 的 RTX 4090/5090 PCIe 拓扑下，以 DMA Copy Engine、避开多次 CPU Relay 的通信路径、按 Sender Completion Flag 细粒度同步实现 MoE Token Dispatch/Combine；已集成 vLLM，对比 **NCCL/SGLang/Megatron-Core**，作者报告 Dispatch 2.00×、Combine 1.53×、端到端最多 1.66×，其中部分报告只代表 Microbenchmark；**不适用于默认有 NVLink/P2P 的集群，也不推断 Ascend HCCL 获同等收益**。作者有 3 模型、ShareGPT/LMSYS Prompt、5 次运行，但代码发布未核验。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; TOPOLOGY_SCOPED; ARTIFACT_UNVERIFIED) |
 
-### Placement, Balance & MoE Serving (13)
+### Placement, Balance & MoE Serving (15)
 
 专家放置/复制/动态负载均衡与 MoE 服务容量。
 
@@ -67,8 +68,10 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [MoE-Lens: Towards the Hardware Limit of High-Throughput MoE LLM Serving Under Resource Constraints](https://doi.org/10.1145/3806645.3807594) | HPDC 2026 | CPU/GPU 混合执行结合硬件上界模型推导 Expert Placement/执行策略，实验比较性能模型与真实吞吐。 |
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
 | 2026 | [ViBE: Co-Optimizing Workload Skew and Hardware Variability for MoE Serving](https://arxiv.org/abs/2606.00735) | arXiv 2026 (preprint) | 结合 GPU 性能异构性和 Expert Token Load 做硬件感知 Expert Placement，按负载变化轻量重校准，报告服务 SLO 达标率及 P90 TTFT；不修改模型路由语义。（HOLD_EVIDENCE） |
+| 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
+| 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
-### Expert Offload & Heterogeneous Execution (21)
+### Expert Offload & Heterogeneous Execution (22)
 
 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。
 
@@ -95,8 +98,9 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [STEP: Adaptive Spatio-Temporal Expert Prefetching for Low-Latency and Memory-Efficient MoE Inference](https://www.iscaconf.org/isca2026/program/#5d) | ISCA 2026 | 自适应时空专家预取：利用专家激活的空间相关性与时间局部性预测后续所需专家，提前把权重搬运到片上存储，降低MoE推理时延并减少内存占用（HOLD_EVIDENCE）。 （HOLD_EVIDENCE；正式 ISCA26 身份已确认，仍需核真实芯片/仿真配置、原生专家预取 Baseline。） |
 | 2026 | [Taming Latency-Memory Trade-Off in MoE-Based LLM Serving via Fine-Grained Expert Offloading](https://doi.org/10.1145/3767295.3769319) | EuroSys 2026 | FineMoE 从 Prompt 语义及细粒度 Expert 激活模式驱动 Expert 预取、缓存与 CPU Offload，在六 GPU 原型和真实 MoE 工作负载中对照时延及 Cache Hit。 |
 | 2026 | [ZipMoE: Efficient On-Device MoE Serving via Lossless Compression and Cache-Affinity Scheduling](https://proceedings.mlr.press/v306/yang26ds.html) | ICML 2026 | 联合无损 Expert 权重压缩、缓存亲和调度与边缘硬件特性，实现低显存 MoE Serving 原型。 |
+| 2026 | [Dynamic HBM Repartitioning for Multi-Turn MoE Serving (VAMP)](https://arxiv.org/abs/2609.13537) | arXiv 2026-09 (preprint) | **Expert Weight ↔ KV Cache 动态 HBM 重新划分**：MoE 稀疏激活允许将部分 Expert Weight 迁到 Host，把 CUDA VMM Page 映射给 KV；由 Controller 比较 Expert Reload、KV Eviction/Re-prefill、Request Preemption 预测损失。**vLLM 0.15.1 / Qwen3-Next-80B-A3B**、2×H100 PCIe / 4×H200 NVLink、2,103 轮 SWE-agent 五次 Replay：相对原版 vLLM **TTFT P90 26.1→1.10 s；请求吞吐 +20.7%；但 TPOT 170.9→224.0 ms（恶化 31.1%）**。收益主要靠避开 Prefix/KV 容量崩溃阈值；不同并发/Offload Ratio 可逆转优势，Closed-loop Agent 负载并非一一匹配的请求 Replay；模型正确性与开源实现未独立核查。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; CAPACITY_THRESHOLD_SCOPED; TPOT_REGRESSION) |
 
-### Sparse Attention & Conditional Compute (23)
+### Sparse Attention & Conditional Compute (24)
 
 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。
 
@@ -125,5 +129,6 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [TileSparse: Arithmetic-Intensity-Aware Sparse Attention for Compute-Bound LLM Decoding](https://icml.cc/virtual/2026/poster/61955) | ICML 2026 | 指出MLA与MTP已把解码注意力从访存受限转为计算受限，改用算力预算代价模型并做Q头-键二维稀疏，剪掉无用交互并把省下的算力用于检索更重要token，注意力计算量降40.8%仍保留99%全注意力精度。 （APPROXIMATE_QUALITY_CHECKED；报告 99% 精度保留不是 Token 级完全相同。） |
 | 2026 | [Token Sparse Attention: Efficient Long-Context Inference with Interleaved Token Selection](https://proceedings.mlr.press/v306/jo26a.html) | ICML 2026 | 跨 Head/Layer 动态选择 Token 执行 Attention，后续 Layer 可重新考虑此前 Token；与既有 FlashAttention 兼容，作者报告 128K Attention Kernel 和质量对照。（KEEP_ADJACENT） |
 | 2026 | [Unified Static–Dynamic Pruning for Efficient LLM Inference](https://doi.org/10.14778/3836663.3836665) | PVLDB 2026 | SPDP 将静态权重与动态激活剪枝映射到 Tiled-CBC 稀疏存储及 Prefill SpMM/Decode SpMspV 专用 GPU Kernel。（APPROXIMATE_QUALITY_CHECKED） |
+| 2026 | [vSkipper: Translating Dynamic Layer Skipping into LLM Serving Gains](https://arxiv.org/abs/2609.37062) | arXiv 2026-09 (preprint) | 将 Token-wise Dynamic Layer Skipping 通过按决策 **Token Grouping、Profitability Gate、Fixed-shape Graph、Paged KV** 等机制适配 Continuous Batching；对比原型 FlexiDepth 即使少算 8 层仍较 Base Decoder 慢 14.6–21.0% 的失败路径。公开 [SGLang Fork](https://github.com/AKafakA/sglang-vskipper/tree/vskipper-ref)，作者在匹配相同 Prompt/Arrival/Output Length 的 GSM8K/BBH 实测原 Checkpoint Serving E2E Latency −36.8%/−13.6%，饱和 Throughput +11.3%/+7.4%。**Skipper Checkpoint 已训练/修改模型，Serving 路径额外精度下降未统计显著，不等于原模型无损输出等价**；未独立验证旧 Checkpoint 与现代 vLLM-Ascend 的兼容。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; REQUIRES_TRAINED_MODEL; APPROXIMATE_QUALITY_CHECKED; PUBLIC_ARTIFACT) |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
