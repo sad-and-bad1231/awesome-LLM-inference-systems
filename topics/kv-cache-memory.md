@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Prefix & Session Reuse](#prefix-session-reuse-40) | 40 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression-quantization-46) | 46 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Prefix & Session Reuse](#prefix--session-reuse-39) | 39 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-46) | 46 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading-tiered-storage-25) | 25 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
-| [Distributed KV Sharing & Transfer](#distributed-kv-sharing-transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
-| [Paging & Cache Allocation](#paging-cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **149** | |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-25) | 25 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
+| [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
+| **Total** | **148** | |
 
-## Papers (149)
+## Papers (148)
 
-### Prefix & Session Reuse (40)
+### Prefix & Session Reuse (39)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -57,7 +57,6 @@
 | 2026 | [MiniPIC: Flexible Position-Independent Caching in <100LOC](https://arxiv.org/abs/2606.13126) | arXiv 2026 (preprint) | vLLM 缓存未旋转 Key，算 Attention 时才应用对应 RoPE，并增加 Span Separator/Prompt Depend 等用户 KV 复用原语；在 2WikiMultihopQA 实测 Prefill 吞吐/TTFT。 |
 | 2026 | [Models Take Notes at Prefill: KV Cache Can Be Editable and Composable](https://arxiv.org/abs/2606.17107) | arXiv 2026 (preprint) | 将 Prefill KV 解释为可编辑、可 RoPE 重定位的结构化 Notes，利用 Append-only Erratum 和预编译 Segment 复用，提供可执行 KV Editing/Composition 实现及在线 vLLM P90 TTFT、跨模型质量对照；极端收益须结合所选重算基线理解。 |
 | 2026 | [Prefix-Cache-Aware Data Reordering for LLM-Augmented Database Analytics](https://proceedings.mlr.press/v306/li26gn.html) | ICML 2026 | SOLO 基于 Prefix Radix Tree 同构关系重排行列 Prompt，让 LLM 增强型数据库分析更容易命中 Prefix KV Cache；有实测 Prefill 吞吐和规划开销。 |
-| 2026 | [ProphetKV: User-Query-Driven Selective Recomputation for Efficient KV Cache Reuse in Retrieval-Augmented Generation](https://proceedings.mlr.press/v306/wang26y.html) | ICML 2026 | Query-aware Token Recompute Budget 与 Layer Attention 合并，缓解 RAG KV 复用中 Query-irrelevant Token 的预算挤出；作者报告准确率改善，GPU TTFT 证据待全文审查。 |
 | 2026 | [RelayCaching: Accelerating LLM Collaboration via Decoding KV Cache Reuse](https://proceedings.mlr.press/v306/geng26a.html) | ICML 2026 | 跨 Agent 重用前一阶段 Decode KV，并局部修正 Prefill 差异。 |
 | 2026 | [SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Workloads](https://openreview.net/forum?id=wNjm4WVkOW) | COLM 2026 (accepted; author preprint title: *Reasoning*) | 将 Agent Tool Responses 的 KV Eviction 决策移至并行辅助推理线程，而非固定 Attention Heuristic；需对 gpt-oss-20b 以 215 样本进行 LoRA 适配（**REQUIRES_FINETUNING / APPROXIMATE_QUALITY_CHECKED**）。作者报告 FRAMES/BrowseComp 质量与 KV 峰值，并提供 H100/SGLang 在线吞吐、全任务时间测试；不能与无需训练、输出等价的 KV Eviction 混比。G4/在线成本归因待核验。 |
 | 2026 | [SpecCache: Speculative KV Cache Reuse for Efficient RAG Serving](https://aclanthology.org/2026.acl-long.859/) | ACL 2026 | 以轻量 Draft Model 深层隐状态选出需重算的 RAG KV Token，在近似 Cache Reuse 中权衡 TTFT、吞吐与答案质量；论文报告实测推理效率，需核验评测部署范围。 |
