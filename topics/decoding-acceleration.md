@@ -18,10 +18,10 @@
 | [Training-Free & Self-Speculation](#training-free--self-speculation-18) | 18 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-9) | 9 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-13) | 13 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
-| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-15) | 15 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **71** | |
+| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-16) | 16 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
+| **Total** | **72** | |
 
-## Papers (71)
+## Papers (72)
 
 ### Draft Models & Candidate Generation (16)
 
@@ -107,7 +107,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Not-a-Bandit: Provably No-Regret Drafter Selection in Speculative Decoding for LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/20563b8508ba42e1b688d922e926ee26-Abstract-Conference.html) | ICLR 2026 | 利用一次 Target Verification 的反馈估计多个 Draft 模型，并建立有无遗憾保证的在线选择策略；有算法/系统开销和解码实验，适用多 Drafter 场景。 |
 | 2026 | [WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching](https://doi.org/10.1145/3805653) | PACM/POMACS 2026 (SIGMETRICS) | 把边缘设备纳入推测解码服务，用 speculation controller、验证时延估计与验证批调度抑制无效 drafting 与验证干扰，实测系统容量与 goodput 较中心化服务及 SLED 最高提升 2.1/4.1 与 1.94/3.7 倍。 （真实正式出版版本：PACM/POMACS 2026 10(2), Article 55, DOI 10.1145/3805653；区别于三页 SIGMETRICS 摘要。） |
 
-### Diffusion & Non-AR Generation (15)
+### Diffusion & Non-AR Generation (16)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
@@ -128,5 +128,6 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Rolling Forcing: Autoregressive Long Video Diffusion in Real Time](https://proceedings.iclr.cc/paper_files/paper/2026/hash/935151cc6cb5d8b6816133b75233775a-Abstract-Conference.html) | ICLR 2026 | 用多帧联合去噪与 Rolling Window 减少自回归视频生成的误差积累，以 Attention Sink 稳定跨窗口状态；单 GPU 实测多分钟实时视频生成（邻接领域）。（KEEP_ADJACENT） |
 | 2026 | [Self-Speculative Masked Diffusions](https://openreview.net/forum?id=ogMTEtHO6M) | ICLR 2026 | 把掩码扩散模型最后若干层的注意力掩码由非因果改为因果，在单次前向中得到非因子化预测，并通过模型内建的投机采样并行校验草稿，使所需网络前向次数较标准掩码扩散减少约 2×。 |
 | 2026 | [WeDLM: Reconciling Diffusion Language Models with Standard Causal Attention for Fast Inference](https://proceedings.mlr.press/v306/liu26av.html) | ICML 2026 | 用 Topological Reordering 将已知 Token 移至物理 Prefix，同时保持逻辑位置和 Causal Mask，使 Diffusion 解码兼容标准 Prefix KV Cache；Streaming Commit 在与 vLLM 同部署条件下比较生成速度。 |
+| 2026 | [Fast-dLLM v2: Efficient Block-Diffusion LLM](https://arxiv.org/abs/2509.26328) | ICLR 2026 (first preprint 2025) | 以 ~1B Token Fine-tuning 把 AR Qwen2.5 模型改造成 Block-Diffusion，Complementary Mask + Block/Sub-block Hierarchical KV Caches 实现并行 Token Decode；[作者代码及权重](https://github.com/NVlabs/Fast-dLLM/tree/main/v2)，对原 Qwen2.5-7B AR Baseline 作者报告吞吐最多 2.54×、跨 MMLU/GPQA/GSM8K/代码任务同等质量约束；**MODEL_CHANGED，不能当作原始 AR 模型无需训练的 Lossless Kernel Speedup**。与已收录 Training-free Fast-dLLM v1 机制不同。（KEEP_STRICT; ICLR2026; PUBLIC_CODE_MODEL; FINETUNING_REQUIRED; NOT_OUTPUT_EQUIVALENT） |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
