@@ -4,12 +4,6 @@ Xiaomi MiMo's publicly documented inference-efficient model designs.
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-| Public work | Inference relevance | Primary source |
-|---|---|---|
-| **MiMo-V2-Flash** | Hybrid sliding-window/global attention and MTP for reduced KV footprint and accelerated decoding; official deployment recipes. | [Official source](https://github.com/XiaomiMiMo/MiMo-V2-Flash) |
-
-**Scope:** a brief technical map of publicly documented results and first-party components; not an exhaustive release history, ownership claim for independent runtimes, or independently reproduced benchmark.
-
 ## Official model/API family coverage (2026-10-24)
 
 **Authoritative listing:** [MiMo models API page](https://mimo.mi.com/docs/zh-CN/quick-start/summary/model) and [official release chronology](https://mimo.mi.com/docs/zh-CN/updates/model). The model-list API example contains older versions; deprecations override stale examples.
@@ -25,3 +19,9 @@ Xiaomi MiMo's publicly documented inference-efficient model designs.
 | MiMo-V2-Flash | Historical hybrid sliding-window/global attention + MTP, explicitly kept for architecture lineage | [Source](https://github.com/XiaomiMiMo/MiMo-V2-Flash) |
 
 **Availability:** do not conflate V2.6 product tiers, deprecated V2.5 models and the older GitHub open-weight architecture.
+
+## Selected first-party architecture and execution sources
+
+| Public work | Inference relevance | Primary source |
+|---|---|---|
+| **MiMo-V2-Flash** | Hybrid sliding-window/global attention and MTP for reduced KV footprint and accelerated decoding; official deployment recipes. | [Official source](https://github.com/XiaomiMiMo/MiMo-V2-Flash) |
