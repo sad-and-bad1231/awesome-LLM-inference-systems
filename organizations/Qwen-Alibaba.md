@@ -4,17 +4,6 @@ The Qwen team's publicly released model families and inference-related model arc
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-| Public work | Inference relevance | Primary source |
-|---|---|---|
-| **Qwen3** | Dense/MoE model family with thinking and non-thinking execution modes; inspect active experts, KV and decoding requirements. | [Official source](https://github.com/QwenLM/Qwen3) |
-| **Qwen3-Next / Qwen3.5–3.8** (2025–26) | Qwen's hybrid **Gated DeltaNet recurrent state + gated full attention** family; Qwen3.5 uses an approximately 3:1 linear/full-attention stack. Recurrent-state and KV attention require distinct memory layouts/kernels; Qwen3.8 largely evolves the family rather than introducing another basic inference attention primitive. | [Official family repository](https://github.com/QwenLM/Qwen3.8) · [Qwen3.5 architecture reference](https://huggingface.co/docs/transformers/en/model_doc/qwen3_5) |
-| **Qwen3.8-Flash-Next** (2026) | Early architectural preview combining **Gated DeltaNet + Qwen Sparse Attention (QSA)**, gated residual streams and N-gram embeddings with asynchronous host prefetch. Substantive inference contracts: sparse indexer, recurrent state, cache/offload and execution overlap. Claims remain author-reported. | [Official repository](https://github.com/QwenLM/Qwen3.8-Flash-Next) |
-| **Qwen3-Coder** | Code-oriented model family; long-context and agentic generation create distinct serving workloads. | [Official source](https://github.com/QwenLM/Qwen3-Coder) |
-| **Qwen3-Omni** | Multimodal model family with streaming audio/video/text execution considerations. | [Official source](https://github.com/QwenLM/Qwen3-Omni) |
-| **MNN (Alibaba)** | Alibaba-maintained efficient inference engine, including on-device model execution. | [Official source](https://github.com/alibaba/MNN) |
-
-**Scope:** Architecture/runtime-relevant releases only. A model-family repository is not proof of a new online serving algorithm or NPU performance result; vLLM/SGLang backend implementation and checkpoint compatibility must be checked independently.
-
 ## Official model-family coverage (2026-10-24)
 
 **Authoritative catalog:** [Alibaba Cloud Model Studio models](https://help.aliyun.com/zh/model-studio/web-search) enumerates service families and versions; [Qwen repositories](https://github.com/QwenLM) are first-party code/weights. **Family vs API model ID vs open checkpoint** must be distinguished.
@@ -33,3 +22,16 @@ The Qwen team's publicly released model families and inference-related model arc
 | Qwen Image / Wan | Adjacent image/video generation workloads, **not** part of text LLM serving | [Alibaba/Qwen project navigation](https://github.com/QwenLM) |
 
 **Policy:** Model Studio lists *many* dated snapshots and sizes. The primary catalog is the exhaustive API-ID registry; this curated page covers **all named major service families** without asserting every `-YYYY-MM-DD` snapshot is a new inference architecture.
+
+## Selected first-party architecture and execution sources
+
+| Public work | Inference relevance | Primary source |
+|---|---|---|
+| **Qwen3** | Dense/MoE model family with thinking and non-thinking execution modes; inspect active experts, KV and decoding requirements. | [Official source](https://github.com/QwenLM/Qwen3) |
+| **Qwen3-Next / Qwen3.5–3.8** (2025–26) | Qwen's hybrid **Gated DeltaNet recurrent state + gated full attention** family; Qwen3.5 uses an approximately 3:1 linear/full-attention stack. Recurrent-state and KV attention require distinct memory layouts/kernels; Qwen3.8 largely evolves the family rather than introducing another basic inference attention primitive. | [Official family repository](https://github.com/QwenLM/Qwen3.8) · [Qwen3.5 architecture reference](https://huggingface.co/docs/transformers/en/model_doc/qwen3_5) |
+| **Qwen3.8-Flash-Next** (2026) | Early architectural preview combining **Gated DeltaNet + Qwen Sparse Attention (QSA)**, gated residual streams and N-gram embeddings with asynchronous host prefetch. Substantive inference contracts: sparse indexer, recurrent state, cache/offload and execution overlap. Claims remain author-reported. | [Official repository](https://github.com/QwenLM/Qwen3.8-Flash-Next) |
+| **Qwen3-Coder** | Code-oriented model family; long-context and agentic generation create distinct serving workloads. | [Official source](https://github.com/QwenLM/Qwen3-Coder) |
+| **Qwen3-Omni** | Multimodal model family with streaming audio/video/text execution considerations. | [Official source](https://github.com/QwenLM/Qwen3-Omni) |
+| **MNN (Alibaba)** | Alibaba-maintained efficient inference engine, including on-device model execution. | [Official source](https://github.com/alibaba/MNN) |
+
+**Scope:** Architecture/runtime-relevant releases only. A model-family repository is not proof of a new online serving algorithm or NPU performance result; vLLM/SGLang backend implementation and checkpoint compatibility must be checked independently.
