@@ -4,15 +4,6 @@ Zhipu AI / Z.ai's published GLM architectures and official deployment references
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-| Public work | Inference relevance | Primary source |
-|---|---|---|
-| **GLM-4.5** | Official model family and documentation; MoE model execution and inference deployment information. | [Official source](https://github.com/zai-org/GLM-4.5) |
-| **GLM-5** | Official model-family documentation and architecture/deployment notes. | [Official source](https://github.com/zai-org/GLM-5) |
-| **GLM-5.3 / GLM-5.3-Flash** (2026) | Updated DSA/MoE inference contracts; GLM-5.3 model metadata declares `glm_moe_dsa` and GLM-5.3-Flash declares `glm5_next` (multimodal). These are **checkpoint model-family updates**, not stand-alone proof of novel serving kernels. | [GLM-5.3 official model card](https://huggingface.co/zai-org/GLM-5.3) · [5.3-Flash official model card](https://huggingface.co/zai-org/GLM-5.3-Flash) |
-| **GLM-4** | Earlier model releases and reference deployment paths; historical context only. | [Official source](https://github.com/THUDM/GLM-4) |
-
-**Scope:** Only source-documented model/execution contracts. Serving-engine and attention-backend support requires version-specific source evidence; provider speed and quantized deployment claims are not independent kernel evaluations.
-
 ## Official model-family crosswalk (2026-10-24)
 
 **First-party release map:** [GLM models used by Z.ai AutoClaw](https://autoclaw.z.ai/models/) and [official GLM-5.3 research note](https://z.ai/blog/glm-5.3).
@@ -27,3 +18,14 @@ Zhipu AI / Z.ai's published GLM architectures and official deployment references
 | GLM-4 / GLM-4.5 and 4.x historical variants | Historical open GLM, MoE and multimodal work; precise endpoint availability requires current API catalog | [GLM-4](https://github.com/THUDM/GLM-4) · [GLM-4.5](https://github.com/zai-org/GLM-4.5) |
 
 **Source correction:** GLM-5.3-Flash's hybrid sparse + linear execution is technically different from GLM-5.3's same-base-model post-training story; neither should be conflated with the other's speedups.
+
+## Selected first-party architecture and execution sources
+
+| Public work | Inference relevance | Primary source |
+|---|---|---|
+| **GLM-4.5** | Official model family and documentation; MoE model execution and inference deployment information. | [Official source](https://github.com/zai-org/GLM-4.5) |
+| **GLM-5** | Official model-family documentation and architecture/deployment notes. | [Official source](https://github.com/zai-org/GLM-5) |
+| **GLM-5.3 / GLM-5.3-Flash** (2026) | Updated DSA/MoE inference contracts; GLM-5.3 model metadata declares `glm_moe_dsa` and GLM-5.3-Flash declares `glm5_next` (multimodal). These are **checkpoint model-family updates**, not stand-alone proof of novel serving kernels. | [GLM-5.3 official model card](https://huggingface.co/zai-org/GLM-5.3) · [5.3-Flash official model card](https://huggingface.co/zai-org/GLM-5.3-Flash) |
+| **GLM-4** | Earlier model releases and reference deployment paths; historical context only. | [Official source](https://github.com/THUDM/GLM-4) |
+
+**Scope:** Only source-documented model/execution contracts. Serving-engine and attention-backend support requires version-specific source evidence; provider speed and quantized deployment claims are not independent kernel evaluations.
