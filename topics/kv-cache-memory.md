@@ -17,12 +17,12 @@
 | [Prefix & Session Reuse](#prefix--session-reuse-38) | 38 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-57) | 57 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-25) | 25 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-26) | 26 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **158** | |
+| **Total** | **159** | |
 
-## Papers (158)
+## Papers (159)
 
 ### Prefix & Session Reuse (38)
 
@@ -156,12 +156,13 @@
 | 2026 | [SpeContext: Enabling Efficient Long-context Reasoning with Speculative Context Sparsity in LLMs](https://doi.org/10.1145/3779212.3790224) | ASPLOS 2026 | 以 Distilled Retrieval Head 预测原模型关注的长上下文 KV，异步预取和 Elastic KV Residency 重叠 GPU 计算；在云端和边缘实机评估准确率/吞吐/显存折中。 |
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 
-### Offloading & Tiered Storage (25)
+### Offloading & Tiered Storage (26)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Range: Decoupling KV-Cache Reuse Granularity from Storage Work](https://arxiv.org/abs/2610.21241) | arXiv 2026 (preprint) | SSD KV 读取中采用 **Byte Stripes + Physical Lease + Batched GPU Transfer Bank**，使读取开销由物理 Bytes/Batch 决定、而非逻辑 KV Object 数；在 vLLM+LMCache、固定 6GiB 和对象数扩大 32× 下，作者报告 TTFT 1.79–1.80s，而 tuned LMCache 2.12–3.01s，**相同 Bytes 控制变量实验**。无可核实公开 Artifact，CPU/GPU/SSD 栈版本对现代部署外推需再审。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; G4_NO_PUBLIC_CODE） |
 | 2024 | [InfiniGen: Efficient Generative Inference of Large Language Models with Dynamic KV Cache Management](https://www.usenix.org/conference/osdi24/presentation/lee) | OSDI 2024 | 预测关键 KV 项并按需预取，避免长上下文 Offloading 的全量回传。（KEEP_FOUNDATIONAL） |
 | 2025 | [AdaptCache: KV Cache Native Storage Hierarchy for Low-Delay and High-Quality Language Model Serving](https://www.microsoft.com/en-us/research/publication/adaptcache-kv-cache-native-storage-hierarchy-for-low-delay-and-high-quality-language-model-serving/) | SOSP BigMem Workshop 2025 | 以每条 KV Entry 的有损压缩算法、压缩率和 DRAM/SSD 分层放置联合优化缓存 Load Delay 与生成质量；三类任务报告固定质量下延迟改善，明确仅为 Workshop。 |
 | 2025 | [Fast State Restoration in LLM Serving with HCache](https://doi.org/10.1145/3689031.3696072) | EuroSys 2025 | 以中间激活恢复状态，配合无 Bubble 调度与分块存储平衡计算/I/O。 |
