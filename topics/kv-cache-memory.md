@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Prefix & Session Reuse](#prefix--session-reuse-40) | 40 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
+| [Prefix & Session Reuse](#prefix--session-reuse-41) | 41 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-57) | 57 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-26) | 26 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **161** | |
+| **Total** | **162** | |
 
-## Papers (161)
+## Papers (162)
 
-### Prefix & Session Reuse (40)
+### Prefix & Session Reuse (41)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -70,6 +70,7 @@
 | 2026 | [WorldPlay: Towards Long-Term Geometric Consistency for Real-Time Interactive World Modeling](https://proceedings.mlr.press/v306/sun26az.html) | ICML 2026 | 交互式视频 World Model 通过 Reconstituted Context Memory 动态重建历史帧上下文并控制长期漂移，配合 Context Forcing 蒸馏实现实测实时流式生成；属于模型-推理状态协同设计（邻接领域）。（KEEP_ADJACENT） |
 | 2026 | [Efficient Serving for Dynamic Agent Workflows with Prediction-based KV-Cache Management (PBKV)](https://arxiv.org/abs/2605.06472) | NeurIPS 2026 (author-confirmed; proceedings pending) | 对动态 Agent DAG 融合历史调用与当前上下文预测后续 Agent Invocation，估计 Prefix KV 再用概率并保守地 Evict/Prefetch；作者在三种 Workflows 评测，相比 LRU 最高 1.85×、相比静态工作流的 KVFlow 最高 1.26×（**不同对比负载，不能混称**）。公开可复现 Serving 代码与 Ascend 收益未核验。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [CacheSmith: Accurate RAG Serving under Latency SLOs with Adaptive KV Reuse](https://arxiv.org/abs/2610.18925) | arXiv 2026-10-13 (preprint) | RAG Chunk KV 的跨 Chunk Attention 缺失通过 **WarmUp/Probe/Patch** 可调重计算修复；按 Batch Budget/Deadline 和质量预测动态分配覆盖率。作者以 **vLLM 0.10.2** 在 RTX PRO 6000 96GB (1×/2×)、Llama-3.1-8B/Qwen3-32B、EPYC 9554 与 PCIe5 NVMe，分别对照 CacheBlend / EPIC / ProphetKV / FusionRAG、Full Reuse / Full Prefill / BestStatic，报告 4 任务 × 多到达率中 **Quality-gated SLO Attainment 最多提升 27.5%（作者表述，非未经确认的百分点）**。**Query/Context signal 采用作者自行编写的未优化 Triton Kernel，可能对其他方法不利；作者实现未独立发布/复现，Chunk 预计算数据可能高达数百 GB，不是严格数值等价**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED; ARTIFACT_UNVERIFIED) |
+| 2026 | [Cache Engineering for Agents (AKV)](https://arxiv.org/abs/2610.28577) | arXiv 2026-10-20 (preprint) | **Cache Engineering Contract**：Agent 执行逻辑轨迹不变，主动 `drop` 已失去价值的历史 KV、`repos` 调整保留 Key 的位置编码；同一 Token Prefix 在不同操作历史下可对应**不同 KV State**，因此 SGLang Engine 使用 Operation-aware Radix Tree + Drop-aware Eviction + Segment-batch Restoration。公开 [AKV Agent & Serving 源码](https://github.com/thu-nics/AKV)，作者用 **SGLang v0.5.20 / 8×A800 BF16 / GPT-OSS-120B（Prefill TP4 + Decode TP4）** 测量 SWE-bench Verified：峰值配置时 AKV Concurrency=14 对比 Standard=12，**P95 Request Latency 1.51× 较低、Output Throughput 1.18×**；Agent Bench 平均准确率 +1.7 points、估算 API-equivalent Cost −27.7% 均来自**策略与 KV 表示改变**，不是严格 Exact-Output / 相同并发下的透明 Serving 加速。需核 Repos 的 Position Semantics 和版本移植。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; APPROXIMATE_MODEL_BEHAVIOR; DIFFERENT_OPTIMAL_CONCURRENCY) |
 
 ### Eviction, Compression & Quantization (57)
 
