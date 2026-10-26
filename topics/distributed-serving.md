@@ -17,11 +17,11 @@
 | [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-24) | 24 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-27) | 27 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-26) | 26 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-20) | 20 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **129** | |
+| **Total** | **128** | |
 
-## Papers (129)
+## Papers (128)
 
 ### Parallelism & Scale-Up (26)
 
@@ -126,7 +126,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://doi.org/10.1145/3789240.3829159) | SIGCOMM 2026 | 让远端 KV 不只 Storage→Prefill，还可 Storage→Decode→Prefill，借 Decode 侧闲置 Storage NIC 与 GPU 间 RDMA；全局 Scheduler 分配两条 I/O 路径。[SIGCOMM 正式摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告 DeepSeek 参与的生产 Agent Trace / 自有系统 E2E：Offline 吞吐最多 1.87×，Online SLO 吞吐均值 1.96×，均为作者报告。**CUSTOM_ENGINE / NETWORK_TOPOLOGY_DEPENDENT / NOT_VLLM_PORT**。 |
 
-### Fleet Scaling & Reliability (27)
+### Fleet Scaling & Reliability (26)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -158,7 +158,6 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Fast Recovery for LLM Serving via Decoupled Device Memory Lifetime in Dynamo](https://arxiv.org/abs/2609.25451) | arXiv 2026-09 (preprint) | **GMS** 将权重 GPU Allocation 生命周期与 Engine Process 解耦，用初始化 Runtime Snapshot + Shared-model **Shadow Engine** 做原位 Failover。作者在 4 Model / vLLM/SGLang / GPU 系统上测得故障恢复 **<7s、较 Warm Restart 13–29×**，代价 **每卡 4–8 GiB** 显存；[Dynamo](https://github.com/ai-dynamo/dynamo) / [Snapshot](https://github.com/ai-dynamo/snapshot) 源码公开。生产 **18 周 Trace 推算**可挽回 79% 故障 GPU-hours，**不是已经实测节省 79%**；仅覆盖安全的 Device-preserving Case。(KEEP_STRICT; REAL_GPU_PRODUCTION_TRACE; PUBLIC_ARTIFACT; NO_INDEPENDENT_REPRO) |
 | 2026 | [Foundry: Template-Based CUDA Graph Context Materialization for Fast LLM Serving Cold Start](https://arxiv.org/abs/2604.06664) | arXiv 2026 (preprint) | 离线保存 CUDA Graph Topology + Driver Context/Kernel Binary/Deterministic Address Layout，启动时直接 Restore 并修补跨 Rank 通信状态，避免分布式 Scale-up 的反复 Graph Capture；[作者实现](https://github.com/foundry-org/foundry) 已公开 SGLang 8×H100 测试（TP2/EP2、256 Decode Graphs，Capture 26.7–56s → Restore 2.1–3.5s，/health 63–93s→41–45s，TPOT 近持平）；论文 Qwen3-235B 10min→3.9s 是**特定全栈冷启动配置**，公开 vLLM/TRT-LLM Fork 尚未全部就绪。（KEEP_STRICT; PUBLIC_SGLANG_PATCH; REAL_H100; CODE_PAPER_SCOPE_DIFFERENCE） |
 | 2026 | [Janus: Multi-LLM Serving at Production Scale](https://github.com/Janus2026/Janus) | SOSP 2026 (author artifact; camera-ready pending) | Service–Engine 双层控制闭环、Gaussian-process Capacity/SLO Oracle、双时间尺度调度与 GPU-to-GPU Model Fork；作者 768 设备、62 Apps、45.6M 请求生产负载报告 24% Device-hour 节省且 SLO 达标。**PRODUCTION_AUTHORED / INDEPENDENT_REPRO_NOT_ATTEMPTED**。 |
-| 2026 | [IgniteServe: Accelerating LLM Serving Engine Cold Starts via Fine-Grained Parallelization](https://ranger.uta.edu/~jrao/index.html) | ACM ATC 2026 (accepted; proceedings pending) | 把 Engine 初始化改写成 State-aware Dependency DAG，重叠 Model Load/Compile、Subgraph 编译与按需 CUDA Graph Capture/Materialization，打破实现顺序产生的伪阶段 Barrier。HUST 作者报告对 vLLM/ServerlessLLM 等平均冷启动延迟 -40.1% 至 -69.3%，保持稳态性能；**AUTHOR_LAB_SUMMARY / COLD_START_ONLY / ARTIFACT_UNVERIFIED / CUDA_GRAPHS**。 |
 
 ### Heterogeneous & Edge Serving (20)
 
