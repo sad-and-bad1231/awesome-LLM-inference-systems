@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-38) | 38 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-14) | 14 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-39) | 39 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-16) | 16 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-26) | 26 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-27) | 27 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **132** | |
+| **Total** | **136** | |
 
-## Papers (132)
+## Papers (136)
 
-### Batching, Queues & SLOs (38)
+### Batching, Queues & SLOs (39)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -68,8 +68,9 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Taking Tokenization off the Host for Agentic LLM Serving (GraphTok)](https://arxiv.org/abs/2610.13325) | arXiv 2026-10-09 (preprint) | **完整 GPU Tokenizer，非 Token Cache**：Pre-tokenization → Parallel Exact BPE → Token-ID Assembly 合并为可 Replay 的 **CUDA Graph**，短输入回退 CPU；对 GPT-2/Llama3/Qwen2.5/DeepSeek-V3/Gemma3 均执行 Reference Bit-identical Token-ID Oracle。作者在 **H100 NVL + vLLM/Dynamo** 和 121K Cached-Agent Prompts 下报告单 Frontend 的 2s P99 下最大处理量 **518 req/s vs CPU gigatoken 296、默认 Tokenizer 18.5**，对命中前缀的请求 Mean TTFT 最多降低 2.4×；此收益受极长 Context 和 Cache-Hit 驱动，不适用于短输入或 GPU 无空余资源的场景。[公开 CUDA、vLLM Plugin、Dynamo Backend](https://github.com/Msiavashi/GraphTok)（v0.3.0）；未独立验证包括所有 Unicode 边界、部署开销或 Ascend 迁移。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; LOSSLESS_TOKEN_IDS_CLAIM) |
 | 2026 | [VoxServe: Streaming-Centric Serving System for Speech Language Models](https://arxiv.org/abs/2602.00269) | arXiv 2026 (preprint; public system 2025) | SpeechLM 的 Backbone + Audio Detokenizer 分阶段异步执行、Streaming-aware Batching、CUDA Graph 与 TTFA/Playback Viability SLO；[作者代码](https://github.com/vox-serve/vox-serve)，H100 Orpheus-3B 对官方 vLLM-backbone 实现，作者宣称相近时延条件 10–20× 吞吐；**语音流式模型/音频后处理优化不可泛化到文本 Decode TPOT**。（KEEP_STRICT; REAL_H100; PUBLIC_CODE; STREAMING_AUDIO_SLO; AUTHOR_REPORTED） |
 | 2026 | [Batched in Back: Characterizing and Optimizing Offline LLM Inference in Production with ACDC](https://doi.org/10.1145/3830418.3843877) | SOSP 2026 | 分析阿里真实离线批处理 Trace，利用 Batch Task 确定性与吞吐导向联合优化资源编排、缓存与执行，并回收 Online Prefill 空隙；作者报告生产部署与输出成本效率提升。**OFFLINE_BATCH_NOT_ONLINE_TTFT**；[生产匿名 Trace](https://github.com/alibaba/ServeGen/tree/main/data/offline)（ServeGen 仓库亦承载相关 NSDI 工作）。 |
+| 2026 | [RadixFlow: Filling Execution Bubbles in Prefix-Cached Hybrid LLM Serving](https://arxiv.org/abs/2610.18143) | arXiv 2026 (preprint) | Hybrid Attention/Recurrent State 复用时 Prefix Match 不代表 Cache State Ready；将全局等待队列扫描 Barrier 改为 State-ready Traversal，使阻塞 Consumer 不妨碍其他可运行任务入 Batch。作者五种 Hybrid 模型报告平均时延下降 3–24%、Worker Rounds 下降 11–44%。**SCHEDULER_REPLAY / HYBRID_MODEL_SCOPED / AUTHOR_REPORTED**，不能推断所有 Dense 模型都有增益。 |
 
-### Routing & Load Balancing (14)
+### Routing & Load Balancing (16)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
@@ -89,6 +90,8 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [STAR: Decode-Phase Rescheduling for LLM Inference](https://doi.org/10.1145/3806645.3807813) | HPDC 2026 | 利用 LLM Hidden State 在线预测 Remaining Output Length，并对 P/D 分离的 Decode Workers 重新分配请求，抑制长 CoT Decode 偏斜与 P99 TPOT；作者报告端到端 Goodput/SLO 对照。 |
 | 2026 | [The Price of Anarchy in Disaggregated Inference](https://arxiv.org/abs/2606.17081) | arXiv 2026 (preprint) | 分析 Disaggregated P/D Serving 的 KV Locality–拥塞耦合，以 Dynamo 实现 Saturation-aware Routing 并在三节点 B200 服务器验证；P/D 资源博弈仍属解析模型。 |
 | 2026 | [PackServe: SLO-Aware Request Scheduling for Agentic LLM Serving at Scale](https://arxiv.org/abs/2609.33224) | arXiv 2026 (preprint) | 白盒 Prefill/Decode Interference Latency Model + KV Affinity 约束将 Agent Requests 安排到更少实例；在 **64×H20** 与生产 Trace 上相对 llm-d+/LMetric 减少 GPU-hours 并满足指定 **TPOT SLO**，另提供 **1000+ GPU 生产同类策略**的资源分析。**生产期平均 TTFT 较负载均衡增加 66.4%**；生产部署称为共享设计原则的调度策略，不能等同所有实验条件与代码完全相同。作者结果、无独立复制。(KEEP_STRICT; REAL_GPU_PRODUCTION_AUTHOR_REPORTED; TTFT_TRADEOFF) |
+| 2026 | [Taming Inference Workloads at Global Scale: Foundation Model Serving in Amazon Bedrock](https://doi.org/10.1145/3830418.3843855) | SOSP 2026 | Amazon Bedrock 生产 **Workload Management System (WLM)** 按请求特征执行 Admission、Classification、Routing 与 Scheduling，并结合跨 Region 弹性容量治理突发负载。**PRODUCTION_EXPERIENCE / AWS_SPECIFIC / ARTIFACT_NOT_PUBLIC**；不臆造公开代码、独立复现实验或通用 vLLM 加速。 |
+| 2026 | [Vesta: Queueing-Aware LLM Scheduling for Real-World Workloads](https://arxiv.org/abs/2610.14686) | arXiv 2026 (preprint) | 为 Agent Session 固定 KV Authoritative Holder、每次请求独立选 Executor；以 Queue Backlog、Prefix Reuse、跨实例 KV Transfer 与新增负载 Queueing Externality 联合决策。作者 Qwen/Hybrid 模型 **Trace Replay** 报告 PD 合置吞吐 +14%、Mean TTFT -57.8%；分离部署 P99 TTFT 最多 -29%（同吞吐）。**TRACE_REPLAY_NOT_LIVE_PRODUCTION / PUBLIC_ARTIFACT_UNVERIFIED**。 |
 
 ### P/D Allocation & Autoscaling (21)
 
@@ -118,7 +121,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 
-### Preemption & Multi-Tenancy (26)
+### Preemption & Multi-Tenancy (27)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -150,6 +153,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [TokenFlow: Responsive LLM Text Streaming Serving under Request Burst via Preemptive Scheduling](https://doi.org/10.1145/3767295.3769328) | EuroSys 2026 | 利用客户端 Token Buffer 的富余量实施抢占调度与主动 KV Offload。 |
 | 2026 | [WarmServe: Enabling One-for-Many GPU Prewarming for Multi-LLM Serving](https://proceedings.mlr.press/v306/lou26f.html) | ICML 2026 | 以多模型 GPU 权重预热、KV 空间复用和快速内存切换降低突发流量 TTFT。 |
 | 2026 | [SANDHI: Fine-grained Merging for Memory Efficient Multi-Model Serving](https://www.microsoft.com/en-us/research/publication/sandhi-fine-grained-merging-for-memory-efficient-multi-model-serving/) | SOSP 2026 | 在组件粒度合并共驻 Fine-tuned Models，以准确率约束换取更高显存容纳量和吞吐；作者 12 模型/9 Benchmark 报告最多 49.8% 显存降低。**MODEL_CHANGED / QUALITY_GATED / NOT_BITWISE_EQUIVALENT**；[Zenodo Artifact](https://zenodo.org/records/22108093)。 |
+| 2026 | [gKSM: GPU Memory Deduplication at Driver Layer for Serverless LLM Inference](https://arxiv.org/abs/2610.25219) | arXiv 2026 (SIGOPS ATC acceptance claimed) | 跨同 GPU 的 Serverless 模型副本共享只读权重，结合 CPU/GPU Hash、Zero-copy Dedup 及 CUDA VMM Remapping + Page-fault Copy-on-write 保持隔离；作者实机显存 -59.8%、受限多实例吞吐 2.15×。**CUDA_DRIVER_LEVEL / REQUIRES_PRIVILEGED_RUNTIME / CLUSTER_SCALE_SIMULATED**；不是通用 KV 状态去重。 |
 
 ### Power & Energy Efficiency (11)
 
