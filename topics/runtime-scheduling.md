@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Batching, Queues & SLOs](#batching-queues--slos-40) | 40 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-17) | 17 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-27) | 27 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **139** | |
+| **Total** | **138** | |
 
-## Papers (139)
+## Papers (138)
 
 ### Batching, Queues & SLOs (40)
 
@@ -95,7 +95,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Vesta: Queueing-Aware LLM Scheduling for Real-World Workloads](https://arxiv.org/abs/2610.14686) | arXiv 2026 (preprint) | 为 Agent Session 固定 KV Authoritative Holder、每次请求独立选 Executor；以 Queue Backlog、Prefix Reuse、跨实例 KV Transfer 与新增负载 Queueing Externality 联合决策。作者 Qwen/Hybrid 模型 **Trace Replay** 报告 PD 合置吞吐 +14%、Mean TTFT -57.8%；分离部署 P99 TTFT 最多 -29%（同吞吐）。**TRACE_REPLAY_NOT_LIVE_PRODUCTION / PUBLIC_ARTIFACT_UNVERIFIED**。 |
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM ATC 2026 (accepted; proceedings pending) | Prefill MoE Expert Activation Signature 预测 Decode 阶段 Expert Locality，Balanced K-means + Locality-band Least-loaded Worker 选择；在 KV Block 旁保存 Signature，Prefix Cache Hit 不丢信号。作者 vLLM 最多 40 GPU/3 MoE 模型、对最强 Load-aware Baseline Median TPOT -5.9% 至 -13.9%；**REQUEST_ROUTING_ONLY / ORIGINAL_EXPERT_SELECTION_UNCHANGED / TAIL_EFFECT_SMALLER / NOT_ASCEND_TESTED**。 |
 
-### P/D Allocation & Autoscaling (22)
+### P/D Allocation & Autoscaling (21)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
@@ -122,7 +122,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Towards High-Goodput LLM Serving with Prefill-decode Multiplexing](https://doi.org/10.1145/3779212.3790236) | ASPLOS 2026 | MuxWise 在同一 GPU 上对 Prefill/Decode 计算和空间进行细粒度 Multiplexing，为物理 P/D 分离提供强对照。 |
 | 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
-| 2026 | [HybridFaaS: Efficient GPU Serverless via Hybrid Autoscaling](https://yuanchaoxu6.github.io/publications/) | ACM ATC 2026 (accepted; proceedings pending) | GPU Serverless 联合 Replica / PP / TP 三种扩缩容选择，按 Pipeline 最慢 Stage 剪枝 Parallelism + Placement 搜索，并做请求路由；作者基于 Knative、Azure Trace 和多类模型报告 Throughput、P99、成本改善。**TRACE_DRIVEN / MULTI_MODEL_ADJACENT / NOT_NATIVE_VLLM_DYNAMIC_RESIZE / P99_EXTREME_BASELINE_SENSITIVITY**；精确配置和 Baseline 尚待 Full-paper Artifact 审核。 |
 
 ### Preemption & Multi-Tenancy (27)
 
