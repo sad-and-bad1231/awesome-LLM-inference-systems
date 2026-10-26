@@ -1,6 +1,6 @@
 # Strict Review: evidence-first curation
 
-**Latest editorial tranche:** +10 entries, [ATC 2026 / ICML / kernel-agent review](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) (759→769). ATC status is accepted, proceedings pending; original HACK/HKVQ title/extent preserved pending full camera-ready cross-check. No user-side hardware reproduction.
+**Latest editorial tranche:** +10 entries, [ATC 2026 / ICML / kernel-agent review](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) (759→769). ATC status is accepted, proceedings pending; original HACK ATC title verified; final camera-ready experiments still pending audit. No user-side hardware reproduction.
 
 **CURRENT INVENTORY (2026-10-26): 769 canonical topic rows in 44 directions.** [TokenGate + first round](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) +11, [three further SOSP/SIGCOMM/arXiv rounds](reviews/THREE_ROUNDS_SYSTEMS_20261026.md) +12, on the October 25 post-lab 736 baseline. Formal publisher identity, paper aliases, trace/model-change/hardware constraints and HOLD exclusions are documented. **No locally repeated benchmarks or Ascend 910B2 ports**; reported source claims are not independently certified.
 
