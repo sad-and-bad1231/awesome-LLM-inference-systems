@@ -17,12 +17,12 @@
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-15) | 15 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-15) | 15 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-6) | 6 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-11) | 11 | 性能建模、容量估计、仿真和边界分析。 |
+| [Models & Simulators](#models--simulators-12) | 12 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-12) | 12 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-6) | 6 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **65** | |
+| **Total** | **66** | |
 
-## Papers (65)
+## Papers (66)
 
 ### Serving Benchmarks & Workloads (15)
 
@@ -81,7 +81,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ProMCP: Profiling Token Flows and Latency Costs in Model Context Protocol–Based LLM Agents](https://aclanthology.org/2026.findings-acl.1967/) | ACL Findings 2026 (NOT ACL Main) | 对 LLM Agent **MCP Host–Client–Server** 端到端六阶段执行做请求级 Token/Latency Attribution，公开 [代码](https://github.com/ResponsibleAILab/ProMCP)；作者在 20 Servers / 169 Tools、不同部署 Topology 上表明 Planning/Schema Injection vs Generation 的主要瓶颈随 Client 形态变化。**属于 Agent Workflow Profiling，不是 GPU/NPU Kernel Profiler，也不证明 Token/s 加速**。（KEEP_ADJACENT; REAL_WORKFLOW_PROFILING; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2026 | [LMTracer: Fine-Grained and Real-Time Performance Profiling for Production LLM Systems](https://llm-profiling.github.io/) | SOSP 2026 | 将 Fence/Probe Kernel 嵌入 GPU Graph 并流式回传 CPU Buffer，不打断异步执行；作者报告生产多月使用、微小 Profiling Overhead、定位 15 个问题。**GPU_GRAPH_DEPENDENT / AUTHOR_REPORTED / NOT_ASCEND_VALIDATED**。 |
 
-### Models & Simulators (11)
+### Models & Simulators (12)
 
 性能建模、容量估计、仿真和边界分析。
 
@@ -98,6 +98,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [How Far Can Disaggregation Go? A Design-Space Exploration of Attention-FFN Disaggregation for Efficient MoE LLM Serving](https://arxiv.org/abs/2605.28302) | arXiv 2026 (preprint) | 以实测 Kernel 与网络仿真对比聚合、P/D 与 AFD，在多工作负载和 SLO 下刻画拆分收益边界。 |
 | 2026 | [LLMServingSim 2.0: A Unified Simulator for Heterogeneous and Disaggregated LLM Serving Infrastructure](https://arxiv.org/abs/2602.23036) | arXiv 2026 (preprint) | 把调度、路由、Offload、功率与互联行为置于统一 Runtime Loop，并对真实部署指标校准。 |
 | 2026 | [AIConfigurator: Lightning-Fast Configuration Optimization for Multi-Framework LLM Serving](https://arxiv.org/abs/2601.06288) | arXiv 2026 (preprint; open-source) | 用实测 **GEMM/Attention/Collective/MoE Op Perf DB + Engine-aware Iteration Model** 自动枚举 TP/DP/EP、Batch、P/D 配置，不依赖每个配置现场 Benchmark。作者在 **8×H100/H200、TRT-LLM/vLLM/Dynamo** 实机验证；真实 H200 Case 选出的 P/D 配置相比最优 Aggregated **648.3 vs 321.5 tokens/s/GPU**，但这是**不同部署拓扑方案的差异**，不是预测器自身的独立 2× 加速。总吞吐建模平均误差最高报告 25.49% 的评估组；[AIConfigurator](https://github.com/ai-dynamo/aiconfigurator) 已标记迁移至 AI Simulate，工具不保证配置真实最优。(KEEP_STRICT; REAL_GPU_VALIDATED_MODEL; OPEN_SOURCE; VERSION_SENSITIVE) |
+| 2026 | [Compositional Performance Modeling of LLM Inference Clusters with Hierarchical KV Caching](https://arxiv.org/abs/2610.15366) | arXiv 2026 (preprint) | 将局部 Compute/Transfer Cost 与共享 KV Availability 分离组合为离散事件仿真器，模型在 1P1D 标定并迁移到 3P1D；作者 Qwen3-8B/32B SGLang 实机回放的平均 E2E 延迟 MAPE 1.34–6.36%，CPU 仿真回放快约 15×。**CALIBRATED_SIMULATOR / SCOPED_TO_TESTED_TOPOLOGIES**，不泛化为任意硬件精准预测。 |
 
 ### Correctness & Reliability (12)
 
