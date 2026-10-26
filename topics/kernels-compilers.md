@@ -17,12 +17,12 @@
 | [Attention & Sparse Kernels](#attention--sparse-kernels-29) | 29 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-17) | 17 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-18) | 18 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-16) | 16 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-9) | 9 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **99** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **101** | |
 
-## Papers (99)
+## Papers (101)
 
 ### Attention & Sparse Kernels (29)
 
@@ -102,7 +102,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 | 2026 | [Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents](https://arxiv.org/abs/2606.06453) | NeurIPS 2026 (authors confirm; official program short title, proceedings pending) | Python-embedded page-centric Sparse-Attention DSL + JIT Indexer/Kernel Backend; [SGLang-integrated code](https://github.com/Infini-AI-Lab/vortex_torch) supports GQA/MLA and algorithm-agent iteration. Authors report end-to-end B200 inference throughput up to 4.7× on a specific GLM-4.7-Flash configuration, with sparse-attention quality tradeoffs; **not exact dense outputs, not independently reproduced or Ascend-ready**. (KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED) |
 
-### Fusion, Pipelines & Megakernels (17)
+### Fusion, Pipelines & Megakernels (18)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -125,6 +125,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [FlashFuser: Expanding the Scale of Kernel Fusion for Compute-Intensive Operators via Inter-Core Connection](https://arxiv.org/abs/2512.12949) | HPCA 2026 (Main Conference) | 以 Hopper Cluster Distributed Shared Memory (DSM) 扩展 FFN 等中间张量超出单 CTA Scratchpad 的跨算子融合范围；DSM 通信 IR + 跨存储层级 Dataflow/Tile Search，作者 H100 真机报告 Memory Access −58%、Kernel 最多 3.3×（vs 高度优化库）、会议摘要 End-to-end 1.12×（arXiv v1 报 1.24×，**版本口径不一致**）。[会议身份](https://2026.hpca-conf.org/details/hpca-2026-main-conference/33/FlashFuser-Expanding-the-Scale-of-Kernel-Fusion-for-Compute-Intensive-operators-via-)；未验证公开完整 compiler artifact 或 910B2 兼容性。（KEEP_STRICT; REAL_H100; CONFERENCE_ARXIV_VERSION_DIFFERENCE; AUTHOR_REPORTED） |
 | 2026 | [Taming Dynamism on GPUs: Cross-SM Kernel Fusion via SM Cooperation and Just-in-Time Reduction](https://doi.org/10.1145/3830418.3843857) | SOSP 2026 | MeldKernel 将跨 SM 动态依赖从 Kernel 边界转成细粒度 SM Cooperation / Just-in-Time Reduction，延迟 Mapping 适配动态形状；作者报告 Decode Attention 约 1.3× Kernel 加速。**CUDA_EXECUTION / KERNEL_ONLY / NO_ASCEND_REPLICATION**；不将单算子改善冒充 Serving Goodput。 |
 | 2026 | [Efficient GPU Multitasking with Morphable Kernels](https://doi.org/10.1145/3830418.3843904) | SOSP 2026 | MorphX 用 Morphable Kernels 适配同卡共驻任务的资源占用与竞争，改善 GPU Multi-tasking 资源利用；[作者代码与 AE Artifact](https://github.com/thustorage/MorphX)。**KEEP_ADJACENT / COLOCATION_INTERFERENCE / NOT_VLLM_E2E**：不能以 Background Throughput 代替关键请求尾延迟。 |
+| 2026 | [FuTransformer: FP8 Prefill and INT4 Decode for Llama-Style Inference on Hopper](https://arxiv.org/abs/2610.23796) | arXiv 2026 (preprint) | Llama-style Transformer Block 融合的 Hopper CUDA Kernel：Prefill FP8、Decode INT4 Projection + KV、RMSNorm 增益折叠、直接 Tensor Core Fragment Dequant 与旋转校正。作者单 H100 8B/70B Shape 比较 PyTorch/CODA；**MODEL_QUANTIZED / QUALITY_REGRESSION**，WikiText2 INT4 PPL 6.24→6.99 (GPTQ) 再加 KV 约 0.20，**NOT_BITWISE_EQUIVALENT / SINGLE_DEVICE_BLOCK_BENCH / NO_VLLM_SERVING_E2E**。 |
 
 ### Communication, Memory & I/O (16)
 
@@ -150,7 +151,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 | 2026 | [Theseus: Runtime-Adaptive GPU Collective Communication with Hot-Swappable Schedules](https://doi.org/10.1145/3789240.3829134) | SIGCOMM 2026 | Collective Schedule 不再在 Communicator Init 后固定：支持运行时监测、集群一致 Hot-swap 和自定义 Schedule/Policy，缓解拓扑、健康状态及动态负载变化。[SIGCOMM 官方摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告多 GPU 工作负载相对 NCCL 的通信/作业收益。**KEEP_ADJACENT / GENERAL_CCL / LLM_SERVING_E2E_UNVERIFIED**，不等于目前 TP4 Ascend 收益。 |
 
-### Kernel Automation & Tools (9)
+### Kernel Automation & Tools (10)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -165,5 +166,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Triton-Sanitizer: A Fast and Device-Agnostic Memory Sanitizer for Triton with Rich Diagnostic Context](https://doi.org/10.1145/3779212.3790241) | ASPLOS 2026 | 针对真实 Triton Kernel 的内存越界/竞争检测提供跨设备 Instrumentation 与源码诊断定位；是可直接用于推理 Kernel Correctness 调试的通用工具，不是推理加速。作为极少数调试基础设施例外保留（KEEP_ADJACENT），Artifact 未复现。 |
 | 2026 | [VibeServe: Can AI Agents Build Bespoke LLM Serving Systems?](https://arxiv.org/abs/2605.06068) | arXiv 2026 (preprint) | 多 Agent 外层系统设计搜索 + 内层写码/Correctness Judge/真实负载 Bench，自动生成面向特定模型/硬件的 Serving Stack（非单 Kernel 自动调优）；[作者代码](https://github.com/uw-syfi/vibe-serve) 和 H100 Llama3.1-8B 对比 vLLM/SGLang、六类非标准场景，作者报 1.69–6.27× 专用场景提速；标准场景基本持平。依赖 Agent Search/Bench Budget、没有证明广泛生产可靠性。（KEEP_ADJACENT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED; NOT_GENERIC_SERVING_GAIN） |
 | 2026 | [Ave: Guiding Agentic GPU Optimization Using Data-Flow Invariants (author version: ARGUS)](https://mast.stanford.edu/pubs/argus_agentic_gpu_optimization_guided_by_data_flow_invariants/) | SOSP 2026 (program title: Ave; author paper: ARGUS) | 把 GPU Layout/Pipeline 约束写成 Compile-time Data-flow Invariants，并以 SMT/Abstract Interpretation 返回可定位反例指导 Agent 优化；Stanford 作者在 MI300X GEMM/Attention/MoE 实机测试。**KEEP_ADJACENT / AMD_GPU / KERNEL_ONLY / NO_SERVING_E2E**；不同于 2609.12299 同名 Profiling Argus。 |
+| 2026 | [KREX: Concurrent Kernel Benchmarking on Shared GPUs via Region-Granular Exclusivity](https://arxiv.org/abs/2609.30057) | arXiv 2026 (preprint) | 将 GPU Kernel Agent 的计时关键区与普通代码区分开，进区时阻止新 GPU Work、Drain Outstanding Tasks、隔离 CPU Host Threads，出区恢复多 Agent 并发；复用 GPU Context 避免串行创建。作者在 NVIDIA/AMD 实机报告 Benchmark Throughput 最多 3.4×；**BENCHMARK_RESOURCE_THROUGHPUT / NOT_KERNEL_SPEEDUP / NO_ASCEND_VALIDATION**，短 Kernel 的 P95 时间膨胀需单独审视。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
