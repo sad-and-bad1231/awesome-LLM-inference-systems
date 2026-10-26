@@ -16,12 +16,12 @@
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-23) | 23 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-25) | 25 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-19) | 19 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **125** | |
+| [KV Transfer & Communication](#kv-transfer--communication-24) | 24 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-26) | 26 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-20) | 20 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **128** | |
 
-## Papers (125)
+## Papers (128)
 
 ### Parallelism & Scale-Up (26)
 
@@ -95,7 +95,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 | 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
 
-### KV Transfer & Communication (23)
+### KV Transfer & Communication (24)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
@@ -124,8 +124,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [UCCL-Tran: An Extensible Software Transport Layer for GPU Networking](https://www.usenix.org/conference/osdi26/presentation/zhou-yang) | OSDI 2026 | 现有 RDMA 网卡的主机传输层难以演进，单路径流量冲突会严重拖慢集合通信；UCCL-Tran 把网卡数据路径与控制路径解耦、把控制路径传输放到主机 CPU 上以软件方式演进，提供多路径传输消除流冲突，ML 集合通信性能最高提升 4.5×。 （KEEP_ADJACENT；通用 GPU Networking 工具链，OSDI26；对分布式推理有可迁移的通信收益，不直接证明 vLLM 在线 Goodput。） |
 | 2026 | [Understanding and Improving Communication Performance in Multi-node LLM Inference](https://doi.org/10.1145/3786335.3813165) | CAIS 2026 | 在 Slingshot/InfiniBand 多节点 405B 推理上剖析 TP/PP 的 AllReduce 瓶颈；NVSHMEM 的 NVRAR 针对小消息 Recursive-Doubling 做分层优化，作者将其集成到 YALIS/vLLM 实机对照（最高 1.72× End-to-end Batch Latency 改善），公开研究代码，区别于泛用 NCCL Microbenchmark。 |
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
+| 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://doi.org/10.1145/3789240.3829159) | SIGCOMM 2026 | 让远端 KV 不只 Storage→Prefill，还可 Storage→Decode→Prefill，借 Decode 侧闲置 Storage NIC 与 GPU 间 RDMA；全局 Scheduler 分配两条 I/O 路径。[SIGCOMM 正式摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告 DeepSeek 参与的生产 Agent Trace / 自有系统 E2E：Offline 吞吐最多 1.87×，Online SLO 吞吐均值 1.96×，均为作者报告。**CUSTOM_ENGINE / NETWORK_TOPOLOGY_DEPENDENT / NOT_VLLM_PORT**。 |
 
-### Fleet Scaling & Reliability (25)
+### Fleet Scaling & Reliability (26)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -156,8 +157,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [WANSpec: Leveraging Global Compute Capacity for LLM Inference](https://arxiv.org/abs/2602.18931) | arXiv 2026 (preprint) | 跨 WAN 将 Speculative Draft 发送至欠载数据中心，同时在高端 GPU 侧 Verify；AWS Regional 延迟测量结合真实云部署与仿真，评估投机成本/尾延迟和冗余。 |
 | 2026 | [Fast Recovery for LLM Serving via Decoupled Device Memory Lifetime in Dynamo](https://arxiv.org/abs/2609.25451) | arXiv 2026-09 (preprint) | **GMS** 将权重 GPU Allocation 生命周期与 Engine Process 解耦，用初始化 Runtime Snapshot + Shared-model **Shadow Engine** 做原位 Failover。作者在 4 Model / vLLM/SGLang / GPU 系统上测得故障恢复 **<7s、较 Warm Restart 13–29×**，代价 **每卡 4–8 GiB** 显存；[Dynamo](https://github.com/ai-dynamo/dynamo) / [Snapshot](https://github.com/ai-dynamo/snapshot) 源码公开。生产 **18 周 Trace 推算**可挽回 79% 故障 GPU-hours，**不是已经实测节省 79%**；仅覆盖安全的 Device-preserving Case。(KEEP_STRICT; REAL_GPU_PRODUCTION_TRACE; PUBLIC_ARTIFACT; NO_INDEPENDENT_REPRO) |
 | 2026 | [Foundry: Template-Based CUDA Graph Context Materialization for Fast LLM Serving Cold Start](https://arxiv.org/abs/2604.06664) | arXiv 2026 (preprint) | 离线保存 CUDA Graph Topology + Driver Context/Kernel Binary/Deterministic Address Layout，启动时直接 Restore 并修补跨 Rank 通信状态，避免分布式 Scale-up 的反复 Graph Capture；[作者实现](https://github.com/foundry-org/foundry) 已公开 SGLang 8×H100 测试（TP2/EP2、256 Decode Graphs，Capture 26.7–56s → Restore 2.1–3.5s，/health 63–93s→41–45s，TPOT 近持平）；论文 Qwen3-235B 10min→3.9s 是**特定全栈冷启动配置**，公开 vLLM/TRT-LLM Fork 尚未全部就绪。（KEEP_STRICT; PUBLIC_SGLANG_PATCH; REAL_H100; CODE_PAPER_SCOPE_DIFFERENCE） |
+| 2026 | [Janus: Multi-LLM Serving at Production Scale](https://github.com/Janus2026/Janus) | SOSP 2026 (author artifact; camera-ready pending) | Service–Engine 双层控制闭环、Gaussian-process Capacity/SLO Oracle、双时间尺度调度与 GPU-to-GPU Model Fork；作者 768 设备、62 Apps、45.6M 请求生产负载报告 24% Device-hour 节省且 SLO 达标。**PRODUCTION_AUTHORED / INDEPENDENT_REPRO_NOT_ATTEMPTED**。 |
 
-### Heterogeneous & Edge Serving (19)
+### Heterogeneous & Edge Serving (20)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
@@ -182,5 +184,6 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [PipeSD: An Efficient Cloud-Edge Collaborative Pipeline Inference Framework with Speculative Decoding](https://proceedings.mlr.press/v306/han26k.html) | ICML 2026 | Cloud–Edge 端协同采用 Token Batch Pipeline 与双阈值 Verify 触发以重叠计算/网络。 |
 | 2026 | [ShadowNPU: System and Algorithm Co-design for NPU-Centric On-Device LLM Inference](https://doi.org/10.1145/3745756.3809205) | MobiSys 2026 | 针对移动 NPU Attention 量化失准引起的 CPU/GPU 回退设计稀疏 Shadow Attention；有 Qualcomm Hexagon NPU 实机实验和 Artifact，硬件适用范围需另验（KEEP_ADJACENT）。 |
 | 2026 | [Automated Tensor Scheduling for Hybrid CPU-GPU LLM Inference on Consumer Devices](https://arxiv.org/abs/2607.10183) | arXiv 2026 (preprint) | 把卸载粒度从整层或整专家细化到单个张量，用静态张量放置配合负载感知的动态传输，并以异步 CPU-GPU 协调统一调度存储、数据搬运与计算，消费级平台上 prefill 吞吐最高提升 1.94 倍、decode 3.29 倍。 |
+| 2026 | [MeshRT: Compile-Time Governed Wafer-Scale Runtime for Low-Latency High-Throughput Inference](https://doi.org/10.1145/3830418.3843856) | SOSP 2026 | 针对 Wafer-scale 的 Batching/MoE 动态负载，将 Runtime Events 编译为 Per-core Schedule、去中心化异步执行；[Microsoft 作者资料](https://www.microsoft.com/en-us/research/publication/meshrt-compile-time-governed-wafer-scale-runtime-for-low-latency-high-throughput-inference/)报告真机推理。**KEEP_ADJACENT / NON_GPU_HARDWARE**：H200 对比为单实例实测，而面积归一化多 H200 能效属于理想线性外推，不是实测。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*

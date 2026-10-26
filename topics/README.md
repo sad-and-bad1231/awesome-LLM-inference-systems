@@ -1,9 +1,11 @@
 # Papers by systems mechanism
 
+**Current canonical inventory (2026-10-26): 766 unique paper rows / 8 mechanisms / 44 engineering directions.** The [first TokenGate tranche](../reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) added 11 works to the October 25 baseline (736→747). [Three further G0–G5 rounds](../reviews/THREE_ROUNDS_SYSTEMS_20261026.md) admitted **12 additional distinct works** (SOSP 4, SIGCOMM 2, October arXiv 6), reaching **759**. [ATC 2026 + production-aware kernel follow-up](../reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) initially proposed **10** rows; [the final candidate closure](../reviews/ATC2026_CANDIDATE_CLOSURE_20261026.md) retracts **three** premature G3 admissions (BMV, IgniteServe, HybridFaaS), leaving **seven** additional rows and the **766** current inventory. All performance numbers are source-attributed; no local reproduction or blanket Ascend/vLLM portability is claimed.
+
 **2026-10-25 lab-origin G0–G5 source-audit:** +14 distinct solid systems/mechanism/benchmark works from Berkeley Sky, MIT/HKU/NVIDIA, SJTU–Tsinghua, and UW SyFI collaborations, 722 → **736 canonical entries** in 44 existing directions. Entries have source-specific hardware/quality/baseline and artifact caveats; all gains are author-reported and none independently reproduced. CHIME (ISCA 2026 DIMM-PIM) is **not admitted** pending physical prototype vs simulated-hardware evidence. [Per-candidate review decisions](../reviews/LAB_ORIGIN_REVIEW_20261025.md).
 
 
-**Current selective intake, 2026-10-25: 722 canonical papers; 8 topics; 44 directions; zero unresolved public HOLD rows.** Former 92 tagged papers: 16 source-supported KEEP and 76 REMOVE; a further two generic/insufficient entries removed; four specialized additions. Individual receipts in [HOLD resolution](../reviews/HOLD_RESOLUTION_20261025.md). Historical admission totals below are dated checkpoints. This is a **source-evidence editorial gate**, not a claim that every experiment has been independently run.
+**Historical post-HOLD checkpoint, 2026-10-25: 722 canonical papers; 8 topics; 44 directions; zero unresolved public HOLD rows.** Former 92 tagged papers: 16 source-supported KEEP and 76 REMOVE; a further two generic/insufficient entries removed; four specialized additions. Individual receipts in [HOLD resolution](../reviews/HOLD_RESOLUTION_20261025.md). Historical admission totals below are dated checkpoints. This is a **source-evidence editorial gate**, not a claim that every experiment has been independently run.
 
 
 Eight research topics, now organized as **44 practical engineering directions**: what an inference engineer would actually optimize next. Every paper has one canonical home; this is a navigation map, not a rigid academic ontology.
@@ -14,15 +16,15 @@ Eight research topics, now organized as **44 practical engineering directions**:
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 94 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 151 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 72 | 5 | Speculative, blockwise and parallel generation |
+| [Kernels & Compilers](kernels-compilers.md) | 101 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 153 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 73 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 37 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 67 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 128 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 125 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 62 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **736** | **44** | |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 68 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 138 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 128 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 68 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **766** | **44** | |
 
 ## Admission summary (through 2026-10-18)
 
