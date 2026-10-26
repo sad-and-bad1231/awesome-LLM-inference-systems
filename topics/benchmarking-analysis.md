@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-15) | 15 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-15) | 15 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-6) | 6 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-12) | 12 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-12) | 12 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
-| [Kernel Benchmarks](#kernel-benchmarks-6) | 6 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **66** | |
+| [Kernel Benchmarks](#kernel-benchmarks-7) | 7 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
+| **Total** | **68** | |
 
-## Papers (66)
+## Papers (68)
 
-### Serving Benchmarks & Workloads (15)
+### Serving Benchmarks & Workloads (16)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -45,6 +45,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ServeGen: Workload Characterization and Generation of Large Language Model Serving in Production](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) | NSDI 2026 | 基于真实云服务 Trace 刻画多类型推理负载并合成代表性请求流。 |
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
+| 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
 ### Performance & Efficiency Studies (15)
 
@@ -119,7 +120,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [M2K: Making the Model-Kernel Interface Explicit for Reliable CUDA Kernel Verification](https://arxiv.org/abs/2603.24595) | SOSP 2026 (conference title M2K; early preprint Model2Kernel) | HFProbe 提取模型固定 vs 用户可变的 Kernel 参数约束，cuKLEE 在模型接口条件下符号执行 CUDA Memory Access，检测 Shape/Index Bug；**CUDA_SPECIFIC / NO_RUNTIME_SPEEDUP / EARLY_TITLE_ALIAS**，论文版本间 Bug 数量不同，不直接引用数字。 |
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
 
-### Kernel Benchmarks (6)
+### Kernel Benchmarks (7)
 
 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。
 
@@ -131,5 +132,6 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TritonGym: A Benchmark for Agentic LLM Workflows in Triton GPU Code Generation](https://proceedings.mlr.press/v306/guan26d.html) | ICML 2026 | 以可复现的工具调用/编译/正确性与速度反馈环境评估多轮 Triton Kernel Agent，覆盖 OOD 与扩展 DSL；是真实 Kernel 执行 Benchmark，不等于 LLM Serving Speedup。 |
 | 2026 | [AscendKernelGen: LLM-Driven Kernel Generation for NPUs](https://aclanthology.org/2026.findings-acl.1533/) | ACL Findings 2026 (NOT ACL Main) | Ascend-CoT/KernelGen-LM 和 [NPUKernelBench](https://github.com/weich97/NPUKernelBench)：真实 AscendC Kernel 编译、PyTorch Reference Precision Oracle、性能测量；官方报告 Complex Level-2 Pass@10 Compile 95.5%、Functional Correctness 64%，**不是 LLM Serving 端到端加速**。Bench 与作者训练方案耦合，须防单固定 Shape Overfit；作为 Ascend Agentic Kernel 测评参考。（KEEP_ADJACENT; PUBLIC_BENCH; REAL_NPU_AUTHOR_REPORTED） |
 | 2026 | [CommBench: Can LLMs Write Correct and Efficient GPU Communication Code?](https://arxiv.org/abs/2608.04450) | arXiv 2026 (preprint) | [100+ 多 GPU Communication Kernel Tasks 与开源 Eval](https://github.com/uccl-project/CommBench)，含 NVLink / RDMA P2P/Collectives、MoE Dispatch、Compute–Comm Fusion，自动编译/正确性/性能共同计分；作者在真实同节点/跨节点 GPU 实测，GPT-5.5 PASS+Good 仅 30.7%（非纯 Correctness Pass Rate）。**属于 Kernel Agent 评测，而非新 GPU 通信提速系统**。（KEEP_ADJACENT; PUBLIC_BENCH; REAL_GPU_NVLINK_RDMA; AUTHOR_REPORTED） |
+| 2026 | [Are LLM-Generated GPU Kernels Production-Ready? A Trace-Driven Benchmark and Optimization Agent (Atrex-Bench)](https://arxiv.org/abs/2607.14541) | arXiv 2026 (preprint) | [Atrex-Bench](https://github.com/alibaba/atrex-bench) 从真实 Production Inference Trace 抽取 30 Operators/440 Shapes，按 GPU 占用时间权重与 Roofline 评价 Kernel Agent，分清 PyTorch Fallback 与真正的 DSL Kernel；[AKA Agent](https://github.com/alibaba/atrex-kernel-agent) 用 Profiling+迭代修正。**BENCHMARK_AND_AGENT / NOT_SERVING_E2E / HARDWARE_SCOPED**；论文 10% Roofline 为测试 Agent 结果，不能冒充全体生产算子结论。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
