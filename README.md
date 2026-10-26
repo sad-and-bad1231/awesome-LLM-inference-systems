@@ -1,6 +1,6 @@
 # Awesome LLM Inference Systems
 
-**Latest review addition:** [ATC 2026 / production-aware Kernel curation](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md), +10 nonduplicate source-audited papers (759→769). G3/G4 limitations preserved, HACK/HKVQ alias annotated, no GPU/NPU reproduction claimed.
+**Latest review addition:** [ATC 2026 / production-aware Kernel curation](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md), +10 nonduplicate source-audited papers (759→769). G3/G4 limitations preserved, HACK ATC title corrected, no GPU/NPU reproduction claimed.
 
 **Latest canonical inventory (2026-10-26): 769 source-curated topic entries in 44 engineering directions.** The [TokenGate source review](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) admits 11 works, and [three successive SOSP/SIGCOMM/October-arXiv rounds](reviews/THREE_ROUNDS_SYSTEMS_20261026.md) add 12 more: 736 (October 25) → **759**. Venue, artifact, hardware, approximation and trace-vs-production limits are preserved; **no independent benchmark replication or Ascend port** is claimed.
 
