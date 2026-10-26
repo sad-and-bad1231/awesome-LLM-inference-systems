@@ -17,10 +17,10 @@
 | [Expert Routing & Communication](#expert-routing--communication-15) | 15 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-18) | 18 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-23) | 23 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **67** | |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-24) | 24 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **68** | |
 
-## Papers (67)
+## Papers (68)
 
 ### Expert Routing & Communication (15)
 
@@ -87,7 +87,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Dynamic HBM Repartitioning for Multi-Turn MoE Serving (VAMP)](https://arxiv.org/abs/2609.13537) | arXiv 2026-09 (preprint) | **Expert Weight ↔ KV Cache 动态 HBM 重新划分**：MoE 稀疏激活允许将部分 Expert Weight 迁到 Host，把 CUDA VMM Page 映射给 KV；由 Controller 比较 Expert Reload、KV Eviction/Re-prefill、Request Preemption 预测损失。**vLLM 0.15.1 / Qwen3-Next-80B-A3B**、2×H100 PCIe / 4×H200 NVLink、2,103 轮 SWE-agent 五次 Replay：相对原版 vLLM **TTFT P90 26.1→1.10 s；请求吞吐 +20.7%；但 TPOT 170.9→224.0 ms（恶化 31.1%）**。收益主要靠避开 Prefix/KV 容量崩溃阈值；不同并发/Offload Ratio 可逆转优势，Closed-loop Agent 负载并非一一匹配的请求 Replay；模型正确性与开源实现未独立核查。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; CAPACITY_THRESHOLD_SCOPED; TPOT_REGRESSION) |
 | 2026 | [FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution](https://arxiv.org/abs/2608.16157) | arXiv 2026 (preprint) | 面向单机消费者 RTX GPU+CPU/Host RAM 的 MoE Serving：Bandwidth-aware CPU–GPU Co-execution、Expert Residency、Double-buffered Prefill、Agent KV/Recurrent State Cache、弹性 Memory Partition；[开源 Runtime](https://github.com/FlashML-org/FreeToken) 支持多 MoE/Claude Code 风格 API，作者报告从 8GB Laptop 到 Workstation 部署巨量模型。**可跑大模型不等于相同硬件/质量/SLO 下优于 vLLM/SGLang；吞吐收益基线及可复现权重布局依配置而异**。（KEEP_STRICT; PUBLIC_RUNTIME; REAL_EDGE_HARDWARE_AUTHOR_REPORTED; PREPRINT; TOPOLOGY_SCOPED） |
 
-### Sparse Attention & Conditional Compute (23)
+### Sparse Attention & Conditional Compute (24)
 
 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。
 
@@ -116,5 +116,6 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Token Sparse Attention: Efficient Long-Context Inference with Interleaved Token Selection](https://proceedings.mlr.press/v306/jo26a.html) | ICML 2026 | 跨 Head/Layer 动态选择 Token 执行 Attention，后续 Layer 可重新考虑此前 Token；与既有 FlashAttention 兼容，作者报告 128K Attention Kernel 和质量对照。（KEEP_ADJACENT） |
 | 2026 | [Unified Static–Dynamic Pruning for Efficient LLM Inference](https://doi.org/10.14778/3836663.3836665) | PVLDB 2026 | SPDP 将静态权重与动态激活剪枝映射到 Tiled-CBC 稀疏存储及 Prefill SpMM/Decode SpMspV 专用 GPU Kernel。（APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [vSkipper: Translating Dynamic Layer Skipping into LLM Serving Gains](https://arxiv.org/abs/2609.37062) | arXiv 2026-09 (preprint) | 将 Token-wise Dynamic Layer Skipping 通过按决策 **Token Grouping、Profitability Gate、Fixed-shape Graph、Paged KV** 等机制适配 Continuous Batching；对比原型 FlexiDepth 即使少算 8 层仍较 Base Decoder 慢 14.6–21.0% 的失败路径。公开 [SGLang Fork](https://github.com/AKafakA/sglang-vskipper/tree/vskipper-ref)，作者在匹配相同 Prompt/Arrival/Output Length 的 GSM8K/BBH 实测原 Checkpoint Serving E2E Latency −36.8%/−13.6%，饱和 Throughput +11.3%/+7.4%。**Skipper Checkpoint 已训练/修改模型，Serving 路径额外精度下降未统计显著，不等于原模型无损输出等价**；未独立验证旧 Checkpoint 与现代 vLLM-Ascend 的兼容。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; REQUIRES_TRAINED_MODEL; APPROXIMATE_QUALITY_CHECKED; PUBLIC_ARTIFACT) |
+| 2026 | [TokenGate: Adapting LLMs for Fast and Memory-Efficient Prefill with Learned Token Pruning](https://arxiv.org/abs/2610.26754) | arXiv 2026 (preprint) | 在中间层对 Token 打分并训练式 Top-K 剪枝，上层不再计算被丢弃 Token 的 Attention/MLP/KV；Token-gated Attention + LoRA 与修改的 FA2 Bias Kernel。作者 A100/Qwen3、Qwen3.5、单请求 TTFT/峰值显存提升；**REQUIRES_TRAINING / MODEL_CHANGED / APPROXIMATE_OUTPUT / CUDA_ARTIFACT / NOT_VLLM_E2E**。 [Code](https://github.com/tokengate-models/TokenGate)。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
