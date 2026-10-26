@@ -1,5 +1,7 @@
 # ATC'26 + production-aware kernel curation — 2026-10-26
 
+**R3 CORRECTION / SUPERSEDED COUNT:** This document is the **historical 10-row proposal**, NOT the current admitted total. [Subsequent G3 review](ATC2026_CANDIDATE_CLOSURE_20261026.md) removed BMV, IgniteServe and HybridFaaS from the canonical tables because venue/lab summaries without inspectable final methods/baselines do not meet the strict acceptance gate. Net from this tranche **+7**; current topic inventory **766**, not 769. All original deliberation text is retained below for provenance. Additionally, HACK is officially titled **HACK** at ATC 2026 (the prior HKVQ assertion is retracted).
+
 **Scope:** targeted missing papers from the [ACM ATC 2026 accepted list](https://atc.sigops.org/2026/accepted.html), corroborated against author papers/affiliation publications, plus arXiv/ICML physical-hardware and open-artifact papers. Stacked on PR #64's previous **759**; **10 newly admitted**, proposed canonical = **769**. One existing **HACK** entry corrected to match the confirmed ATC 2026 program title (**NOT HKVQ**); **zero** additional rows for that identity. These are source-level editorial decisions: **independent reproduction: not_attempted** across this batch. No server/NPU run, no production deployment access, no inference-version parity certification.
 
 ## Round D: ATC 2026 — scope and primary evidence (6 KEEP)
@@ -46,6 +48,6 @@
 - October 25 main baseline: 736.
 - Previous TokenGate/SOSP/SIGCOMM/arXiv branch additions: +23 → 759.
 - This batch: +10 → **769**.
-- Only five topic pages receive new rows; one existing KV HACK row bibliographically annotated. Each paper gets **one** primary category.
+- Only five topic pages receive new rows; one existing KV HACK row bibliographically corrected; see R3 closure for conference-title correction. Each paper gets **one** primary category.
 - New count target: Kernels 101; KV 153; Decoding 74; Quantization 37; MoE 68; Runtime 139; Distributed 129; Benchmarking 68 = **769**.
 - G4 independent reproduction status: `not_attempted` (all 10). Conference ATC 2026 **accepted, proceedings pending** as of this editorial date.
