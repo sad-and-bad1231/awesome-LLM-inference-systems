@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-28) | 28 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-29) | 29 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-15) | 15 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-15) | 15 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-8) | 8 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **94** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-9) | 9 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **96** | |
 
-## Papers (94)
+## Papers (96)
 
-### Attention & Sparse Kernels (28)
+### Attention & Sparse Kernels (29)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -58,6 +58,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [LiteTopK: Exploiting the Curse of Dimensionality for a Fused Indexer-TopK Kernel in Long-Context Sparse Attention](https://arxiv.org/abs/2607.11976) | arXiv 2026 (preprint) | 利用 Indexer 分数集中性估计在线阈值，融合打分、候选过滤和 Top-K，避免物化完整分数矩阵并保持 exact Top-K；配套 LiteDSA 对邻近 Query 分组以降低访存。作者报告 1M context 下 Kernel 相对官方 DSA 路径最高 3.38×、相对优化 vLLM 1.24×，GLM-5.2 Prefill 端到端 1.35×。公开 [CUDA source and four-arm vLLM benchmarks](https://github.com/Heisenberg-Yin/LiteTopK)；结果未独立复现。（KEEP_STRICT; PREPRINT; EXACT_TOPK; PUBLIC_CODE） |
 | 2026 | [DoSA: Dots Sparse Attention](https://arxiv.org/abs/2610.13990) | arXiv 2026 (preprint) | 用 Seed Threshold 与可认证分数上界提前排除不可能进入 Top-K 的 Indexer 候选，仅对剩余候选完整计分；保持原 Indexer 的 Top-K 选择语义，减少 DSA Indexer 的计算与访存。作者报告 Indexer 最高 2.74×，并公开 [Flash Indexer](https://github.com/llm-sys/flash-indexer) 与 [SGLang 集成/TTFT 复现](https://github.com/llm-sys/dosa-sglang)；端到端结果仍待独立复现。（KEEP_STRICT） |
 | 2026 | [PackInfer: Compute- and I/O-Efficient Attention for Batched LLM Inference](https://arxiv.org/abs/2602.06072) | arXiv 2026 (preprint) | **跨请求 compute/I/O-aware attention packing**：将混合长度 batch 分组、合并短序列并协调 shared-prefix KV layout，降低 CTA straggler 与访存碎片；保留 dense attention 语义。作者在 A100/H200/A40 与 4×A100、Qwen3/Mistral/Alpaca/LMSYS 等报告 TTFT/TBT/throughput 改善，强对照包括 FlashAttention 和 Prepack，**收益依负载变化，未开源的可复现 Kernel/Serving Patch 未核验**。不同于 request-level scheduling；未独立复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
+| 2026 | [FlashPrefill V2: Block-Sparse Prefill Attention for Long-Context LLM Serving](https://arxiv.org/abs/2608.19758) | arXiv 2026 (preprint) | 从 FlashPrefill 原型推进到可执行 Hopper SM90 Sparse Prefill Backend：Mean Correction、PackGQA、Warp Specialization、BF16/FP8、Paged KV 与 SGLang Continuous Batching。作者 H20 长上下文算子加速不等于全链路 Goodput；**APPROXIMATE_ATTENTION / CUDA_SM90_ONLY**。[Code](https://github.com/qhfan/FlashPrefillv2)。 |
 
 ### GEMM & Low-Bit Kernels (11)
 
@@ -146,7 +147,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KVBuffer: IO-aware Serving for Linear Attention](https://arxiv.org/abs/2605.19049) | arXiv 2026 (preprint) | 缓冲最近 K/V，将递推状态更新改为 chunkwise 批处理；支持 speculative verification 并行验证 draft tokens，短上下文时直接从缓冲 K/V 计算而不创建/更新状态。作者在 Qwen3-Next 的 SGLang 实现中报告线性 Attention Decode 延迟最高降低 45.17%，四 Token speculative verification 下最大可服务请求数提升至 5×。未找到作者公开代码，结果为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
 | 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 
-### Kernel Automation & Tools (8)
+### Kernel Automation & Tools (9)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -160,5 +161,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KernelFoundry: Hardware-Aware Evolutionary GPU Kernel Optimization](https://proceedings.mlr.press/v306/wiedemann26a.html) | ICML 2026 | Quality-Diversity MAP-Elites、Prompt Co-evolution 与 Template Parameter Search，在 SYCL/CUDA 的 KernelBench/robust-kbench 上实测；虽有跨设备工具价值，但没有 LLM Serving Goodput 证据，暂保留为 Agentic Kernel 前沿例外待 G5 去同质化。 |
 | 2026 | [Triton-Sanitizer: A Fast and Device-Agnostic Memory Sanitizer for Triton with Rich Diagnostic Context](https://doi.org/10.1145/3779212.3790241) | ASPLOS 2026 | 针对真实 Triton Kernel 的内存越界/竞争检测提供跨设备 Instrumentation 与源码诊断定位；是可直接用于推理 Kernel Correctness 调试的通用工具，不是推理加速。作为极少数调试基础设施例外保留（KEEP_ADJACENT），Artifact 未复现。 |
 | 2026 | [VibeServe: Can AI Agents Build Bespoke LLM Serving Systems?](https://arxiv.org/abs/2605.06068) | arXiv 2026 (preprint) | 多 Agent 外层系统设计搜索 + 内层写码/Correctness Judge/真实负载 Bench，自动生成面向特定模型/硬件的 Serving Stack（非单 Kernel 自动调优）；[作者代码](https://github.com/uw-syfi/vibe-serve) 和 H100 Llama3.1-8B 对比 vLLM/SGLang、六类非标准场景，作者报 1.69–6.27× 专用场景提速；标准场景基本持平。依赖 Agent Search/Bench Budget、没有证明广泛生产可靠性。（KEEP_ADJACENT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED; NOT_GENERIC_SERVING_GAIN） |
+| 2026 | [ARGUS: Agentic GPU Optimization Guided by Data-Flow Invariants](https://mast.stanford.edu/pubs/argus_agentic_gpu_optimization_guided_by_data_flow_invariants/) | SOSP 2026 | 把 GPU Layout/Pipeline 约束写成 Compile-time Data-flow Invariants，并以 SMT/Abstract Interpretation 返回可定位反例指导 Agent 优化；Stanford 作者在 MI300X GEMM/Attention/MoE 实机测试。**KEEP_ADJACENT / AMD_GPU / KERNEL_ONLY / NO_SERVING_E2E**；不同于 2609.12299 同名 Profiling Argus。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
