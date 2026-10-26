@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Prefix & Session Reuse](#prefix--session-reuse-39) | 39 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
+| [Prefix & Session Reuse](#prefix--session-reuse-40) | 40 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-48) | 48 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-16) | 16 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-26) | 26 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-27) | 27 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **151** | |
+| **Total** | **153** | |
 
-## Papers (151)
+## Papers (153)
 
-### Prefix & Session Reuse (39)
+### Prefix & Session Reuse (40)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -69,6 +69,7 @@
 | 2026 | [Efficient Serving for Dynamic Agent Workflows with Prediction-based KV-Cache Management (PBKV)](https://arxiv.org/abs/2605.06472) | NeurIPS 2026 (author-confirmed; proceedings pending) | 对动态 Agent DAG 融合历史调用与当前上下文预测后续 Agent Invocation，估计 Prefix KV 再用概率并保守地 Evict/Prefetch；作者在三种 Workflows 评测，相比 LRU 最高 1.85×、相比静态工作流的 KVFlow 最高 1.26×（**不同对比负载，不能混称**）。公开可复现 Serving 代码与 Ascend 收益未核验。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [CacheSmith: Accurate RAG Serving under Latency SLOs with Adaptive KV Reuse](https://arxiv.org/abs/2610.18925) | arXiv 2026-10-13 (preprint) | RAG Chunk KV 的跨 Chunk Attention 缺失通过 **WarmUp/Probe/Patch** 可调重计算修复；按 Batch Budget/Deadline 和质量预测动态分配覆盖率。作者以 **vLLM 0.10.2** 在 RTX PRO 6000 96GB (1×/2×)、Llama-3.1-8B/Qwen3-32B、EPYC 9554 与 PCIe5 NVMe，分别对照 CacheBlend / EPIC / ProphetKV / FusionRAG、Full Reuse / Full Prefill / BestStatic，报告 4 任务 × 多到达率中 **Quality-gated SLO Attainment 最多提升 27.5%（作者表述，非未经确认的百分点）**。**Query/Context signal 采用作者自行编写的未优化 Triton Kernel，可能对其他方法不利；作者实现未独立发布/复现，Chunk 预计算数据可能高达数百 GB，不是严格数值等价**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED; ARTIFACT_UNVERIFIED) |
 | 2026 | [Cache Engineering for Agents (AKV)](https://arxiv.org/abs/2610.28577) | arXiv 2026-10-20 (preprint) | **Cache Engineering Contract**：Agent 执行逻辑轨迹不变，主动 `drop` 已失去价值的历史 KV、`repos` 调整保留 Key 的位置编码；同一 Token Prefix 在不同操作历史下可对应**不同 KV State**，因此 SGLang Engine 使用 Operation-aware Radix Tree + Drop-aware Eviction + Segment-batch Restoration。公开 [AKV Agent & Serving 源码](https://github.com/thu-nics/AKV)，作者用 **SGLang v0.5.20 / 8×A800 BF16 / GPT-OSS-120B（Prefill TP4 + Decode TP4）** 测量 SWE-bench Verified：峰值配置时 AKV Concurrency=14 对比 Standard=12，**P95 Request Latency 1.51× 较低、Output Throughput 1.18×**；Agent Bench 平均准确率 +1.7 points、估算 API-equivalent Cost −27.7% 均来自**策略与 KV 表示改变**，不是严格 Exact-Output / 相同并发下的透明 Serving 加速。需核 Repos 的 Position Semantics 和版本移植。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; APPROXIMATE_MODEL_BEHAVIOR; DIFFERENT_OPTIMAL_CONCURRENCY) |
+| 2026 | [RaReCache: Bridging the Gap in Cross-Model KV Cache Reuse via Rank Disagreement-based Selective Recomputation](https://arxiv.org/abs/2610.11358) | arXiv 2026 (preprint) | 在不同规模的同族模型间用 Linear KV Mapping 加 Rank-disagreement 定位关键 Tokens，仅对部分位置由大模型重新 Prefill；作者 Qwen3/Llama 实机在线实验。**APPROXIMATE_QUALITY / MODEL_PAIR_SPECIFIC / SELECTIVE_RECOMPUTE**：23× 参数差情况下仅重算 30% 保留部分任务 95–99% 目标精度，不是精确 Cache 等价或无损提升。 |
 
 ### Eviction, Compression & Quantization (48)
 
@@ -148,7 +149,7 @@
 | 2026 | [SpeContext: Enabling Efficient Long-context Reasoning with Speculative Context Sparsity in LLMs](https://doi.org/10.1145/3779212.3790224) | ASPLOS 2026 | 以 Distilled Retrieval Head 预测原模型关注的长上下文 KV，异步预取和 Elastic KV Residency 重叠 GPU 计算；在云端和边缘实机评估准确率/吞吐/显存折中。 |
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 
-### Offloading & Tiered Storage (26)
+### Offloading & Tiered Storage (27)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -180,6 +181,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [Stream2LLM: Overlap Context Streaming and Prefill for Reduced Time-to-First-Token](https://openreview.net/forum?id=FuRo7Ur5Ib) | MLSys 2026 | Stream2LLM 将上下文流式加载与 prefill 计算重叠，把长 prompt 的数据到达时间隐藏到首 token 前的执行流水中 |
 | 2026 | [Tutti: Making SSD-Backed KV Cache Practical for Long-Context LLM Serving](https://arxiv.org/abs/2605.03375) | arXiv 2026 (preprint) | 以 GPU-native KV Object Store、GPU io_uring 和 Slack-aware I/O Scheduling 避开 SSD KV Restore 的 CPU 小 I/O 控制路径，已集成 vLLM 并开源，实测对 GDS-enabled SSD LMCache 的 TTFT、QPS 和 GPU Stall。 |
 | 2026 | [Idleness is Relative: Exploiting Tool-Call Idle Windows for Offloading in Agentic Systems with MORI](https://arxiv.org/abs/2606.00866) | arXiv 2026 (preprint) | 根据真实 Agent 程序在 Tool-call 阶段连续相对 Idle Rank 动态划分 GPU HBM / CPU DRAM KV 驻留和 Admission，避免 LRU/二值忙闲策略迁移抖动；ThunderAgent + SGLang HiCache 作者实测 Claude Code Trace、H200/B200 多配置，相对 Offload Baseline 吞吐 +20–71%、TTFT −18–43%，**MORI 专属 Patch/Trace 未公开，不能独立复现**。（KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; AGENT_TRACE; NO_PUBLIC_MORI_ARTIFACT） |
+| 2026 | [Gandalf: Flash Shall Not Die! Increasing Flash Storage Lifetime for KV Cache Offloading in LLM Serving](https://arxiv.org/abs/2610.30791) | arXiv 2026 (preprint) | 利用 Hybrid 模型 Full-attention KV 与 Linear-state 不同的未来重用特点，对 DRAM→SSD Admission 施加写入寿命约束；作者 Claude Code 等 Trace 驱动实验报告平均估算 SSD Lifetime 7.3×。**TRACE_DRIVEN_ENDURANCE_ESTIMATE / NO_LONG_TERM_SSD_WEAROUT_TEST / CACHE_MISS_TRADEOFF**，不是实测物理 SSD 使用寿命。 |
 
 ### Distributed KV Sharing & Transfer (14)
 
