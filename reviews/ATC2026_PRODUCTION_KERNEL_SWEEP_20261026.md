@@ -1,6 +1,6 @@
 # ATC'26 + production-aware kernel curation — 2026-10-26
 
-**Scope:** targeted missing papers from the [ACM ATC 2026 accepted list](https://atc.sigops.org/2026/accepted.html), corroborated against author papers/affiliation publications, plus arXiv/ICML physical-hardware and open-artifact papers. Stacked on PR #64's previous **759**; **10 newly admitted**, proposed canonical = **769**. One **HACK/HKVQ** bibliographic alias annotation, **zero** additional rows for that identity. These are source-level editorial decisions: **independent reproduction: not_attempted** across this batch. No server/NPU run, no production deployment access, no inference-version parity certification.
+**Scope:** targeted missing papers from the [ACM ATC 2026 accepted list](https://atc.sigops.org/2026/accepted.html), corroborated against author papers/affiliation publications, plus arXiv/ICML physical-hardware and open-artifact papers. Stacked on PR #64's previous **759**; **10 newly admitted**, proposed canonical = **769**. One existing **HACK** entry corrected to match the confirmed ATC 2026 program title (**NOT HKVQ**); **zero** additional rows for that identity. These are source-level editorial decisions: **independent reproduction: not_attempted** across this batch. No server/NPU run, no production deployment access, no inference-version parity certification.
 
 ## Round D: ATC 2026 — scope and primary evidence (6 KEEP)
 
@@ -26,7 +26,7 @@
 
 | Candidate | Decision and reason |
 |---|---|
-| [HACK arXiv 2502.03589](https://arxiv.org/abs/2502.03589) vs [ATC 2026 HKVQ](https://atc.sigops.org/2026/accepted.html) | **EXISTING_IDENTITY, UPDATE ONLY**. Authorship and prior paper link overlap, but final ATC camera-ready title and experiment extent must be cross-checked before asserting full title substitution. Original HACK row now notes ATC HKVQ and uncertainty. **No +1**. |
+| [HACK arXiv 2502.03589](https://arxiv.org/abs/2502.03589) and [ATC 2026 HACK program](https://atc.sigops.org/2026/schedule.html) | **EXISTING_IDENTITY, UPDATE ONLY**. Official ATC 2026 schedule explicitly titles this paper **HACK**, so the previous claim that the accepted paper was called HKVQ was incorrect. Kept only original HACK row, updated venue metadata; any independent HKVQ paper would need a distinct primary identity source. **No +1**. |
 | [SptcAttn](https://kevinwu2017.github.io/) (ATC) | **HOLD_G3/G4**. Author describes diagonal-stripe sparse Tensor Core mapping retaining selected scores, but publicly accessible quantitative GPU kernel and end-to-end task/precision baselines not verified in this audit. Strong next full paper candidate. |
 | [TensorBridge](https://soldierchen.github.io/publications/) (ATC) | **HOLD_G3**. FP4→FP8 tensor-core bridge compelling, but absent public full artifact/quality and per-shape kernel vs system-level performance evidence here. |
 | DittoCache, ATP, CacheSched, TwinCache, DAG-KV, JetFire, Mosaic (CPU–GPU), Octopus, MoE-Lego, Axon | **HOLD_EVIDENCE**. [Official ATC listing](https://atc.sigops.org/2026/accepted.html) establishes identity. Final methods, physical kernel/storage/network setup, quality, best serving baselines or artifacts not yet source-audited. No G0-only mass admission. |
