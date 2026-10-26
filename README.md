@@ -1,6 +1,6 @@
 # Awesome LLM Inference Systems
 
-**Latest canonical inventory (2026-10-26): 747 source-curated topic entries in 44 engineering directions.** A new 11-paper focused review adds TokenGate and high-evidence 2026 kernel, serving, energy, profiling and correctness work to the October 25 baseline of 736; see [the batch decisions](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md). No independent performance reproduction or Ascend portability is claimed.
+**Latest canonical inventory (2026-10-26): 759 source-curated topic entries in 44 engineering directions.** The [TokenGate source review](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) admits 11 works, and [three successive SOSP/SIGCOMM/October-arXiv rounds](reviews/THREE_ROUNDS_SYSTEMS_20261026.md) add 12 more: 736 (October 25) → **759**. Venue, artifact, hardware, approximation and trace-vs-production limits are preserved; **no independent benchmark replication or Ascend port** is claimed.
 
 **Systems research worth reading — from first principles to production.**
 
