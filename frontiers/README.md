@@ -53,6 +53,8 @@ The anchors are a **starter reading path, not new canonical admission**. An ICML
 | VLA execution | Can the compute-bound backbone overlap with the memory-bound action expert within deadline? | Hardware-traced stage latency, missed deadline rate, energy/action and action quality on embedded devices |
 | Agentic kernels | Does the generated code remain correct and fast outside public test tensors? | Hidden distributions + precision parity, multi-shape benchmarks, real profiler evidence, compilation cost and downstream serving impact |
 
+**World-model state-management follow-on (October 2026):** [WorldPager](https://arxiv.org/abs/2610.35529) explores pose-predictable KV-prefetch into NVMe-backed memory for long interactive sessions on a consumer GPU. It is an **adjacent real-hardware experiment**, with int4 quality limitations, and already has its one canonical entry under KV Cache & Context Memory; it is not a seventh frontier or a claim about text LLM KV reuse.
+
 ## Watching, not yet promoting
 
 - **Reasoning/test-time-compute control.** [Plan and Budget](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ae8d4084f418bb51575c2ca6c658a05b-Abstract-Conference.html) (ICLR 2026) demonstrates adaptive reasoning budgets, but it is primarily a **model-level quality–compute algorithm**. Promote when a real inference runtime jointly optimizes correctness/quality, token budgets, SLO and co-tenant requests across workloads; avoid mistaking fewer tokens for a proven serving-system breakthrough.
