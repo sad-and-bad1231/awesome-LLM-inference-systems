@@ -21,7 +21,7 @@
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-20) | 20 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
 | **Total** | **128** | |
 
-## Papers (129)
+## Papers (131)
 
 ### Parallelism & Scale-Up (26)
 
@@ -127,7 +127,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://doi.org/10.1145/3789240.3829159) | SIGCOMM 2026 | 让远端 KV 不只 Storage→Prefill，还可 Storage→Decode→Prefill，借 Decode 侧闲置 Storage NIC 与 GPU 间 RDMA；全局 Scheduler 分配两条 I/O 路径。[SIGCOMM 正式摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告 DeepSeek 参与的生产 Agent Trace / 自有系统 E2E：Offline 吞吐最多 1.87×，Online SLO 吞吐均值 1.96×，均为作者报告。**CUSTOM_ENGINE / NETWORK_TOPOLOGY_DEPENDENT / NOT_VLLM_PORT**。 |
 | 2026 | [Deploying RDMA for Large-Scale Inference and Training Workloads (ByteExpress)](https://arxiv.org/abs/2610.12815) | arXiv 2026 (ByteDance production report; preprint) | 生产参数服务器推理/训练中的 RDMA Layer：跨应用/传输缓冲区协同、Zero-copy、QP Multiplexing、Receive-credit、Software Send Window 与 RPC Recovery。生产推理 Parameter Fetch Mean/P99 相对 Kernel TCP 分别低 35.7%/43.7%（作者报告）；**并非** vLLM P/D KV Transfer 或 Decode Collective 的直接 E2E 证据，作为分布式推理通信基础设施相邻准入。（KEEP_ADJACENT；NOT_REPRODUCED） |
 
-### Fleet Scaling & Reliability (26)
+### Fleet Scaling & Reliability (27)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -159,8 +159,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Fast Recovery for LLM Serving via Decoupled Device Memory Lifetime in Dynamo](https://arxiv.org/abs/2609.25451) | arXiv 2026-09 (preprint) | **GMS** 将权重 GPU Allocation 生命周期与 Engine Process 解耦，用初始化 Runtime Snapshot + Shared-model **Shadow Engine** 做原位 Failover。作者在 4 Model / vLLM/SGLang / GPU 系统上测得故障恢复 **<7s、较 Warm Restart 13–29×**，代价 **每卡 4–8 GiB** 显存；[Dynamo](https://github.com/ai-dynamo/dynamo) / [Snapshot](https://github.com/ai-dynamo/snapshot) 源码公开。生产 **18 周 Trace 推算**可挽回 79% 故障 GPU-hours，**不是已经实测节省 79%**；仅覆盖安全的 Device-preserving Case。(KEEP_STRICT; REAL_GPU_PRODUCTION_TRACE; PUBLIC_ARTIFACT; NO_INDEPENDENT_REPRO) |
 | 2026 | [Foundry: Template-Based CUDA Graph Context Materialization for Fast LLM Serving Cold Start](https://arxiv.org/abs/2604.06664) | arXiv 2026 (preprint) | 离线保存 CUDA Graph Topology + Driver Context/Kernel Binary/Deterministic Address Layout，启动时直接 Restore 并修补跨 Rank 通信状态，避免分布式 Scale-up 的反复 Graph Capture；[作者实现](https://github.com/foundry-org/foundry) 已公开 SGLang 8×H100 测试（TP2/EP2、256 Decode Graphs，Capture 26.7–56s → Restore 2.1–3.5s，/health 63–93s→41–45s，TPOT 近持平）；论文 Qwen3-235B 10min→3.9s 是**特定全栈冷启动配置**，公开 vLLM/TRT-LLM Fork 尚未全部就绪。（KEEP_STRICT; PUBLIC_SGLANG_PATCH; REAL_H100; CODE_PAPER_SCOPE_DIFFERENCE） |
 | 2026 | [Janus: Multi-LLM Serving at Production Scale](https://github.com/Janus2026/Janus) | SOSP 2026 (author artifact; camera-ready pending) | Service–Engine 双层控制闭环、Gaussian-process Capacity/SLO Oracle、双时间尺度调度与 GPU-to-GPU Model Fork；作者 768 设备、62 Apps、45.6M 请求生产负载报告 24% Device-hour 节省且 SLO 达标。**PRODUCTION_AUTHORED / INDEPENDENT_REPRO_NOT_ATTEMPTED**。 |
+| 2026 | [Resuming Vision-Language Inference across Onboard Interruptions (OrbitWeaver)](https://arxiv.org/abs/2610.29183) | arXiv 2026 (preprint; Oct 22 announcement) | Satellite VLM Vision/Prefill/Decode 跨断电持久化与 DAG 恢复：按状态生命周期 Checkpoint 并重排局部恢复，作者声称 2 颗在轨卫星 72 小时部署 + 卫星板卡实测，最多 4.07× 完成时间收益。仅面向频繁中断的边缘载荷；未经独立验证在轨数据。（KEEP_ADJACENT；AUTHOR_DEPLOYMENT_CLAIM；NOT_REPRODUCED） |
 
-### Heterogeneous & Edge Serving (20)
+### Heterogeneous & Edge Serving (21)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
@@ -188,3 +189,4 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [MeshRT: Compile-Time Governed Wafer-Scale Runtime for Low-Latency High-Throughput Inference](https://doi.org/10.1145/3830418.3843856) | SOSP 2026 | 针对 Wafer-scale 的 Batching/MoE 动态负载，将 Runtime Events 编译为 Per-core Schedule、去中心化异步执行；[Microsoft 作者资料](https://www.microsoft.com/en-us/research/publication/meshrt-compile-time-governed-wafer-scale-runtime-for-low-latency-high-throughput-inference/)报告真机推理。**KEEP_ADJACENT / NON_GPU_HARDWARE**：H200 对比为单实例实测，而面积归一化多 H200 能效属于理想线性外推，不是实测。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
+| 2026 | [Shared Context, Separate Engines: Streaming Vision–Language Inference on Edge SoCs](https://arxiv.org/abs/2610.35309) | arXiv 2026 (preprint; Oct 27 announcement) | 将跨 CPU/GPU/NPU 的 Versioned Context 与后端 KV 分离，让多路 Streaming VLM Frame Ingest 与 Answer Concurrent，按 State-aware Dispatch 选择 Engine；Apple M4 Max、RK3588、QCS6490 实机，RK3588 双流对最强单引擎 +19.6% Throughput。VLM-only、平台依赖，非文本 LLM Server Pool。（KEEP_STRICT；REAL_EDGE_SOC；NOT_REPRODUCED） |
