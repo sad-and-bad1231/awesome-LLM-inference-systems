@@ -1,6 +1,6 @@
 # Awesome LLM Inference Systems
 
-**Latest curated update (2026-10-29):** [Kernel-agent comparison and October arXiv source audit](reviews/ARXIV_KERNEL_FRONTIER_20261029.md) admitted **10** distinct entries after nonduplicate G0–G5 screening (766→**776**, 44 engineering directions). [Agentic kernel frontier](frontiers/README.md) contrasts goal-only JustGoal, KDA and CAKE and explicitly separates the unresolved ForgeKernel name. The ICML 2026 output-length uncertainty scheduling paper was **already present**; weak/simulation-only candidates stay out of canonical. All speedups are author-reported, **not independently reproduced**.
+**Latest curated update (2026-10-29):** **793 canonical entries** across **8 systems topics / 44 engineering directions**, following **27 source-screened nonduplicate additions** to the Oct 26 baseline of 766. [Original requested/kernel-agent review](reviews/ARXIV_KERNEL_FRONTIER_20261029.md) added 10; the [cross-topic Oct 22–29 arXiv survey](reviews/WEEKLY_ARXIV_MAINLINE_20261029.md) adds **17** across all eight categories. **Gandalf and the ICML uncertainty-aware output-length paper were already in canonical**. The [Agentic-kernel frontier](frontiers/README.md) contrasts goal-only/agent-specialized/compiler-agent systems; ForgeKernel original identity remains unresolved. All numerical comparisons are **author-reported**, no local NPU, GPU or end-to-end replication.
 
 **Historical 2026-10-26 review closure:** [ATC 2026 / production-aware Kernel curation](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) proposed +10; the [final ATC item-by-item closure](reviews/ATC2026_CANDIDATE_CLOSURE_20261026.md) retracts three program/lab-only G3-premature admissions, for **+7 net** (759→766). Corrected HACK and TokenGate source identities. No GPU/NPU replication claimed.
 
@@ -20,7 +20,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 776 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 793 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Six selected emerging execution problems; mature KV and hybrid attention work remains in the eight topic areas. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
