@@ -22,9 +22,9 @@
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
 | **Total** | **153** | |
 
-## Papers (155)
+## Papers (158)
 
-### Prefix & Session Reuse (40)
+### Prefix & Session Reuse (42)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -70,8 +70,10 @@
 | 2026 | [CacheSmith: Accurate RAG Serving under Latency SLOs with Adaptive KV Reuse](https://arxiv.org/abs/2610.18925) | arXiv 2026-10-13 (preprint) | RAG Chunk KV 的跨 Chunk Attention 缺失通过 **WarmUp/Probe/Patch** 可调重计算修复；按 Batch Budget/Deadline 和质量预测动态分配覆盖率。作者以 **vLLM 0.10.2** 在 RTX PRO 6000 96GB (1×/2×)、Llama-3.1-8B/Qwen3-32B、EPYC 9554 与 PCIe5 NVMe，分别对照 CacheBlend / EPIC / ProphetKV / FusionRAG、Full Reuse / Full Prefill / BestStatic，报告 4 任务 × 多到达率中 **Quality-gated SLO Attainment 最多提升 27.5%（作者表述，非未经确认的百分点）**。**Query/Context signal 采用作者自行编写的未优化 Triton Kernel，可能对其他方法不利；作者实现未独立发布/复现，Chunk 预计算数据可能高达数百 GB，不是严格数值等价**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED; ARTIFACT_UNVERIFIED) |
 | 2026 | [Cache Engineering for Agents (AKV)](https://arxiv.org/abs/2610.28577) | arXiv 2026-10-20 (preprint) | **Cache Engineering Contract**：Agent 执行逻辑轨迹不变，主动 `drop` 已失去价值的历史 KV、`repos` 调整保留 Key 的位置编码；同一 Token Prefix 在不同操作历史下可对应**不同 KV State**，因此 SGLang Engine 使用 Operation-aware Radix Tree + Drop-aware Eviction + Segment-batch Restoration。公开 [AKV Agent & Serving 源码](https://github.com/thu-nics/AKV)，作者用 **SGLang v0.5.20 / 8×A800 BF16 / GPT-OSS-120B（Prefill TP4 + Decode TP4）** 测量 SWE-bench Verified：峰值配置时 AKV Concurrency=14 对比 Standard=12，**P95 Request Latency 1.51× 较低、Output Throughput 1.18×**；Agent Bench 平均准确率 +1.7 points、估算 API-equivalent Cost −27.7% 均来自**策略与 KV 表示改变**，不是严格 Exact-Output / 相同并发下的透明 Serving 加速。需核 Repos 的 Position Semantics 和版本移植。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; APPROXIMATE_MODEL_BEHAVIOR; DIFFERENT_OPTIMAL_CONCURRENCY) |
 | 2026 | [RaReCache: Bridging the Gap in Cross-Model KV Cache Reuse via Rank Disagreement-based Selective Recomputation](https://arxiv.org/abs/2610.11358) | arXiv 2026 (preprint) | 在不同规模的同族模型间用 Linear KV Mapping 加 Rank-disagreement 定位关键 Tokens，仅对部分位置由大模型重新 Prefill；作者 Qwen3/Llama 实机在线实验。**APPROXIMATE_QUALITY / MODEL_PAIR_SPECIFIC / SELECTIVE_RECOMPUTE**：23× 参数差情况下仅重算 30% 保留部分任务 95–99% 目标精度，不是精确 Cache 等价或无损提升。 |
+| 2026 | [Budgeted KV-Cache Repair for Evolving Contexts](https://arxiv.org/abs/2610.17338) | arXiv 2026 (preprint; Oct 12) | 对 Agent Context 删改后的被污染 KV 后缀，按 Semantic Unit 的 Relevance 分配部分 Recompute Budget，通过 Layer-packed Executor 合并不连续位置的刷新；五种模型和四类 Multi-hop QA 下，5% 后缀预算达到接近 Full Recompute 的任务质量，作者报告 Executor 相对逐 Interval 刷新最多 16.1×。**APPROXIMATE_BEHAVIOR / TASK_QUALITY_NOT_EXACT_KV_EQUIVALENCE**；16.1× 是 Refresh Executor 而非端到端 Serving。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [LatentRemedy: Efficient Remedy for Non-Prefix KV Cache Reuse in Multi-Agent Systems](https://arxiv.org/abs/2610.18014) | arXiv 2026 (preprint; Oct 13; [code](https://github.com/chenzhwsysu57/kvreuse)) | 跨冲突 Agent 复用非 Prefix KV 时，基于目标前缀隐藏状态生成少量 Task-conditioned Latent Tokens，对已污染 Cache 做语义校正，MLP 由 Full-prefill Distillation 训练；作者报告冲突任务质量优于 Selective Recomputation/Offset Calibration，同时长 Cache 的 TTFT 接近直接复用。**TRAINED_ADAPTER / MODEL_OUTPUT_NOT_EQUIVALENT / USER_TASK_DEPENDENT**，不是无损跨模型缓存共享。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Eviction, Compression & Quantization (48)
+### Eviction, Compression & Quantization (49)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -125,6 +127,7 @@
 | 2026 | [VecInfer: Efficient LLM Inference with Low-Bit KV Cache via Outlier-Suppressed Vector Quantization](https://aclanthology.org/2026.acl-long.1454/) | ACL 2026 | 采用 Smooth/Hadamard 抑制 K 的异常值提升低 Bit Codebook 利用率，并设计 CUDA Fused Dequant–Attention Kernel；论文在 Llama-3.1-8B 196K 上报告 2-bit 单批完整推理延迟收益与质量，仍需独立复现。 |
 | 2026 | [DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5c1ddd2e59df46fd2aa85c833b1b36ed-Abstract-Conference.html) | ICLR 2025 | 通过优化辨别 Retrieval Heads 与 Streaming Heads，仅为前者保留完整 KV，后者存 Sink+Recent 常量窗口；[作者代码](https://github.com/mit-han-lab/duo-attention) + A100，MHA/GQA Cache Memory 最高 2.55×/1.67× 降低，Decode 最高 2.18×/1.50×；LongBench/NIAH 质量权衡，**非 Dense Attention 数值/输出完全等价**。属于重要混合 Head KV 机制，不重复 QServe 首页锚点。（KEEP_STRICT; ICLR_PROCEEDINGS; REAL_A100; PUBLIC_CODE; APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [MURMUR: An Efficient Inference System for Long-Form ASR](https://arxiv.org/abs/2606.01483) | arXiv 2026 (preprint; long-form ASR) | 长语音 ASR 的 Inter-chunk Size/Latency 调参 + Intra-chunk Speech/Output Token Sliding-window KV Eviction，改善单长窗精度与切块延迟矛盾；[作者代码](https://github.com/uw-syfi/Murmur)，AMI-IHM 上作者报告匹配 Full Single-pass Accuracy 时 Latency −4.2×、进一步 Eviction <1% 相对 tcpWER 退化。**邻接语音推理/非通用文本 LLM KV 淘汰策略**。（KEEP_ADJACENT; REAL_ASR_EXECUTION; PUBLIC_CODE; ACCURACY_LATENCY_TRADEOFF） |
+| 2026 | [DropKV: Decoupling Residual-Output Perturbation for Near-Optimal KV-Cache Eviction](https://arxiv.org/abs/2610.22130) | arXiv 2026 (preprint; Oct 15; conference-track identity not inferred) | 通过独立 Token 的 Residual-output Perturbation Scoring 将联合 Eviction 近似问题可解化，在论文 Cone Condition 下给出近似保证；融合 Triton Scorer 避免全 Attention Matrix 物化。作者报告 Scoring Kernel 19.8× 与**匹配 Batch Prefill** 最多 9.9% E2E 改善，RULER/LongBench 同预算质量对照；**APPROXIMATE_KV_EVICTION / NOT_FULL_ONLINE_SERVING_9.9PCT**。（KEEP_STRICT；NOT_REPRODUCED） |
 
 ### Sparse KV Retrieval (17)
 
