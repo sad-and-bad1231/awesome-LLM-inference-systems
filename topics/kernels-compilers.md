@@ -22,7 +22,7 @@
 | [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **101** | |
 
-## Papers (110)
+## Papers (112)
 
 ### Attention & Sparse Kernels (30)
 
@@ -61,7 +61,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [FlashPrefill V2: Block-Sparse Prefill Attention for Long-Context LLM Serving](https://arxiv.org/abs/2608.19758) | arXiv 2026 (preprint) | 从 FlashPrefill 原型推进到可执行 Hopper SM90 Sparse Prefill Backend：Mean Correction、PackGQA、Warp Specialization、BF16/FP8、Paged KV 与 SGLang Continuous Batching。作者 H20 长上下文算子加速不等于全链路 Goodput；**APPROXIMATE_ATTENTION / CUDA_SM90_ONLY**。[Code](https://github.com/qhfan/FlashPrefillv2)。 |
 | 2026 | [Reorienting the Vector Axis: Restructuring FlashAttention for Long-Vector Processors](https://arxiv.org/abs/2610.29489) | arXiv 2026 (preprint; Oct 22 announcement) | 将 FA score/output Tile 转置以沿 Query 轴向量化，Softmax 系数移至 Scalar Register；真实 RISC-V 长向量 CPU 上完整 Attention Kernel 周期改善 1.84–2.08×（作者报告），不是 GPU 或 vLLM E2E。精确算法未改，但未独立验证数值误差。（KEEP_STRICT；REAL_SILICON；NOT_REPRODUCED） |
 
-### GEMM & Low-Bit Kernels (11)
+### GEMM & Low-Bit Kernels (12)
 
 矩阵计算、量化 GEMM 和硬件原生低比特执行。
 
@@ -75,9 +75,10 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2025 | [T-MAC: CPU Renaissance via Table Lookup for Low-Bit LLM Deployment on Edge](https://doi.org/10.1145/3689031.3696099) | EuroSys 2025 | 以 Group-wise Lookup Table 替换低比特 CPU Decode 的反量化乘加，利用 SIMD 改善边缘 LLM 推理。 |
 | 2025 | [VQ-LLM: High-performance Code Generation for Vector Quantization Augmented LLM Inference](https://doi.org/10.1109/HPCA61900.2025.00112) | HPCA 2025 | 针对 Vector-Quantized LLM 的 Codebook-cache 跨寄存器/Shared Memory/Global Memory 分层布局，结合 Codebook-centric Dataflow 和融合 Kernel 生成降低查表/量化计算开销；作者报告低比特 LLM 推理算子性能，非无条件的端到端 Serving Goodput 改进。 |
 | 2026 | [FlashServe: Adaptive Kernel Provision for Quantized LLM Serving](https://doi.org/10.1109/2575-8411.2026.00078) | ICDCS 2026 | 面向动态 Batch Size，为不同量化 GEMM Kernel 建模选择成本与切换开销，使用异步预备/切换避免静态 Kernel 固化；原始来源 Dynamic GEMM 标题不等于正式出版 Adaptive Kernel Provision。 |
-| 2026 | [IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ea5ffdf7da91256ecd2770f9fd2dade9-Abstract-Conference.html) | MLSys 2026 | 用 IndexSoftmax 和整数查表消除边缘 Attention 中反量化、Softmax、再量化的执行往返；Armv8 实测。 |
+| 2026 | [IntAttention: A Fully Integer Attention Pipeline for Efficient Edge Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/ea5ffdf7da91256ecd2770f9fd2dade9-Abstract-Conference.html) | MLSys 2026 (formal; [code/Artifact Evaluation](https://github.com/WanliZhong/IntAttention)) | Edge CPU 上以 IndexSoftmax 的 Sparsity-aware Clipping + 32-entry LUT Exp Approximation + Integer Normalization 去除 QK/Softmax/V 中反量化→浮点 Softmax→重量化孤岛，无需模型重训。作者在 Armv8 (RK3588S2/Apple M2) 报告 Attention 对 FP16 最多 3.7×、能耗 -61%，对常规 INT8 Attention 最多 2.0×；**APPROXIMATE_SOFTMAX / EVALUATED_ARM_CPU / NOT_ASCEND_910B2_OR_vLLM_SERVING_E2E**。新增代码链接但不重复计入论文数。（KEEP_STRICT；AUTHOR_ARTIFACT；NOT_REPRODUCED） |
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
+| 2026 | [SparseDecoding: Decoding-Aware Pruning for Accurate and Efficient LLM Inference](https://arxiv.org/abs/2610.12327) | arXiv 2026 (preprint; Oct 8) | 按自回归生成的 Decode Activations 而非自然语料校准 N:M Pruning，并为 Memory-bound Decode 实现 Bitmask-indexed Sparse SpMV Kernel；作者在 A100、Llama/Qwen 8B–70B 报告最高 1.48× 实际 Wall-clock Decode。**CHANGES_MODEL_WEIGHTS / SPARSE_WEIGHT_FORMAT / QUALITY_TRADEOFF**：不是原密集模型精确等价，也非通用稠密 GEMM 加速。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 
 ### Kernel DSL & Compilers (20)
 
@@ -132,7 +133,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [FuTransformer: FP8 Prefill and INT4 Decode for Llama-Style Inference on Hopper](https://arxiv.org/abs/2610.23796) | arXiv 2026 (preprint) | Llama-style Transformer Block 融合的 Hopper CUDA Kernel：Prefill FP8、Decode INT4 Projection + KV、RMSNorm 增益折叠、直接 Tensor Core Fragment Dequant 与旋转校正。作者单 H100 8B/70B Shape 比较 PyTorch/CODA；**MODEL_QUANTIZED / QUALITY_REGRESSION**，WikiText2 INT4 PPL 6.24→6.99 (GPTQ) 再加 KV 约 0.20，**NOT_BITWISE_EQUIVALENT / SINGLE_DEVICE_BLOCK_BENCH / NO_VLLM_SERVING_E2E**。 |
 | 2026 | [One Megakernel is Not Enough: Predicting Where to Cut for Streaming Inference](https://arxiv.org/abs/2610.35336) | arXiv 2026 (preprint; Oct 26) | 从 Graph Profile 与独立 Kernel Benchmark 预测不同 Batch 下最优 Megakernel 分段；作者在 NH-TTS/Qwen3-TTS/Llama-1B 共 13 个组合中实测验证，H100 上针对 NH-TTS 的三段设计比所测单体 Megakernel 低 21.4% batch-P95 TTFA、吞吐高 28%。TTS-heavy，不能外推所有 LLM Decode。（KEEP_STRICT；NOT_REPRODUCED） |
 
-### Communication, Memory & I/O (17)
+### Communication, Memory & I/O (18)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
@@ -156,6 +157,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 | 2026 | [Theseus: Runtime-Adaptive GPU Collective Communication with Hot-Swappable Schedules](https://doi.org/10.1145/3789240.3829134) | SIGCOMM 2026 | Collective Schedule 不再在 Communicator Init 后固定：支持运行时监测、集群一致 Hot-swap 和自定义 Schedule/Policy，缓解拓扑、健康状态及动态负载变化。[SIGCOMM 官方摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告多 GPU 工作负载相对 NCCL 的通信/作业收益。**KEEP_ADJACENT / GENERAL_CCL / LLM_SERVING_E2E_UNVERIFIED**，不等于目前 TP4 Ascend 收益。 |
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
 ### Kernel Automation & Tools (13)
 
