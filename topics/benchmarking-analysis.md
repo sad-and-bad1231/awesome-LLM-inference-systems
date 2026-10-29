@@ -22,7 +22,7 @@
 | [Kernel Benchmarks](#kernel-benchmarks-7) | 7 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **68** | |
 
-## Papers (70)
+## Papers (72)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,7 +47,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (16)
+### Performance & Efficiency Studies (17)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -69,6 +69,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [When NPUs Are Not Always Faster: A Stage-Level Analysis of Mobile LLM Inference](https://arxiv.org/abs/2605.27435) | arXiv 2026 (preprint) | 按阶段分离移动端 LLM 推理的量化、通信与计算开销，定位 NPU 在 prefill/decode 中因算子 fallback 与调度开销反而慢于 CPU 的条件。 |
 | 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 | 2026 | [Measuring the Energy Cost of Completing Tasks with Quantized Language-Model Agents](https://arxiv.org/abs/2610.32417) | arXiv 2026 (preprint; Oct 26 announcement) | 在 A100 裸机 llama.cpp 测量两款模型的 4/8-bit、29 个 Agent Task 与自动通过率，揭示 Per-token Energy 改善不保证 Per-successful-task Energy 改善，部分任务后者反增最高 3.5×。指定 Agent Tasks/量化格式，非一般能耗模型。（KEEP_STRICT；REAL_ENERGY_MEASUREMENT；NOT_REPRODUCED） |
+| 2026 | [Characterizing Predictability–Latency Trade-offs of KV-Cache SSD Offloading in LMCache for LLM Serving Systems](https://arxiv.org/abs/2610.21249) | arXiv 2026 (preprint; Oct 15) | 在四类 Multi-session Workload 实测 LMCache SSD 层、OS Page Cache 与 O_DIRECT 行为：重复请求 Dedup 写入下降却不代表任何负载均受益；作者观测 Warm TTFT 27→93ms 与缓存读取稳定性权衡。**OBSERVATIONAL_UNCONTROLLED_VERSION_CHANGE**（LMCache 0.3.0 Buffered vs 0.3.16 O_DIRECT+Dedup），不可把所有差异归因于 O_DIRECT；是系统诊断，不是新版提速。（KEEP_STRICT；REAL_STORAGE_MEASUREMENT；NOT_REPRODUCED） |
 
 ### Profiling & Diagnosis (6)
 
@@ -122,7 +123,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [M2K: Making the Model-Kernel Interface Explicit for Reliable CUDA Kernel Verification](https://arxiv.org/abs/2603.24595) | SOSP 2026 (conference title M2K; early preprint Model2Kernel) | HFProbe 提取模型固定 vs 用户可变的 Kernel 参数约束，cuKLEE 在模型接口条件下符号执行 CUDA Memory Access，检测 Shape/Index Bug；**CUDA_SPECIFIC / NO_RUNTIME_SPEEDUP / EARLY_TITLE_ALIAS**，论文版本间 Bug 数量不同，不直接引用数字。 |
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
 
-### Kernel Benchmarks (7)
+### Kernel Benchmarks (8)
 
 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。
 
@@ -137,3 +138,4 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Are LLM-Generated GPU Kernels Production-Ready? A Trace-Driven Benchmark and Optimization Agent (Atrex-Bench)](https://arxiv.org/abs/2607.14541) | arXiv 2026 (preprint) | [Atrex-Bench](https://github.com/alibaba/atrex-bench) 从真实 Production Inference Trace 抽取 30 Operators/440 Shapes，按 GPU 占用时间权重与 Roofline 评价 Kernel Agent，分清 PyTorch Fallback 与真正的 DSL Kernel；[AKA Agent](https://github.com/alibaba/atrex-kernel-agent) 用 Profiling+迭代修正。**BENCHMARK_AND_AGENT / NOT_SERVING_E2E / HARDWARE_SCOPED**；论文 10% Roofline 为测试 Agent 结果，不能冒充全体生产算子结论。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
+| 2026 | [EdgeKernelBench: Unified LLM-Driven Kernel Generation for Edge Backends](https://arxiv.org/abs/2610.24648) | arXiv 2026 (preprint; Oct 17; [benchmark/source](https://github.com/pillor9/EdgeKernelBench)) | 331 Kernel Tasks/650 场景实例，TVM 中间表示跨 Snapdragon CPU、Jetson Orin CUDA、RK3588 Mali OpenCL 验证 Correctness 与 Speed；层次化 LEKA 在同基础模型和优化预算的 Agent Subset 上报告 Fast@1.0 43.5%，对照 Direct Generation 13.0%、Claude Code 26.1%。**EDGE_KERNEL_BENCHMARK_ONLY / NOT_vLLM_E2E / SUBSET_COMPARISON**，不可声称 Agent 通用生产优势。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
