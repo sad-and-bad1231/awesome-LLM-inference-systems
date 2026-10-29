@@ -22,7 +22,7 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **138** | |
 
-## Papers (140)
+## Papers (141)
 
 ### Batching, Queues & SLOs (40)
 
@@ -123,7 +123,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 
-### Preemption & Multi-Tenancy (28)
+### Preemption & Multi-Tenancy (29)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -157,6 +157,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [SANDHI: Fine-grained Merging for Memory Efficient Multi-Model Serving](https://www.microsoft.com/en-us/research/publication/sandhi-fine-grained-merging-for-memory-efficient-multi-model-serving/) | SOSP 2026 | 在组件粒度合并共驻 Fine-tuned Models，以准确率约束换取更高显存容纳量和吞吐；作者 12 模型/9 Benchmark 报告最多 49.8% 显存降低。**MODEL_CHANGED / QUALITY_GATED / NOT_BITWISE_EQUIVALENT**；[Zenodo Artifact](https://zenodo.org/records/22108093)。 |
 | 2026 | [gKSM: GPU Memory Deduplication at Driver Layer for Serverless LLM Inference](https://arxiv.org/abs/2610.25219) | arXiv 2026 (SIGOPS ATC acceptance claimed) | 跨同 GPU 的 Serverless 模型副本共享只读权重，结合 CPU/GPU Hash、Zero-copy Dedup 及 CUDA VMM Remapping + Page-fault Copy-on-write 保持隔离；作者实机显存 -59.8%、受限多实例吞吐 2.15×。**CUDA_DRIVER_LEVEL / REQUIRES_PRIVILEGED_RUNTIME / CLUSTER_SCALE_SIMULATED**；不是通用 KV 状态去重。 |
 | 2026 | [EdgePace: Deadline- and Freshness-Aware LLM Scheduling on Unified-Memory Platforms](https://arxiv.org/abs/2610.37307) | arXiv 2026 (preprint; Oct 27) | 在统一内存边缘设备上为前台感知任务提供可暂停的 Prefill/Decode 和带宽竞争监测，按 Deadline Slack 与 Output Freshness 调度 LLM。OnePlus 13、3 款 Jetson 的多相机/机器人任务实测，作者报告前台 Deadline Miss 减少 24.1–96.1%、保留 64.9–98.5% LLM 吞吐；边缘实时执行边界，不是数据中心 Goodput。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [DualPace: Decoupled Scheduling and Cooperative GPU–CPU Decoding for LLM Serving](https://arxiv.org/abs/2610.33501) | arXiv 2026 (preprint; Oct 26 announcement) | 将 CPU AMX Decode 变成独立 Scheduler/Engine，并可按需从 GPU Dense Assist 获取稠密计算；作者在 Decode-oriented 负载报告相对 NEO Throughput +6.9–43.2%、同 P99 ITL 下请求率 +7.3–50.5%。需额外 CPU AMX，不等于 GPU-only vLLM 加速。（KEEP_STRICT；REAL_EXECUTION；NOT_REPRODUCED） |
 
 ### Power & Energy Efficiency (11)
 
