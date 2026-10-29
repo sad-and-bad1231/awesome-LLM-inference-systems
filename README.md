@@ -1,8 +1,10 @@
 # Awesome LLM Inference Systems
 
-**Latest review closure:** [ATC 2026 / production-aware Kernel curation](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) proposed +10; the [final ATC item-by-item closure](reviews/ATC2026_CANDIDATE_CLOSURE_20261026.md) retracts three program/lab-only G3-premature admissions, for **+7 net** (759→766). Corrected HACK and TokenGate source identities. No GPU/NPU replication claimed.
+**Latest curated update (2026-10-29):** [Kernel-agent comparison and October arXiv source audit](reviews/ARXIV_KERNEL_FRONTIER_20261029.md) admitted **10** distinct entries after nonduplicate G0–G5 screening (766→**776**, 44 engineering directions). [Agentic kernel frontier](frontiers/README.md) contrasts goal-only JustGoal, KDA and CAKE and explicitly separates the unresolved ForgeKernel name. The ICML 2026 output-length uncertainty scheduling paper was **already present**; weak/simulation-only candidates stay out of canonical. All speedups are author-reported, **not independently reproduced**.
 
-**Latest canonical inventory (2026-10-26): 766 source-curated topic entries in 44 engineering directions.** The [TokenGate source review](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) admits 11 works, and [three successive SOSP/SIGCOMM/October-arXiv rounds](reviews/THREE_ROUNDS_SYSTEMS_20261026.md) add 12 more: 736 (October 25) → **759**. Venue, artifact, hardware, approximation and trace-vs-production limits are preserved; **no independent benchmark replication or Ascend port** is claimed.
+**Historical 2026-10-26 review closure:** [ATC 2026 / production-aware Kernel curation](reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) proposed +10; the [final ATC item-by-item closure](reviews/ATC2026_CANDIDATE_CLOSURE_20261026.md) retracts three program/lab-only G3-premature admissions, for **+7 net** (759→766). Corrected HACK and TokenGate source identities. No GPU/NPU replication claimed.
+
+**Historical canonical inventory (2026-10-26): 766 source-curated topic entries in 44 engineering directions.** The [TokenGate source review](reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) admits 11 works, and [three successive SOSP/SIGCOMM/October-arXiv rounds](reviews/THREE_ROUNDS_SYSTEMS_20261026.md) add 12 more: 736 (October 25) → **759**. Venue, artifact, hardware, approximation and trace-vs-production limits are preserved; **no independent benchmark replication or Ascend port** is claimed.
 
 **Systems research worth reading — from first principles to production.**
 
@@ -18,7 +20,7 @@ Selection follows the **systems question, the mechanism, and the evidence**. We 
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 766 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 776 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Six selected emerging execution problems; mature KV and hybrid attention work remains in the eight topic areas. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
