@@ -22,9 +22,9 @@
 | [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **101** | |
 
-## Papers (108)
+## Papers (110)
 
-### Attention & Sparse Kernels (29)
+### Attention & Sparse Kernels (30)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -59,6 +59,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [DoSA: Dots Sparse Attention](https://arxiv.org/abs/2610.13990) | arXiv 2026 (preprint) | 用 Seed Threshold 与可认证分数上界提前排除不可能进入 Top-K 的 Indexer 候选，仅对剩余候选完整计分；保持原 Indexer 的 Top-K 选择语义，减少 DSA Indexer 的计算与访存。作者报告 Indexer 最高 2.74×，并公开 [Flash Indexer](https://github.com/llm-sys/flash-indexer) 与 [SGLang 集成/TTFT 复现](https://github.com/llm-sys/dosa-sglang)；端到端结果仍待独立复现。（KEEP_STRICT） |
 | 2026 | [PackInfer: Compute- and I/O-Efficient Attention for Batched LLM Inference](https://arxiv.org/abs/2602.06072) | arXiv 2026 (preprint) | **跨请求 compute/I/O-aware attention packing**：将混合长度 batch 分组、合并短序列并协调 shared-prefix KV layout，降低 CTA straggler 与访存碎片；保留 dense attention 语义。作者在 A100/H200/A40 与 4×A100、Qwen3/Mistral/Alpaca/LMSYS 等报告 TTFT/TBT/throughput 改善，强对照包括 FlashAttention 和 Prepack，**收益依负载变化，未开源的可复现 Kernel/Serving Patch 未核验**。不同于 request-level scheduling；未独立复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FlashPrefill V2: Block-Sparse Prefill Attention for Long-Context LLM Serving](https://arxiv.org/abs/2608.19758) | arXiv 2026 (preprint) | 从 FlashPrefill 原型推进到可执行 Hopper SM90 Sparse Prefill Backend：Mean Correction、PackGQA、Warp Specialization、BF16/FP8、Paged KV 与 SGLang Continuous Batching。作者 H20 长上下文算子加速不等于全链路 Goodput；**APPROXIMATE_ATTENTION / CUDA_SM90_ONLY**。[Code](https://github.com/qhfan/FlashPrefillv2)。 |
+| 2026 | [Reorienting the Vector Axis: Restructuring FlashAttention for Long-Vector Processors](https://arxiv.org/abs/2610.29489) | arXiv 2026 (preprint; Oct 22 announcement) | 将 FA score/output Tile 转置以沿 Query 轴向量化，Softmax 系数移至 Scalar Register；真实 RISC-V 长向量 CPU 上完整 Attention Kernel 周期改善 1.84–2.08×（作者报告），不是 GPU 或 vLLM E2E。精确算法未改，但未独立验证数值误差。（KEEP_STRICT；REAL_SILICON；NOT_REPRODUCED） |
 
 ### GEMM & Low-Bit Kernels (11)
 
@@ -78,7 +79,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
-### Kernel DSL & Compilers (19)
+### Kernel DSL & Compilers (20)
 
 Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 
@@ -103,6 +104,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents](https://arxiv.org/abs/2606.06453) | NeurIPS 2026 (authors confirm; official program short title, proceedings pending) | Python-embedded page-centric Sparse-Attention DSL + JIT Indexer/Kernel Backend; [SGLang-integrated code](https://github.com/Infini-AI-Lab/vortex_torch) supports GQA/MLA and algorithm-agent iteration. Authors report end-to-end B200 inference throughput up to 4.7× on a specific GLM-4.7-Flash configuration, with sparse-attention quality tradeoffs; **not exact dense outputs, not independently reproduced or Ascend-ready**. (KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED) |
 | 2026 | [DITRON: Distributed Multi-level Tiling Compiler for Parallel Tensor Programs](https://proceedings.mlr.press/v306/zheng26ai.html) | ICML 2026 (PMLR 306) | Core–Device–Task 三级 Tiling 编译抽象联合表达单卡内存层次与多卡通信；作者在 NVIDIA/AMD 集群及 vLLM 端到端报告 5–30% 改善。实际硬件结果、非 Ascend 移植证明；性能为作者报告。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [PipeLink: Contract-Guided Linking of GPU Kernel Components](https://arxiv.org/abs/2610.37200) | arXiv 2026 (preprint; Oct 27) | 用编译期资源 Contract/LTO 将独立 Attention、GEMM、Epilogue/通信组件链接成共享寄存器、Warp、Barrier 的 Kernel；Hopper/Blackwell 51 个配置的链接版本相较同源码单体编译在 0.2% 内，CuTe Attention 接 ThunderKittens Decode Megakernel 报告 2.16×。针对特定算子组合，非通用 Serving 加速。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [When and Why to Use TMA: A Workload-Grounded Characterization of Tensor Memory Acceleration on NVIDIA Hopper GPUs](https://arxiv.org/abs/2610.34907) | arXiv 2026 (IISCW 2026 workshop accepted) | 对 FA3、Paged-KV 以及 B200 GEMM 实机分析 TMA、cp.async、DSM/Multicast 的 Shape/Tile crossover，提炼内存通道选择规则；H100/B200 硬件测量而非一般 LLM Serving speedup。（KEEP_ADJACENT；KERNEL_CHARACTERIZATION；NOT_REPRODUCED） |
 
 ### Fusion, Pipelines & Megakernels (19)
 
