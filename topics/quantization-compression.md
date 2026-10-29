@@ -22,7 +22,7 @@
 | [Lossless & Delta Compression](#lossless--delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
 | **Total** | **37** | |
 
-## Papers (37)
+## Papers (39)
 
 ### Weight-Only & Rotation (12)
 
@@ -43,7 +43,7 @@ GPTQ/AWQ、Codebook 与旋转变换后的权重量化。
 | 2026 | [GyRot: Leveraging Hidden Synergy between Rotation and Fine-grained Group Quantization for Low-bit LLM Inference](https://2026.hpca-conf.org/details/hpca-2026-main-conference/38/GyRot-Leveraging-Hidden-Synergy-between-Rotation-and-Fine-grained-Group-Quantization) | HPCA 2026 | 旋转与细粒度分组量化协同，结合低位宽 GEMM 执行。 |
 | 2026 | [TwinQuant: Learnable Subspace Decomposition for 4-Bit LLM Quantization](https://proceedings.mlr.press/v306/wang26el.html) | ICML 2026 | 联合低秩/残差分解与量化友好子空间学习，Fuse 两分量的 GEMM/Epilogue 避免中间 HBM 物化；作者 Llama3/Qwen3 真实推理评测 Near-FP16 Quality + **相对 FP16 最多 1.8× E2E Speedup**。**需要量化子空间拟合/改变权重表示**，不等于同精度 BF16 Kernel 改进。（KEEP_STRICT; REAL_HARDWARE_AUTHOR_REPORTED; MODEL_CHANGED） |
 
-### Weight-Activation & Hardware Formats (11)
+### Weight-Activation & Hardware Formats (12)
 
 W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 
@@ -60,6 +60,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [TWLA: Achieving Ternary Weights and Low-Bit Activations for LLMs via Post-Training Quantization](https://openreview.net/forum?id=s1WSLFmnr8) | ICML 2026 | 用欧氏初始化到流形重定位的非对称三值量化器，加 Kronecker 结构正交旋转把权重整形成三峰分布并抑制激活离群，再以层间二阶交互代价做激活混合位宽分配，在 W1.58A4 下保持精度。 （APPROXIMATE_QUALITY_CHECKED；W1.58A4 与原精度模型须做质量-延迟同条件比较，非逐 Token 完全一致。） |
 | 2026 | [Disaggregated Quantization: Specializing LLM Prefill and Decode](https://arxiv.org/abs/2609.26333) | arXiv 2026 (preprint) | 将 Prefill 与 Decode 的**权重量化/算术格式**解耦：另训 NVFP4 Prefiller，与 GGUF 低比特 Decoder 配合；ODP 从 SSD 流式加载 Prefill 权重。作者在 DGX Spark / llama.cpp 的 Qwen3.8-27B 8K Prompt 报告相对 weight-only TTFT 1.78×，vLLM 评估主要用于质量/精度，**不是同一条 vLLM Online-Serving 加速结果**。公开 [研究代码](https://github.com/IST-DASLab/disaggregated-quantization)；额外模型训练、短输入加载开销、架构限制必须保留。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; REQUIRES_FINETUNING; MODEL_CHANGED) |
 | 2026 | [RoMeo: Mitigating Dual-dimensional Outliers with Rotated Mixed Precision Quantization](https://doi.org/10.1145/3774934.3786419) | PPoPP 2026 (Main Conference) | 通过 Rotation 把 Channel Outlier 迁移到 Token 方向，设计动态 Token Outlier 检测与 Sparse Mixed-precision Kernel 支持 4-bit 加速；[作者 Artifact](https://github.com/thu-pacman/RoMeo) 给出 RTX4090/H100、Qwen3、Batch/Shape Kernel/Layer 和 Accuracy 复现脚本。PPoPP 作者报告相对 FP16 最高 2.10× E2E、相对 QuaRot/MixQ 精度提升最多 5.17%；**量化改变权重/激活数值，非无损输出**。（KEEP_STRICT; ARTIFACT_PUBLIC; REAL_H100_4090; MODEL_PRECISION_CHANGED） |
+| 2026 | [Is 2:4 Sparsity Still Worth It? Semi-Structured Sparsity versus Quantization in LLM Inference](https://arxiv.org/abs/2610.28947) | arXiv 2026 (preprint; Oct 22 announcement) | 同 Bit Budget/硬件 Tensor-Core Tier 下检验 2:4 Sparsity 与降 Bit 的收益；三代 GPU Kernel，H100 FP8 **重训练** 2:4 模型在 vLLM Prefill 报告 +27% 吞吐但 Blackwell FP4 质量未恢复。质量、训练成本和 Prefill-only 限制不可省略。（KEEP_STRICT；REQUIRES_RETRAINING；NOT_REPRODUCED） |
 
 ### Mixed Precision & Bit Allocation (3)
 
@@ -81,7 +82,7 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 | 2026 | [JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference](https://doi.org/10.1145/3774934.3786428) | PPoPP 2026 | RtSmooth 运行时平滑离群值，配合 Fast Absmax、Recent-token 分层表示和 Mixed-precision Attention Kernel；报告 KV 质量、显存与端到端 Decode 吞吐对照。（KEEP_ADJACENT） |
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。（KEEP_ADJACENT） |
 
-### Recurrent State Quantization (3)
+### Recurrent State Quantization (4)
 
 线性 Attention / Hybrid LLM 的持久 Recurrent State 低比特表示；关注递推误差、状态读写流量与并发 Serving 内存，不等同于 KV Cache Quantization。
 
@@ -91,6 +92,7 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 
 | 2026 | [STEPQuant: When and Where Errors Matter in Delta-Rule Recurrent State Quantization](https://arxiv.org/abs/2609.38169) | arXiv 2026 (preprint) | 按时间误差持续性和空间 Key-row/Value-column 敏感度分配精度，采用 packed state 与异步写回；与 LeapQuant 的窗口级量化/补偿 Token 属于不同误差预算策略。作者报告 nominal 6-bit 状态接近 FP32 质量、状态压缩超过 5×、总 serving memory 最高减少 68.7%。公开 [STEPQuant source, SGLang integration, tests and reproduction scripts](https://github.com/Dreamer-Toby/STEPQuant)；结果未独立复现。（KEEP_STRICT; PREPRINT; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2026 | [DAMP: Decay-Aware Mixed-Precision Recurrent-State Quantization](https://arxiv.org/abs/2608.27513) | arXiv 2026 (preprint) | 离线结合量化误差能量与 learned decay 对误差的保留程度识别高风险 Key channels，将其保留 FP16、其余状态使用 INT8，并融合状态更新。作者报告状态存储减少 69.1%、更新 Kernel 最高 2.59×、full-model TPOT 最高降低 19.0%。未找到作者维护的公开代码；论文披露校准、Kernel 与 serving 评测细节，性能仍为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND; AUTHOR_REPORTED） |
+| 2026 | [PACE: Periodic and Channel-Aligned Encoding of Four-Bit Recurrent States](https://arxiv.org/abs/2610.29545) | arXiv 2026 (preprint; Oct 22 announcement) | Gated Delta State 每 N Tokens 而非逐 Token 量化，Channel-aligned Scale + Head-wise 4/8-bit，Buffer 计入 Memory；四个 4B–35B Hybrid 模型及 Triton Decode 测试，相较 DAMP/Q-Mamba 有质量-容量优势，非原模型精确等价；仅报告指定缓冲/Decode 配置。（KEEP_STRICT；QUALITY_TRADEOFF；NOT_REPRODUCED） |
 
 ### Lossless & Delta Compression (5)
 
