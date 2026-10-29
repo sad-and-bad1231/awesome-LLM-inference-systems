@@ -22,7 +22,7 @@
 | [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **101** | |
 
-## Papers (101)
+## Papers (108)
 
 ### Attention & Sparse Kernels (29)
 
@@ -78,7 +78,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [QIGen: A Kernel Generator for Inference on Nonuniformly Quantized Large Language Models](https://2026.cgo.org/details/cgo-2026-papers/7/QIGen-A-Kernel-Generator-for-Inference-on-Nonuniformly-Quantized-Large-Language-Mode) | CGO 2026 | 针对 CPU 非均匀量化权重自动生成匹配其压缩布局和硬件特征的 GEMV/GEMM Kernel，提供实际 CPU 性能–准确率对照，非 GPU Serving。 |
 | 2026 | [Vec-LUT: Vector Table Lookup for Parallel Ultra-Low-Bit LLM Inference on Edge Devices](https://doi.org/10.1145/3745756.3809200) | MobiSys 2026 | 将单 Token 标量 LUT 升级为跨 Token 向量查表，改善边缘设备 Ultra-low-bit Batch Decode 的访存合并。 |
 
-### Kernel DSL & Compilers (17)
+### Kernel DSL & Compilers (19)
 
 Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 
@@ -101,8 +101,10 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [VTC: DNN Compilation with Virtual Tensors for Data Movement Elimination](https://www.usenix.org/conference/osdi26/presentation/hu-muyan) | OSDI 2026 | 以 Virtual Tensor 的 Index Mapping 表示 Reshape/Slice/Concat/Permute 等纯数据搬运，推迟或消除显式 Global Memory Materialization；整合 [PyTorch Inductor Artifact](https://github.com/ADAPT-uiuc/VTC)，作者报告 A100/H100 推理任务的性能/内存收益。**KEEP_ADJACENT**：主要为通用 DNN Compiler，不能把平均加速直接归因为 vLLM/SGLang Serving 提升。 |
 | 2026 | [Wave: A Symbolic Python DSL And Compiler for High-Performance Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2026/hash/48c34730ff9a8574481a00ce8cb5e2cb-Abstract-Conference.html) | MLSys 2026 | Python DSL 自动优化 GPU Kernel 的矩阵核心地址映射与张量布局。 |
 | 2026 | [Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents](https://arxiv.org/abs/2606.06453) | NeurIPS 2026 (authors confirm; official program short title, proceedings pending) | Python-embedded page-centric Sparse-Attention DSL + JIT Indexer/Kernel Backend; [SGLang-integrated code](https://github.com/Infini-AI-Lab/vortex_torch) supports GQA/MLA and algorithm-agent iteration. Authors report end-to-end B200 inference throughput up to 4.7× on a specific GLM-4.7-Flash configuration, with sparse-attention quality tradeoffs; **not exact dense outputs, not independently reproduced or Ascend-ready**. (KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; APPROXIMATE_QUALITY_CHECKED) |
+| 2026 | [DITRON: Distributed Multi-level Tiling Compiler for Parallel Tensor Programs](https://proceedings.mlr.press/v306/zheng26ai.html) | ICML 2026 (PMLR 306) | Core–Device–Task 三级 Tiling 编译抽象联合表达单卡内存层次与多卡通信；作者在 NVIDIA/AMD 集群及 vLLM 端到端报告 5–30% 改善。实际硬件结果、非 Ascend 移植证明；性能为作者报告。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [PipeLink: Contract-Guided Linking of GPU Kernel Components](https://arxiv.org/abs/2610.37200) | arXiv 2026 (preprint; Oct 27) | 用编译期资源 Contract/LTO 将独立 Attention、GEMM、Epilogue/通信组件链接成共享寄存器、Warp、Barrier 的 Kernel；Hopper/Blackwell 51 个配置的链接版本相较同源码单体编译在 0.2% 内，CuTe Attention 接 ThunderKittens Decode Megakernel 报告 2.16×。针对特定算子组合，非通用 Serving 加速。（KEEP_STRICT；NOT_REPRODUCED） |
 
-### Fusion, Pipelines & Megakernels (18)
+### Fusion, Pipelines & Megakernels (19)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -126,8 +128,9 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Taming Dynamism on GPUs: Cross-SM Kernel Fusion via SM Cooperation and Just-in-Time Reduction](https://doi.org/10.1145/3830418.3843857) | SOSP 2026 | MeldKernel 将跨 SM 动态依赖从 Kernel 边界转成细粒度 SM Cooperation / Just-in-Time Reduction，延迟 Mapping 适配动态形状；作者报告 Decode Attention 约 1.3× Kernel 加速。**CUDA_EXECUTION / KERNEL_ONLY / NO_ASCEND_REPLICATION**；不将单算子改善冒充 Serving Goodput。 |
 | 2026 | [Efficient GPU Multitasking with Morphable Kernels](https://doi.org/10.1145/3830418.3843904) | SOSP 2026 | MorphX 用 Morphable Kernels 适配同卡共驻任务的资源占用与竞争，改善 GPU Multi-tasking 资源利用；[作者代码与 AE Artifact](https://github.com/thustorage/MorphX)。**KEEP_ADJACENT / COLOCATION_INTERFERENCE / NOT_VLLM_E2E**：不能以 Background Throughput 代替关键请求尾延迟。 |
 | 2026 | [FuTransformer: FP8 Prefill and INT4 Decode for Llama-Style Inference on Hopper](https://arxiv.org/abs/2610.23796) | arXiv 2026 (preprint) | Llama-style Transformer Block 融合的 Hopper CUDA Kernel：Prefill FP8、Decode INT4 Projection + KV、RMSNorm 增益折叠、直接 Tensor Core Fragment Dequant 与旋转校正。作者单 H100 8B/70B Shape 比较 PyTorch/CODA；**MODEL_QUANTIZED / QUALITY_REGRESSION**，WikiText2 INT4 PPL 6.24→6.99 (GPTQ) 再加 KV 约 0.20，**NOT_BITWISE_EQUIVALENT / SINGLE_DEVICE_BLOCK_BENCH / NO_VLLM_SERVING_E2E**。 |
+| 2026 | [One Megakernel is Not Enough: Predicting Where to Cut for Streaming Inference](https://arxiv.org/abs/2610.35336) | arXiv 2026 (preprint; Oct 26) | 从 Graph Profile 与独立 Kernel Benchmark 预测不同 Batch 下最优 Megakernel 分段；作者在 NH-TTS/Qwen3-TTS/Llama-1B 共 13 个组合中实测验证，H100 上针对 NH-TTS 的三段设计比所测单体 Megakernel 低 21.4% batch-P95 TTFA、吞吐高 28%。TTS-heavy，不能外推所有 LLM Decode。（KEEP_STRICT；NOT_REPRODUCED） |
 
-### Communication, Memory & I/O (16)
+### Communication, Memory & I/O (17)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
@@ -150,8 +153,9 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KVBuffer: IO-aware Serving for Linear Attention](https://arxiv.org/abs/2605.19049) | arXiv 2026 (preprint) | 缓冲最近 K/V，将递推状态更新改为 chunkwise 批处理；支持 speculative verification 并行验证 draft tokens，短上下文时直接从缓冲 K/V 计算而不创建/更新状态。作者在 Qwen3-Next 的 SGLang 实现中报告线性 Attention Decode 延迟最高降低 45.17%，四 Token speculative verification 下最大可服务请求数提升至 5×。未找到作者公开代码，结果为作者报告。（KEEP_STRICT; PREPRINT; NO_PUBLIC_CODE_FOUND） |
 | 2026 | [Understand and Accelerate Memory Processing Pipeline for Large Language Model Inference](https://proceedings.mlr.press/v306/he26ab.html) | ICML 2026 | 基于真实 Attention/RAG/压缩运行剖析将 Memory Processing 分解为 Prepare / Relevancy / Retrieval / Apply；AMD MI210+Alveo U55C FPGA 和 NVIDIA A100 GPU 真实设备验证异构流水，作者报告特定优化端到端最高 2.2× 与 Energy 最多降低 4.7×。专用 FPGA 系统，不推定通用 vLLM-Ascend 直接可用。（KEEP_STRICT; REAL_GPU_FPGA; AUTHOR_REPORTED） |
 | 2026 | [Theseus: Runtime-Adaptive GPU Collective Communication with Hot-Swappable Schedules](https://doi.org/10.1145/3789240.3829134) | SIGCOMM 2026 | Collective Schedule 不再在 Communicator Init 后固定：支持运行时监测、集群一致 Hot-swap 和自定义 Schedule/Policy，缓解拓扑、健康状态及动态负载变化。[SIGCOMM 官方摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告多 GPU 工作负载相对 NCCL 的通信/作业收益。**KEEP_ADJACENT / GENERAL_CCL / LLM_SERVING_E2E_UNVERIFIED**，不等于目前 TP4 Ascend 收益。 |
+| 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (10)
+### Kernel Automation & Tools (13)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -169,3 +173,6 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [KREX: Concurrent Kernel Benchmarking on Shared GPUs via Region-Granular Exclusivity](https://arxiv.org/abs/2609.30057) | arXiv 2026 (preprint) | 将 GPU Kernel Agent 的计时关键区与普通代码区分开，进区时阻止新 GPU Work、Drain Outstanding Tasks、隔离 CPU Host Threads，出区恢复多 Agent 并发；复用 GPU Context 避免串行创建。作者在 NVIDIA/AMD 实机报告 Benchmark Throughput 最多 3.4×；**BENCHMARK_RESOURCE_THROUGHPUT / NOT_KERNEL_SPEEDUP / NO_ASCEND_VALIDATION**，短 Kernel 的 P95 时间膨胀需单独审视。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
+| 2026 | [JustGoal: With Only a Goal, the AI Baseline Is Above the Expert Kernels](https://arxiv.org/abs/2610.36434) | arXiv 2026 (preprint; Oct 27) | 用无专家 Kernel Harness 的 Goal-only Agent 作为可反驳专用 Agent 优越性的基线；B200 上 10 个 Operator 测试，8 个超越比较库，单 Shape 同基础模型对照优于 KDA-0.5，但完整算子工作负载上 KDA 更好，不能概括为全面击败 KDA/CAKE。与 KDA、CAKE 的不同预算/硬件比较不能混成公平排名。（KEEP_ADJACENT；BENCHMARK_ONLY；NOT_REPRODUCED） |
+| 2026 | [CAKE: Compiler-Agent Co-Design for Frontier Kernel Evolution](https://arxiv.org/abs/2608.12629) | arXiv 2026 (preprint; Aug) | 专用 Agent 直接编辑带硬件调度语义的 Typed CAKE IR，Compiler 返回局部 Correctness/Cost 诊断，验证器与优化知识随案例演化；B200 上作者报告 Kimi Delta Attention 相对 FlashKDA 的 Kernel 几何均值 2.05×并做 Serving 验证。对照预算、Shape 覆盖及编译器专用性需区分；与 Ascend 同名 CAKE 非同一系统。（KEEP_ADJACENT；NOT_REPRODUCED） |
+| 2026 | [CANNBot-CAKE: Collaborative Agentic Kernel Evolution for Ascend NPU](https://arxiv.org/abs/2610.31034) | arXiv 2026 (preprint; Oct 22) | 面向 Ascend CANN 的 Generation/Evolution、Multi-DSL 路由、经审阅 Knowledge Book；在 Ascend 950PR 的 53 个 CANN-Bench Operator，标准测试 1060/1060、隐藏测试 4167/4240，作者报告均值 1.334× 相对基线。**不是** NVIDIA CAKE，亦不等于 Ascend 910B2 或真实 vLLM Serving 提速。（KEEP_ADJACENT；BENCHMARK_ONLY；NOT_REPRODUCED） |
