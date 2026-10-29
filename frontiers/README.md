@@ -1,6 +1,6 @@
 # Emerging inference research frontiers
 
-**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** As of **2026-10-19**. The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
+**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** Updated **2026-10-29** (six frontiers; agent-kernel comparator refresh). The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
 
 [← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Historical October 2026 signals](2026-10-frontier-scan.md)
 
@@ -23,7 +23,22 @@ A direction earns a place here when **all three** hold:
 | **Diffusion-language-model serving** | [dLLM-Serve](https://doi.org/10.1145/3797905.3800532) (ICS 2026) | Token/step/block-parallel decoding changes compute and memory demand. How should an **iteration-aware, block-aware** scheduler admit, batch and allocate memory versus an AR baseline? |
 | **Interactive world-model inference** | [StreamDiffusionV2](https://mlsys.org/virtual/2026/oral/3750) (MLSys 2026; [vLLM-Omni world-model path](https://github.com/vllm-project/vllm-omni)) | An interactive, continuous environment consumes actions and emits frames over many steps. Bound **action-to-first-frame, sustained FPS, jitter, memory growth and state drift** together. |
 | **Embodied / VLA action-loop inference** | [Characterizing VLA Models across XPUs](https://proceedings.mlr.press/v306/zhou26e.html) (ICML 2026) | The vision backbone and action expert have dissimilar hardware bottlenecks; meet a **hard perception-to-action deadline** on power-limited heterogeneous edge hardware. |
-| **Agentic kernel engineering** | [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) (ICML 2026; [code](https://github.com/TongmingLAIC/KernelBand)) | Search and *verify* kernels across shapes and devices; separate **semantic correctness, fair timing, memory footprint** and engine-level value from benchmark score. |
+| **Agentic kernel engineering** | [JustGoal](https://arxiv.org/abs/2610.36434) (2026 preprint; [released kernels](https://github.com/OpenBMB/JustGoal)); compare [KDA](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/), [CAKE](https://arxiv.org/abs/2608.12629), [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) | When does **goal-only** optimization beat domain-specific agents, and when do compiler IR, model-agnostic diagnostics, reusable search memory or a stronger verification harness justify their cost? Judge **same foundation model, operator shapes, budget, correctness and real serving** rather than cherry-picked per-kernel wins. |
+
+### Kernel agents: goal-only vs. KDA vs. compiler-agent co-design
+
+**This is one frontier, not three new categories.** The decisive research question is the *marginal value of agent-specific engineering under controlled compute/model budgets*.
+
+| Approach | First-party source / implementation | Mechanism | Valid comparison boundary |
+|---|---|---|---|
+| **Goal-only (JustGoal)** | [arXiv:2610.36434](https://arxiv.org/abs/2610.36434) · [released B200 kernels](https://github.com/OpenBMB/JustGoal) | General coding agent receives goals and constraints but constructs its own optimizer/evaluator; no prebuilt domain-specific harness | On B200, reported wins versus open-source kernel libraries on 8/10 operators; in a **same-model, single-shape** Fable 5.1 comparison, KDA-0.5 reaches 0.95× of JustGoal. This is not a claim that JustGoal wins across full-shape operator workloads. |
+| **KDA / Kernel Design Agents** | [NVIDIA KDA case study](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/) · [source](https://github.com/NVlabs/kda/tree/260927-kda-for-kda) | Specialized tool/harness, persistent knowledge and correctness feedback; can pair with several Kernel DSLs including CAKE | Reported 2.96× vs FlashKDA on **B300** Kimi Delta Attention; not directly comparable with B200 JustGoal or to full vLLM throughput. KDA reports verifier-overfit candidates it explicitly rejected. |
+| **CAKE (NVIDIA/CMU)** | [arXiv:2608.12629](https://arxiv.org/abs/2608.12629) | Co-design of Agent + typed schedule IR + compiler diagnostics and reusable verifier | Author reports B200 Flash-KMeans and Kimi Delta Attention kernel / serving validation; token budgets, task coverage and availability of the core compiler differ from JustGoal. |
+| **CANNBot-CAKE (Ascend; distinct project)** | [arXiv:2610.31034](https://arxiv.org/abs/2610.31034) | CANN-specific multi-DSL generation/evolution with curated knowledge | Reports CANN-Bench hidden correctness on **Ascend 950PR**; not NVIDIA CAKE, not verified on 910B2 and not online vLLM Goodput. |
+
+**Name/identity check:** `ForgeKernel` (user-observed name) has **not** been tied to a uniquely verifiable official paper or code identity in this review. Do not silently equate it with JustGoal or the distinct [Kernel Forge](https://arxiv.org/abs/2607.24762) paper. Keep that project as an unresolved discovery lead until its original URL is checked. Canonical paper entries remain in the existing Kernels & Compilers category, never duplicated here.
+
+**New benchmark obligation:** add same-model and same-token-budget A/B, hidden distribution and output-equivalence tests, **single shape vs full operator**, compilation/search cost, and engine-level throughput/latency with composed winners. [FastKernels](https://fastkernels.github.io/) highlights that individually faster kernels can fail or regress after composition. A leaderboard score alone is not validated production inference speedup.
 
 The anchors are a **starter reading path, not new canonical admission**. An ICML paper with a kernel benchmark is not evidence of vLLM end-to-end Goodput; a video model demo is not proof of multi-session production serving.
 
