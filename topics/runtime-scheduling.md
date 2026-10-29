@@ -22,7 +22,7 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **138** | |
 
-## Papers (138)
+## Papers (140)
 
 ### Batching, Queues & SLOs (40)
 
@@ -123,7 +123,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 
-### Preemption & Multi-Tenancy (27)
+### Preemption & Multi-Tenancy (28)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -156,6 +156,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [WarmServe: Enabling One-for-Many GPU Prewarming for Multi-LLM Serving](https://proceedings.mlr.press/v306/lou26f.html) | ICML 2026 | 以多模型 GPU 权重预热、KV 空间复用和快速内存切换降低突发流量 TTFT。 |
 | 2026 | [SANDHI: Fine-grained Merging for Memory Efficient Multi-Model Serving](https://www.microsoft.com/en-us/research/publication/sandhi-fine-grained-merging-for-memory-efficient-multi-model-serving/) | SOSP 2026 | 在组件粒度合并共驻 Fine-tuned Models，以准确率约束换取更高显存容纳量和吞吐；作者 12 模型/9 Benchmark 报告最多 49.8% 显存降低。**MODEL_CHANGED / QUALITY_GATED / NOT_BITWISE_EQUIVALENT**；[Zenodo Artifact](https://zenodo.org/records/22108093)。 |
 | 2026 | [gKSM: GPU Memory Deduplication at Driver Layer for Serverless LLM Inference](https://arxiv.org/abs/2610.25219) | arXiv 2026 (SIGOPS ATC acceptance claimed) | 跨同 GPU 的 Serverless 模型副本共享只读权重，结合 CPU/GPU Hash、Zero-copy Dedup 及 CUDA VMM Remapping + Page-fault Copy-on-write 保持隔离；作者实机显存 -59.8%、受限多实例吞吐 2.15×。**CUDA_DRIVER_LEVEL / REQUIRES_PRIVILEGED_RUNTIME / CLUSTER_SCALE_SIMULATED**；不是通用 KV 状态去重。 |
+| 2026 | [EdgePace: Deadline- and Freshness-Aware LLM Scheduling on Unified-Memory Platforms](https://arxiv.org/abs/2610.37307) | arXiv 2026 (preprint; Oct 27) | 在统一内存边缘设备上为前台感知任务提供可暂停的 Prefill/Decode 和带宽竞争监测，按 Deadline Slack 与 Output Freshness 调度 LLM。OnePlus 13、3 款 Jetson 的多相机/机器人任务实测，作者报告前台 Deadline Miss 减少 24.1–96.1%、保留 64.9–98.5% LLM 吞吐；边缘实时执行边界，不是数据中心 Goodput。（KEEP_STRICT；NOT_REPRODUCED） |
 
 ### Power & Energy Efficiency (11)
 
@@ -175,7 +176,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (22)
+### Agent & Workflow Serving (23)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -205,3 +206,4 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Justitia: Fair and Efficient Scheduling of Task-parallel LLM Agents with Selective Pampering](https://arxiv.org/abs/2510.17015) | NeurIPS 2026 (author-confirmed final title; proceedings pending) | 为并行 Agent 计算 Memory-centric Service Cost，按 Virtual-time Fair Queue 估计公平完成顺序，并以 **Selective Pampering** 优先完成关键 Agent 以缩短整体 JCT、约束最坏延迟；作者报告 [vLLM 实现](https://chenc10.github.io/publications/)及多 Agent Testbed。arXiv 早期题名为 *Justitia: Fair and Efficient Scheduling for LLM Applications*；公开代码与独立复现未核验。(KEEP_STRICT; AUTHOR_REPORTED; ARTIFACT_UNVERIFIED; TITLE_ALIAS) |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
+| 2026 | [TAO: Tool-Aware Joint Scheduling for LLM-Based Agentic Serving](https://arxiv.org/abs/2610.37230) | arXiv 2026 (preprint; Oct 27) | 联合 Tool-return Readiness、节点 KV Cache Credit、Token Footprint，以动态规划同时决定 Agent Session 的 Admission 与 Placement；作者在 12 组模型/负载/并发配置报告最高 26.8% Latency 减少和 29.5% Decode Throughput 改善。是跨阶段 Agent JCT/SLO 调度，不是单次请求 Token 排序；指标为各配置最高值。（KEEP_STRICT；NOT_REPRODUCED） |
