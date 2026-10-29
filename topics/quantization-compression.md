@@ -22,7 +22,7 @@
 | [Lossless & Delta Compression](#lossless--delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
 | **Total** | **37** | |
 
-## Papers (39)
+## Papers (41)
 
 ### Weight-Only & Rotation (12)
 
@@ -62,7 +62,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [RoMeo: Mitigating Dual-dimensional Outliers with Rotated Mixed Precision Quantization](https://doi.org/10.1145/3774934.3786419) | PPoPP 2026 (Main Conference) | 通过 Rotation 把 Channel Outlier 迁移到 Token 方向，设计动态 Token Outlier 检测与 Sparse Mixed-precision Kernel 支持 4-bit 加速；[作者 Artifact](https://github.com/thu-pacman/RoMeo) 给出 RTX4090/H100、Qwen3、Batch/Shape Kernel/Layer 和 Accuracy 复现脚本。PPoPP 作者报告相对 FP16 最高 2.10× E2E、相对 QuaRot/MixQ 精度提升最多 5.17%；**量化改变权重/激活数值，非无损输出**。（KEEP_STRICT; ARTIFACT_PUBLIC; REAL_H100_4090; MODEL_PRECISION_CHANGED） |
 | 2026 | [Is 2:4 Sparsity Still Worth It? Semi-Structured Sparsity versus Quantization in LLM Inference](https://arxiv.org/abs/2610.28947) | arXiv 2026 (preprint; Oct 22 announcement) | 同 Bit Budget/硬件 Tensor-Core Tier 下检验 2:4 Sparsity 与降 Bit 的收益；三代 GPU Kernel，H100 FP8 **重训练** 2:4 模型在 vLLM Prefill 报告 +27% 吞吐但 Blackwell FP4 质量未恢复。质量、训练成本和 Prefill-only 限制不可省略。（KEEP_STRICT；REQUIRES_RETRAINING；NOT_REPRODUCED） |
 
-### Mixed Precision & Bit Allocation (3)
+### Mixed Precision & Bit Allocation (4)
 
 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。
 
@@ -71,8 +71,9 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping](https://www.usenix.org/conference/osdi26/presentation/liu-yao) | OSDI 2026 | 面向不对称精度 GEMM 构建 DPR 计算族和轻量 Runtime Dispatch，依据形状与位宽选择 Kernel。 |
 | 2026 | [MixLLM: LLM Quantization with Global Mixed-precision between Output-features and Highly-efficient System Design](https://proceedings.mlsys.org/paper_files/paper/2026/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2026 | 跨层按输出特征重要性分配量化位宽，设计反量化与 GEMM 重叠流水。 |
 | 2026 | [PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization](https://arxiv.org/abs/2607.16184) | arXiv 2026 (preprint) | 根据在线 KV 容量压力调节 MoE Expert Weights 的精度，将模型质量、显存与 Batch 吞吐联合优化；真实 MoE Serving 工作负载报告 GPU 内存与端到端性能。 **复审证据：**[arXiv](https://arxiv.org/abs/2607.16184)：KV Pressure 驱动动态 Expert Weight Quantization；作者报告 FP16-equivalent Accuracy 条件下最多 72% Memory Saving / 1.94× Throughput。MODEL_CHANGED/QUALITY_TRADEOFF。 （KEEP_SOURCE_VERIFIED; AUTHOR_REPORTED; NOT_INDEPENDENTLY_REPRODUCED） |
+| 2026 | [Context-Aware Precision Scheduling for Small Language Models](https://arxiv.org/abs/2610.15640) | arXiv 2026 (preprint; Oct 11) | 以实测 Tensor Precision Cost 与上下文长度/KV 负担校准混合权重精度策略，修改 llama.cpp 在不丢弃 Session KV 的前提下切换已预置的多精度 Weight Bank；笔记本 GPU 上相对 Byte-aware Policy 报告 16K 情况更低 KL、长 Context Deadline 更稳定。**EXTRA_WEIGHT_BANK_MEMORY（作者约 2.072GiB） / MODEL_QUALITY_TRADEOFF / SLM_EDGE_ONLY**，不代表 910B2 通用 Prefill/Decode 加速。（KEEP_ADJACENT；EXECUTED_RUNTIME；NOT_REPRODUCED） |
 
-### KV Cache Quantization (3)
+### KV Cache Quantization (4)
 
 KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 
@@ -81,6 +82,7 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 | 2025 | [Oaken: Fast and Efficient LLM Serving with Online-Offline Hybrid KV Cache Quantization](https://doi.org/10.1145/3695053.3731019) | ISCA 2025 | 离线确定 KV Outlier Threshold，在线低成本量化并协同 KV MMU/硬件引擎，减少长 Batch Attention 带宽。（KEEP_ADJACENT） |
 | 2026 | [JanusQuant: Accurate and Efficient 2-bit KV Cache Quantization for Long-Context Inference](https://doi.org/10.1145/3774934.3786428) | PPoPP 2026 | RtSmooth 运行时平滑离群值，配合 Fast Absmax、Recent-token 分层表示和 Mixed-precision Attention Kernel；报告 KV 质量、显存与端到端 Decode 吞吐对照。（KEEP_ADJACENT） |
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。（KEEP_ADJACENT） |
+| 2026 | [Read What Matters: Query-Adaptive Quantization for KV Caches (ReadKV)](https://arxiv.org/abs/2610.11245) | arXiv 2026 (preprint; Oct 8) | 用 Progressive KV Codes 区分**存储精度**与每次 Query 的**读取 Bit Budget**，Query-guided Key-channel Read 后按 Attention 选择 Value-token Refinements；作者六模型评估和 A10G **8K/B1/Single-layer** Codec 测试，相对所测 TurboQuant Reader 延迟低 39%。**APPROXIMATE_KV / SINGLE_LAYER_CODEC_NOT_LLM_SERVING_E2E / LIMITED_HARDWARE**。（KEEP_ADJACENT；REAL_GPU_MICROBENCH；NOT_REPRODUCED） |
 
 ### Recurrent State Quantization (4)
 
