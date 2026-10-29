@@ -1,6 +1,8 @@
 # Papers by systems mechanism
 
-**Latest curated inventory (2026-10-29): 793 distinct canonical topic rows / 8 mechanisms / 44 engineering directions.** [Requested papers and kernel-agent source audit](../reviews/ARXIV_KERNEL_FRONTIER_20261029.md) accepted 10 nonduplicate rows (766→776); the [broader Oct 22–29 arXiv mainline screening](../reviews/WEEKLY_ARXIV_MAINLINE_20261029.md) accepts a further 17 (776→793) spanning **all eight** categories. Gandalf and the ICML 2026 uncertainty-aware length scheduling work were already canonical. Weekly announcement date may differ from arXiv submission date. HOLD/simulation-only items remain outside the list. No independent speedup replication.
+**Latest canonical inventory (2026-10-29 backfill): 803 source-screened unique paper rows / 8 mechanisms / 44 engineering directions.** [Oct 8–21 arXiv review and IntAttention audit](../reviews/ARXIV_OCT08_21_INTATTENTION_20261029.md) adds 10 distinct rows (793→**803**), updates the **already-existing MLSys 2026 IntAttention** row, and preserves quality/hardware/simulation limitations. No full-text universal benchmark parity audit or independent GPU/NPU reproduction is claimed; venue, model changes and component-vs-E2E distinctions remain explicit.
+
+**Historical October 22–29 sweep (2026-10-29): 793 distinct canonical topic rows / 8 mechanisms / 44 engineering directions.** [Requested papers and kernel-agent source audit](../reviews/ARXIV_KERNEL_FRONTIER_20261029.md) accepted 10 nonduplicate rows (766→776); the [broader Oct 22–29 arXiv mainline screening](../reviews/WEEKLY_ARXIV_MAINLINE_20261029.md) accepts a further 17 (776→793) spanning **all eight** categories. Gandalf and the ICML 2026 uncertainty-aware length scheduling work were already canonical. Weekly announcement date may differ from arXiv submission date. HOLD/simulation-only items remain outside the list. No independent speedup replication.
 
 **Historical checkpoint (2026-10-26): 766 unique paper rows / 8 mechanisms / 44 engineering directions.** The [first TokenGate tranche](../reviews/TOKENGATE_SYSTEMS_BATCH_20261026.md) added 11 works to the October 25 baseline (736→747). [Three further G0–G5 rounds](../reviews/THREE_ROUNDS_SYSTEMS_20261026.md) admitted **12 additional distinct works** (SOSP 4, SIGCOMM 2, October arXiv 6), reaching **759**. [ATC 2026 + production-aware kernel follow-up](../reviews/ATC2026_PRODUCTION_KERNEL_SWEEP_20261026.md) initially proposed **10** rows; [the final candidate closure](../reviews/ATC2026_CANDIDATE_CLOSURE_20261026.md) retracts **three** premature G3 admissions (BMV, IgniteServe, HybridFaaS), leaving **seven** additional rows and the **766** current inventory. All performance numbers are source-attributed; no local reproduction or blanket Ascend/vLLM portability is claimed.
 
@@ -18,15 +20,15 @@ Eight research topics, now organized as **44 practical engineering directions**:
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 110 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 155 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 77 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 39 | 6 | Low-bit representation with executable system gains |
+| [Kernels & Compilers](kernels-compilers.md) | 112 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 158 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 78 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 41 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 70 | 4 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 141 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 131 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 70 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **793** | **44** | |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 72 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **803** | **44** | |
 
 ## Admission summary (through 2026-10-18)
 
