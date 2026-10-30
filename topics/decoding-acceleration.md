@@ -21,7 +21,7 @@
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **73** | |
 
-## Papers (78)
+## Papers (79)
 
 ### Draft Models & Candidate Generation (17)
 
@@ -112,7 +112,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching](https://doi.org/10.1145/3805653) | PACM/POMACS 2026 (SIGMETRICS) | 把边缘设备纳入推测解码服务，用 speculation controller、验证时延估计与验证批调度抑制无效 drafting 与验证干扰，实测系统容量与 goodput 较中心化服务及 SLED 最高提升 2.1/4.1 与 1.94/3.7 倍。 （真实正式出版版本：PACM/POMACS 2026 10(2), Article 55, DOI 10.1145/3805653；区别于三页 SIGMETRICS 摘要。） |
 | 2026 | [Speculative Decoding for Mixture-of-Experts Models: Expert Bytes, Kernel Bandwidth and the Best Draft Length](https://arxiv.org/abs/2610.34440) | arXiv 2026 (preprint; Oct 26 announcement) | 建立 MoE 验证步的 Expert Bytes / Effective Bandwidth 模型选择 Draft Length，并实测 llama.cpp CUDA/Metal、MLX-LM Expert 去重：去重并非必优、只在部分 Draft 长度胜出；提出对 DeepSeek-V2-Lite 的最佳 Draft 长度预测。是测量约束的机制分析，非全引擎加速结论。（KEEP_STRICT；REAL_KERNEL_MEASUREMENT；NOT_REPRODUCED） |
 
-### Diffusion & Non-AR Generation (17)
+### Diffusion & Non-AR Generation (18)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
@@ -137,3 +137,4 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Mosaic: Unlocking Over 30× Context Length for Diffusion LLMs Inference via Global Memory Planning and Dynamic Peak Taming](https://proceedings.mlr.press/v306/zheng26o.html) | ICML 2026 | Diffusion LM 的瞬时 Logits/FFN Activation 而非 AR-KV 主导 Peak Memory；Mask-only Logits Kernel、Lazy Chunking 和 Global Virtual-Memory Planner 处理多阶段动态峰值。[Author Code](https://github.com/flashserve/Mosaic)；作者报告同硬件 Context Max +15.30–32.34×、E2E latency -2.5% 至 -55.4%，**DIFFUSION_LM_ONLY / AUTHOR_REPORTED / LOSSLESS_WITHIN_TESTED_MODELS / CUDA**；不同于 ATC'26 CPU-GPU Block-Sparse 同名 Mosaic。 |
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
+| 2026 | [Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation](https://arxiv.org/abs/2610.14162) | arXiv 2026 (preprint; Stanford Hazy; [code](https://github.com/HazyResearch/ncm)) | 把生成从 Token-level AR/Diffusion 改为离散概念层级逐层并行预测：Multi-scale Residual VQ-VAE + Hierarchical Transformer。在 H100 上作者报告 LM1B/OpenWebText/XSum 相近任务质量下比所测 Diffusion Baselines 快 21×/10×/31×；**NEW_TRAINED_MODEL_AND_TOKENIZER / NOT_SAME_MODEL_SERVING_SPEEDUP / QUALITY_MATCH_SCOPED**。作为非 AR 推理执行 Contract 的强相邻基础工作收录。（KEEP_ADJACENT；NOT_REPRODUCED） |
