@@ -21,9 +21,9 @@
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-20) | 20 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
 | **Total** | **128** | |
 
-## Papers (131)
+## Papers (132)
 
-### Parallelism & Scale-Up (26)
+### Parallelism & Scale-Up (27)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -55,6 +55,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [TPLA: Tensor Parallel Latent Attention for Efficient Disaggregated Prefill & Decode Inference](https://arxiv.org/abs/2508.15881) | ASPLOS 2026 | 跨 TP Rank 切分 MLA Latent KV 和 Head Input，经 AllReduce 合并 Attention，缓解 MLA 重复加载 KV 的通信/显存成本。 |
 | 2026 | [Spexis: Speculative Lookahead Scheduling for LLM Inference](https://arxiv.org/abs/2609.34370) | EMNLP 2026 Main (author/ACL listing; proceedings detail pending) | **Speculative Parallelism (SP)** 作为 TP/PP 之外的新执行维度：早期层 Drafter 与后续层 Target Verification 跨 Pipeline Stage 并发，辅以 Confidence Selective Speculation 与剩余长度预测抑制 KV Eviction。作者用 [vLLM v0.8.4 Fork](https://github.com/mlsys-seo/spexis) 于 A40/A100/H100/L40S/RTX PRO 6000 实测，部分低互联场景请求率最高 +34%。**反例：H100 SXM + Qwen3-32B，SP/TP Throughput 仅 0.47×；论文所需 Early-exit 权重尚未发布，不能即刻复现完整结果**。非现代 vLLM v0.23 / Ascend 的 Drop-in 优化。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; INCOMPLETE_ARTIFACT; MODEL_COMPONENT_TRAINING) |
 | 2026 | [SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving](https://arxiv.org/abs/2609.37626) | arXiv 2026-09 (preprint) | **Runtime Attention Layout Switching (TP/DP/CP/DOP)**：将 Attention Weight Sharding 与 KV Request Ownership 解耦，提出 Decoupled Ownership Parallelism，以后台 State Transfer 与 Batch-boundary Handoff 迁移当前正在执行的请求；决策由当前 Prompt/Concurrency/Memory Pressure 驱动。作者在 **B200+GLM-5.3** 报告相对固定 Layout 的 **E2E Throughput 1.3–1.73×**，中位切换额外成本小于当前 Step 0.51%，**H200+DeepSeek-V3.2/DCU+GLM-Flash** 用于验证不同布局的适用区间；公开 [SGLang Fork](https://github.com/ict-agent/SPLASH-sglang)。需要提前 Capture 多 Layout Graph 且切换需短暂内存余量；该数字**不是 Ascend vLLM0.23 的可移植收益**。(KEEP_STRICT; REAL_ACCELERATOR_AUTHOR_REPORTED; PUBLIC_ARTIFACT; GRAPH_MEMORY_OVERHEAD) |
+| 2026 | [FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications](https://arxiv.org/abs/2607.18171) | arXiv 2026 (preprint; CMU InfiniAI Lab; [code](https://github.com/Infini-AI-Lab/FlashRT)) | 将用户的单 GPU Multimodal Reference 转成 Chain-of-program IR，经依赖与持久 State Scope 检查后，由 Agent 探索跨 GPU Stage Placement、Disaggregation、Streaming 和 Intra-model Parallelism；在 NVIDIA B200/AMD MI355X 实测，多任务**相对于各自 Reference** 作者报告最高约 70× Latency Reduction、3.6× Throughput；AMD MI355X Qwen3-Omni Text-to-audio 相对所测 vLLM-Omni Response Latency -65%。**HETEROGENEOUS_MULTIMODAL_WORKLOAD / NOT_GENERAL_LLM_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Disaggregated Compute Stages (32)
 
