@@ -22,7 +22,7 @@
 | [Kernel Benchmarks](#kernel-benchmarks-7) | 7 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **68** | |
 
-## Papers (72)
+## Papers (74)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,7 +47,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (17)
+### Performance & Efficiency Studies (18)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -70,6 +70,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Understanding Bottlenecks for Efficiently Serving LLM Inference With KV Offloading](https://arxiv.org/abs/2601.19910) | arXiv 2026 (preprint) | 系统拆解 KV offload 服务链路的瓶颈归属：分别量化 PCIe 传输、KV 重建与注意力计算的时间占比，指出传输与重建的重叠不足而非带宽本身构成主要损失，并据此给出预取与调度层面的优化空间。 |
 | 2026 | [Measuring the Energy Cost of Completing Tasks with Quantized Language-Model Agents](https://arxiv.org/abs/2610.32417) | arXiv 2026 (preprint; Oct 26 announcement) | 在 A100 裸机 llama.cpp 测量两款模型的 4/8-bit、29 个 Agent Task 与自动通过率，揭示 Per-token Energy 改善不保证 Per-successful-task Energy 改善，部分任务后者反增最高 3.5×。指定 Agent Tasks/量化格式，非一般能耗模型。（KEEP_STRICT；REAL_ENERGY_MEASUREMENT；NOT_REPRODUCED） |
 | 2026 | [Characterizing Predictability–Latency Trade-offs of KV-Cache SSD Offloading in LMCache for LLM Serving Systems](https://arxiv.org/abs/2610.21249) | arXiv 2026 (preprint; Oct 15) | 在四类 Multi-session Workload 实测 LMCache SSD 层、OS Page Cache 与 O_DIRECT 行为：重复请求 Dedup 写入下降却不代表任何负载均受益；作者观测 Warm TTFT 27→93ms 与缓存读取稳定性权衡。**OBSERVATIONAL_UNCONTROLLED_VERSION_CHANGE**（LMCache 0.3.0 Buffered vs 0.3.16 O_DIRECT+Dedup），不可把所有差异归因于 O_DIRECT；是系统诊断，不是新版提速。（KEEP_STRICT；REAL_STORAGE_MEASUREMENT；NOT_REPRODUCED） |
+| 2026 | [Evaluating the Applicability of LLM Inference Optimizations on Apple Silicon](https://arxiv.org/abs/2610.31479) | arXiv 2026 (preprint; submitted Oct 22) | 在统一的 Single-request Decode 负载下跨四台 Apple Silicon 机器和匹配 RTX4090 比较 KV Pruning、Speculative Decoding、GPU Kernel Port、PTQ；作者发现被测 Speculative Methods 在 Apple 上均**降低**吞吐，KV Pruning 在 Apple 最高 1.75× E2E、移植 Kernel 最高 1.20× Decode，但 GPU 上结论可反转。**PLATFORM_WORKLOAD_DEPENDENT / APPLE_METAL_NO_ASYNC_COPY / NOT_SERVER_BATCHING**。（KEEP_STRICT；NOT_REPRODUCED） |
 
 ### Profiling & Diagnosis (6)
 
@@ -104,7 +105,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Compositional Performance Modeling of LLM Inference Clusters with Hierarchical KV Caching](https://arxiv.org/abs/2610.15366) | arXiv 2026 (preprint) | 将局部 Compute/Transfer Cost 与共享 KV Availability 分离组合为离散事件仿真器，模型在 1P1D 标定并迁移到 3P1D；作者 Qwen3-8B/32B SGLang 实机回放的平均 E2E 延迟 MAPE 1.34–6.36%，CPU 仿真回放快约 15×。**CALIBRATED_SIMULATOR / SCOPED_TO_TESTED_TOPOLOGIES**，不泛化为任意硬件精准预测。 |
 | 2026 | [COPE: Composable Performance Emulation for Mixture-of-Experts Offloading Policies](https://arxiv.org/abs/2610.33404) | arXiv 2026 (preprint; Oct 26 announcement) | 将 MoE Expert Residency 和执行策略拆成可组合 Policy Matrix，结合目标硬件 Operator Profiles 与离线 Routing Traces 构成 Virtual Heterogeneous Machine，预测 CPU/GPU Offloading 最优策略；作者报告策略预测误差缩小 1.7–6.8×。**Emulator/决策选型收益**，不是实际 Serving 直接提升 6.8×。（KEEP_ADJACENT；TRACE_DRIVEN_EMULATION；NOT_REPRODUCED） |
 
-### Correctness & Reliability (12)
+### Correctness & Reliability (13)
 
 输出一致性、运行时 Bug、可靠性及数值语义检查。
 
@@ -122,6 +123,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Ekka: Automated Diagnosis of Silent Errors in LLM Inference](https://proceedings.mlr.press/v306/gu26q.html) | ICML 2026 | 将推理系统 Silent Quality Regression 作为 Differential Debugging：对齐 Target 与 Reference 的中间状态/Operators，自动定位低层 Kernel/Runtime 错误；真实多 Serving Framework 缺陷构建 Benchmark，作者报告 Diagnosis Pass@1 80%、Pass@5 88%，并发现 4 个开发者确认新 Bug。**不是性能优化器或独立证明所有后端数值一致**；完整可移植复现工件待核验。（KEEP_STRICT; FORMAL_ICML; REAL_FRAMEWORK_BUGS; AUTHOR_REPORTED） |
 | 2026 | [M2K: Making the Model-Kernel Interface Explicit for Reliable CUDA Kernel Verification](https://arxiv.org/abs/2603.24595) | SOSP 2026 (conference title M2K; early preprint Model2Kernel) | HFProbe 提取模型固定 vs 用户可变的 Kernel 参数约束，cuKLEE 在模型接口条件下符号执行 CUDA Memory Access，检测 Shape/Index Bug；**CUDA_SPECIFIC / NO_RUNTIME_SPEEDUP / EARLY_TITLE_ALIAS**，论文版本间 Bug 数量不同，不直接引用数字。 |
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
+| 2026 | [DFIP: Decision-Focused Inference Path for System One Models](https://arxiv.org/abs/2610.36804) | arXiv 2026 (preprint; submitted Oct 27; [reproduction code](https://arxiv.org/abs/2610.36804)) | 审核 CUDA Graph Replay、候选词表投影、Schema-compatible Length-aware Batching 对小结构化决策模型的真实收益与 Failure Boundary：Resident Request 最好 2.47×（Decider），但外部多样到达下 Replay 可能发生 CUDA Illegal-memory-access、请求丢失和 P95 严重退化；多轮输出一致性审计发现某些分数/阈值漂移。**NEGATIVE_SERVING_EVIDENCE / NOT_GENERAL_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Kernel Benchmarks (8)
 
