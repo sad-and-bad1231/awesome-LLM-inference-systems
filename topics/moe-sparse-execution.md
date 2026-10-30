@@ -16,11 +16,11 @@
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-15) | 15 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
-| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-18) | 18 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-24) | 24 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **68** | |
+| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-25) | 25 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **72** | |
 
-## Papers (70)
+## Papers (72)
 
 ### Expert Routing & Communication (15)
 
@@ -62,7 +62,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
-### Expert Offload & Heterogeneous Execution (19)
+### Expert Offload & Heterogeneous Execution (21)
 
 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。
 
@@ -87,6 +87,8 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Dynamic HBM Repartitioning for Multi-Turn MoE Serving (VAMP)](https://arxiv.org/abs/2609.13537) | arXiv 2026-09 (preprint) | **Expert Weight ↔ KV Cache 动态 HBM 重新划分**：MoE 稀疏激活允许将部分 Expert Weight 迁到 Host，把 CUDA VMM Page 映射给 KV；由 Controller 比较 Expert Reload、KV Eviction/Re-prefill、Request Preemption 预测损失。**vLLM 0.15.1 / Qwen3-Next-80B-A3B**、2×H100 PCIe / 4×H200 NVLink、2,103 轮 SWE-agent 五次 Replay：相对原版 vLLM **TTFT P90 26.1→1.10 s；请求吞吐 +20.7%；但 TPOT 170.9→224.0 ms（恶化 31.1%）**。收益主要靠避开 Prefix/KV 容量崩溃阈值；不同并发/Offload Ratio 可逆转优势，Closed-loop Agent 负载并非一一匹配的请求 Replay；模型正确性与开源实现未独立核查。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; CAPACITY_THRESHOLD_SCOPED; TPOT_REGRESSION) |
 | 2026 | [FreeToken: Efficient Edge-Native MoE Serving with Bandwidth-Adaptive Execution](https://arxiv.org/abs/2608.16157) | arXiv 2026 (preprint) | 面向单机消费者 RTX GPU+CPU/Host RAM 的 MoE Serving：Bandwidth-aware CPU–GPU Co-execution、Expert Residency、Double-buffered Prefill、Agent KV/Recurrent State Cache、弹性 Memory Partition；[开源 Runtime](https://github.com/FlashML-org/FreeToken) 支持多 MoE/Claude Code 风格 API，作者报告从 8GB Laptop 到 Workstation 部署巨量模型。**可跑大模型不等于相同硬件/质量/SLO 下优于 vLLM/SGLang；吞吐收益基线及可复现权重布局依配置而异**。（KEEP_STRICT; PUBLIC_RUNTIME; REAL_EDGE_HARDWARE_AUTHOR_REPORTED; PREPRINT; TOPOLOGY_SCOPED） |
 | 2026 | [DeepInfer-Mac: Running a 750B-Class MoE on a 24 GB Laptop](https://arxiv.org/abs/2610.36564) | arXiv 2026 (preprint; Oct 28 announcement; arXiv ancillary source) | 用约 338GiB SSD Mixed Low-bit 权重、7.6GiB 常驻和路由专家按需 I/O 在 24GB MacBook Air 运行超大 MoE；作者实测 0.21–0.72 tok/s、Prefetch 相对特定对照 +21% Decode。容量可行性而非实用低延迟 Serving；非 DeepSeek 正式 DeepInfer 系统证据。（KEEP_ADJACENT；VERY_LOW_THROUGHPUT；NOT_REPRODUCED） |
+| 2026 | [PDScope: Breaking the Prefill-Decode Seesaw for Memory-Bound MoE Inference](https://arxiv.org/abs/2610.39216) | arXiv 2026 (preprint; submitted Oct 29) | CPU–GPU MoE Expert Offload 的 Phase-aware Prediction、Expert Residency、Prefetch/Static Graph Async-I/O；作者 **A100/RTX3090、24GB GPU Limit、4 BF16 MoE** 与同预算 KTransformers/Fate/Fiddler/HybriMoE/MoE-APEX 对照，报告 **Prefill 2.5–10.3× 与 Decode 2.1–6.1× 的分阶段吞吐**，非统一 Online Goodput，也非 GPU-resident GPU Benchmark。（KEEP_STRICT; CPU_GPU_PCIe; PHASE_ONLY; NOT_REPRODUCED） |
+| 2026 | [Rimuru: Unified Memory Management for Modern LLM Serving via Elastic Expert Offloading](https://arxiv.org/abs/2610.40305) | arXiv 2026 (preprint; submitted Oct 29) | 跨 KV/Expert 共享 Tensor Page Pool、异构 Memory Views、Elastic Expert Offload 与 Page-table-aware MoE Kernel；作者在 **8×RTX5090/2×RTX4090D、Qwen3/3.5 MoE** 比较 Offload Baseline 和 vLLM/SGLang。**最高 19.03×** 仅为资源受限的 Offloader 口径；多系统 CUDA Graph 被关闭，现代默认 vLLM 公平性及 Ascend 可移植均未验证。（KEEP_STRICT; REAL_GPU; BASELINE_CAVEAT; NOT_REPRODUCED） |
 
 ### Sparse Attention & Conditional Compute (25)
 
