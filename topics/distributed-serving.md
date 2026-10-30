@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Parallelism & Scale-Up](#parallelism--scale-up-26) | 26 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
+| [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-24) | 24 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-26) | 26 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-20) | 20 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **128** | |
+| [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-27) | 27 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-21) | 21 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **133** | |
 
-## Papers (132)
+## Papers (133)
 
-### Parallelism & Scale-Up (27)
+### Parallelism & Scale-Up (28)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -56,6 +56,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [Spexis: Speculative Lookahead Scheduling for LLM Inference](https://arxiv.org/abs/2609.34370) | EMNLP 2026 Main (author/ACL listing; proceedings detail pending) | **Speculative Parallelism (SP)** 作为 TP/PP 之外的新执行维度：早期层 Drafter 与后续层 Target Verification 跨 Pipeline Stage 并发，辅以 Confidence Selective Speculation 与剩余长度预测抑制 KV Eviction。作者用 [vLLM v0.8.4 Fork](https://github.com/mlsys-seo/spexis) 于 A40/A100/H100/L40S/RTX PRO 6000 实测，部分低互联场景请求率最高 +34%。**反例：H100 SXM + Qwen3-32B，SP/TP Throughput 仅 0.47×；论文所需 Early-exit 权重尚未发布，不能即刻复现完整结果**。非现代 vLLM v0.23 / Ascend 的 Drop-in 优化。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; INCOMPLETE_ARTIFACT; MODEL_COMPONENT_TRAINING) |
 | 2026 | [SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving](https://arxiv.org/abs/2609.37626) | arXiv 2026-09 (preprint) | **Runtime Attention Layout Switching (TP/DP/CP/DOP)**：将 Attention Weight Sharding 与 KV Request Ownership 解耦，提出 Decoupled Ownership Parallelism，以后台 State Transfer 与 Batch-boundary Handoff 迁移当前正在执行的请求；决策由当前 Prompt/Concurrency/Memory Pressure 驱动。作者在 **B200+GLM-5.3** 报告相对固定 Layout 的 **E2E Throughput 1.3–1.73×**，中位切换额外成本小于当前 Step 0.51%，**H200+DeepSeek-V3.2/DCU+GLM-Flash** 用于验证不同布局的适用区间；公开 [SGLang Fork](https://github.com/ict-agent/SPLASH-sglang)。需要提前 Capture 多 Layout Graph 且切换需短暂内存余量；该数字**不是 Ascend vLLM0.23 的可移植收益**。(KEEP_STRICT; REAL_ACCELERATOR_AUTHOR_REPORTED; PUBLIC_ARTIFACT; GRAPH_MEMORY_OVERHEAD) |
 | 2026 | [FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications](https://arxiv.org/abs/2607.18171) | arXiv 2026 (preprint; CMU InfiniAI Lab; [code](https://github.com/Infini-AI-Lab/FlashRT)) | 将用户的单 GPU Multimodal Reference 转成 Chain-of-program IR，经依赖与持久 State Scope 检查后，由 Agent 探索跨 GPU Stage Placement、Disaggregation、Streaming 和 Intra-model Parallelism；在 NVIDIA B200/AMD MI355X 实测，多任务**相对于各自 Reference** 作者报告最高约 70× Latency Reduction、3.6× Throughput；AMD MI355X Qwen3-Omni Text-to-audio 相对所测 vLLM-Omni Response Latency -65%。**HETEROGENEOUS_MULTIMODAL_WORKLOAD / NOT_GENERAL_LLM_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [ConfluxServe: Reconciling Resource Utilization and Parallelism Efficiency across Prefill and Decode in LLM Serving](https://arxiv.org/abs/2610.37810) | arXiv 2026 (preprint; submitted Oct 27) | Operator-level XP 在 Linear 层 P/D Co-batch、Attention 层 Prefill SP/Decode Local，配合 KV Handoff 和 SLO Control；作者 **4/8×H100、3 模型、生产 Trace Replay** 对 Chunked Prefill/DistServe/LoongServe/MuxWise 及增强 Scheduler 报告 Full Scheduler **1.26–1.52× Goodput**。仅评估单 XP Instance，没有 Global Routing 效果；vLLM0.15.1/SGLang0.5.9 基线，未移植 Ascend。（KEEP_STRICT; REAL_GPU_E2E; NO_AUTHOR_REPRO） |
 
 ### Disaggregated Compute Stages (32)
 

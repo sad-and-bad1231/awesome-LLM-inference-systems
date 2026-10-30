@@ -1,6 +1,6 @@
 # Papers by systems mechanism
 
-**Current inventory (2026-10-30): 813 unique canonical topic papers · 8 mechanism classes · 44 engineering tracks.** These are **source-curated reading selections**, not 813 independently reproduced experiments or a guarantee of complete G3/G4 baseline scrutiny.
+**Current inventory (2026-10-30): 821 unique canonical topic papers · 8 mechanism classes · 44 engineering tracks.** These are **source-curated reading selections**, not 813 independently reproduced experiments or a guarantee of complete G3/G4 baseline scrutiny.
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -9,14 +9,14 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 114 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 159 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 160 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 79 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 43 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 70 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 142 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 132 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 74 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **813** | **44** | |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 72 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 144 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 133 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 76 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **821** | **44** | |
 
 ## How to use this index
 
