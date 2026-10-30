@@ -31,9 +31,23 @@ An opinionated, **small starting map** of people and codebases worth following f
 | **Tsinghua PACMAN Group** | Parallel architecture, ML systems and performance optimization. | [Lab / projects](https://pacman.cs.tsinghua.edu.cn/) |
 | **Shanghai Jiao Tong University IPADS** | Operating systems, systems infrastructure, distributed and ML systems. | [Lab / projects](https://ipads.se.sjtu.edu.cn/) |
 | **ETH Zurich SPCL** | Scalable high-performance computing, communication and GPU performance. | [Lab / projects](https://spcl.inf.ethz.ch/) |
-| **UW SyFI Lab** | GPU/accelerator execution, FlashInfer and production-oriented multimodal inference systems. | [Lab / publications](https://syfi.cs.washington.edu/publications/) |
+| **UW SyFI Lab** | Agent-driven serving engine development, performance-model/real-hardware alignment and production-like traces; distinguish blog demonstrations from papers. | [Lab / publications](https://syfi.cs.washington.edu/publications/) |
+| **CMU InfiniAI Lab** | Real-time multimodal pipelines, end-to-end agent-guided placement/streaming and inference correctness; FlashRT is distinct from other FlashRT-named projects. | [Lab / publications](https://www.infini-ai-lab.cmu.edu/publications.html) |
 
-## Latest group-originated inference signals (checked 2026-10-25)
+## Latest research-lab signal pass (checked 2026-10-30)
+
+| Source-led group | Research signal / original link | Bibliographic action and boundary |
+|---|---|---|
+| **Stanford Hazy Research** | [Next-Concept Modeling](https://hazyresearch.stanford.edu/blog/2026-10-12-ncm) · [paper](https://arxiv.org/abs/2610.14162) · [code](https://github.com/HazyResearch/ncm) | One **KEEP_ADJACENT** Decoding entry: new trained non-AR hierarchy on H100, not drop-in optimization of existing LLM weights |
+| **MIT Han Lab** | [Quant VideoGen](https://proceedings.mlr.press/v306/xi26f.html) · [VLASH](https://arxiv.org/abs/2512.01031) | One formal ICML 2026 video KV compression entry and one lab-listed IROS 2026 embodied inference entry; both adjacent, no token-serving speedup claim |
+| **CMU InfiniAI Lab** | [FlashRT agent harness](https://arxiv.org/abs/2607.18171) · [code](https://github.com/Infini-AI-Lab/FlashRT) | One source-reviewed multimodal **distributed deployment** paper; CUDA/ROCm hardware evidence, not the unrelated FlashRT-PAI |
+| **UW SyFI Lab** | [VibeSys: 4× MI300A Qwen3.5 engine](https://syfi.cs.washington.edu/blog/2026-10-08-qwen35-mi300a/) · [ServingStudio](https://syfi.cs.washington.edu/blog/2026-09-24-introducing-servingstudio/) | Two **first-party engineering/blog signals**, not new formal paper identities; preserve the measured workload/model + SLO and simulator vs real-hardware boundaries |
+| **UC Berkeley Sky** | [Official 2026 publication index](https://sky.cs.berkeley.edu/publications/) | CommBench and FreeToken checked and **already canonical**; don't add duplicate institutional aliases |
+| **CMU InfiniAI / other lab discovery leads** | [STAPLE sparse upcycling](https://arxiv.org/abs/2610.12599) | **HOLD_G1/G5** in selective LLM Serving canon: trained architecture/quality dominates; measured decode comparison requires method and baseline attribution |
+
+Complete item-level paper decisions, caveats and reproduction states: [October 30 audit](../reviews/ARXIV_LAB_SWEEP_20261030.md). This research-group map is a **source navigation aid**, not a second catalog, a ranking or a claim of deployment independently reproduced here.
+
+## Historical group-originated inference signals (checked 2026-10-25)
 
 This is a **discovery map**, not another canonical paper list or an institutional ranking. **TOPIC** means the *paper itself* has a primary row in [the eight selective categories](../topics/README.md); **FOUNDATION** means the paper is intentionally on the [homepage](../README.md#foundational-and-influential-papers); **REVIEW** means a publisher/author group lists a relevant source but the selective-catalog evidence gate has not been passed; **ENGINEERING** means an upstream software change or project, not necessarily a new peer-reviewed paper. A missing topic row **does not automatically justify admission**.
 

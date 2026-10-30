@@ -22,7 +22,7 @@
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
 | **Total** | **153** | |
 
-## Papers (158)
+## Papers (159)
 
 ### Prefix & Session Reuse (42)
 
@@ -153,7 +153,7 @@
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 
-### Offloading & Tiered Storage (28)
+### Offloading & Tiered Storage (29)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -187,6 +187,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [Idleness is Relative: Exploiting Tool-Call Idle Windows for Offloading in Agentic Systems with MORI](https://arxiv.org/abs/2606.00866) | arXiv 2026 (preprint) | 根据真实 Agent 程序在 Tool-call 阶段连续相对 Idle Rank 动态划分 GPU HBM / CPU DRAM KV 驻留和 Admission，避免 LRU/二值忙闲策略迁移抖动；ThunderAgent + SGLang HiCache 作者实测 Claude Code Trace、H200/B200 多配置，相对 Offload Baseline 吞吐 +20–71%、TTFT −18–43%，**MORI 专属 Patch/Trace 未公开，不能独立复现**。（KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; AGENT_TRACE; NO_PUBLIC_MORI_ARTIFACT） |
 | 2026 | [Gandalf: Flash Shall Not Die! Increasing Flash Storage Lifetime for KV Cache Offloading in LLM Serving](https://arxiv.org/abs/2610.30791) | arXiv 2026 (preprint) | 利用 Hybrid 模型 Full-attention KV 与 Linear-state 不同的未来重用特点，对 DRAM→SSD Admission 施加写入寿命约束；作者 Claude Code 等 Trace 驱动实验报告平均估算 SSD Lifetime 7.3×。**TRACE_DRIVEN_ENDURANCE_ESTIMATE / NO_LONG_TERM_SSD_WEAROUT_TEST / CACHE_MISS_TRADEOFF**，不是实测物理 SSD 使用寿命。 |
 | 2026 | [WorldPager: Zero-Stall Tiered Memory for Long-Horizon World Models on a Single Consumer GPU](https://arxiv.org/abs/2610.35529) | arXiv 2026 (preprint; Oct 27 announcement) | World Model 长会话的 GPU/DRAM/NVMe 分层 int4 KV 与相机 Pose 驱动 Prefetch；作者在 RTX4090 + NVMe 报告 37.5 分钟持续生成、约 9.5 FPS、无 Storage Stalls。仅面向 Pose 可预测交互场景，部分重访质量降低，不是文本 LLM KV 通用解。（KEEP_ADJACENT；REAL_HARDWARE；NOT_REPRODUCED） |
+| 2026 | [KVStream: Adaptive Parallel Storage Management for KV Caching in Large-Scale LLM Serving](https://arxiv.org/abs/2610.31827) | arXiv 2026 (preprint; submitted Oct 22) | 让本地 NVMe 与已挂载的 Parallel File System/Cloud Storage 同时争用 KV Chunk 读取，按各层动态可用带宽分派而非静态分流；将 Writes 延后到 Forward 后并在多 Tier 复制。在 LMCache 四模型/六数据集、最多 128 GPU 作者实测下，检索效率处在 Aggregate-bandwidth Bound 的 5% 内，Offline Throughput 最高 1.49×、Burst Mean TTFT 最多降低 6.1×。改善依赖跨存储 Tier 与 Burst，缓存全命中场景没有收益；**REAL_MULTINODE_AUTHOR_REPORT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Distributed KV Sharing & Transfer (14)
 
