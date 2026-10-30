@@ -22,7 +22,7 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-22) | 22 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **138** | |
 
-## Papers (141)
+## Papers (142)
 
 ### Batching, Queues & SLOs (40)
 
@@ -177,7 +177,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (23)
+### Agent & Workflow Serving (24)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -208,3 +208,4 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [TAO: Tool-Aware Joint Scheduling for LLM-Based Agentic Serving](https://arxiv.org/abs/2610.37230) | arXiv 2026 (preprint; Oct 27) | 联合 Tool-return Readiness、节点 KV Cache Credit、Token Footprint，以动态规划同时决定 Agent Session 的 Admission 与 Placement；作者在 12 组模型/负载/并发配置报告最高 26.8% Latency 减少和 29.5% Decode Throughput 改善。是跨阶段 Agent JCT/SLO 调度，不是单次请求 Token 排序；指标为各配置最高值。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [VLASH: Real-Time VLAs via Future-State-Aware Asynchronous Inference](https://arxiv.org/abs/2512.01031) | IROS 2026 (MIT Han Lab 公开列示；2025 arXiv preprint) | 异步 Robot Action 与 VLA Inference Overlap 导致 State Staleness：根据上一 Action Chunk 推演未来执行时刻机器人 State，消除预测与执行窗口错位，不依赖模型架构修改。作者在真实机器人交互任务报告相对同步推理最高 2.03× 速度、Reaction Latency 最多低 17.4× 并维持任务精度；[code](https://github.com/mit-han-lab/vlash)。**EMBODIED_VLA_ADJACENT / NOT_DATACENTER_LLM_SERVING / NOT_REPRODUCED**。（KEEP_ADJACENT） |
