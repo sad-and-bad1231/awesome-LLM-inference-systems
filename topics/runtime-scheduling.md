@@ -22,9 +22,9 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (146)
+## Papers (147)
 
-### Batching, Queues & SLOs (41)
+### Batching, Queues & SLOs (42)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -71,6 +71,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [RadixFlow: Filling Execution Bubbles in Prefix-Cached Hybrid LLM Serving](https://arxiv.org/abs/2610.18143) | arXiv 2026 (preprint) | Hybrid Attention/Recurrent State 复用时 Prefix Match 不代表 Cache State Ready；将全局等待队列扫描 Barrier 改为 State-ready Traversal，使阻塞 Consumer 不妨碍其他可运行任务入 Batch。作者五种 Hybrid 模型报告平均时延下降 3–24%、Worker Rounds 下降 11–44%。**SCHEDULER_REPLAY / HYBRID_MODEL_SCOPED / AUTHOR_REPORTED**，不能推断所有 Dense 模型都有增益。 |
 | 2026 | [Requests of a Feather Must Flock Together: Batch Size vs. Prefix Homogeneity in LLM Inference](https://arxiv.org/abs/2605.06046) | ACM ATC 2026 (accepted; proceedings pending) | Feather 将 Prefix 同质性与 Batch Size 联合调度：Chunked Hash Tree 降低 CPU Prefix 查找开销，RL 决定何时停止扩 Batch；作者在 vLLM/SGLang 报告特定 Prefix-heavy Workload E2E throughput 2–10×。**WORKLOAD_PREFIX_DISTRIBUTION_DEPENDENT / RL_OVERHEAD / AUTHOR_REPORTED / GENERALITY_UNVERIFIED**；不能外推到无共享 Prefix 的通用服务。 |
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
+| 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (17)
 
