@@ -1,6 +1,8 @@
 # Papers by systems mechanism
 
-**Current inventory (2026-10-30): 821 unique canonical topic papers · 8 mechanism classes · 44 engineering tracks.** These are **source-curated reading selections**, not 813 independently reproduced experiments or a guarantee of complete G3/G4 baseline scrutiny.
+**October 2026 monthly close (2026-10-31): 835 distinct source-curated papers · 8 mechanisms · 44 engineering directions.** The [October complete month-close audit](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) adds **14** nonduplicate paper rows to the latest **821** source baseline (not the historical 813 checkpoint). Each paper received its own push, and industrial releases/research-lab blogs are indexed separately. **G0–G5 source screening does not equal independent G3/G4 replication**. The earlier October 30 tally is a dated snapshot, not current.
+
+**Historical checkpoint (2026-10-30): 821 canonical topic papers / 44 engineering tracks.** This was the baseline before the Oct 31 monthly close; no independent full-corpus reproducibility audit has been performed.
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -8,15 +10,15 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 114 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [Kernels & Compilers](kernels-compilers.md) | 115 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
 | [KV Cache & Context Memory](kv-cache-memory.md) | 160 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 79 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 43 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 72 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 144 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 133 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 76 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **821** | **44** | |
+| [Decoding Acceleration](decoding-acceleration.md) | 80 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 44 | 6 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 148 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 134 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 79 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **835** | **44** | |
 
 ## How to use this index
 

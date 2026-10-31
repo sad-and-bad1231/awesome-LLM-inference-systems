@@ -20,6 +20,23 @@ An opinionated, **small starting map** of people and codebases worth following f
 | **Ray Serve** | Application-serving framework for scalable online inference. | [Repository](https://github.com/ray-project/ray) |
 | **vLLM Ascend** | Community-maintained Ascend hardware plugin; do not attribute solely to one company. | [Repository](https://github.com/vllm-project/vllm-ascend) |
 
+## October 2026 lab/industry-research cross-check
+
+**One paper, one canonical topic entry.** The following are **research-source cross-references**, not a separate count or a university ranking; published venue must be independently checked. Collab coauthorship ≠ lab-exclusive ownership.
+
+| Group/source | October systems signal | Editorial disposition |
+|---|---|---|
+| [Stanford Hazy](https://hazyresearch.stanford.edu/) | [Next-Concept Modeling](https://arxiv.org/abs/2610.14162) (Oct 9) | **Already canonical** Decoding adjacent: a **new trained hierarchy/tokenizer**, not drop-in existing-model serving. |
+| [MIT Han Lab](https://hanlab.mit.edu/) | [Quant VideoGen](https://proceedings.mlr.press/v306/xi26f.html) (ICML'26) and [VLASH](https://arxiv.org/abs/2512.01031) (IROS'26 lab listing) | **Already canonical** as video KV / embodied action-loop systems; retain scope. |
+| [UW SyFI](https://syfi.cs.washington.edu/publications/) | [VibeSys 4×MI300A report](https://syfi.cs.washington.edu/blog/2026-10-08-qwen35-mi300a/) | **BLOG / ENGINEERING**, not a new paper or independent GPU reproduction. |
+| [SOSP'26 / expert-parallel collaborations](https://sigops.org/s/conferences/sosp/2026/schedule.html) | [StreamEP](https://doi.org/10.1145/3830418.3843869) | **New canonical** MoE; specific 16-GPU/NCCL network constraints, original author [artifact](https://zenodo.org/records/22100357). |
+| [UW / ByteDance Seed collaborators](https://sigops.org/s/conferences/sosp/2026/schedule.html) | [TensorHub](https://arxiv.org/abs/2604.09107) SOSP'26 | **New canonical ADJACENT** distributed GPU-resident RL policy weight updates; not online request KV transport. |
+| [SOSP'26 / voice-serving group](https://sigops.org/s/conferences/sosp/2026/schedule.html) | [llmovoice](https://doi.org/10.1145/3830418.3843860) | **New canonical ADJACENT** voice context orchestration; changes generated behavior and session cost. |
+| [CMU InfiniAI](https://www.infini-ai-lab.cmu.edu/publications.html) | [FlashRT](https://arxiv.org/abs/2607.18171), [STAPLE](https://arxiv.org/abs/2610.12599) | FlashRT **already canonical**, STAPLE **HOLD** for model/upcycling/system attribution. |
+| [Berkeley Sky](https://sky.cs.berkeley.edu/publications/) | [CommBench](https://arxiv.org/abs/2608.04450), [FreeToken](https://arxiv.org/abs/2608.16157) | **Already canonical**; institutional alias must not cause another row. |
+
+Official October venues: SOSP published, EMNLP 2026 [ACL Anthology](https://aclanthology.org/volumes/2026.emnlp-main/), NeurIPS 2026 [accepted-program listing](https://neurips.cc/Downloads/2026) is **not yet a published proceedings full paper** by Oct 31. [Full source-gated monthly report](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md).
+
 ## Research labs and source-linked systems signals
 
 This is a **navigation crosswalk, not a second paper bibliography or institutional ranking**. A paper appears in an [existing canonical topic](../topics/README.md) only once, regardless of how many labs collaborated. A **BLOG/ENGINEERING** signal is not automatically a peer-reviewed paper, and **REVIEW/HOLD** is not admission.

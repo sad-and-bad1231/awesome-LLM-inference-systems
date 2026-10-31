@@ -22,7 +22,7 @@
 | [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **101** | |
 
-## Papers (114)
+## Papers (115)
 
 ### Attention & Sparse Kernels (30)
 
@@ -160,7 +160,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (14)
+### Kernel Automation & Tools (15)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -182,3 +182,4 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [CAKE: Compiler-Agent Co-Design for Frontier Kernel Evolution](https://arxiv.org/abs/2608.12629) | arXiv 2026 (preprint; Aug) | 专用 Agent 直接编辑带硬件调度语义的 Typed CAKE IR，Compiler 返回局部 Correctness/Cost 诊断，验证器与优化知识随案例演化；B200 上作者报告 Kimi Delta Attention 相对 FlashKDA 的 Kernel 几何均值 2.05×并做 Serving 验证。对照预算、Shape 覆盖及编译器专用性需区分；与 Ascend 同名 CAKE 非同一系统。（KEEP_ADJACENT；NOT_REPRODUCED） |
 | 2026 | [CANNBot-CAKE: Collaborative Agentic Kernel Evolution for Ascend NPU](https://arxiv.org/abs/2610.31034) | arXiv 2026 (preprint; Oct 22) | 面向 Ascend CANN 的 Generation/Evolution、Multi-DSL 路由、经审阅 Knowledge Book；在 Ascend 950PR 的 53 个 CANN-Bench Operator，标准测试 1060/1060、隐藏测试 4167/4240，作者报告均值 1.334× 相对基线。**不是** NVIDIA CAKE，亦不等于 Ascend 910B2 或真实 vLLM Serving 提速。（KEEP_ADJACENT；BENCHMARK_ONLY；NOT_REPRODUCED） |
 | 2026 | [God Does Not Play Dice: Enforcing Batch Invariance in Agentic Kernel Generation](https://arxiv.org/abs/2610.36623) | arXiv 2026 (preprint; submitted Oct 27) | 在 GPU Kernel Agent 的优化 Loop 引入 Batch Invariance（同一请求随 Batch 伙伴变化仍 Bitwise Consistent）Contract-guided 静态依赖检查和多 Batch 动态执行验证；作者在 83 个适用的已发布 Kernel 中发现 19 个违例，三 Agent Framework 实验中 BI Pass Rate 67.6%→91.9%，保留原几何平均 Kernel Speedup 的 91.8%。**KERNEL_CORRECTNESS_GATE / NON_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Learning to Formulate: Agentic Hardware-Software Co-Design of AI Infrastructure through Progressive Optimization and Verification (Formulaic)](https://arxiv.org/abs/2610.39380) | arXiv 2026 (preprint; Oct 29) | Agent 逐级生成跨 Compiler/Kernel/Hardware 的 **Constraint-bearing Template Formulation**，Solver 优化并用 Verification/Measurement 校验；对独立 Component Study，真实 NVIDIA GB10 的 Qwen3-8B **Layer** 相对 SGLang 1.075×，Ventus GPU 联合设计收益是**模拟周期**（0.428 vs Software-only 0.934），Proof Reuse GEMM Verify 2.51×。**THREE_SEPARATE_STUDIES / NO_JOINT_REAL_CHIP_E2E / PARTLY_SIMULATED / NOT_REPRODUCED**，不是 GPU Serving 一体化 2× 以上收益。（KEEP_ADJACENT；KERNEL_AGENTIC_CO_DESIGN） |

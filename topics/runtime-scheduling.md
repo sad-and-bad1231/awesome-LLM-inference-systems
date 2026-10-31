@@ -22,9 +22,9 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (144)
+## Papers (148)
 
-### Batching, Queues & SLOs (41)
+### Batching, Queues & SLOs (42)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -71,6 +71,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [RadixFlow: Filling Execution Bubbles in Prefix-Cached Hybrid LLM Serving](https://arxiv.org/abs/2610.18143) | arXiv 2026 (preprint) | Hybrid Attention/Recurrent State 复用时 Prefix Match 不代表 Cache State Ready；将全局等待队列扫描 Barrier 改为 State-ready Traversal，使阻塞 Consumer 不妨碍其他可运行任务入 Batch。作者五种 Hybrid 模型报告平均时延下降 3–24%、Worker Rounds 下降 11–44%。**SCHEDULER_REPLAY / HYBRID_MODEL_SCOPED / AUTHOR_REPORTED**，不能推断所有 Dense 模型都有增益。 |
 | 2026 | [Requests of a Feather Must Flock Together: Batch Size vs. Prefix Homogeneity in LLM Inference](https://arxiv.org/abs/2605.06046) | ACM ATC 2026 (accepted; proceedings pending) | Feather 将 Prefix 同质性与 Batch Size 联合调度：Chunked Hash Tree 降低 CPU Prefix 查找开销，RL 决定何时停止扩 Batch；作者在 vLLM/SGLang 报告特定 Prefix-heavy Workload E2E throughput 2–10×。**WORKLOAD_PREFIX_DISTRIBUTION_DEPENDENT / RL_OVERHEAD / AUTHOR_REPORTED / GENERALITY_UNVERIFIED**；不能外推到无共享 Prefix 的通用服务。 |
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
+| 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (17)
 
@@ -179,7 +180,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (24)
+### Agent & Workflow Serving (27)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -211,3 +212,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [TAO: Tool-Aware Joint Scheduling for LLM-Based Agentic Serving](https://arxiv.org/abs/2610.37230) | arXiv 2026 (preprint; Oct 27) | 联合 Tool-return Readiness、节点 KV Cache Credit、Token Footprint，以动态规划同时决定 Agent Session 的 Admission 与 Placement；作者在 12 组模型/负载/并发配置报告最高 26.8% Latency 减少和 29.5% Decode Throughput 改善。是跨阶段 Agent JCT/SLO 调度，不是单次请求 Token 排序；指标为各配置最高值。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [VLASH: Real-Time VLAs via Future-State-Aware Asynchronous Inference](https://arxiv.org/abs/2512.01031) | IROS 2026 (MIT Han Lab 公开列示；2025 arXiv preprint) | 异步 Robot Action 与 VLA Inference Overlap 导致 State Staleness：根据上一 Action Chunk 推演未来执行时刻机器人 State，消除预测与执行窗口错位，不依赖模型架构修改。作者在真实机器人交互任务报告相对同步推理最高 2.03× 速度、Reaction Latency 最多低 17.4× 并维持任务精度；[code](https://github.com/mit-han-lab/vlash)。**EMBODIED_VLA_ADJACENT / NOT_DATACENTER_LLM_SERVING / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [Can Agent Harnesses and Inference Engines Hear Each Other? The HEAR Protocol for Agentic LLM Serving](https://arxiv.org/abs/2610.06597) | arXiv 2026 (preprint; submitted Oct 5) | 将 Agent Harness 的 Workflow Dependency、Context Lifecycle 与 Engine 的 Queue/KV/Capabilities 组成双向 **Harness–Engine Pairing Protocol**，从具体 Cache/Mode 策略中解耦接口语义。作者在四组 Agent Workloads + Mooncake/SCBench 配置报告 Batch 最高 1.61×、Median TTFT 最高 2.23× 改善，BrowseComp-Plus/DeepResearchBench E2E 分别 1.23×/2.45×；**DIFFERENT_WORKLOAD_AND_METRIC_MAXIMA / MODEL_POLICY_SCOPE / NOT_REPRODUCED**，不构成模型输出严格等价的普遍证明。（KEEP_STRICT） |
+| 2026 | [FlowMaker: From Tasks to Cost-Efficient Generative AI Workflow Deployments](https://arxiv.org/abs/2610.24861) | arXiv 2026 (preprint; submitted Oct 17) | 按 Task 共同优化 Agent Workflow Topology、各 Subtask 模型和在线 Deployment Configuration，使用 Constraint-guided Pruning 与 Cluster-aware 已部署模型复用压缩动态配置空间；对比 Murakkab 等系统作者报告在所测多模型工作流 **Goodput 最高 10.14× / Cost 最多下降 2.77×**（不同实验极值）。**WORKFLOW_AND_MODEL_ASSIGNMENT_CHANGES / ACCURACY_CONSTRAINT / NOT_SINGLE_MODEL_INFERENCE_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Scalable Context Orchestration for Serving LLMs Over Voice (llmovoice)](https://doi.org/10.1145/3830418.3843860) | SOSP 2026 (official; [author preprint](https://arxiv.org/abs/2609.04288)) | 语音多轮调用的文本 History 遗漏 Speaking Rate/Noise/Loss 等 Paralinguistic State；llmovoice 按轮构造 **Bounded Voice Context** 并由 LLM 产出 Runtime Directives，协调响应风格和长会话成本。作者真实 Voice Workload 报告 Speaking-rate Error −52.4%、Packet-loss False Interruption 46.0→0.9%、模型使用成本 −79.2%；长会话 Per-turn Cost 最多下降 24.9×，在测评中保留最高 98.7% Quality。**PROMPT_AND_BEHAVIOR_CHANGING_MULTIMODAL_MIDDLEWARE / NOT_KERNEL_SPEEDUP / MULTI_METRIC_MAXIMA / NOT_REPRODUCED**。（KEEP_ADJACENT） |
