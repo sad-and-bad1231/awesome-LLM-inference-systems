@@ -22,7 +22,7 @@
 | [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **76** | |
 
-## Papers (76)
+## Papers (77)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,7 +47,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (20)
+### Performance & Efficiency Studies (21)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -73,6 +73,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Evaluating the Applicability of LLM Inference Optimizations on Apple Silicon](https://arxiv.org/abs/2610.31479) | arXiv 2026 (preprint; submitted Oct 22) | 在统一的 Single-request Decode 负载下跨四台 Apple Silicon 机器和匹配 RTX4090 比较 KV Pruning、Speculative Decoding、GPU Kernel Port、PTQ；作者发现被测 Speculative Methods 在 Apple 上均**降低**吞吐，KV Pruning 在 Apple 最高 1.75× E2E、移植 Kernel 最高 1.20× Decode，但 GPU 上结论可反转。**PLATFORM_WORKLOAD_DEPENDENT / APPLE_METAL_NO_ASYNC_COPY / NOT_SERVER_BATCHING**。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [Only Accepted Tokens Count: An Energy Accounting of Speculative Decoding Under Latency Targets](https://arxiv.org/abs/2610.40287) | arXiv 2026 (preprint; submitted Oct 29) | H100/H200 **SGLang CUDA Graph、5 Corpora、Batch1–64** 测量不同 Speculation Drafter 的 **Energy/Accepted Token** 及 Latency Target：Batch 变大、Verifier 进入 Compute-bound 或 Acceptance 低时 Speculation 可能反而多耗能；作者实测的边界而非新 Kernel 加速或普适能效改进。（KEEP_STRICT; REAL_GPU_MEASUREMENT; NEGATIVE_FINDING; NOT_REPRODUCED） |
 | 2026 | [How Far Are We From On-Device VLM Inference? A Measurement Study on Edge NPUs](https://arxiv.org/abs/2610.40039) | arXiv 2026 (preprint; submitted Oct 29) | 真实 **3 Edge NPU、6 VLM、10 Multimodal Benchmarks** 的 End-to-end→Kernel Measurement：特定 Hexagon Softmax Vector Pipeline 阻塞矩阵执行，Tensor Rearrangement 抵消 Linear Attention 理论收益，Decode GQA Shapes 改变 CPU/NPU 比较。**非 Ascend 910B2 架构与实测**；可用于方法学而非直接 Kernel 瓶颈归因。（KEEP_STRICT; REAL_EDGE_NPU; NOT_REPRODUCED） |
+| 2026 | [LLM-PowerTrace: A Dataset of Time-Resolved GPU Power Traces for AI Compute](https://arxiv.org/abs/2610.38315) | arXiv 2026 (preprint; submitted Oct 28) | 发布带 Workload Metadata 的**每 GPU 100ms Power Time Series**，覆盖推理 Concurrency、GPU Clock、KV/Weight Quantization、Prompt/Output Length、Arrival Pattern，也有 Fine-tuning 控制矩阵，并定义 Grid-facing Ramp/Peak 指标及外推模型。**REAL_GPU_POWER_SAMPLING / INFERENCE_AND_TRAINING_MIXED / SAMPLING_RESOLUTION_100MS / AUTHOR_DATASET_NOT_INDEPENDENTLY_REPLAYED**；不是新的 Serving 加速算法。（KEEP_STRICT；MEASUREMENT_DATASET） |
 
 ### Profiling & Diagnosis (6)
 
