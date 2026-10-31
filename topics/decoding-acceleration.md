@@ -21,7 +21,7 @@
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **73** | |
 
-## Papers (80)
+## Papers (81)
 
 ### Draft Models & Candidate Generation (17)
 
@@ -92,7 +92,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Inference-Cost-Aware Dynamic Tree Construction for Efficient Inference in Large Language Models (CAST)](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7f9923be721e32592466d9a49c6364e1-Abstract-Conference.html) | ICLR 2026 (formal conference paper) | 在 EAGLE-2/3 的动态 Draft Tree 基础上，显式感知 GPU 配置与 Batch Size 的 Draft/Verification 成本以调整 Tree 结构；作者在六任务/六 LLM 报告相对同类最优方法约 5%–20% 收益，公开 [EAGLE/SGLang 代码入口](https://github.com/EAGLE-Research/sglang-eagle4)。未独立复现在线动态批处理及 Ascend 性能。(KEEP_STRICT; AUTHOR_REPORTED) |
 | 2026 | [Understanding Target Probability Reuse in Speculative Decoding](https://arxiv.org/abs/2610.29210) | arXiv 2026 (preprint; Oct 22 announcement) | 澄清 Target Tree Verification 的概率无法无条件跨轮精确重用；提前 Target Pass 的 First-token Reranking 与 Sampling 更有效，六个 Target 的 Tree 实验并有作者代码；独立 Target Pass 需要与 Draft Overlap 才有延迟收益。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Adaptive Speculation in Serving (14)
+### Adaptive Speculation in Serving (15)
 
 动态 Draft 长度、启停决策及异构/分布式部署。
 
@@ -112,6 +112,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Not-a-Bandit: Provably No-Regret Drafter Selection in Speculative Decoding for LLMs](https://proceedings.iclr.cc/paper_files/paper/2026/hash/20563b8508ba42e1b688d922e926ee26-Abstract-Conference.html) | ICLR 2026 | 利用一次 Target Verification 的反馈估计多个 Draft 模型，并建立有无遗憾保证的在线选择策略；有算法/系统开销和解码实验，适用多 Drafter 场景。 |
 | 2026 | [WISP: Waste- and Interference-Suppressed Distributed Speculative LLM Serving at the Edge via Dynamic Drafting and SLO-Aware Batching](https://doi.org/10.1145/3805653) | PACM/POMACS 2026 (SIGMETRICS) | 把边缘设备纳入推测解码服务，用 speculation controller、验证时延估计与验证批调度抑制无效 drafting 与验证干扰，实测系统容量与 goodput 较中心化服务及 SLED 最高提升 2.1/4.1 与 1.94/3.7 倍。 （真实正式出版版本：PACM/POMACS 2026 10(2), Article 55, DOI 10.1145/3805653；区别于三页 SIGMETRICS 摘要。） |
 | 2026 | [Speculative Decoding for Mixture-of-Experts Models: Expert Bytes, Kernel Bandwidth and the Best Draft Length](https://arxiv.org/abs/2610.34440) | arXiv 2026 (preprint; Oct 26 announcement) | 建立 MoE 验证步的 Expert Bytes / Effective Bandwidth 模型选择 Draft Length，并实测 llama.cpp CUDA/Metal、MLX-LM Expert 去重：去重并非必优、只在部分 Draft 长度胜出；提出对 DeepSeek-V2-Lite 的最佳 Draft 长度预测。是测量约束的机制分析，非全引擎加速结论。（KEEP_STRICT；REAL_KERNEL_MEASUREMENT；NOT_REPRODUCED） |
+| 2026 | [TableTune: Measured, Self-Correcting Draft-Length Tables for Dynamic Speculative Decoding](https://arxiv.org/abs/2610.38968) | arXiv 2026 (preprint; Oct 28) | 直接在 vLLM 原生 Serving Step 上计时 **Batch Size × Draft Length** 组合，建立最大 Throughput Table，再以实际 Accept Count 在线纠偏，替代手填静态推测宽度；作者 H100 五种 Drafter 中四种达到 Best Fixed 的至少 94% Throughput，MoE 固定表可能损失 18% 而校准表最多损失 3%；四 GPU llm-d 高负载对比所测固定宽度最高 +32%。**vLLM_SPECULATION_SCOPED / SOURCE_BASELINE_SPECIFIC / NOT_NO_SPECULATION_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Diffusion & Non-AR Generation (18)
 
