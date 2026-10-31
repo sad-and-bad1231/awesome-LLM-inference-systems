@@ -1,12 +1,14 @@
 # Awesome LLM Inference Systems
 
-**821 source-curated papers · 8 systems mechanisms · 44 engineering directions** (catalog snapshot: **2026-10-30**).
+**835 source-curated papers · 8 systems mechanisms · 44 engineering directions** (October 2026 monthly close: **2026-10-31**).
+
+The October 2026 closure [G0–G5 audit](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) compared SOSP/NeurIPS/EMNLP/arXiv, research labs and first-party deployment releases. **+14 paper entries** were individually pushed; industrial engineering changes are **not counted as papers**. Author speedups remain unreplicated here.
 
 A selective, engineering-centered reading map for efficient LLM inference: kernels and compilers, KV memory, decoding, quantization, MoE, serving runtime, distributed execution, and system measurement.
 
-**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 813 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
+**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 835 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
 
-[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [Recent source audit](reviews/ARXIV_OCT29_30_VERIFIED_20261030.md)
+[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
 
 **Historical admission snapshots** (722 → 736 → 766 → 793 → 803 → 813, with intermediate corrections) are preserved in [the archived homepage/strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md) and [topic intake chronology](reviews/archive/TOPIC_INDEX_HISTORY_20261030.md); dated totals are not today's inventory.
 
@@ -16,7 +18,7 @@ A selective, engineering-centered reading map for efficient LLM inference: kerne
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 821 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 835 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Six selected emerging execution problems; mature KV and hybrid attention work remains in the eight topic areas. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
