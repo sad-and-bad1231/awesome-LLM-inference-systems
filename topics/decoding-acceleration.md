@@ -21,7 +21,7 @@
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **73** | |
 
-## Papers (84)
+## Papers (85)
 
 ### Draft Models & Candidate Generation (18)
 
@@ -77,7 +77,7 @@ N-gram/检索/自投机与模型自身的低成本草稿路径。
 | 2026 | [EfficientRollout: System-Aware Self-Speculative Decoding for RL Rollouts](https://arxiv.org/abs/2606.18967) | NeurIPS 2026 (accepted list; preprint Jun 17; [code](https://github.com/furiosa-ai/EfficientRollout)) | RL Rollout Target Policy 持续更新导致固定 Draft Drift；从每轮 Policy 构造 Quantized Self-Drafter，并用 Batch/Length-aware SD Toggle + Acceptance-aware Draft Length 避免大 Batch 的低收益推测。作者在 8×A100、VeRL 0.7 + vendored vLLM 0.11.2 报告 **Rollout Latency 最高 −19.6%、RL 端到端 −12.7%** 对比加速 AR Rollout，按标准 Target Verify 保持目标分布。**RL_TRAINING_ROLLOUT_NOT_ONLINE_SERVING / AUTHOR_ARTIFACT / NOT_REPRODUCED**。（KEEP_ADJACENT；VENUE_CONFIRMED） |
 | 2026 | [GPU-Resident Speculative Decoding for In-Browser LLM Inference with WebGPU](https://arxiv.org/abs/2610.39761) | arXiv 2026 (preprint; Oct 29) | Browser WebGPU 的 CPU Readback/Dispatch Barrier 令逐 Token Speculation 失去优势：将 Draft、Verify、Accept 和 KV Maintenance 放入 GPU-resident Loop，配合确定性 Integer Multi-token Kernels 与 Context-mixing Drafter；作者在三种 Client GPU、七模型/11任务相较 WebLLM 报告 3.5–8.6× Decode，且**只声称与同一 Quantized Greedy Runtime 精确一致**。**CLIENT_WEBGPU_HARDWARE / OPTIMIZED_KERNEL_PLUS_SD_COMPOSITE / NOT_SERVER_GPU_OR_SAMPLING_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
-### Tree & Parallel Verification (10)
+### Tree & Parallel Verification (11)
 
 Candidate Tree、并行候选和 Target Verification 效率。
 
@@ -93,6 +93,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Training-Free Loosely Speculative Decoding: Accepting Semantically Correct Drafts Beyond Exact Match](https://proceedings.iclr.cc/paper_files/paper/2026/hash/acb94e709f02895fd98b5867f0b184f3-Abstract-Conference.html) | ICLR 2026 | FLy 将精确匹配放宽为熵门控和延迟验证窗口，利用目标模型自纠正行为接纳语义等价 Draft；在 70B/405B 模型上测得端到端加速，但不保证与严格 Speculative Decoding 的输出分布恒等。（APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [Inference-Cost-Aware Dynamic Tree Construction for Efficient Inference in Large Language Models (CAST)](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7f9923be721e32592466d9a49c6364e1-Abstract-Conference.html) | ICLR 2026 (formal conference paper) | 在 EAGLE-2/3 的动态 Draft Tree 基础上，显式感知 GPU 配置与 Batch Size 的 Draft/Verification 成本以调整 Tree 结构；作者在六任务/六 LLM 报告相对同类最优方法约 5%–20% 收益，公开 [EAGLE/SGLang 代码入口](https://github.com/EAGLE-Research/sglang-eagle4)。未独立复现在线动态批处理及 Ascend 性能。(KEEP_STRICT; AUTHOR_REPORTED) |
 | 2026 | [Understanding Target Probability Reuse in Speculative Decoding](https://arxiv.org/abs/2610.29210) | arXiv 2026 (preprint; Oct 22 announcement) | 澄清 Target Tree Verification 的概率无法无条件跨轮精确重用；提前 Target Pass 的 First-token Reranking 与 Sampling 更有效，六个 Target 的 Tree 实验并有作者代码；独立 Target Pass 需要与 Draft Overlap 才有延迟收益。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
+| 2026 | [HIPPO: Accelerating Video Large Language Model Inference via Holistic-aware Parallel Speculative Decoding](https://aclanthology.org/2026.emnlp-main.155/) | EMNLP 2026 Main (ACL Anthology) | Video-LM 轻量 Draft 仍消耗大量视觉 Token，且盲目 Pruning 会降低 Target Acceptance：HIPPO 用全局 Attention 与局部视觉语义选择高价值 Token，并将 Draft 与 Target Verification **并行 Overlap**。作者在四种 Video-LM、六 Benchmarks 相对 Vanilla AR 报告最高 **3.51× 推理加速**。**VIDEO_DRAFT_PRUNING / DRAFT_COST_AND_QUALITY_DEPENDENT / NOT_GENERIC_LLM_SPECULATION / NOT_REPRODUCED**；不把丢弃 Draft 视觉 Token 当成 Target 输出逐位变化证据。（KEEP_ADJACENT） |
 
 ### Adaptive Speculation in Serving (16)
 
