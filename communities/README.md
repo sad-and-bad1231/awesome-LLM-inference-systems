@@ -20,6 +20,8 @@ An opinionated, **small starting map** of people and codebases worth following f
 | **Ray Serve** | Application-serving framework for scalable online inference. | [Repository](https://github.com/ray-project/ray) |
 | **vLLM Ascend** | Community-maintained Ascend hardware plugin; do not attribute solely to one company. | [Repository](https://github.com/vllm-project/vllm-ascend) |
 
+**October 31 EMNLP source follow-up (zero additional institutional paper rows):** [Orthrus](https://aclanthology.org/2026.emnlp-main.28/) ([Illinois Data project](https://github.com/illinoisdata/Orthrus)) pairs embedding/generation kernels; [WG-KV](https://aclanthology.org/2026.emnlp-main.1063/) ([author code](https://github.com/EMCLab-Sinica/WG-KV)) introduces write-time KV admission; [Beyond-KV](https://aclanthology.org/2026.emnlp-main.526/) and [Seer](https://aclanthology.org/2026.emnlp-main.1852/) provide low-bit/semantic retrieval code. These are **EMNLP 2026 papers** already counted **once** under their decisive mechanisms; first-party lab/project pages are cross-references, not new bibliographic identities. Review [the 16-item October follow-up receipt](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md).
+
 ## October 2026 lab/industry-research cross-check
 
 **One paper, one canonical topic entry.** The following are **research-source cross-references**, not a separate count or a university ranking; published venue must be independently checked. Collab coauthorship ≠ lab-exclusive ownership.
