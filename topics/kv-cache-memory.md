@@ -22,9 +22,9 @@
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
 | **Total** | **160** | |
 
-## Papers (163)
+## Papers (164)
 
-### Prefix & Session Reuse (43)
+### Prefix & Session Reuse (44)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -73,6 +73,7 @@
 | 2026 | [Budgeted KV-Cache Repair for Evolving Contexts](https://arxiv.org/abs/2610.17338) | arXiv 2026 (preprint; Oct 12) | 对 Agent Context 删改后的被污染 KV 后缀，按 Semantic Unit 的 Relevance 分配部分 Recompute Budget，通过 Layer-packed Executor 合并不连续位置的刷新；五种模型和四类 Multi-hop QA 下，5% 后缀预算达到接近 Full Recompute 的任务质量，作者报告 Executor 相对逐 Interval 刷新最多 16.1×。**APPROXIMATE_BEHAVIOR / TASK_QUALITY_NOT_EXACT_KV_EQUIVALENCE**；16.1× 是 Refresh Executor 而非端到端 Serving。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [LatentRemedy: Efficient Remedy for Non-Prefix KV Cache Reuse in Multi-Agent Systems](https://arxiv.org/abs/2610.18014) | arXiv 2026 (preprint; Oct 13; [code](https://github.com/chenzhwsysu57/kvreuse)) | 跨冲突 Agent 复用非 Prefix KV 时，基于目标前缀隐藏状态生成少量 Task-conditioned Latent Tokens，对已污染 Cache 做语义校正，MLP 由 Full-prefill Distillation 训练；作者报告冲突任务质量优于 Selective Recomputation/Offset Calibration，同时长 Cache 的 TTFT 接近直接复用。**TRAINED_ADAPTER / MODEL_OUTPUT_NOT_EQUIVALENT / USER_TASK_DEPENDENT**，不是无损跨模型缓存共享。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
 | 2026 | [Raincheck: Deferred Multimodal Prefill for Efficient Multi-Turn MLLM Inference](https://arxiv.org/abs/2610.39562) | arXiv 2026 (preprint; Oct 29) | 在 Multi-turn Multimodal 中初始仅 Prefill Query-selected Tokens，将剩余 Tokens **按原顺序在 Decode 空闲算力/返回后间隙增量 Prefill**，通过 Attention Visibility 与 Affine State Mapping 延迟恢复 Full Context，以免 Hard Pruning 永久丢失后续问题所需视觉信息；Qwen3-VL-8B/Qwen3.5-9B、30% 初始保留，作者报告相比 Hard Pruning 恢复 77.7%/60.4% 丢失质量，SGLang MultiVerse 首轮 Mean TTFT 最高 −24.1%，TPOT 增幅小于 0.5%。**ASYNC_BACKGROUND_WORK / APPROXIMATE_EARLY_ANSWER / MULTIMODAL_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [A3: Attention-Aware Accurate KV Cache Fusion for Fast Large Language Model Serving](https://aclanthology.org/2026.emnlp-main.113/) | EMNLP 2026 Main (ACL Anthology) | 长 Context/RAG Chunk 直接复用旧 KV 时遗漏本轮问题的因果条件；A3 根据 Query-relevant Chunk 选择性 **Recompute/Fuse 预计算 KV**，避免均匀重算与错误位置更新。作者多个任务/模型对照五方法报告 **TTFT 最多约 2× 加快**，同时有相竞争的任务质量。**APPROXIMATE_CACHE_FUSION / QUERY_DEPENDENT / NOT_STRICT_OUTPUT_EQUIVALENCE / NO_INDEPENDENT_REPRODUCTION**；不能当作任意 Prompt 的无损 Prefix Reuse。（KEEP_STRICT） |
 
 ### Eviction, Compression & Quantization (50)
 
