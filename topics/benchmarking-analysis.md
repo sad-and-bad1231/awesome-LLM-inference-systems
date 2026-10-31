@@ -22,7 +22,7 @@
 | [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
 | **Total** | **76** | |
 
-## Papers (79)
+## Papers (80)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -89,7 +89,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ProMCP: Profiling Token Flows and Latency Costs in Model Context Protocol–Based LLM Agents](https://aclanthology.org/2026.findings-acl.1967/) | ACL Findings 2026 (NOT ACL Main) | 对 LLM Agent **MCP Host–Client–Server** 端到端六阶段执行做请求级 Token/Latency Attribution，公开 [代码](https://github.com/ResponsibleAILab/ProMCP)；作者在 20 Servers / 169 Tools、不同部署 Topology 上表明 Planning/Schema Injection vs Generation 的主要瓶颈随 Client 形态变化。**属于 Agent Workflow Profiling，不是 GPU/NPU Kernel Profiler，也不证明 Token/s 加速**。（KEEP_ADJACENT; REAL_WORKFLOW_PROFILING; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2026 | [LMTracer: Fine-Grained and Real-Time Performance Profiling for Production LLM Systems](https://llm-profiling.github.io/) | SOSP 2026 | 将 Fence/Probe Kernel 嵌入 GPU Graph 并流式回传 CPU Buffer，不打断异步执行；作者报告生产多月使用、微小 Profiling Overhead、定位 15 个问题。**GPU_GRAPH_DEPENDENT / AUTHOR_REPORTED / NOT_ASCEND_VALIDATED**。 |
 
-### Models & Simulators (14)
+### Models & Simulators (15)
 
 性能建模、容量估计、仿真和边界分析。
 
@@ -109,6 +109,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Compositional Performance Modeling of LLM Inference Clusters with Hierarchical KV Caching](https://arxiv.org/abs/2610.15366) | arXiv 2026 (preprint) | 将局部 Compute/Transfer Cost 与共享 KV Availability 分离组合为离散事件仿真器，模型在 1P1D 标定并迁移到 3P1D；作者 Qwen3-8B/32B SGLang 实机回放的平均 E2E 延迟 MAPE 1.34–6.36%，CPU 仿真回放快约 15×。**CALIBRATED_SIMULATOR / SCOPED_TO_TESTED_TOPOLOGIES**，不泛化为任意硬件精准预测。 |
 | 2026 | [COPE: Composable Performance Emulation for Mixture-of-Experts Offloading Policies](https://arxiv.org/abs/2610.33404) | arXiv 2026 (preprint; Oct 26 announcement) | 将 MoE Expert Residency 和执行策略拆成可组合 Policy Matrix，结合目标硬件 Operator Profiles 与离线 Routing Traces 构成 Virtual Heterogeneous Machine，预测 CPU/GPU Offloading 最优策略；作者报告策略预测误差缩小 1.7–6.8×。**Emulator/决策选型收益**，不是实际 Serving 直接提升 6.8×。（KEEP_ADJACENT；TRACE_DRIVEN_EMULATION；NOT_REPRODUCED） |
 | 2026 | [Dissecting the Carbon-SLO Tension in Geo-Distributed LLM Serving](https://arxiv.org/abs/2610.14571) | arXiv 2026 (preprint; submitted Oct 10; [authors' simulation code](https://github.com/topcuburak/carbon-slo-at-geoscale)) | 用实机校准的 Prefill/Decode Power、Continuous Batching 和 Queueing 建立跨地域 LLM Serving Simulator，比较 Greedy、Iterative ILP、Facility MILP 的 Carbon/SLO Frontier；作者在三种 LLM 与 MLPerf-derived SLO、**模拟区域集群** 中相对 Round Robin 报告最高 −60% Operational Carbon，伴随平均 **3% SLO Violations**。**CALIBRATED_REAL_NODE + SIMULATED_GEO_CLUSTER / ORACLE_OUTPUT_LENGTH_MAIN_SWEEP / NO_PHYSICAL_CARBON_DEPLOYMENT / NOT_REPRODUCED**；仅作为强边界的系统测量/仿真工作。（KEEP_ADJACENT） |
+| 2026 | [On the Fundamental Limits of Prefill-Based Decoding Length Prediction](https://arxiv.org/abs/2610.40541) | arXiv 2026 (preprint; Oct 29; author code linked in paper) | 将输出长度作为 **Stopped Stochastic Process**，证明 Sampling/Stop Randomness 限制 Prefill-hidden-state Predictor 的可达误差，得到 Prompt-conditional Normal Approximation 与 Affine Variance Law σ=αμ+b；对 MLP/EGTP/FiLM/Soft-label/MoE Predictor 同数据和 Sampling Settings 评测时表现接近误差下界。**THEORY_PLUS_BENCHMARK_PROTOCOL / NOT_ONLINE_SCHEDULER_ACCELERATION / CONDITIONAL_STOCHASTIC_ASSUMPTIONS / NOT_REPRODUCED**；为不确定性感知 Scheduler 的评测边界提供负面证据。（KEEP_STRICT） |
 
 ### Correctness & Reliability (13)
 

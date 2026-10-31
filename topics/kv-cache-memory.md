@@ -22,9 +22,9 @@
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
 | **Total** | **160** | |
 
-## Papers (160)
+## Papers (165)
 
-### Prefix & Session Reuse (42)
+### Prefix & Session Reuse (44)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
@@ -72,8 +72,10 @@
 | 2026 | [RaReCache: Bridging the Gap in Cross-Model KV Cache Reuse via Rank Disagreement-based Selective Recomputation](https://arxiv.org/abs/2610.11358) | arXiv 2026 (preprint) | 在不同规模的同族模型间用 Linear KV Mapping 加 Rank-disagreement 定位关键 Tokens，仅对部分位置由大模型重新 Prefill；作者 Qwen3/Llama 实机在线实验。**APPROXIMATE_QUALITY / MODEL_PAIR_SPECIFIC / SELECTIVE_RECOMPUTE**：23× 参数差情况下仅重算 30% 保留部分任务 95–99% 目标精度，不是精确 Cache 等价或无损提升。 |
 | 2026 | [Budgeted KV-Cache Repair for Evolving Contexts](https://arxiv.org/abs/2610.17338) | arXiv 2026 (preprint; Oct 12) | 对 Agent Context 删改后的被污染 KV 后缀，按 Semantic Unit 的 Relevance 分配部分 Recompute Budget，通过 Layer-packed Executor 合并不连续位置的刷新；五种模型和四类 Multi-hop QA 下，5% 后缀预算达到接近 Full Recompute 的任务质量，作者报告 Executor 相对逐 Interval 刷新最多 16.1×。**APPROXIMATE_BEHAVIOR / TASK_QUALITY_NOT_EXACT_KV_EQUIVALENCE**；16.1× 是 Refresh Executor 而非端到端 Serving。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [LatentRemedy: Efficient Remedy for Non-Prefix KV Cache Reuse in Multi-Agent Systems](https://arxiv.org/abs/2610.18014) | arXiv 2026 (preprint; Oct 13; [code](https://github.com/chenzhwsysu57/kvreuse)) | 跨冲突 Agent 复用非 Prefix KV 时，基于目标前缀隐藏状态生成少量 Task-conditioned Latent Tokens，对已污染 Cache 做语义校正，MLP 由 Full-prefill Distillation 训练；作者报告冲突任务质量优于 Selective Recomputation/Offset Calibration，同时长 Cache 的 TTFT 接近直接复用。**TRAINED_ADAPTER / MODEL_OUTPUT_NOT_EQUIVALENT / USER_TASK_DEPENDENT**，不是无损跨模型缓存共享。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
+| 2026 | [Raincheck: Deferred Multimodal Prefill for Efficient Multi-Turn MLLM Inference](https://arxiv.org/abs/2610.39562) | arXiv 2026 (preprint; Oct 29) | 在 Multi-turn Multimodal 中初始仅 Prefill Query-selected Tokens，将剩余 Tokens **按原顺序在 Decode 空闲算力/返回后间隙增量 Prefill**，通过 Attention Visibility 与 Affine State Mapping 延迟恢复 Full Context，以免 Hard Pruning 永久丢失后续问题所需视觉信息；Qwen3-VL-8B/Qwen3.5-9B、30% 初始保留，作者报告相比 Hard Pruning 恢复 77.7%/60.4% 丢失质量，SGLang MultiVerse 首轮 Mean TTFT 最高 −24.1%，TPOT 增幅小于 0.5%。**ASYNC_BACKGROUND_WORK / APPROXIMATE_EARLY_ANSWER / MULTIMODAL_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [A3: Attention-Aware Accurate KV Cache Fusion for Fast Large Language Model Serving](https://aclanthology.org/2026.emnlp-main.113/) | EMNLP 2026 Main (ACL Anthology) | 长 Context/RAG Chunk 直接复用旧 KV 时遗漏本轮问题的因果条件；A3 根据 Query-relevant Chunk 选择性 **Recompute/Fuse 预计算 KV**，避免均匀重算与错误位置更新。作者多个任务/模型对照五方法报告 **TTFT 最多约 2× 加快**，同时有相竞争的任务质量。**APPROXIMATE_CACHE_FUSION / QUERY_DEPENDENT / NOT_STRICT_OUTPUT_EQUIVALENCE / NO_INDEPENDENT_REPRODUCTION**；不能当作任意 Prompt 的无损 Prefix Reuse。（KEEP_STRICT） |
 
-### Eviction, Compression & Quantization (49)
+### Eviction, Compression & Quantization (51)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -128,8 +130,10 @@
 | 2026 | [DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5c1ddd2e59df46fd2aa85c833b1b36ed-Abstract-Conference.html) | ICLR 2025 | 通过优化辨别 Retrieval Heads 与 Streaming Heads，仅为前者保留完整 KV，后者存 Sink+Recent 常量窗口；[作者代码](https://github.com/mit-han-lab/duo-attention) + A100，MHA/GQA Cache Memory 最高 2.55×/1.67× 降低，Decode 最高 2.18×/1.50×；LongBench/NIAH 质量权衡，**非 Dense Attention 数值/输出完全等价**。属于重要混合 Head KV 机制，不重复 QServe 首页锚点。（KEEP_STRICT; ICLR_PROCEEDINGS; REAL_A100; PUBLIC_CODE; APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [MURMUR: An Efficient Inference System for Long-Form ASR](https://arxiv.org/abs/2606.01483) | arXiv 2026 (preprint; long-form ASR) | 长语音 ASR 的 Inter-chunk Size/Latency 调参 + Intra-chunk Speech/Output Token Sliding-window KV Eviction，改善单长窗精度与切块延迟矛盾；[作者代码](https://github.com/uw-syfi/Murmur)，AMI-IHM 上作者报告匹配 Full Single-pass Accuracy 时 Latency −4.2×、进一步 Eviction <1% 相对 tcpWER 退化。**邻接语音推理/非通用文本 LLM KV 淘汰策略**。（KEEP_ADJACENT; REAL_ASR_EXECUTION; PUBLIC_CODE; ACCURACY_LATENCY_TRADEOFF） |
 | 2026 | [DropKV: Decoupling Residual-Output Perturbation for Near-Optimal KV-Cache Eviction](https://arxiv.org/abs/2610.22130) | arXiv 2026 (preprint; Oct 15; conference-track identity not inferred) | 通过独立 Token 的 Residual-output Perturbation Scoring 将联合 Eviction 近似问题可解化，在论文 Cone Condition 下给出近似保证；融合 Triton Scorer 避免全 Attention Matrix 物化。作者报告 Scoring Kernel 19.8× 与**匹配 Batch Prefill** 最多 9.9% E2E 改善，RULER/LongBench 同预算质量对照；**APPROXIMATE_KV_EVICTION / NOT_FULL_ONLINE_SERVING_9.9PCT**。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [KV Admission: Learning What to Write for Efficient Long-Context LLM Inference](https://aclanthology.org/2026.emnlp-main.1063/) | EMNLP 2026 Main (ACL Anthology; [code](https://github.com/EMCLab-Sinica/WG-KV)) | 将 KV 管理前移至 **Admission 而非事后 Selection/Eviction**：WG-KV 学习预测 Token 在写入 Cache 前的长期价值，拒绝低效 Token，同时保留小型 Global KV 与 Sliding Local Cache，以减小长上下文 Prefill/Decode 带宽和容量。**TRAINED_WRITE_GATE / MODEL_BEHAVIOR_APPROXIMATE / NO_LOSSLESS_KV_EQUIVALENCE / NOT_REPRODUCED**；正式论文声明真实推理性能收益但官方摘要无足够统一倍数，未写虚构 speedup。（KEEP_STRICT） |
+| 2026 | [VisCache: Visual KV Cache Pruning for Efficient Vision Large Language Model Inference](https://aclanthology.org/2026.emnlp-main.1196/) | EMNLP 2026 Main (ACL Anthology) | VLLM 长视频视觉 KV 的粗细两级压缩：先以轻量 VLM 选语义关键帧，再基于 VLLM Attention Pattern 给各层 **Parabolic KV Budget**，仅修剪 Key、融合 Value，避免简单同率删 Token 导致质量崩溃。作者在测试的 Vision Long-context Tasks 报告保留 **19%–28% KV** 时，整体推理速度最高 2.35×、维持竞争性任务质量。**VIDEO_VISUAL_KV_APPROXIMATION / TWO_STAGE_COST_INCLUDED_ONLY_AS_AUTHORED / NOT_TEXT_LLM_SERVING_OR_STRICT_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
-### Sparse KV Retrieval (17)
+### Sparse KV Retrieval (18)
 
 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。
 
@@ -152,6 +156,7 @@
 | 2026 | [SpeContext: Enabling Efficient Long-context Reasoning with Speculative Context Sparsity in LLMs](https://doi.org/10.1145/3779212.3790224) | ASPLOS 2026 | 以 Distilled Retrieval Head 预测原模型关注的长上下文 KV，异步预取和 Elastic KV Residency 重叠 GPU 计算；在云端和边缘实机评估准确率/吞吐/显存折中。 |
 | 2026 | [Using Span Queries to Optimize Cache and Attention Locality](https://proceedings.mlsys.org/paper_files/paper/2026/hash/f5d77f1e501e0496377d8b68c8e81a48-Abstract-Conference.html) | MLSys 2026 | 使用可交换 Span Query 依赖树统一 Chat/RAG/Agent 的 KV 复用优化。 |
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
+| 2026 | [Seer: Efficient KV Cache Management for LLM Acceleration via Mitigating Semantic Search Inefficiency](https://aclanthology.org/2026.emnlp-main.1852/) | EMNLP 2026 Main ([code](https://github.com/Acaciasama/Seer)) | Semantic-space KV Centroid（离线训练）对 Token Importance 做粗粒度近似，再以 Product Quantization+Asymmetric Distance LUT 降低实际 Sparse Retrieval 访存/Index Cost；作者报告理论 Attention Bandwidth 可降 40×、**32K Context Attention 最高 5.57×、相同测试中 E2E 最高 2×** 对照 Full Attention。**OFFLINE_TRAINED_CENTROIDS / APPROXIMATE_RETRIEVAL / THEORY_BANDWIDTH_NOT_MEASURED_TRAFFIC / NOT_REPRODUCED**，不能把 40× 当 E2E。（KEEP_STRICT） |
 
 ### Offloading & Tiered Storage (30)
 

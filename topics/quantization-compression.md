@@ -22,7 +22,7 @@
 | [Lossless & Delta Compression](#lossless--delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
 | **Total** | **37** | |
 
-## Papers (44)
+## Papers (46)
 
 ### Weight-Only & Rotation (12)
 
@@ -75,7 +75,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [Context-Aware Precision Scheduling for Small Language Models](https://arxiv.org/abs/2610.15640) | arXiv 2026 (preprint; Oct 11) | 以实测 Tensor Precision Cost 与上下文长度/KV 负担校准混合权重精度策略，修改 llama.cpp 在不丢弃 Session KV 的前提下切换已预置的多精度 Weight Bank；笔记本 GPU 上相对 Byte-aware Policy 报告 16K 情况更低 KL、长 Context Deadline 更稳定。**EXTRA_WEIGHT_BANK_MEMORY（作者约 2.072GiB） / MODEL_QUALITY_TRADEOFF / SLM_EDGE_ONLY**，不代表 910B2 通用 Prefill/Decode 加速。（KEEP_ADJACENT；EXECUTED_RUNTIME；NOT_REPRODUCED） |
 | 2026 | [The Price of Precision: A Calibrated Cost Model for Mixed-Precision LLM Serving](https://arxiv.org/abs/2610.15629) | arXiv 2026 (preprint; submitted Oct 11) | 不再以平均 Bitwidth/Weight Bytes 代理 Latency，而是校准 Hardware/Stack 的 **Compute、Weight-load 与 KV-access** 主瓶颈，按 Prefill/Decode、Batch/Context 工作点预测执行成本，并结合 Per-tensor Accuracy Sensitivity 用 DP 选精度方案；作者在三类硬件比较预测/分配方法。**COST_MODEL_AND_ALLOCATOR / MODEL_QUANTIZATION_CHANGES_QUALITY / HARDWARE_CALIBRATION_REQUIRED / NO_UNIVERSAL_SPEEDUP**；不同于只按 Byte Budget 分位宽。（KEEP_STRICT；NOT_REPRODUCED） |
 
-### KV Cache Quantization (5)
+### KV Cache Quantization (7)
 
 KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 
@@ -86,6 +86,8 @@ KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。
 | 2026 | [SAW-INT4: System-Aware 4-Bit KV-Cache Quantization for Real-World LLM Serving](https://arxiv.org/abs/2604.19157) | arXiv 2026 (preprint) | 将 Token-wise INT4 与 Block-diagonal Hadamard Rotation 融合至 Paged KV 的 Quantization/Attention Kernel，公开 SGLang 运行与复现脚本；质量近 BF16 同时保持 Plain INT4 Serving Throughput。（KEEP_ADJACENT） |
 | 2026 | [Read What Matters: Query-Adaptive Quantization for KV Caches (ReadKV)](https://arxiv.org/abs/2610.11245) | arXiv 2026 (preprint; Oct 8) | 用 Progressive KV Codes 区分**存储精度**与每次 Query 的**读取 Bit Budget**，Query-guided Key-channel Read 后按 Attention 选择 Value-token Refinements；作者六模型评估和 A10G **8K/B1/Single-layer** Codec 测试，相对所测 TurboQuant Reader 延迟低 39%。**APPROXIMATE_KV / SINGLE_LAYER_CODEC_NOT_LLM_SERVING_E2E / LIMITED_HARDWARE**。（KEEP_ADJACENT；REAL_GPU_MICROBENCH；NOT_REPRODUCED） |
 | 2026 | [Quant VideoGen: Auto-Regressive Long Video Generation via 2-Bit KV-Cache Quantization](https://proceedings.mlr.press/v306/xi26f.html) | ICML 2026 (PMLR 306; MIT Han Lab) | 针对 AR Video Diffusion 的时空 KV 相似性做 Semantic-aware Smoothing 与 Progressive Residual 2-bit 量化；作者在 LongCat-Video/HY-WorldPlay/Self-Forcing、H100/RTX4090 报告 KV Memory 最高降低 7.0×、End-to-end Latency **额外开销＜4%**，以更大 Context 增强长视频质量。**VIDEO_DIFFUSION_ADJACENT / LOSSY_KV / NOT_TEXT_LLM / NOT_SERVING_SPEEDUP**。（KEEP_ADJACENT；NOT_REPRODUCED） |
+| 2026 | [SampKV: Saliency-Aware Mixed-Precision KV Cache for Efficient Diffusion Language Model Inference](https://aclanthology.org/2026.emnlp-main.1968/) | EMNLP 2026 Main (ACL Anthology, October) | dLLM Bidirectional Attention 的完整 BF16 KV 过大；大部分历史状态保留 2-bit、少量 Attention-salient Tokens 提高精度，**Triton Kernel 直接消费 Packed Mixed-precision Cache**，避免全精度中间物化；作者在 LLaDA/Dream 上相同负载最高 Peak Memory −54%，或相同 Peak Memory 预算吞吐最高 +2.06×，任务质量近似保持。**DISTINCT_COMPARISON_BUDGETS / QUANTIZED_MODEL_STATE / DIFFUSION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Beyond: Better-than-Full-Precision KV Caches via Learnable Non-Uniform Quantization as Implicit Regularization](https://aclanthology.org/2026.emnlp-main.526/) | EMNLP 2026 Main ([source](https://github.com/wsxhjnb1/Beyond-KV-Cache)) | 不再仅最小化 KV 重建误差，而是冻结 LLM Backbone、学习基于 Next-token NLL 的非均匀量化 Levels/Thresholds，并令 Training/Inference 使用同一 Hard Quantizer；4-bit Codes+Scale 相当于 5 effective bits/KV scalar（相对 BF16 3.2× 压缩）。作者 B300 Packed-cache Kernel 最高比 FA4 快 1.50×，所测 **vLLM E2E Throughput 最高 1.17×**；**LEARNED_QUANTIZER / MODEL_OUTPUT_QUALITY_CHANGED / KERNEL_VS_SERVING_SEPARATE / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Recurrent State Quantization (4)
 

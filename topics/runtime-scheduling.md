@@ -22,9 +22,9 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (148)
+## Papers (151)
 
-### Batching, Queues & SLOs (42)
+### Batching, Queues & SLOs (43)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -72,8 +72,9 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Requests of a Feather Must Flock Together: Batch Size vs. Prefix Homogeneity in LLM Inference](https://arxiv.org/abs/2605.06046) | ACM ATC 2026 (accepted; proceedings pending) | Feather 将 Prefix 同质性与 Batch Size 联合调度：Chunked Hash Tree 降低 CPU Prefix 查找开销，RL 决定何时停止扩 Batch；作者在 vLLM/SGLang 报告特定 Prefix-heavy Workload E2E throughput 2–10×。**WORKLOAD_PREFIX_DISTRIBUTION_DEPENDENT / RL_OVERHEAD / AUTHOR_REPORTED / GENERALITY_UNVERIFIED**；不能外推到无共享 Prefix 的通用服务。 |
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
 | 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Efficient Iterative Retrieval with Heterogeneous Batching (Orthrus)](https://aclanthology.org/2026.emnlp-main.28/) | EMNLP 2026 Main ([code](https://github.com/illinoisdata/Orthrus)) | Embedding/Retrieval 与 Generative LLM Token Decode 在共享 GPU 上分模型执行形成 Bubble；Orthrus 用 **Incremental Computing + Single-GPU-Kernel Heterogeneous Batching** 将 Embedding/Generation Workload 对齐，再进行 Workload-aware Batch Composition。作者 **4×A100** 多 Deployment Baselines（含 vLLM Homogeneous Batching）报告 Throughput +1.28–4.52×、Latency 最多 −52%；**HETEROGENEOUS_EMBEDDING_PLUS_GENERATION / SELECTED_DEPLOYMENT_COMPARISONS / NOT_STANDARD_TEXT_GENERATION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Routing & Load Balancing (17)
+### Routing & Load Balancing (18)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
@@ -96,6 +97,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Taming Inference Workloads at Global Scale: Foundation Model Serving in Amazon Bedrock](https://doi.org/10.1145/3830418.3843855) | SOSP 2026 | Amazon Bedrock 生产 **Workload Management System (WLM)** 按请求特征执行 Admission、Classification、Routing 与 Scheduling，并结合跨 Region 弹性容量治理突发负载。**PRODUCTION_EXPERIENCE / AWS_SPECIFIC / ARTIFACT_NOT_PUBLIC**；不臆造公开代码、独立复现实验或通用 vLLM 加速。 |
 | 2026 | [Vesta: Queueing-Aware LLM Scheduling for Real-World Workloads](https://arxiv.org/abs/2610.14686) | arXiv 2026 (preprint) | 为 Agent Session 固定 KV Authoritative Holder、每次请求独立选 Executor；以 Queue Backlog、Prefix Reuse、跨实例 KV Transfer 与新增负载 Queueing Externality 联合决策。作者 Qwen/Hybrid 模型 **Trace Replay** 报告 PD 合置吞吐 +14%、Mean TTFT -57.8%；分离部署 P99 TTFT 最多 -29%（同吞吐）。**TRACE_REPLAY_NOT_LIVE_PRODUCTION / PUBLIC_ARTIFACT_UNVERIFIED**。 |
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM ATC 2026 (accepted; proceedings pending) | Prefill MoE Expert Activation Signature 预测 Decode 阶段 Expert Locality，Balanced K-means + Locality-band Least-loaded Worker 选择；在 KV Block 旁保存 Signature，Prefix Cache Hit 不丢信号。作者 vLLM 最多 40 GPU/3 MoE 模型、对最强 Load-aware Baseline Median TPOT -5.9% 至 -13.9%；**REQUEST_ROUTING_ONLY / ORIGINAL_EXPERT_SELECTION_UNCHANGED / TAIL_EFFECT_SMALLER / NOT_ASCEND_TESTED**。 |
+| 2026 | [DolphinRouting: Cluster-Level Binary Routing for Disaggregated LLM Inference Serving](https://arxiv.org/abs/2610.40292) | arXiv 2026 (preprint; Oct 29) | 在固定 Prefill/Decode 资源分配下，以 Input Length、P/D Cache-adjusted Length 和 Output Length 聚类，离线按 E2E SLO 学习每簇本地 Prefill / 远端 Prefill **Binary Routing**，在线仅需 Feature+Lookup；作者在真实 PD Cluster 的 Mixed Workload 和真实数据对比 **NVIDIA Dynamo** 报告 P90 TTFT −5.7%–7.9%、P90 TPOT −2.6%–10.1%。**REAL_CLUSTER / FIXED_PD_RESOURCES / NO_UNIVERSAL_SLO_GAIN / NOT_REPRODUCED**；无需发明跨集群吞吐结论。（KEEP_STRICT） |
 
 ### P/D Allocation & Autoscaling (22)
 
@@ -126,7 +128,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 | 2026 | [PhOSv1: Efficient Scaling of Model Sleeping on a Single Server for Autoscaling with GPU-Context Deduplication](https://arxiv.org/abs/2610.39999) | arXiv 2026 (preprint; submitted Oct 29) | 用中心 Daemon/API Remoting 对长期 Sleep 的 vLLM Instances 共享 CUDA Context/Kernel Binary；作者 **10 Qwen、10min 稀疏 Poisson Trace、Vanilla 6GiB Sleep Budget** 上 Mean E2E TTFT 146.82→19.09s。**长尾多模型 Autoscaling 而非稳态 Decode Speed**；HPCC 2026 Accepted List 可查，正式出版/Ascend 实现尚未验证。（KEEP_STRICT; CUDA_SPECIFIC; LONG_TAIL; NOT_REPRODUCED） |
 
-### Preemption & Multi-Tenancy (29)
+### Preemption & Multi-Tenancy (30)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -161,6 +163,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [gKSM: GPU Memory Deduplication at Driver Layer for Serverless LLM Inference](https://arxiv.org/abs/2610.25219) | arXiv 2026 (SIGOPS ATC acceptance claimed) | 跨同 GPU 的 Serverless 模型副本共享只读权重，结合 CPU/GPU Hash、Zero-copy Dedup 及 CUDA VMM Remapping + Page-fault Copy-on-write 保持隔离；作者实机显存 -59.8%、受限多实例吞吐 2.15×。**CUDA_DRIVER_LEVEL / REQUIRES_PRIVILEGED_RUNTIME / CLUSTER_SCALE_SIMULATED**；不是通用 KV 状态去重。 |
 | 2026 | [EdgePace: Deadline- and Freshness-Aware LLM Scheduling on Unified-Memory Platforms](https://arxiv.org/abs/2610.37307) | arXiv 2026 (preprint; Oct 27) | 在统一内存边缘设备上为前台感知任务提供可暂停的 Prefill/Decode 和带宽竞争监测，按 Deadline Slack 与 Output Freshness 调度 LLM。OnePlus 13、3 款 Jetson 的多相机/机器人任务实测，作者报告前台 Deadline Miss 减少 24.1–96.1%、保留 64.9–98.5% LLM 吞吐；边缘实时执行边界，不是数据中心 Goodput。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [DualPace: Decoupled Scheduling and Cooperative GPU–CPU Decoding for LLM Serving](https://arxiv.org/abs/2610.33501) | arXiv 2026 (preprint; Oct 26 announcement) | 将 CPU AMX Decode 变成独立 Scheduler/Engine，并可按需从 GPU Dense Assist 获取稠密计算；作者在 Decode-oriented 负载报告相对 NEO Throughput +6.9–43.2%、同 P99 ITL 下请求率 +7.3–50.5%。需额外 CPU AMX，不等于 GPU-only vLLM 加速。（KEEP_STRICT；REAL_EXECUTION；NOT_REPRODUCED） |
+| 2026 | [RW-TTT: Batched Serving for Request-Owned Test-Time Training State](https://aclanthology.org/2026.emnlp-main.232/) | EMNLP 2026 Main (October) | Request-owned Test-time Training State（Fast Weight / Low-rank Delta）改变共享静态权重的 Batching 安全假设；在每个 Decode Step 显式标记 Owner/Version/READ-WRITE Effect，仅融合兼容阶段并将更新提交回 Owner，避免跨请求 State 污染。作者 **单 GPU、8 路 In-place TTT** 报告 274.61 tok/s、相比顺序执行 9.31×、相比 Memory-matched Independent Replicas 3.44×，RULER 与 Ownership Checks 通过。**TTT_MODEL_ONLY / NOT_GENERAL_STATIC_LLM_BATCH_GAIN / REAL_SINGLE_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Power & Energy Efficiency (11)
 
