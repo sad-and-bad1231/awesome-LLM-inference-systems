@@ -22,7 +22,7 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (150)
+## Papers (151)
 
 ### Batching, Queues & SLOs (43)
 
@@ -128,7 +128,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 | 2026 | [PhOSv1: Efficient Scaling of Model Sleeping on a Single Server for Autoscaling with GPU-Context Deduplication](https://arxiv.org/abs/2610.39999) | arXiv 2026 (preprint; submitted Oct 29) | 用中心 Daemon/API Remoting 对长期 Sleep 的 vLLM Instances 共享 CUDA Context/Kernel Binary；作者 **10 Qwen、10min 稀疏 Poisson Trace、Vanilla 6GiB Sleep Budget** 上 Mean E2E TTFT 146.82→19.09s。**长尾多模型 Autoscaling 而非稳态 Decode Speed**；HPCC 2026 Accepted List 可查，正式出版/Ascend 实现尚未验证。（KEEP_STRICT; CUDA_SPECIFIC; LONG_TAIL; NOT_REPRODUCED） |
 
-### Preemption & Multi-Tenancy (29)
+### Preemption & Multi-Tenancy (30)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -163,6 +163,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [gKSM: GPU Memory Deduplication at Driver Layer for Serverless LLM Inference](https://arxiv.org/abs/2610.25219) | arXiv 2026 (SIGOPS ATC acceptance claimed) | 跨同 GPU 的 Serverless 模型副本共享只读权重，结合 CPU/GPU Hash、Zero-copy Dedup 及 CUDA VMM Remapping + Page-fault Copy-on-write 保持隔离；作者实机显存 -59.8%、受限多实例吞吐 2.15×。**CUDA_DRIVER_LEVEL / REQUIRES_PRIVILEGED_RUNTIME / CLUSTER_SCALE_SIMULATED**；不是通用 KV 状态去重。 |
 | 2026 | [EdgePace: Deadline- and Freshness-Aware LLM Scheduling on Unified-Memory Platforms](https://arxiv.org/abs/2610.37307) | arXiv 2026 (preprint; Oct 27) | 在统一内存边缘设备上为前台感知任务提供可暂停的 Prefill/Decode 和带宽竞争监测，按 Deadline Slack 与 Output Freshness 调度 LLM。OnePlus 13、3 款 Jetson 的多相机/机器人任务实测，作者报告前台 Deadline Miss 减少 24.1–96.1%、保留 64.9–98.5% LLM 吞吐；边缘实时执行边界，不是数据中心 Goodput。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [DualPace: Decoupled Scheduling and Cooperative GPU–CPU Decoding for LLM Serving](https://arxiv.org/abs/2610.33501) | arXiv 2026 (preprint; Oct 26 announcement) | 将 CPU AMX Decode 变成独立 Scheduler/Engine，并可按需从 GPU Dense Assist 获取稠密计算；作者在 Decode-oriented 负载报告相对 NEO Throughput +6.9–43.2%、同 P99 ITL 下请求率 +7.3–50.5%。需额外 CPU AMX，不等于 GPU-only vLLM 加速。（KEEP_STRICT；REAL_EXECUTION；NOT_REPRODUCED） |
+| 2026 | [RW-TTT: Batched Serving for Request-Owned Test-Time Training State](https://aclanthology.org/2026.emnlp-main.232/) | EMNLP 2026 Main (October) | Request-owned Test-time Training State（Fast Weight / Low-rank Delta）改变共享静态权重的 Batching 安全假设；在每个 Decode Step 显式标记 Owner/Version/READ-WRITE Effect，仅融合兼容阶段并将更新提交回 Owner，避免跨请求 State 污染。作者 **单 GPU、8 路 In-place TTT** 报告 274.61 tok/s、相比顺序执行 9.31×、相比 Memory-matched Independent Replicas 3.44×，RULER 与 Ownership Checks 通过。**TTT_MODEL_ONLY / NOT_GENERAL_STATIC_LLM_BATCH_GAIN / REAL_SINGLE_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Power & Energy Efficiency (11)
 
