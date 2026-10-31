@@ -1,6 +1,6 @@
 # Strict Review: evidence-first curation
 
-**Active G0–G5 gates (2026-10-30).** The live catalog contains **813 source-curated** unique topic entries. This is an editorial source/identity selection, **not** a statement that 813 implementations, paper baselines or performance claims have passed independent G3/G4 replication. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
+**Active G0–G5 gates (rechecked 2026-10-31).** The live catalog contains **835 source-curated** unique topic entries as of the [October month-end audit](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md). This is an editorial source/identity selection, **not** a statement that 835 implementations, paper baselines or performance claims have passed independent G3/G4 replication. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
 
 **Prior historical snapshots and numerical claims:** [archived strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md), [curation chronology](reviews/archive/CURATION_HISTORY_20261030.md) and dated [G0–G5 receipts](reviews/). Only the [topic index](topics/README.md) defines the present inventory; unresolved HOLD records must live outside canonical topics.
 
