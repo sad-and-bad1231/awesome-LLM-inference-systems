@@ -22,7 +22,7 @@
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
 | **Total** | **160** | |
 
-## Papers (161)
+## Papers (162)
 
 ### Prefix & Session Reuse (43)
 
@@ -74,7 +74,7 @@
 | 2026 | [LatentRemedy: Efficient Remedy for Non-Prefix KV Cache Reuse in Multi-Agent Systems](https://arxiv.org/abs/2610.18014) | arXiv 2026 (preprint; Oct 13; [code](https://github.com/chenzhwsysu57/kvreuse)) | 跨冲突 Agent 复用非 Prefix KV 时，基于目标前缀隐藏状态生成少量 Task-conditioned Latent Tokens，对已污染 Cache 做语义校正，MLP 由 Full-prefill Distillation 训练；作者报告冲突任务质量优于 Selective Recomputation/Offset Calibration，同时长 Cache 的 TTFT 接近直接复用。**TRAINED_ADAPTER / MODEL_OUTPUT_NOT_EQUIVALENT / USER_TASK_DEPENDENT**，不是无损跨模型缓存共享。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
 | 2026 | [Raincheck: Deferred Multimodal Prefill for Efficient Multi-Turn MLLM Inference](https://arxiv.org/abs/2610.39562) | arXiv 2026 (preprint; Oct 29) | 在 Multi-turn Multimodal 中初始仅 Prefill Query-selected Tokens，将剩余 Tokens **按原顺序在 Decode 空闲算力/返回后间隙增量 Prefill**，通过 Attention Visibility 与 Affine State Mapping 延迟恢复 Full Context，以免 Hard Pruning 永久丢失后续问题所需视觉信息；Qwen3-VL-8B/Qwen3.5-9B、30% 初始保留，作者报告相比 Hard Pruning 恢复 77.7%/60.4% 丢失质量，SGLang MultiVerse 首轮 Mean TTFT 最高 −24.1%，TPOT 增幅小于 0.5%。**ASYNC_BACKGROUND_WORK / APPROXIMATE_EARLY_ANSWER / MULTIMODAL_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Eviction, Compression & Quantization (49)
+### Eviction, Compression & Quantization (50)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -129,6 +129,7 @@
 | 2026 | [DuoAttention: Efficient Long-Context LLM Inference with Retrieval and Streaming Heads](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5c1ddd2e59df46fd2aa85c833b1b36ed-Abstract-Conference.html) | ICLR 2025 | 通过优化辨别 Retrieval Heads 与 Streaming Heads，仅为前者保留完整 KV，后者存 Sink+Recent 常量窗口；[作者代码](https://github.com/mit-han-lab/duo-attention) + A100，MHA/GQA Cache Memory 最高 2.55×/1.67× 降低，Decode 最高 2.18×/1.50×；LongBench/NIAH 质量权衡，**非 Dense Attention 数值/输出完全等价**。属于重要混合 Head KV 机制，不重复 QServe 首页锚点。（KEEP_STRICT; ICLR_PROCEEDINGS; REAL_A100; PUBLIC_CODE; APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [MURMUR: An Efficient Inference System for Long-Form ASR](https://arxiv.org/abs/2606.01483) | arXiv 2026 (preprint; long-form ASR) | 长语音 ASR 的 Inter-chunk Size/Latency 调参 + Intra-chunk Speech/Output Token Sliding-window KV Eviction，改善单长窗精度与切块延迟矛盾；[作者代码](https://github.com/uw-syfi/Murmur)，AMI-IHM 上作者报告匹配 Full Single-pass Accuracy 时 Latency −4.2×、进一步 Eviction <1% 相对 tcpWER 退化。**邻接语音推理/非通用文本 LLM KV 淘汰策略**。（KEEP_ADJACENT; REAL_ASR_EXECUTION; PUBLIC_CODE; ACCURACY_LATENCY_TRADEOFF） |
 | 2026 | [DropKV: Decoupling Residual-Output Perturbation for Near-Optimal KV-Cache Eviction](https://arxiv.org/abs/2610.22130) | arXiv 2026 (preprint; Oct 15; conference-track identity not inferred) | 通过独立 Token 的 Residual-output Perturbation Scoring 将联合 Eviction 近似问题可解化，在论文 Cone Condition 下给出近似保证；融合 Triton Scorer 避免全 Attention Matrix 物化。作者报告 Scoring Kernel 19.8× 与**匹配 Batch Prefill** 最多 9.9% E2E 改善，RULER/LongBench 同预算质量对照；**APPROXIMATE_KV_EVICTION / NOT_FULL_ONLINE_SERVING_9.9PCT**。（KEEP_STRICT；NOT_REPRODUCED） |
+| 2026 | [KV Admission: Learning What to Write for Efficient Long-Context LLM Inference](https://aclanthology.org/2026.emnlp-main.1063/) | EMNLP 2026 Main (ACL Anthology; [code](https://github.com/EMCLab-Sinica/WG-KV)) | 将 KV 管理前移至 **Admission 而非事后 Selection/Eviction**：WG-KV 学习预测 Token 在写入 Cache 前的长期价值，拒绝低效 Token，同时保留小型 Global KV 与 Sliding Local Cache，以减小长上下文 Prefill/Decode 带宽和容量。**TRAINED_WRITE_GATE / MODEL_BEHAVIOR_APPROXIMATE / NO_LOSSLESS_KV_EQUIVALENCE / NOT_REPRODUCED**；正式论文声明真实推理性能收益但官方摘要无足够统一倍数，未写虚构 speedup。（KEEP_STRICT） |
 
 ### Sparse KV Retrieval (17)
 
