@@ -21,7 +21,7 @@
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **73** | |
 
-## Papers (81)
+## Papers (82)
 
 ### Draft Models & Candidate Generation (17)
 
@@ -47,7 +47,7 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [Variational Speculative Decoding: Rethinking Draft Training from Token Likelihood to Sequence Acceptance](https://openreview.net/forum?id=7xO0ADKJu8) | ICML 2026 | 把草稿训练从贪心轨迹的 token 似然改为对潜在草稿路径做变分推断，直接最大化目标模型接受概率并减小与目标分布的散度，使解码相对 EAGLE-3 加速 9.58%。 |
 | 2026 | [RCSD: Reinforcement and Continual Learning for Domain-Specific Speculative Decoding](https://arxiv.org/abs/2610.29527) | arXiv 2026 (preprint; Oct 22 announcement) | 从真实 Accept/Reject 轨迹构建隐式偏好，训练 Draft 直接最大化 Acceptance Length；作者相对 HASS 报告平均接受长度 +35%、实际端到端推理 1.35×。需训练专用 Draft，非仅 Runtime 可插拔优化。（KEEP_STRICT；DRAFT_RETRAINING；NOT_REPRODUCED） |
 
-### Training-Free & Self-Speculation (21)
+### Training-Free & Self-Speculation (22)
 
 N-gram/检索/自投机与模型自身的低成本草稿路径。
 
@@ -74,6 +74,7 @@ N-gram/检索/自投机与模型自身的低成本草稿路径。
 | 2026 | [Prefix Keys and Values Matter Late: RIPE Caching for Self-Speculative Decoding in Looped Language Models](https://arxiv.org/abs/2610.34436) | arXiv 2026 (preprint; Oct 26 announcement) | Looped LM 的多 Loop KV 平面中，仅深层平面全长保留，最近窗口保留全深；作者在 Huginn/Raven 的预注册 GPU 实验报告 Self-speculation 2.58×（deepest plane）、固定内存吞吐 2.24×。模型特定、改变中间 KV 近似，非完全数值等价。（KEEP_STRICT；APPROXIMATE_CACHE；NOT_REPRODUCED） |
 | 2026 | [S³R: Fast and Faithful RL Rollouts via Self-Sparse Speculative Decoding](https://arxiv.org/abs/2610.13202) | arXiv 2026 (preprint; Oct 9) | RLVR 多样本 Group-relative Training 的 Rollout 用稀疏 Attention Draft + 完整 Attention Verification/Exact Speculative Sampling 保留 Dense Policy 的采样分布，KV-aware Schedule 避免反复 Offload；作者在 Qwen3-1.7B/8B 报告 **RL 训练端到端吞吐** 约 1.39×/1.35×。**INFERENCE_GENERATION_INSIDE_RL / TRAINING_THROUGHPUT_NOT_ONLINE_SERVING / EXACT_SAMPLING_UNDER_PAPER_ASSUMPTIONS**。（KEEP_ADJACENT；NOT_REPRODUCED） |
 | 2026 | [EfficientRollout: System-Aware Self-Speculative Decoding for RL Rollouts](https://arxiv.org/abs/2606.18967) | NeurIPS 2026 (accepted list; preprint Jun 17; [code](https://github.com/furiosa-ai/EfficientRollout)) | RL Rollout Target Policy 持续更新导致固定 Draft Drift；从每轮 Policy 构造 Quantized Self-Drafter，并用 Batch/Length-aware SD Toggle + Acceptance-aware Draft Length 避免大 Batch 的低收益推测。作者在 8×A100、VeRL 0.7 + vendored vLLM 0.11.2 报告 **Rollout Latency 最高 −19.6%、RL 端到端 −12.7%** 对比加速 AR Rollout，按标准 Target Verify 保持目标分布。**RL_TRAINING_ROLLOUT_NOT_ONLINE_SERVING / AUTHOR_ARTIFACT / NOT_REPRODUCED**。（KEEP_ADJACENT；VENUE_CONFIRMED） |
+| 2026 | [GPU-Resident Speculative Decoding for In-Browser LLM Inference with WebGPU](https://arxiv.org/abs/2610.39761) | arXiv 2026 (preprint; Oct 29) | Browser WebGPU 的 CPU Readback/Dispatch Barrier 令逐 Token Speculation 失去优势：将 Draft、Verify、Accept 和 KV Maintenance 放入 GPU-resident Loop，配合确定性 Integer Multi-token Kernels 与 Context-mixing Drafter；作者在三种 Client GPU、七模型/11任务相较 WebLLM 报告 3.5–8.6× Decode，且**只声称与同一 Quantized Greedy Runtime 精确一致**。**CLIENT_WEBGPU_HARDWARE / OPTIMIZED_KERNEL_PLUS_SD_COMPOSITE / NOT_SERVER_GPU_OR_SAMPLING_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
 ### Tree & Parallel Verification (10)
 
