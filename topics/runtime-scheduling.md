@@ -22,7 +22,7 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (148)
+## Papers (149)
 
 ### Batching, Queues & SLOs (42)
 
@@ -73,7 +73,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
 | 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Routing & Load Balancing (17)
+### Routing & Load Balancing (18)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
@@ -96,6 +96,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Taming Inference Workloads at Global Scale: Foundation Model Serving in Amazon Bedrock](https://doi.org/10.1145/3830418.3843855) | SOSP 2026 | Amazon Bedrock 生产 **Workload Management System (WLM)** 按请求特征执行 Admission、Classification、Routing 与 Scheduling，并结合跨 Region 弹性容量治理突发负载。**PRODUCTION_EXPERIENCE / AWS_SPECIFIC / ARTIFACT_NOT_PUBLIC**；不臆造公开代码、独立复现实验或通用 vLLM 加速。 |
 | 2026 | [Vesta: Queueing-Aware LLM Scheduling for Real-World Workloads](https://arxiv.org/abs/2610.14686) | arXiv 2026 (preprint) | 为 Agent Session 固定 KV Authoritative Holder、每次请求独立选 Executor；以 Queue Backlog、Prefix Reuse、跨实例 KV Transfer 与新增负载 Queueing Externality 联合决策。作者 Qwen/Hybrid 模型 **Trace Replay** 报告 PD 合置吞吐 +14%、Mean TTFT -57.8%；分离部署 P99 TTFT 最多 -29%（同吞吐）。**TRACE_REPLAY_NOT_LIVE_PRODUCTION / PUBLIC_ARTIFACT_UNVERIFIED**。 |
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM ATC 2026 (accepted; proceedings pending) | Prefill MoE Expert Activation Signature 预测 Decode 阶段 Expert Locality，Balanced K-means + Locality-band Least-loaded Worker 选择；在 KV Block 旁保存 Signature，Prefix Cache Hit 不丢信号。作者 vLLM 最多 40 GPU/3 MoE 模型、对最强 Load-aware Baseline Median TPOT -5.9% 至 -13.9%；**REQUEST_ROUTING_ONLY / ORIGINAL_EXPERT_SELECTION_UNCHANGED / TAIL_EFFECT_SMALLER / NOT_ASCEND_TESTED**。 |
+| 2026 | [DolphinRouting: Cluster-Level Binary Routing for Disaggregated LLM Inference Serving](https://arxiv.org/abs/2610.40292) | arXiv 2026 (preprint; Oct 29) | 在固定 Prefill/Decode 资源分配下，以 Input Length、P/D Cache-adjusted Length 和 Output Length 聚类，离线按 E2E SLO 学习每簇本地 Prefill / 远端 Prefill **Binary Routing**，在线仅需 Feature+Lookup；作者在真实 PD Cluster 的 Mixed Workload 和真实数据对比 **NVIDIA Dynamo** 报告 P90 TTFT −5.7%–7.9%、P90 TPOT −2.6%–10.1%。**REAL_CLUSTER / FIXED_PD_RESOURCES / NO_UNIVERSAL_SLO_GAIN / NOT_REPRODUCED**；无需发明跨集群吞吐结论。（KEEP_STRICT） |
 
 ### P/D Allocation & Autoscaling (22)
 
