@@ -22,9 +22,9 @@
 | [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
 | **Total** | **144** | |
 
-## Papers (149)
+## Papers (150)
 
-### Batching, Queues & SLOs (42)
+### Batching, Queues & SLOs (43)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -72,6 +72,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Requests of a Feather Must Flock Together: Batch Size vs. Prefix Homogeneity in LLM Inference](https://arxiv.org/abs/2605.06046) | ACM ATC 2026 (accepted; proceedings pending) | Feather 将 Prefix 同质性与 Batch Size 联合调度：Chunked Hash Tree 降低 CPU Prefix 查找开销，RL 决定何时停止扩 Batch；作者在 vLLM/SGLang 报告特定 Prefix-heavy Workload E2E throughput 2–10×。**WORKLOAD_PREFIX_DISTRIBUTION_DEPENDENT / RL_OVERHEAD / AUTHOR_REPORTED / GENERALITY_UNVERIFIED**；不能外推到无共享 Prefix 的通用服务。 |
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
 | 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Efficient Iterative Retrieval with Heterogeneous Batching (Orthrus)](https://aclanthology.org/2026.emnlp-main.28/) | EMNLP 2026 Main ([code](https://github.com/illinoisdata/Orthrus)) | Embedding/Retrieval 与 Generative LLM Token Decode 在共享 GPU 上分模型执行形成 Bubble；Orthrus 用 **Incremental Computing + Single-GPU-Kernel Heterogeneous Batching** 将 Embedding/Generation Workload 对齐，再进行 Workload-aware Batch Composition。作者 **4×A100** 多 Deployment Baselines（含 vLLM Homogeneous Batching）报告 Throughput +1.28–4.52×、Latency 最多 −52%；**HETEROGENEOUS_EMBEDDING_PLUS_GENERATION / SELECTED_DEPLOYMENT_COMPARISONS / NOT_STANDARD_TEXT_GENERATION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (18)
 
