@@ -21,9 +21,9 @@
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **73** | |
 
-## Papers (83)
+## Papers (84)
 
-### Draft Models & Candidate Generation (17)
+### Draft Models & Candidate Generation (18)
 
 Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 
@@ -46,6 +46,7 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [SpecDiff-2: Scaling Diffusion Drafter Alignment For Faster Speculative Decoding](https://proceedings.mlsys.org/paper_files/paper/2026/hash/041dad5ed2191b44ba3ed0e00cdc3187-Abstract-Conference.html) | MLSys 2026 | 使用离散扩散并行 Drafter 与自回归验证器对齐，提高接受率。 |
 | 2026 | [Variational Speculative Decoding: Rethinking Draft Training from Token Likelihood to Sequence Acceptance](https://openreview.net/forum?id=7xO0ADKJu8) | ICML 2026 | 把草稿训练从贪心轨迹的 token 似然改为对潜在草稿路径做变分推断，直接最大化目标模型接受概率并减小与目标分布的散度，使解码相对 EAGLE-3 加速 9.58%。 |
 | 2026 | [RCSD: Reinforcement and Continual Learning for Domain-Specific Speculative Decoding](https://arxiv.org/abs/2610.29527) | arXiv 2026 (preprint; Oct 22 announcement) | 从真实 Accept/Reject 轨迹构建隐式偏好，训练 Draft 直接最大化 Acceptance Length；作者相对 HASS 报告平均接受长度 +35%、实际端到端推理 1.35×。需训练专用 Draft，非仅 Runtime 可插拔优化。（KEEP_STRICT；DRAFT_RETRAINING；NOT_REPRODUCED） |
+| 2026 | [Domino: Decoupling Causal Modeling from Autoregressive Drafting in Speculative Decoding](https://aclanthology.org/2026.emnlp-main.1015/) | EMNLP 2026 Main (ACL Anthology, October) | 用一次并行 Draft Backbone 生成整段初始概率，再以 Lightweight Domino Head 注入 Prefix-dependent Causal Correction，替代高成本 AR Draft；训练采用 Base-anchored Curriculum，使 Parallel Backbone 与 Causal Head 对齐。作者 Qwen3 对照在 **Transformers 端到端最高 5.49×**、**SGLang Serving Throughput 最高 5.8×**（不同 Backend/Metric）。**TRAINED_DRAFTER / BASELINE_AND_SAMPLING_EQUIVALENCE_CONTRACT / AUTHOR_ARTIFACT_NOT_RUN / NOT_REPRODUCED**；非可直接替换的通用 Kernel。（KEEP_STRICT） |
 
 ### Training-Free & Self-Speculation (22)
 
