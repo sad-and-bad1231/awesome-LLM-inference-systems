@@ -20,9 +20,9 @@
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-25) | 25 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
 | **Total** | **72** | |
 
-## Papers (72)
+## Papers (73)
 
-### Expert Routing & Communication (15)
+### Expert Routing & Communication (16)
 
 Token Dispatch、Expert Parallel 和计算通信重叠。
 
@@ -43,6 +43,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods](https://doi.org/10.1145/3789240.3829183) | SIGCOMM 2026 | 面向 SuperPod 拓扑重构 MoE Expert All-to-All 的通信和同步路径，减少 EP 调度的跨节点序列化。 |
 | 2026 | [UEP: Portable Expert-Parallel Communication](https://www.usenix.org/conference/osdi26/presentation/mao-ziming-uep) | OSDI 2026 | UEP 用 GPU-CPU 控制通道取代 GPU 发起的 RDMA，由 CPU 代理发 GPUDirect RDMA 以 immediate data 模拟保序，在 EFA 上 dispatch/combine 吞吐提升 2.1×、SGLang token 吞吐提升至多 40% |
 | 2026 | [Efficient Expert-Parallel Communication on PCIe-Connected Consumer GPUs (ThunderEP)](https://arxiv.org/abs/2609.40093) | arXiv 2026-09 (preprint) | 在**无 GPU P2P** 的 RTX 4090/5090 PCIe 拓扑下，以 DMA Copy Engine、避开多次 CPU Relay 的通信路径、按 Sender Completion Flag 细粒度同步实现 MoE Token Dispatch/Combine；已集成 vLLM，对比 **NCCL/SGLang/Megatron-Core**，作者报告 Dispatch 2.00×、Combine 1.53×、端到端最多 1.66×，其中部分报告只代表 Microbenchmark；**不适用于默认有 NVLink/P2P 的集群，也不推断 Ascend HCCL 获同等收益**。作者有 3 模型、ShareGPT/LMSYS Prompt、5 次运行，但代码发布未核验。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; TOPOLOGY_SCOPED; ARTIFACT_UNVERIFIED) |
+| 2026 | [StreamEP: Straggler-Tolerant MoE Decoding without Communication Barriers](https://doi.org/10.1145/3830418.3843869) | SOSP 2026 ([author artifact](https://zenodo.org/records/22100357)) | 将传统 Expert Parallelism 中每层跨 GPU Collective Barrier 改为 StreamEP 异步到达/执行/转发，StreamInfer 采用 per-layer Token Queue、Defragmenting Scheduler 与基于常规 NCCL 的两阶段可变长通信；SOSP 论文作者在 16×L40S / 16×A100、200Gbps 网络相对传统 EP 报告最高 **1.7× Decode Throughput**。**TOPOLOGY_AND_CONCURRENCY_SCOPED / AUTHOR_REPORTED / NOT_ASCEND_HCCL_REPRODUCED**，不是通用 Token-level 加速。（KEEP_STRICT） |
 
 ### Placement, Balance & MoE Serving (11)
 
