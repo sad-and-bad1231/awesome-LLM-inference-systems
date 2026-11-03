@@ -161,7 +161,7 @@
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 | 2026 | [Seer: Efficient KV Cache Management for LLM Acceleration via Mitigating Semantic Search Inefficiency](https://aclanthology.org/2026.emnlp-main.1852/) | EMNLP 2026 Main ([code](https://github.com/Acaciasama/Seer)) | Semantic-space KV Centroid（离线训练）对 Token Importance 做粗粒度近似，再以 Product Quantization+Asymmetric Distance LUT 降低实际 Sparse Retrieval 访存/Index Cost；作者报告理论 Attention Bandwidth 可降 40×、**32K Context Attention 最高 5.57×、相同测试中 E2E 最高 2×** 对照 Full Attention。**OFFLINE_TRAINED_CENTROIDS / APPROXIMATE_RETRIEVAL / THEORY_BANDWIDTH_NOT_MEASURED_TRAFFIC / NOT_REPRODUCED**，不能把 40× 当 E2E。（KEEP_STRICT） |
 
-### Offloading & Tiered Storage (31)
+### Offloading & Tiered Storage (32)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -198,6 +198,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [KVStream: Adaptive Parallel Storage Management for KV Caching in Large-Scale LLM Serving](https://arxiv.org/abs/2610.31827) | arXiv 2026 (preprint; submitted Oct 22) | 让本地 NVMe 与已挂载的 Parallel File System/Cloud Storage 同时争用 KV Chunk 读取，按各层动态可用带宽分派而非静态分流；将 Writes 延后到 Forward 后并在多 Tier 复制。在 LMCache 四模型/六数据集、最多 128 GPU 作者实测下，检索效率处在 Aggregate-bandwidth Bound 的 5% 内，Offline Throughput 最高 1.49×、Burst Mean TTFT 最多降低 6.1×。改善依赖跨存储 Tier 与 Burst，缓存全命中场景没有收益；**REAL_MULTINODE_AUTHOR_REPORT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [FlatCake: A Flat KVCache Storage Architecture for LLM Serving](https://arxiv.org/abs/2610.38355) | arXiv 2026 (preprint; submitted Oct 28) | DRAM 与 SSD 统一 Flat KV 地址空间，按 Session-contiguous Layer-major 直接写入、经 GPUDirect Storage 读取到有界 HBM Window，规避 Mooncake Host Staging 及 SSD Read Amplification；作者 **8×B200、SGLang0.5.19、同等 1TiB DRAM+4TiB SSD Budget** 上 Claude Code Trace 峰值 Mean TTFT 12.24→7.57s、Throughput 61.6K→98.3K tok/s，另有 A100/Mooncake-GDS 对照。**SSD-heavy/GDS 依赖，非单卡 Ascend KV Cache 直接收益**。（KEEP_STRICT; REAL_GPU_E2E; NOT_REPRODUCED） |
 | 2026 | [HiState: Hierarchical Prefix Cache Management for Hybrid LLM Serving in Agentic Workloads](https://arxiv.org/abs/2610.41508) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 在 Hybrid Attention/Recurrent LLM 的 Agent 回溯上下文中，将历史 recurrent checkpoints 分级驻留 SSD，优先让可复用 KV 留在快速存储；自适应 checkpoint interval + unified eviction 避免 checkpoint 膨胀。基于 vLLM/Qwen3.5-9B/H100 与两组 Coding-Agent Trace Replay，对比 vLLM-Marconi/SGLang-HiCache 的 p99 TTFT；**真实硬件、Trace Replay、作者报告、未独立复现；暂无核实公开代码**。（KEEP_STRICT; REAL_GPU_TRACE_REPLAY; NOT_REPRODUCED） |
+| 2026 | [Ask the Tool, Don't Guess: Agent Tool Calls Hold Their Progress, and the Serving System Should Read It](https://arxiv.org/abs/2609.18849) | arXiv 2026 (preprint; Sep 16) | 在 Tool 执行过程中提取 **in-flight progress**/near-completion Hints，指导 Session KV 保留、DRAM Demotion 和提前 Prefetch，替代调用前一次性 Tool Duration 预测。四组公开 Agent Corpus 的 Tool Signal Audit + **4×H100 Agent Session Replay**；对 LRU，作者报告 Tool Return 后 **p90 TTFT -20.7%（HBM）/-20.8%（HBM+DRAM）**，不是整体任务完成时延。需区分可观测工具与黑箱 API，未独立复现。（KEEP_STRICT; REAL_GPU_REPLAY; TOOL_PROGRESS_HINT） |
 
 ### Distributed KV Sharing & Transfer (14)
 
