@@ -1,6 +1,6 @@
 # 2026 Agent-native Serving — Conference / arXiv / Industry / Lab Gap Audit
 
-**Audit date:** 2026-11-03 (America/Los_Angeles). **Repository baseline:** October 31 `main` = 851 canonical rows; pending November first pass [PR #72](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/72) adds 3 = 854. This **stacked** agent audit adds **14 source-level-reviewed nonduplicates**, proposed **868** canonical rows after both PRs. The new branch is based on PR #72, not directly on `main`.
+**Audit date:** 2026-11-03 (UTC, still November 2 in America/Los_Angeles at the time of review). **Repository baseline:** October 31 `main` = 851 canonical rows; pending November first pass [PR #72](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/72) adds 3 = 854. This **stacked** agent audit adds **14 source-level-reviewed nonduplicates**, proposed **868** canonical rows after both PRs. The new branch is based on PR #72, not directly on `main`.
 
 **Editorial scope:** selectively investigate 2026 ACL Main/Findings, EMNLP Main/Findings/Industry, ICML/MLSys/NSDI/OSDI, July–October 2026 arXiv (plus high-value earlier backfill), production engine code/RFCs and source-linked institutional reports. This is **not an exhaustive crawl** of every 2026 ACL/EMNLP/arXiv paper. Candidate sample audited here: **47 named research items**, with **8 implementation signals + 6 lab/source crosswalks**. No GPU/NPU code execution or independent quantitative replication was performed.
 
