@@ -1,15 +1,17 @@
 # 2026 Agent-native Serving — Conference / arXiv / Industry / Lab Gap Audit
 
-**Audit date:** 2026-11-03 (America/Los_Angeles). **Repository baseline:** October 31 `main` = 851 canonical rows; pending November first pass [PR #72](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/72) adds 3 = 854. This **stacked** agent audit adds **12 independently source-reviewed nonduplicates**, proposed **866** canonical rows after both PRs. The new branch is based on PR #72, not directly on `main`.
+**Audit date:** 2026-11-03 (America/Los_Angeles). **Repository baseline:** October 31 `main` = 851 canonical rows; pending November first pass [PR #72](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/72) adds 3 = 854. This **stacked** agent audit adds **14 source-level-reviewed nonduplicates**, proposed **868** canonical rows after both PRs. The new branch is based on PR #72, not directly on `main`.
 
-**Editorial scope:** selectively investigate 2026 ACL Main/Findings, EMNLP Main/Findings/Industry, ICML/MLSys/NSDI/OSDI, July–October 2026 arXiv (plus high-value earlier backfill), production engine code/RFCs and source-linked institutional reports. This is **not an exhaustive crawl** of every 2026 ACL/EMNLP/arXiv paper. Candidate sample audited here: **44 named research items**, with **8 implementation signals + 6 lab/source crosswalks**. No GPU/NPU code execution or independent quantitative replication was performed.
+**Editorial scope:** selectively investigate 2026 ACL Main/Findings, EMNLP Main/Findings/Industry, ICML/MLSys/NSDI/OSDI, July–October 2026 arXiv (plus high-value earlier backfill), production engine code/RFCs and source-linked institutional reports. This is **not an exhaustive crawl** of every 2026 ACL/EMNLP/arXiv paper. Candidate sample audited here: **47 named research items**, with **8 implementation signals + 6 lab/source crosswalks**. No GPU/NPU code execution or independent quantitative replication was performed.
 
-## 1. G0–G5 source-admission matrix — 12 new canonical records
+## 1. G0–G5 source-admission matrix — 14 new canonical records
 
 **Every KEEP is source-level bibliographic + mechanism + author-evidence acceptance only**, not `G3 replicated` or `G4 executed`. One primary canonical home per paper. Specific hardware, baselines, task correctness and performance metrics do not transfer across contexts.
 
 | Paper | Verified source identity | Decisive mechanism / closest distinction | Author evidence and G3 bound | G4 / verdict |
 |---|---|---|---|---|
+| [EfficientAgent](https://arxiv.org/abs/2609.33762) | 2026 Sep preprint | **KV:** reuse-working-set/stack-distance predicts host-cache survival and useful offload capacity; pressure-gated KV write admission avoids thrashing | Real 3090/H20/H800; 8 H20 coding-agent replay, 5→20 GiB/rank reduces recomputed prefill 93% and makespan 39%; separate capacity gain from policy benefit | [author code](https://github.com/KunmingSHAO/efficientagent_release); not_attempted; **KEEP_STRICT (source)** |
+| [Tool Waiting and Re-arrival in Compile-Time-Static LLM Serving](https://arxiv.org/abs/2609.34663) | 2026 Sep preprint | **Benchmark:** compile-time static NPU batch bucket, KV slots and prefill interference under tool-return arrivals; replay/model-guided config selection | Real non-Ascend vllm-rbln NPU + synthetic prompts with TraceLab tool timing; 2,077-setting search, narrow N=8 measured device execution cost reductions 8.25%/9.72%; one tool call/session | author scripts and bounded experimental records; not_attempted; **KEEP_ADJACENT (real NPU, synthetic workload)** |
 | [ThunderAgent](https://proceedings.mlr.press/v306/kang26j.html) | ICML 2026 / PMLR | **Runtime:** LLM program as schedule unit + tool environment/disk/KV coordinated | coding/routing/science agents; published serving throughput 1.5–3.6× and separate RL figures | public implementation; not_attempted; **KEEP_STRICT (source)** |
 | [RoleKV](https://aclanthology.org/2026.emnlp-main.1982/) | EMNLP 2026 Main | **KV:** Role-aware block residency and eviction (system/tool/reasoning), without changing KV content | 8B–70B; multicard; measured preemptions, PCIe traffic and E2E latency; role-generalization unknown | public artifact not established; not_attempted; **KEEP_STRICT (source)** |
 | [AgentKV](https://aclanthology.org/2026.emnlp-main.2514/) | EMNLP 2026 Main | **KV:** Think/Act/Tool query distributions; per-phase query buffers, importance and page compaction | SGLang persistent compressed cache; task score vs R-KV/Tri-attention and TPS vs full KV; accuracy-changing | author code; not_attempted; **KEEP_STRICT (source)** |
@@ -54,12 +56,13 @@ The repository **already** holds the following canonical papers (or intentionall
 
 *Technical caveat:* The current Frontier previously referenced **ThunderAgent** as its flagship anchor, but the canonical 8-topic paper pages contained **no** ThunderAgent entry. The topical inclusion in this PR repairs that omission. It does not make the ICML paper newly published in November.
 
-## 3. Watch / HOLD / exclude decisions — 12 items
+## 3. Watch / HOLD / exclude decisions — 13 items
 
 **These are not canonical admissions.** A HOLD is an evidence/scope need, not a claim the paper is defective. The candidate URL must be verified as paper-specific before future admission; two broad venue-list placeholders below are for discovery only.
 
 | Source / candidate | G-gate and reason |
 |---|---|
+| [ScoutKV: Learning to Evict for Multimodal Spatial Reasoning](https://aclanthology.org/2026.emnlp-main.729/) | Formal EMNLP 2026 Main; agent means an RL-learned eviction *policy agent*, while the workload is multi-hop visual/spatial reasoning. This has measured quality/FLOPs/latency, but the model/specialized multimodal policy needs a tighter engine-runtime, strong-baseline and semantic budget audit before *Agent-native Serving* source admission. **HOLD_SCOPE_G3** for this tranche. |
 | [H-MAS](https://aclanthology.org/2026.findings-acl.1946/) | A multi-agent *controller for generic LLM scheduling*, not necessarily an agent-session workload; genuinely evaluates LLM server goodput, but belongs to independent generic runtime audit, not this Agent-native gap admission. |
 | [LLM-as-Scheduler (LAS)](https://aclanthology.org/2026.acl-long.581/) | Application-level choice among workflows by confidence/cascade; token/latency improvements change which LLM operations run. No GPU engine scheduling mechanism; REMOVE_SCOPE for this selective inference bibliography. |
 | [CondenseFlow](https://aclanthology.org/2026.findings-acl.669/) | Learned latent/KV message compression in multi-agent collaboration; performance and semantic fidelity do not yet establish generic vLLM/SGLang online serving benefit. HOLD_G3. |
@@ -115,9 +118,9 @@ A **stateful Session** (identity, parent-child relation, turn phase and tool wai
 
 ## 6. Verification and source limits
 
-- **Admission delta (relative to pending 854):** KV +4; Runtime +6; Quantization +1; Benchmarking +1 = **12**; target **866**. All 8 source categories remain, no ninth Agent category.
+- **Admission delta (relative to pending 854):** KV +5; Runtime +6; Quantization +1; Benchmarking +2 = **14**; target **868**. All 8 source categories remain, no ninth Agent category.
 - **One canonical URL each:** new source rows checked against already listed URLs and descriptive aliases. ThunderAgent previously frontier-only was a genuine canonical omission.
-- **No independent G3/G4:** all 12 `not_attempted`; code presence is recorded only when author/full text identifies it. Author results remain unconfirmed on Ascend, and production numbers are owned by the citing companies.
+- **No independent G3/G4:** all 14 `not_attempted`; code presence is recorded only when author/full text identifies it. Author results remain unconfirmed on Ascend, and production numbers are owned by the citing companies.
 - **Audit priority:** correctness of edited/shifted KV and compressed cache; fair comparison of Session-level vs Request-level objective; dynamic agent replay vs live; parent/child eviction and cache ownership; tool-progress observability and security.
 
 **Decision:** Treat **Agent-native Serving as a first-class cross-cutting research program**, maintain eight mechanism homes for papers and extend the Frontier with (a) program-level execution control, (b) session/KV state lifecycle, (c) tool/engine cross-layer contracts, (d) production workload verification. Do not merge generic Agent prompt-workflow optimization into the inference corpus by keyword.
