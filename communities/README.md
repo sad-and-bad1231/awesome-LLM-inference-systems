@@ -24,7 +24,7 @@ An opinionated, **small starting map** of people and codebases worth following f
 
 ## Agent-native Serving research-group / project crosswalk (November 3, 2026)
 
-[Source-audited 44-work review](../reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md) reconciles 12 newly source-admitted papers with prior canonical entries; **group association does not imply exclusive ownership, and group pages are not extra bibliography rows**.
+[Source-audited 47-work review](../reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md) reconciles 14 newly source-admitted papers with prior canonical entries; **group association does not imply exclusive ownership, and group pages are not extra bibliography rows**.
 
 | Source and group | Why relevant | Provenance limit |
 |---|---|---|
