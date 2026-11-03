@@ -14,15 +14,15 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-17) | 17 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-23) | 23 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **82** | |
+| **Total** | **83** | |
 
-## Papers (82)
+## Papers (83)
 
 ### Serving Benchmarks & Workloads (17)
 
