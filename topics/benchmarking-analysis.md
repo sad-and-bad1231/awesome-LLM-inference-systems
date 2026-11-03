@@ -24,7 +24,7 @@
 
 ## Papers (82)
 
-### Serving Benchmarks & Workloads (16)
+### Serving Benchmarks & Workloads (17)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -46,6 +46,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
+| 2026 | [Semantics, Workflows, and Infrastructure: Understanding Agent Serving at Production Scale](https://arxiv.org/abs/2609.34432) | arXiv 2026 (preprint; Sep 28; Ant Group/CUHKSZ) | 首个跨 Task Trigger→Workflow DAG→GPU Serving 容量/状态的三层生产 Agent Trace Characterization：作者分析 **2 周、11.7M Requests、约 948k Sessions、10k+ GPU**，揭示 Session 负载倾斜、Sibling Requests 很少真实重叠、跨任务上下文复用；**真实生产观测，不是公开可复放 Trace，也没有自身运行时加速因果实验**，平台代表性有限。（KEEP_STRICT; PRODUCTION_TRACE_AUTHOR_ONLY; NO_SPEEDUP_CLAIM） |
 
 ### Performance & Efficiency Studies (23)
 
