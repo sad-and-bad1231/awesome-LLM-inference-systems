@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-44) | 44 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-51) | 51 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-54) | 54 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-31) | 31 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-32) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **166** | |
+| **Total** | **170** | |
 
-## Papers (166)
+## Papers (170)
 
 ### Prefix & Session Reuse (44)
 
