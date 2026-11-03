@@ -17,12 +17,12 @@
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
 | [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-13) | 13 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
 | [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-5) | 5 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
-| [KV Cache Quantization](#kv-cache-quantization-7) | 7 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
+| [KV Cache Quantization](#kv-cache-quantization-8) | 8 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-4) | 4 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-5) | 5 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **46** | |
+| **Total** | **47** | |
 
-## Papers (46)
+## Papers (47)
 
 ### Weight-Only & Rotation (12)
 
