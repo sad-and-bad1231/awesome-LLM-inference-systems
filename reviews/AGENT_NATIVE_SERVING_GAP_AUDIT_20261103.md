@@ -50,7 +50,7 @@ The repository **already** holds the following canonical papers (or intentionall
 | [DualPath](https://doi.org/10.1145/3789240.3829159) | https://doi.org/10.1145/3789240.3829159 | **ALREADY_INDEXED** / cross-reference only |
 | [KAIROS](https://arxiv.org/abs/2604.16682) | https://arxiv.org/abs/2604.16682 | **ALREADY_INDEXED** / cross-reference only |
 | [FlashAgents (MLSys 2026)](https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html) | https://proceedings.mlsys.org/paper_files/paper/2026/hash/9a6f6e0d6781d1cb8689192408946d73-Abstract-Conference.html | **ALREADY_INDEXED** / cross-reference only |
-| [Pythia](https://arxiv.org/abs/2605.23160) | https://arxiv.org/abs/2605.23160 | **ALREADY_INDEXED** / cross-reference only |
+| [Pythia](https://arxiv.org/abs/2604.25899) | https://arxiv.org/abs/2604.25899 | **ALREADY_INDEXED** / cross-reference only |
 
 *Technical caveat:* The current Frontier previously referenced **ThunderAgent** as its flagship anchor, but the canonical 8-topic paper pages contained **no** ThunderAgent entry. The topical inclusion in this PR repairs that omission. It does not make the ICML paper newly published in November.
 
@@ -68,7 +68,7 @@ The repository **already** holds the following canonical papers (or intentionall
 | [Irminsul](https://arxiv.org/abs/2605.05696) | MLA-specific content-addressable shifted-context reuse; position rotation alone does not remove causal-dependency effects of changing prefix. Contains narrow output-consistency tests, but universal exactness needs careful G3 evaluation. HOLD_G3 before canonical claim. |
 | [From Static Templates to Dynamic Runtime Graphs (survey)](https://aclanthology.org/2026.findings-emnlp.1393/) | Useful adjacent workflow taxonomy, not inference-system optimization evidence; reference in review only. |
 | [AgenticRAGTracer](https://aclanthology.org/2026.findings-acl/) | Agent evaluation dataset and reasoning quality, no direct serving engine tracing/latency/cost control shown. REMOVE_SCOPE for inference bibliography. |
-| [RealFin](https://aclanthology.org/2026.findings-emnlp.1393/) | Finance-domain MCP-style tool orchestration benchmark distinct from GPU/NPU serving benchmarks. Keep outside canonical systems list; URL here points to the broad workflow survey index, not a verified RealFin paper-specific record. |
+| RealFin (paper-specific primary source not yet resolved) | Finance-domain MCP-style tool-orchestration benchmark; not admitted without an attributable primary paper and a demonstrated inference-engine systems mechanism. **HOLD_IDENTITY / REMOVE_SCOPE** pending verification. |
 | [Toollery](https://aclanthology.org/volumes/2026.emnlp-industry/) | Tool retrieval/skills selection may reduce prompt tokens; without a controlled inference-engine execution study, not Agent-serving runtime. REMOVE_SCOPE for this tranche. |
 | [Role-conditioned Context Routing](https://aclanthology.org/volumes/2026.findings-emnlp/) | Agent semantic memory selection under token budget; needs same-task semantic quality and serving runtime evidence, not exact KV residency. HOLD_SCOPE. |
 | [Speculate While You Reason](https://arxiv.org/abs/2609.18849) | Self-speculating agent trained for tool-call prediction, cited in Ask the Tool; author-reported next-tool accuracy ≠ demonstrated generic inference serving runtime speedup. Separate model-policy/quality line, not canonical this batch. |
