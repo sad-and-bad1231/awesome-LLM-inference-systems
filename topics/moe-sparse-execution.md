@@ -14,11 +14,11 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Expert Routing & Communication](#expert-routing--communication-15) | 15 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
+| [Expert Routing & Communication](#expert-routing--communication-17) | 17 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-25) | 25 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **72** | |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-26) | 26 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **75** | |
 
 ## Papers (75)
 
