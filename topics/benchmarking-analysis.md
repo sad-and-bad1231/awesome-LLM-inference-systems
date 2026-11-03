@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-20) | 20 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
-| [Profiling & Diagnosis](#profiling--diagnosis-6) | 6 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-13) | 13 | 性能建模、容量估计、仿真和边界分析。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-23) | 23 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
+| [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **76** | |
+| **Total** | **82** | |
 
-## Papers (80)
+## Papers (82)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,7 +47,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (22)
+### Performance & Efficiency Studies (23)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -75,8 +75,9 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [How Far Are We From On-Device VLM Inference? A Measurement Study on Edge NPUs](https://arxiv.org/abs/2610.40039) | arXiv 2026 (preprint; submitted Oct 29) | 真实 **3 Edge NPU、6 VLM、10 Multimodal Benchmarks** 的 End-to-end→Kernel Measurement：特定 Hexagon Softmax Vector Pipeline 阻塞矩阵执行，Tensor Rearrangement 抵消 Linear Attention 理论收益，Decode GQA Shapes 改变 CPU/NPU 比较。**非 Ascend 910B2 架构与实测**；可用于方法学而非直接 Kernel 瓶颈归因。（KEEP_STRICT; REAL_EDGE_NPU; NOT_REPRODUCED） |
 | 2026 | [LLM-PowerTrace: A Dataset of Time-Resolved GPU Power Traces for AI Compute](https://arxiv.org/abs/2610.38315) | arXiv 2026 (preprint; submitted Oct 28) | 发布带 Workload Metadata 的**每 GPU 100ms Power Time Series**，覆盖推理 Concurrency、GPU Clock、KV/Weight Quantization、Prompt/Output Length、Arrival Pattern，也有 Fine-tuning 控制矩阵，并定义 Grid-facing Ramp/Peak 指标及外推模型。**REAL_GPU_POWER_SAMPLING / INFERENCE_AND_TRAINING_MIXED / SAMPLING_RESOLUTION_100MS / AUTHOR_DATASET_NOT_INDEPENDENTLY_REPLAYED**；不是新的 Serving 加速算法。（KEEP_STRICT；MEASUREMENT_DATASET） |
 | 2026 | [The Language–Energy Divide: Measuring Energy Costs of Multilingual LLM Inference](https://aclanthology.org/2026.emnlp-main.2113/) | EMNLP 2026 Main (October; ACL Anthology) | 使用 **ML.Energy** 测量跨语言、模型、硬件、任务的真实推理能耗，分解 Tokens Per Request 与 Per-token Energy 两项因素，避免仅按 English Prompt 或单位 Token 推断全球部署成本；作者报告跨语言 Per-output-token Energy 最高相差 8.3×、固定请求集合 Total Energy 最高相差 179×，低资源语言的准确率还存在劣势。**OBSERVATIONAL_TASK_DISTRIBUTION / NOT_FAIRLY_IDENTICAL_TOKEN_COUNT / DOES_NOT_PROVE_CAUSAL_HARDWARE_EFFECT / NOT_NEW_SERVING_ALGORITHM**；为性能/能耗测量方法准入，非推理加速论文。（KEEP_STRICT；AUTHOR_REPORTED；NOT_REPRODUCED） |
+| 2026 | [Understanding the Energy Cost of Quantized Agents on Shared GPUs](https://arxiv.org/abs/2610.41672) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 将量化的 **fixed-call energy** 与真实 Agent 的 **energy per verified task completion** 分开测量，并联合 GPU Cache Capacity/Admission Limit 分析：A100 40/80GB、Devstral/Qwen3.5-9B、Coding/Data Analysis；W4A16 在固定 Replay 下较 W8A8 省 10–25% 能量，但特定 4-Agent Live 负载每成功任务能耗上升 49%。**仅为测试配置下的作者实测，不是量化普遍无效或性能优化结果**。（KEEP_STRICT; REAL_GPU; TASK_OUTCOME_VERIFIED; NOT_REPRODUCED） |
 
-### Profiling & Diagnosis (6)
+### Profiling & Diagnosis (7)
 
 性能分析器、Tracing、可观测性和异常定位。
 
@@ -88,6 +89,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [XProf: An Open, Scalable, and Extensible Profiling System for the Modern ML Stack](https://proceedings.mlsys.org/paper_files/paper/2026/hash/280776fda5970060e6a5efcfd43e5d2d-Abstract-Conference.html) | MLSys 2026 | OpenXLA/PJRT Full-stack CPU–TPU/GPU Profiling、Roofline 与跨千卡低开销分布式 Trace；开源生产级性能分析基础设施，但不是 LLM Serving 专用评测（KEEP_ADJACENT）。 |
 | 2026 | [ProMCP: Profiling Token Flows and Latency Costs in Model Context Protocol–Based LLM Agents](https://aclanthology.org/2026.findings-acl.1967/) | ACL Findings 2026 (NOT ACL Main) | 对 LLM Agent **MCP Host–Client–Server** 端到端六阶段执行做请求级 Token/Latency Attribution，公开 [代码](https://github.com/ResponsibleAILab/ProMCP)；作者在 20 Servers / 169 Tools、不同部署 Topology 上表明 Planning/Schema Injection vs Generation 的主要瓶颈随 Client 形态变化。**属于 Agent Workflow Profiling，不是 GPU/NPU Kernel Profiler，也不证明 Token/s 加速**。（KEEP_ADJACENT; REAL_WORKFLOW_PROFILING; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2026 | [LMTracer: Fine-Grained and Real-Time Performance Profiling for Production LLM Systems](https://llm-profiling.github.io/) | SOSP 2026 | 将 Fence/Probe Kernel 嵌入 GPU Graph 并流式回传 CPU Buffer，不打断异步执行；作者报告生产多月使用、微小 Profiling Overhead、定位 15 个问题。**GPU_GRAPH_DEPENDENT / AUTHOR_REPORTED / NOT_ASCEND_VALIDATED**。 |
+| 2026 | [Matching Workloads to Blackwell: Power-Resolved Benchmarking of NVIDIA B200 and B300 across HPC and AI Workloads](https://arxiv.org/abs/2610.41919) | arXiv 2026 (preprint; author states PMBS 2026 SC26 workshop acceptance) | 双独立 8-GPU B200/B300 Cluster，覆盖 vLLM/Llama-3-8B/70B 及 HPC/CV；逐设备功率与精确软件栈揭示硬件代际性能归因陷阱：相同 B300 芯片的不同 vLLM Build 造成 2.1× TTFT 差异。**跨 AI/HPC 测评，非纯 LLM Serving 研究；LLM/CV 多为 single timed run（spot-check 2–4% 波动），不能当成芯片固有胜负**。[Artifact](https://github.com/MohsenZand/GPUBenchmarking)。（KEEP_ADJACENT; REAL_CLUSTER; SOURCE_ARTIFACT; NOT_REPRODUCED） |
 
 ### Models & Simulators (15)
 
