@@ -22,6 +22,21 @@ An opinionated, **small starting map** of people and codebases worth following f
 
 **October 31 EMNLP source follow-up (zero additional institutional paper rows):** [Orthrus](https://aclanthology.org/2026.emnlp-main.28/) ([Illinois Data project](https://github.com/illinoisdata/Orthrus)) pairs embedding/generation kernels; [WG-KV](https://aclanthology.org/2026.emnlp-main.1063/) ([author code](https://github.com/EMCLab-Sinica/WG-KV)) introduces write-time KV admission; [Beyond-KV](https://aclanthology.org/2026.emnlp-main.526/) and [Seer](https://aclanthology.org/2026.emnlp-main.1852/) provide low-bit/semantic retrieval code. These are **EMNLP 2026 papers** already counted **once** under their decisive mechanisms; first-party lab/project pages are cross-references, not new bibliographic identities. Review [the 16-item October follow-up receipt](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md).
 
+## Agent-native Serving research-group / project crosswalk (November 3, 2026)
+
+[Source-audited 44-work review](../reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md) reconciles 12 newly source-admitted papers with prior canonical entries; **group association does not imply exclusive ownership, and group pages are not extra bibliography rows**.
+
+| Source and group | Why relevant | Provenance limit |
+|---|---|---|
+| [UW SyFI / TraceLab](https://github.com/uw-syfi/TraceLab) | Reproducible real coding-Agent session trace and replay scaffold to measure prefix reuse, tool stalls and long-session JCT | Research-team-derived traces; not a universal production distribution |
+| [Berkeley research / Continuum](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2026/EECS-2026-234.html) | Tool duration and KV TTL residency as a program-level scheduling signal | Earlier 2025 arXiv, 2026 Berkeley report and workshop lineage are not separate canonical papers |
+| [ThunderAgent open-source authors](https://github.com/ThunderAgent-org/ThunderAgent) | Joint management of GPU inference and CPU/tool sandbox state; ICML 2026 formal [paper](https://proceedings.mlr.press/v306/kang26j.html) | Multi-institution system; source repository and published system results, not group-only ownership |
+| [Ant Group + CUHKSZ](https://arxiv.org/abs/2609.34432) | Production task-workflow-infrastructure workload characterization for agentic serving | Proprietary observational trace and unpublished raw logs; institutional claim is author-reported |
+| [NVIDIA Dynamo contributors](https://github.com/ai-dynamo/dynamo) | Session-aware routing, KV state, and proposed cross-layer hint contracts | First-party source/RFC status differs by tag; inspect actual code and release notes |
+| [Microsoft Research](https://arxiv.org/abs/2601.12967) | Sutradhara early tool dispatch, KV hint and orchestrator–engine co-design | Research prototype; check deployment/implementation state before claiming upstream availability |
+
+**Research relevance test:** only track application-layer Agent work when it exposes a reusable execution mechanism (DAG/phase/state/latency contract) or measured engine bottleneck; generic prompt/tool-selection benchmark improvements stay outside the inference bibliography.
+
 ## October 2026 lab/industry-research cross-check
 
 **One paper, one canonical topic entry.** The following are **research-source cross-references**, not a separate count or a university ranking; published venue must be independently checked. Collab coauthorship ≠ lab-exclusive ownership.
