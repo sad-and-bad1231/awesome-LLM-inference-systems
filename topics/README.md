@@ -1,6 +1,8 @@
 # Papers by systems mechanism
 
-**November 2 arXiv first-pass (2026-11-02): 854 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [Source-level G0–G5 review](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md): +3 nonduplicate papers after October's 851 (KV +1; Benchmarking +2). These arXiv papers were submitted Oct 30 and listed in the Nov 2 announcements. No independent GPU/NPU reproduction; simulated-only works stay HOLD.
+**November 3 Agent-native Serving backfill (2026-11-03): 866 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [2026 conference/arXiv/industry/lab gap audit](../reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md): +12 nonduplicate works over the prior 854 (KV +4, Runtime +6, Quantization +1, Benchmarking +1), all source-curated, none independently hardware-reproduced. Industrial projects are cross-links, not extra paper rows.
+
+**Historical November 2 arXiv first-pass (2026-11-02): 854 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [Source-level G0–G5 review](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md): +3 nonduplicate papers after October's 851 (KV +1; Benchmarking +2). These arXiv papers were submitted Oct 30 and listed in the Nov 2 announcements. No independent GPU/NPU reproduction; simulated-only works stay HOLD.
 
 **Historical final October 31 follow-up (2026-10-31): 851 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [Second-pass arXiv/EMNLP and industrial evidence audit](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) admits **16** source-reviewed nonduplicates after the prior **835** monthly snapshot, with each item separately pushed. This does **not** certify independent code execution, benchmarking, quality-equivalence or 100% October submission coverage. The earlier 835 figure is a dated checkpoint, not a second count.
 
@@ -15,14 +17,14 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 115 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 166 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 170 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
 | [Decoding Acceleration](decoding-acceleration.md) | 85 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 46 | 6 | Low-bit representation with executable system gains |
+| [Quantization & Compression](quantization-compression.md) | 47 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 151 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Runtime & Scheduling](runtime-scheduling.md) | 157 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 134 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 82 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **854** | **44** | |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 83 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **866** | **44** | |
 
 ## How to use this index
 
