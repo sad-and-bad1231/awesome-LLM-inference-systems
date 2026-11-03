@@ -1,14 +1,16 @@
 # Awesome LLM Inference Systems
 
-**851 source-curated papers · 8 systems mechanisms · 44 engineering directions** (October 31, 2026 final second-pass close).
+**854 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 2, 2026 arXiv first-pass; source-level, not independently reproduced).
+
+The [November 2 arXiv first-pass review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) selectively admits **3** nonduplicate studies (851 → 854) after the October close: hybrid-state KV tiering, verified-task energy of quantized agents and cross-stack GPU measurement. **Submitted Oct 30, listed Nov 2; not three November-submitted papers.** Simulation-only and insufficient-serving-evidence papers remain outside canonical categories.
 
 The [final October second-pass audit](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) adds **16 individually committed nonduplicate papers** (835 → 851) from late arXiv and EMNLP proceedings, plus first-party Humming/TorchTPU/vLLM implementation signals. The [earlier +14-paper monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) remains a dated source receipt. Industrial releases do **not** add paper rows; author speedups are not locally reproduced.
 
 A selective, engineering-centered reading map for efficient LLM inference: kernels and compilers, KV memory, decoding, quantization, MoE, serving runtime, distributed execution, and system measurement.
 
-**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 851 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
+**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 854 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
 
-[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
+[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [November first-pass](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
 
 **Historical admission snapshots** (722 → 736 → 766 → 793 → 803 → 813, with intermediate corrections) are preserved in [the archived homepage/strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md) and [topic intake chronology](reviews/archive/TOPIC_INDEX_HISTORY_20261030.md); dated totals are not today's inventory.
 
