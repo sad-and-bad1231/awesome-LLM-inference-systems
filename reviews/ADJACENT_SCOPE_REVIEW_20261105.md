@@ -1,5 +1,8 @@
 # Adjacent inference scope review — first focused tranche (2026-11-05)
 
+**Follow-up closure:** The [75 additional row-by-row scope dispositions](ADJACENT_FULL_SCOPE_REVIEW_20261105.md) extend this preliminary eight-case receipt. They also record two ICLR-only video-model algorithm removals, two topic migrations, and pending G3/G5 source gates. Row-level screening is not equivalent to complete full-text reproduction.
+
+
 **Purpose:** strengthen the unusually broad **83 `KEEP_ADJACENT`-marked canonical rows** without treating the label itself as a fault. Counts by primary category: Kernels 18; KV 10; Decoding 10; Quantization 6; MoE 6; Runtime 10; Distributed 11; Benchmarking 12. This is a selected **nine-case evidence pass**, not a claim that all 83 papers have been re-read or independently reproduced.
 
 **Boundary:** a strong paper can still be outside a *selective LLM serving* catalog. Preserve a distinct executable mechanism, underlying model/task, measured system metric, production/kernel/simulation distinction, and the relevance to existing LLM inference implementation. No quantitative results below were locally reproduced.
