@@ -20,6 +20,8 @@ The design is defensible, but navigation and source depth are less mature than t
 | Active research frontiers | 7 | Research cross-index only; no additional canonical paper rows |
 | Reviews/archives | 22 files | Dated snapshots and HOLD/REMOVE dispositions preserved; archives are not live counts |
 
+**Corpus composition (mechanical field scan):** 617 of the 854 topic rows have year **2026** (about 72%); 240 venue fields contain arXiv / preprint wording; and 323 distinct mechanism cells have fewer than 85 plain-text characters after stripping Markdown formatting. The last threshold is only a **navigation-density flag**, not a quality score: concise Chinese descriptions may be technically useful. However, a short mechanism description should not be mistaken for a complete hardware/workload/baseline/equivalence receipt. Prioritize source and evidence review on high-impact recent preprints, cross-domain exceptions and difficult replication claims instead of imposing a fixed page-length rule.
+
 Exact first-source URL deduplication is a **syntactic screen**; DOI/arXiv/publisher aliases and semantically duplicated papers still require source-level checking.
 
 ## 2. Why these foundations?
@@ -104,7 +106,7 @@ These are not taxonomy bins. The qualifying test is **a changed execution contra
 | **P1** | Evidence-depth pass for low-source company pages | Strengthen with first-party code, design reports or explicit service-only boundaries; do not equalize page lengths artificially |
 | **P1** | Make research-source navigation durable | Separate true labs, collaborations, industry researchers and OSS maintainers in the existing map or one lightweight subpage; preserve source attribution and avoid duplicate papers |
 | **P1** | Revisit group boundaries | Examine MoE/sparse attention, KV compression vs quantization, scheduler policy vs distributed fabric on difficult examples; document stable tie-break decisions |
-| **P1** | Paper audit by **research value**, not numeric quota | Prioritize high-impact/reproducible 2026 work, missing baseline comparisons, author-code availability and important mechanism omissions; retire stale weak entries if source evidence fails |
+| **P1** | Evidence-depth pass on 2026/preprint and terse mechanism rows | Focus on strong recent works, source identity, real hardware, closest baseline, correctness/model changes and code; short text alone is not grounds for rejection |
 | **P2** | International organization discovery | Add only teams with inspectable inference-specific engineering; classify archived software, API documentation and production claims distinctly |
 | **P2** | Reduce landing-page chronology | Move old organization release/update matrices to dated reviews when safe; keep a current source map, not a rolling release blog on the landing page |
 | **P2** | Frontier reevaluation and experimental handoff | Require a new executable workload contract and 1–2 decisive measurable tests per active Frontier; cross-reference the canonical mechanism, not another paper list |
