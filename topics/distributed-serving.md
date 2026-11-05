@@ -18,10 +18,10 @@
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-28) | 28 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-21) | 21 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **134** | |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-22) | 22 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **135** | |
 
-## Papers (134)
+## Papers (135)
 
 ### Parallelism & Scale-Up (28)
 
@@ -164,12 +164,13 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Resuming Vision-Language Inference across Onboard Interruptions (OrbitWeaver)](https://arxiv.org/abs/2610.29183) | arXiv 2026 (preprint; Oct 22 announcement) | Satellite VLM Vision/Prefill/Decode 跨断电持久化与 DAG 恢复：按状态生命周期 Checkpoint 并重排局部恢复，作者声称 2 颗在轨卫星 72 小时部署 + 卫星板卡实测，最多 4.07× 完成时间收益。仅面向频繁中断的边缘载荷；未经独立验证在轨数据。（KEEP_ADJACENT；AUTHOR_DEPLOYMENT_CLAIM；NOT_REPRODUCED） |
 | 2026 | [TensorHub: Scalable and Elastic Weight Transfer for LLM RL Training](https://arxiv.org/abs/2604.09107) | SOSP 2026 (preprint Apr; UW–ByteDance Seed) | LLM RL 的 Policy→Rollout Worker 频繁权重更新引入冗余 Weight Checkpoint I/O；**Reference-Oriented Storage (ROS)** 只跟踪 GPU 上已有权重的 Owner，不复制 Tensor，再执行 Topology-aware RDMA Read/Consistency/Failure Recovery。作者报告实际 RL Rollout/生产部署下 Standalone GPU Stall 最高降低 6.7×、Elastic Weight Update 加速 4.8×、跨 DC Rollout Stall 降低 19×。**TRAINING_ROLLOUT_ADJACENT / WEIGHT_SYNC_NOT_KV_TRANSFER / DIFFERENT_SETTING_MAXIMA / AUTHOR_DEPLOYMENT_CLAIM**；不是普通在线 LLM 请求加速。（KEEP_ADJACENT；NOT_REPRODUCED） |
 
-### Heterogeneous & Edge Serving (21)
+### Heterogeneous & Edge Serving (22)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [ExecuTorch - A Unified PyTorch Solution to Run ML Models On-Device](https://proceedings.mlsys.org/paper_files/paper/2026/hash/236f915dd02af4f11927f67330b21d4b-Abstract-Conference.html) | MLSys 2026 | 面向端侧多 SoC 的 PyTorch-native Runtime、可插拔 Backend 与量化部署；官方项目含 LLM APIs/Benchmark，但论文范围涵盖广泛 Edge AI，并非在线请求抢占或云端 LLM Goodput 优化。**EDGE_BACKEND / GENERIC_AI_RUNTIME / NOT_VLLM_SCHEDULER**。（KEEP_ADJACENT） |
 | 2026 | [HAWK: Heterogeneity-Aware KV Cache Transfer for Efficient GPU-NPU Phase-Disaggregated LLM Inference](https://arxiv.org/abs/2610.29873) | arXiv 2026 (preprint) | GPU Prefill → NPU Decode 的 P/D KV 传输中，构造跨设备 RDMA 和 **目标 NPU Layout-aware DMA buffers**，避免到达后 Tensor 转置/Channel Fragmentation。作者在真实 **NVIDIA A100 + Tenstorrent p150a** 和 vLLM/Mooncake 系统测得同 SLO 下相对 GPU-only 性能差距 7.88%、能效最高 1.26×/成本效率 1.72×。**不是 Ascend NPU 实测**，无可验证公开作者代码，性能为论文报告。（KEEP_STRICT; REAL_GPU_OTHER_NPU; G4_NO_PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2024 | [HeteGen: Efficient Heterogeneous Parallel Inference for Large Language Models on Resource-Constrained Devices](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5431dca75a8d2abc1fb51e89e8324f10-Abstract-Conference.html) | MLSys 2024 | 针对 GPU/CPU 异构设备规划推理执行与参数转移，实现受限资源大模型部署。 |
 | 2025 | [Attention-Level Speculation](https://proceedings.mlr.press/v267/cai25g.html) | ICML 2025 | 以 Attention 输出预测提前执行后续层，在异构 NPU 上重叠 Attention 与非 Attention 计算。 |
