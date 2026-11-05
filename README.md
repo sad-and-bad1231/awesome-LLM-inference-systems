@@ -1,6 +1,8 @@
 # Awesome LLM Inference Systems
 
-**854 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 2, 2026 arXiv first-pass; source-level, not independently reproduced).
+**868 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 3, 2026; source-screened, not independently reproduced).
+
+The [Agent-native Serving 2026 cross-source gap audit](reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md) adds **14 nonduplicate systems papers** from 2025–2026 source material over the pending November 2 baseline (854 → 868), including three EMNLP 2026 papers and the ICML 2026 ThunderAgent. This is **backfill**, not 14 new November submissions. Engine implementations, RFCs, and lab reports are recorded as separate evidence, never inflated into paper rows.
 
 The [November 2 arXiv first-pass review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) selectively admits **3** nonduplicate studies (851 → 854) after the October close: hybrid-state KV tiering, verified-task energy of quantized agents and cross-stack GPU measurement. **Submitted Oct 30, listed Nov 2; not three November-submitted papers.** Simulation-only and insufficient-serving-evidence papers remain outside canonical categories.
 
@@ -8,9 +10,9 @@ The [final October second-pass audit](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_202610
 
 A selective, engineering-centered reading map for efficient LLM inference: kernels and compilers, KV memory, decoding, quantization, MoE, serving runtime, distributed execution, and system measurement.
 
-**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 854 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
+**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 868 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
 
-[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [November first-pass](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
+[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [Agent-native audit](reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md) · [November first-pass](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
 
 **Historical admission snapshots** (722 → 736 → 766 → 793 → 803 → 813, with intermediate corrections) are preserved in [the archived homepage/strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md) and [topic intake chronology](reviews/archive/TOPIC_INDEX_HISTORY_20261030.md); dated totals are not today's inventory.
 

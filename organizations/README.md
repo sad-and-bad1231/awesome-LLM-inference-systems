@@ -35,6 +35,21 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Apple](Apple.md) | MLX · local/on-device inference |
 | [Intel](Intel.md) | OpenVINO · GenAI inference |
 
+## Agent-native Serving: first-party runtime and production signals (November 3 research cross-check)
+
+**Engineering and operational evidence; NOT 6 new research papers.** Source-derived implementation claims below may be confined to specific branches, RFCs, GPU architectures and model/workload configurations. [Complete G0–G5 agent-serving audit](../reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md); all source-curated canonical papers remain in the eight technical topics.
+
+| Organization / first-party source | Executed interface or measured workload | Evidence boundary |
+|---|---|---|
+| [vLLM × AgentX](https://vllm.ai/blog/2026-09-08-vllm-agentx) | Characterizes coding-agent session structure, frequent short decode/long cached context and P/D configuration; proposed programmable session/cache hints | Workload distribution is specific to AgentX; *future interface plans* are not all upstream-shipped |
+| [vLLM × Mooncake](https://vllm.ai/blog/2026-05-06-mooncake-store) | Distributed KV/prefix cache and real agent trace replay to study TTFT under active sessions | First-party GPU/trace-bound results; not a general improvement for workloads with low cache reuse |
+| [NVIDIA Dynamo](https://pytorch.org/blog/session-aware-agentic-inference-with-nvidia-dynamo/) · [repository](https://github.com/ai-dynamo/dynamo) | Session-aware request metadata, routing and KV cache-index ideas | Separate documented implemented parts from *RFC and experimental hint / prefetch* components; validate release/commit |
+| [SGLang session cache](https://github.com/sgl-project/sglang/blob/main/docs/docs/advanced_features/session_radix_cache.mdx) · [Programmable KV RFC](https://github.com/sgl-project/sglang/issues/27574) | Versioned opt-in session-reference lifecycle in Radix Cache; proposals for extending hints, demote/prefetch | Session references are **soft**; an RFC is not proof of a complete published production feature |
+| [Ant Group + CUHKSZ production research](https://arxiv.org/abs/2609.34432) | Task→workflow→GPU study across 11.7M requests / 2 weeks with multi-session state & request traffic | Author access to proprietary production logs, not publicly verified raw trace or direct causal accelerator speedup |
+| [Microsoft Research Sutradhara](https://www.microsoft.com/en-us/research/publication/sutradhara-an-intelligent-orchestrator-engine-co-design-for-tool-based-agentic-inference/) | Tool-aware orchestrator↔vLLM interface, early tool dispatch and partially overlapping prefill | Source-level research on A100, **not** proof that the mainline vLLM API has adopted the full design |
+
+**System boundary:** Session IDs, parent/child relations, tool progress and cache-lifetime hints are potential cross-layer contracts. Engine authority for KV ownership, tenant isolation and correctness must remain independent from the application agent framework. Avoid equating task success / session JCT with per-token throughput.
+
 ## October 31 follow-up: additional first-party engine/kernel signals
 
 These were missed in the original October 31 industrial pass. **Repositories, implementation blog posts and live backend support are not extra canonical paper entries.** Always pin commits, models, hardware and runtime paths before asserting measured speedups.

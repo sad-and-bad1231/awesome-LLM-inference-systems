@@ -1,6 +1,8 @@
 # Strict Review: evidence-first curation
 
-**Active G0–G5 gates (reviewed for November intake 2026-11-02).** The catalog contains **854 source-curated** unique topic entries after the [November first-pass source review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md), with **3** nonduplicate new admissions after October's 851. These are editorial KEEP decisions, not independent result reproduction.
+**Active G0–G5 gates (source-reviewed 2026-11-03).** The catalog contains **868 source-curated** unique topic records after the [Agent-native Serving cross-source audit](reviews/AGENT_NATIVE_SERVING_GAP_AUDIT_20261103.md), of which 14 are nonduplicate older-paper backfill relative to the November 2 proposal. All source KEEP decisions remain **unreproduced on hardware**, may require closer G3/G4 inspection, and must not be described as deployment confirmations.
+
+**Historical November 2 status.** The catalog contained **854 source-curated** unique topic entries after the [November first-pass source review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md), with **3** nonduplicate new admissions after October's 851. These are editorial KEEP decisions, not independent result reproduction.
 
 **Historical October 31 status.** The catalog contained **851 source-curated** unique topic entries after the [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), including **16** separately committed additions over the earlier [835-paper monthly checkpoint](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md). Source acceptance **does not** mean 851 implementations, baseline comparisons or model outputs were independently reproduced. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
 

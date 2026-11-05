@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-44) | 44 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-51) | 51 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-54) | 54 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-31) | 31 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-33) | 33 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-14) | 14 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **166** | |
+| **Total** | **171** | |
 
-## Papers (166)
+## Papers (171)
 
 ### Prefix & Session Reuse (44)
 
@@ -75,7 +75,7 @@
 | 2026 | [Raincheck: Deferred Multimodal Prefill for Efficient Multi-Turn MLLM Inference](https://arxiv.org/abs/2610.39562) | arXiv 2026 (preprint; Oct 29) | 在 Multi-turn Multimodal 中初始仅 Prefill Query-selected Tokens，将剩余 Tokens **按原顺序在 Decode 空闲算力/返回后间隙增量 Prefill**，通过 Attention Visibility 与 Affine State Mapping 延迟恢复 Full Context，以免 Hard Pruning 永久丢失后续问题所需视觉信息；Qwen3-VL-8B/Qwen3.5-9B、30% 初始保留，作者报告相比 Hard Pruning 恢复 77.7%/60.4% 丢失质量，SGLang MultiVerse 首轮 Mean TTFT 最高 −24.1%，TPOT 增幅小于 0.5%。**ASYNC_BACKGROUND_WORK / APPROXIMATE_EARLY_ANSWER / MULTIMODAL_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [A3: Attention-Aware Accurate KV Cache Fusion for Fast Large Language Model Serving](https://aclanthology.org/2026.emnlp-main.113/) | EMNLP 2026 Main (ACL Anthology) | 长 Context/RAG Chunk 直接复用旧 KV 时遗漏本轮问题的因果条件；A3 根据 Query-relevant Chunk 选择性 **Recompute/Fuse 预计算 KV**，避免均匀重算与错误位置更新。作者多个任务/模型对照五方法报告 **TTFT 最多约 2× 加快**，同时有相竞争的任务质量。**APPROXIMATE_CACHE_FUSION / QUERY_DEPENDENT / NOT_STRICT_OUTPUT_EQUIVALENCE / NO_INDEPENDENT_REPRODUCTION**；不能当作任意 Prompt 的无损 Prefix Reuse。（KEEP_STRICT） |
 
-### Eviction, Compression & Quantization (51)
+### Eviction, Compression & Quantization (54)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -132,6 +132,9 @@
 | 2026 | [DropKV: Decoupling Residual-Output Perturbation for Near-Optimal KV-Cache Eviction](https://arxiv.org/abs/2610.22130) | arXiv 2026 (preprint; Oct 15; conference-track identity not inferred) | 通过独立 Token 的 Residual-output Perturbation Scoring 将联合 Eviction 近似问题可解化，在论文 Cone Condition 下给出近似保证；融合 Triton Scorer 避免全 Attention Matrix 物化。作者报告 Scoring Kernel 19.8× 与**匹配 Batch Prefill** 最多 9.9% E2E 改善，RULER/LongBench 同预算质量对照；**APPROXIMATE_KV_EVICTION / NOT_FULL_ONLINE_SERVING_9.9PCT**。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [KV Admission: Learning What to Write for Efficient Long-Context LLM Inference](https://aclanthology.org/2026.emnlp-main.1063/) | EMNLP 2026 Main (ACL Anthology; [code](https://github.com/EMCLab-Sinica/WG-KV)) | 将 KV 管理前移至 **Admission 而非事后 Selection/Eviction**：WG-KV 学习预测 Token 在写入 Cache 前的长期价值，拒绝低效 Token，同时保留小型 Global KV 与 Sliding Local Cache，以减小长上下文 Prefill/Decode 带宽和容量。**TRAINED_WRITE_GATE / MODEL_BEHAVIOR_APPROXIMATE / NO_LOSSLESS_KV_EQUIVALENCE / NOT_REPRODUCED**；正式论文声明真实推理性能收益但官方摘要无足够统一倍数，未写虚构 speedup。（KEEP_STRICT） |
 | 2026 | [VisCache: Visual KV Cache Pruning for Efficient Vision Large Language Model Inference](https://aclanthology.org/2026.emnlp-main.1196/) | EMNLP 2026 Main (ACL Anthology) | VLLM 长视频视觉 KV 的粗细两级压缩：先以轻量 VLM 选语义关键帧，再基于 VLLM Attention Pattern 给各层 **Parabolic KV Budget**，仅修剪 Key、融合 Value，避免简单同率删 Token 导致质量崩溃。作者在测试的 Vision Long-context Tasks 报告保留 **19%–28% KV** 时，整体推理速度最高 2.35×、维持竞争性任务质量。**VIDEO_VISUAL_KV_APPROXIMATION / TWO_STAGE_COST_INCLUDED_ONLY_AS_AUTHORED / NOT_TEXT_LLM_SERVING_OR_STRICT_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [RoleKV: Role-Aware KV Cache Management for the Inverted Age-Importance of LLM Agent Context](https://aclanthology.org/2026.emnlp-main.1982/) | EMNLP 2026 Main | Agent 多轮上下文的 **role-aware KV residency/eviction**：标注 system/tool/reasoning 等块的语义角色，按角色衰减而非纯 LRU 选择从 GPU 驱逐哪些完整 KV；**不剪枝模型注意力 KV，作者称 lossless**。8B–70B、多 GPU Agent Trace 下报告 preemption/PCIe 减少和 E2E latency 最高 1.41×；角色标注正确性与不同模型普适性仍需审计。**作者实测，未独立复现**。（KEEP_STRICT; FORMAL_EMNLP; ROLE_AWARE_EXACT_RESIDENCY） |
+| 2026 | [AgentKV: Phase-Aware KV Eviction for Agentic LLMs](https://aclanthology.org/2026.emnlp-main.2514/) | EMNLP 2026 Main | Agent Think/Act/Tool 等阶段的 Query 子空间不同，按阶段维护小 Query Buffer 并联合打分保留 KV；在 SGLang 持久化 Multi-turn 压缩 KV、在线 Page Compaction，和 R-KV/Tri-attention 比较任务质量（平均 +5.5/+5.3 分）。作者称对 full-KV upstream SGLang Output TPS 最多 1.80×；**质量改变，非 exact KV eviction，基线的 KV Budget 不同**。[Code](https://github.com/LiuTaowen-Tony/agentkv)；未复现。（KEEP_STRICT; FORMAL_EMNLP; APPROXIMATE_CACHE; PUBLIC_CODE） |
+| 2026 | [Learning Agent Execution for KV-Cache Management in Agentic Serving (CacheScout)](https://arxiv.org/abs/2608.14624) | arXiv 2026 (preprint; July v1 / Aug ID) | 在线学习 Agent Dispatch Transition，不要求静态 Agent DAG：以轻量 Survival Score 控制 KV Anchor Eviction，并在可预测且 GPU 空闲时后台 Warmup/Prefetch；与预先定义 Graph 的 PBKV/KVFlow、Tool TTL Continuum 区分。**vLLM v0.11** Patch、8×RTX PRO 6000 Blackwell 和 4×H200/Qwen3-235B 实机 Agent Workload，作者报告平均 TTFT -18–45%、Per-turn Latency -29–38%、Peak Turns/s +19–57%；**不等于完整任务成功率改善**。未核实公开作者代码，未复现。（KEEP_STRICT; REAL_GPU; ONLINE_WORKFLOW_LEARNING） |
 
 ### Sparse KV Retrieval (18)
 
@@ -158,7 +161,7 @@
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 | 2026 | [Seer: Efficient KV Cache Management for LLM Acceleration via Mitigating Semantic Search Inefficiency](https://aclanthology.org/2026.emnlp-main.1852/) | EMNLP 2026 Main ([code](https://github.com/Acaciasama/Seer)) | Semantic-space KV Centroid（离线训练）对 Token Importance 做粗粒度近似，再以 Product Quantization+Asymmetric Distance LUT 降低实际 Sparse Retrieval 访存/Index Cost；作者报告理论 Attention Bandwidth 可降 40×、**32K Context Attention 最高 5.57×、相同测试中 E2E 最高 2×** 对照 Full Attention。**OFFLINE_TRAINED_CENTROIDS / APPROXIMATE_RETRIEVAL / THEORY_BANDWIDTH_NOT_MEASURED_TRAFFIC / NOT_REPRODUCED**，不能把 40× 当 E2E。（KEEP_STRICT） |
 
-### Offloading & Tiered Storage (31)
+### Offloading & Tiered Storage (33)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -195,6 +198,8 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [KVStream: Adaptive Parallel Storage Management for KV Caching in Large-Scale LLM Serving](https://arxiv.org/abs/2610.31827) | arXiv 2026 (preprint; submitted Oct 22) | 让本地 NVMe 与已挂载的 Parallel File System/Cloud Storage 同时争用 KV Chunk 读取，按各层动态可用带宽分派而非静态分流；将 Writes 延后到 Forward 后并在多 Tier 复制。在 LMCache 四模型/六数据集、最多 128 GPU 作者实测下，检索效率处在 Aggregate-bandwidth Bound 的 5% 内，Offline Throughput 最高 1.49×、Burst Mean TTFT 最多降低 6.1×。改善依赖跨存储 Tier 与 Burst，缓存全命中场景没有收益；**REAL_MULTINODE_AUTHOR_REPORT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [FlatCake: A Flat KVCache Storage Architecture for LLM Serving](https://arxiv.org/abs/2610.38355) | arXiv 2026 (preprint; submitted Oct 28) | DRAM 与 SSD 统一 Flat KV 地址空间，按 Session-contiguous Layer-major 直接写入、经 GPUDirect Storage 读取到有界 HBM Window，规避 Mooncake Host Staging 及 SSD Read Amplification；作者 **8×B200、SGLang0.5.19、同等 1TiB DRAM+4TiB SSD Budget** 上 Claude Code Trace 峰值 Mean TTFT 12.24→7.57s、Throughput 61.6K→98.3K tok/s，另有 A100/Mooncake-GDS 对照。**SSD-heavy/GDS 依赖，非单卡 Ascend KV Cache 直接收益**。（KEEP_STRICT; REAL_GPU_E2E; NOT_REPRODUCED） |
 | 2026 | [HiState: Hierarchical Prefix Cache Management for Hybrid LLM Serving in Agentic Workloads](https://arxiv.org/abs/2610.41508) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 在 Hybrid Attention/Recurrent LLM 的 Agent 回溯上下文中，将历史 recurrent checkpoints 分级驻留 SSD，优先让可复用 KV 留在快速存储；自适应 checkpoint interval + unified eviction 避免 checkpoint 膨胀。基于 vLLM/Qwen3.5-9B/H100 与两组 Coding-Agent Trace Replay，对比 vLLM-Marconi/SGLang-HiCache 的 p99 TTFT；**真实硬件、Trace Replay、作者报告、未独立复现；暂无核实公开代码**。（KEEP_STRICT; REAL_GPU_TRACE_REPLAY; NOT_REPRODUCED） |
+| 2026 | [Ask the Tool, Don't Guess: Agent Tool Calls Hold Their Progress, and the Serving System Should Read It](https://arxiv.org/abs/2609.18849) | arXiv 2026 (preprint; Sep 16) | 在 Tool 执行过程中提取 **in-flight progress**/near-completion Hints，指导 Session KV 保留、DRAM Demotion 和提前 Prefetch，替代调用前一次性 Tool Duration 预测。四组公开 Agent Corpus 的 Tool Signal Audit + **4×H100 Agent Session Replay**；对 LRU，作者报告 Tool Return 后 **p90 TTFT -20.7%（HBM）/-20.8%（HBM+DRAM）**，不是整体任务完成时延。需区分可观测工具与黑箱 API，未独立复现。（KEEP_STRICT; REAL_GPU_REPLAY; TOOL_PROGRESS_HINT） |
+| 2026 | [EfficientAgent: What Makes KV Cache Offloading Work for Concurrent Agents?](https://arxiv.org/abs/2609.33762) | arXiv 2026 (preprint; Sep 27) | 对并发 Agent 的 **Reuse Working Set / Stack Distance** 建模：在 Tool Wait 期间，其他 Session 的历史 KV 重用距离决定 CPU Tier 能否让 Prefix 存活；用 Stack-distance Model 规划 Host Capacity，并在 Tier Thrashing 时有条件跳过大规模 KV Refill Writes。**真实 RTX3090/H20/H800 多 GPU、Qwen2.5-Coder/Qwen3-Coder 和 SWE-bench Verified Agent Replay**，作者在 8×H20 通过 Host Tier 5→20GiB/rank 报告 Recomputed Prefill −93% / Makespan −39%；**容量扩张收益与写准入策略收益分开，Trace Replay ≠ 在线任务成功率提升，硬件依赖**。[Author code](https://github.com/KunmingSHAO/efficientagent_release)，未独立复现。（KEEP_STRICT; REAL_GPU; REUSE_WORKING_SET; PUBLIC_CODE） |
 
 ### Distributed KV Sharing & Transfer (14)
 
