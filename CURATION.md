@@ -45,6 +45,19 @@ Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First 
 
 No crawler, JSONL store, generated views, CI publication pipeline, deep research-note hierarchy, badges with hardcoded counts, or mandatory per-paper reading documents. Add complexity only when a concrete presentation need cannot be solved with Markdown.
 
+## Offline repository integrity check
+
+Before submitting any Markdown curation PR, run:
+
+```bash
+python3 -m unittest discover -s tests -p 'test_*.py'
+python3 scripts/check_catalog.py
+```
+
+The lightweight GitHub Actions check runs the **same commands** on relevant PRs. This is **not a publication pipeline**, crawler, generated bibliography, or automatic scientific reviewer. The script compares declared topic/subgroup totals, first-paper URL identities (including arXiv/DOI/OpenReview forms), foundation and organization/OSS index counts, and internal Markdown targets/anchors. Counts live in the visible Markdown indexes; no independent machine-managed catalog is introduced.
+
+**Limitations:** identity aliases that mix DOI/arXiv/publisher pages can evade exact URL matching; Markdown link extraction is a practical linter rather than a full CommonMark parser; live external URL availability, publication claims, model correctness and reported speedups require manual primary-source review. Never use a passing structural check as evidence that G0–G5 scientific gates passed. When a legitimate source changes the catalog count, update the visible index and the paper row together; do not weaken the checker just to pass CI.
+
 ## Survey-specific gate
 
 Require a distinct systems lens (Serving architecture, hardware/compilers, KV cache, scheduling or distributed inference), credible primary source, meaningful taxonomy/synthesis and an honest coverage boundary. Prefer peer-reviewed surveys; strong lab-authored preprints must be clearly labeled. Reject near-duplicate overviews and survey titles without substantial system content.
