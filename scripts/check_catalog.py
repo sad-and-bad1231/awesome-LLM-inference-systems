@@ -108,11 +108,11 @@ def check(root):
         issues.append(f"topic index directions != {n_groups}")
     # Live landing pages must not silently drift from canonical topic rows.
     home = docs["README.md"]
-    home_total = re.search(r"^\\*\\*(\\d+) source-curated papers", home, re.M)
+    home_total = re.search(r"^\*\*(\d+) source-curated papers", home, re.M)
     if not home_total or int(home_total.group(1)) != total:
         issues.append(f"homepage current corpus count != {total}")
     strict = docs.get("STRICT_REVIEW.md", "")
-    strict_total = re.search(r"The catalog contains \\*\\*(\\d+) source-curated\\*\\*", strict)
+    strict_total = re.search(r"The catalog contains \*\*(\d+) source-curated\*\*", strict)
     if not strict_total or int(strict_total.group(1)) != total:
         issues.append(f"STRICT_REVIEW current corpus count != {total}")
 
