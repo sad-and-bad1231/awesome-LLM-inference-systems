@@ -1,0 +1,26 @@
+name: Catalog integrity
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "scripts/check_catalog.py"
+      - ".github/workflows/catalog-integrity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "**/*.md"
+      - "scripts/check_catalog.py"
+      - ".github/workflows/catalog-integrity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-markdown-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source-curated catalog integrity
+        run: python3 scripts/check_catalog.py
