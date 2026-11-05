@@ -19,10 +19,10 @@
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-15) | 15 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **115** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-14) | 14 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **114** | |
 
-## Papers (115)
+## Papers (114)
 
 ### Attention & Sparse Kernels (30)
 
@@ -160,13 +160,12 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (15)
+### Kernel Automation & Tools (14)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2026 | [SOL-ExecBench: Speed-of-Light Benchmarking for Real-World GPU Kernels Against Hardware Limits](https://arxiv.org/abs/2603.19173) | NeurIPS 2026 (Evaluations & Datasets Track; author-verified) | 从 124 个真实/新兴 AI Model 抽取 **235 个真实 GPU Kernel**，在 NVIDIA B200 以锁频、Correctness/Anti-gaming 与 SOL Roofline 上界衡量优化空间，而非仅相对 PyTorch Baseline Speedup。公开 [基准与重放 Harness](https://github.com/NVIDIA/SOL-ExecBench)；服务端 TTFT/TPOT **未验证**，作为 Agentic Kernel 评价基础设施例外保留。（KEEP_ADJACENT; REAL_GPU; PUBLIC_BENCHMARK; NOT_SERVING_E2E） |
 | 2025 | [KPerfIR: Towards a Open and Compiler-centric Ecosystem for GPU Kernel Performance Tooling on Modern AI Workloads](https://www.usenix.org/conference/osdi25/presentation/guan) | OSDI 2025 | 在 Triton 编译流程插入可编程 Profiling Pass，把微架构流水事件与源级 IR 关联，作者报告约 8.2% 测量开销、2% 相对误差；为通用 Kernel Profiling **工具**，不是 LLM 推理优化器，作为可迁移性能分析基础保留（KEEP_ADJACENT）。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 针对 Trainium NKI Kernel 的迭代优化与慢/快 Kernel 经验记忆，作者提供 [AccelOpt](https://github.com/zhang677/AccelOpt) 和 LLM-derived NKIBench，在 Trainium 1/2 实机测量 % peak；属于专用 Agentic Kernel Optimization 而非在线 Serving 性能。 |
 | 2026 | [K-Search: LLM Kernel Generation via Co-Evolving Intrinsic World Model](https://arxiv.org/abs/2602.19128) | arXiv 2026 (preprint) | 用与搜索共同演化的世界模型替代静态启发式，把高层算法规划与低层程序实例化显式解耦，使 LLM 在非单调优化路径上不丢弃暂不完善的中间实现，FlashInfer 的 GQA/MLA/MoE Kernel 平均提升 2.10 倍、MoE 最高 14.3 倍。 |
