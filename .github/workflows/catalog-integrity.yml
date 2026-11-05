@@ -22,5 +22,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - name: Unit-test parser and identity rules
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
       - name: Check source-curated catalog integrity
         run: python3 scripts/check_catalog.py
