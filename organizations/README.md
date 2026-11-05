@@ -10,7 +10,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 |---|---|
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
 | [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
-| [Qwen (Alibaba)](Qwen-Alibaba.md) | Qwen3.5–3.8 · Gated DeltaNet / QSA · multimodal models · MNN |
+| [Alibaba / Qwen](Qwen-Alibaba.md) | Qwen3.5–3.8 · **RTP-LLM production serving engine** · Gated DeltaNet / QSA · MNN |
 | [Huawei / Ascend](Huawei.md) | CANN · MindIE · vLLM Ascend · third-party TileLang Ascend 950 backend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
@@ -19,18 +19,25 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | Seed-OSS · ByteTransformer · ByteIR |
 | [Baidu / Paddle](Baidu.md) | FastDeploy · PaddleNLP |
+| [Meituan / LongCat](Meituan.md) | **[CODE]** SGLang-FluentLLM · P/D KV transfer · sparse MoE/LSA · W4A4 / numerical consistency |
+| [Xiaohongshu / Rednote](Xiaohongshu.md) | **[CODE + PREPRINT]** HYPIC hybrid-position-independent cache · Relax training/rollout |
+| [Ant Group](Ant-Group.md) | **[CODE + COMMUNITY]** Humming quantized dense/MoE JIT kernels with vLLM |
+| [Kuaishou / Kwai](Kuaishou.md) | **[MODEL + SERVICE]** Keye-VL DSA · StreamLake Vanchin prefix cache / observability |
+| [JD.com / JD Cloud](JDCloud.md) | **[SERVICE]** JoyMaaS model gateway / routing / enterprise inference API |
+| [iFLYTEK / Spark](iFLYTEK.md) | **[SERVICE]** domestic heterogeneous AI platform · online/batch deployment |
+| [Moore Threads](MooreThreads.md) | **[CODE]** MUSA vLLM backend fork · MUSA tensor engine / kernel tooling |
 
 ## United States
 
 | Organization | Primary focus |
 |---|---|
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
-| [Google](Google.md) | **TorchTPU-native vLLM/SGLang** · Ragged Paged Attention · JetStream · AlphaEvolve (RSI-adjacent) |
+| [Google](Google.md) | **TorchTPU vLLM/SGLang** · llm-d P/D topology · Ragged Paged Attention · AlphaEvolve |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
 | [AMD](AMD.md) | ROCm · AITER · kernel libraries |
 | [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
 | [Anthropic](Anthropic.md) | Claude serving-visible API behavior; no inferred internals |
-| [Meta](Meta.md) | Llama · xFormers · ExecuTorch · torchao |
+| [Meta](Meta.md) | Llama · **KernelEvolve optimization agent** · TP/CP/EP systems · ExecuTorch / xFormers |
 | [AWS](AWS.md) | Neuron · DJL Serving · Bedrock |
 | [Apple](Apple.md) | MLX · local/on-device inference |
 | [Intel](Intel.md) | OpenVINO · GenAI inference |
@@ -40,6 +47,21 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Modal](Modal.md) | **FlashAttention-4 decode optimization** · SGLang speculative inference · deployment |
 | [Fireworks AI](Fireworks-AI.md) | **Disaggregated inference engine** · KV routing · multi-node EP · FireOptimizer |
 | [Groq](Groq.md) | **LPU / deterministic dataflow** · on-chip SRAM · latency-oriented hardware/runtime |
+| [Anyscale / Ray Serve](Anyscale.md) | **[CODE]** Ray Serve LLM · multi-node routing, scaling, fault-tolerant P/D/EP |
+| [Baseten](Baseten.md) | **[CODE + ENGINEERING]** Truss · engine-specific deployment/compile/autoscaling |
+| [Databricks](Databricks.md) | **[CASE STUDY]** CPU+kernel+FP8 full-stack optimization · Model Serving |
+| [Red Hat / llm-d](Red-Hat.md) | **[COMMUNITY CODE]** distributed inference router · KV/P-D · multi-tenant QoS |
+| [Cloudflare / Workers AI](Cloudflare.md) | **[PRODUCTION ENGINEERING]** P/D · KV compression/cache · SGLang isolation fixes |
+| [Predibase / LoRAX](Predibase.md) | **[CODE]** multi-adapter batching · LoRA load/evict/prefetch scheduler |
+| [CoreWeave](CoreWeave.md) | **[COMMUNITY + PLATFORM]** llm-d founding contributor · K8s production inference |
+
+## November 4 — execution-first organization expansion
+
+**14 additional company profiles (7 China, 7 US) and three existing profiles expanded** in this sweep. The purpose is **not** to track every business that calls an LLM API: it is to identify **inspectable inference systems engineering** outside frontier model labs. **[CODE]** indicates a linked source artifact; **[CASE STUDY]** a first-party deployment or experiment report; **[SERVICE]** a documented externally visible platform contract; **[COMMUNITY]** shared open-source ownership. A company can be important for operating AI services while disclosing no proprietary kernel or scheduler details.
+
+**Read by mechanism:** [Meituan](Meituan.md) (speculative decode/graph + P/D/KV), [Xiaohongshu](Xiaohongshu.md) (hybrid state/PIC), [Ant](Ant-Group.md) (quantized GEMM/JIT), [Alibaba](Qwen-Alibaba.md) (RTP-LLM), [Meta](Meta.md) (KernelEvolve), [Cloudflare](Cloudflare.md) (P/D and KV lifetime correctness), [Ray Serve](Anyscale.md) and [llm-d](Red-Hat.md) (distributed serving/control plane). For proprietary services such as JDCloud, Kuaishou Vanchin and iFLYTEK AICC, the evidence is mainly a **service/deployment contract**. For inference hardware (Moore Threads, Cerebras and Groq), never extrapolate a CUDA benchmark across accelerators.
+
+**Audit discipline:** model/provider names and open-source contributor credit are kept distinct; vendor reports are author-reported; no source is represented as a locally reproduced benchmark, no new canonical paper rows are admitted, and unknown private algorithms remain unknown. [Review receipt](../reviews/ORG_INFRA_SWEEP_20261104.md).
 
 ## November 4 update — model revisions and US inference-system sources
 
@@ -57,6 +79,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Modal](https://modal.com/blog/flash-attention-4-faster) · [Fireworks](https://fireworks.ai/platform/disaggregated-inference-engine) | Decode-oriented kernel improvements and production disaggregated P/D, distributed KV, cache-aware routing. | Engineering and product evidence; single-kernel gains and marketing speedups are not interchangeable with audited E2E results. |
 
 **US coverage rule:** infrastructure companies are added for identifiable inference mechanism or publicly inspectable engineering, not merely for operating a hosted model API. [Together AI](Together-AI.md), [Asari AI](Asari-AI.md), [Cerebras](Cerebras.md), [Modal](Modal.md), [Fireworks AI](Fireworks-AI.md) and [Groq](Groq.md) now have focused first-party pages. The related [engine-evolution Frontier](../frontiers/README.md#autonomous-inference-engine-evolution-separate-engine-evolution-from-rsi) keeps strict RSI claims evidence-gated.
+
 ## October 31 follow-up: additional first-party engine/kernel signals
 
 These were missed in the original October 31 industrial pass. **Repositories, implementation blog posts and live backend support are not extra canonical paper entries.** Always pin commits, models, hardware and runtime paths before asserting measured speedups.
