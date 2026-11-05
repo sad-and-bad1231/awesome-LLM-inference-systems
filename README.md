@@ -25,7 +25,7 @@ A selective, engineering-centered reading map for efficient LLM inference: kerne
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
 | [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
-| [Research labs & open source](communities/README.md) | **43 source-linked repos across five execution boundaries**; university labs and cross-institution research sources, with explicit ownership and archival status. |
+| [Research labs & open source](communities/README.md) | **76 nonduplicate source-linked repositories across five execution boundaries**; university labs and cross-institution research sources, with explicit ownership and archival status. |
 
 **One primary home per paper.** The homepage keeps historic foundations and surveys; technical additions live under [eight topic categories](topics/README.md). The former 50-paper Serving cohort has been reviewed: 49 were moved to their technical home, and 1 general AI-serving work was held out under the stricter LLM-specific boundary.
 
@@ -35,7 +35,7 @@ The [research frontiers](frontiers/README.md) now highlight **seven selective in
 
 ## Organizations
 
-Source-backed maps of model architecture **and independently useful inference infrastructure** (kernels, backend compilers, KV/communication, deployment and autonomous optimization). The November 4 sweep broadens [organizations](organizations/README.md), [43 open-source execution projects](communities/README.md) and [research labs](communities/README.md), with an [audit receipt](reviews/ORG_LAB_OSS_SWEEP_20261104.md). Regional grouping is navigation, not a quality ranking. Community contributions and archived projects retain explicit status labels.
+Source-backed maps of model architecture **and independently useful inference infrastructure** (kernels, backend compilers, KV/communication, deployment and autonomous optimization). The November 4–5 sweeps broaden [organizations](organizations/README.md), [76 open-source execution projects](communities/README.md) and [research/maintainer source nodes](communities/README.md), with an [November 4 audit](reviews/ORG_LAB_OSS_SWEEP_20261104.md) and [November 5 incremental audit](reviews/ORG_LAB_OSS_SWEEP_20261105.md). Regional grouping is navigation, not a quality ranking. Community contributions and archived projects retain explicit status labels.
 
 [**Companies — China & US**](organizations/README.md) · [**Research labs & open-source communities**](communities/README.md)
 
