@@ -1,6 +1,6 @@
 # Strict Review: evidence-first curation
 
-**Active G0–G5 gates (reviewed for November intake 2026-11-02).** The catalog contains **854 source-curated** unique topic entries after the [November first-pass source review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md), with **3** nonduplicate new admissions after October's 851. These are editorial KEEP decisions, not independent result reproduction.
+**Active G0–G5 gates (reviewed 2026-11-05).** The catalog contains **852 source-curated** unique topic entries after the [November 5 adjacent-scope review](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md): November 2 first-pass had **854**, then two video-generation-only algorithm papers were excluded from the LLM-serving canon. The November source intake added 3 from October's 851 to the historical 854 checkpoint. These are editorial KEEP decisions, not independent result reproduction.
 
 **Historical October 31 status.** The catalog contained **851 source-curated** unique topic entries after the [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), including **16** separately committed additions over the earlier [835-paper monthly checkpoint](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md). Source acceptance **does not** mean 851 implementations, baseline comparisons or model outputs were independently reproduced. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
 
