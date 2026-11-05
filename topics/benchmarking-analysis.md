@@ -19,10 +19,10 @@
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
-| [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **82** | |
+| [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
+| **Total** | **83** | |
 
-## Papers (82)
+## Papers (83)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -133,12 +133,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
 | 2026 | [DFIP: Decision-Focused Inference Path for System One Models](https://arxiv.org/abs/2610.36804) | arXiv 2026 (preprint; submitted Oct 27; [author reproduction repo](https://github.com/superagent-ai/dfip)) | 审核 CUDA Graph Replay、候选词表投影、Schema-compatible Length-aware Batching 对小结构化决策模型的真实收益与 Failure Boundary：Resident Request 最好 2.47×（Decider），但外部多样到达下 Replay 可能发生 CUDA Illegal-memory-access、请求丢失和 P95 严重退化；多轮输出一致性审计发现某些分数/阈值漂移。**NEGATIVE_SERVING_EVIDENCE / NOT_GENERAL_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Kernel Benchmarks (8)
+### Kernel Benchmarks (9)
 
 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SOL-ExecBench: Speed-of-Light Benchmarking for Real-World GPU Kernels Against Hardware Limits](https://arxiv.org/abs/2603.19173) | NeurIPS 2026 (Evaluations & Datasets Track; author-verified) | 从 124 个真实/新兴 AI Model 抽取 **235 个真实 GPU Kernel**，在 NVIDIA B200 以锁频、正确性/反作弊检查和分析模型给出的 Speed-of-Light (SOL) Bound 评价 Kernel 优化空间，而非仅相对 PyTorch Baseline Speedup。公开 [基准与重放 Harness](https://github.com/NVIDIA/SOL-ExecBench)；其中 **153/235** 工作负载来自 LLM，但同时包含训练/视觉/音频等；这是 Kernel 评价基础设施，**不是**在线 Serving TTFT/TPOT 测试。（KEEP_ADJACENT; REAL_GPU; PUBLIC_BENCHMARK; NOT_SERVING_E2E） |
 | 2025 | [KernelBench: Can LLMs Write Efficient GPU Kernels?](https://proceedings.mlr.press/v267/ouyang25a.html) | ICML 2025 | 奠基性 Kernel Generation 测试环境：250 个 PyTorch ML Workload、正确性加速联合指标 fast_p，并考察迭代 Profiling Feedback；是通用 Kernel 评测前提，不是 LLM Serving 端到端 Benchmark（KEEP_FOUNDATIONAL）。 |
 | 2026 | [FlashInfer-Bench: Building the Virtuous Cycle for AI-driven LLM Systems](https://proceedings.mlsys.org/paper_files/paper/2026/hash/37e44c4b5321605735be9761f9b758fc-Abstract-Conference.html) | MLSys 2026 | FlashInfer-Bench 构建了一套基准与反馈闭环，用于评测并迭代改进由 AI 驱动的 LLM 系统实现，形成“评测—优化”的良性循环 |
 | 2026 | [KernelCraft: Benchmarking for Agentic Close-to-Metal Kernel Generation on Emerging Hardware](https://proceedings.mlr.press/v306/nie26c.html) | ICML 2026 | 面向新兴 NPU ISA 的 Agentic Kernel 编译、正确性反馈与性能评测；涵盖真实 AMD NPU、PLENA 模拟器与 Verilator RTL，基准代码的公开状态需复核，不是生产 Serving 加速。 |
