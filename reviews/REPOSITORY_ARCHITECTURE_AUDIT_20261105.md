@@ -86,6 +86,10 @@ These are not taxonomy bins. The qualifying test is **a changed execution contra
 
 **Do not promote** standard KV tiering, hybrid attention, ordinary multi-node scaling or routine deployment just because they appear in new papers. Those already have canonical engineering homes. Revisit the seven periodically against baseline engines, artifacts and negative evidence; allow demotion.
 
+### Specific source-level follow-up example
+
+The 2026-11 source [RTP-LLM: Building an Evolvable and Reliable LLM Inference Engine at Alibaba Scale](https://arxiv.org/abs/2611.00967) presents production-engine evolution and failure containment, whereas the already-canonical [May 2026 RTP-LLM report](https://arxiv.org/abs/2605.29639) focuses on performance mechanisms, cache/phase separation and model loading. **Do not automatically admit two rows because the arXiv IDs differ**; first examine overlap, independent contribution, publication identity, implementation continuity and the G0–G5 value of a second row. This is a **review candidate**, not a newly accepted paper.
+
 ## 7. Confirmed small documentation fixes in this audit branch
 
 - Corrected a stale homepage claim of **851 current** topic entries to **854**.
