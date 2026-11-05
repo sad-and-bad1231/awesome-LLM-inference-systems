@@ -26,6 +26,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [JD.com / JD Cloud](JDCloud.md) | **[SERVICE]** JoyMaaS model gateway / routing / enterprise inference API |
 | [iFLYTEK / Spark](iFLYTEK.md) | **[SERVICE]** domestic heterogeneous AI platform · online/batch deployment |
 | [Moore Threads](MooreThreads.md) | **[CODE]** MUSA vLLM backend fork · MUSA tensor engine / kernel tooling |
+| [Cambricon / MLU](Cambricon.md) | **[BACKEND CODE]** torch_mlu · CNToolkit/CNNL/CNCL device stack; older public release matrix |
 
 ## United States
 
@@ -54,7 +55,20 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Cloudflare / Workers AI](Cloudflare.md) | **[PRODUCTION ENGINEERING]** P/D · KV compression/cache · SGLang isolation fixes |
 | [Predibase / LoRAX](Predibase.md) | **[CODE]** multi-adapter batching · LoRA load/evict/prefetch scheduler |
 | [CoreWeave](CoreWeave.md) | **[COMMUNITY + PLATFORM]** llm-d founding contributor · K8s production inference |
+| [Hugging Face](Hugging-Face.md) | **[CODE + ARCHIVE]** Transformers/Optimum · TGI now archived; cross-runtime interoperability |
+| [Inferact](Inferact.md) | **[CODE + COLLAB]** vLLM maintainers · joint TorchTPU backend / CI with Google |
+| [RadixArk](RadixArk.md) | **[CODE + COLLAB]** SGLang community · joint TorchTPU backend with Google |
+| [Tenstorrent](Tenstorrent.md) | **[KERNEL + HARDWARE]** TT-Metal / TT-NN · low-level kernel / multi-chip LLM programming |
+| [IBM](IBM.md) | **[COMMUNITY + ARCHIVE]** llm-d collaboration · historical archived vLLM Spyre plugin |
+| [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoML model services · API / package / autoscaling integration |
 
+## November 4 — second-pass infrastructure and research-community sweep
+
+**7 new first-party company profiles** added beyond the first organization batch: [Cambricon](Cambricon.md), [Hugging Face](Hugging-Face.md), [Inferact](Inferact.md), [RadixArk](RadixArk.md), [Tenstorrent](Tenstorrent.md), [IBM](IBM.md), [BentoML](BentoML.md). Their reason for admission is a **public backend / codebase / engineering contribution**, not the size of a hosted-model portfolio. This iteration also expands [open-source projects and research labs](../communities/README.md); see [source receipt](../reviews/ORG_LAB_OSS_SWEEP_20261104.md).
+
+**Changed source status matters:** Hugging Face TGI [archived Mar 21, 2026](https://github.com/huggingface/text-generation-inference); IBM's earlier [vllm-spyre plugin](https://github.com/IBM/vllm-spyre) is archived, while llm-d is a shared community; Tenstorrent low-level kernel development moved into [TT-Metal](https://github.com/tenstorrent/tt-metal); Google TPU integrations credit **Inferact + Google** for vLLM and **RadixArk + Google** for SGLang. These boundaries prevent false claims of exclusive ownership, current support or production performance.
+
+**No paper rows are added here.** Manufacturer-supported backends, archived reference stacks, live community engines and deployed enterprise services are different evidence tiers; reported improvements remain author-reported without our own hardware replication.
 ## November 4 — execution-first organization expansion
 
 **14 additional company profiles (7 China, 7 US) and three existing profiles expanded** in this sweep. The purpose is **not** to track every business that calls an LLM API: it is to identify **inspectable inference systems engineering** outside frontier model labs. **[CODE]** indicates a linked source artifact; **[CASE STUDY]** a first-party deployment or experiment report; **[SERVICE]** a documented externally visible platform contract; **[COMMUNITY]** shared open-source ownership. A company can be important for operating AI services while disclosing no proprietary kernel or scheduler details.
