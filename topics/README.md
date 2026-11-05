@@ -15,8 +15,8 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | [Decoding Acceleration](decoding-acceleration.md) | 85 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 46 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 151 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 134 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Runtime & Scheduling](runtime-scheduling.md) | 150 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 135 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 82 | 6 | Validated models, traces, benchmarks and production diagnosis |
 | **Total** | **854** | **44** | |
 
