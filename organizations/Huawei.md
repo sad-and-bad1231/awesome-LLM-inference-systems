@@ -14,6 +14,7 @@ Huawei Cloud's [Pangu official product portfolio](https://www.huaweicloud.com/pr
 
 | Public work | Inference relevance | Primary source |
 |---|---|---|
+| **[TorchNPU](https://github.com/Ascend/pytorch)** | PyTorch/Ascend backend plugin with operator dispatch, PrivateUse1 integration, memory management and distributed device execution. **GitHub is an official mirror** of the GitCode upstream. | Match torch, torch-npu, driver and CANN release versions before using with a vLLM Ascend plugin. |
 | **Ascend C / CANN** | Ascend device programming and operator toolchain; fundamental kernel/runtime substrate. | [Official source](https://www.hiascend.com/en/software/cann) |
 | **MindIE** | Huawei Ascend inference service/deployment software; vendor documentation is the authority for availability and compatibility. | [Official source](https://www.hiascend.com/en/software/mindie) |
 | **Ascend ModelZoo** | Ascend-supported model examples and engineering references, some including inference paths. | [Official source](https://github.com/Ascend/ModelZoo-PyTorch) |
