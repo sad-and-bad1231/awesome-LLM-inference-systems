@@ -1,6 +1,6 @@
 # Emerging inference research frontiers
 
-**Six selective bets on *new inference execution problems*, not six more ways to subdivide LLM serving.** Updated **2026-10-29** (six frontiers; agent-kernel comparator refresh). The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
+**Seven selective bets on *new inference execution or optimization-lifecycle problems*, not seven more ways to subdivide LLM serving.** Updated **2026-11-04** (autonomous engine evolution added; previous six frontiers retained). The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
 
 [← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Historical October 2026 signals](2026-10-frontier-scan.md)
 
@@ -8,13 +8,13 @@
 
 A direction earns a place here when **all three** hold:
 
-1. **New execution contract:** the workload challenges the request → prefill → autoregressive decode loop (or substantially changes how its kernels are built). Merely improving an existing KV policy, sparse attention algorithm, or GPU backend does not qualify.
+1. **New execution or engineering contract:** the workload challenges the request → prefill → autoregressive decode loop, or fundamentally changes how inference kernels/**whole engines** are built, tested and maintained. Generic coding-agent wrappers or ordinary autotuning without a substantive systems mechanism do not qualify.
 2. **Two kinds of evidence:** a traceable systems paper **and** a public implementation/credible industry serving signal, where possible. Distinguish deployed code, research prototype, preprint and hardware simulation.
-3. **An unsettled systems question:** there is a meaningful unresolved scheduling, memory, correctness, communication, throughput or latency question, and a way to test it with real workloads.
+3. **An unsettled systems question:** there is a meaningful unresolved scheduling, memory, correctness, communication, throughput, latency **or optimization-budget** question, and a way to test it with real workloads.
 
 **Not frontiers by themselves:** KV caching/offloading/sharing, sparse/hybrid/MLA attention, ordinary MoE/parallelism, P/D disaggregation, quantization, heterogeneous CUDA/ROCm/Ascend porting, and generic semantic response caching. These are **important active engineering tracks** in the topic pages, not new fields. Particularly, *response reuse* is not equivalent to exact *KV reuse*.
 
-## Six active frontiers — one anchor each
+## Seven active frontiers — one anchor each
 
 | Frontier | Start here | New systems contract / unresolved decision |
 |---|---|---|
@@ -24,10 +24,31 @@ A direction earns a place here when **all three** hold:
 | **Interactive world-model inference** | [StreamDiffusionV2](https://mlsys.org/virtual/2026/oral/3750) (MLSys 2026; [vLLM-Omni world-model path](https://github.com/vllm-project/vllm-omni)) | An interactive, continuous environment consumes actions and emits frames over many steps. Bound **action-to-first-frame, sustained FPS, jitter, memory growth and state drift** together. |
 | **Embodied / VLA action-loop inference** | [Characterizing VLA Models across XPUs](https://proceedings.mlr.press/v306/zhou26e.html) (ICML 2026) | The vision backbone and action expert have dissimilar hardware bottlenecks; meet a **hard perception-to-action deadline** on power-limited heterogeneous edge hardware. |
 | **Agentic kernel engineering** | [JustGoal](https://arxiv.org/abs/2610.36434) (2026 preprint; [released kernels](https://github.com/OpenBMB/JustGoal)); compare [KDA](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/), [CAKE](https://arxiv.org/abs/2608.12629), [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) | When does **goal-only** optimization beat domain-specific agents, and when do compiler IR, model-agnostic diagnostics, reusable search memory or a stronger verification harness justify their cost? Judge **same foundation model, operator shapes, budget, correctness and real serving** rather than cherry-picked per-kernel wins. |
+| **Autonomous inference-engine evolution (RSI-adjacent)** | [SEIS](https://arxiv.org/abs/2610.04646) (2026 **preprint**; [code/session artifacts](https://github.com/nehzux/SEIS)) | Optimize **the whole engine**, not just a kernel, through successive agent-led code changes and measured feedback. Can improvements transfer across workloads and optimization sessions without evaluator gaming, correctness regressions or prohibitive search cost? **An evolving engine is not evidence that the agent itself recursively self-improves.** |
+
+### Autonomous inference-engine evolution: separate engine evolution from RSI
+
+**Scope.** This frontier studies iterative, agent-directed changes to executable inference stacks and to the *process of evaluating those changes*. It is distinct from the **agentic kernel engineering** frontier above: the unit of optimization is an end-to-end engine, workload-specific serving stack or persistent test loop. Calling every optimize–benchmark–repeat loop “recursive self-improvement” overstates the evidence.
+
+- **Engine self-evolution (demonstrated in specific settings):** a largely fixed coding agent improves the *engine artifact* across sessions.
+- **Optimizer/agent self-improvement (research question):** experience changes the agent's *future search policy or reusable optimization capability*, improving results on unseen tasks **under equal budgets**; simply reusing better engine code does not establish this.
+- **Recursive self-improvement (stronger, unproven here):** the improved system materially enhances its own ability to perform subsequent improvements, producing a verified repeatable feedback loop rather than only a sequence of externally supplied model calls.
+
+| Work / evidence type | Concrete contribution | Boundary that must be preserved |
+|---|---|---|
+| [SEIS](https://arxiv.org/abs/2610.04646) · 2026 preprint; [author code and histories](https://github.com/nehzux/SEIS) | Iterative sessions inherit mini-SGLang code/reports; evolve kernels, runtime and decoding. Authors report **3.27× throughput vs original mini-SGLang** for **Qwen3-0.6B, H100, single-request** inference. | The **agent stays fixed**; not 3.27× over every production engine/workload. Downstream quality and held-out tests remain necessary. |
+| [VibeServe](https://arxiv.org/abs/2605.06068) · 2026 preprint; [code](https://github.com/uw-syfi/vibe-serve) | Outer design search plus inner implementation/correctness/benchmark loop synthesizes bespoke serving stacks. | Author-reported gains emphasize **six non-standard scenarios**; a specialized stack is not evidence of continual adaptation or RSI. **Already canonical** under [Kernels & Compilers](../topics/kernels-compilers.md). |
+| [Asari AI](https://asari.ai/blog/inference-optimization) · 2026 **first-party engineering blog** | Reports agent-led changes spanning kernels, schedulers, load balancing and configuration in vLLM on B200. | Author-reported up to **16%** across selected concurrency settings; no independently reproduced, general engine improvement claim. |
+| [Together Compiler](https://www.together.ai/blog/together-compiler-continual-compilation-for-ai-inference) · 2026 **first-party technical report/blog** | Persistent engine, hot-swappable forward passes, parallel agents, tiered evaluation and measured parallelism selection reduce optimization-loop overhead. | Its reported **252× is experiment throughput, not inference TPS**; up to **2.6× inference TPS** is a different, configuration-dependent author claim. Production statements are not independent verification. |
+| [InferenceBench](https://arxiv.org/abs/2607.20468) · 2026 **benchmark preprint**; [benchmark site](https://inferencebench.ai/) | Fixed-budget, open-ended inference-server optimization exposes weak candidate exploration and experimental decision-making. | Most measured agents lag a simple hyperparameter search, **with a later leading-agent exception on the live leaderboard**; results vary by agent version and baseline. |
+
+**Decisive research test:** does accumulated evidence improve **optimization competence**, or merely the final code artifact? Compare (i) a fresh agent, (ii) a fixed agent inheriting engine code and reports, (iii) an agent reusing a learned/edited optimization strategy, and (iv) a strong conventional tuning/search baseline at matched LLM-token, wall-clock and accelerator budgets. Use the same checkpoint, precision, hardware and request distribution; enforce output/quality oracles and hidden workloads. Report end-to-end goodput/TTFT/TPOT, workload-transfer regressions, **verified improvement per accelerator-hour**, experiment throughput and the full accepted/rejected candidate history. Treat kernel microbenchmarks and hot-reload setup savings as *different metrics* from serving speedup.
+
+**Open failure modes:** agent-generated shortcut code that passes a narrow oracle; numerical/semantic changes in decoding; kernel speedups that disappear on a full engine; overfitting to known shapes or one model; noisy accelerator timings; and an experiment loop whose overhead exceeds the eventual serving gain. **No public work listed here demonstrates open-ended, self-sustaining RSI of an inference optimization agent.** This is a high-priority systems frontier because these claims can be tested, not because RSI is already established.
 
 ### Kernel agents: goal-only vs. KDA vs. compiler-agent co-design
 
-**This is one frontier, not three new categories.** The decisive research question is the *marginal value of agent-specific engineering under controlled compute/model budgets*.
+**This is one frontier, not three new categories.** The decisive research question is the *marginal value of agent-specific engineering under controlled compute/model budgets*. Kernel-only optimization belongs here; cross-layer, repeated **engine-level** evolution belongs to the separate frontier above.
 
 | Approach | First-party source / implementation | Mechanism | Valid comparison boundary |
 |---|---|---|---|
@@ -52,6 +73,7 @@ The anchors are a **starter reading path, not new canonical admission**. An ICML
 | Interactive worlds | When must old latent/attention state be refreshed to prevent visual drift? | Long interactive action trace; sustained FPS, action latency P95, memory, consistency/drift checks and controlled action changes |
 | VLA execution | Can the compute-bound backbone overlap with the memory-bound action expert within deadline? | Hardware-traced stage latency, missed deadline rate, energy/action and action quality on embedded devices |
 | Agentic kernels | Does the generated code remain correct and fast outside public test tensors? | Hidden distributions + precision parity, multi-shape benchmarks, real profiler evidence, compilation cost and downstream serving impact |
+| Autonomous engine evolution | Does inherited experience improve the optimizer rather than only the engine checkpoint? | Equal-budget fresh vs. code/report inheritance vs. strategy-memory agent; held-out workloads/models, end-to-end quality/goodput, search cost and regression tracking |
 
 **World-model state-management follow-on (October 2026):** [WorldPager](https://arxiv.org/abs/2610.35529) explores pose-predictable KV-prefetch into NVMe-backed memory for long interactive sessions on a consumer GPU. It is an **adjacent real-hardware experiment**, with int4 quality limitations, and already has its one canonical entry under KV Cache & Context Memory; it is not a seventh frontier or a claim about text LLM KV reuse.
 
@@ -72,6 +94,6 @@ The anchors are a **starter reading path, not new canonical admission**. An ICML
 
 ## Update rule
 
-**Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/contract*, a primary systems paper, a usable public stack or real hardware receipt, strong existing baselines, and a testable unresolved bottleneck. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
+**Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/execution contract or system-optimization lifecycle*, a primary systems paper, a usable public stack or real hardware receipt, strong existing baselines, and a testable unresolved bottleneck. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
 
-*Research judgement as of 2026-10-19. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
+*Research judgement updated 2026-11-04. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
