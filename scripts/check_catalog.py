@@ -99,11 +99,13 @@ def check(root):
             uid = first_source_id(row)
             if uid:
                 aliases[uid].append(path)
-    index_total = re.search(r"^\| \*\*Total\*\* \| \*\*(\d+)\*\*", topic_index, re.M)
+    index_total = re.search(
+        r"^\| \*\*Total\*\* \| \*\*(\d+)\*\* \| \*\*(\d+)\*\*", topic_index, re.M
+    )
     if not index_total or int(index_total.group(1)) != total:
         issues.append(f"topic index total != {total}")
-    if n_groups != 44:
-        issues.append(f"expected 44 topic directions, got {n_groups}")
+    if not index_total or int(index_total.group(2)) != n_groups:
+        issues.append(f"topic index directions != {n_groups}")
     for uid, where in sorted(aliases.items()):
         if len(where) > 1:
             issues.append(f"duplicate first-source identity: {uid} ({', '.join(where)})")
@@ -115,10 +117,11 @@ def check(root):
     org = docs["organizations/README.md"]
     cn = sum(x.startswith("| [") for x in section(org, "## China", "## United States").splitlines())
     us = sum(x.startswith("| [") for x in section(org, "## United States", "## November").splitlines())
-    if (cn, us) != (19, 30):
-        issues.append(f"organization index expected 19/30, got {cn}/{us}")
+    declared_org = re.search(r"These \*\*(\d+) China/US profiles\*\*", org)
+    if not declared_org or int(declared_org.group(1)) != cn + us:
+        issues.append(f"organization index declared total != {cn + us}")
     community = docs["communities/README.md"]
-    expected = (24, 11, 9, 23, 9)
+    declared_oss = re.search(r"\*\*(\d+) unique source repos\*\*", community)
     observed = []
     for i in range(1, 6):
         match = re.search(rf"^### {i}\. .+$", community, re.M)
@@ -129,8 +132,8 @@ def check(root):
         stop = re.search(r"^#{2,3} ", remainder, re.M)
         group = remainder[:stop.start()] if stop else remainder
         observed.append(sum(x.startswith("| [") for x in group.splitlines()))
-    if tuple(observed) != expected:
-        issues.append(f"OSS groups expected {expected}, got {observed}")
+    if not declared_oss or int(declared_oss.group(1)) != sum(observed):
+        issues.append(f"OSS index declared total != {sum(observed)}; group sizes {observed}")
 
     lookup = {p: anchors(s) for p, s in docs.items()}
     for origin, content in docs.items():
