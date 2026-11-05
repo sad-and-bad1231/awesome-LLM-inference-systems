@@ -22,6 +22,17 @@ This is the **public Llama model-family** inventory, not an unsupported enumerat
 | **Llama 3.1** (2024) | 405B deployment and FP8 inference choices; longer-context model serving requirements. | [Meta announcement](https://ai.meta.com/blog/meta-llama-3-1/) |
 | **Llama 4** (2025) | MoE with limited active parameters per token and natively multimodal execution, introducing expert routing requirements. | [Meta announcement](https://ai.meta.com/blog/llama-4-multimodal-intelligence/) |
 
+## Production inference-system engineering (2025–2026)
+
+| First-party source | Reusable mechanism | Scope and evidence |
+|---|---|---|
+| [KernelEvolve](https://engineering.fb.com/2026/04/02/developer-tools/kernelevolve-how-metas-ranking-engineer-agent-optimizes-ai-infrastructure/) (2026-04-02) | Meta's **evaluator-guided kernel optimization agent** searches candidates for GPU/AMD/MTIA/CPU inference and training kernels with operational deployment feedback. | Meta reports **60% ads-model inference throughput** improvement in a specified deployment; this is **not** LLM decoding engine speedup or a verified recursive change to the agent's own model weights. |
+| [LLM inference TP/CP/EP engineering](https://engineering.fb.com/2025/10/17/ai-research/scaling-llm-inference-innovations-tensor-parallelism-context-parallelism-expert-parallelism/) (2025) | Practical parallel execution choices for production LLM inference, communication/memory tradeoffs and deployment efficiency. | Team engineering evidence; do not attribute every Meta service to this configuration. |
+| [Opportunistic inference capacity](https://engineering.fb.com/2026/10/12/ml-applications/turning-opportunistic-ai-inference-capacity-into-better-ads-recommendations/) (2026-10-12) | Exploits idle inference fleet capacity with elasticity controls while guarding baseline request performance. | **Advertising recommendation inference**, not autoregressive text generation; a useful workload elasticity analogue, not canonical LLM-serving performance. |
+| [Meta Adaptive Ranking Model](https://engineering.fb.com/2026/03/31/ml-applications/meta-adaptive-ranking-model-bending-the-inference-scaling-curve-to-serve-llm-scale-models-for-ads/) (2026) | Context-aware request-dependent inference complexity / routing for large ads recommender networks. | “LLM-scale” **RecSys** does not mean a causal LLM token decoder; apply as an adjacent systems idea only. |
+
+**RSI research boundary:** [KernelEvolve](https://engineering.fb.com/2026/04/02/developer-tools/kernelevolve-how-metas-ranking-engineer-agent-optimizes-ai-infrastructure/) is a stronger first-party **production kernel agent** signal than a generic agent coding demo. It belongs beside [autonomous engine evolution](../frontiers/README.md#autonomous-inference-engine-evolution-separate-engine-evolution-from-rsi) but does **not** prove that a full model-serving engine or the optimizer's underlying LLM recursively self-improves.
+
 ## Execution
 
 | Project | Role | Official source |
