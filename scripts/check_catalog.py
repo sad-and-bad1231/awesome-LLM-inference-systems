@@ -9,7 +9,7 @@ import sys
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 TOPICS = ("kernels-compilers", "kv-cache-memory", "decoding-acceleration",
           "quantization-compression", "moe-sparse-execution", "runtime-scheduling",
@@ -52,6 +52,11 @@ def first_source_id(row):
     arxiv = re.search(r"/(?:abs|pdf)/(\d{4}\.\d{4,5})(?:v\d+)?(?:\.pdf)?$", path)
     if url.hostname and url.hostname.endswith("arxiv.org") and arxiv:
         return "arxiv:" + arxiv.group(1)
+    if url.hostname in ("openreview.net", "www.openreview.net"):
+        paper_id = parse_qs(url.query).get("id", [])
+        if paper_id:
+            return "openreview:" + paper_id[0]
+        return "url:" + url.netloc.lower() + path.lower() + "?" + url.query
     if url.hostname in ("doi.org", "dx.doi.org"):
         return "doi:" + path.lower().lstrip("/")
     return "url:" + url.netloc.lower() + path.lower()
