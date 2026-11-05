@@ -11,7 +11,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
 | [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
 | [Alibaba / Qwen](Qwen-Alibaba.md) | Qwen3.5–3.8 · **RTP-LLM production serving engine** · Gated DeltaNet / QSA · MNN |
-| [Huawei / Ascend](Huawei.md) | CANN · MindIE · vLLM Ascend · third-party TileLang Ascend 950 backend |
+| [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
 | [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · K3 / K3.1 Pro · KDA / Gated MLA · AttnRes |
@@ -23,7 +23,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Xiaohongshu / Rednote](Xiaohongshu.md) | **[CODE + PREPRINT]** HYPIC hybrid-position-independent cache · Relax training/rollout |
 | [Ant Group](Ant-Group.md) | **[CODE + COMMUNITY]** Humming quantized dense/MoE JIT kernels with vLLM |
 | [Kuaishou / Kwai](Kuaishou.md) | **[MODEL + SERVICE]** Keye-VL DSA · StreamLake Vanchin prefix cache / observability |
-| [JD.com / JD Cloud](JDCloud.md) | **[SERVICE]** JoyMaaS model gateway / routing / enterprise inference API |
+| [JD.com / JD Cloud](JDCloud.md) | **[CODE + SERVICE]** xLLM Service cluster/engine layer · JoyMaaS API gateway |
 | [iFLYTEK / Spark](iFLYTEK.md) | **[SERVICE]** domestic heterogeneous AI platform · online/batch deployment |
 | [Moore Threads](MooreThreads.md) | **[CODE]** MUSA vLLM backend fork · MUSA tensor engine / kernel tooling |
 | [Cambricon / MLU](Cambricon.md) | **[BACKEND CODE]** torch_mlu · CNToolkit/CNNL/CNCL device stack; older public release matrix |
@@ -35,7 +35,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
 | [Google](Google.md) | **TorchTPU vLLM/SGLang** · llm-d P/D topology · Ragged Paged Attention · AlphaEvolve |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
-| [AMD](AMD.md) | ROCm · AITER · kernel libraries |
+| [AMD](AMD.md) | ROCm · AITER · **ATOM** engine · **MORI** EP/KV communication |
 | [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
 | [Anthropic](Anthropic.md) | Claude serving-visible API behavior; no inferred internals |
 | [Meta](Meta.md) | Llama · **KernelEvolve optimization agent** · TP/CP/EP systems · ExecuTorch / xFormers |
@@ -55,6 +55,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [Cloudflare / Workers AI](Cloudflare.md) | **[PRODUCTION ENGINEERING]** P/D · KV compression/cache · SGLang isolation fixes |
 | [Predibase / LoRAX](Predibase.md) | **[CODE]** multi-adapter batching · LoRA load/evict/prefetch scheduler |
 | [CoreWeave](CoreWeave.md) | **[COMMUNITY + PLATFORM]** llm-d founding contributor · K8s production inference |
+| [Modular](Modular.md) | **[COMPILER + SERVER CODE]** MAX graph compiler/runtime · Mojo kernels · OpenAI-compatible model server |
 | [Hugging Face](Hugging-Face.md) | **[CODE + ARCHIVE]** Transformers/Optimum · TGI now archived; cross-runtime interoperability |
 | [Inferact](Inferact.md) | **[CODE + COLLAB]** vLLM maintainers · joint TorchTPU backend / CI with Google |
 | [RadixArk](RadixArk.md) | **[CODE + COLLAB]** SGLang community · joint TorchTPU backend with Google |
@@ -62,6 +63,13 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [IBM](IBM.md) | **[COMMUNITY + ARCHIVE]** llm-d collaboration · historical archived vLLM Spyre plugin |
 | [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoML model services · API / package / autoscaling integration |
 
+## November 5 — code-grounded organizations/communities expansion
+
+One new US organization ([Modular](Modular.md), compiler-to-server stack) and three **existing profiles materially corrected**: [JD.com](JDCloud.md) publicly releases [xLLM Service](https://github.com/xLLM-AI/xllm-service) (previously mislabeled as service-contract-only), [AMD](AMD.md) provides both [ATOM](https://github.com/ROCm/ATOM) and [MORI](https://github.com/ROCm/mori), and [Huawei](Huawei.md) has [TorchNPU](https://github.com/Ascend/pytorch). The cited JD repository states its service layer is developed from the xLLM engine and credits JD.com; it **does not prove JoyMaaS uses that exact binary in all deployments**.
+
+Beyond companies, [Open-source & Labs](../communities/README.md) now presents **76 nonduplicate code repositories** by execution boundary (**+33 this sweep**) and **22 additional research/maintainer source nodes across two November passes** (**+10 this sweep**). Nodes include named multi-institution collaborations and industrial engineering teams; these counts are **not 22 newly established university labs**. [November 5 source receipt](../reviews/ORG_LAB_OSS_SWEEP_20261105.md).
+
+The highest-information sources for code reading are [Chitu](https://github.com/thu-pacman/chitu) (documented Ascend 910B engine path), [LightLLM](https://github.com/ModelTC/LightLLM) (token-level KV scheduling), [MORI](https://github.com/ROCm/mori) (EP/RDMA/KV transport), [SGL NPU kernels](https://github.com/sgl-project/sgl-kernel-npu) (Ascend backend), [DynaFlow](https://github.com/uw-syfi/DynaFlow) (programmable operator scheduling), and [Prism + kvcached](https://github.com/Multi-LLM/prism-research) (elastic GPU residency). None are claimed locally benchmark-replicated.
 ## November 4 — second-pass infrastructure and research-community sweep
 
 **7 new first-party company profiles** added beyond the first organization batch: [Cambricon](Cambricon.md), [Hugging Face](Hugging-Face.md), [Inferact](Inferact.md), [RadixArk](RadixArk.md), [Tenstorrent](Tenstorrent.md), [IBM](IBM.md), [BentoML](BentoML.md). Their reason for admission is a **public backend / codebase / engineering contribution**, not the size of a hosted-model portfolio. This iteration also expands [open-source projects and research labs](../communities/README.md); see [source receipt](../reviews/ORG_LAB_OSS_SWEEP_20261104.md).
