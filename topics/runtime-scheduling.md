@@ -17,12 +17,12 @@
 | [Batching, Queues & SLOs](#batching-queues--slos-43) | 43 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-27) | 27 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **151** | |
+| **Total** | **150** | |
 
-## Papers (151)
+## Papers (150)
 
 ### Batching, Queues & SLOs (43)
 
@@ -128,7 +128,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 | 2026 | [PhOSv1: Efficient Scaling of Model Sleeping on a Single Server for Autoscaling with GPU-Context Deduplication](https://arxiv.org/abs/2610.39999) | arXiv 2026 (preprint; submitted Oct 29) | 用中心 Daemon/API Remoting 对长期 Sleep 的 vLLM Instances 共享 CUDA Context/Kernel Binary；作者 **10 Qwen、10min 稀疏 Poisson Trace、Vanilla 6GiB Sleep Budget** 上 Mean E2E TTFT 146.82→19.09s。**长尾多模型 Autoscaling 而非稳态 Decode Speed**；HPCC 2026 Accepted List 可查，正式出版/Ascend 实现尚未验证。（KEEP_STRICT; CUDA_SPECIFIC; LONG_TAIL; NOT_REPRODUCED） |
 
-### Preemption & Multi-Tenancy (30)
+### Preemption & Multi-Tenancy (29)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -146,7 +146,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2025 | [LithOS: An Operating System for Efficient Machine Learning on GPUs](https://doi.org/10.1145/3731569.3764818) | SOSP 2025 | 以 TPC 级 Spatial Scheduling、Kernel Atomization、动态 Right-sizing 与功耗控制管理并发 GPU Workload；Rust 原型含实际 ML/LLM Inference Stacking 测量，属于与 Serving 密切相关的 GPU OS 基础工作。（KEEP_ADJACENT） |
 | 2025 | [Resource Multiplexing in Tuning and Serving Large Language Models](https://www.usenix.org/conference/atc25/presentation/he-yongjun) | USENIX ATC 2025 | LLMStation 将 Fine-tuning 拆为可挂起 Pipeline，与推理 Batch 做迭代级 GPU 时空复用并保证 Serving SLO。 |
 | 2025 | [Toppings: CPU-Assisted, Rank-Aware Adapter Serving for LLM Inference](https://www.usenix.org/conference/atc25/presentation/li-suyi-toppings) | USENIX ATC 2025 | LoRA 加载期间先在 CPU 执行适配层、完成 GPU Residency 后切回，并采用 Adapter Rank-aware SLO 调度。 |
-| 2026 | [ExecuTorch - A Unified PyTorch Solution to Run ML Models On-Device](https://proceedings.mlsys.org/paper_files/paper/2026/hash/236f915dd02af4f11927f67330b21d4b-Abstract-Conference.html) | MLSys 2026 | PyTorch 原生 Edge Runtime 与多 SoC Backend/量化部署工具链；属于通用端侧推理系统基础设施，不主张专门的 LLM 在线调度提速。（KEEP_ADJACENT） |
 | 2026 | [FlexLLM: Token-Level Co-Serving of LLM Inference and Finetuning with SLO Guarantees](https://www.usenix.org/conference/nsdi26/presentation/oliaro) | NSDI 2026 | 共享 GPU 上按 Token 协同 PEFT 与在线推理，优化激活内存和 SLO。 |
 | 2026 | [Inference in the Shadows: Taming Memory Bandwidth Contention in Mobile LLM Inference with Sereno](https://www.usenix.org/conference/osdi26/presentation/xin) | OSDI 2026 | SERENO 发现并发 LLM 推理使前台卡顿率升 153% 而自身吞吐仅降约 1%，遂复用 speculative decoding 插入细粒度让步点实现可抢占执行，在检测到带宽争用时把带宽让给前台 |
 | 2026 | [KUNSERVE: Parameter-centric Memory Management for Efficient Memory Overloading Handling in LLM Serving](https://dl.acm.org/doi/10.1145/3767295.3769348) | EuroSys 2026 | 以参数为中心处理 Serving 的显存超额占用，减少模型切换及请求停顿。 |
