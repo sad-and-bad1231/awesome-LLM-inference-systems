@@ -1,12 +1,8 @@
 # Papers by systems mechanism
 
-**November 2 arXiv first-pass (2026-11-02): 854 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [Source-level G0–G5 review](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md): +3 nonduplicate papers after October's 851 (KV +1; Benchmarking +2). These arXiv papers were submitted Oct 30 and listed in the Nov 2 announcements. No independent GPU/NPU reproduction; simulated-only works stay HOLD.
+**Current index (2026-11-02 source review): 854 unique canonical papers · 8 mechanisms · 44 engineering directions.** The [November first-pass receipt](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) documents three new source-reviewed studies after the October 851-paper checkpoint. Independent GPU/NPU reproduction is **not** claimed; HOLD candidates remain outside this index.
 
-**Historical final October 31 follow-up (2026-10-31): 851 unique canonical paper rows · 8 mechanisms · 44 engineering directions.** [Second-pass arXiv/EMNLP and industrial evidence audit](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) admits **16** source-reviewed nonduplicates after the prior **835** monthly snapshot, with each item separately pushed. This does **not** certify independent code execution, benchmarking, quality-equivalence or 100% October submission coverage. The earlier 835 figure is a dated checkpoint, not a second count.
-
-**Historical first October monthly close (2026-10-31): 835 distinct source-curated papers · 8 mechanisms · 44 engineering directions.** The [October complete month-close audit](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) adds **14** nonduplicate paper rows to the latest **821** source baseline (not the historical 813 checkpoint). Each paper received its own push, and industrial releases/research-lab blogs are indexed separately. **G0–G5 source screening does not equal independent G3/G4 replication**. The earlier October 30 tally is a dated snapshot, not current.
-
-**Historical checkpoint (2026-10-30): 821 canonical topic papers / 44 engineering tracks.** This was the baseline before the Oct 31 monthly close; no independent full-corpus reproducibility audit has been performed.
+**History, not current inventory:** [October final follow-up (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), [monthly close (835)](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md), and the [archived intake chronology](../reviews/archive/TOPIC_INDEX_HISTORY_20261030.md) preserve dated decisions without crowding the live directory.
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -23,6 +19,20 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 134 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 82 | 6 | Validated models, traces, benchmarks and production diagnosis |
 | **Total** | **854** | **44** | |
+
+## Classification boundaries
+
+The **primary engineering mechanism** determines the one canonical home; workload labels (Agent, multimodal, reasoning, long-context), accelerator vendor, venue, and application domain are cross-cutting attributes rather than extra categories. For borderline studies, use the main technical contribution, not keyword frequency:
+
+| Boundary | Choose the first when… | Choose the second when… |
+|---|---|---|
+| **KV Cache** vs **Quantization** | The principal problem is cache residency, reuse, eviction, tiering or transfer, even if compression is used. | The principal result is a low-bit representation, error control or executable quantization scheme, including KV precision. |
+| **Kernels & Compilers** vs **MoE & Sparse Execution** | The novelty lies in operator implementation, tiling, code generation or launch/fusion. | The novelty lies in conditional computation, expert placement, sparse execution policy or expert communication. |
+| **Runtime & Scheduling** vs **Distributed Serving** | The system decides request ordering, batching, routing, fairness or SLO policy. | The system changes the physical execution layout, parallelism, transport, disaggregation or fleet lifecycle. |
+| **Decoding Acceleration** vs **Runtime & Scheduling** | The work changes draft generation, verification, acceptance or non-autoregressive decoding. | The work schedules existing decoding methods dynamically among requests and resources. |
+| **Benchmarking & Analysis** vs **optimization categories** | The primary contribution is a workload, measurement method, correctness oracle, analytical model or diagnosis. | The primary contribution is an optimization mechanism evaluated using those tools. |
+
+Hybrid systems may span multiple rows; keep **one full paper entry** under the dominant mechanism and refer to it in prose elsewhere when useful. Do not duplicate bibliography rows to make a category look fuller.
 
 ## How to use this index
 
