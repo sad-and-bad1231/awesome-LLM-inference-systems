@@ -34,4 +34,13 @@ The Qwen team's publicly released model families and inference-related model arc
 | **Qwen3-Omni** | Multimodal model family with streaming audio/video/text execution considerations. | [Official source](https://github.com/QwenLM/Qwen3-Omni) |
 | **MNN (Alibaba)** | Alibaba-maintained efficient inference engine, including on-device model execution. | [Official source](https://github.com/alibaba/MNN) |
 
+## Alibaba infrastructure beyond Qwen models
+
+| First-party execution source | Implemented mechanism | Attribution boundary |
+|---|---|---|
+| [RTP-LLM](https://github.com/alibaba/rtp-llm) | Alibaba's production-derived LLM engine with C++ scheduler/dynamic batching, KV-cache management/quantization, multi-LoRA, distributed TP and P/D separation. The maintainers describe use across Taobao, Tmall, Xianyu, Cainiao, Amap, Ele.me, AliExpress and Lazada. | **Alibaba inference team**, not the exclusive work of Qwen model designers. Runtime code acknowledges FasterTransformer, TensorRT-LLM and vLLM influences. Any internal-production usage statement is first-party, not independent audit. |
+| [RTP-LLM technical README](https://github.com/alibaba/rtp-llm/blob/main/README_cn.md) | Documents system-prompt/context prefix caching, speculative decoding and weight-only INT8/INT4; optimization is across engine scheduling and kernels. | Features and performance vary by exact commit and hardware; do not infer compatibility with all current Qwen checkpoints or Ascend. |
+
+**Systems priority:** the **RTP-LLM runtime** is a more direct source for Alibaba Serving research than another incremental API model menu. Compare the shipped code with modern vLLM/SGLang under matched model, precision, concurrency and output correctness.
+
 **Scope:** Architecture/runtime-relevant releases only. A model-family repository is not proof of a new online serving algorithm or NPU performance result; vLLM/SGLang backend implementation and checkpoint compatibility must be checked independently.
