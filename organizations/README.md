@@ -1,6 +1,6 @@
 # Organizations
 
-Source-linked maps of **first-party model families plus inference infrastructure**. Each model vendor page now contains an **official-model-family crosswalk checked on 2026-10-24**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
+Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-04**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
 
 [← Home](../README.md) · [Research labs & open source](../communities/README.md)
 
@@ -8,11 +8,11 @@ Source-linked maps of **first-party model families plus inference infrastructure
 
 | Organization | Public work |
 |---|---|
-| [DeepSeek](DeepSeek.md) | V4.1 causal encoder–decoder · DeepInfer · TileKernels / TileLang · MLA/DSA · DeepEP |
-| [Tencent](Tencent.md) | Hy3 / Hy4-preview · Gated DSA / IndexCache · MoE / MTP |
+| [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
+| [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
 | [Qwen (Alibaba)](Qwen-Alibaba.md) | Qwen3.5–3.8 · Gated DeltaNet / QSA · multimodal models · MNN |
 | [Huawei / Ascend](Huawei.md) | CANN · MindIE · vLLM Ascend · third-party TileLang Ascend 950 backend |
-| [StepFun](StepFun.md) | Step3 MFA + Attention–FFN Disaggregation |
+| [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
 | [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · K3 / K3.1 Pro · KDA / Gated MLA · AttnRes |
 | [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
@@ -25,7 +25,7 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | Organization | Primary focus |
 |---|---|
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
-| [Google](Google.md) | JetStream · SAXML · MQA/GQA · speculative decoding |
+| [Google](Google.md) | **TorchTPU-native vLLM/SGLang** · Ragged Paged Attention · JetStream · AlphaEvolve (RSI-adjacent) |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
 | [AMD](AMD.md) | ROCm · AITER · kernel libraries |
 | [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
@@ -34,7 +34,26 @@ Source-linked maps of **first-party model families plus inference infrastructure
 | [AWS](AWS.md) | Neuron · DJL Serving · Bedrock |
 | [Apple](Apple.md) | MLX · local/on-device inference |
 | [Intel](Intel.md) | OpenVINO · GenAI inference |
+| [Together AI](Together-AI.md) | **Together Compiler** · persistent-engine agent optimization · polymorphic serving |
+| [Asari AI](Asari-AI.md) | **Whole-stack agent optimization** · vLLM profiling/verification/experience reuse |
+| [Cerebras](Cerebras.md) | **CS-4 / Nexus** · wafer-scale inference and rack-scale co-design |
+| [Modal](Modal.md) | **FlashAttention-4 decode optimization** · SGLang speculative inference · deployment |
 
+## November 4 update — model revisions and US inference-system sources
+
+**Release identity first.** The links below are primary sources, not extra canonical paper rows. First-party speedups remain author-reported.
+
+| Organization / source | Auditable new signal | Scope boundary |
+|---|---|---|
+| [StepFun Step 5 Preview](https://platform.stepfun.com/blog/inside-step-5-preview) · [released weights](https://huggingface.co/collections/stepfun-ai/step-5-preview) | 92-layer sparse MoE, Gated SWA and Sparse GQA; model weight variants are public. | The published model is still named **Preview**; architecture ≠ full-engine speedup. |
+| [DeepSeek-V4.1-Flash-1017](https://api-docs.deepseek.com/news/news261017/) · [weights](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) | Oct 17 revised weights and API alias for V4.1 Flash. | **Not** a distinct model architecture or new inference engine. |
+| [Tencent Hy4 final](https://cloud.tencent.com/document/product/1823/132252) · [release](https://adp.tencent.com/zh/blog/tencent-cloud-adp-hunyuan-hy4-release) | Nov 4 formal Hy4 vision/agent/computer-use model available through API. | **Final weights/system card not yet publicly verified**; do not substitute [Hy4-preview](https://github.com/Tencent-Hunyuan/Hy4-preview) checkpoint. |
+| [Google TorchTPU](https://developers.googleblog.com/en/announcing-new-vllm-and-sglang-inference-engines-on-tpu/) · [Ragged Paged Attention](https://research.google/pubs/ragged-paged-attention-a-high-performance-and-flexible-llm-inference-kernel-for-tpu/) | Native PyTorch TPU serving and ragged attention primitives, in cooperation with Inferact/RadixArk. | TPU-specific performance, not generic CUDA/Ascend acceleration. |
+| [Google DeepMind AlphaEvolve](https://deepmind.google/blog/alphaevolve-impact/) · [Cloud rollout](https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/alphaevolve-on-cloud/) | Evaluator-guided algorithm evolution, with reported TPU design/cache-policy contributions. | **RSI-adjacent algorithm optimization**, not proof of recursive Gemini/model-weight improvement or evolving serving engine. |
+| [Together Compiler](https://www.together.ai/blog/together-compiler-continual-compilation-for-ai-inference) · [Asari AI](https://asari.ai/blog/inference-optimization) | Multi-iteration, profile-guided or persistent-engine agent optimization of inference stacks. | Company reports only; distinguish faster *experiment throughput* from actual token throughput and optimizer self-improvement. |
+| [Cerebras](https://www.cerebras.ai/blog/ultrafast-frontier-inference-cerebras-deep-dive-at-hot-chips-2026) · [Modal](https://modal.com/blog/flash-attention-4-faster) | Wafer-scale topology / kernel-to-serving execution engineering. | Hardware product claims and single-kernel gains are not universal serving Goodput. |
+
+**US coverage rule:** infrastructure companies are added for identifiable inference mechanism or publicly inspectable engineering, not merely for operating a hosted model API. [Together AI](Together-AI.md), [Asari AI](Asari-AI.md), [Cerebras](Cerebras.md) and [Modal](Modal.md) now have focused first-party pages. The related [engine-evolution Frontier](../frontiers/README.md#autonomous-inference-engine-evolution-separate-engine-evolution-from-rsi) keeps strict RSI claims evidence-gated.
 ## October 31 follow-up: additional first-party engine/kernel signals
 
 These were missed in the original October 31 industrial pass. **Repositories, implementation blog posts and live backend support are not extra canonical paper entries.** Always pin commits, models, hardware and runtime paths before asserting measured speedups.
@@ -77,7 +96,7 @@ The following are **official repositories, release notes and technical reports**
 | [Moonshot / Kimi](Moonshot-Kimi.md) | [Mooncake](https://github.com/kvcache-ai/Mooncake) KV transfer/storage; [FlashKDA](https://github.com/MoonshotAI/FlashKDA) recurrent kernel; Kimi-K3 KDA/AttnRes and K3.1 model generation | **FOUNDATION** Mooncake paper on homepage. **ENGINEERING / model architecture** FlashKDA, KDA and AttnRes; don't count API K3.1 high-speed tier as a new kernel paper. |
 | [ByteDance / Seed](ByteDance.md) | Production LLM workload characterization; ByteTransformer / ByteIR compiler; Seed2.1 and multimodal model family | **TOPIC** cloud-native inference characterization. **ENGINEERING** ByteTransformer/ByteIR. Seed model-family news is workload context, not a Serving paper. |
 | [Microsoft](Microsoft.md) | DeepSpeed-FastGen, MSCCL++, vAttention, Splitwise, Phi multimodal; DeepSpeed/ONNX ecosystem | **TOPIC** DeepSpeed-FastGen, MSCCL++; **FOUNDATION** Splitwise and vAttention; **ENGINEERING / model** other infrastructure and Phi, not automatically new canonical titles. |
-| [Google](Google.md) | JetStream / SAXML TPU inference infrastructure, Gemini/Gemma family and deployment patterns | **ENGINEERING / model**; JetStream/SAXML need actual publication-identity and benchmark audit before canonical status; hosted model products are not publications. |
+| [Google](Google.md) | TorchTPU-native vLLM/SGLang, Ragged Paged Attention, JetStream/SAXML, AlphaEvolve optimization tooling, Gemini/Gemma model architecture | **ENGINEERING / first-party research / model**; Inferact/RadixArk backend collaborations credited. AlphaEvolve is not demonstrated recursive inference-agent self-improvement. |
 | [AMD](AMD.md) | [AITER](https://github.com/ROCm/aiter), ROCm, Composable Kernel; ROCm inference kernel releases | **ENGINEERING** kernel stack. The catalog includes an AMD Instinct deployment measurement study (**TOPIC**) but testing AMD hardware does not imply AMD authorship. |
 | [Tencent](Tencent.md) | Hunyuan Hy3/Hy4 Gated DSA/MTP; sparse-indexer/IndexCache-related ecosystem | **ENGINEERING / model** Hunyuan lineage; attribution of third-party indexer patches must be paper- or repo-confirmed; model architecture is not itself a Serving system. |
 
@@ -110,6 +129,6 @@ The counts below use the **unit named in the source**: homepage featured model l
 | Apple | [AFM 3 first-party research](https://machinelearning.apple.com/research/introducing-third-generation-of-apple-foundation-models) | **5 named AFM3 models** (two on-device, three cloud), plus MLX execution software |
 | AMD / Intel | [AMD AITER](https://github.com/ROCm/aiter) · [Intel OpenVINO](https://github.com/openvinotoolkit/openvino) | In this collection these two are **hardware/software ecosystem** pages, not proprietary frontier-model portfolio owners; do not invent model releases to fill rows |
 
-**Strict reading rule:** owning an API model is not owning its inference framework; owning a kernel repo is not proof of production adoption. A product/model-family entry is **not** a new canonical paper and does not affect the current 756-paper technical catalog. New model generations must be cross-checked against the official model menu *and* the release/retirement log. A provider's total downloadable checkpoint count is not feasible to freeze as a manually maintained Markdown list; the authoritative site is linked instead.
+**Strict reading rule:** owning an API model is not owning its inference framework; owning a kernel repo is not proof of production adoption. A product/model-family entry is **not** a new canonical paper and does not change the current [topic bibliography inventory](../topics/README.md). New model generations must be cross-checked against the official model menu *and* the release/retirement log. A provider's total downloadable checkpoint count is not feasible to freeze as a manually maintained Markdown list; the authoritative site is linked instead.
 
 **Editorial boundary.** Organization pages represent verifiable first-party releases or research directly attributable to a team. Coauthored work belongs in the topical paper lists unless the institution is explicitly presenting its own system. An API feature is not proof of an undisclosed serving implementation.
