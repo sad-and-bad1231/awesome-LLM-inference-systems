@@ -1,6 +1,6 @@
 # Google
 
-A short index of Google's **inference-system research, open-source serving software, and efficient model execution**.
+A source-scoped map of Google's **inference kernels, TPU-native serving stacks, and agent-assisted infrastructure optimization**, plus publicly documented model architecture. This is not an account of Google's undisclosed Gemini production serving code.
 
 [← Organizations](../README.md#organizations)
 
@@ -30,13 +30,25 @@ A short index of Google's **inference-system research, open-source serving softw
 | **Grouped-Query Attention (GQA)** (EMNLP 2023) | Attention-head grouping trades off decode bandwidth and model quality. | [ACL Anthology](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Gemma family** | Open-weight architectures and deployment examples; model design, **not** a disclosed Google production serving stack. | [Official models/docs](https://ai.google.dev/gemma/docs) |
 
-## Infrastructure
+## TPU inference infrastructure and optimization
 
 | Project | Role | Official source |
 |---|---|---|
+| **TorchTPU (2026)** | Native PyTorch `tpu` backend with ATen ops, XLA/`torch.compile`, distributed collectives and TPU-specific kernel integration; a supported **backend**, not automatic transfer of CUDA kernels. | [Google engineering launch](https://developers.googleblog.com/en/announcing-new-vllm-and-sglang-inference-engines-on-tpu/) · [source](https://github.com/google-pytorch/torch_tpu) |
+| **vLLM-TorchTPU / SGLang-TorchTPU (2026-10-20)** | Google with **Inferact** (vLLM) and **RadixArk** (SGLang) integrated native PyTorch-based serving, Pallas custom ops, KV/parallelism paths and common engine schedulers. Their product announcement includes a TPU7x/AgentX performance claim, not a cross-backend speedup. | [First-party engineering report](https://developers.googleblog.com/en/announcing-new-vllm-and-sglang-inference-engines-on-tpu/) · [vLLM backend](https://github.com/vllm-project/vllm-torchtpu) · [SGLang backend](https://github.com/sgl-project/sglang-torchtpu) |
+| **Ragged Paged Attention (2026)** | Pallas/Mosaic TPU kernel for dynamic ragged KV access, fused KV updates and distribution-aware prefill/decode specialization; the authors report real TPU7x kernel measurements. **Kernel/JAX-XLA baseline improvements are not end-to-end engine throughput.** | [Google Research paper page](https://research.google/pubs/ragged-paged-attention-a-high-performance-and-flexible-llm-inference-kernel-for-tpu/) |
 | **JetStream** | High-throughput LLM inference engine targeting TPU-oriented deployments. | [GitHub](https://github.com/google/JetStream) |
 | **SAX / SAXML** | Scalable JAX/TPU model-serving platform. | [GitHub](https://github.com/google/saxml) |
 | **MaxText** | Open JAX/TPU LLM implementation with generation/inference paths; also a training framework. | [GitHub](https://github.com/google/maxtext) |
 | **Gemma.cpp** | Lightweight C++ inference for Gemma on resource-constrained devices. | [GitHub](https://github.com/google/gemma.cpp) |
 
-**Boundary.** Selected Google-authored research and first-party projects, not the entirety of Google Cloud's managed model catalog. A model architecture contribution is not evidence of an unpublished serving implementation.
+## Algorithm discovery / RSI-adjacent infrastructure research
+
+| Public work | Executed mechanism and evidence | Boundary / research implication |
+|---|---|---|
+| **[AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/)** (DeepMind, 2025) | Gemini-backed code candidate generation + programmatic evaluators + evolutionary search for algorithms; Google reports use in TPU circuit-design optimization and infrastructure heuristics. | **Algorithm/code evolution, not demonstrated recursive weight/model self-improvement**, nor direct evidence of autonomously evolving vLLM/SGLang production engines. |
+| **[AlphaEvolve infrastructure follow-up](https://deepmind.google/blog/alphaevolve-impact/)** (2026) | First-party report describes TPU design and cache policy improvements; [Google Cloud GA announcement](https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/alphaevolve-on-cloud/) documents a customer-accessible algorithm optimization service. | A deployed algorithm optimizer is evidence of optimization *capability* and operational investment; absence of matched-budget, held-out inference-engine experiments prevents an RSI-on-serving claim. |
+
+**Research crosswalk:** [Autonomous inference-engine evolution](../frontiers/README.md#autonomous-inference-engine-evolution-separate-engine-evolution-from-rsi) is the relevant frontier. Google demonstrates a strong **general-purpose evaluator-guided optimization loop**, while [SEIS](https://arxiv.org/abs/2610.04646) and [Together Compiler](https://www.together.ai/blog/together-compiler-continual-compilation-for-ai-inference) are closer to explicit **inference-engine** evolution. Do not conflate the three.
+
+**Boundary.** Selected Google-authored first-party and explicitly credited partner projects, not all Google Cloud managed model endpoints or Google's unpublished Gemini serving architecture. TPU benchmarks are specific to model, hardware, backend, shapes and baseline; **no independent reproduction claimed here**.
