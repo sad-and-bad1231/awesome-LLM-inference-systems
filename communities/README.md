@@ -1,8 +1,16 @@
 # Research labs & open-source communities
 
-An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-04:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
+An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-05:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
 
 [← Home](../README.md) · [Companies](../organizations/README.md)
+
+## How to read this source map
+
+Choose a project by the **execution boundary** you want to understand: token-step engines, multi-replica/cluster orchestration, KV and network state movement, device kernels/compilers, or multimodal/device backends. The five groups below describe a project's **primary instructional role**, not exclusive feature ownership or a universal ranking.
+
+The later research-lab sections index source-producing teams and collaborations, **not 22 additional canonical papers or 22 verified independent laboratories**. Inclusion requires a concrete inference-systems paper, upstream artifact, maintainer contribution or first-party technical report. Company and university credit must be checked per project; dated discovery notes are not claims of active maintenance or reproduced performance.
+
+[Jump to research labs](#research-labs-and-source-linked-systems-signals) · [Company profiles](../organizations/README.md) · [Paper mechanisms](../topics/README.md)
 
 ## Open-source systems — grouped by execution boundary
 
