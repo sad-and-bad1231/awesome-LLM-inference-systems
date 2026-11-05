@@ -4,7 +4,7 @@
 
 [← Home](../README.md) · [Serving systems](../topics/serving-systems.md)
 
-## Official model-family crosswalk (2026-10-24)
+## Official model-family crosswalk (updated 2026-11-04)
 
 **First-party catalog:** [DeepSeek official research/releases](https://www.deepseek.com/en/news/) and [API changelog](https://api-docs.deepseek.com/updates/). Model weights, API aliases and experimental releases are not interchangeable.
 
@@ -16,7 +16,7 @@
 | DeepSeek-V3.2-Exp / V3.2 / V3.2-Speciale | DSA sparse indexer and MLA serving kernel demand; Speciale is a model variant | [V3.2 code](https://github.com/deepseek-ai/DeepSeek-V3.2) · [official news](https://www.deepseek.com/en/news/) |
 | DeepSeek-V4 Preview / V4-Flash / V4-Pro | 2026 V4 generation, long-context and high-throughput model releases; model availability and alias state require release-specific documentation | [Official April 2026 V4 preview release](https://www.deepseek.com/en/news/) · [API changelog](https://api-docs.deepseek.com/updates/) |
 | DeepSeek-V4-Flash-Vision-Exp | August 2026 experimental visual model; now **retired** from API, alias maps to V4.1 Flash | [API changelog](https://api-docs.deepseek.com/updates/) |
-| DeepSeek-V4.1-Flash / V4.1-Flash-1017 | Causal encoder–decoder asymmetric MoE, native vision and sharply lower KV footprint; `deepseek-flash` is an API alias, not a separate architecture | [Official model news](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [Oct 17 model update](https://api-docs.deepseek.com/updates/) |
+| DeepSeek-V4.1-Flash / V4.1-Flash-1017 | 552B causal encoder–decoder asymmetric MoE (8B active input / 16B output), native vision and lower KV footprint. **1017 is the Oct 17 model revision**, not a distinct V4.1 architecture or new inference engine. `deepseek-flash` API alias points to the updated model; **1017 open weights** are available. | [Sep 10 architecture announcement](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [Oct 17 API revision](https://api-docs.deepseek.com/updates/) · [official 1017 weights](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) |
 
 **Systems map:** model dataflow → [DeepInfer](https://github.com/deepseek-ai/DeepInfer) (public offline path) → [TileKernels](https://github.com/deepseek-ai/TileKernels) / independently maintained [TileLang](https://github.com/tile-ai/tilelang) → [FlashMLA](https://github.com/deepseek-ai/FlashMLA), [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM), [DeepEP](https://github.com/deepseek-ai/DeepEP). Do not infer that commercial API models, open-weight checkpoints and open-sourced runtime features have identical deployment scope.
 
@@ -28,7 +28,7 @@
 | **DeepSeek-V3** (2024) | Technical report | Production-scale MLA/MoE design, Multi-Token Prediction and engineering tradeoffs; FP8/DualPipe details primarily concern **training**. | [Paper](https://arxiv.org/abs/2412.19437) · [Official repo](https://github.com/deepseek-ai/DeepSeek-V3) |
 | **DeepSeek-V3.2-Exp** (2025) | Official experimental release | Introduces DeepSeek Sparse Attention (DSA), motivating indexer TopK and sparse MLA kernel implementations. Experimental release, not a conference paper. | [Official repo](https://github.com/deepseek-ai/DeepSeek-V3.2-Exp) |
 | **DeepSeek-V3.2** (2025) | Technical report | DeepSeek Sparse Attention: long-context computation is reduced through learned fine-grained sparse selection. Discussion of RL and agent performance is outside this page's systems focus. | [Paper](https://arxiv.org/abs/2512.02556) · [Official repo](https://github.com/deepseek-ai/DeepSeek-V3.2) |
-| **DeepSeek-V4.1-Flash / -1017** (2026) | Official model release | Asymmetric causal encoder–decoder MoE (552B total; 8B/16B activated in input/output phases), designed to reduce KV-storage costs. The published model architecture is not a serving-runtime performance proof. | [Official release](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [API changelog](https://api-docs.deepseek.com/updates/) |
+| **DeepSeek-V4.1-Flash / -1017** (2026) | Official model release + Oct 17 checkpoint revision | Asymmetric causal encoder–decoder MoE (552B total; 8B/16B activated in input/output phases), designed to reduce KV-storage costs. **1017** further targets shorter task runs and agent-harness workflows; its self-feedback RL is a **training claim**, not RSI of a deployed inference engine. No independently controlled throughput improvement is established by the model update alone. | [Architecture](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [1017 release](https://api-docs.deepseek.com/news/news261017/) · [open weights](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) |
 
 ## Execution and communication libraries
 
