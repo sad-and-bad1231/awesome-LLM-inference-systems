@@ -14,13 +14,13 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-29) | 29 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
-| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-11) | 11 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
-| [Kernel DSL & Compilers](#kernel-dsl--compilers-17) | 17 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-18) | 18 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-16) | 16 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-10) | 10 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **101** | |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-30) | 30 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
+| [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Kernel Automation & Tools](#kernel-automation--tools-15) | 15 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **115** | |
 
 ## Papers (115)
 

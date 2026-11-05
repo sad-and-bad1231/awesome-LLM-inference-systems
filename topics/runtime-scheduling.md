@@ -14,13 +14,13 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-41) | 41 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-17) | 17 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-43) | 43 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-24) | 24 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **144** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-27) | 27 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **151** | |
 
 ## Papers (151)
 

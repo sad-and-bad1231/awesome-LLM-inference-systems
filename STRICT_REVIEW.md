@@ -1,6 +1,8 @@
 # Strict Review: evidence-first curation
 
-**Active G0–G5 gates (rechecked 2026-10-31).** The catalog contains **851 source-curated** unique topic entries after the [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), including **16** separately committed additions over the earlier [835-paper monthly checkpoint](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md). Source acceptance **does not** mean 851 implementations, baseline comparisons or model outputs were independently reproduced. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
+**Active G0–G5 gates (reviewed for November intake 2026-11-02).** The catalog contains **854 source-curated** unique topic entries after the [November first-pass source review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md), with **3** nonduplicate new admissions after October's 851. These are editorial KEEP decisions, not independent result reproduction.
+
+**Historical October 31 status.** The catalog contained **851 source-curated** unique topic entries after the [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), including **16** separately committed additions over the earlier [835-paper monthly checkpoint](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md). Source acceptance **does not** mean 851 implementations, baseline comparisons or model outputs were independently reproduced. Continue source-level checks and schedule reproducibility work separately for the strongest candidates.
 
 **Prior historical snapshots and numerical claims:** [archived strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md), [curation chronology](reviews/archive/CURATION_HISTORY_20261030.md) and dated [G0–G5 receipts](reviews/). Only the [topic index](topics/README.md) defines the present inventory; unresolved HOLD records must live outside canonical topics.
 
