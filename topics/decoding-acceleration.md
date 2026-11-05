@@ -18,10 +18,10 @@
 | [Training-Free & Self-Speculation](#training-free--self-speculation-22) | 22 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-16) | 16 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
-| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-18) | 18 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **85** | |
+| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-16) | 16 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
+| **Total** | **83** | |
 
-## Papers (85)
+## Papers (83)
 
 ### Draft Models & Candidate Generation (18)
 
@@ -118,7 +118,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [TableTune: Measured, Self-Correcting Draft-Length Tables for Dynamic Speculative Decoding](https://arxiv.org/abs/2610.38968) | arXiv 2026 (preprint; Oct 28) | 直接在 vLLM 原生 Serving Step 上计时 **Batch Size × Draft Length** 组合，建立最大 Throughput Table，再以实际 Accept Count 在线纠偏，替代手填静态推测宽度；作者 H100 五种 Drafter 中四种达到 Best Fixed 的至少 94% Throughput，MoE 固定表可能损失 18% 而校准表最多损失 3%；四 GPU llm-d 高负载对比所测固定宽度最高 +32%。**vLLM_SPECULATION_SCOPED / SOURCE_BASELINE_SPECIFIC / NOT_NO_SPECULATION_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [AgentSpec: Speculative Decoding for Batch Inference of LLM Agents](https://aclanthology.org/2026.emnlp-main.585/) | EMNLP 2026 Main (ACL Anthology, October) | Agent 大 Batch 下传统 SD 因 Draft Rejection 和未利用动态 Token Budget 效率下降：**Structure-isolated Drafting** 在语义工作流段内推测，并按 Agent-level Redundancy 自适应分配 Token Budget；作者在 vLLM 上四模型族、五 Agent Workloads 对照现有 SD，报告优于所测基线，但**官方摘要未提供可采信的统一加速数字**。**AGENT_BATCH_WORKLOAD / TARGET_VERIFICATION_SCOPE / AUTHOR_REPORTED / NO_INDEPENDENT_REPRODUCTION**，不是任意 Batched Serving 的通用收益。（KEEP_STRICT） |
 
-### Diffusion & Non-AR Generation (18)
+### Diffusion & Non-AR Generation (16)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
@@ -127,7 +127,6 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [DAWN: Dependency-Aware Fast Inference for Diffusion LLMs](https://arxiv.org/abs/2602.06953) | NeurIPS 2026 (author-verified; formal proceedings pending) | 在 Dream/LLaDA DLM 逐步 Unmask 时，从 Attention Map 建立 Token 依赖图，结合 **Anchor-Guided Selection + Conflict-Graph Independent-Set Scheduling** 提高可并行提交位置数，解决纯 Confidence 选点的耦合错误；**无需重训**。作者在真实 **H100 80GB** 报告相对基线 1.80–8.06× 生成加速和任务质量近似保持，但不是严格输出等价或高并发 Serving Goodput。公开 [代码与基准脚本](https://github.com/lizhuo-luo/DAWN)，未在 Ascend 复现。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
 | 2026 | [SparseD: Sparse Attention for Diffusion Language Models](https://openreview.net/forum?id=dwbrZtYP04) | ICLR 2026 | 缓存早期去噪步骤的 Sparse Attention Pattern 并跨 Denoising Iteration 复用；Dream/LLaDA + 64K/1024 step 作者报告 **生成最高 1.50× 加速**、近似质量保持，非严格输出等价。公开 [FlexAttention 实现](https://github.com/INV-WZQ/SparseD)，不是现成 vLLM-Ascend AR Serving 优化。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
 | 2026 | [AdaBlock-dLLM: Semantic-Aware Diffusion LLM Inference via Adaptive Block Size](https://openreview.net/pdf?id=0Cv9PwL7cI) | ICLR 2026 | 以语义分隔符置信度和 Volatility Band 动态选择半自回归 DLM 的 Block Size；训练免改造，有 Dream/LLaDA 可执行代码，质量-吞吐需要配套审查。 |
-| 2026 | [BWCache: Accelerating Video Diffusion Transformers through Block-Wise Caching](https://proceedings.iclr.cc/paper_files/paper/2026/hash/ac8ec9b4d94c03f0af8c4fe3d5fad4fd-Abstract-Conference.html) | ICLR 2026 | 训练无关地跨 Denoising Step 缓存并复用 DiT Block Feature，以相似性阈值触发重算，实测视频扩散推理延迟与视觉质量权衡（邻接领域；非 KV Cache）。（KEEP_ADJACENT） |
 | 2026 | [CDLM: Consistency Diffusion Language Models for Faster Sampling](https://proceedings.mlsys.org/paper_files/paper/2026/hash/054de805fcceb78a201f5e9d53c85908-Abstract-Conference.html) | MLSys 2026 | 通过一致性建模降低 Diffusion LM 的 Refinement Steps，并通过 Block Causal Mask 与微调实现可复用 KV；训练-推理协同加速，开源实验代码，非无需重训练的纯 Runtime 系统。（REQUIRES_FINETUNING） |
 | 2026 | [DFlash: Block Diffusion for Flash Speculative Decoding](https://openreview.net/forum?id=Oz335dV48X) | ICML 2026 | 用轻量块扩散模型在单次前向中并行生成整块草稿 token，并以目标模型抽取的上下文特征为条件提高接受率，实现超过 6× 无损加速、相对 EAGLE-3 再快最高 2.5×。 |
 | 2026 | [DSB: Dynamic Sliding Block Scheduling for Diffusion LLMs](https://proceedings.mlr.press/v306/luo26o.html) | ICML 2026 | 自适应滑动 Block 和配套 KV Cache 提升扩散语言模型的并行生成效率。 |
@@ -136,7 +135,6 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [ES-dLLM: Efficient Inference for Diffusion Large Language Models by Early-Skipping](https://proceedings.iclr.cc/paper_files/paper/2026/hash/6fc63067ef32cfda806afbd8328ab27e-Abstract-Conference.html) | ICLR 2026 | 基于相邻去噪步的 Hidden-State 变化和 Token Confidence 决定早期 Layer Token Skipping；H200 实机推理实验兼顾吞吐与质量。 |
 | 2026 | [Fast-dLLM: Training-free Acceleration of Diffusion LLM by Enabling KV Cache and Parallel Decoding](https://nvlabs.github.io/Fast-dLLM/) | ICLR 2026 | 为双向 Diffusion LLM 设计 Block-wise Approximate KV Cache，并以置信度策略并行提交 Token；提供 LLaDA/Dream 质量与端到端生成性能对照及公开实现，注意非严格等价解码。（APPROXIMATE_QUALITY_CHECKED） |
 | 2026 | [FlashDLM: Accelerating Diffusion Language Model Inference via Efficient KV Caching and Guided Diffusion](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f930c6e1292a1160189a0734f22b465b-Abstract-Conference.html) | ICLR 2026 | 以 FreeCache 复用稳定 Denoising-step KV，Guided Diffusion 采用轻量 AR 模型减少去噪迭代；作者开源端到端实验，但需计入辅助模型运行开销。 |
-| 2026 | [Rolling Forcing: Autoregressive Long Video Diffusion in Real Time](https://proceedings.iclr.cc/paper_files/paper/2026/hash/935151cc6cb5d8b6816133b75233775a-Abstract-Conference.html) | ICLR 2026 | 用多帧联合去噪与 Rolling Window 减少自回归视频生成的误差积累，以 Attention Sink 稳定跨窗口状态；单 GPU 实测多分钟实时视频生成（邻接领域）。（KEEP_ADJACENT） |
 | 2026 | [Self-Speculative Masked Diffusions](https://openreview.net/forum?id=ogMTEtHO6M) | ICLR 2026 | 把掩码扩散模型最后若干层的注意力掩码由非因果改为因果，在单次前向中得到非因子化预测，并通过模型内建的投机采样并行校验草稿，使所需网络前向次数较标准掩码扩散减少约 2×。 |
 | 2026 | [WeDLM: Reconciling Diffusion Language Models with Standard Causal Attention for Fast Inference](https://proceedings.mlr.press/v306/liu26av.html) | ICML 2026 | 用 Topological Reordering 将已知 Token 移至物理 Prefix，同时保持逻辑位置和 Causal Mask，使 Diffusion 解码兼容标准 Prefix KV Cache；Streaming Commit 在与 vLLM 同部署条件下比较生成速度。 |
 | 2026 | [Fast-dLLM v2: Efficient Block-Diffusion LLM](https://arxiv.org/abs/2509.26328) | ICLR 2026 (first preprint 2025) | 以 ~1B Token Fine-tuning 把 AR Qwen2.5 模型改造成 Block-Diffusion，Complementary Mask + Block/Sub-block Hierarchical KV Caches 实现并行 Token Decode；[作者代码及权重](https://github.com/NVlabs/Fast-dLLM/tree/main/v2)，对原 Qwen2.5-7B AR Baseline 作者报告吞吐最多 2.54×、跨 MMLU/GPQA/GSM8K/代码任务同等质量约束；**MODEL_CHANGED，不能当作原始 AR 模型无需训练的 Lossless Kernel Speedup**。与已收录 Training-free Fast-dLLM v1 机制不同。（KEEP_STRICT; ICLR2026; PUBLIC_CODE_MODEL; FINETUNING_REQUIRED; NOT_OUTPUT_EQUIVALENT） |
