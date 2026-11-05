@@ -1,8 +1,14 @@
 # Organizations
 
-Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-04**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
+Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-05**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
 
 [← Home](../README.md) · [Research labs & open source](../communities/README.md)
+
+## How organizations are selected
+
+These **49 China/US profiles** are an engineering-source map, **not** a company ranking or exhaustive global coverage. An organization is useful here when its first-party evidence reveals a relevant part of the inference execution stack: **(1)** a model architectural decision that changes inference cost, **(2)** an inspectable runtime/kernel/compiler/transport implementation, **(3)** production engineering with identifiable mechanisms and constraints, or **(4)** an accelerator/backend design. A source-only service or API is explicitly labeled; it does not establish ownership of undocumented kernels, schedulers, or benchmark results.
+
+**Reading priority:** follow source code/implementation and published system artifacts first; read engineering reports for workload and deployment context; use model catalogs and service pages for compatibility and requirements. Community-owned or co-developed projects remain attributed to their actual maintainers. Profiles vary in evidence depth deliberately; a short page should not be padded with unsupported architecture claims. See the [research/open-source map](../communities/README.md) for projects that cross company boundaries, and the [source audits](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) for provenance.
 
 ## China
 
@@ -133,7 +139,7 @@ The following are **official repositories, release notes and technical reports**
 
 ## Recent first-party systems signals (2025–2026 cross-check)
 
-[Eight research groups and their canonical-paper crosswalk](../communities/README.md#latest-group-originated-inference-signals-checked-2026-10-25) is maintained separately. The **company pages above remain authoritative for model families**. This short map highlights recent first-party *software/technical reports*; software projects do not have to be cloned into the 722-paper canonical bibliography. **TOPIC** = representative systems paper has a canonical row; **FOUNDATION** = homepage paper only; **ENGINEERING** = maintained implementation/model architecture rather than a distinct reviewed paper.
+[Eight research groups and their canonical-paper crosswalk](../communities/README.md#research-labs-and-source-linked-systems-signals) is maintained separately. The **company pages above remain authoritative for model families**. This short map highlights recent first-party *software/technical reports*; software projects do not have to be cloned into the 722-paper canonical bibliography. **TOPIC** = representative systems paper has a canonical row; **FOUNDATION** = homepage paper only; **ENGINEERING** = maintained implementation/model architecture rather than a distinct reviewed paper.
 
 | Organization | Newer first-party systems / related release | Bibliography crosswalk and ownership limits |
 |---|---|---|
