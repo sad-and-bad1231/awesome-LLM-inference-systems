@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-23) | 23 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-24) | 24 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **83** | |
+| **Total** | **84** | |
 
-## Papers (83)
+## Papers (84)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,12 +47,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (23)
+### Performance & Efficiency Studies (24)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | LinkedIn 生产语义搜索的端到端 **Model–Workload–GPU Serving Co-optimization** 案例：作者报告 SLM Pruning 缩小约 **40%**、输入 Context Compression 超过 **10×**，组合服务优化在所测生产路径提升约 **10× Throughput**、维持质量要求。**MODEL_AND_INPUT_CHANGED / PRODUCTION_CASE_STUDY / CANNOT_ATTRIBUTE_10X_TO_SCHEDULER_OR_KERNEL / AUTHOR_REPORTED**。不应被归为 P/D Autoscaling 算法。（KEEP_ADJACENT） |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
 | 2026 | [Beyond FLOPs: Benchmarking Real Inference Acceleration of LLM Pruning under a GEMM-Centric Taxonomy](https://arxiv.org/abs/2606.09080) | arXiv 2026 (preprint) | 以 GEMM 维度为核心重组 LLM 剪枝设计空间，统一比较结构化与非结构化剪枝族在真实内核与硬件上取得的端到端加速，而非理论 FLOPs 收益。 |
 | 2026 | [Beyond the Buzz: A Pragmatic Take on Inference Disaggregation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/d49cee5f3a79d97d719df255689d83d7-Abstract-Conference.html) | MLSys 2026 | 通过不同规模部署评估 P/D 分离的价值和资源、传输及调度边界。 |
