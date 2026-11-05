@@ -42,6 +42,15 @@ A source-scoped map of Google's **inference kernels, TPU-native serving stacks, 
 | **MaxText** | Open JAX/TPU LLM implementation with generation/inference paths; also a training framework. | [GitHub](https://github.com/google/maxtext) |
 | **Gemma.cpp** | Lightweight C++ inference for Gemma on resource-constrained devices. | [GitHub](https://github.com/google/gemma.cpp) |
 
+## Distributed serving topology: Google contributors to llm-d
+
+| Engineering source | Executed contribution | Attribution / validation limit |
+|---|---|---|
+| [Topology as an End-to-End Contract](https://llm-d.ai/blog/topology-as-an-end-to-end-contract) (2026-10-29; Google engineers, llm-d project) | Treat **GPU ↔ NIC ↔ RoCE rail ↔ Prefill/Decode replica ↔ Router** mapping as a cross-layer constraint. On GKE H200/B200/GB200/GB300, describes RDMA bring-up, topology-aware KV handoff and request pairing. | **Cross-company llm-d engineering**, not proprietary Gemini serving; the reported H200 TTFT benefit came from a two-node benchmark and a **prototype** rail-locality scorer, not automatically the shipped router policy. |
+| [llm-d project](https://github.com/llm-d/llm-d) | Google Cloud is a founding collaborator on the Kubernetes-native control plane with Red Hat, IBM Research, CoreWeave and NVIDIA. | A shared open-source organization; do not claim every component was Google-authored. |
+
+**Engineering insight:** a correct RDMA topology is not enough: the allocator must preserve GPU/NIC affinity, transport must confirm real RDMA instead of TCP fallback, and routing must choose feasible P/D pairs. Evaluate topology and queueing jointly rather than attributing network improvements to a kernel.
+
 ## Algorithm discovery / RSI-adjacent infrastructure research
 
 | Public work | Executed mechanism and evidence | Boundary / research implication |
