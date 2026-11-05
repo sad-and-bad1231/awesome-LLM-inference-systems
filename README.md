@@ -1,12 +1,14 @@
 # Awesome LLM Inference Systems
 
-**854 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 2, 2026 arXiv first-pass; source-level, not independently reproduced).
+**852 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 2, 2026 arXiv first-pass; source-level, not independently reproduced).
+
+**November 5 scope cleanup:** two purely video-generation model/DiT algorithm works were removed from canonical Decoding Acceleration without judging their scientific merit ([editorial receipt](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md)); **854 → 852 current papers**. Their original ICLR publication sources remain traceable in that review.
 
 **Latest source audit:** the [November 2 arXiv review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) adds three source-reviewed papers (851 → 854; submitted October 30, announced November 2). The [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) and [monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) retain detailed decisions and industrial source receipts. Neither editorial admission nor author-reported speedups imply independent reproduction.
 
 A selective, engineering-centered reading map for efficient LLM inference: kernels and compilers, KV memory, decoding, quantization, MoE, serving runtime, distributed execution, and system measurement.
 
-**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 854 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
+**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 852 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
 
 [Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [November first-pass](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
 
@@ -18,7 +20,7 @@ A selective, engineering-centered reading map for efficient LLM inference: kerne
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 854 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 852 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |

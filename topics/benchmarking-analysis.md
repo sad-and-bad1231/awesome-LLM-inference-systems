@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-23) | 23 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-24) | 24 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
-| [Kernel Benchmarks](#kernel-benchmarks-8) | 8 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **82** | |
+| [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
+| **Total** | **84** | |
 
-## Papers (82)
+## Papers (84)
 
 ### Serving Benchmarks & Workloads (16)
 
@@ -47,12 +47,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 
-### Performance & Efficiency Studies (23)
+### Performance & Efficiency Studies (24)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | LinkedIn 生产语义搜索的端到端 **Model–Workload–GPU Serving Co-optimization** 案例：作者报告 SLM Pruning 缩小约 **40%**、输入 Context Compression 超过 **10×**，组合服务优化在所测生产路径提升约 **10× Throughput**、维持质量要求。**MODEL_AND_INPUT_CHANGED / PRODUCTION_CASE_STUDY / CANNOT_ATTRIBUTE_10X_TO_SCHEDULER_OR_KERNEL / AUTHOR_REPORTED**。不应被归为 P/D Autoscaling 算法。（KEEP_ADJACENT） |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
 | 2026 | [Beyond FLOPs: Benchmarking Real Inference Acceleration of LLM Pruning under a GEMM-Centric Taxonomy](https://arxiv.org/abs/2606.09080) | arXiv 2026 (preprint) | 以 GEMM 维度为核心重组 LLM 剪枝设计空间，统一比较结构化与非结构化剪枝族在真实内核与硬件上取得的端到端加速，而非理论 FLOPs 收益。 |
 | 2026 | [Beyond the Buzz: A Pragmatic Take on Inference Disaggregation](https://proceedings.mlsys.org/paper_files/paper/2026/hash/d49cee5f3a79d97d719df255689d83d7-Abstract-Conference.html) | MLSys 2026 | 通过不同规模部署评估 P/D 分离的价值和资源、传输及调度边界。 |
@@ -133,12 +134,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
 | 2026 | [DFIP: Decision-Focused Inference Path for System One Models](https://arxiv.org/abs/2610.36804) | arXiv 2026 (preprint; submitted Oct 27; [author reproduction repo](https://github.com/superagent-ai/dfip)) | 审核 CUDA Graph Replay、候选词表投影、Schema-compatible Length-aware Batching 对小结构化决策模型的真实收益与 Failure Boundary：Resident Request 最好 2.47×（Decider），但外部多样到达下 Replay 可能发生 CUDA Illegal-memory-access、请求丢失和 P95 严重退化；多轮输出一致性审计发现某些分数/阈值漂移。**NEGATIVE_SERVING_EVIDENCE / NOT_GENERAL_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Kernel Benchmarks (8)
+### Kernel Benchmarks (9)
 
 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SOL-ExecBench: Speed-of-Light Benchmarking for Real-World GPU Kernels Against Hardware Limits](https://arxiv.org/abs/2603.19173) | NeurIPS 2026 (Evaluations & Datasets Track; author-verified) | 从 124 个真实/新兴 AI Model 抽取 **235 个真实 GPU Kernel**，在 NVIDIA B200 以锁频、正确性/反作弊检查和分析模型给出的 Speed-of-Light (SOL) Bound 评价 Kernel 优化空间，而非仅相对 PyTorch Baseline Speedup。公开 [基准与重放 Harness](https://github.com/NVIDIA/SOL-ExecBench)；其中 **153/235** 工作负载来自 LLM，但同时包含训练/视觉/音频等；这是 Kernel 评价基础设施，**不是**在线 Serving TTFT/TPOT 测试。（KEEP_ADJACENT; REAL_GPU; PUBLIC_BENCHMARK; NOT_SERVING_E2E） |
 | 2025 | [KernelBench: Can LLMs Write Efficient GPU Kernels?](https://proceedings.mlr.press/v267/ouyang25a.html) | ICML 2025 | 奠基性 Kernel Generation 测试环境：250 个 PyTorch ML Workload、正确性加速联合指标 fast_p，并考察迭代 Profiling Feedback；是通用 Kernel 评测前提，不是 LLM Serving 端到端 Benchmark（KEEP_FOUNDATIONAL）。 |
 | 2026 | [FlashInfer-Bench: Building the Virtuous Cycle for AI-driven LLM Systems](https://proceedings.mlsys.org/paper_files/paper/2026/hash/37e44c4b5321605735be9761f9b758fc-Abstract-Conference.html) | MLSys 2026 | FlashInfer-Bench 构建了一套基准与反馈闭环，用于评测并迭代改进由 AI 驱动的 LLM 系统实现，形成“评测—优化”的良性循环 |
 | 2026 | [KernelCraft: Benchmarking for Agentic Close-to-Metal Kernel Generation on Emerging Hardware](https://proceedings.mlr.press/v306/nie26c.html) | ICML 2026 | 面向新兴 NPU ISA 的 Agentic Kernel 编译、正确性反馈与性能评测；涵盖真实 AMD NPU、PLENA 模拟器与 Verilator RTL，基准代码的公开状态需复核，不是生产 Serving 加速。 |

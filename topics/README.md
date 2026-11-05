@@ -1,6 +1,6 @@
 # Papers by systems mechanism
 
-**Current index (2026-11-02 source review): 854 unique canonical papers · 8 mechanisms · 44 engineering directions.** The [November first-pass receipt](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) documents three new source-reviewed studies after the October 851-paper checkpoint. Independent GPU/NPU reproduction is **not** claimed; HOLD candidates remain outside this index.
+**Current index (2026-11-05 editorial scope review): 852 unique canonical papers · 8 mechanisms · 44 engineering directions.** The [November first-pass receipt](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) documents the prior **854-paper** November 2 checkpoint (851 → 854). The [November 5 adjacent-scope disposition](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) subsequently excludes two pure video-generation algorithms from the LLM inference canon (854 → 852); their published papers remain cited as adjacent context. Independent GPU/NPU reproduction is **not** claimed; HOLD candidates remain outside this index.
 
 **History, not current inventory:** [October final follow-up (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), [monthly close (835)](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md), and the [archived intake chronology](../reviews/archive/TOPIC_INDEX_HISTORY_20261030.md) preserve dated decisions without crowding the live directory.
 
@@ -10,15 +10,15 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 115 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [Kernels & Compilers](kernels-compilers.md) | 114 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
 | [KV Cache & Context Memory](kv-cache-memory.md) | 166 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 85 | 5 | Speculative, blockwise and parallel generation |
+| [Decoding Acceleration](decoding-acceleration.md) | 83 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 46 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 150 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Runtime & Scheduling](runtime-scheduling.md) | 149 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 135 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 82 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **854** | **44** | |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 84 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **852** | **44** | |
 
 ## Classification boundaries
 

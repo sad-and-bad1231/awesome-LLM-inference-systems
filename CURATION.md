@@ -45,6 +45,12 @@ Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First 
 
 No crawler, JSONL store, generated views, CI publication pipeline, deep research-note hierarchy, badges with hardcoded counts, or mandatory per-paper reading documents. Add complexity only when a concrete presentation need cannot be solved with Markdown.
 
+## Adjacent-work and evidence-scope decisions
+
+`KEEP_ADJACENT` is **not** an unconditional green label. Cross-domain papers (DiT/video, ASR, VLA, RL rollout, GPU OS, simulation) must have an identifiable execution mechanism and an explicit reason a modern LLM inference-systems reader would need the work. An adjacent paper can be valuable without belonging in the 8-topic canonical list. Strong academic venue or new model speed alone is insufficient for canonical LLM Serving admission.
+
+If removing a row for editorial scope, preserve the primary proceedings source and precise reason in `reviews/`; do not delete the historical reading signal. If retaining a paper with changed models/semantics, record the non-equivalence and task/hardware boundaries. See the [2026-11-05 complete adjacent-scope triage](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md); this 75-row pass includes explicit `INDEXED_SOURCE` caveats and **does not** claim independent reproduction.
+
 ## Offline repository integrity check
 
 Before submitting any Markdown curation PR, run:

@@ -106,6 +106,16 @@ def check(root):
         issues.append(f"topic index total != {total}")
     if not index_total or int(index_total.group(2)) != n_groups:
         issues.append(f"topic index directions != {n_groups}")
+    # Live landing pages must not silently drift from canonical topic rows.
+    home = docs["README.md"]
+    home_total = re.search(r"^\*\*(\d+) source-curated papers", home, re.M)
+    if not home_total or int(home_total.group(1)) != total:
+        issues.append(f"homepage current corpus count != {total}")
+    strict = docs.get("STRICT_REVIEW.md", "")
+    strict_total = re.search(r"The catalog contains \*\*(\d+) source-curated\*\*", strict)
+    if not strict_total or int(strict_total.group(1)) != total:
+        issues.append(f"STRICT_REVIEW current corpus count != {total}")
+
     for uid, where in sorted(aliases.items()):
         if len(where) > 1:
             issues.append(f"duplicate first-source identity: {uid} ({', '.join(where)})")
