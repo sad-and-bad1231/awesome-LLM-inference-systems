@@ -4,13 +4,14 @@ Tencent's public LLM model releases and inference-oriented systems work. The ind
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-## Official model-family coverage (2026-10-24)
+## Official model-family coverage (updated 2026-11-04)
 
 **First-party model list:** [Tencent HY model center](https://llm.hunyuan.tencent.com/), [Tencent Hunyuan portal](https://hunyuan.tencent.com/) and [cloud migration notices](https://cloud.tencent.com/document/product/1729/131925). Tencent moved newer API access to TokenHub; **legacy API IDs have been retired**.
 
 | Official family | Execution / model context | Primary source |
 |---|---|---|
-| Hy4-preview | 770B-class MoE, Gated DSA + IndexCache and MTP, not an independently optimized inference runtime | [Model / source](https://github.com/Tencent-Hunyuan/Hy4-preview) |
+| **Hy4 (final, 2026-11-04)** | Officially launched text/vision model, adding vision understanding and computer-use workflows over Preview; live `hy4` API. **Final weights and system card were announced but not publicly verified as released on Nov 4**; do not substitute Preview checkpoints. | [Tencent Cloud release](https://adp.tencent.com/zh/blog/tencent-cloud-adp-hunyuan-hy4-release) · [API docs](https://cloud.tencent.com/document/product/1823/132252) |
+| **Hy4-preview (2026-08-28)** | 770B/49B-active MoE; published Gated DSA + IndexCache, iHC and MTP implementation. These are specifically the **Preview artifact's** inspected architecture, not proof that every final Hy4 component is identical. | [Official Preview source](https://github.com/Tencent-Hunyuan/Hy4-preview) |
 | Hy3 / Hy3-preview | 295B/21B MoE, GQA, MTP and thinking modes; current flagship on the Tencent HY site | [Hy3](https://github.com/Tencent-Hunyuan/Hy3) · [official model center](https://llm.hunyuan.tencent.com/) |
 | Hy-MT2-30B-A3B / Hy-MT2-7B / Hy-MT2-1.8B | Multilingual translation; one MoE variant and smaller dense deployments | [Tencent HY model center](https://llm.hunyuan.tencent.com/) |
 | HY-1.8B-2Bit | Quantized edge/local deployment exemplar; not a general Hy3 checkpoint | [Tencent HY model center](https://llm.hunyuan.tencent.com/) |
@@ -27,6 +28,7 @@ Tencent's public LLM model releases and inference-oriented systems work. The ind
 |---|---|---|
 | **Hunyuan-A13B** | Efficient MoE model architecture with a low active-parameter footprint; inference-related architecture, not a serving scheduler. | [Official source](https://github.com/Tencent-Hunyuan/Hunyuan-A13B) |
 | **Hy3** (2026) | 295B MoE / 21B activated, GQA, expert routing and native MTP head. Public vLLM/SGLang deployment guidance informs real serving compatibility; quality ranking is not a systems measurement. | [Official repository](https://github.com/Tencent-Hunyuan/Hy3) |
+| **Hy4 (final; Nov 4, 2026)** | Product/API model revision adds vision understanding and computer-use workflows; model remains a 770B-class MoE in Tencent's release description. **Formal weights/system card pending** in checked official documentation; internal capability comparisons are not inference speedups or architectural evidence. | [First-party release](https://adp.tencent.com/zh/blog/tencent-cloud-adp-hunyuan-hy4-release) · [Tencent TokenHub model documentation](https://cloud.tencent.com/document/product/1823/132252) |
 | **Hy4-preview** (2026) | 770B MoE / 49B activated; **Gated DeepSeek Sparse Attention** with cross-layer **IndexCache** reuse, iHC residual branches and an MTP head. Interesting for indexer reuse, sparsity, KV layout and expert placement; **preview model**, not independent engine/kernel evidence. | [Official repository](https://github.com/Tencent-Hunyuan/Hy4-preview) |
 | **Hunyuan-Large** | Technical report and code for Tencent's large MoE model; inspect model architecture and sparse expert execution. | [Official source](https://github.com/Tencent/Hunyuan-Large) |
 | **Angel** | Tencent's distributed ML systems toolkit; useful background but predominantly broader than LLM inference. | [Official source](https://github.com/Tencent/Angel) |
