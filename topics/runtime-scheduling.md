@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Batching, Queues & SLOs](#batching-queues--slos-43) | 43 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-22) | 22 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-27) | 27 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **150** | |
+| **Total** | **149** | |
 
-## Papers (150)
+## Papers (149)
 
 ### Batching, Queues & SLOs (43)
 
@@ -99,7 +99,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM ATC 2026 (accepted; proceedings pending) | Prefill MoE Expert Activation Signature 预测 Decode 阶段 Expert Locality，Balanced K-means + Locality-band Least-loaded Worker 选择；在 KV Block 旁保存 Signature，Prefix Cache Hit 不丢信号。作者 vLLM 最多 40 GPU/3 MoE 模型、对最强 Load-aware Baseline Median TPOT -5.9% 至 -13.9%；**REQUEST_ROUTING_ONLY / ORIGINAL_EXPERT_SELECTION_UNCHANGED / TAIL_EFFECT_SMALLER / NOT_ASCEND_TESTED**。 |
 | 2026 | [DolphinRouting: Cluster-Level Binary Routing for Disaggregated LLM Inference Serving](https://arxiv.org/abs/2610.40292) | arXiv 2026 (preprint; Oct 29) | 在固定 Prefill/Decode 资源分配下，以 Input Length、P/D Cache-adjusted Length 和 Output Length 聚类，离线按 E2E SLO 学习每簇本地 Prefill / 远端 Prefill **Binary Routing**，在线仅需 Feature+Lookup；作者在真实 PD Cluster 的 Mixed Workload 和真实数据对比 **NVIDIA Dynamo** 报告 P90 TTFT −5.7%–7.9%、P90 TPOT −2.6%–10.1%。**REAL_CLUSTER / FIXED_PD_RESOURCES / NO_UNIVERSAL_SLO_GAIN / NOT_REPRODUCED**；无需发明跨集群吞吐结论。（KEEP_STRICT） |
 
-### P/D Allocation & Autoscaling (22)
+### P/D Allocation & Autoscaling (21)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
@@ -120,7 +120,6 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Optimizing Deployment Configurations for LLM Inference](https://proceedings.mlsys.org/paper_files/paper/2026/hash/97dc07f1253ab33ee514f395a82fa7cc-Abstract-Conference.html) | MLSys 2026 | 研究服务部署方案的资源与性能配置空间，指导高性能推理服务选型。 |
 | 2026 | [PLA-Serve: A Prefill-Length-Aware LLM Serving System](https://openreview.net/forum?id=dzjCkSEDyG) | MLSys 2026 | 按 Prompt Prefill 长度协调请求分配，处理长短输入混合下的资源干扰。 |
 | 2026 | [RAPID-Serve: Resource-efficient and Accelerated P/D Intra-GPU Disaggregation](https://arxiv.org/abs/2601.11822) | arXiv 2026 (preprint) | 在同一块（组）GPU 上并发执行 prefill 与 decode，并按运行时负载自适应划分算力（可选 AMD CU masking 做细粒度计算单元切分），以避免跨节点 P/D 解耦带来的 KV 传输与资源闲置；报告 SLO 约束下最高 32× 吞吐提升。 （arXiv preprint；SLO 约束下最高 32×、作者报告平均约 4.9×；需按相同 SLO 与成本约束核对 Baseline。） |
-| 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | 基于真实生产语义搜索评估 Serving 的模型、硬件及执行优化。（KEEP_ADJACENT） |
 | 2026 | [ShuntServe: Cost-Efficient LLM Serving on Heterogeneous Spot GPU Clusters](https://arxiv.org/abs/2606.18600) | arXiv 2026 (preprint) | 用 roofline 性能估计与动态规划放置优化器联合决定异构 Spot GPU 集群的节点配置、并行策略与层分配，并以保输出请求迁移加共享张量存储并发初始化容错；L4/A10G/L40S 上吞吐高 1.42 倍。 |
 | 2026 | [Threshold-Based Exclusive Batching for LLM Inference](https://proceedings.mlr.press/v306/zhang26eo.html) | ICML 2026 (PMLR 306) | THETA/EB+ 解析 Prefill–Decode Interference 随 GPU 带宽和请求构成变化的 Mixed-versus-Exclusive Batching 阈值，再动态切换：作者报告 H200 上 Decode Token 占比约 80% 才出现拐点，RTX PRO 6000 则约 20%；特定带宽受限 GPU Exclusive Batching 最多 +41.9% 吞吐，非平稳负载 EB+ 对比 MB 最多 +36.4%。**高带宽/大模型上 Mixed Batching 仍可能占优**。（AUTHOR_REPORTED；HARDWARE_WORKLOAD_SCOPED；NOT_REPRODUCED） |
 | 2026 | [Towards High-Goodput LLM Serving with Prefill-decode Multiplexing](https://doi.org/10.1145/3779212.3790236) | ASPLOS 2026 | MuxWise 在同一 GPU 上对 Prefill/Decode 计算和空间进行细粒度 Multiplexing，为物理 P/D 分离提供强对照。 |
