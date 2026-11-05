@@ -54,7 +54,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [Modal](Modal.md) | **FlashAttention-4 decode optimization** · SGLang speculative inference · deployment |
 | [Fireworks AI](Fireworks-AI.md) | **Disaggregated inference engine** · KV routing · multi-node EP · FireOptimizer |
 | [Groq](Groq.md) | **LPU / deterministic dataflow** · on-chip SRAM · latency-oriented hardware/runtime |
-| [Anyscale / Ray Serve](Anyscale.md) | **[CODE]** Ray Serve LLM · multi-node routing, scaling, fault-tolerant P/D/EP |
+| [Anyscale / Ray Serve](Anyscale.md) | **[CODE + ARCHITECTURE]** LLMServer / replica routing · P/D and DP-attention deployment patterns |
 | [Baseten](Baseten.md) | **[CODE + ENGINEERING]** Truss · engine-specific deployment/compile/autoscaling |
 | [Databricks](Databricks.md) | **[CASE STUDY]** CPU+kernel+FP8 full-stack optimization · Model Serving |
 | [Red Hat / llm-d](Red-Hat.md) | **[COMMUNITY CODE]** distributed inference router · KV/P-D · multi-tenant QoS |
@@ -67,7 +67,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [RadixArk](RadixArk.md) | **[CODE + COLLAB]** SGLang community · joint TorchTPU backend with Google |
 | [Tenstorrent](Tenstorrent.md) | **[KERNEL + HARDWARE]** TT-Metal / TT-NN · low-level kernel / multi-chip LLM programming |
 | [IBM](IBM.md) | **[COMMUNITY + ARCHIVE]** llm-d collaboration · historical archived vLLM Spyre plugin |
-| [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoML model services · API / package / autoscaling integration |
+| [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoVLLM launcher · service worker/replica scaling · model lifecycle |
 
 ## Historical source notes and model release reconciliation
 
