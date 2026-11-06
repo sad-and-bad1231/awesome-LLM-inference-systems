@@ -62,6 +62,11 @@ def first_source_id(row):
     return "url:" + url.netloc.lower() + path.lower()
 
 
+def is_existing_non_markdown_target(path):
+    """Allow relative links to actual code/assets/directories, not nonexistent files."""
+    return path.is_dir() or (path.is_file() and path.suffix.lower() != ".md")
+
+
 def check(root):
     issues = []
     docs = {p.relative_to(root).as_posix(): p.read_text(encoding="utf-8")
@@ -162,7 +167,7 @@ def check(root):
                 issues.append(f"{origin}: link outside repository: {raw}")
                 continue
             if target not in docs:
-                if resolved.is_dir():
+                if is_existing_non_markdown_target(resolved):
                     continue
                 issues.append(f"{origin}: missing internal link target: {raw}")
             elif url.fragment and unquote(url.fragment).lower() not in lookup[target]:

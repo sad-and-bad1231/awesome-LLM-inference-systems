@@ -1,10 +1,24 @@
 """Minimal offline regression tests for the curated Markdown checker."""
+import tempfile
 import unittest
+from pathlib import Path
 
-from scripts.check_catalog import anchors, first_source_id
+from scripts.check_catalog import anchors, first_source_id, is_existing_non_markdown_target
 
 
 class CatalogIdentityTests(unittest.TestCase):
+    def test_existing_code_and_directory_links_are_valid_but_missing_are_not(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            code = root / "checker.py"
+            code.write_text("print('ok')", encoding="utf-8")
+            markdown = root / "readme.md"
+            markdown.write_text("# Heading", encoding="utf-8")
+            self.assertTrue(is_existing_non_markdown_target(code))
+            self.assertTrue(is_existing_non_markdown_target(root))
+            self.assertFalse(is_existing_non_markdown_target(root / "missing.py"))
+            self.assertFalse(is_existing_non_markdown_target(markdown))
+
     def test_openreview_forum_and_pdf_are_one_paper(self):
         forum = "| 2026 | [One](https://openreview.net/forum?id=AbC_12) | Venue | ..."
         pdf = "| 2026 | [One](https://openreview.net/pdf?id=AbC_12) | Venue | ..."

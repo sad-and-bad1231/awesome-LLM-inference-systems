@@ -1,8 +1,8 @@
 # Papers by systems mechanism
 
-**Current index (2026-11-05 editorial scope review): 852 unique canonical papers · 8 mechanisms · 44 engineering directions.** The [November first-pass receipt](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) documents the prior **854-paper** November 2 checkpoint (851 → 854). The [November 5 adjacent-scope disposition](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) subsequently excludes two pure video-generation algorithms from the LLM inference canon (854 → 852); their published papers remain cited as adjacent context. Independent GPU/NPU reproduction is **not** claimed; HOLD candidates remain outside this index.
+**Current canonical index (2026-11-06): 852 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 6 G0/G3–G5 follow-up](../reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) corrected source/evidence boundaries without changing the count.
 
-**History, not current inventory:** [October final follow-up (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md), [monthly close (835)](../reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md), and the [archived intake chronology](../reviews/archive/TOPIC_INDEX_HISTORY_20261030.md) preserve dated decisions without crowding the live directory.
+**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 

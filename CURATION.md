@@ -1,6 +1,6 @@
 # Curation policy
 
-**Current policy (reviewed 2026-10-30).** This file contains enduring selection and attribution rules; see [STRICT_REVIEW.md](STRICT_REVIEW.md) for operational G0–G5 gates, [topics/README.md](topics/README.md) for live counts and [archived historical intake waves](reviews/archive/CURATION_HISTORY_20261030.md) for dated acceptance/rejection accounting. Counts in archives describe past checkpoints only.
+**Current policy (last reconciled 2026-11-06).** This file contains enduring selection and attribution rules; see [STRICT_REVIEW.md](STRICT_REVIEW.md) for operational G0–G5 gates, [topics/README.md](topics/README.md) for live counts and [archived historical intake waves](reviews/archive/CURATION_HISTORY_20261030.md) for dated acceptance/rejection accounting. Counts in archives describe past checkpoints only.
 
 ## Canonical bibliography invariant
 
