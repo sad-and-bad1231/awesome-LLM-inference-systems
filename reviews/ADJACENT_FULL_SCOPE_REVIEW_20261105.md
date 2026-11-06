@@ -1,5 +1,7 @@
 # 2026-11-05 — adjacent-work scope disposition: complete 75-row editorial screening
 
+**2026-11-06 primary-source follow-up:** [G5/G4 11-case audit](G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) now revisits all seven `CHECK_G5` and four `CHECK_EVIDENCE` rows. The list below is a **dated November 5 initial triage**, not the latest gate result. In particular the original Formulaic `CHECK_EVIDENCE` concern is superseded: the paper includes narrow real-chip end-to-end Serving tests with regressions and correctness failure, although its chip co-design evaluation is still simulated and none of its results was independently reproduced.
+
 ## Protocol and evidence ceiling
 
 Baseline: `main` at `3d8e108` (prior PR #75), **83 tagged `KEEP_ADJACENT`** across eight mechanisms. [Earlier 8-item review](ADJACENT_SCOPE_REVIEW_20261105.md) covered eight; **the 75 remaining published rows have each received a separate entry below**. This closes the **catalogue-level scope triage**, not an 83-paper full-text methods reproduction. The `INDEXED_SOURCE` label means the catalogue preserves a source link/mechanism but the primary source **was not independently reopened this turn**. No independent GPU/NPU experiment was performed. G0–G5 full-paper quality admission, reproducibility and comparisons remain a separate gate.
