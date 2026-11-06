@@ -1,18 +1,16 @@
 # Awesome LLM Inference Systems
 
-**852 source-curated papers · 8 systems mechanisms · 44 engineering directions** (November 2, 2026 arXiv first-pass; source-level, not independently reproduced).
+**852 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 5 scope review; **no independent GPU/NPU reproduction is implied**.
 
-**November 5 scope cleanup:** two purely video-generation model/DiT algorithm works were removed from canonical Decoding Acceleration without judging their scientific merit ([editorial receipt](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md)); **854 → 852 current papers**. Their original ICLR publication sources remain traceable in that review.
+A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
-**Latest source audit:** the [November 2 arXiv review](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) adds three source-reviewed papers (851 → 854; submitted October 30, announced November 2). The [October final follow-up](reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) and [monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) retain detailed decisions and industrial source receipts. Neither editorial admission nor author-reported speedups imply independent reproduction.
+**Current review status (2026-11-06):** the [latest G0/G3–G5 primary-source review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) revisited **11 evidence/value cases** and resolved two historical paper-identity issues (RAGBoost → ContextPilot alias; DefensiveKV ≠ CriticalKV). **NovaServe / Select-N remains HOLD_IDENTITY**; historical fast-admission records still require case-by-case verification. This review added **zero** canonical entries. The [November 5 scope review](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) removed two non-core video-generation studies; the current total is **852**, not the earlier **854**.
 
-A selective, engineering-centered reading map for efficient LLM inference: kernels and compilers, KV memory, decoding, quantization, MoE, serving runtime, distributed execution, and system measurement.
+**What “source-curated” means:** editorial selection based on public sources, **not** a claim that every current row has passed an independently documented full G0–G5 audit, that all papers are reproducible, or that reported speedups were replicated. Publisher identity, model/quality changes, hardware and workload constraints remain paper-specific.
 
-**What this count means:** verified bibliographic identities and source-screened systems mechanisms, **not** 852 reproducibility certifications, a systematic exhaustive arXiv index, or independent speedup replication. Results remain attributed to their authors; exactness, hardware, workload and baseline limitations matter.
+**Start here:** [8 topic mechanisms](topics/README.md) · [30 foundations below](#foundational-and-influential-papers) · [Organizations](organizations/README.md) · [Research labs & OSS](communities/README.md) · [7 Frontiers](frontiers/README.md) · [G0–G5 review rules](STRICT_REVIEW.md) · [Review receipts & outstanding HOLDs](reviews/README.md).
 
-[Browse papers by mechanism](topics/README.md) · [Research labs and open-source](communities/README.md) · [Frontiers](frontiers/README.md) · [G0–G5 gates](STRICT_REVIEW.md) · [November first-pass](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly report](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md)
-
-**Historical admission snapshots** (722 → 736 → 766 → 793 → 803 → 813, with intermediate corrections) are preserved in [the archived homepage/strict-review notes](reviews/archive/STATUS_SNAPSHOTS_20261030.md) and [topic intake chronology](reviews/archive/TOPIC_INDEX_HISTORY_20261030.md); dated totals are not today's inventory.
+**Historical receipts:** [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
 
 ## Explore
 
