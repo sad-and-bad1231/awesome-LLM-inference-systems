@@ -17,10 +17,10 @@
 | [Expert Routing & Communication](#expert-routing--communication-17) | 17 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
-| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-26) | 26 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **75** | |
+| [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
+| **Total** | **76** | |
 
-## Papers (75)
+## Papers (76)
 
 ### Expert Routing & Communication (17)
 
@@ -92,7 +92,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [PDScope: Breaking the Prefill-Decode Seesaw for Memory-Bound MoE Inference](https://arxiv.org/abs/2610.39216) | arXiv 2026 (preprint; submitted Oct 29) | CPU–GPU MoE Expert Offload 的 Phase-aware Prediction、Expert Residency、Prefetch/Static Graph Async-I/O；作者 **A100/RTX3090、24GB GPU Limit、4 BF16 MoE** 与同预算 KTransformers/Fate/Fiddler/HybriMoE/MoE-APEX 对照，报告 **Prefill 2.5–10.3× 与 Decode 2.1–6.1× 的分阶段吞吐**，非统一 Online Goodput，也非 GPU-resident GPU Benchmark。（KEEP_STRICT; CPU_GPU_PCIe; PHASE_ONLY; NOT_REPRODUCED） |
 | 2026 | [Rimuru: Unified Memory Management for Modern LLM Serving via Elastic Expert Offloading](https://arxiv.org/abs/2610.40305) | arXiv 2026 (preprint; submitted Oct 29) | 跨 KV/Expert 共享 Tensor Page Pool、异构 Memory Views、Elastic Expert Offload 与 Page-table-aware MoE Kernel；作者在 **8×RTX5090/2×RTX4090D、Qwen3/3.5 MoE** 比较 Offload Baseline 和 vLLM/SGLang。**最高 19.03×** 仅为资源受限的 Offloader 口径；多系统 CUDA Graph 被关闭，现代默认 vLLM 公平性及 Ascend 可移植均未验证。（KEEP_STRICT; REAL_GPU; BASELINE_CAVEAT; NOT_REPRODUCED） |
 
-### Sparse Attention & Conditional Compute (26)
+### Sparse Attention & Conditional Compute (27)
 
 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。
 
@@ -126,3 +126,4 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [Channel Selection for Mixture-of-Experts Decoding Needs No Calibration Data](https://arxiv.org/abs/2610.37386) | arXiv 2026 (preprint; Oct 28 announcement; author code) | 以 Token-wise Top-k Expert Channel Read 取代失控的 Calibration Threshold，Ternary Sketch + Low-rank Recover 生成选择器；三种训练完成的 MoE 上 Triton MoE Block 相对优化 vLLM Kernel 报告 1.60–1.90×（B1），以约 17.8% Expert Reads 保留 98.1% Accuracy。**近似子算子**，非完整 Serving Gain。（KEEP_STRICT；APPROXIMATE_COMPUTE；NOT_REPRODUCED） |
 | 2026 | [SieveServe: Adaptive Visual Token Pruning for Reliable and Efficient Multimodal LLM Inference](https://aclanthology.org/2026.emnlp-main.648/) | EMNLP 2026 Main (ACL Anthology, October) | 为高分辨率 MLLM 的 Vision Token 输入提供与 KV Block/Fused Kernel/Batching 兼容的 **Pre-LLM Adaptive Pruning**，通过 Query Complexity Router 和 Dense Information Guard 防止 Document/Chart 等密集信息请求过度裁剪；作者 Qwen2.5-VL-7B/InternVL3-8B 共八项评测报告所有任务至少保留 95% Accuracy、High-res Serving 对 Vanilla vLLM **P90 TTFT 最多 5.4× 降低、Throughput 在特定 SLO 下 2.2–2.7×**。**LOSSY_VISUAL_TOKEN_PRUNING / REQUEST_DEPENDENT / NOT_BITWISE_EQUIVALENT / AUTHOR_REPORTED**；不是标准 Text Attention Kernel 或普适数据中心推理提升。（KEEP_STRICT） |
+| 2026 | [CISA: Retrofitting Dense Attention Models with Chunk-Indexed Sparse Attention](https://arxiv.org/abs/2611.03200) | arXiv 2026 (Nov 2 preprint) | 用 Dense KV Chunk Summary 初始化 Sparse Indexer、固定选择预算与 **QShare Prefill Position Reuse**，在 vLLM Paged Attention 中无需梯度更新实现 Dense→Sparse 运行（**仍需 Calibration**）；作者 NVIDIA GPU 真实推理报告 Throughput/Quality。**1M+ Context 部分任务仍有准确度损失，QShare 仅 Prefill；APPROXIMATE_OUTPUT / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
