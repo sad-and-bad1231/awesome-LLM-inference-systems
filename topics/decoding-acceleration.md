@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Draft Models & Candidate Generation](#draft-models--candidate-generation-18) | 18 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
+| [Draft Models & Candidate Generation](#draft-models--candidate-generation-19) | 19 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-22) | 22 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
-| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-16) | 16 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
+| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-17) | 17 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-16) | 16 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **83** | |
+| **Total** | **85** | |
 
-## Papers (83)
+## Papers (85)
 
-### Draft Models & Candidate Generation (18)
+### Draft Models & Candidate Generation (19)
 
 Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 
@@ -47,6 +47,7 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [Variational Speculative Decoding: Rethinking Draft Training from Token Likelihood to Sequence Acceptance](https://openreview.net/forum?id=7xO0ADKJu8) | ICML 2026 | 把草稿训练从贪心轨迹的 token 似然改为对潜在草稿路径做变分推断，直接最大化目标模型接受概率并减小与目标分布的散度，使解码相对 EAGLE-3 加速 9.58%。 |
 | 2026 | [RCSD: Reinforcement and Continual Learning for Domain-Specific Speculative Decoding](https://arxiv.org/abs/2610.29527) | arXiv 2026 (preprint; Oct 22 announcement) | 从真实 Accept/Reject 轨迹构建隐式偏好，训练 Draft 直接最大化 Acceptance Length；作者相对 HASS 报告平均接受长度 +35%、实际端到端推理 1.35×。需训练专用 Draft，非仅 Runtime 可插拔优化。（KEEP_STRICT；DRAFT_RETRAINING；NOT_REPRODUCED） |
 | 2026 | [Domino: Decoupling Causal Modeling from Autoregressive Drafting in Speculative Decoding](https://aclanthology.org/2026.emnlp-main.1015/) | EMNLP 2026 Main (ACL Anthology, October) | 用一次并行 Draft Backbone 生成整段初始概率，再以 Lightweight Domino Head 注入 Prefix-dependent Causal Correction，替代高成本 AR Draft；训练采用 Base-anchored Curriculum，使 Parallel Backbone 与 Causal Head 对齐。作者 Qwen3 对照在 **Transformers 端到端最高 5.49×**、**SGLang Serving Throughput 最高 5.8×**（不同 Backend/Metric）。**TRAINED_DRAFTER / BASELINE_AND_SAMPLING_EQUIVALENCE_CONTRACT / AUTHOR_ARTIFACT_NOT_RUN / NOT_REPRODUCED**；非可直接替换的通用 Kernel。（KEEP_STRICT） |
+| 2026 | [ChainFlow: Few-Step Latent Flow Matching for Speculative Decoding](https://arxiv.org/abs/2611.08669) | arXiv 2026 (Nov 5 preprint) | 使用 Target Hidden-state 条件化的压缩潜变量 Flow Drafter 和 Token Feedback/Tree Drafting，用 1–2 步代替逐 Token Draft；**需要训练 Drafter**。作者在 **B300、vLLM 0.31.0、Qwen3.5、Greedy Batch1** 对比 EAGLE-3/DFlash，另测试语言适配和部分并发。**TRAINED_DRAFTER / EXACT_TARGET_VERIFICATION / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Training-Free & Self-Speculation (22)
 
@@ -95,7 +96,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Understanding Target Probability Reuse in Speculative Decoding](https://arxiv.org/abs/2610.29210) | arXiv 2026 (preprint; Oct 22 announcement) | 澄清 Target Tree Verification 的概率无法无条件跨轮精确重用；提前 Target Pass 的 First-token Reranking 与 Sampling 更有效，六个 Target 的 Tree 实验并有作者代码；独立 Target Pass 需要与 Draft Overlap 才有延迟收益。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 | 2026 | [HIPPO: Accelerating Video Large Language Model Inference via Holistic-aware Parallel Speculative Decoding](https://aclanthology.org/2026.emnlp-main.155/) | EMNLP 2026 Main (ACL Anthology) | Video-LM 轻量 Draft 仍消耗大量视觉 Token，且盲目 Pruning 会降低 Target Acceptance：HIPPO 用全局 Attention 与局部视觉语义选择高价值 Token，并将 Draft 与 Target Verification **并行 Overlap**。作者在四种 Video-LM、六 Benchmarks 相对 Vanilla AR 报告最高 **3.51× 推理加速**。**VIDEO_DRAFT_PRUNING / DRAFT_COST_AND_QUALITY_DEPENDENT / NOT_GENERIC_LLM_SPECULATION / NOT_REPRODUCED**；不把丢弃 Draft 视觉 Token 当成 Target 输出逐位变化证据。（KEEP_ADJACENT） |
 
-### Adaptive Speculation in Serving (16)
+### Adaptive Speculation in Serving (17)
 
 动态 Draft 长度、启停决策及异构/分布式部署。
 
@@ -117,6 +118,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [Speculative Decoding for Mixture-of-Experts Models: Expert Bytes, Kernel Bandwidth and the Best Draft Length](https://arxiv.org/abs/2610.34440) | arXiv 2026 (preprint; Oct 26 announcement) | 建立 MoE 验证步的 Expert Bytes / Effective Bandwidth 模型选择 Draft Length，并实测 llama.cpp CUDA/Metal、MLX-LM Expert 去重：去重并非必优、只在部分 Draft 长度胜出；提出对 DeepSeek-V2-Lite 的最佳 Draft 长度预测。是测量约束的机制分析，非全引擎加速结论。（KEEP_STRICT；REAL_KERNEL_MEASUREMENT；NOT_REPRODUCED） |
 | 2026 | [TableTune: Measured, Self-Correcting Draft-Length Tables for Dynamic Speculative Decoding](https://arxiv.org/abs/2610.38968) | arXiv 2026 (preprint; Oct 28) | 直接在 vLLM 原生 Serving Step 上计时 **Batch Size × Draft Length** 组合，建立最大 Throughput Table，再以实际 Accept Count 在线纠偏，替代手填静态推测宽度；作者 H100 五种 Drafter 中四种达到 Best Fixed 的至少 94% Throughput，MoE 固定表可能损失 18% 而校准表最多损失 3%；四 GPU llm-d 高负载对比所测固定宽度最高 +32%。**vLLM_SPECULATION_SCOPED / SOURCE_BASELINE_SPECIFIC / NOT_NO_SPECULATION_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [AgentSpec: Speculative Decoding for Batch Inference of LLM Agents](https://aclanthology.org/2026.emnlp-main.585/) | EMNLP 2026 Main (ACL Anthology, October) | Agent 大 Batch 下传统 SD 因 Draft Rejection 和未利用动态 Token Budget 效率下降：**Structure-isolated Drafting** 在语义工作流段内推测，并按 Agent-level Redundancy 自适应分配 Token Budget；作者在 vLLM 上四模型族、五 Agent Workloads 对照现有 SD，报告优于所测基线，但**官方摘要未提供可采信的统一加速数字**。**AGENT_BATCH_WORKLOAD / TARGET_VERIFICATION_SCOPE / AUTHOR_REPORTED / NO_INDEPENDENT_REPRODUCTION**，不是任意 Batched Serving 的通用收益。（KEEP_STRICT） |
+| 2026 | [SpecPilot: Autonomous Algorithm Discovery and Systems Optimization for Speculative Decoding](https://arxiv.org/abs/2611.02501) | arXiv 2026 (Nov 2 preprint) | Agent 在冻结的 **SGLang v0.5.20** 优化 W12 Weight Packing、Hybrid Target Tree Verification、Shared-node Budget 与 Prompt Admission；通过 **Token Forcing** 监督正确性。作者在 **H100 / RTX PRO 6000 Blackwell** 对多 Qwen/Gemma Target 测单请求和 Batched Serving；**引擎优化不等于 Agent RSI，AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Diffusion & Non-AR Generation (16)
 
