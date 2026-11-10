@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-44) | 44 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-51) | 51 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-52) | 52 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-32) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
-| [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-15) | 15 | 跨实例共享、P/D 传输和 KV 状态池。 |
+| [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-16) | 16 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **168** | |
+| **Total** | **170** | |
 
-## Papers (168)
+## Papers (170)
 
 ### Prefix & Session Reuse (44)
 
@@ -75,7 +75,7 @@
 | 2026 | [Raincheck: Deferred Multimodal Prefill for Efficient Multi-Turn MLLM Inference](https://arxiv.org/abs/2610.39562) | arXiv 2026 (preprint; Oct 29) | 在 Multi-turn Multimodal 中初始仅 Prefill Query-selected Tokens，将剩余 Tokens **按原顺序在 Decode 空闲算力/返回后间隙增量 Prefill**，通过 Attention Visibility 与 Affine State Mapping 延迟恢复 Full Context，以免 Hard Pruning 永久丢失后续问题所需视觉信息；Qwen3-VL-8B/Qwen3.5-9B、30% 初始保留，作者报告相比 Hard Pruning 恢复 77.7%/60.4% 丢失质量，SGLang MultiVerse 首轮 Mean TTFT 最高 −24.1%，TPOT 增幅小于 0.5%。**ASYNC_BACKGROUND_WORK / APPROXIMATE_EARLY_ANSWER / MULTIMODAL_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [A3: Attention-Aware Accurate KV Cache Fusion for Fast Large Language Model Serving](https://aclanthology.org/2026.emnlp-main.113/) | EMNLP 2026 Main (ACL Anthology) | 长 Context/RAG Chunk 直接复用旧 KV 时遗漏本轮问题的因果条件；A3 根据 Query-relevant Chunk 选择性 **Recompute/Fuse 预计算 KV**，避免均匀重算与错误位置更新。作者多个任务/模型对照五方法报告 **TTFT 最多约 2× 加快**，同时有相竞争的任务质量。**APPROXIMATE_CACHE_FUSION / QUERY_DEPENDENT / NOT_STRICT_OUTPUT_EQUIVALENCE / NO_INDEPENDENT_REPRODUCTION**；不能当作任意 Prompt 的无损 Prefix Reuse。（KEEP_STRICT） |
 
-### Eviction, Compression & Quantization (51)
+### Eviction, Compression & Quantization (52)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -132,6 +132,7 @@
 | 2026 | [DropKV: Decoupling Residual-Output Perturbation for Near-Optimal KV-Cache Eviction](https://arxiv.org/abs/2610.22130) | arXiv 2026 (preprint; Oct 15; conference-track identity not inferred) | 通过独立 Token 的 Residual-output Perturbation Scoring 将联合 Eviction 近似问题可解化，在论文 Cone Condition 下给出近似保证；融合 Triton Scorer 避免全 Attention Matrix 物化。作者报告 Scoring Kernel 19.8× 与**匹配 Batch Prefill** 最多 9.9% E2E 改善，RULER/LongBench 同预算质量对照；**APPROXIMATE_KV_EVICTION / NOT_FULL_ONLINE_SERVING_9.9PCT**。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [KV Admission: Learning What to Write for Efficient Long-Context LLM Inference](https://aclanthology.org/2026.emnlp-main.1063/) | EMNLP 2026 Main (ACL Anthology; [code](https://github.com/EMCLab-Sinica/WG-KV)) | 将 KV 管理前移至 **Admission 而非事后 Selection/Eviction**：WG-KV 学习预测 Token 在写入 Cache 前的长期价值，拒绝低效 Token，同时保留小型 Global KV 与 Sliding Local Cache，以减小长上下文 Prefill/Decode 带宽和容量。**TRAINED_WRITE_GATE / MODEL_BEHAVIOR_APPROXIMATE / NO_LOSSLESS_KV_EQUIVALENCE / NOT_REPRODUCED**；正式论文声明真实推理性能收益但官方摘要无足够统一倍数，未写虚构 speedup。（KEEP_STRICT） |
 | 2026 | [VisCache: Visual KV Cache Pruning for Efficient Vision Large Language Model Inference](https://aclanthology.org/2026.emnlp-main.1196/) | EMNLP 2026 Main (ACL Anthology) | VLLM 长视频视觉 KV 的粗细两级压缩：先以轻量 VLM 选语义关键帧，再基于 VLLM Attention Pattern 给各层 **Parabolic KV Budget**，仅修剪 Key、融合 Value，避免简单同率删 Token 导致质量崩溃。作者在测试的 Vision Long-context Tasks 报告保留 **19%–28% KV** 时，整体推理速度最高 2.35×、维持竞争性任务质量。**VIDEO_VISUAL_KV_APPROXIMATION / TWO_STAGE_COST_INCLUDED_ONLY_AS_AUTHORED / NOT_TEXT_LLM_SERVING_OR_STRICT_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [Intent-Aware Caching for Efficient LLM Serving](https://arxiv.org/abs/2611.09715) | arXiv 2026 (preprint, Nov 6) | **Intent Classifier + Conditional Return-Delay Model + RadixTree Eviction Priority**，按多轮会话意图预测下轮重用时间而非只按最近访问；作者 **SGLang、4×A100、WildChat/ShareChat、8B–110B** 报告对 LRU/LPC/Oracle 的 Cache-hit、TTFT、Throughput，并做因果滚动窗口及分类器开销分析。**有训练/历史 Trace 依赖，不适用于不可预测意图的任意 Prompt；REAL_GPU / AUTHOR_REPORTED / NOT_REPRODUCED**。[Code](https://github.com/hasanar1f/intent-aware-caching)。（KEEP_STRICT） |
 
 ### Sparse KV Retrieval (18)
 
@@ -197,7 +198,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [HiState: Hierarchical Prefix Cache Management for Hybrid LLM Serving in Agentic Workloads](https://arxiv.org/abs/2610.41508) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 在 Hybrid Attention/Recurrent LLM 的 Agent 回溯上下文中，将历史 recurrent checkpoints 分级驻留 SSD，优先让可复用 KV 留在快速存储；自适应 checkpoint interval + unified eviction 避免 checkpoint 膨胀。基于 vLLM/Qwen3.5-9B/H100 与两组 Coding-Agent Trace Replay，对比 vLLM-Marconi/SGLang-HiCache 的 p99 TTFT；**真实硬件、Trace Replay、作者报告、未独立复现；暂无核实公开代码**。（KEEP_STRICT; REAL_GPU_TRACE_REPLAY; NOT_REPRODUCED） |
 | 2026 | [FlashOffloading: Low-Latency KV Cache Offloading for Long-Context LLM Serving](https://arxiv.org/abs/2611.07542) | arXiv 2026 (Nov 5 preprint) | Layerwise Prefill DRAM Offload + Decode Rolling HBM Hot Cache 和 CopySFA Kernel 内 H2D/Attention Overlap；作者在 **32 Ascend 910C（64 dies）、GLM-5.2/MTP3、vLLM-Ascend PD 集群** 报告 Prefill/Decode 吞吐最高 1.38×/1.91×，Decode 受 30ms TPOT 限制。**910C 实机不等于 910B2 兼容；AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Distributed KV Sharing & Transfer (15)
+### Distributed KV Sharing & Transfer (16)
 
 跨实例共享、P/D 传输和 KV 状态池。
 
@@ -218,6 +219,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [SmartGen: Seamless Disaggregated LLM Inference with Selective KV Cache Transfer](https://arxiv.org/abs/2607.28150) | arXiv 2026 (preprint) | 面向租赁云实例中受限的 P/D 节点带宽，SmartGen 用 **Profile-based 重要 KV 主动推送 → Decode 端本地/远端并行按需读取 → 后台 Speculative Transfer 补齐全量 KV** 三条路径，把首轮完整 KV 传输延后而非永久丢弃；作者在 Llama-3.1/Qwen3/Phi-4 等长上下文测试报告 **Time-to-second-token 最多降低 4.3×**，后续 Decode 与精度接近全量传输。**NETWORK_CONSTRAINED / STST_NOT_TTFT / AUTHOR_REPORTED / NOT_REPRODUCED**；不能外推任何链路及总 Session Goodput。 |
 | 2026 | [SwiftCache: Efficient LLM Serving for Multi-turn Conversations with Heterogeneous KV Cache Sharing](https://arxiv.org/abs/2606.16135) | arXiv 2026 (preprint) | 让多个异构模型跨 NVLink 捐赠空闲 GPU HBM 作为会话 Prefix KV Cache，并令本地只保持活动层 KV；在真实多轮 Serving 负载对比 vLLM/SGLang 的 P99 TTFT、上下文长度及干扰。 |
 | 2026 | [Nebula: Distributed Position-Independent Caching for LLM Serving](https://arxiv.org/abs/2611.09474) | arXiv 2026 (Nov 6 preprint) | **SGLang+Dynamo+NIXL** 将非前缀 Position-independent Cache Segment 跨节点管理，利用 Event-driven Cache View、Ghost-hit PC/PIC Budget 和 Cost-aware Prefill Placement；作者 **2×4 H20-3e、7P1D、四个 RAG/Agent Workload** 报告平均 Median TTFT 降低 61.4%。**PIC 质量/位置约束不能省略；REAL_GPU_RDMA / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Beyond Compression Ratio: High-Throughput KV Compression for Disaggregated LLM Serving](https://arxiv.org/abs/2611.04382) | arXiv 2026 (preprint; author claims NPC 2026 acceptance) | **FastKVComp** 将 KV Distribution Transform + Low-bit Quantization 通过 TileLang Fused，配合 LC 可搜索 Lossless Codec 降低高带宽 P/D Compress/Decompress Critical Path；**2×RTX5090 Host-staged NCCL SHM PCIe Gen5** 和 **RTX PRO6000→H100 200Gb/s IB** 真实 Llama3.1/Qwen2.5 8K–20K Context/50 Requests 测 JCT/Output Throughput；相对 Raw Transfer 本地吞吐 +1.83–2.04×、跨节点 +44.2–62.6%，**编码+解码开销/带宽依赖、非普通单卡 Decode 加速**。**REAL_GPU_NETWORK / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Paging & Cache Allocation (8)
 
