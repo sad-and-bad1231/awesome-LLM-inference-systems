@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-17) | 17 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-18) | 18 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-26) | 26 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-16) | 16 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **90** | |
+| **Total** | **91** | |
 
-## Papers (90)
+## Papers (91)
 
-### Serving Benchmarks & Workloads (17)
+### Serving Benchmarks & Workloads (18)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -47,6 +47,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 | 2026 | [ServerBench: How can your coding agents design specialized LLM serving systems?](https://arxiv.org/abs/2611.06841) | arXiv 2026 (Nov 4 preprint) | 让 Coding Agent 修改真实 LLM Server，以 **Frozen Code、Hidden Correctness/Checkpoint Verification、AgentX Stateful Closed-loop Replay、Latency-qualified GPU-$** 评价引擎。作者 **11 Agents×3 L40 Model Deployments** 对 vLLM 0.28/SGLang 0.5.19；**不是生产 Open-loop Goodput 或 Agent RSI**。[Project](https://infini-ai-lab.github.io/Server-Bench/)；**REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines](https://arxiv.org/abs/2611.05991) | arXiv 2026 (Nov 4 preprint) | **Control Confounding between KV Cache Granularity, Chunked Prefill, Request Ordering and Queue Stability**：固定 Seed 的 Multi-agent Graph Arrival/Prefix Share，记录 Engine 实际 Resolved Flags，比较 Default 与仅匹配 Chunk Size。作者 **GKE Kubernetes1.35、单 L4 24GB、vLLM0.6.3/SGLang0.4.1、4/8/16K Context、Gamma Bursty Agent DAG** 显示默认下 TTFT 差可达64×，仅把 vLLM Chunk Budget 设为同 SGLang 的 2048 可消除最高容量差的78%和部分时延差，剩余等吞吐 Tail Ratio 2.4–6.4×。**旧引擎版本、单小 GPU、人工合成 DAG/Tool Timings 和 Kubernetes Spot Re-provisioning，非 2026 新版 vLLM/SGLang 绝对性能结论**。[Artifact](https://arxiv.org/abs/2611.05991)。**REAL_GPU / CONTROLLED_CAUSAL_ABLATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Performance & Efficiency Studies (26)
 
