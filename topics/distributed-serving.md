@@ -15,13 +15,13 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-29) | 29 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
-| [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
+| [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-29) | 29 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-26) | 26 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **142** | |
+| **Total** | **143** | |
 
-## Papers (142)
+## Papers (143)
 
 ### Parallelism & Scale-Up (29)
 
@@ -59,7 +59,7 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [ConfluxServe: Reconciling Resource Utilization and Parallelism Efficiency across Prefill and Decode in LLM Serving](https://arxiv.org/abs/2610.37810) | arXiv 2026 (preprint; submitted Oct 27) | Operator-level XP 在 Linear 层 P/D Co-batch、Attention 层 Prefill SP/Decode Local，配合 KV Handoff 和 SLO Control；作者 **4/8×H100、3 模型、生产 Trace Replay** 对 Chunked Prefill/DistServe/LoongServe/MuxWise 及增强 Scheduler 报告 Full Scheduler **1.26–1.52× Goodput**。仅评估单 XP Instance，没有 Global Routing 效果；vLLM0.15.1/SGLang0.5.9 基线，未移植 Ascend。（KEEP_STRICT; REAL_GPU_E2E; NO_AUTHOR_REPRO） |
 | 2026 | [Workload-Static Optical Circuit Switching For Scalable LLM Inference Decode](https://arxiv.org/abs/2611.05104) | arXiv 2026 | 根据固定 Model/TP-EP Topology 在部署时提前配置 **OCS Optical Circuit**，让 Decode Collectives 可使用 Spare Accelerator Ports 减少 Phases；以 Topology-aware Scheduling 对比 Oversubscribed Packet Switch。作者使用 **GXNET Flit-level/Analytic Models（硬件量测校准）** 投影 576 Accelerators/5T MoE/5M Context，报 **交互性最高+65% / 能效+119%**；**大型 OCS 系统是建模推演，不是 576 GPU 上实测线上 TPOT，也没有制造光交换机对照**。**KEEP_PREPRINT_EXPLORE / NETWORK_SIM_CALIBRATED / NOT_REPRODUCED**。 |
 
-### Disaggregated Compute Stages (32)
+### Disaggregated Compute Stages (33)
 
 P/D、Attention–FFN 与多阶段资源解耦。
 
@@ -97,6 +97,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 | 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
+| 2026 | [vLLM-Omni Technical Report: A Unified Serving Runtime for Omni-Modality Generation](https://arxiv.org/abs/2610.09307) | arXiv 2026 | 把 **Text/Audio/Image/Video/Action** 推理表示为 Stage Graph，统一的 Request Orchestrator 负责 Admission/Stage Replicas/Streaming Demux，Connector 转移大量 Payload，覆盖 TTS、Full-duplex、World Model 与 Robot Session API。**vLLM-Omni Team Technical Report** 提供架构与 H100/H200 Nightly CI、Qwen3-Omni 多阶段测试；**不同阶段 Model/Task 的执行语义不等于一条 vLLM Autoregressive Decode，也不能把组件稳定性当成已经实现所有 World-model 生产优化**。[Official runtime](https://github.com/vllm-project/vllm-omni)。**KEEP_PREPRINT_EVIDENCED / OPEN_SOURCE_ENGINE_TECH_REPORT / NOT_REPRODUCED**。 |
 
 ### KV Transfer & Communication (26)
 
