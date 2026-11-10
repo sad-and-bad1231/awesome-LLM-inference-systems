@@ -33,3 +33,32 @@
 - **Review:** obtain explicit approval for batch size/source claims; keep PR **Draft until reviewed**. Preserve 898 canonical entries unless an evidentiary HOLD/REMOVE forces a documented negative count adjustment.
 
 **Verdict:** **STRUCTURAL_PASS_PENDING_FINAL_HEAD_CI; SCIENTIFIC_REVIEW_INCOMPLETE / DRAFT**. The already implemented corrections are appropriate; this document is **not** a merge approval.
+
+
+## November 10 second review: full new-source G0 metadata / selective G3 and G4
+
+**Additional source work:** compared **all 46 newly admitted arXiv paper titles and date metadata**, plus the revised [ELDR author-final](https://arxiv.org/abs/2607.00466), against their first-party arXiv abstract/metadata pages, rather than sampling only famous titles. **No unmatched new paper title/ID was found**. This does **not** mean all 46 full evaluation appendices were inspected, nor that experiment claims are replicated. The unresolved MobiInfer anomaly remains specifically marked and should not be counted as a verified November first-submission date.
+
+### Further corrections made
+
+| Source | Original row defect | Correct evidence and change |
+|---|---|---|
+| [Inside the Trap, 2611.08902](https://arxiv.org/abs/2611.08902) | Incorrect **Nov 5** first-submission date | arXiv records **Nov 6, 2026**; corrected category row |
+| [SpecCTMC, 2611.08362](https://arxiv.org/abs/2611.08362) | Incorrect **Nov 6** first-submission date | arXiv records **Nov 5, 2026**; corrected category row |
+| [UMLoad, 2611.04253](https://arxiv.org/abs/2611.04253) | Listed **Nov 4** as initial preprint date | Submitted **Nov 3, 2026 (v1)** and revised **Nov 4 (v2)**; corrected category row and switched the detailed evaluation link to **v2** |
+| [MobiInfer, 2611.08496](https://arxiv.org/abs/2611.08496) | arXiv ID encodes a November intake while the source page and its v1 submission history say **11 Aug 2026** | **UNRESOLVED SOURCE_CONFLICT:** preserve year/title/authors, keep November-first-submission date **unverified** and flagged directly in canonical row. Do not silently infer source typo or assert an author correction |
+| [ELDR 2607.00466v3](https://arxiv.org/abs/2607.00466) | Earlier preprint claims in old row | Author-final revision **Nov 6**, originally submitted **Jul 1**. Existing canonical row refreshed; the manuscript's accepted ACM SIGOPS ATC 2026 claim is backed by the public conference schedule; one paper, one home |
+
+**Historical timing detail:** [Penelope](https://arxiv.org/abs/2611.00391), [Megakernel Study](https://arxiv.org/abs/2611.00495), [Weights That Stay](https://arxiv.org/abs/2611.00506) and [Ripple](https://arxiv.org/abs/2611.01067) were **first submitted October 30–31**, but surfaced in the November arXiv issue/index. Their topic rows already retain the date distinction; **do not count them as November first submissions**.
+
+### Verified G4 author artifacts — pinned browse snapshot, no execution
+
+These sources supply a useful beginning for **source audit**, but a browseable repository alone does not establish that author performance tables are reproducible.
+
+| Paper | Official artifact/commit seen during audit | Evidence limit |
+|---|---|---|
+| [ForgeKernel](https://arxiv.org/abs/2611.04998) | [OpenBMB/ForgeKernel @ `6664d608`](https://github.com/OpenBMB/ForgeKernel/tree/6664d6080c37803605d6c6bc25f87656423ff114): `src/`, `skills/`, `kernels/`, `tests/`, `hw_kb/` | Original agent/kernel repository resolved and source paths visible; **no model, test-suite, hardware probe, NPU run or match of leaderboard outputs** attempted |
+| [ServerBench](https://arxiv.org/abs/2611.06841) | [Infini-AI-Lab/Server-Bench @ `b80a3fb2`](https://github.com/Infini-AI-Lab/Server-Bench/tree/b80a3fb21ff9037bedbde78536a5b918f100c6cc): `serving_tasks/`, `serverbench/`, `agentx-harness/`, `experiments/` | Source and harness present, no executed frozen submission, reference replay or held-out verification |
+| [SpecCTMC](https://arxiv.org/abs/2611.08362) | [kasakh/specctmc @ `c2cff633`](https://github.com/kasakh/specctmc/tree/c2cff63396b0446dbfefbc0b062461dd23ee2d77): `src/`, `tests/`, `examples/`, `environment.yml` | Official arXiv-linked repo supports CPU synthetic tests and user-supplied models; **no tests run**. README explicitly says code repo lacks checkpoints, paper results and experiment logs |
+
+**Important quality boundary:** source G0 is now checked across all 46 new paper identities/first submissions (aside from the marked metadata conflict), while G3/G4 checks remain **selective** and uneven; source-level author claims can still be wrong. Passing `catalog-integrity` is evidence about repository structure only. **Do not convert this status into a merge approval**.
