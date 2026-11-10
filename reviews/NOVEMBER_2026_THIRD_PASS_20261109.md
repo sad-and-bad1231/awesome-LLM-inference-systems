@@ -33,7 +33,7 @@
 | **Bench / causal engine comparison:** [Controlled Engine Evaluation 2611.05991](https://arxiv.org/html/2611.05991v1) ([artifact](https://arxiv.org/abs/2611.05991)) | Reconstruct **exact resolved engine defaults** and vary only vLLM Chunk Prefill while holding SGLang and seeded Agent DAG stream constant; vs unadjusted vLLM0.6.3/SGLang0.4.1 | **1×NVIDIA L4 24GB, GKE K8s1.35**, prefix-heavy **synthetic Gamma-arrival agent graph**, defaults can show **64× median TTFT**; matching 2,048 chunk resolves **78% largest capacity gap** and **30–67% latency**. **Old 2024/25 engine versions, GPU mem config still nonidentical, queueing effect and Spot VM interruptions**. Not a 2026 upstream winner verdict |
 | **Bench / VLA source diagnostics:** [VLA Bottleneck Interaction Study 2611.06710](https://arxiv.org/html/2611.06710v1) | Seven VLA × H100/A10G/4090/Jetson Thor, CUDA Graph/FlashAttention/Quant/Pruning Stage profiling, **stronger baseline controls** | OpenVLA-OFT 50% Visual Token Pruning relative **unfused Attention 21.4%** vs **FlashAttention2 only 6.9%**; **real device stage latency**, not measured physical robot success or claim of all-VLA generality |
 
-**Category deltas third pass:** Kernel+2; KV+2; Decoding+1; Quant+1; MoE+3; Runtime+4; Distributed+2; Benchmarking+3 → **17**. Prior 879 +17 = **896**.
+**Category deltas third pass:** Kernel+2; KV+1; Decoding+1; Quant+1; MoE+3; Runtime+4; Distributed+2; Benchmarking+3 → **17**. Prior 879 +17 = **896**.
 
 ## Explicit examined candidates not admitted
 
