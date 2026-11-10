@@ -32,6 +32,25 @@
 | [ServerBench](https://arxiv.org/html/2611.06841v1) · [project](https://infini-ai-lab.github.io/Server-Bench/) | **Benchmarking/Workloads**: **11 coding agents ×3 L40 deployments, Qwen/Gemma**; frozen agent-written serving implementation, held-out correctness and session replay vs vLLM 0.28/SGLang 0.5.19. **Closed-loop replay ≠ production online demand** | KEEP_STRICT; REAL_GPU_REPLAY; not_attempted |
 | [ROCm InferaSim](https://arxiv.org/html/2611.04032v1) | **Benchmarking/Models**: **MI355X measured anchors + DES**, synthetic/predicted configs calibrated against real engine points. Accuracy and applicability must be checked per workloads; no simulator output claimed as real deployment gain | KEEP_STRICT; MEASURED_ANCHOR+SIMULATED_PREDICTION; not_attempted |
 
+## G2 / G4 comparison and artifact audit (three nearest references per KEEP)
+
+These are **related mechanisms or baseline candidates**, **not** a claim that the authors actually ran all three in a matched experiment. The primary paper's evaluation tables, not this list, establish which baselines were measured. G4 states below distinguish a link observed in the paper from source code executed in this review.
+
+| Paper | Three related mechanisms or baseline candidates | Artifact / unresolved controlled-comparison gate |
+|---|---|---|
+| FlashOffloading | vLLM-Ascend conventional device-resident KV; SGLang HiCache tiering; sparse indexer HBM-only Decode | Author discusses an upstream vLLM-Ascend integration, but **no pinned 910B2 build or complete reproduction run**; compare same GLM/MTP3 + hardware under offload-enabled/disabled |
+| Nebula | SGLang Radix Prefix Cache; CacheBlend position-independent fusion; Dynamo cache-aware scheduling | Implementation described as SGLang+Dynamo+NIXL (~19K LOC); **specific verified replay commit not executed**; cache capacity, semantics and identical requests matter |
+| ChainFlow | EAGLE-3 autoregressive trained draft; DFlash diffusion parallel drafter; vanilla target-only AR decoding | Authors state publicly released code and drafter weights; **not independently fetched/run**; equal drafter size/training tokens and Target Quality must be controlled |
+| SpecPilot | SGLang v0.5.20 stock speculative serving; DFlash2; DSpark | Author methodology includes frozen SGLang and Token Forcing; **agent's resulting patches and long-run transferability not verified locally** |
+| BitDecoding-FP4 | BF16 KV; FP8 KV; TensorRT-LLM native NVFP4 attention | [Author code](https://github.com/OpenBitSys/BitDecoding-FP4) linked, **not run**; compare on equal quality/model/context and B300 instructions; no guarantee for other architectures |
+| TriAttention | Dense BF16 attention; Torch attention fallback; sparse-only 8-bit attention (ablation) | [Author code](https://github.com/HanzhiZhang-Ulrica/TriAttention) linked, **not run**; model-wide calibration and quality budget differ from exact dense serving |
+| CISA | Dense Paged Attention; DeepSeek Sparse Attention (DSA); Native Sparse Attention (NSA) | Paper discusses these as related designs, not three proven direct head-to-head measurements; **calibration data, indexer cost and Quality at 1M Context** remain important |
+| cμ scheduling | FCFS request ordering; shortest-work-first prioritization; KV capacity-aware service admission | Real H800 experiment present in manuscript; **fluid-limit optimality proof is not a finite realistic cluster benchmark**; recheck stochastic arrivals and system simulator transfer |
+| ServerBench | vLLM stock server; SGLang stock server; KernelBench-style executable agent evaluation | [Public project](https://infini-ai-lab.github.io/Server-Bench/) describes test; trusted tests/seeds and frozen implementation provenance remain essential; **no local execution** |
+| ROCm InferaSim | Exhaustive MI355X real GPU configuration sweep; Vidur-like serving simulation; analytical kernel/shape extrapolation | [AMD blog](https://rocm.blogs.amd.com/software-tools-optimization/inferasim/README.html) and preprint read; independent simulation prediction residuals and convergence to real measurements require pinned runs |
+
+**No G4 level above `not_attempted` is claimed for this 10-paper intake**, even when a code link exists. This review used the publicly accessible author manuscript/HTML and first-party notes, **not cloned repositories, compiled kernel artifacts or reproduced benchmark traces**.
+
 ## Explicit holds and removals — **not** canonical paper rows
 
 | Candidate | Decision & specific missing evidence |
