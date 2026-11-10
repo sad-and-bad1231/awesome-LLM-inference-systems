@@ -15,12 +15,12 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-17) | 17 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
-| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
+| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-12) | 12 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-22) | 22 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **77** | |
+| **Total** | **78** | |
 
-## Papers (77)
+## Papers (78)
 
 ### Expert Routing & Communication (17)
 
@@ -46,7 +46,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [StreamEP: Straggler-Tolerant MoE Decoding without Communication Barriers](https://doi.org/10.1145/3830418.3843869) | SOSP 2026 ([author artifact](https://zenodo.org/records/22100357)) | 将传统 Expert Parallelism 中每层跨 GPU Collective Barrier 改为 StreamEP 异步到达/执行/转发，StreamInfer 采用 per-layer Token Queue、Defragmenting Scheduler 与基于常规 NCCL 的两阶段可变长通信；SOSP 论文作者在 16×L40S / 16×A100、200Gbps 网络相对传统 EP 报告最高 **1.7× Decode Throughput**。**TOPOLOGY_AND_CONCURRENCY_SCOPED / AUTHOR_REPORTED / NOT_ASCEND_HCCL_REPRODUCED**，不是通用 Token-level 加速。（KEEP_STRICT） |
 | 2026 | [Decoding the Skew: Distribution-Aware MoE Inference with Adaptive Kernel Dispatch (DA-MoE)](https://arxiv.org/abs/2607.23099) | arXiv 2026 (preprint Jul 25; October lab-gap closure) | 固定 Token-count Bucket 忽视 Expert Routing Skew 导致稀疏 GEMM 不同 Tile Padding 效率；用 **Effective Experts + Dirichlet-generated Routing Histograms** 离线校准，GPU-resident Dispatch 读真实路由分布选择 Kernel，避免 CPU/GPU 同步。作者基于 HumanEval-X 轨迹、DeepSeek-V3/Kimi K2 报告 Fused-MoE **Kernel Geomean Latency 1.16×/1.29×** 改善、峰值 1.40×/1.56×；**KERNEL_ONLY / NVIDIA_ROUTING_SHAPE_DEPENDENT / NOT_ONLINE_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Placement, Balance & MoE Serving (11)
+### Placement, Balance & MoE Serving (12)
 
 专家放置/复制/动态负载均衡与 MoE 服务容量。
 
@@ -63,6 +63,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Semantic Parallelism: Redefining Efficient MoE Inference via Model-Data Co-Scheduling](https://proceedings.iclr.cc/paper_files/paper/2026/hash/f0552f14388d95b19740dee809f5cad1-Abstract-Conference.html) | ICLR 2026 | 联合安排 Expert Placement 与 DP 请求/TP Token 数据位置，减少 EP All-to-All 跨设备流量。 |
 | 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
+| 2026 | [ISER-MoE: Dynamic In-Switch Replication of Hot Experts for Load Balancing in Expert-Parallel](https://arxiv.org/abs/2611.09008) | arXiv 2026 (Nov 6 preprint) | **HALO-Q** 通过选择热专家 Helper Slots+Group Multicast 缓解 EP Owner 过载，SAMI 多端口广播与 Shared Expert Overlap 减少复制关键路径。作者在 **GB300 / TensorRT-LLM / DeepSeek-V4-Pro NVFP4** 报告 Context-only Prefill **最多 +17.4%**（DEP8 GSM8K），另 GB300 NVL72 **40–56 GPUs / Agentic Coding Trace** 的 PD Serving 比较中 Output Throughput +1.4–1.9%、P90 End-to-end Latency −3.1–4.3%。**重要限制：HALO-Q 动态调度的全链路性能未直接验证，部分 Planner/Rank Imbalance 仅 Trace Simulation；E5 Best-run Selection/共享 Decode 有混杂；预发布 Rubin 硬件另计**。**REAL_MULTIGPU_AND_TRACE_SIM / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT; SCOPED） |
 
 ### Expert Offload & Heterogeneous Execution (22)
 
