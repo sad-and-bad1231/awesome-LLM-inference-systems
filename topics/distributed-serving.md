@@ -17,11 +17,11 @@
 | [Parallelism & Scale-Up](#parallelism--scale-up-29) | 29 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-28) | 28 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-29) | 29 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-26) | 26 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **141** | |
+| **Total** | **142** | |
 
-## Papers (141)
+## Papers (142)
 
 ### Parallelism & Scale-Up (29)
 
@@ -131,7 +131,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Deploying RDMA for Large-Scale Inference and Training Workloads (ByteExpress)](https://arxiv.org/abs/2610.12815) | arXiv 2026 (ByteDance production report; preprint) | 生产参数服务器推理/训练中的 RDMA Layer：跨应用/传输缓冲区协同、Zero-copy、QP Multiplexing、Receive-credit、Software Send Window 与 RPC Recovery。生产推理 Parameter Fetch Mean/P99 相对 Kernel TCP 分别低 35.7%/43.7%（作者报告）；**并非** vLLM P/D KV Transfer 或 Decode Collective 的直接 E2E 证据，作为分布式推理通信基础设施相邻准入。（KEEP_ADJACENT；NOT_REPRODUCED） |
 | 2026 | [flash-comm: Self-Synchronizing Collective Communication for LLM Decoding](https://arxiv.org/abs/2611.06634) | arXiv 2026 (Nov 4 preprint) | 消除 Decode Collective 中独立 Cross-GPU Barrier，借助 **Per-block Readiness Evidence + Cost-guided Encoding + Deterministic Reduction Ordering** 维护 Data Dependence 与 Graph Buffer Reuse；与 **SGLang Custom AR v2/NCCL Symmetric AllReduce** 比较。作者在 **2/4/8×H100/H200/B300 CUDA Graph、1KB–16MB** 实测，8×B300 相对 AR v2 的 AllReduce Median Latency **−28.8%**；在 **8×B300、DeepSeek-V4-Flash-0731、TP Decode、Concurrency≥16** 报 **端到端 TPOT −1.7–6.8%**（AllReduce 本占 Decode 11.4%，上限受 Amdahl 约束）。**READINESS_CORRECTNESS / REAL_MULTIGPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Fleet Scaling & Reliability (28)
+### Fleet Scaling & Reliability (29)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -165,6 +165,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Janus: Multi-LLM Serving at Production Scale](https://github.com/Janus2026/Janus) | SOSP 2026 (author artifact; camera-ready pending) | Service–Engine 双层控制闭环、Gaussian-process Capacity/SLO Oracle、双时间尺度调度与 GPU-to-GPU Model Fork；作者 768 设备、62 Apps、45.6M 请求生产负载报告 24% Device-hour 节省且 SLO 达标。**PRODUCTION_AUTHORED / INDEPENDENT_REPRO_NOT_ATTEMPTED**。 |
 | 2026 | [Resuming Vision-Language Inference across Onboard Interruptions (OrbitWeaver)](https://arxiv.org/abs/2610.29183) | arXiv 2026 (preprint; Oct 22 announcement) | OrbitWeaver 按 **VLM Vision/Prefill/Decode 的不同 State Lifetime**选择 Checkpoint Boundary，按 Layer×Token Chunk 的依赖关系调度断电后恢复并 Overlap Weight/KV I/O；作者在卫星载荷硬件及在轨 Telemetry Trace 回放中报告相对对照**最多 4.07× 请求完成时间收益、SSD 写入最多减 3.56×**。论文另声称在 **两颗 LEO 卫星上进行 72 小时实际部署**：这是 **AUTHOR_DEPLOYMENT_CLAIM，非本库独立验证或可复制的云端 LLM Serving 结果**。**INTERRUPT_DRIVEN_EDGE / PHASE_AWARE_RECOVERY / ARTIFACT_NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [TensorHub: Scalable and Elastic Weight Transfer for LLM RL Training](https://arxiv.org/abs/2604.09107) | SOSP 2026 (preprint Apr; UW–ByteDance Seed) | TensorHub（SOSP 2026）为 **LLM RL Trainer→Rollout Inference Workers** 的版本化权重传输设计 Reference-Oriented Storage（ROS）：不复制权重作存储，而是定位已在 GPU 中的 Replica，再做 Topology-aware RDMA、跨 Rank 同版本事务和故障恢复。作者报告真实 RL 场景 **GPU Stall 最高降低 6.7×、弹性 Rollout Weight Update 最高加速 4.8×、跨 DC Stall 最高降低 19×**，并称 ByteDance 生产部署；**三者属不同设置，不是在线请求 TPS/TTFT**。**TRAINING_ROLLOUT_CONTROL_PLANE / WEIGHT_SYNC_NOT_KV_TRANSFER / AUTHOR_DEPLOYMENT_CLAIM / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [Surviving Partial Rank Failures in Wide Expert-Parallel MoE Inference](https://arxiv.org/abs/2605.10670) | arXiv 2026 | **EEP：EP Rank Membership 变成可变 Runtime State**，故障时修复 Peer Reachability、Expert Coverage、CUDA Graph Routing Metadata，尽量不使健康 Rank 全量 Recapture；接入 SGLang MoE Serving。作者报告稳态相对固定 DeepEP 开销 ≤**4.4%**，单 Rank 故障 **11s Recovery +8s Reintegration**，52s 内恢复至约95%故障前吞吐；Full Restart Baseline 不可用 **348s**。**只对作者测试 Fault Pattern/Rank/IB 体系成立，故障恢复指标不能当成稳态 TPS 提升**。**KEEP_PREPRINT_EVIDENCED / REAL_CLUSTER_FAILURE / NOT_REPRODUCED**。 |
 
 ### Heterogeneous & Edge Serving (26)
 
