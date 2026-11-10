@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-17) | 17 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-24) | 24 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-25) | 25 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-16) | 16 | 性能建模、容量估计、仿真和边界分析。 |
-| [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
+| [Correctness & Reliability](#correctness--reliability-14) | 14 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **86** | |
+| **Total** | **88** | |
 
-## Papers (86)
+## Papers (88)
 
 ### Serving Benchmarks & Workloads (17)
 
@@ -48,7 +48,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 | 2026 | [ServerBench: How can your coding agents design specialized LLM serving systems?](https://arxiv.org/abs/2611.06841) | arXiv 2026 (Nov 4 preprint) | 让 Coding Agent 修改真实 LLM Server，以 **Frozen Code、Hidden Correctness/Checkpoint Verification、AgentX Stateful Closed-loop Replay、Latency-qualified GPU-$** 评价引擎。作者 **11 Agents×3 L40 Model Deployments** 对 vLLM 0.28/SGLang 0.5.19；**不是生产 Open-loop Goodput 或 Agent RSI**。[Project](https://infini-ai-lab.github.io/Server-Bench/)；**REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Performance & Efficiency Studies (24)
+### Performance & Efficiency Studies (25)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -78,6 +78,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LLM-PowerTrace: A Dataset of Time-Resolved GPU Power Traces for AI Compute](https://arxiv.org/abs/2610.38315) | arXiv 2026 (preprint; submitted Oct 28) | 发布带 Workload Metadata 的**每 GPU 100ms Power Time Series**，覆盖推理 Concurrency、GPU Clock、KV/Weight Quantization、Prompt/Output Length、Arrival Pattern，也有 Fine-tuning 控制矩阵，并定义 Grid-facing Ramp/Peak 指标及外推模型。**REAL_GPU_POWER_SAMPLING / INFERENCE_AND_TRAINING_MIXED / SAMPLING_RESOLUTION_100MS / AUTHOR_DATASET_NOT_INDEPENDENTLY_REPLAYED**；不是新的 Serving 加速算法。（KEEP_STRICT；MEASUREMENT_DATASET） |
 | 2026 | [The Language–Energy Divide: Measuring Energy Costs of Multilingual LLM Inference](https://aclanthology.org/2026.emnlp-main.2113/) | EMNLP 2026 Main (October; ACL Anthology) | 使用 **ML.Energy** 测量跨语言、模型、硬件、任务的真实推理能耗，分解 Tokens Per Request 与 Per-token Energy 两项因素，避免仅按 English Prompt 或单位 Token 推断全球部署成本；作者报告跨语言 Per-output-token Energy 最高相差 8.3×、固定请求集合 Total Energy 最高相差 179×，低资源语言的准确率还存在劣势。**OBSERVATIONAL_TASK_DISTRIBUTION / NOT_FAIRLY_IDENTICAL_TOKEN_COUNT / DOES_NOT_PROVE_CAUSAL_HARDWARE_EFFECT / NOT_NEW_SERVING_ALGORITHM**；为性能/能耗测量方法准入，非推理加速论文。（KEEP_STRICT；AUTHOR_REPORTED；NOT_REPRODUCED） |
 | 2026 | [Understanding the Energy Cost of Quantized Agents on Shared GPUs](https://arxiv.org/abs/2610.41672) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 将量化的 **fixed-call energy** 与真实 Agent 的 **energy per verified task completion** 分开测量，并联合 GPU Cache Capacity/Admission Limit 分析：A100 40/80GB、Devstral/Qwen3.5-9B、Coding/Data Analysis；W4A16 在固定 Replay 下较 W8A8 省 10–25% 能量，但特定 4-Agent Live 负载每成功任务能耗上升 49%。**仅为测试配置下的作者实测，不是量化普遍无效或性能优化结果**。（KEEP_STRICT; REAL_GPU; TASK_OUTCOME_VERIFIED; NOT_REPRODUCED） |
+| 2026 | [The GPU Needs an Operating System: Putting Idle AI Hardware to Work](https://arxiv.org/abs/2611.08720) | arXiv 2026 (Nov 5 preprint; systems position paper with prototype) | 通过 **Real Decode SM/Memory Headroom Profiling、Static GPU Partition Co-run 与 Single-resident-kernel Serving Prototype** 论证 Token-step 内调度的空间；作者 **RTX PRO6000 Blackwell/AMD MI300X、Kimi K2 Single-GPU Share Proxy、Llama3.1-8B Resident Kernel** 实测，普通 FP8 GEMM Backfill 仅回收约 0.09 GPU（前台 +4.7% Step），手工可共享背景 0.23 GPU（+5.1%），Prototype 仅**一个模型/特定工作负载**。**GPU OS/通用 Compiler 方案尚未实现，不能将预测的 OS 能力或 Kernel Microbench 当成多租户线上 Goodput**。**REAL_GPU_PARTIAL_PROTOTYPE / NON_GENERALIZABLE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
 ### Profiling & Diagnosis (7)
 
@@ -116,7 +117,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [On the Fundamental Limits of Prefill-Based Decoding Length Prediction](https://arxiv.org/abs/2610.40541) | arXiv 2026 (preprint; Oct 29; author code linked in paper) | 将输出长度作为 **Stopped Stochastic Process**，证明 Sampling/Stop Randomness 限制 Prefill-hidden-state Predictor 的可达误差，得到 Prompt-conditional Normal Approximation 与 Affine Variance Law σ=αμ+b；对 MLP/EGTP/FiLM/Soft-label/MoE Predictor 同数据和 Sampling Settings 评测时表现接近误差下界。**THEORY_PLUS_BENCHMARK_PROTOCOL / NOT_ONLINE_SCHEDULER_ACCELERATION / CONDITIONAL_STOCHASTIC_ASSUMPTIONS / NOT_REPRODUCED**；为不确定性感知 Scheduler 的评测边界提供负面证据。（KEEP_STRICT） |
 | 2026 | [ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration](https://arxiv.org/abs/2611.04032) | arXiv 2026 (Nov 2 preprint) | AMD 的 **MI355X Anchor Measurement + Kernel Transfer Laws + Discrete-event Simulation** 评估 Model/Batch/P-D/TP-EP/Precision/SLO；官方报告 **11 Anchor 9.1 GPU-hours** 覆盖 **226 配置测量约 204 GPU-hours**。**Simulation 预测≠部署实测，VENDOR_REPORTED / NOT_REPRODUCED**。[Official engineering](https://rocm.blogs.amd.com/software-tools-optimization/inferasim/README.html)。（KEEP_STRICT） |
 
-### Correctness & Reliability (13)
+### Correctness & Reliability (14)
 
 输出一致性、运行时 Bug、可靠性及数值语义检查。
 
@@ -135,6 +136,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [M2K: Making the Model-Kernel Interface Explicit for Reliable CUDA Kernel Verification](https://arxiv.org/abs/2603.24595) | SOSP 2026 (conference title M2K; early preprint Model2Kernel) | HFProbe 提取模型固定 vs 用户可变的 Kernel 参数约束，cuKLEE 在模型接口条件下符号执行 CUDA Memory Access，检测 Shape/Index Bug；**CUDA_SPECIFIC / NO_RUNTIME_SPEEDUP / EARLY_TITLE_ALIAS**，论文版本间 Bug 数量不同，不直接引用数字。 |
 | 2026 | [LLM-42: Enabling Determinism in LLM Inference with Verified Speculation](https://www.microsoft.com/en-us/research/publication/llm-42-enabling-determinism-in-llm-inference-with-verified-speculation/) | SOSP 2026 | Fast Dynamic Batching Decode + Fixed-shape Verify + Rollback，并修复 KV 状态，仅为要求 Deterministic 的请求增加校验开销；作者基于 SGLang 0.5.3/H100。**CONFIG_SCOPED_DETERMINISM / VERIFICATION_OVERHEAD / CUDA_ARTIFACT**；[Code](https://github.com/microsoft/llm-42)。 |
 | 2026 | [DFIP: Decision-Focused Inference Path for System One Models](https://arxiv.org/abs/2610.36804) | arXiv 2026 (preprint; submitted Oct 27; [author reproduction repo](https://github.com/superagent-ai/dfip)) | 审核 CUDA Graph Replay、候选词表投影、Schema-compatible Length-aware Batching 对小结构化决策模型的真实收益与 Failure Boundary：Resident Request 最好 2.47×（Decider），但外部多样到达下 Replay 可能发生 CUDA Illegal-memory-access、请求丢失和 P95 严重退化；多轮输出一致性审计发现某些分数/阈值漂移。**NEGATIVE_SERVING_EVIDENCE / NOT_GENERAL_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Inside the Trap: A Renewal Law for Prefix-Cache Collapse in LLM Agent Serving](https://arxiv.org/abs/2611.08902) | arXiv 2026 (Nov 5 preprint) | 刻画 **Agent 多轮 Prefix KV Cache 一次 Burst 后陷入 All-miss 持久拥塞**，结合 Fluid FIFO Renewal-law 与注册的配对 Real-engine Tests、Session Cap Recovery，而非简单优化 Hit-rate。作者在 **SGLang0.5.22 / vLLM0.32.0，A100/H200，Qwen2.5-7B/Llama3.1-8B，Poisson Session + Tool-delay** 测 **30/30 Burst Runs 持续 0 Hit；Cap 恢复 9/9，早期 9/10 Rate Cells 通过 Rule**。**该 Registration 不在独立第三方注册系统，论文承认 Rule 非所有 Cells 通过；理论为理想化，不能将 Session Throughput 错当 Recovery Threshold**。**REAL_GPU + FLUID_MODEL / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Kernel Benchmarks (9)
 
