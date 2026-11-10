@@ -72,6 +72,8 @@ A direction earns a place here when **all three** hold:
 
 The anchors are a **starter reading path, not new canonical admission**. An ICML paper with a kernel benchmark is not evidence of vLLM end-to-end Goodput; a video model demo is not proof of multi-session production serving.
 
+**November 10 arXiv backlog upgrade:** [SEIS](https://arxiv.org/abs/2610.04646), [InferenceBench](https://arxiv.org/abs/2607.20468), and [vLLM-Omni Technical Report](https://arxiv.org/abs/2610.09307) now have **one canonical home each** in the eight technical topic tables after the [31-paper re-audit](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md). Earlier Frontier mentions remain **cross-links**, not duplicate admissions. Agent improving engine code ≠ proof of an agent improving itself; first-party Omni architecture ≠ demonstrated production coverage of every stage.
+
 ## What remains open (researcher-facing)
 
 | If you work on... | First engineering question | Minimal defensible experiment |
