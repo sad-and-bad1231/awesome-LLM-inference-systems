@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-45) | 45 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-46) | 46 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-28) | 28 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **152** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-29) | 29 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **154** | |
 
-## Papers (152)
+## Papers (154)
 
-### Batching, Queues & SLOs (45)
+### Batching, Queues & SLOs (46)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -75,6 +75,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Efficient Iterative Retrieval with Heterogeneous Batching (Orthrus)](https://aclanthology.org/2026.emnlp-main.28/) | EMNLP 2026 Main ([code](https://github.com/illinoisdata/Orthrus)) | Embedding/Retrieval 与 Generative LLM Token Decode 在共享 GPU 上分模型执行形成 Bubble；Orthrus 用 **Incremental Computing + Single-GPU-Kernel Heterogeneous Batching** 将 Embedding/Generation Workload 对齐，再进行 Workload-aware Batch Composition。作者 **4×A100** 多 Deployment Baselines（含 vLLM Homogeneous Batching）报告 Throughput +1.28–4.52×、Latency 最多 −52%；**HETEROGENEOUS_EMBEDDING_PLUS_GENERATION / SELECTED_DEPLOYMENT_COMPARISONS / NOT_STANDARD_TEXT_GENERATION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Asymptotic Optimality of cμ-Rule for LLM Inference Scheduling under Memory Constraint](https://arxiv.org/abs/2611.04807) | arXiv 2026 (Nov 3 preprint) | 以 Compute、KV Bandwidth、HBM Capacity 构造 Effective Service Rate，导出多类请求的 **cμ Priority** 与 Fluid-limit Optimality；作者另在 **H800 真实引擎及 Trace/Semi-synthetic Workload** 测均值时延和 Throughput。**Fluid Model 理论最优≠任意在线 SLO 最优；REAL_GPU / MODEL_BOUND / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Not All Loops Cost the Same: Phase-Dependent Depth for Serving Looped Transformers (LoopDuet)](https://arxiv.org/abs/2611.07211) | arXiv 2026 (Nov 4 preprint) | 对 Looped Transformer 分离 Prefill 深度 P 与 Decode 深度 S，并在 Loop 边界 **Gather 活跃 Query 形成紧凑 Batch、共享 KV**；Queue-age Controller 按 TTFT 积压降低 P，保留首次生成 Token 的全深度计算。作者 **A100-SXM4-80GB、vLLM 0.14.1、Huginn/OLMo、HotpotQA 与两条 OLMo Arrival Trace**；Huginn 在相同 Accuracy 条件下相对最快 Uniform-depth **吞吐 +19%**，OLMo 同一 1s TTFT 达标率下准确率 +0.92–1.35 EM points。**训练免除但 Prefill 计算近似、质量须逐任务核对；REAL_GPU / QUALITY_CHANGING_EXECUTION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Fairway: Load-Aware KV Cache Reuse for LLM Prefill Scheduling](https://arxiv.org/abs/2611.02082) | arXiv 2026 (Nov 1 preprint) | **KV-reuse Fast Lane + Aging Fair Lane + Per-step Stride-like Work Charge**：在空队列优先 Cache Hit，在请求排队和超载时限制未命中长请求被挤占；在 **vLLM0.16.0、单 A6000 48GB、Llama3.1-8B、P/D 分离的 Prefill-only Node、每 Request 仅1 Token** 上测 **SEC/MuSiQue/Mooncake 11 Traffic Scenarios**，与 FCFS/LPM/k-LPM/RAGCache/PEEK/Preble 共用同样的 Cache Eviction；作者最高报 **p99 TTFT 8.6× 更低**，Transient Spike 中维持 FCFS 级 Tail 同时 Median 约0.82s。**仅 Prefill TTFT 不代表完整 Decode E2E；w=4/Patience=3/1s 在 SEC 开发 Trace 上调参后冻结，不能称完全 Zero-tuning；先前 HOLD_G3 通过全文实验查验解除**。**REAL_GPU / SOURCE_HTML_G3 / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (18)
 
@@ -183,7 +184,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (28)
+### Agent & Workflow Serving (29)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -219,3 +220,4 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [FlowMaker: From Tasks to Cost-Efficient Generative AI Workflow Deployments](https://arxiv.org/abs/2610.24861) | arXiv 2026 (preprint; submitted Oct 17) | 按 Task 共同优化 Agent Workflow Topology、各 Subtask 模型和在线 Deployment Configuration，使用 Constraint-guided Pruning 与 Cluster-aware 已部署模型复用压缩动态配置空间；对比 Murakkab 等系统作者报告在所测多模型工作流 **Goodput 最高 10.14× / Cost 最多下降 2.77×**（不同实验极值）。**WORKFLOW_AND_MODEL_ASSIGNMENT_CHANGES / ACCURACY_CONSTRAINT / NOT_SINGLE_MODEL_INFERENCE_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Scalable Context Orchestration for Serving LLMs Over Voice (llmovoice)](https://doi.org/10.1145/3830418.3843860) | SOSP 2026 (official; [author preprint](https://arxiv.org/abs/2609.04288)) | 语音多轮调用的文本 History 遗漏 Speaking Rate/Noise/Loss 等 Paralinguistic State；llmovoice 按轮构造 **Bounded Voice Context** 并由 LLM 产出 Runtime Directives，协调响应风格和长会话成本。作者真实 Voice Workload 报告 Speaking-rate Error −52.4%、Packet-loss False Interruption 46.0→0.9%、模型使用成本 −79.2%；长会话 Per-turn Cost 最多下降 24.9×，在测评中保留最高 98.7% Quality。**PROMPT_AND_BEHAVIOR_CHANGING_MULTIMODAL_MIDDLEWARE / NOT_KERNEL_SPEEDUP / MULTI_METRIC_MAXIMA / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [MobiInfer: Accelerating On-Device GUI Agents with Workload-Aware Inference](https://arxiv.org/abs/2611.08496) | arXiv 2026 (preprint, Nov 5) | 面向结构化 Mobile GUI Agent，将 **Prompt Canonicalization/Prefix KV Reuse + Phase-specific LM Head Vocabulary + Schema-guided n-gram Speculation** 联合到 On-device MNN Runtime；对动作标签/坐标保护 Target-only Decode。作者在 **OnePlus13/OPPO Find X8/Redmi K50、MAI-UI-2B/GELab-Zero-4B、AndroidWorld(116 templates)/111 RealWorld Tasks、INT8 GPTQ** 与相同 MNN Baseline 比较，RealWorld 总体 E2E **118.32→50.83s (2.33×)**；**Vocabulary Pruning 与 Prompt Reordering 改变策略输出，原版 MNN 逐步一致率降至98.1%（组合），必须以 Task Success/Action Quality 检查；非云端 Token Serving Goodput**。**REAL_PHONE / QUALITY_CONTRACT / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Serving Agentic Robot Fleets: Workload Characterization, KV-Cache Thrashing, and Admission Control](https://arxiv.org/abs/2611.01404) | arXiv 2026 (Nov 1 preprint) | **Robot Action Chunk Hard Deadline + Long-lived Brain Prefix Working Set** 的双资源约束。作者记录 **80 LIBERO-PRO Episodes / 1,862 Brain Turns / 1,582 VLA Inference Chunks**，在 **H800、π0.5/VLA、Qwen3.6-27B-vLLM TP4** Profile/Trace Replay，0.25s Chunk Deadline 下单 VLA GPU 仅测得1 Robot 满足≤1% Starvation，1.0s 可至少32；持续 Brain Replay 从20→32 Robots 时完成请求约2.4→0.6req/s，静态 Active-episode Cap 可恢复 Episode Throughput。**Deadline Capacity 是零网络 RTT 的虚拟 Robot Replay，部分 Brain Calls 用 TTFT+固定 Decode 间隔估算，非端到端 Physical Robot Success/现场部署；重点是 KV Thrashing Admission**。**REAL_GPU_PLUS_TRACE_REPLAY / ADJACENT_EMBODIED / NOT_REPRODUCED**。（KEEP_STRICT） |
