@@ -2,12 +2,13 @@
 
 [← Home](../README.md) · [Current canonical topics](../topics/README.md) · [G0–G5 rules](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
-**Current catalog state — 2026-11-10 review of the Nov 9 intake:** **898** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
+**Current catalog state — 2026-11-10 arXiv frontier and backlog reassessment:** **929** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
 
 ## Read these first: latest evidence and quality corrections
 
 | Receipt | What it establishes | What it does **not** establish |
 |---|---|---|
+| [November 10 arXiv frontier and historic HOLD recovery](ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md) | **31** newly admitted source-grounded mechanisms in eight categories, including SEIS/InferenceBench/vLLM-Omni, MoE/EP historical rescues and simulator-backed analytical ideas | No GPU/NPU reproduction; preprint `EXPLORE` is not an externally validated speedup or conference-level REFERENCE |
 | [November 10 PR #80 pre-merge editorial audit](PR80_PREMERGE_AUDIT_20261110.md) | Corrected six source-title labels, audited Warpline 35+3 experimental population, temporarily held and then re-admitted MobiInfer as evidenced preprint with date warning, checked all 46 paper identities, pinned 3 code/harness commits, and identified review-size / G4 reproducibility risks | Not a comprehensive scientific re-verification of 46 currently admitted additions or independent performance replication; PR remains Draft |
 | [November 9 third arXiv + systems-methodology pass](NOVEMBER_2026_THIRD_PASS_20261109.md) | Seventeen further source-audited papers plus Basin/UniExit addenda and an ELDR v3 correction: KVGuard, Warpline, GC-MoE, vExpert, Penelope, flash-comm, Fairway, Ripple, StrataFlux, Megakernel ordering counterexample, and others | Publication dates/claims, non-reproduction, comparator normalization and simulator/hardware boundaries explicitly stated |
 | [November 9 expanded cross-category and company sweep](NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) | Seventeen additional mechanism-reviewed November papers, source-level G3 boundaries, 8-class and 7-frontier search with explicit HOLDs and first-party infrastructure refresh | No exhaustive census of all arXiv records or independent benchmark reproduction |
