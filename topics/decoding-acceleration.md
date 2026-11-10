@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Draft Models & Candidate Generation](#draft-models--candidate-generation-19) | 19 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
+| [Draft Models & Candidate Generation](#draft-models--candidate-generation-21) | 21 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-22) | 22 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-17) | 17 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
-| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-16) | 16 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **85** | |
+| [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
+| **Total** | **88** | |
 
-## Papers (85)
+## Papers (88)
 
-### Draft Models & Candidate Generation (19)
+### Draft Models & Candidate Generation (21)
 
 Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 
@@ -48,6 +48,8 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [RCSD: Reinforcement and Continual Learning for Domain-Specific Speculative Decoding](https://arxiv.org/abs/2610.29527) | arXiv 2026 (preprint; Oct 22 announcement) | 从真实 Accept/Reject 轨迹构建隐式偏好，训练 Draft 直接最大化 Acceptance Length；作者相对 HASS 报告平均接受长度 +35%、实际端到端推理 1.35×。需训练专用 Draft，非仅 Runtime 可插拔优化。（KEEP_STRICT；DRAFT_RETRAINING；NOT_REPRODUCED） |
 | 2026 | [Domino: Decoupling Causal Modeling from Autoregressive Drafting in Speculative Decoding](https://aclanthology.org/2026.emnlp-main.1015/) | EMNLP 2026 Main (ACL Anthology, October) | 用一次并行 Draft Backbone 生成整段初始概率，再以 Lightweight Domino Head 注入 Prefix-dependent Causal Correction，替代高成本 AR Draft；训练采用 Base-anchored Curriculum，使 Parallel Backbone 与 Causal Head 对齐。作者 Qwen3 对照在 **Transformers 端到端最高 5.49×**、**SGLang Serving Throughput 最高 5.8×**（不同 Backend/Metric）。**TRAINED_DRAFTER / BASELINE_AND_SAMPLING_EQUIVALENCE_CONTRACT / AUTHOR_ARTIFACT_NOT_RUN / NOT_REPRODUCED**；非可直接替换的通用 Kernel。（KEEP_STRICT） |
 | 2026 | [ChainFlow: Few-Step Latent Flow Matching for Speculative Decoding](https://arxiv.org/abs/2611.08669) | arXiv 2026 (Nov 5 preprint) | 使用 Target Hidden-state 条件化的压缩潜变量 Flow Drafter 和 Token Feedback/Tree Drafting，用 1–2 步代替逐 Token Draft；**需要训练 Drafter**。作者在 **B300、vLLM 0.31.0、Qwen3.5、Greedy Batch1** 对比 EAGLE-3/DFlash，另测试语言适配和部分并发。**TRAINED_DRAFTER / EXACT_TARGET_VERIFICATION / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Seeing What Matters, Verifying What Pays: Load-Adaptive Speculative Decoding for Vision-Language Models (Uni-LaSpec)](https://arxiv.org/abs/2611.01617) | arXiv 2026 (preprint, Nov 1) | Draft 复用 Verifier Attention 按跨层投票挑少量 **INT8 Visual KV**，以 Gated Cross-Attention 生成 Visual-grounded Candidates，再据 GPU Load/边际 Verification Cost 在 Tree 与截断 Linear Draft 切换。作者 **6 VLM/17 Benchmarks/3 GPU 型号/6 负载层级** 测多模态与文本 Tokens/Latency，报告相对 AR Greedy Batch1 的 **Text 5.11×、Multimodal 3.24×** 最高吞吐；**需要训练/模型族适配，仅限 VLM Greedy/对应质量实验，不是纯文本通用 Kernel**。**REAL_GPU / TRAINED_DRAFTER / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Give the Drafter a Second Chance to Guess: Parallel Reconsideration for Speculative Decoding](https://arxiv.org/abs/2611.05724) | arXiv 2026 (preprint, Nov 3) | 用 Drafter 自身不确定性驱动 **并行额外 Forward Reconsideration**，训练 Self-query/Mixed-cache Head；保持 Target Verification 不变、输出 Sampling Contract，融合到 Draft Tree。作者相对 **EAGLE-3.1** 在 Llama3.1/Gemma3/Qwen3、Greedy/Nonzero Temperature 多题型测 Acceptance +5.3–10.2%、Wall-clock Speedup +3.5–9.2%，另测 Batch1–16。**需要训练 Draft，不是原模型无损新 Kernel；没有证明线上 SLO Goodput**。**TRAINED_DRAFTER / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Training-Free & Self-Speculation (22)
 
@@ -120,7 +122,7 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [AgentSpec: Speculative Decoding for Batch Inference of LLM Agents](https://aclanthology.org/2026.emnlp-main.585/) | EMNLP 2026 Main (ACL Anthology, October) | Agent 大 Batch 下传统 SD 因 Draft Rejection 和未利用动态 Token Budget 效率下降：**Structure-isolated Drafting** 在语义工作流段内推测，并按 Agent-level Redundancy 自适应分配 Token Budget；作者在 vLLM 上四模型族、五 Agent Workloads 对照现有 SD，报告优于所测基线，但**官方摘要未提供可采信的统一加速数字**。**AGENT_BATCH_WORKLOAD / TARGET_VERIFICATION_SCOPE / AUTHOR_REPORTED / NO_INDEPENDENT_REPRODUCTION**，不是任意 Batched Serving 的通用收益。（KEEP_STRICT） |
 | 2026 | [SpecPilot: Autonomous Algorithm Discovery and Systems Optimization for Speculative Decoding](https://arxiv.org/abs/2611.02501) | arXiv 2026 (Nov 2 preprint) | Agent 在冻结的 **SGLang v0.5.20** 优化 W12 Weight Packing、Hybrid Target Tree Verification、Shared-node Budget 与 Prompt Admission；通过 **Token Forcing** 监督正确性。作者在 **H100 / RTX PRO 6000 Blackwell** 对多 Qwen/Gemma Target 测单请求和 Batched Serving；**引擎优化不等于 Agent RSI，AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Diffusion & Non-AR Generation (16)
+### Diffusion & Non-AR Generation (17)
 
 非自回归/扩散解码、并行提交和相邻视觉生成执行。
 
@@ -144,3 +146,4 @@ Candidate Tree、并行候选和 Target Verification 效率。
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [Next-Concept Modeling: Fast, Parallel Coarse-to-Fine Text Generation](https://arxiv.org/abs/2610.14162) | arXiv 2026 (preprint; Stanford Hazy; [code](https://github.com/HazyResearch/ncm)) | NCM 使用**新的 Multi-scale Residual VQ-VAE Text Codes + Hierarchical Transformer**，按概念层级并行生成而非对现有 LLM 做 Drop-in Speculation。作者在 **H100、Batch=16、生成 1024 条序列**下报告 LM1B/OpenWebText/XSum 相对所测 Diffusion Baselines 的 **21×/10×/31×** 生成时间改善，并分别给出 PPL/ROUGE 等任务质量；还测 WMT14、Sudoku。已有 [官方模型/代码](https://github.com/HazyResearch/ncm)；**NEW_MODEL_AND_TOKENIZER / NOT_SAME_CHECKPOINT / DLM_BASELINES_ONLY / OFFLINE_GENERATION_NOT_SERVING_GOODPUT / AUTHOR_REPORTED**。仅作为新 Non-AR Execution Contract 的相邻基础研究（KEEP_ADJACENT）。 |
+| 2026 | [SpecCTMC: Exact Speculative Simulation of Diffusion Language Model Continuous-Time Markov Chains](https://arxiv.org/abs/2611.08362) | arXiv 2026 (preprint, Nov 6) | 对 Masked dLLM 的 Event-driven Continuous-time Markov Chain 用 **Batched Target Proposal + 顺序 Verify/Positive-residual Correction** 加速，同时证明所定义 CTMC 完整 Marked-path Sampling Law 不变；作者在 **LLaDA-8B/Dream-7B、GSM8K/MATH/MBPP/HumanEval/IFEval** 测 NFE、Wall-clock/准确率。**精确性仅相对 DirectCTMC Sampling Law、非保证与 AR/Different dLLM Sampler 等价；Fast-dLLM-v2 组合检查中有不提速的实验**。**MODEL_SAMPLER_SPECIFIC / REAL_GPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
