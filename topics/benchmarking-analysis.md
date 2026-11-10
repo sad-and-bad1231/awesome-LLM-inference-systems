@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-18) | 18 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-19) | 19 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-26) | 26 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-16) | 16 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
-| [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **91** | |
+| [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
+| **Total** | **93** | |
 
-## Papers (91)
+## Papers (93)
 
-### Serving Benchmarks & Workloads (18)
+### Serving Benchmarks & Workloads (19)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -48,6 +48,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
 | 2026 | [ServerBench: How can your coding agents design specialized LLM serving systems?](https://arxiv.org/abs/2611.06841) | arXiv 2026 (Nov 4 preprint) | 让 Coding Agent 修改真实 LLM Server，以 **Frozen Code、Hidden Correctness/Checkpoint Verification、AgentX Stateful Closed-loop Replay、Latency-qualified GPU-$** 评价引擎。作者 **11 Agents×3 L40 Model Deployments** 对 vLLM 0.28/SGLang 0.5.19；**不是生产 Open-loop Goodput 或 Agent RSI**。[Project](https://infini-ai-lab.github.io/Server-Bench/)；**REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） [Author harness/code snapshot](https://github.com/Infini-AI-Lab/Server-Bench/tree/b80a3fb21ff9037bedbde78536a5b918f100c6cc)（serving_tasks/evaluation/agentx-harness；**未运行独立审查**）. |
 | 2026 | [A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines](https://arxiv.org/abs/2611.05991) | arXiv 2026 (Nov 4 preprint) | **Control Confounding between KV Cache Granularity, Chunked Prefill, Request Ordering and Queue Stability**：固定 Seed 的 Multi-agent Graph Arrival/Prefix Share，记录 Engine 实际 Resolved Flags，比较 Default 与仅匹配 Chunk Size。作者 **GKE Kubernetes1.35、单 L4 24GB、vLLM0.6.3/SGLang0.4.1、4/8/16K Context、Gamma Bursty Agent DAG** 显示默认下 TTFT 差可达64×，仅把 vLLM Chunk Budget 设为同 SGLang 的 2048 可消除最高容量差的78%和部分时延差，剩余等吞吐 Tail Ratio 2.4–6.4×。**旧引擎版本、单小 GPU、人工合成 DAG/Tool Timings 和 Kubernetes Spot Re-provisioning，非 2026 新版 vLLM/SGLang 绝对性能结论**。[Artifact](https://arxiv.org/abs/2611.05991)。**REAL_GPU / CONTROLLED_CAUSAL_ABLATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [VLALagBench: Understanding When and Why VLA Inference Latency Matters](https://arxiv.org/abs/2611.03103) | arXiv 2026 | 刻画 **VLA Inference Latency → Robotic Task Success** 的因果接口，按 Moving-target Speed、同步/异步 Action Execution、Policy 测 Delivery-to-Action Deadline，并拟合 SLO→Task Accuracy Model。作者报告某些移动目标上 **增加100ms 推理延迟可使 Success Rate 近乎减半**，校准后跨不同 Policy 的 Task-success Prediction RMSE **5.7–7.8%**；**这不是新的 Token Kernel 或机器人端到端吞吐加速，作为 Embodied Serving Deadline Benchmark 的邻接实验信号**。**KEEP_PREPRINT_EXPLORE / REAL_OR_SIM_ROBOT_TASK_BENCH / KEEP_ADJACENT / NOT_REPRODUCED**。 |
 
 ### Performance & Efficiency Studies (26)
 
@@ -141,7 +142,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Inside the Trap: A Renewal Law for Prefix-Cache Collapse in LLM Agent Serving](https://arxiv.org/abs/2611.08902) | arXiv 2026 (submitted Nov 6) | 刻画 **Agent 多轮 Prefix KV Cache 一次 Burst 后陷入 All-miss 持久拥塞**，结合 Fluid FIFO Renewal-law 与注册的配对 Real-engine Tests、Session Cap Recovery，而非简单优化 Hit-rate。作者在 **SGLang0.5.22 / vLLM0.32.0，A100/H200，Qwen2.5-7B/Llama3.1-8B，Poisson Session + Tool-delay** 测 **30/30 Burst Runs 持续 0 Hit；Cap 恢复 9/9，早期 9/10 Rate Cells 通过 Rule**。**该 Registration 不在独立第三方注册系统，论文承认 Rule 非所有 Cells 通过；理论为理想化，不能将 Session Throughput 错当 Recovery Threshold**。**REAL_GPU + FLUID_MODEL / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [KVGuard: A KV Cache Safety Checker for LLM Serving Systems](https://arxiv.org/abs/2611.06138) | arXiv 2026 (preprint, Nov 4) | 把 **Paged KV Blocks/Request Permissions/Entries Initialization** 当作独立 Memory-safety 对象，以 **Shadow Block Metadata + CPU Block-table/GPU Access/Transfer Checks** 检测 Double-free、UAF、OOB、未初始化读取、跨请求权限破坏；作者 **H100、vLLM0.32.0/FA3、SGLang0.5.22/FlashInfer、Qwen2.5-14B** 报覆盖 **29 历史 BUG + 8 新发现**，14B 在 ShareGPT 的 Median TPOT GM 开销分别 **3.0%/7.4%**，Shadow/KV ≤0.11%。**严格限制：Llama3.2-1B LongBench 的 TPOT Check Slowdown 可达 7.55×/10.84×，需开发/CI Sanitizer 模式而非声称无损生产级监控；未独立验证报告 BUG**。**REAL_GPU / SOURCE_HTML_METHODS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Kernel Benchmarks (9)
+### Kernel Benchmarks (10)
 
 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。
 
@@ -158,3 +159,4 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [EdgeKernelBench: Unified LLM-Driven Kernel Generation for Edge Backends](https://arxiv.org/abs/2610.24648) | arXiv 2026 (preprint; Oct 17; [benchmark/source](https://github.com/pillor9/EdgeKernelBench)) | 331 Kernel Tasks/650 场景实例，TVM 中间表示跨 Snapdragon CPU、Jetson Orin CUDA、RK3588 Mali OpenCL 验证 Correctness 与 Speed；层次化 LEKA 在同基础模型和优化预算的 Agent Subset 上报告 Fast@1.0 43.5%，对照 Direct Generation 13.0%、Claude Code 26.1%。**EDGE_KERNEL_BENCHMARK_ONLY / NOT_vLLM_E2E / SUBSET_COMPARISON**，不可声称 Agent 通用生产优势。（KEEP_ADJACENT；AUTHOR_CODE；NOT_REPRODUCED） |
+| 2026 | [KernelBench-Verified: Do LLM-Generated Kernels Actually Beat PyTorch?](https://arxiv.org/abs/2607.16241) | arXiv 2026 | 针对 **Kernel Agent Reward Hacking 和 Baseline Underprecision** 建立 **TF32 TensorCore Fair Baseline + 4 Distribution Hidden Correctness + Peak GPU Memory**；对七个 Frontier Model 测：最佳模型标准评测 **GM 1.43×**，加强验证后 **GM 0.88×**，28% Kernel 额外增加 GPU Peak Memory。**这是 Codegen Benchmark 的方法论/反例，不是一个新 Kernel Speedup；检测特定数据分布，不能直接推广为所有后续 Agent 失败**。**KEEP_PREPRINT_EVIDENCED / KERNEL_BENCH_AUDIT / AUTHOR_REPORTED / NOT_REPRODUCED**。 |
