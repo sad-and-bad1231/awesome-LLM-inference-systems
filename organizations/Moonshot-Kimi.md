@@ -10,7 +10,7 @@ Moonshot AI/Kimi's model architecture and **production-oriented KV-cache infrast
 
 | Official model ID | Model version / distinction | Source |
 |---|---|---|
-| `k3.1-pro` | **K3.1 Pro**, new 3T-class long-context flagship; K3.1 family follows K3, but no architecture-level change should be assumed without a technical source | [Official Kimi Code models](https://www.kimi.com/code/docs/en/kimi-code/models) |
+| `k3.1-pro` | **K3.1 Pro**, 2.8T-class multimodal open-weight flagship with 1M context; the 24 MLA layers add DSA sparse indexers to K3's 69 KDA + MLA hybrid execution | [Official Kimi Code models](https://www.kimi.com/code/docs/en/kimi-code/models) |
 | `k3.1-pro-highspeed` | K3.1 Pro high-speed **serving tier**, same declared model quality; no public Kernel-level speed attribution | [Official Kimi Code models](https://www.kimi.com/code/docs/en/kimi-code/models) |
 | `k3` | K3, 2.8T MoE, up to 1M context; published KDA/Gated MLA/AttnRes mechanics | [K3 official code](https://github.com/MoonshotAI/Kimi-K3) |
 | `k3-256k` | K3 with 256K context quota, not a new model architecture | [Official Kimi Code models](https://www.kimi.com/code/docs/en/kimi-code/models) |
