@@ -17,12 +17,12 @@
 | [Attention & Sparse Kernels](#attention--sparse-kernels-32) | 32 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-21) | 21 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-16) | 16 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **118** | |
+| **Total** | **119** | |
 
-## Papers (118)
+## Papers (119)
 
 ### Attention & Sparse Kernels (32)
 
@@ -109,7 +109,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [PipeLink: Contract-Guided Linking of GPU Kernel Components](https://arxiv.org/abs/2610.37200) | arXiv 2026 (preprint; Oct 27) | 用编译期资源 Contract/LTO 将独立 Attention、GEMM、Epilogue/通信组件链接成共享寄存器、Warp、Barrier 的 Kernel；Hopper/Blackwell 51 个配置的链接版本相较同源码单体编译在 0.2% 内，CuTe Attention 接 ThunderKittens Decode Megakernel 报告 2.16×。针对特定算子组合，非通用 Serving 加速。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [When and Why to Use TMA: A Workload-Grounded Characterization of Tensor Memory Acceleration on NVIDIA Hopper GPUs](https://arxiv.org/abs/2610.34907) | arXiv 2026 (IISCW 2026 workshop accepted) | 对 FA3、Paged-KV 以及 B200 GEMM 实机分析 TMA、cp.async、DSM/Multicast 的 Shape/Tile crossover，提炼内存通道选择规则；H100/B200 硬件测量而非一般 LLM Serving speedup。（KEEP_ADJACENT；KERNEL_CHARACTERIZATION；NOT_REPRODUCED） |
 
-### Fusion, Pipelines & Megakernels (20)
+### Fusion, Pipelines & Megakernels (21)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -135,6 +135,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [FuTransformer: FP8 Prefill and INT4 Decode for Llama-Style Inference on Hopper](https://arxiv.org/abs/2610.23796) | arXiv 2026 (preprint) | Llama-style Transformer Block 融合的 Hopper CUDA Kernel：Prefill FP8、Decode INT4 Projection + KV、RMSNorm 增益折叠、直接 Tensor Core Fragment Dequant 与旋转校正。作者单 H100 8B/70B Shape 比较 PyTorch/CODA；**MODEL_QUANTIZED / QUALITY_REGRESSION**，WikiText2 INT4 PPL 6.24→6.99 (GPTQ) 再加 KV 约 0.20，**NOT_BITWISE_EQUIVALENT / SINGLE_DEVICE_BLOCK_BENCH / NO_VLLM_SERVING_E2E**。 |
 | 2026 | [One Megakernel is Not Enough: Predicting Where to Cut for Streaming Inference](https://arxiv.org/abs/2610.35336) | arXiv 2026 (preprint; Oct 26) | 从 Graph Profile 与独立 Kernel Benchmark 预测不同 Batch 下最优 Megakernel 分段；作者在 NH-TTS/Qwen3-TTS/Llama-1B 共 13 个组合中实测验证，H100 上针对 NH-TTS 的三段设计比所测单体 Megakernel 低 21.4% batch-P95 TTFA、吞吐高 28%。TTS-heavy，不能外推所有 LLM Decode。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ZipFusion: Fusing Lossless KV Decompression with Attention for Efficient LLM Decoding](https://arxiv.org/abs/2610.33719) | arXiv 2026 (preprint; submitted Oct 24) | 将无损 KV 压缩格式与 FlashInfer Decode Attention 联合设计，在寄存器中直接恢复 KV，免独立解压和未压缩 KV 重新写回；集成 SGLang。在 H100 8K Context/等 GPU Memory Budget 下，作者报告模型 Decode Throughput 最高 +26.3%，Attention Kernel 约 1.25×；与压缩基线在**各自最大可容纳 Batch** 的 2.76× 不构成相同 Batch 对照。**LOSSLESS_KV / CUDA_SGLANG / AUTHOR_REPORT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Understanding GPU Megakernels: Why Residency Can Mislead](https://arxiv.org/abs/2611.00495) | arXiv 2026 (Oct 31 submitted; Nov list) | 将 **ThunderKittens(TK)/VDCores** 中的原始 Operator Code 重构成独立 CUDA Graph Kernels，控制 **PDL Early-start、TMA Prefetch、CTA Admission、Release/Acquire Completion Signaling** 归因 Megakernel Residency 收益。作者在 **H100 SXM、Llama3.2-1B BF16、B1 32+128 Token、5轮跨5卡 Interleaved Test** 发现 PDL Separate Kernels 相对 Ordered TK Persistent Decode Step **−5.7% Latency**，与原始 Relaxed Ordering Persistent 则仍慢3.4%。**关键 Correctness：原版 TK/VDCores 跨 CTA Counter 缺少适当 Acquire/Release；Relaxed 原实现只能作为乐观参考，不能拿它对规范内存序版本证明 Kernel 更快；资源空闲不代表可以提前取得 CTA Footprint，Bandwidth Saturation 时 Co-location 无增益**。**REAL_GPU / CONTROLLED_MECHANISM_NEGATIVE_RESULT / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Communication, Memory & I/O (18)
 
