@@ -9,7 +9,7 @@
 A direction earns a place here when **all three** hold:
 
 1. **New execution or engineering contract:** the workload challenges the request → prefill → autoregressive decode loop, or fundamentally changes how inference kernels/**whole engines** are built, tested and maintained. Generic coding-agent wrappers or ordinary autotuning without a substantive systems mechanism do not qualify.
-2. **Two kinds of evidence:** a traceable systems paper **and** a public implementation/credible industry serving signal, where possible. Distinguish deployed code, research prototype, preprint and hardware simulation.
+2. **Evidence appropriate to maturity:** for a brand-new topic, one traceable preprint with a **specific falsifiable system mechanism and limited inspectable pilot/trace/model/proof** is enough to track the question. A public implementation or production signal **raises confidence but is not mandatory**. Distinguish exploratory work, fielded code, hardware simulation and independently replicated results.
 3. **An unsettled systems question:** there is a meaningful unresolved scheduling, memory, correctness, communication, throughput, latency **or optimization-budget** question, and a way to test it with real workloads.
 
 **Not frontiers by themselves:** KV caching/offloading/sharing, sparse/hybrid/MLA attention, ordinary MoE/parallelism, P/D disaggregation, quantization, heterogeneous CUDA/ROCm/Ascend porting, and generic semantic response caching. These are **important active engineering tracks** in the topic pages, not new fields. Particularly, *response reuse* is not equivalent to exact *KV reuse*.
@@ -103,6 +103,6 @@ The anchors are a **starter reading path, not new canonical admission**. An ICML
 
 ## Update rule
 
-**Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/execution contract or system-optimization lifecycle*, a primary systems paper, a usable public stack or real hardware receipt, strong existing baselines, and a testable unresolved bottleneck. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
+**Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/execution contract or system-optimization lifecycle*, a primary **preprint or mature systems paper with inspectable support**, the nearest credible prior baseline or counterexample, and a decisive unresolved bottleneck. Public stack and real hardware strengthen evidence but **do not gate an emerging 2027-oriented research direction**; do not present speculation as validated runtime acceleration. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
 
-*Research judgement updated 2026-11-04. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
+*Research judgement updated 2026-11-10. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
