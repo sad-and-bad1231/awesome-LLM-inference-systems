@@ -1,10 +1,26 @@
 # Curation policy
 
-**Current policy (last reconciled 2026-11-06).** This file contains enduring selection and attribution rules; see [STRICT_REVIEW.md](STRICT_REVIEW.md) for operational G0–G5 gates, [topics/README.md](topics/README.md) for live counts and [archived historical intake waves](reviews/archive/CURATION_HISTORY_20261030.md) for dated acceptance/rejection accounting. Counts in archives describe past checkpoints only.
+**Current policy (last reconciled 2026-11-10).** This file contains enduring selection and attribution rules; see [STRICT_REVIEW.md](STRICT_REVIEW.md) for operational G0–G5 gates, [topics/README.md](topics/README.md) for live counts and [archived historical intake waves](reviews/archive/CURATION_HISTORY_20261030.md) for dated acceptance/rejection accounting. Counts in archives describe past checkpoints only.
 
 ## Canonical bibliography invariant
 
-Only explicit **KEEP_SOURCE_VERIFIED / KEEP_STRICT / KEEP_FOUNDATIONAL / narrowly scoped KEEP_ADJACENT** belongs in `topics/*.md`. An unresolved `HOLD_EVIDENCE`, `HOLD_IDENTITY`, `HOLD_METHOD`, `HOLD_REPRO`, or template-like **快速准入 / 待二审** record must **not** occupy a canonical topic row: keep its source and doubt in a dated `reviews/` evidence ledger instead. Admission requires attributable publisher/author identity, an identifiable distinct execution/correctness mechanism, evidence relevant to its proper scope (real hardware/Serving if performance is asserted; actual dataset and methods for measurement works), strongest feasible comparison, and an honest code/reproduction label. **KEEP is source-level selection, not local replication**; author-reported experimental results and hardware limits remain explicit. If source or experiment details are not strong enough to establish reading/reproduction value, REMOVE from the selective catalog rather than giving it a false green tag. [October 25 itemized dispositions](reviews/HOLD_RESOLUTION_20261025.md) are the precedent.
+The eight topic tables are the **one canonical bibliography**. Admissions may use **KEEP_PREPRINT_EXPLORE**, **KEEP_PREPRINT_EVIDENCED**, **KEEP_STRICT / KEEP_REFERENCE**, **KEEP_FOUNDATIONAL**, or a narrowly justified **KEEP_ADJACENT**. All accepted papers must have a reliable primary-paper identity, a distinct *inference execution/system* idea, and an honest evidence/proof boundary. **Acceptance means editorial reading/research value, not independently reproduced performance.**
+
+A credible arXiv preprint **does not need** top-conference acceptance, end-to-end Serving Goodput, public code, an Ascend port, or local reproduction to enter the bibliography. However, a paper with merely a grand architecture diagram, ungrounded headline speedup, generic agent prompt, or no falsifiable mechanism stays **HOLD_STORY_ONLY** (or Frontier WATCH) until a meaningful technical check is available. Keep genuinely unresolved paper identities / aliases in **HOLD_IDENTITY**; a **non-material date/venue discrepancy** can be annotated rather than automatically disqualifying a stable arXiv ID + title + author + full text. Never invent the date.
+
+## Two-speed publication review: arXiv discovery vs. conference references
+
+| Review dimension | **arXiv discovery / frontier-first** | **Top-conference reference / mature systems work** |
+|---|---|---|
+| Editorial role | Fast intake of novel problems, specific executable mechanisms, early exploration, negative results and brand-new directions (e.g. **RSI on Inference Engines**, Agent-native Serving, Kernel Agents) | Study exemplary system research: mechanism attribution, baseline selection, complete evaluations, reproducibility and topic convergence |
+| Novelty | Distinct, falsifiable execution/optimization contract or surprising technical counterexample; cannot be generic application-agent packaging | A well-developed, reusable systems abstraction with clear prior-art distinctions |
+| **Minimum evidence** | **One inspectable technical anchor:** controlled pilot/microbenchmark, evaluated prototype, trace study, transparent simulator/analytical model with assumptions, or rigorous formal argument. Explain what it **does not** demonstrate; modest or negative evidence is valid | Prefer full-paper methods, matched strong baselines, ablations, workload variation, measured hardware and metrics appropriate to the claim. Venue name alone does not prove this |
+| Artifact | Optional; add author repo/commit if available. Mechanism, assumptions and evaluation/proof must still be inspectable | Favor pinned artifact, environment and experiments, but lack of public code alone does not exclude an important historical paper |
+| Performance claim | Label **PILOT / MICROBENCH / TRACE / SIM / FORMAL / REAL_GPU/NPU / E2E**, author-reported vs independently replicated; no simulated speedup advertised as real deployment | Same labels, with more complete comparison and scope scrutiny; no blanket presumption of correctness from acceptance |
+| Evidence status | **KEEP_PREPRINT_EXPLORE** (mechanism + limited but inspectable support) or **KEEP_PREPRINT_EVIDENCED** (substantial primary-source experiment) | **KEEP_REFERENCE** or existing **KEEP_STRICT / KEEP_FOUNDATIONAL** |
+| Disposition when only a story exists | **HOLD_STORY_ONLY / WATCH_FRONTIER**, with a concrete next experiment that would change the verdict | HOLD/REMOVE unless historically foundational and independently established |
+
+**Both tracks share a hard floor:** valid paper identity; material LLM-inference-system relevance; identifiable bottleneck → mechanism → expected observable; explicitly attributed claims; model/precision/quality changes and simulator-vs-hardware separation; a reason why the reader should care. The **strength of the evidence**, not the prestige or recency of the venue, decides which tag applies. Frontier research papers can graduate from EXPLORE → EVIDENCED → REFERENCE as experiments and publication mature, **without creating duplicate rows**. Do not impose a target admission percentage or wait for 2027 conference lists to decide what to read.
 
 
 ## Goal
@@ -17,14 +33,14 @@ A paper or survey is accepted when all baseline requirements are satisfied:
 
 1. **Systems relevance:** targets a concrete LLM inference/serving bottleneck (runtime scheduling, memory/KV, P/D transfer, kernel/compiler, distributed systems, parallelism, speculation, production operations), or is a genuinely foundational prerequisite.
 2. **Substantive contribution:** proposes an identifiable and reusable system mechanism or architecture, not merely a renamed heuristic, new prompt/task, or marginal parameter tuning.
-3. **Evidence:** credible real hardware, end-to-end workloads, published evaluation or production deployment; baseline and trade-offs should be intelligible. Older landmark papers can be admitted for historic influence after their concrete contribution is verified.
-4. **Reliable identity:** title, year, venue, and official primary source checked; unverified entries must not appear in the published list.
+3. **Evidence:** use the appropriate **preprint exploration vs. mature systems reference** threshold above: an inspectable, falsifiable pilot/model/proof suffices for exploratory preprints; strong measured baselines and full-system methods are preferred for conference exemplars. Never promote a hypothetical design into a measured runtime speedup.
+4. **Reliable identity:** stable paper ID, title, authors, version/year and accessible full text; **arXiv is its own valid preprint identity** and needs no invented conference venue. Distinguish unverified metadata fields from genuine paper-identity conflicts.
 5. **Research credibility:** author expertise, institutions, open-source adoption, and selective systems venues are positive supporting signals. **Institutional prestige alone is neither sufficient nor necessary.**
 
 ## Default exclusion
 
 - Training-only or model-quality-only studies with no inference execution/system contribution.
-- Pure simulation/proof/algorithm papers lacking convincing systems evidence, except historically foundational techniques.
+- Unsupported simulation/proof/algorithm claims **without an inspectable execution mechanism, assumptions or systems implications**. Transparent models/formal analysis with testable inference consequences can enter as clearly labeled **PREPRINT_EXPLORE**, not as measured deployed acceleration.
 - Derivative variants without an important new abstraction, measurable systems advantage, or materially different deployment context.
 - General vector DB, security, generic cloud, and hardware papers not tightly connected to LLM inference.
 - Duplicates, unpublished claims with unclear provenance, and venue/affiliation metadata that cannot be verified.
@@ -33,7 +49,7 @@ A paper or survey is accepted when all baseline requirements are satisfied:
 
 1. Check current canonical paper titles, arXiv IDs, DOI/publisher URL aliases across all eight topic pages. If the original external JSONL is available, use it only as a discovery aid; never treat its `verified_legacy` or `core` tag as final admission evidence.
 2. Verify using conference proceedings, publisher, official paper PDF, or author's artifact/project page.
-3. Judge **problem → mechanism → end-to-end value / limitations**. Favor precision over coverage.
+3. Judge **problem → mechanism → evidence strength → next test / limitations**. A preprint need not already demonstrate end-to-end Serving; never suggest it does when evidence is narrower.
 4. Add one Markdown table row under the correct sub-group with verified year/venue, primary source link and a **distinct mechanism plus a truthful evidence boundary** (models, hardware, metric, quality/model changes, artifact availability as applicable).
 5. When uncertain, omit from public list and revisit in a later batch. Use GitHub issues/PRs for discussions; do not create a second shadow database.
 
