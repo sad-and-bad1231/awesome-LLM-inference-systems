@@ -18,11 +18,11 @@
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-56) | 56 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-32) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
-| [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-17) | 17 | 跨实例共享、P/D 传输和 KV 状态池。 |
+| [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-18) | 18 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **178** | |
+| **Total** | **179** | |
 
-## Papers (178)
+## Papers (179)
 
 ### Prefix & Session Reuse (47)
 
@@ -205,7 +205,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [HiState: Hierarchical Prefix Cache Management for Hybrid LLM Serving in Agentic Workloads](https://arxiv.org/abs/2610.41508) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 在 Hybrid Attention/Recurrent LLM 的 Agent 回溯上下文中，将历史 recurrent checkpoints 分级驻留 SSD，优先让可复用 KV 留在快速存储；自适应 checkpoint interval + unified eviction 避免 checkpoint 膨胀。基于 vLLM/Qwen3.5-9B/H100 与两组 Coding-Agent Trace Replay，对比 vLLM-Marconi/SGLang-HiCache 的 p99 TTFT；**真实硬件、Trace Replay、作者报告、未独立复现；暂无核实公开代码**。（KEEP_STRICT; REAL_GPU_TRACE_REPLAY; NOT_REPRODUCED） |
 | 2026 | [FlashOffloading: Low-Latency KV Cache Offloading for Long-Context LLM Serving](https://arxiv.org/abs/2611.07542) | arXiv 2026 (Nov 5 preprint) | Layerwise Prefill DRAM Offload + Decode Rolling HBM Hot Cache 和 CopySFA Kernel 内 H2D/Attention Overlap；作者在 **32 Ascend 910C（64 dies）、GLM-5.2/MTP3、vLLM-Ascend PD 集群** 报告 Prefill/Decode 吞吐最高 1.38×/1.91×，Decode 受 30ms TPOT 限制。**910C 实机不等于 910B2 兼容；AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Distributed KV Sharing & Transfer (17)
+### Distributed KV Sharing & Transfer (18)
 
 跨实例共享、P/D 传输和 KV 状态池。
 
@@ -228,6 +228,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [Nebula: Distributed Position-Independent Caching for LLM Serving](https://arxiv.org/abs/2611.09474) | arXiv 2026 (Nov 6 preprint) | **SGLang+Dynamo+NIXL** 将非前缀 Position-independent Cache Segment 跨节点管理，利用 Event-driven Cache View、Ghost-hit PC/PIC Budget 和 Cost-aware Prefill Placement；作者 **2×4 H20-3e、7P1D、四个 RAG/Agent Workload** 报告平均 Median TTFT 降低 61.4%。**PIC 质量/位置约束不能省略；REAL_GPU_RDMA / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Beyond Compression Ratio: High-Throughput KV Compression for Disaggregated LLM Serving](https://arxiv.org/abs/2611.04382) | arXiv 2026 (preprint; author claims NPC 2026 acceptance) | **FastKVComp** 将 KV Distribution Transform + Low-bit Quantization 通过 TileLang Fused，配合 LC 可搜索 Lossless Codec 降低高带宽 P/D Compress/Decompress Critical Path；**2×RTX5090 Host-staged NCCL SHM PCIe Gen5** 和 **RTX PRO6000→H100 200Gb/s IB** 真实 Llama3.1/Qwen2.5 8K–20K Context/50 Requests 测 JCT/Output Throughput；相对 Raw Transfer 本地吞吐 +1.83–2.04×、跨节点 +44.2–62.6%，**编码+解码开销/带宽依赖、非普通单卡 Decode 加速**。**REAL_GPU_NETWORK / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [ReKV: Overlapping Quantized KV Transfer and Suffix Recomputation](https://arxiv.org/abs/2611.08770) | arXiv 2026 | 在 P/D Disaggregation 中寻找 **Quantized Prefix KV Transfer + BF16 Boundary Hidden State + Decode-side Contiguous Layer Suffix Recompute** 的最优切点，使传输与重算重叠。作者在 **跨节点双 H100、512/2048/8192 Prompt，30次计时** 的 **模型形状匹配但权重/输入为 Synthetic 的 Pipeline** 报 8K Q8 Handoff 相对 BF16 **2.36–3.65×**；**真实模型权重的 BF16 重算单独实验**只证明 First-token-return **1.16–1.63×**，不是在线 E2E Goodput。低比特 Prefix 有 Quality Constraint，带宽变化影响 Cut。**KEEP_PREPRINT_EXPLORE / REAL_GPU_SYNTHETIC_HANDoFF / SEPARATE_REAL_WEIGHTS / NOT_REPRODUCED**。 |
+| 2026 | [PTStore (Prefix Tensor Store): Distributed Prefix Caching and Replication for High Throughput Inference Serving](https://arxiv.org/abs/2607.22648) | arXiv 2026 | 将常用 Prefix KV Tensor 当 **CDN-like Replicated Distributed Object**，按请求热点在节点间复制，减少 Prefix Recompute 与单节点 OOM/Cache Hotspot。论文在长 Passage QA 工作负载报相对不能跨 GPU 聚合 KV Memory 的 Baseline **5–6× Inference Efficiency**；**优势依赖 Baseline 是否具备跨节点缓存、Replica Consistency/Network 成本是否计入，不能作为相对成熟 NIXL/HiCache 的必然收益**。原文标记 **Euro-Par2026**，没有确认 DOI Camera-ready 的实现细节。**KEEP_PREPRINT_EXPLORE / DISTRIBUTED_PREFIX_REPLICATION / NOT_REPRODUCED**。 |
 
 ### Paging & Cache Allocation (8)
 
