@@ -23,6 +23,12 @@ A credible arXiv preprint **does not need** top-conference acceptance, end-to-en
 **Both tracks share a hard floor:** valid paper identity; material LLM-inference-system relevance; identifiable bottleneck → mechanism → expected observable; explicitly attributed claims; model/precision/quality changes and simulator-vs-hardware separation; a reason why the reader should care. The **strength of the evidence**, not the prestige or recency of the venue, decides which tag applies. Frontier research papers can graduate from EXPLORE → EVIDENCED → REFERENCE as experiments and publication mature, **without creating duplicate rows**. Do not impose a target admission percentage or wait for 2027 conference lists to decide what to read.
 
 
+## Intake cadence and upgrade path
+
+- **arXiv:** browse recent papers often (daily/weekly when actively researching) across inference-related cs.DC/cs.OS/cs.PF/cs.AR and adjacent model/agent fields. Broaden discovery around brand-new topics rather than enforcing a low fixed acceptance quota. Admit **EXPLORE** quickly when the minimum technical anchor is real; record the *one experiment that would be most informative next*. Periodically re-check updated preprint versions.
+- **Conferences:** scan authoritative proceedings/accepted lists when published; use a slower deep-reading cycle for **REFERENCE** examples of research problem formulation, strong experimental design, and convergence. **Do not invent future 2027 acceptances or delay arXiv admission until decisions.**
+- **Progression:** source discovery → mechanism check → evidence-grade label → optional artifact/reproduction → later venue/final-version update. Upgrade the existing one-home row; keep provisional claims clearly marked. Negative/pilot studies remain valuable when falsifiable; speculative marketing without an inspectable anchor stays WATCH/HOLD.
+
 ## Goal
 
 Maintain an approachable, **selectively edited Awesome bibliography**, not a paper database, monitoring platform, knowledge graph, ranking site or per-paper note repository. `README.md` is the editorial entrance; each topic or organization Markdown page is a directly maintained, human-reviewed list. No machine-generated parallel catalog. Updates should remain small and attributable to primary sources.
