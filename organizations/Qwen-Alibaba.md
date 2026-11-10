@@ -23,6 +23,8 @@ The Qwen team's publicly released model families and inference-related model arc
 
 **Policy:** Model Studio lists *many* dated snapshots and sizes. The primary catalog is the exhaustive API-ID registry; this curated page covers **all named major service families** without asserting every `-YYYY-MM-DD` snapshot is a new inference architecture.
 
+**Qwen4 release watch (Nov 9):** A verified first-party Qwen4 general-availability/weight-card release has **not been established**. The publicly inspectable [Qwen3.8-Flash-Next experimental architecture](https://github.com/QwenLM/Qwen3.8-Flash-Next) provides a **Gated DeltaNet + QSA indexer/offload** inference signal, but does not license a claim of published Qwen4 final weights, model IDs or compatibility. Recheck source identities on a real Qwen4 announcement.
+
 ## Selected first-party architecture and execution sources
 
 | Public work | Inference relevance | Primary source |
