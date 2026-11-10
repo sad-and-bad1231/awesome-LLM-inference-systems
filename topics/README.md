@@ -1,8 +1,8 @@
 # Papers by systems mechanism
 
-**Current canonical index (2026-11-06): 852 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 6 G0/G3–G5 follow-up](../reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) corrected source/evidence boundaries without changing the count.
+**Current canonical index (2026-11-09): 862 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 9 technical intake](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) added ten source-reviewed preprints, none independently reproduced.
 
-**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
+**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -10,15 +10,15 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 114 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 166 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 83 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 46 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 149 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Kernels & Compilers](kernels-compilers.md) | 115 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 168 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 85 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 47 | 6 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 76 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 150 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 135 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 84 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **852** | **44** | |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 86 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **862** | **44** | |
 
 ## Classification boundaries
 
