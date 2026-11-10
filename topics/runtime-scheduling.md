@@ -17,12 +17,12 @@
 | [Batching, Queues & SLOs](#batching-queues--slos-46) | 46 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-29) | 29 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **154** | |
+| **Total** | **155** | |
 
-## Papers (154)
+## Papers (155)
 
 ### Batching, Queues & SLOs (46)
 
@@ -130,7 +130,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 | 2026 | [PhOSv1: Efficient Scaling of Model Sleeping on a Single Server for Autoscaling with GPU-Context Deduplication](https://arxiv.org/abs/2610.39999) | arXiv 2026 (preprint; submitted Oct 29) | 用中心 Daemon/API Remoting 对长期 Sleep 的 vLLM Instances 共享 CUDA Context/Kernel Binary；作者 **10 Qwen、10min 稀疏 Poisson Trace、Vanilla 6GiB Sleep Budget** 上 Mean E2E TTFT 146.82→19.09s。**长尾多模型 Autoscaling 而非稳态 Decode Speed**；HPCC 2026 Accepted List 可查，正式出版/Ascend 实现尚未验证。（KEEP_STRICT; CUDA_SPECIFIC; LONG_TAIL; NOT_REPRODUCED） |
 
-### Preemption & Multi-Tenancy (29)
+### Preemption & Multi-Tenancy (30)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
@@ -165,6 +165,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [EdgePace: Deadline- and Freshness-Aware LLM Scheduling on Unified-Memory Platforms](https://arxiv.org/abs/2610.37307) | arXiv 2026 (preprint; Oct 27) | 在统一内存边缘设备上为前台感知任务提供可暂停的 Prefill/Decode 和带宽竞争监测，按 Deadline Slack 与 Output Freshness 调度 LLM。OnePlus 13、3 款 Jetson 的多相机/机器人任务实测，作者报告前台 Deadline Miss 减少 24.1–96.1%、保留 64.9–98.5% LLM 吞吐；边缘实时执行边界，不是数据中心 Goodput。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [DualPace: Decoupled Scheduling and Cooperative GPU–CPU Decoding for LLM Serving](https://arxiv.org/abs/2610.33501) | arXiv 2026 (preprint; Oct 26 announcement) | 将 CPU AMX Decode 变成独立 Scheduler/Engine，并可按需从 GPU Dense Assist 获取稠密计算；作者在 Decode-oriented 负载报告相对 NEO Throughput +6.9–43.2%、同 P99 ITL 下请求率 +7.3–50.5%。需额外 CPU AMX，不等于 GPU-only vLLM 加速。（KEEP_STRICT；REAL_EXECUTION；NOT_REPRODUCED） |
 | 2026 | [RW-TTT: Batched Serving for Request-Owned Test-Time Training State](https://aclanthology.org/2026.emnlp-main.232/) | EMNLP 2026 Main (October) | Request-owned Test-time Training State（Fast Weight / Low-rank Delta）改变共享静态权重的 Batching 安全假设；在每个 Decode Step 显式标记 Owner/Version/READ-WRITE Effect，仅融合兼容阶段并将更新提交回 Owner，避免跨请求 State 污染。作者 **单 GPU、8 路 In-place TTT** 报告 274.61 tok/s、相比顺序执行 9.31×、相比 Memory-matched Independent Replicas 3.44×，RULER 与 Ownership Checks 通过。**TTT_MODEL_ONLY / NOT_GENERAL_STATIC_LLM_BATCH_GAIN / REAL_SINGLE_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Ripple: Deadline-Aware CPU-GPU Sharing for Embodied Inference](https://arxiv.org/abs/2611.01067) | arXiv 2026 (Oct 31 submitted; Nov list) | 将 **Robotic CPU Task Remaining Deadline Slack → Per-job Allowable GPU Memory Bytes**，在 **SGLang0.5.12** 中把 LLM/VLM Work 拆成可暂停的 Layer Units，经 Admission/Grant Pipeline 和 **CUDA Green Context SM Narrowing** 控制 Unified-memory Contention。作者在 **DGX Spark GB10 20-core ARM +48SM Blackwell /128GB LPDDR5X、Qwen3-8B/32B、Qwen3-VL-8B/30B、Robotic Costmap/KDNN/SGM/Control/ORB** 实测，4组负载×7类 Deadline 配置的测试中满足 **CPU Deadline-miss-rate≤2% 且 VLM 全部 Deadline 达标**，优于 Sereno/SiGAMMA/SGLang Pause/Cap；**绝对吞吐需连同 SLO 给出，Baseline 不是精确同机制、冷启动/热调参窗口不同，最坏的 Blocking Kernel 很低效；UMA 而非独立 Ascend HBM，也不是实机机器人任务成功率**。**REAL_EDGE_GPU_CPU / DEADLINE_SLO / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Power & Energy Efficiency (11)
 
