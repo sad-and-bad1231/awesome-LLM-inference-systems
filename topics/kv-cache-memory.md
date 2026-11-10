@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-46) | 46 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-53) | 53 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-54) | 54 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-32) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-16) | 16 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **173** | |
+| **Total** | **174** | |
 
-## Papers (173)
+## Papers (174)
 
 ### Prefix & Session Reuse (46)
 
@@ -77,7 +77,7 @@
 | 2026 | [DARIC: A Position-Independent KV Cache Reuse System with Distribution-Aware Recomputation](https://arxiv.org/abs/2611.09109) | arXiv 2026 (Nov 6 preprint; author states SIGMOD 2027 accepted, proceedings unverified) | 利用跨 Chunk Attention Distribution 选择性 **Partial Recomputation**，并以 **Redis Radix Index + GPU/Host/Disk Offload + vLLM Connector** 集成带位置偏移的 PIC KV 复用。作者 **4×H20 96GiB、vLLM0.11.0、Mistral7B/Qwen3-32B/Llama3.3-70B 等、LongBench/Function-call/SWE-bench Agentic、同步与异步** 对 Full Recompute、Full Reuse、CacheBlend 和 EPIC，控制每 Chunk 预算并报告 Quality/TTFT/Input Throughput。**PIC 改变数值/质量，不是 Exact Prefix Cache；基线 CacheBlend 在部分模型需加大重算预算；REAL_GPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [MORTIS: Compiler-Guided KV-Cache Management for LLM Agent Programs](https://arxiv.org/abs/2611.08638) | arXiv 2026 (Nov 5 preprint, cs.OS) | **Jac/byLLM Typed LLM Call Program** 的静态数据流/变量生命周期分析产出 Agent Descriptor + Workflow Automaton；跨 Call-site **Re-layout Prompt Components** 暴露 Prefix Share，再以 **PLANNED / UNCLASSIFIED / TRANSIENT / RETIRED Cache Bands** 和 Arrival-time 预测执行 Retain/Evict/Prefetch。作者在 **SGLang0.5.10.post1、1×A40、Qwen3-32B-AWQ、GPU15GB + CPU25GB KV Pool** 的 HoVer/HumanEval/BFCL/FinanceBench 四种 Agent、混合负载中对 SGLang/CacheScout/Continuum/KVFlow/Static Adapter 报 **geomean JCT 1.45×、Prompt-token Throughput 1.49×**。**仅适用于可由 Typed Call 编译并允许语义安全 Prompt 重排的 Agent 程序，部分低负载收益来自 Layout 非 Eviction，不能推广到任意 API Agent Prompt**。**REAL_GPU / PROGRAM_SEMANTICS_CONTRACT / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Eviction, Compression & Quantization (53)
+### Eviction, Compression & Quantization (54)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
@@ -136,6 +136,7 @@
 | 2026 | [VisCache: Visual KV Cache Pruning for Efficient Vision Large Language Model Inference](https://aclanthology.org/2026.emnlp-main.1196/) | EMNLP 2026 Main (ACL Anthology) | VLLM 长视频视觉 KV 的粗细两级压缩：先以轻量 VLM 选语义关键帧，再基于 VLLM Attention Pattern 给各层 **Parabolic KV Budget**，仅修剪 Key、融合 Value，避免简单同率删 Token 导致质量崩溃。作者在测试的 Vision Long-context Tasks 报告保留 **19%–28% KV** 时，整体推理速度最高 2.35×、维持竞争性任务质量。**VIDEO_VISUAL_KV_APPROXIMATION / TWO_STAGE_COST_INCLUDED_ONLY_AS_AUTHORED / NOT_TEXT_LLM_SERVING_OR_STRICT_EQUIVALENCE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [Intent-Aware Caching for Efficient LLM Serving](https://arxiv.org/abs/2611.09715) | arXiv 2026 (preprint, Nov 6) | **Intent Classifier + Conditional Return-Delay Model + RadixTree Eviction Priority**，按多轮会话意图预测下轮重用时间而非只按最近访问；作者 **SGLang、4×A100、WildChat/ShareChat、8B–110B** 报告对 LRU/LPC/Oracle 的 Cache-hit、TTFT、Throughput，并做因果滚动窗口及分类器开销分析。**有训练/历史 Trace 依赖，不适用于不可预测意图的任意 Prompt；REAL_GPU / AUTHOR_REPORTED / NOT_REPRODUCED**。[Code](https://github.com/hasanar1f/intent-aware-caching)。（KEEP_STRICT） |
 | 2026 | [BasisKV: Value Latents for Communication and Key Routing](https://arxiv.org/abs/2611.02583) | arXiv 2026 (Nov 2 preprint) | TP Attention Output 先投影至 **Low-rank Value Latent** 再 AllGather/重建，复用 Latent+Key Residual 预测 Sparse KV Pages；被选 Key 再计算 Exact QK，但 Value 压缩/页选择并不逐位等价。作者在 **8×NVIDIA L40S 48GiB PCIe4（无 NVLink）、vLLM/PyNccl、4K Prompt+128 Decode、TP8** 报最高 **1.42× End-to-end**；在单卡 L40S 128K Sparse Decode 报 **1.25× Full Decode**（与前者不同实验），部分质量任务有退化。[Code](https://github.com/alexz949/BasisKV)。**REAL_GPU / QUALITY_CHANGING_LOW_RANK / SOURCE_PDF_CHECKED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Penelope: Rethinking KV Cache Eviction for Agentic LLM Serving](https://arxiv.org/abs/2611.00391) | arXiv 2026 (Nov issue, submitted Oct 30) | 在 Prefix Sharing 之外采用 **Head-first History Eviction + Surviving Suffix Reuse + Phantom-request Partial Recomputation + Unified GPU/CPU LRU**：靠前 KV 重算的 Attention Cost 低于靠后 KV，回访时保留最贵的 Suffix，但正确恢复时须按缺失区间重算 Key/Value Dependency。作者在 **SGLang、H100/A100 80GB、Qwen3-8B/32B/235B-A22B、1–8GPU、真实 Agent Traces** 对 SGLang 原策略测 **Mean TTFT/JCT 最高减少 60%/37% GPU-only、76%/60% 2-tier**；**测试窗口/负载和块分配依赖，常规 Prefix-only 回访不一定获益，Three Runs Range 非置信区间；无新 GPU Kernel**。**REAL_MULTIGPU / ENGINE_INTEGRATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Sparse KV Retrieval (18)
 
