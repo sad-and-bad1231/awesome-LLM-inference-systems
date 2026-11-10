@@ -17,12 +17,12 @@
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-19) | 19 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-26) | 26 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-16) | 16 | 性能建模、容量估计、仿真和边界分析。 |
+| [Models & Simulators](#models--simulators-17) | 17 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **93** | |
+| **Total** | **94** | |
 
-## Papers (93)
+## Papers (94)
 
 ### Serving Benchmarks & Workloads (19)
 
@@ -97,7 +97,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LMTracer: Fine-Grained and Real-Time Performance Profiling for Production LLM Systems](https://llm-profiling.github.io/) | SOSP 2026 | 将 Fence/Probe Kernel 嵌入 GPU Graph 并流式回传 CPU Buffer，不打断异步执行；作者报告生产多月使用、微小 Profiling Overhead、定位 15 个问题。**GPU_GRAPH_DEPENDENT / AUTHOR_REPORTED / NOT_ASCEND_VALIDATED**。 |
 | 2026 | [Matching Workloads to Blackwell: Power-Resolved Benchmarking of NVIDIA B200 and B300 across HPC and AI Workloads](https://arxiv.org/abs/2610.41919) | arXiv 2026 (preprint; author states PMBS 2026 SC26 workshop acceptance) | 双独立 8-GPU B200/B300 Cluster，覆盖 vLLM/Llama-3-8B/70B 及 HPC/CV；逐设备功率与精确软件栈揭示硬件代际性能归因陷阱：同型 B300 节点在不同软件配置下出现 2.1× TTFT 差异（vLLM Build、Host Allocation 同时不同，**不能单因子归因**）。**跨 AI/HPC 测评，非纯 LLM Serving 研究；LLM/CV 多为 single timed run（spot-check 2–4% 波动），不能当成芯片固有胜负**。[Artifact](https://github.com/MohsenZand/GPUBenchmarking)。（KEEP_ADJACENT; REAL_CLUSTER; SOURCE_ARTIFACT; NOT_REPRODUCED） |
 
-### Models & Simulators (16)
+### Models & Simulators (17)
 
 性能建模、容量估计、仿真和边界分析。
 
@@ -119,6 +119,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [Dissecting the Carbon-SLO Tension in Geo-Distributed LLM Serving](https://arxiv.org/abs/2610.14571) | arXiv 2026 (preprint; submitted Oct 10; [authors' simulation code](https://github.com/topcuburak/carbon-slo-at-geoscale)) | 用实机校准的 Prefill/Decode Power、Continuous Batching 和 Queueing 建立跨地域 LLM Serving Simulator，比较 Greedy、Iterative ILP、Facility MILP 的 Carbon/SLO Frontier；作者在三种 LLM 与 MLPerf-derived SLO、**模拟区域集群** 中相对 Round Robin 报告最高 −60% Operational Carbon，伴随平均 **3% SLO Violations**。**CALIBRATED_REAL_NODE + SIMULATED_GEO_CLUSTER / ORACLE_OUTPUT_LENGTH_MAIN_SWEEP / NO_PHYSICAL_CARBON_DEPLOYMENT / NOT_REPRODUCED**；仅作为强边界的系统测量/仿真工作。（KEEP_ADJACENT） |
 | 2026 | [On the Fundamental Limits of Prefill-Based Decoding Length Prediction](https://arxiv.org/abs/2610.40541) | arXiv 2026 (preprint; Oct 29; author code linked in paper) | 将输出长度作为 **Stopped Stochastic Process**，证明 Sampling/Stop Randomness 限制 Prefill-hidden-state Predictor 的可达误差，得到 Prompt-conditional Normal Approximation 与 Affine Variance Law σ=αμ+b；对 MLP/EGTP/FiLM/Soft-label/MoE Predictor 同数据和 Sampling Settings 评测时表现接近误差下界。**THEORY_PLUS_BENCHMARK_PROTOCOL / NOT_ONLINE_SCHEDULER_ACCELERATION / CONDITIONAL_STOCHASTIC_ASSUMPTIONS / NOT_REPRODUCED**；为不确定性感知 Scheduler 的评测边界提供负面证据。（KEEP_STRICT） |
 | 2026 | [ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration](https://arxiv.org/abs/2611.04032) | arXiv 2026 (Nov 2 preprint) | AMD 的 **MI355X Anchor Measurement + Kernel Transfer Laws + Discrete-event Simulation** 评估 Model/Batch/P-D/TP-EP/Precision/SLO；官方报告 **11 Anchor 9.1 GPU-hours** 覆盖 **226 配置测量约 204 GPU-hours**。**Simulation 预测≠部署实测，VENDOR_REPORTED / NOT_REPRODUCED**。[Official engineering](https://rocm.blogs.amd.com/software-tools-optimization/inferasim/README.html)。（KEEP_STRICT） |
+| 2026 | [When Does Disaggregation Pay? Simulating Prefill--Decode--Attention--FFN Specialization for Agentic LLM Inference](https://arxiv.org/abs/2608.03741) | arXiv 2026 | **HeteroPanacea** 联合模拟 **P/D、Attention/FFN 分离、不同 Stage Quantization 和架构异构 NPU**，按 Agent Multi-turn Input/Output 特征研究不同硬件的选择；作者报告模型化 P/D 比传统同构服务 **最多+75% Throughput**，PDAF 4-way 对部分模型具备优势。**这是校准/假设条件下的 Cross-stack Simulation，不是投产 NPU 或真实端到端在线 Serving；不可宣传为通用四段分离最优**。**KEEP_PREPRINT_EXPLORE / PERF_SIM / NOT_REPRODUCED**。 |
 
 ### Correctness & Reliability (15)
 
