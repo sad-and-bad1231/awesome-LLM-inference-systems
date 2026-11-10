@@ -19,10 +19,10 @@
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-22) | 22 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-18) | 18 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **122** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-19) | 19 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **123** | |
 
-## Papers (122)
+## Papers (123)
 
 ### Attention & Sparse Kernels (32)
 
@@ -164,7 +164,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (18)
+### Kernel Automation & Tools (19)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -190,3 +190,4 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Warpline: Binary-Level Tracing and Unified Evidence for Agentic GPU Kernel Optimization](https://arxiv.org/abs/2611.04331) | arXiv 2026 (preprint, Nov 3) | **Binary/SASS Instrumentation → Pipeline/Barrier Timeline → Queryable Evidence for Agent**，支持 Triton/CuTe/CUDA Kernel，减少源级 Tracer 改动优化对象本身的问题。作者在 **B200 sm100、35 个开源 Kernel + 3 个闭源库 Kernel（共38）、10 SOL-ExecBench 问题、相同 6×60min/问题 Budget** 报 **1.2% Median Tracing Overhead、99.9% Median Instruction Preservation**；Agent 从 Starting Kernels 获得 **7.69× GM Speedup**，Bare 6.94×、KDA 6.13×。**这三个值均相对各自 Starting Kernels，不是 Warpline 相对 KDA 提速 7.69×；Agent Model/Reviewer 调用数也不等，比较依赖 Budget 定义；非 Serving E2E，CUDA/SASS 工具链不直接移植 Ascend**。**REAL_GPU / SOURCE_HTML_METHODS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [KernelOPT: Dispatch-Aware Agentic Search for GPU Kernel Optimization](https://arxiv.org/abs/2609.30059) | arXiv 2026 | 将 **PyTorch Inductor Graph 的 Kernel + Vendor Library Call** 当完整优化对象，仅重写编译器生成 Triton 子算子；以 **Static / Multiseed Oracle / Float64-fallback Model Equivalence / Speed Gate** 四关验证重拼模型，不以单 Kernel 成绩冒充完整模型收益。作者在 **250 KernelBench Tasks** 的成功子集按 L1/L2/L3 报相对 torch.compile 几何均值 **1.40/1.15/1.07×**；注意覆盖率 **51/100、31/100、12/50**，不是全任务显著加速。**KEEP_PREPRINT_EVIDENCED / GPU_KERNEL_AGENT / AUTHOR_REPORTED / NOT_REPRODUCED**。 |
 | 2026 | [Agentic Kernel Optimization: Generating State-of-the-Art GPU Kernels Without Hand-Written CUDA](https://arxiv.org/abs/2608.14560) | arXiv 2026 | 在 **FlashInfer-Bench Fused MoE、DSA TopK Indexer、DSA Sparse Attention** 上用 Agent+Skill+Profiling 迭代，无人工直接编辑 Kernel；作者报告 **B200** 的 PyTorch Reference 巨大加速（如 92.68× MoE）与 **官方 FlashInfer Baseline** 的独立对照，其中 Fused MoE 为 **1.71×**（AI Kernel Generation Contest）。**不要将 92.68× 对 PyTorch 与 1.71× 对 FlashInfer 混为同一基线**；约 1.9B Agent Tokens、人工负责流程与约束，非 RSI/无人工决策。**KEEP_PREPRINT_EVIDENCED / REAL_GPU_OPERATOR / AUTHOR_REPORTED / NOT_REPRODUCED**。 |
+| 2026 | [SEIS: Self-Evolving Inference Systems](https://arxiv.org/abs/2610.04646) | arXiv 2026 | **Whole-engine Agentic Code Evolution:** 在现有 mini-SGLang 上跨多轮保留通过 Oracle 的 Code/Report，联动修改 Attention Kernel、模型执行路径、Scheduler 与 Prompt Lookup Speculation；与 VibeServe 从零设计不同。作者 **Qwen3-0.6B、单 H100、单请求、100 Natural-length Prompts** 对原 mini-SGLang **594→1,942 tok/s (3.27×)**，关闭 Speculation 仍 **3.08×**；质量对照含 GSM8K/Long Retrieval，不能把相对小型起点的改进当作高并发 vLLM/SGLang 通用吞吐。**Agent Policy 本身未被训练或自我改变，因此这是 Engine Code 迭代，不等于严格 RSI**。[Author artifact](https://github.com/nehzux/SEIS)。**KEEP_PREPRINT_EVIDENCED / REAL_H100_SINGLE_REQUEST / NOT_REPRODUCED**。 |
