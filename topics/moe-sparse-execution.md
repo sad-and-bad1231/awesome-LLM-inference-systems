@@ -16,11 +16,11 @@
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-17) | 17 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-11) | 11 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
-| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-21) | 21 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
+| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-22) | 22 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **76** | |
+| **Total** | **77** | |
 
-## Papers (76)
+## Papers (77)
 
 ### Expert Routing & Communication (17)
 
@@ -64,7 +64,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 
-### Expert Offload & Heterogeneous Execution (21)
+### Expert Offload & Heterogeneous Execution (22)
 
 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。
 
@@ -91,6 +91,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [DeepInfer-Mac: Running a 750B-Class MoE on a 24 GB Laptop](https://arxiv.org/abs/2610.36564) | arXiv 2026 (preprint; Oct 28 announcement; arXiv ancillary source) | 单作者 DeepInfer-Mac 在 **24GB MacBook Air** 上以 **338GiB SSD Mixed Low-bit 权重、约 7.6GiB 常驻**运行 750B-Class MoE；路由专家/Engram Row 通过 SSD→可复用 GPU Buffer 按需加载。作者公开 [独立实现与日志](https://github.com/haoruilee/DeepInfer-Mac)，完整请求 **0.21–0.72 tok/s**；匹配的 Warm Decode Blocks 中 Next-layer Prefetch 相对 Resident-expert Overlap **+21.0%**，额外读取 **+5.4%**，两种速度不能混为同一测试。**SINGLE_LAPTOP / ONE_SEQUENCE / STORAGE_BOUND / NOT_PRODUCTION_SERVING / NO_BROAD_QUALITY_BENCH / NOT_DEEPSEEK_OFFICIAL_DEEPINFER / AUTHOR_REPORTED**。（KEEP_ADJACENT） |
 | 2026 | [PDScope: Breaking the Prefill-Decode Seesaw for Memory-Bound MoE Inference](https://arxiv.org/abs/2610.39216) | arXiv 2026 (preprint; submitted Oct 29) | CPU–GPU MoE Expert Offload 的 Phase-aware Prediction、Expert Residency、Prefetch/Static Graph Async-I/O；作者 **A100/RTX3090、24GB GPU Limit、4 BF16 MoE** 与同预算 KTransformers/Fate/Fiddler/HybriMoE/MoE-APEX 对照，报告 **Prefill 2.5–10.3× 与 Decode 2.1–6.1× 的分阶段吞吐**，非统一 Online Goodput，也非 GPU-resident GPU Benchmark。（KEEP_STRICT; CPU_GPU_PCIe; PHASE_ONLY; NOT_REPRODUCED） |
 | 2026 | [Rimuru: Unified Memory Management for Modern LLM Serving via Elastic Expert Offloading](https://arxiv.org/abs/2610.40305) | arXiv 2026 (preprint; submitted Oct 29) | 跨 KV/Expert 共享 Tensor Page Pool、异构 Memory Views、Elastic Expert Offload 与 Page-table-aware MoE Kernel；作者在 **8×RTX5090/2×RTX4090D、Qwen3/3.5 MoE** 比较 Offload Baseline 和 vLLM/SGLang。**最高 19.03×** 仅为资源受限的 Offloader 口径；多系统 CUDA Graph 被关闭，现代默认 vLLM 公平性及 Ascend 可移植均未验证。（KEEP_STRICT; REAL_GPU; BASELINE_CAVEAT; NOT_REPRODUCED） |
+| 2026 | [Accelerating Offloading-Based MoE Inference by Interleaving Concurrent Requests (Bevy)](https://arxiv.org/abs/2611.04794) | arXiv 2026 (preprint, Nov 3) | 在本地 MoE Expert Offload 中采用 **Runahead Requests + Lowest-layer-first + Opportunistic Layer-wise Grouping**，让已就绪请求计算与其他请求缺失 Expert Fetch 重叠，避免有 Expert Cache 时预测式 Prefetch 的无效访问；作者 **llama.cpp Metal/CUDA、两台 Local Device、2 个 MoE 模型/2 Trace，2–16 并发** 报告相对最快 Prefetch Baseline Decode Throughput 最高 1.55×、相对 llama.cpp 最高 3.46×；计时排除冷启动前 256 步/共同 SSD Slowdown，**仅本地 Expert Cache Offload，不是跨多节点 EP**。**REAL_DEVICE / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Sparse Attention & Conditional Compute (27)
 
