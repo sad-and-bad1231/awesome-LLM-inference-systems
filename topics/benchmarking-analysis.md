@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-16) | 16 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-17) | 17 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-24) | 24 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
-| [Models & Simulators](#models--simulators-15) | 15 | 性能建模、容量估计、仿真和边界分析。 |
+| [Models & Simulators](#models--simulators-16) | 16 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-13) | 13 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-9) | 9 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **84** | |
+| **Total** | **86** | |
 
-## Papers (84)
+## Papers (86)
 
-### Serving Benchmarks & Workloads (16)
+### Serving Benchmarks & Workloads (17)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -46,6 +46,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [The Cost of Dynamic Reasoning: Demystifying AI Agents and Test-Time Scaling from an AI Infrastructure Perspective](https://2026.hpca-conf.org/details/hpca-2026-main-conference/17/The-Cost-of-Dynamic-Reasoning-Demystifying-AI-Agents-and-Test-Time-Scaling-from-an-A) | HPCA 2026 | 对 Agent/Test-Time Scaling 的计算、能耗与设备性能进行系统性测量。 |
 | 2026 | [TraceLab: Characterizing Coding Agent Workloads for LLM Serving](https://arxiv.org/abs/2606.30560) | arXiv 2026 (preprint) | [作者公开 4,300 个 Claude Code/Codex 编码 Session、约 350k LLM Steps / 430k Tool Calls 的 Trace/采集/匿名化/Replay Harness](https://github.com/uw-syfi/TraceLab)，系统刻画长 Agent Loop、Prompt 长 Output 短、Tool Call Heavy Tail、Prefix Reuse 与 Human Pause；用于 vLLM/SGLang Agent Serving 负载/队列复现实验。**研究组自身日常使用的数据有组织与任务偏差，Trace 不等于广义生产分布**。（KEEP_STRICT; PUBLIC_WORKLOAD_CODE; REAL_AGENT_TRACE; REPRESENTATIVENESS_LIMIT） |
 | 2026 | [Model-as-a-Service in the Wild: Characterizing Production LLM Inference Clusters at Scale](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2026-maas/README.md) | ACM ATC 2026 (accepted; proceedings pending) | Alibaba xMaaS 发布 6 个月匿名 Online/Offline LLM Serving Trace，覆盖 56 集群/30 种 GPU/超过 10 万 GPU，并给出 Instance/Apps 分辨率、Schema 与 Figure Reproduction Scripts；研究 GPU Memory Overprovision、Model Residency 和 P/D 失衡。**PRODUCTION_TRACE / ANONYMIZED_WORKLOAD / TRACE_NOT_KERNEL_REPLAY**；[Dataset Docs](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas)。 |
+| 2026 | [ServerBench: How can your coding agents design specialized LLM serving systems?](https://arxiv.org/abs/2611.06841) | arXiv 2026 (Nov 4 preprint) | 让 Coding Agent 修改真实 LLM Server，以 **Frozen Code、Hidden Correctness/Checkpoint Verification、AgentX Stateful Closed-loop Replay、Latency-qualified GPU-$** 评价引擎。作者 **11 Agents×3 L40 Model Deployments** 对 vLLM 0.28/SGLang 0.5.19；**不是生产 Open-loop Goodput 或 Agent RSI**。[Project](https://infini-ai-lab.github.io/Server-Bench/)；**REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Performance & Efficiency Studies (24)
 
@@ -92,7 +93,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LMTracer: Fine-Grained and Real-Time Performance Profiling for Production LLM Systems](https://llm-profiling.github.io/) | SOSP 2026 | 将 Fence/Probe Kernel 嵌入 GPU Graph 并流式回传 CPU Buffer，不打断异步执行；作者报告生产多月使用、微小 Profiling Overhead、定位 15 个问题。**GPU_GRAPH_DEPENDENT / AUTHOR_REPORTED / NOT_ASCEND_VALIDATED**。 |
 | 2026 | [Matching Workloads to Blackwell: Power-Resolved Benchmarking of NVIDIA B200 and B300 across HPC and AI Workloads](https://arxiv.org/abs/2610.41919) | arXiv 2026 (preprint; author states PMBS 2026 SC26 workshop acceptance) | 双独立 8-GPU B200/B300 Cluster，覆盖 vLLM/Llama-3-8B/70B 及 HPC/CV；逐设备功率与精确软件栈揭示硬件代际性能归因陷阱：同型 B300 节点在不同软件配置下出现 2.1× TTFT 差异（vLLM Build、Host Allocation 同时不同，**不能单因子归因**）。**跨 AI/HPC 测评，非纯 LLM Serving 研究；LLM/CV 多为 single timed run（spot-check 2–4% 波动），不能当成芯片固有胜负**。[Artifact](https://github.com/MohsenZand/GPUBenchmarking)。（KEEP_ADJACENT; REAL_CLUSTER; SOURCE_ARTIFACT; NOT_REPRODUCED） |
 
-### Models & Simulators (15)
+### Models & Simulators (16)
 
 性能建模、容量估计、仿真和边界分析。
 
@@ -113,6 +114,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [COPE: Composable Performance Emulation for Mixture-of-Experts Offloading Policies](https://arxiv.org/abs/2610.33404) | arXiv 2026 (preprint; Oct 26 announcement) | 将 MoE Expert Residency 和执行策略拆成可组合 Policy Matrix，结合目标硬件 Operator Profiles 与离线 Routing Traces 构成 Virtual Heterogeneous Machine，预测 CPU/GPU Offloading 最优策略；作者报告策略预测误差缩小 1.7–6.8×。**Emulator/决策选型收益**，不是实际 Serving 直接提升 6.8×。（KEEP_ADJACENT；TRACE_DRIVEN_EMULATION；NOT_REPRODUCED） |
 | 2026 | [Dissecting the Carbon-SLO Tension in Geo-Distributed LLM Serving](https://arxiv.org/abs/2610.14571) | arXiv 2026 (preprint; submitted Oct 10; [authors' simulation code](https://github.com/topcuburak/carbon-slo-at-geoscale)) | 用实机校准的 Prefill/Decode Power、Continuous Batching 和 Queueing 建立跨地域 LLM Serving Simulator，比较 Greedy、Iterative ILP、Facility MILP 的 Carbon/SLO Frontier；作者在三种 LLM 与 MLPerf-derived SLO、**模拟区域集群** 中相对 Round Robin 报告最高 −60% Operational Carbon，伴随平均 **3% SLO Violations**。**CALIBRATED_REAL_NODE + SIMULATED_GEO_CLUSTER / ORACLE_OUTPUT_LENGTH_MAIN_SWEEP / NO_PHYSICAL_CARBON_DEPLOYMENT / NOT_REPRODUCED**；仅作为强边界的系统测量/仿真工作。（KEEP_ADJACENT） |
 | 2026 | [On the Fundamental Limits of Prefill-Based Decoding Length Prediction](https://arxiv.org/abs/2610.40541) | arXiv 2026 (preprint; Oct 29; author code linked in paper) | 将输出长度作为 **Stopped Stochastic Process**，证明 Sampling/Stop Randomness 限制 Prefill-hidden-state Predictor 的可达误差，得到 Prompt-conditional Normal Approximation 与 Affine Variance Law σ=αμ+b；对 MLP/EGTP/FiLM/Soft-label/MoE Predictor 同数据和 Sampling Settings 评测时表现接近误差下界。**THEORY_PLUS_BENCHMARK_PROTOCOL / NOT_ONLINE_SCHEDULER_ACCELERATION / CONDITIONAL_STOCHASTIC_ASSUMPTIONS / NOT_REPRODUCED**；为不确定性感知 Scheduler 的评测边界提供负面证据。（KEEP_STRICT） |
+| 2026 | [ROCm InferaSim: Cut LLM Serving Trial Costs and Deploy the Best Configuration](https://arxiv.org/abs/2611.04032) | arXiv 2026 (Nov 2 preprint) | AMD 的 **MI355X Anchor Measurement + Kernel Transfer Laws + Discrete-event Simulation** 评估 Model/Batch/P-D/TP-EP/Precision/SLO；官方报告 **11 Anchor 9.1 GPU-hours** 覆盖 **226 配置测量约 204 GPU-hours**。**Simulation 预测≠部署实测，VENDOR_REPORTED / NOT_REPRODUCED**。[Official engineering](https://rocm.blogs.amd.com/software-tools-optimization/inferasim/README.html)。（KEEP_STRICT） |
 
 ### Correctness & Reliability (13)
 
