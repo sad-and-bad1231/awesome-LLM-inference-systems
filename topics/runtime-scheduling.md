@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-44) | 44 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-45) | 45 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-27) | 27 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **150** | |
+| **Total** | **151** | |
 
-## Papers (150)
+## Papers (151)
 
-### Batching, Queues & SLOs (44)
+### Batching, Queues & SLOs (45)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -74,6 +74,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Efficient Iterative Retrieval with Heterogeneous Batching (Orthrus)](https://aclanthology.org/2026.emnlp-main.28/) | EMNLP 2026 Main ([code](https://github.com/illinoisdata/Orthrus)) | Embedding/Retrieval 与 Generative LLM Token Decode 在共享 GPU 上分模型执行形成 Bubble；Orthrus 用 **Incremental Computing + Single-GPU-Kernel Heterogeneous Batching** 将 Embedding/Generation Workload 对齐，再进行 Workload-aware Batch Composition。作者 **4×A100** 多 Deployment Baselines（含 vLLM Homogeneous Batching）报告 Throughput +1.28–4.52×、Latency 最多 −52%；**HETEROGENEOUS_EMBEDDING_PLUS_GENERATION / SELECTED_DEPLOYMENT_COMPARISONS / NOT_STANDARD_TEXT_GENERATION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Asymptotic Optimality of cμ-Rule for LLM Inference Scheduling under Memory Constraint](https://arxiv.org/abs/2611.04807) | arXiv 2026 (Nov 3 preprint) | 以 Compute、KV Bandwidth、HBM Capacity 构造 Effective Service Rate，导出多类请求的 **cμ Priority** 与 Fluid-limit Optimality；作者另在 **H800 真实引擎及 Trace/Semi-synthetic Workload** 测均值时延和 Throughput。**Fluid Model 理论最优≠任意在线 SLO 最优；REAL_GPU / MODEL_BOUND / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Not All Loops Cost the Same: Phase-Dependent Depth for Serving Looped Transformers (LoopDuet)](https://arxiv.org/abs/2611.07211) | arXiv 2026 (Nov 4 preprint) | 对 Looped Transformer 分离 Prefill 深度 P 与 Decode 深度 S，并在 Loop 边界 **Gather 活跃 Query 形成紧凑 Batch、共享 KV**；Queue-age Controller 按 TTFT 积压降低 P，保留首次生成 Token 的全深度计算。作者 **A100-SXM4-80GB、vLLM 0.14.1、Huginn/OLMo、HotpotQA 与两条 OLMo Arrival Trace**；Huginn 在相同 Accuracy 条件下相对最快 Uniform-depth **吞吐 +19%**，OLMo 同一 1s TTFT 达标率下准确率 +0.92–1.35 EM points。**训练免除但 Prefill 计算近似、质量须逐任务核对；REAL_GPU / QUALITY_CHANGING_EXECUTION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (18)
 
