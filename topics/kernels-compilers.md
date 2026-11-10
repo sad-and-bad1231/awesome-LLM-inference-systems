@@ -17,12 +17,12 @@
 | [Attention & Sparse Kernels](#attention--sparse-kernels-32) | 32 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-21) | 21 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-22) | 22 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-16) | 16 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **119** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-18) | 18 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **122** | |
 
-## Papers (119)
+## Papers (122)
 
 ### Attention & Sparse Kernels (32)
 
@@ -109,7 +109,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [PipeLink: Contract-Guided Linking of GPU Kernel Components](https://arxiv.org/abs/2610.37200) | arXiv 2026 (preprint; Oct 27) | 用编译期资源 Contract/LTO 将独立 Attention、GEMM、Epilogue/通信组件链接成共享寄存器、Warp、Barrier 的 Kernel；Hopper/Blackwell 51 个配置的链接版本相较同源码单体编译在 0.2% 内，CuTe Attention 接 ThunderKittens Decode Megakernel 报告 2.16×。针对特定算子组合，非通用 Serving 加速。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [When and Why to Use TMA: A Workload-Grounded Characterization of Tensor Memory Acceleration on NVIDIA Hopper GPUs](https://arxiv.org/abs/2610.34907) | arXiv 2026 (IISCW 2026 workshop accepted) | 对 FA3、Paged-KV 以及 B200 GEMM 实机分析 TMA、cp.async、DSM/Multicast 的 Shape/Tile crossover，提炼内存通道选择规则；H100/B200 硬件测量而非一般 LLM Serving speedup。（KEEP_ADJACENT；KERNEL_CHARACTERIZATION；NOT_REPRODUCED） |
 
-### Fusion, Pipelines & Megakernels (21)
+### Fusion, Pipelines & Megakernels (22)
 
 减少 Launch/中间物化，优化跨算子流水与动态执行。
 
@@ -136,6 +136,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [One Megakernel is Not Enough: Predicting Where to Cut for Streaming Inference](https://arxiv.org/abs/2610.35336) | arXiv 2026 (preprint; Oct 26) | 从 Graph Profile 与独立 Kernel Benchmark 预测不同 Batch 下最优 Megakernel 分段；作者在 NH-TTS/Qwen3-TTS/Llama-1B 共 13 个组合中实测验证，H100 上针对 NH-TTS 的三段设计比所测单体 Megakernel 低 21.4% batch-P95 TTFA、吞吐高 28%。TTS-heavy，不能外推所有 LLM Decode。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ZipFusion: Fusing Lossless KV Decompression with Attention for Efficient LLM Decoding](https://arxiv.org/abs/2610.33719) | arXiv 2026 (preprint; submitted Oct 24) | 将无损 KV 压缩格式与 FlashInfer Decode Attention 联合设计，在寄存器中直接恢复 KV，免独立解压和未压缩 KV 重新写回；集成 SGLang。在 H100 8K Context/等 GPU Memory Budget 下，作者报告模型 Decode Throughput 最高 +26.3%，Attention Kernel 约 1.25×；与压缩基线在**各自最大可容纳 Batch** 的 2.76× 不构成相同 Batch 对照。**LOSSLESS_KV / CUDA_SGLANG / AUTHOR_REPORT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Understanding GPU Megakernels: Why Residency Can Mislead](https://arxiv.org/abs/2611.00495) | arXiv 2026 (Oct 31 submitted; Nov list) | 将 **ThunderKittens(TK)/VDCores** 中的原始 Operator Code 重构成独立 CUDA Graph Kernels，控制 **PDL Early-start、TMA Prefetch、CTA Admission、Release/Acquire Completion Signaling** 归因 Megakernel Residency 收益。作者在 **H100 SXM、Llama3.2-1B BF16、B1 32+128 Token、5轮跨5卡 Interleaved Test** 发现 PDL Separate Kernels 相对 Ordered TK Persistent Decode Step **−5.7% Latency**，与原始 Relaxed Ordering Persistent 则仍慢3.4%。**关键 Correctness：原版 TK/VDCores 跨 CTA Counter 缺少适当 Acquire/Release；Relaxed 原实现只能作为乐观参考，不能拿它对规范内存序版本证明 Kernel 更快；资源空闲不代表可以提前取得 CTA Footprint，Bandwidth Saturation 时 Co-location 无增益**。**REAL_GPU / CONTROLLED_MECHANISM_NEGATIVE_RESULT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [KOSMOS: Self-scheduling Persistent Kernels for Communication-Compute Overlap](https://arxiv.org/abs/2611.07477) | arXiv 2026 | 把 **TP/SP Collective + GEMM、EP Router→Fold** 融入 Demand-ordered Persistent Work Queues，让 CTA 在通信/计算之间根据数据就绪动态换角色，区别于固定 SM Split。作者用 **AMD MI350X/MI355X** 测 Megatron-LM TP/SP 和 DeepSeek-V3/Qwen3-235B Proxy 训练 Forward/Backward：TP/SP 训练 **1.10–1.28×**、EP Proxy **1.29–1.83×**。**主要是训练与算子证据，不是线上 Decode TPOT/Serving Goodput；作为同构 Attention/EP 依赖调度技术邻接准入**。**KEEP_PREPRINT_EXPLORE / REAL_AMD_GPU_TRAINING / KEEP_ADJACENT / NOT_REPRODUCED**。 |
 
 ### Communication, Memory & I/O (18)
 
@@ -163,7 +164,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (16)
+### Kernel Automation & Tools (18)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -187,3 +188,5 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [Learning to Formulate: Agentic Hardware-Software Co-Design of AI Infrastructure through Progressive Optimization and Verification (Formulaic)](https://arxiv.org/abs/2610.39380) | arXiv 2026 (preprint; Oct 29) | Formulaic 由 Agent 生成带约束的 **Template + Cost Model**，Solver 选择 Kernel/Hardware 配置，逐步执行数值检查与部分形式化证明。论文 **NVIDIA GB10** 在 Qwen3-8B 完整层上相对 SGLang 0.5.9 几何平均 **1.075×**，另报告 **整模型 Serving**：Dense P2048/P4096 TTFT 分别改善 **5.72%/4.73%**、P512 **回退 5.82%**，Dense 单客户端吞吐 +7.70%；MoE Prefill 有正向结果，但 **MoE Decode 未通过 40 层完整输出/状态检查，未用于 Serving**。Ventus Qwen2.5-0.5B 硬软联合设计 **0.428 vs 0.934 周期比是模拟**；Proof Reuse 2.51× 只指 Checking。**REAL_GPU_SERVING_SCOPED / NEGATIVE_RESULT_RECORDED / PARTIAL_PROOF / SEPARATE_SIMULATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [ForgeKernel: Self-Evolving Kernels Catching and Surpassing Experts and Agents](https://arxiv.org/abs/2611.04998) | arXiv 2026 (preprint, Nov 3) | Architecture Agent 规划可执行 Kernel 里程碑，Coding Agent 实现，**Profiler/Disassembly→机制知识库→sealed reference→新一轮架构重评**；与 KDA、CAKE、JustGoal 比较。作者 **H100/B200 + Ascend 910C CANN-Bench** 真实公开测试集报告实机 Operator 收益与最佳提交；**跨轮机制复用不等于 Agent 自身 RSI，作者最佳选取和搜索预算影响可比性，非 Serving E2E**。**REAL_GPU_NPU / AGENT_KERNEL / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） [Author code snapshot](https://github.com/OpenBMB/ForgeKernel/tree/6664d6080c37803605d6c6bc25f87656423ff114)（含 src/skills/kernels/tests；已检查文件入口，**未执行**）. |
 | 2026 | [Warpline: Binary-Level Tracing and Unified Evidence for Agentic GPU Kernel Optimization](https://arxiv.org/abs/2611.04331) | arXiv 2026 (preprint, Nov 3) | **Binary/SASS Instrumentation → Pipeline/Barrier Timeline → Queryable Evidence for Agent**，支持 Triton/CuTe/CUDA Kernel，减少源级 Tracer 改动优化对象本身的问题。作者在 **B200 sm100、35 个开源 Kernel + 3 个闭源库 Kernel（共38）、10 SOL-ExecBench 问题、相同 6×60min/问题 Budget** 报 **1.2% Median Tracing Overhead、99.9% Median Instruction Preservation**；Agent 从 Starting Kernels 获得 **7.69× GM Speedup**，Bare 6.94×、KDA 6.13×。**这三个值均相对各自 Starting Kernels，不是 Warpline 相对 KDA 提速 7.69×；Agent Model/Reviewer 调用数也不等，比较依赖 Budget 定义；非 Serving E2E，CUDA/SASS 工具链不直接移植 Ascend**。**REAL_GPU / SOURCE_HTML_METHODS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [KernelOPT: Dispatch-Aware Agentic Search for GPU Kernel Optimization](https://arxiv.org/abs/2609.30059) | arXiv 2026 | 将 **PyTorch Inductor Graph 的 Kernel + Vendor Library Call** 当完整优化对象，仅重写编译器生成 Triton 子算子；以 **Static / Multiseed Oracle / Float64-fallback Model Equivalence / Speed Gate** 四关验证重拼模型，不以单 Kernel 成绩冒充完整模型收益。作者在 **250 KernelBench Tasks** 的成功子集按 L1/L2/L3 报相对 torch.compile 几何均值 **1.40/1.15/1.07×**；注意覆盖率 **51/100、31/100、12/50**，不是全任务显著加速。**KEEP_PREPRINT_EVIDENCED / GPU_KERNEL_AGENT / AUTHOR_REPORTED / NOT_REPRODUCED**。 |
+| 2026 | [Agentic Kernel Optimization: Generating State-of-the-Art GPU Kernels Without Hand-Written CUDA](https://arxiv.org/abs/2608.14560) | arXiv 2026 | 在 **FlashInfer-Bench Fused MoE、DSA TopK Indexer、DSA Sparse Attention** 上用 Agent+Skill+Profiling 迭代，无人工直接编辑 Kernel；作者报告 **B200** 的 PyTorch Reference 巨大加速（如 92.68× MoE）与 **官方 FlashInfer Baseline** 的独立对照，其中 Fused MoE 为 **1.71×**（AI Kernel Generation Contest）。**不要将 92.68× 对 PyTorch 与 1.71× 对 FlashInfer 混为同一基线**；约 1.9B Agent Tokens、人工负责流程与约束，非 RSI/无人工决策。**KEEP_PREPRINT_EVIDENCED / REAL_GPU_OPERATOR / AUTHOR_REPORTED / NOT_REPRODUCED**。 |
