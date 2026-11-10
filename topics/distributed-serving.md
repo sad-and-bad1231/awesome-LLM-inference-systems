@@ -18,10 +18,10 @@
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
 | [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-28) | 28 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-23) | 23 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **137** | |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-24) | 24 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **138** | |
 
-## Papers (137)
+## Papers (138)
 
 ### Parallelism & Scale-Up (28)
 
@@ -165,7 +165,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Resuming Vision-Language Inference across Onboard Interruptions (OrbitWeaver)](https://arxiv.org/abs/2610.29183) | arXiv 2026 (preprint; Oct 22 announcement) | OrbitWeaver 按 **VLM Vision/Prefill/Decode 的不同 State Lifetime**选择 Checkpoint Boundary，按 Layer×Token Chunk 的依赖关系调度断电后恢复并 Overlap Weight/KV I/O；作者在卫星载荷硬件及在轨 Telemetry Trace 回放中报告相对对照**最多 4.07× 请求完成时间收益、SSD 写入最多减 3.56×**。论文另声称在 **两颗 LEO 卫星上进行 72 小时实际部署**：这是 **AUTHOR_DEPLOYMENT_CLAIM，非本库独立验证或可复制的云端 LLM Serving 结果**。**INTERRUPT_DRIVEN_EDGE / PHASE_AWARE_RECOVERY / ARTIFACT_NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [TensorHub: Scalable and Elastic Weight Transfer for LLM RL Training](https://arxiv.org/abs/2604.09107) | SOSP 2026 (preprint Apr; UW–ByteDance Seed) | TensorHub（SOSP 2026）为 **LLM RL Trainer→Rollout Inference Workers** 的版本化权重传输设计 Reference-Oriented Storage（ROS）：不复制权重作存储，而是定位已在 GPU 中的 Replica，再做 Topology-aware RDMA、跨 Rank 同版本事务和故障恢复。作者报告真实 RL 场景 **GPU Stall 最高降低 6.7×、弹性 Rollout Weight Update 最高加速 4.8×、跨 DC Stall 最高降低 19×**，并称 ByteDance 生产部署；**三者属不同设置，不是在线请求 TPS/TTFT**。**TRAINING_ROLLOUT_CONTROL_PLANE / WEIGHT_SYNC_NOT_KV_TRANSFER / AUTHOR_DEPLOYMENT_CLAIM / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
-### Heterogeneous & Edge Serving (23)
+### Heterogeneous & Edge Serving (24)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
@@ -196,3 +196,4 @@ P/D、Attention–FFN 与多阶段资源解耦。
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [Shared Context, Separate Engines: Streaming Vision–Language Inference on Edge SoCs](https://arxiv.org/abs/2610.35309) | arXiv 2026 (preprint; Oct 27 announcement) | 将跨 CPU/GPU/NPU 的 Versioned Context 与后端 KV 分离，让多路 Streaming VLM Frame Ingest 与 Answer Concurrent，按 State-aware Dispatch 选择 Engine；Apple M4 Max、RK3588、QCS6490 实机，RK3588 双流对最强单引擎 +19.6% Throughput。VLM-only、平台依赖，非文本 LLM Server Pool。（KEEP_STRICT；REAL_EDGE_SOC；NOT_REPRODUCED） |
 | 2026 | [UMLoad: Fast On-Demand Model Loading on Unified Memory Architecture](https://arxiv.org/abs/2611.04253) | arXiv 2026 (preprint, Nov 4) | **Reclaim File-backed Weight Pages to GPU Ownership + CPU On-demand Reconstruction** 保留 Copy Independence，配合 **Huge-page VA Mapping Recovery + GPU-assisted Zeroing/CPU Pipeline**，去除 UMA 中冗余 Weight Copy/Allocation 延迟。作者在 **Intel/AMD/NVIDIA UMA，llama.cpp/PyTorch/vLLM 六模型** 实测相对 Vanilla Loading 时间平均减少 **36.6–71.9%**，相比 Pipelined Loader 减少19.9–62.7%；其 **Model-routing TTFT** (包含 Cold-load) 减少51.3–59.3%。**不加速模型已驻留时的普通 Decode，NVIDIA 需加载阶段标记及部分框架改动，非离散 Ascend 910B2 Zero-copy 实现；未独立复现**。**REAL_UMA_DEVICE / AUTHOR_REPORTED / SOURCE_HTML_METHODS / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [UniExit: A Unified Latency-Aware Early-Exit Runtime for Heterogeneous Edge AI](https://arxiv.org/abs/2611.09159) | arXiv 2026 (Nov 6 preprint; SenSys 2027 acceptance **author-claimed**) | 将 CNN Blocks 与 Transformer Layers 抽象成 **Stage-wise Deadline-aware Early Exit**，利用实时 CPU/GPU/EMC Frequency/Utilization、轻量 MLP Latency Predictor、**128-entry/约3KB Prediction Cache** 与 DVFS Trend Fallback 选择是否执行下一个 Exit Module；作者在 **Jetson Xavier NX/Orin Nano（8GB UMA）和 RTX5880 Edge–Cloud、16-layer LLaMA3.2-1B/64 token WikiText103、CNN/Map/Audio Co-run** 对 **LayerSkip、SpecEE、Layer-wise EE、Pantheon、HaX-CoNN** 测 TPOT Deadline Satisfaction Rate、Same-input Full-depth Token Agreement 与能耗。在压力下作者显示 DSR 维持高位，且跳过中间无用 Head 可对相同 Exit-depth 提供约 **2× 更快的局部推理进度**；**这是小模型 Token-level Exit / Accuracy–Deadline Tradeoff，输出允许不同于 Full-depth，未验证常规 Qwen/VLLM 大模型 Serving Goodput，也不是独立 NPU 优化。作者的“≥95% DSR”跨 CNN/LM 和多个测试设置，不是统一生产 SLO**。**REAL_EDGE_GPU / APPROXIMATE_EARLY_EXIT / SOURCE_HTML_G3 / NOT_REPRODUCED**。（KEEP_ADJACENT） |
