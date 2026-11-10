@@ -14,15 +14,15 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Expert Routing & Communication](#expert-routing--communication-17) | 17 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
+| [Expert Routing & Communication](#expert-routing--communication-18) | 18 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-12) | 12 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-22) | 22 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **78** | |
+| **Total** | **79** | |
 
-## Papers (78)
+## Papers (79)
 
-### Expert Routing & Communication (17)
+### Expert Routing & Communication (18)
 
 Token Dispatch、Expert Parallel 和计算通信重叠。
 
@@ -45,6 +45,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Efficient Expert-Parallel Communication on PCIe-Connected Consumer GPUs (ThunderEP)](https://arxiv.org/abs/2609.40093) | arXiv 2026-09 (preprint) | 在**无 GPU P2P** 的 RTX 4090/5090 PCIe 拓扑下，以 DMA Copy Engine、避开多次 CPU Relay 的通信路径、按 Sender Completion Flag 细粒度同步实现 MoE Token Dispatch/Combine；已集成 vLLM，对比 **NCCL/SGLang/Megatron-Core**，作者报告 Dispatch 2.00×、Combine 1.53×、端到端最多 1.66×，其中部分报告只代表 Microbenchmark；**不适用于默认有 NVLink/P2P 的集群，也不推断 Ascend HCCL 获同等收益**。作者有 3 模型、ShareGPT/LMSYS Prompt、5 次运行，但代码发布未核验。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; TOPOLOGY_SCOPED; ARTIFACT_UNVERIFIED) |
 | 2026 | [StreamEP: Straggler-Tolerant MoE Decoding without Communication Barriers](https://doi.org/10.1145/3830418.3843869) | SOSP 2026 ([author artifact](https://zenodo.org/records/22100357)) | 将传统 Expert Parallelism 中每层跨 GPU Collective Barrier 改为 StreamEP 异步到达/执行/转发，StreamInfer 采用 per-layer Token Queue、Defragmenting Scheduler 与基于常规 NCCL 的两阶段可变长通信；SOSP 论文作者在 16×L40S / 16×A100、200Gbps 网络相对传统 EP 报告最高 **1.7× Decode Throughput**。**TOPOLOGY_AND_CONCURRENCY_SCOPED / AUTHOR_REPORTED / NOT_ASCEND_HCCL_REPRODUCED**，不是通用 Token-level 加速。（KEEP_STRICT） |
 | 2026 | [Decoding the Skew: Distribution-Aware MoE Inference with Adaptive Kernel Dispatch (DA-MoE)](https://arxiv.org/abs/2607.23099) | arXiv 2026 (preprint Jul 25; October lab-gap closure) | 固定 Token-count Bucket 忽视 Expert Routing Skew 导致稀疏 GEMM 不同 Tile Padding 效率；用 **Effective Experts + Dirichlet-generated Routing Histograms** 离线校准，GPU-resident Dispatch 读真实路由分布选择 Kernel，避免 CPU/GPU 同步。作者基于 HumanEval-X 轨迹、DeepSeek-V3/Kimi K2 报告 Fused-MoE **Kernel Geomean Latency 1.16×/1.29×** 改善、峰值 1.40×/1.56×；**KERNEL_ONLY / NVIDIA_ROUTING_SHAPE_DEPENDENT / NOT_ONLINE_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [GC-MoE: Overlapping Expert-Parallel Token Dispatch with FP8/FP4 Grouped GEMM via CUDA Green Contexts](https://arxiv.org/abs/2611.04222) | arXiv 2026 (preprint, Nov 3) | 用 **CUDA Green Contexts** 将 EP Dispatch 和 Grouped GEMM 分配独立 SM Budget/Kernel，Graph Concurrent Roots + Ring Handshake + Double-buffered Counter 避免全设备 Barrier；含 Fused SwiGLU/Optional Shared Expert。作者在 **8×H20 sm90a / 8×B300 sm103、CUDA Graph Replay、DeepSeek-V4.1-Flash 与 GLM-5.2 Shape** 和 DeepGEMM **Mega MoE** 比较，H20 路由算子 **平均 1.188×、峰值 1.296×**，B300 平均 **1.106×**；**这是跨8卡 Operator Latency，不是完整 vLLM/TRT-LLM 请求 Goodput，模型配置按 Layer Shape 模拟，H20 使用作者移植的 Mega MoE Reference，FP8/FP4 语义须匹配**。**REAL_MULTIGPU_OPERATOR / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Placement, Balance & MoE Serving (12)
 
