@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-43) | 43 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-44) | 44 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-29) | 29 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-27) | 27 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **149** | |
+| **Total** | **150** | |
 
-## Papers (149)
+## Papers (150)
 
-### Batching, Queues & SLOs (43)
+### Batching, Queues & SLOs (44)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
@@ -73,6 +73,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [DWISE: Denoising Workload-Informed Scheduling Engine](https://arxiv.org/abs/2610.39852) | arXiv 2026 (preprint; submitted Oct 29) | **Diffusion LLM** 以剩余 Denoising Block-work 合并 Prefill/Generate 调度，用 Prompt 和首轮 Hidden States 估计执行成本；作者 **GH200、SGLang0.5.20 dLLM、5 模型/4096 请求** 的 Burst/Poisson Serving 实验报告平均 **5.4× Mean E2E Latency** 改善，并单独核对 Accuracy。**代码承诺公开但尚未查到可运行版本；AR vLLM 不可直接复现**。（KEEP_STRICT; DIFFUSION_ONLY; CODE_PENDING; NOT_REPRODUCED） |
 | 2026 | [ALPS: An Application-Aware, Length-Predictive Scheduler for Efficient LLM Inference at Edge](https://doi.org/10.1109/TPDS.2026.3741399) | IEEE TPDS 2026 (online Oct 7; Vol 37 Issue 12) | Edge vLLM 请求调度融合 **System-prompt-aware Grouping、Output-token Bucket 预测、Phase-aware Prefill/Decode Batch 与 SLO Preemption**，减少应用间重复 Prefill 并改善 Decode/Prefill 干扰；作者在多 Edge GPU 与工作负载上对比调度基线报告 Token Throughput 最高 1.6×、E2E Latency 最多下降约 2.4×。**EDGE_AND_PREFIX_SHARE_DEPENDENT / NOT_GENERAL_VLLM_CLUSTER_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Efficient Iterative Retrieval with Heterogeneous Batching (Orthrus)](https://aclanthology.org/2026.emnlp-main.28/) | EMNLP 2026 Main ([code](https://github.com/illinoisdata/Orthrus)) | Embedding/Retrieval 与 Generative LLM Token Decode 在共享 GPU 上分模型执行形成 Bubble；Orthrus 用 **Incremental Computing + Single-GPU-Kernel Heterogeneous Batching** 将 Embedding/Generation Workload 对齐，再进行 Workload-aware Batch Composition。作者 **4×A100** 多 Deployment Baselines（含 vLLM Homogeneous Batching）报告 Throughput +1.28–4.52×、Latency 最多 −52%；**HETEROGENEOUS_EMBEDDING_PLUS_GENERATION / SELECTED_DEPLOYMENT_COMPARISONS / NOT_STANDARD_TEXT_GENERATION_ONLY / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Asymptotic Optimality of cμ-Rule for LLM Inference Scheduling under Memory Constraint](https://arxiv.org/abs/2611.04807) | arXiv 2026 (Nov 3 preprint) | 以 Compute、KV Bandwidth、HBM Capacity 构造 Effective Service Rate，导出多类请求的 **cμ Priority** 与 Fluid-limit Optimality；作者另在 **H800 真实引擎及 Trace/Semi-synthetic Workload** 测均值时延和 Throughput。**Fluid Model 理论最优≠任意在线 SLO 最优；REAL_GPU / MODEL_BOUND / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Routing & Load Balancing (18)
 
