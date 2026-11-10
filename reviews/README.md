@@ -2,13 +2,13 @@
 
 [← Home](../README.md) · [Current canonical topics](../topics/README.md) · [G0–G5 rules](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
-**Current state — 2026-11-09:** **876** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
+**Current state — 2026-11-09:** **882** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
 
 ## Read these first: latest evidence and quality corrections
 
 | Receipt | What it establishes | What it does **not** establish |
 |---|---|---|
-| [November 9 expanded cross-category and company sweep](NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) | Fourteen additional mechanism-reviewed November papers, source-level G3 boundaries, 8-class and 7-frontier search with explicit HOLDs and first-party infrastructure refresh | No exhaustive census of all arXiv records or independent benchmark reproduction |
+| [November 9 expanded cross-category and company sweep](NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) | Twenty additional mechanism-reviewed November papers, source-level G3 boundaries, 8-class and 7-frontier search with explicit HOLDs and first-party infrastructure refresh | No exhaustive census of all arXiv records or independent benchmark reproduction |
 | [November 9 systems, industry and frontiers source sweep](NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) | Ten November preprints, eight-category screening, all seven frontiers and first-party model/runtime statuses; explicit HOLDs and metric boundaries | No independent GPU/NPU reproduction; no Qwen4/V4.1 Pro/Astra 6.2 release confirmation |
 | [November 6 G0/G3–G5 primary-source review](G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) | Eleven previously flagged value/evidence cases; Formulaic, ReadKV and TokenSim metric/negative-result corrections; RAGBoost→ContextPilot alias, DefensiveKV ≠ CriticalKV | Neither independent execution nor resolution of NovaServe/Select-N |
 | [November 5 preprint identity/metrics](PREPRINT_EVIDENCE_HYGIENE_20261105.md) | Eleven selected source corrections, including Nuska's updated arXiv title and TTFT/SLO distinction | An audit or quality certification of every 2026 preprint |
