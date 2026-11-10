@@ -35,6 +35,15 @@
 
 **Category deltas third pass:** Kernel+2; KV+1; Decoding+1; Quant+1; MoE+3; Runtime+4; Distributed+2; Benchmarking+3 → **17**. Prior 879 +17 = **896**.
 
+## Late source supplement: Basin, distinct from Inside the Trap
+
+**[When Cache Pressure Becomes a Trap: Metastability in Agent Serving (arXiv 2611.02543)](https://arxiv.org/html/2611.02543v1)**, submitted Nov 2, found in follow-up citation-crosswalk. **This increases the three-pass result from 896 to 897**, but is a **separate supplementary single paper**, not a retroactive eighteenth entry in the 17-row third-pass table.
+
+- **G0:** distinct paper and authors from [Inside the Trap (2611.08902)](https://arxiv.org/abs/2611.08902); no identity duplication. G1: actual SGLang/NIXL P/D serving intervention. G2: population/cache feedback plus **Basin arrival-age priority, context reservation, admission/shedding, and decode-memory lending**. Strong baselines include HiCache, Continuum, ThunderAgent, CONCUR and Crossflow.
+- **G3 actual silicon:** author reports **4×H200 1P3D / 2×H100 NVL 1P1D, Qwen3.6-35B-A3B FP8 and long-context Terminal-Bench / SWE-bench Pro sessions**. The **arrival-time priority/current-context prototype** shows H200 1P3D **1.20–1.70× Session Goodput vs Continuum, 2.35–3.59× vs HiCache** under burst scenarios, with matched tool delays and run windows. Goodput means SLO-qualified **completed sessions/h**, with rejection/shed requests as failed, not output Tokens/s. Paper explicitly states hardware prototype **does not implement future-context prediction/size-aware priority**.
+- **G3 simulation separation:** prediction-driven controller across broader loads, 36-deployment criterion, and scaled 2P6D are **simulation**, with calibrated models and measured nonzero fidelity error (H100 ITL violation simulator 0.5% vs hardware 13.6% in one setting). In **decode-limited H100 1P1D** the hardware arrival-time system shows little goodput gain; do not generalize H200 result.
+- **G4/G5:** original source HTML full method, explicit baselines and limitations inspected; code was not executed here. Independent Session KV state management is differentiated from *Inside the Trap*'s independent FIFO renewal-theory analysis. **KEEP_STRICT / SOURCE_G3 / NOT_REPRODUCED**.
+
 ## Explicit examined candidates not admitted
 
 | Primary candidate | Disposition |
