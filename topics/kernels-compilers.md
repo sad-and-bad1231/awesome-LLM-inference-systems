@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-30) | 30 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-31) | 31 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-14) | 14 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **114** | |
+| **Total** | **115** | |
 
-## Papers (114)
+## Papers (115)
 
-### Attention & Sparse Kernels (30)
+### Attention & Sparse Kernels (31)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -60,6 +60,7 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [PackInfer: Compute- and I/O-Efficient Attention for Batched LLM Inference](https://arxiv.org/abs/2602.06072) | arXiv 2026 (preprint) | **跨请求 compute/I/O-aware attention packing**：将混合长度 batch 分组、合并短序列并协调 shared-prefix KV layout，降低 CTA straggler 与访存碎片；保留 dense attention 语义。作者在 A100/H200/A40 与 4×A100、Qwen3/Mistral/Alpaca/LMSYS 等报告 TTFT/TBT/throughput 改善，强对照包括 FlashAttention 和 Prepack，**收益依负载变化，未开源的可复现 Kernel/Serving Patch 未核验**。不同于 request-level scheduling；未独立复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FlashPrefill V2: Block-Sparse Prefill Attention for Long-Context LLM Serving](https://arxiv.org/abs/2608.19758) | arXiv 2026 (preprint) | 从 FlashPrefill 原型推进到可执行 Hopper SM90 Sparse Prefill Backend：Mean Correction、PackGQA、Warp Specialization、BF16/FP8、Paged KV 与 SGLang Continuous Batching。作者 H20 长上下文算子加速不等于全链路 Goodput；**APPROXIMATE_ATTENTION / CUDA_SM90_ONLY**。[Code](https://github.com/qhfan/FlashPrefillv2)。 |
 | 2026 | [Reorienting the Vector Axis: Restructuring FlashAttention for Long-Vector Processors](https://arxiv.org/abs/2610.29489) | arXiv 2026 (preprint; Oct 22 announcement) | 将 FA score/output Tile 转置以沿 Query 轴向量化，Softmax 系数移至 Scalar Register；真实 RISC-V 长向量 CPU 上完整 Attention Kernel 周期改善 1.84–2.08×（作者报告），不是 GPU 或 vLLM E2E。精确算法未改，但未独立验证数值误差。（KEEP_STRICT；REAL_SILICON；NOT_REPRODUCED） |
+| 2026 | [TriAttention: Unified Sparse Mixed-Precision Attention for Long-Context LLM Inference](https://arxiv.org/abs/2611.07256) | arXiv 2026 (Nov 5 preprint) | 按 Head 将 QK Tiles 分为 Skip/4-bit/8-bit、校准 Precision/Quality，再以 Fused Prefill 和 Packed KV Decode 执行。作者在 A100 测 Attention/Generation；**近似输出，所报最多 2.65× 对 BF16 的 Generation 加速不是 vLLM Online Goodput**。[Code](https://github.com/HanzhiZhang-Ulrica/TriAttention)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### GEMM & Low-Bit Kernels (12)
 
