@@ -39,7 +39,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | Organization | Primary focus |
 |---|---|
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
-| [Google](Google.md) | **TorchTPU vLLM/SGLang** · llm-d P/D topology · Ragged Paged Attention · AlphaEvolve |
+| [Google](Google.md) | **TorchTPU vLLM/SGLang** · **TPU Sync / Agent Compute Engine (Nov 9)** · **XLA Serving Engine (Nov 5)** · llm-d / Ragged Paged Attention · AlphaEvolve |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
 | [AMD](AMD.md) | ROCm · AITER · **ATOM** engine · **MORI** EP/KV communication · **InferaSim** |
 | [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
