@@ -15,12 +15,12 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Expert Routing & Communication](#expert-routing--communication-18) | 18 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
-| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-12) | 12 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
-| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-22) | 22 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
+| [Placement, Balance & MoE Serving](#placement-balance--moe-serving-13) | 13 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
+| [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-23) | 23 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **79** | |
+| **Total** | **81** | |
 
-## Papers (79)
+## Papers (81)
 
 ### Expert Routing & Communication (18)
 
@@ -47,7 +47,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Decoding the Skew: Distribution-Aware MoE Inference with Adaptive Kernel Dispatch (DA-MoE)](https://arxiv.org/abs/2607.23099) | arXiv 2026 (preprint Jul 25; October lab-gap closure) | 固定 Token-count Bucket 忽视 Expert Routing Skew 导致稀疏 GEMM 不同 Tile Padding 效率；用 **Effective Experts + Dirichlet-generated Routing Histograms** 离线校准，GPU-resident Dispatch 读真实路由分布选择 Kernel，避免 CPU/GPU 同步。作者基于 HumanEval-X 轨迹、DeepSeek-V3/Kimi K2 报告 Fused-MoE **Kernel Geomean Latency 1.16×/1.29×** 改善、峰值 1.40×/1.56×；**KERNEL_ONLY / NVIDIA_ROUTING_SHAPE_DEPENDENT / NOT_ONLINE_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [GC-MoE: Overlapping Expert-Parallel Token Dispatch with FP8/FP4 Grouped GEMM via CUDA Green Contexts](https://arxiv.org/abs/2611.04222) | arXiv 2026 (preprint, Nov 3) | 用 **CUDA Green Contexts** 将 EP Dispatch 和 Grouped GEMM 分配独立 SM Budget/Kernel，Graph Concurrent Roots + Ring Handshake + Double-buffered Counter 避免全设备 Barrier；含 Fused SwiGLU/Optional Shared Expert。作者在 **8×H20 sm90a / 8×B300 sm103、CUDA Graph Replay、DeepSeek-V4.1-Flash 与 GLM-5.2 Shape** 和 DeepGEMM **Mega MoE** 比较，H20 路由算子 **平均 1.188×、峰值 1.296×**，B300 平均 **1.106×**；**这是跨8卡 Operator Latency，不是完整 vLLM/TRT-LLM 请求 Goodput，模型配置按 Layer Shape 模拟，H20 使用作者移植的 Mega MoE Reference，FP8/FP4 语义须匹配**。**REAL_MULTIGPU_OPERATOR / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Placement, Balance & MoE Serving (12)
+### Placement, Balance & MoE Serving (13)
 
 专家放置/复制/动态负载均衡与 MoE 服务容量。
 
@@ -65,8 +65,9 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [Coordinated Scheduling for MoE LLM Serving (Gimbal)](https://arxiv.org/abs/2606.15177) | arXiv 2026 (ATC 2026 author manuscript; archival proceedings pending) | 将 **DP routing / engine pressure** 与 **EP expert placement** 联合优化：Backend KV/Queue/Prefill/Expert 压力反馈给 Frontend，源 DP→Expert 访问统计影响迁移/复制决策；作者在单节点 **4×H100、Qwen3-30B-A3B**、BurstGPT 派生 Trace 对比 vLLM 与 MoE Balancer，报告平均 TTFT −42.9%、TPOT −33.3%，高压吞吐 +3%。**实验关闭 prefix-cache matching；规模限单节点；无独立复现或已核验公开代码**。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [FastEEP: Fast Intra-Instance Elastic Scaling for Expert-Parallel MoE Serving](https://arxiv.org/abs/2610.18451) | arXiv 2026-10-13 (preprint) | **Partial Reuse**：在最大 EP 拓扑下保留 Worker Process、父 NCCL Group、CUDA Virtual Address/Graph State，仅重配活动 EP 子组、NIXL Rank Mask、权重回填，避免整实例拆/重启；作者基于 **vLLM 0.27.0 + NIXL 1.2.0** 约 5K LOC，在双节点各 8×H20-3e (140GiB/NVLink) 对比 vLLM Elastic EP/Restart，报告伸缩周期 **4.5–11.7× 更快**，非单 Token Decode 或稳定吞吐同倍率提升。实际动态 EP 迁移的代码发布、生产交互质量及在 vLLM 0.23/Ascend 重现均未核实。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [ISER-MoE: Dynamic In-Switch Replication of Hot Experts for Load Balancing in Expert-Parallel](https://arxiv.org/abs/2611.09008) | arXiv 2026 (Nov 6 preprint) | **HALO-Q** 通过选择热专家 Helper Slots+Group Multicast 缓解 EP Owner 过载，SAMI 多端口广播与 Shared Expert Overlap 减少复制关键路径。作者在 **GB300 / TensorRT-LLM / DeepSeek-V4-Pro NVFP4** 报告 Context-only Prefill **最多 +17.4%**（DEP8 GSM8K），另 GB300 NVL72 **40–56 GPUs / Agentic Coding Trace** 的 PD Serving 比较中 Output Throughput +1.4–1.9%、P90 End-to-end Latency −3.1–4.3%。**重要限制：HALO-Q 动态调度的全链路性能未直接验证，部分 Planner/Rank Imbalance 仅 Trace Simulation；E5 Best-run Selection/共享 Decode 有混杂；预发布 Rubin 硬件另计**。**REAL_MULTIGPU_AND_TRACE_SIM / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT; SCOPED） |
+| 2026 | [vExpert: Virtualizing Expert Storage for Adaptive Load Balancing in Distributed MoE Inference](https://arxiv.org/abs/2611.06057) | arXiv 2026 (Nov 4 preprint; NeurIPS 2026 acceptance **author-claimed**) | 将 Host DRAM 作为完整冗余 Virtual Expert Pool，基于 **H2D PCIe Contention/NUMA/Expert Load** 模型映射 Virtual Slots→GPU，Coordinator/Worker 避免重复 Pinned-Memory Page-table，CUDA Graph 更新 Memcpy Source Pointer。作者 **8-node×8 H100 + 1.8TB/node DDR5、4×400Gbps IB、DeepSeek-V3.1 671B EP32/EP64** 实测相对 B2 **吞吐提升最高约20%**，4-node Kimi K2 演示与另一校准策略到29%；**需要极大的主机 DRAM，数据流为多数据集构造的 Synthetic Arrival/Drift，Allocator 每10步重配开销约10ms，绝不能当成所有在线 MoE 服务 1.2×**。**REAL_MULTINODE / SYNTHETIC_TRAFFIC / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Expert Offload & Heterogeneous Execution (22)
+### Expert Offload & Heterogeneous Execution (23)
 
 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。
 
@@ -94,6 +95,7 @@ Token Dispatch、Expert Parallel 和计算通信重叠。
 | 2026 | [PDScope: Breaking the Prefill-Decode Seesaw for Memory-Bound MoE Inference](https://arxiv.org/abs/2610.39216) | arXiv 2026 (preprint; submitted Oct 29) | CPU–GPU MoE Expert Offload 的 Phase-aware Prediction、Expert Residency、Prefetch/Static Graph Async-I/O；作者 **A100/RTX3090、24GB GPU Limit、4 BF16 MoE** 与同预算 KTransformers/Fate/Fiddler/HybriMoE/MoE-APEX 对照，报告 **Prefill 2.5–10.3× 与 Decode 2.1–6.1× 的分阶段吞吐**，非统一 Online Goodput，也非 GPU-resident GPU Benchmark。（KEEP_STRICT; CPU_GPU_PCIe; PHASE_ONLY; NOT_REPRODUCED） |
 | 2026 | [Rimuru: Unified Memory Management for Modern LLM Serving via Elastic Expert Offloading](https://arxiv.org/abs/2610.40305) | arXiv 2026 (preprint; submitted Oct 29) | 跨 KV/Expert 共享 Tensor Page Pool、异构 Memory Views、Elastic Expert Offload 与 Page-table-aware MoE Kernel；作者在 **8×RTX5090/2×RTX4090D、Qwen3/3.5 MoE** 比较 Offload Baseline 和 vLLM/SGLang。**最高 19.03×** 仅为资源受限的 Offloader 口径；多系统 CUDA Graph 被关闭，现代默认 vLLM 公平性及 Ascend 可移植均未验证。（KEEP_STRICT; REAL_GPU; BASELINE_CAVEAT; NOT_REPRODUCED） |
 | 2026 | [Accelerating Offloading-Based MoE Inference by Interleaving Concurrent Requests (Bevy)](https://arxiv.org/abs/2611.04794) | arXiv 2026 (preprint, Nov 3) | 在本地 MoE Expert Offload 中采用 **Runahead Requests + Lowest-layer-first + Opportunistic Layer-wise Grouping**，让已就绪请求计算与其他请求缺失 Expert Fetch 重叠，避免有 Expert Cache 时预测式 Prefetch 的无效访问；作者 **llama.cpp Metal/CUDA、两台 Local Device、2 个 MoE 模型/2 Trace，2–16 并发** 报告相对最快 Prefetch Baseline Decode Throughput 最高 1.55×、相对 llama.cpp 最高 3.46×；计时排除冷启动前 256 步/共同 SSD Slowdown，**仅本地 Expert Cache Offload，不是跨多节点 EP**。**REAL_DEVICE / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Apto: Self-Adaptive CPU-GPU Hybrid MoE Inference on Shared PCs](https://arxiv.org/abs/2611.01859) | arXiv 2026 (Nov 1 preprint) | **Dual-ended Work Queue + CPU/GPU Expert Affinity + Cancellable Straggler Race** 依实际 Worker Progress 动态分配活跃专家，UMA 根据 GPU Stall 自动开启 CPU Execution 以避免共享内存带宽争抢。作者在 **llama.cpp、RTX5080 16GB/Intel Ultra9 285K 96GB DRAM PCIe5、DGX Spark** 对 **FineMoE/KTransformers0.6.2/HybriMoE/llama.cpp**、Qwen1.5-MoE/DeepSeek-V2-Lite/Qwen3-30B-A3B 测真实 Prefill/Decode；与竞争 CPU 编译负载共存时作者报平均 Prefill **5.97×**、Decode **3.45×** 相对最强指定基线；**部分基线由作者重实现，指标是独立 PPS/TPS 和 Sharing 场景，非同等单流 TTFT/TPOT 或 Datacenter EP**。**REAL_CONSUMER_GPU_CPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Sparse Attention & Conditional Compute (27)
 
