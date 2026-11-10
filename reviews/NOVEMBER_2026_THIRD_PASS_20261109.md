@@ -44,6 +44,13 @@
 - **G3 simulation separation:** prediction-driven controller across broader loads, 36-deployment criterion, and scaled 2P6D are **simulation**, with calibrated models and measured nonzero fidelity error (H100 ITL violation simulator 0.5% vs hardware 13.6% in one setting). In **decode-limited H100 1P1D** the hardware arrival-time system shows little goodput gain; do not generalize H200 result.
 - **G4/G5:** original source HTML full method, explicit baselines and limitations inspected; code was not executed here. Independent Session KV state management is differentiated from *Inside the Trap*'s independent FIFO renewal-theory analysis. **KEEP_STRICT / SOURCE_G3 / NOT_REPRODUCED**.
 
+## Further edge supplement and older-paper revision: UniExit, ELDR
+
+- **[UniExit 2611.09159](https://arxiv.org/html/2611.09159v1), Nov 6:** **G0/G1/G2/G3 KEEP_ADJACENT** with actual **Jetson Xavier NX/Orin Nano, LLaMA3.2-1B 16 layers, 64 token WikiText103**, concurrency with CNN, Map, Audio, plus edge-cloud RTX5880. Policy predicts next-exit segment cost from DVFS/EMC/utilization, skips unused exit heads and chooses a single deadline-feasible exit; baseline **LayerSkip / SpecEE / Pantheon / HaX-CoNN**. Results include **per-token deadline satisfaction** and **agreement with full-depth output** (may differ); a roughly **2× local exit-level forward-progression** result is **not full HTTP Serving Goodput or lossless output**. CNN-specific monotone stabilization is not a Transformer result. **SenSys 2027 accepted is from author preprint, not independently verified proceedings**. No local reproductions.
+- **[ELDR 2607.00466v3](https://arxiv.org/html/2607.00466v3), revision Nov 6:** **No new catalog row.** Updated existing [Runtime & Scheduling canonical ELDR row](../topics/runtime-scheduling.md) after reviewing author-final ATC 2026 preprint and its new baseline-specific numbers: **Task median TPOT −8.6–14.5%** vs RR and **Language −5.4–9.8%**, averaging across arrival rates, peak max −17.8%, TTFT largely unchanged. [Zenodo author artifact](https://doi.org/10.5281/zenodo.23310788) is disclosed; no code executed. ACM-related DOI appears in arXiv metadata but a publisher landing page did not resolve in this check; **do not assert proceedings independently verified**.
+
+**Editorial count:** Original third-pass 17 + Basin 1 + UniExit 1 = **19 additions following the prior 879**, making **898**; ELDR is a 0-count correction.
+
 ## Explicit examined candidates not admitted
 
 | Primary candidate | Disposition |
