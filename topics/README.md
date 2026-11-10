@@ -1,8 +1,8 @@
 # Papers by systems mechanism
 
-**Current canonical index (reviewed 2026-11-10): 898 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 9 technical intake](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) added ten source-reviewed preprints; the [November 9 expanded sweep](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) adds seventeen additional mechanism-reviewed papers; the [third source-method pass](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) adds seventeen mechanism-reviewed papers plus [Basin and UniExit follow-up supplements](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md#late-source-supplement-basin-distinct-from-inside-the-trap); none independently reproduced. On Nov 10, **MobiInfer was briefly held for conflicting submission metadata**, then re-admitted as **KEEP_PREPRINT_EVIDENCED** after rechecking the actual full arXiv paper and Android experiments. The date conflict remains disclosed; this paper is **not asserted to be first submitted in November**.
+**Current canonical index (reviewed 2026-11-10): 929 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 9 technical intake](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) added ten source-reviewed preprints; the [November 9 expanded sweep](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) adds seventeen additional mechanism-reviewed papers; the [third source-method pass](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) adds seventeen mechanism-reviewed papers plus [Basin and UniExit follow-up supplements](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md#late-source-supplement-basin-distinct-from-inside-the-trap); none independently reproduced. On Nov 10, **MobiInfer was briefly held for conflicting submission metadata**, then re-admitted as **KEEP_PREPRINT_EVIDENCED** after rechecking the actual full arXiv paper and Android experiments. The date conflict remains disclosed; this paper is **not asserted to be first submitted in November**. The [Nov 10 arXiv frontier/backlog rescue](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md) further admitted **31 unique earlier HOLD / frontier anchors** as graded `EXPLORE`, `EVIDENCED` and `REFERENCE`, bringing the live index to **929**.
 
-**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) → [Nov 9 expanded pass (879)](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) → [Nov 9 third pass + Nov 10 preprint recalibration (898)](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
+**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) → [Nov 9 expanded pass (879)](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) → [Nov 9 third pass + Nov 10 preprint recalibration (898)](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) → [Nov 10 frontier + backlog re-audit (929)](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -10,15 +10,15 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 119 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 174 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
-| [Decoding Acceleration](decoding-acceleration.md) | 88 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 51 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 81 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 156 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 138 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 91 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **898** | **44** | |
+| [Kernels & Compilers](kernels-compilers.md) | 123 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 179 | 6 | Reuse, eviction, compression, offloading and distributed KV state |
+| [Decoding Acceleration](decoding-acceleration.md) | 91 | 5 | Speculative, blockwise and parallel generation |
+| [Quantization & Compression](quantization-compression.md) | 52 | 6 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 88 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 158 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 143 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 95 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **929** | **44** | |
 
 ## Classification boundaries
 
