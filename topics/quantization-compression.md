@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
-| [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-13) | 13 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
+| [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-14) | 14 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
 | [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-6) | 6 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-9) | 9 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-4) | 4 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **50** | |
+| **Total** | **51** | |
 
-## Papers (50)
+## Papers (51)
 
 ### Weight-Only & Rotation (12)
 
@@ -43,7 +43,7 @@ GPTQ/AWQ、Codebook 与旋转变换后的权重量化。
 | 2026 | [GyRot: Leveraging Hidden Synergy between Rotation and Fine-grained Group Quantization for Low-bit LLM Inference](https://2026.hpca-conf.org/details/hpca-2026-main-conference/38/GyRot-Leveraging-Hidden-Synergy-between-Rotation-and-Fine-grained-Group-Quantization) | HPCA 2026 | 旋转与细粒度分组量化协同，结合低位宽 GEMM 执行。 |
 | 2026 | [TwinQuant: Learnable Subspace Decomposition for 4-Bit LLM Quantization](https://proceedings.mlr.press/v306/wang26el.html) | ICML 2026 | 联合低秩/残差分解与量化友好子空间学习，Fuse 两分量的 GEMM/Epilogue 避免中间 HBM 物化；作者 Llama3/Qwen3 真实推理评测 Near-FP16 Quality + **相对 FP16 最多 1.8× E2E Speedup**。**需要量化子空间拟合/改变权重表示**，不等于同精度 BF16 Kernel 改进。（KEEP_STRICT; REAL_HARDWARE_AUTHOR_REPORTED; MODEL_CHANGED） |
 
-### Weight-Activation & Hardware Formats (13)
+### Weight-Activation & Hardware Formats (14)
 
 W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 
@@ -62,6 +62,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [RoMeo: Mitigating Dual-dimensional Outliers with Rotated Mixed Precision Quantization](https://doi.org/10.1145/3774934.3786419) | PPoPP 2026 (Main Conference) | 通过 Rotation 把 Channel Outlier 迁移到 Token 方向，设计动态 Token Outlier 检测与 Sparse Mixed-precision Kernel 支持 4-bit 加速；[作者 Artifact](https://github.com/thu-pacman/RoMeo) 给出 RTX4090/H100、Qwen3、Batch/Shape Kernel/Layer 和 Accuracy 复现脚本。PPoPP 作者报告相对 FP16 最高 2.10× E2E、相对 QuaRot/MixQ 精度提升最多 5.17%；**量化改变权重/激活数值，非无损输出**。（KEEP_STRICT; ARTIFACT_PUBLIC; REAL_H100_4090; MODEL_PRECISION_CHANGED） |
 | 2026 | [Is 2:4 Sparsity Still Worth It? Semi-Structured Sparsity versus Quantization in LLM Inference](https://arxiv.org/abs/2610.28947) | arXiv 2026 (preprint; Oct 22 announcement) | 同 Bit Budget/硬件 Tensor-Core Tier 下检验 2:4 Sparsity 与降 Bit 的收益；三代 GPU Kernel，H100 FP8 **重训练** 2:4 模型在 vLLM Prefill 报告 +27% 吞吐但 Blackwell FP4 质量未恢复。质量、训练成本和 Prefill-only 限制不可省略。（KEEP_STRICT；REQUIRES_RETRAINING；NOT_REPRODUCED） |
 | 2026 | [BiLoCo: Binary Low-Rank Corrections for Post-Training Quantization](https://arxiv.org/abs/2610.32243) | arXiv 2026 (preprint; submitted Oct 23) | 以 Binary Sign 低秩残差纠正 FP4 PTQ 的量化误差：CUDA Core Add/Sub 与 Tensor Core FP4 GEMM 在单 Kernel Epilogue 并行，替代 SVDQuant 的高精度低秩乘法。作者在 B300 4B–72B LLM 与 Rank≤512、B1 报告相对纯 FP4 Kernel **额外延迟≤11%**（B≤8/Rank128 ≤20%），在匹配 Memory Budget 的 SVDQuant 质量相近或更好。**QUANTIZED_MODEL / KERNEL_OVERHEAD_NOT_FULL_SERVING_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [ResServe: Accurate and Efficient FP4 LLM Inference with Residue Compensation](https://arxiv.org/abs/2611.08713) | arXiv 2026 (Nov 5 preprint) | 用 **FP4 Base + FP4 Residue** 的 M-Ext GEMM 及 **ResAttn** 在 On-chip 恢复部分量化误差，Prefill 则按层选择补偿比例；基于 **vLLM0.26/FlashInfer/TensorRT Model Optimizer、NVIDIA B200、Qwen3-8B/32B 8K Input+256 Decode** 报告低负载 HTTP TTFT/TPOT/E2E 和编程质量。**相对同格式 W4A4，ResServe 仍有最高约3.4% E2E 开销；相对 W4A8 可快 22.4–53.3%；不等于原 BF16 输出等价**。作者报告所有实验局限于所测 B200/模型/格式。[Source](https://arxiv.org/html/2611.08713v1)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / SAME_FORMAT_OVERHEAD / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Mixed Precision & Bit Allocation (6)
 
