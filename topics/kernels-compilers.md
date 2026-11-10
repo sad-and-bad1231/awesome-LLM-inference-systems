@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-33) | 33 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-32) | 32 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-15) | 15 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **118** | |
+| **Total** | **117** | |
 
-## Papers (118)
+## Papers (117)
 
-### Attention & Sparse Kernels (33)
+### Attention & Sparse Kernels (32)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -62,7 +62,6 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [Reorienting the Vector Axis: Restructuring FlashAttention for Long-Vector Processors](https://arxiv.org/abs/2610.29489) | arXiv 2026 (preprint; Oct 22 announcement) | 将 FA score/output Tile 转置以沿 Query 轴向量化，Softmax 系数移至 Scalar Register；真实 RISC-V 长向量 CPU 上完整 Attention Kernel 周期改善 1.84–2.08×（作者报告），不是 GPU 或 vLLM E2E。精确算法未改，但未独立验证数值误差。（KEEP_STRICT；REAL_SILICON；NOT_REPRODUCED） |
 | 2026 | [TriAttention: Unified Sparse Mixed-Precision Attention for Long-Context LLM Inference](https://arxiv.org/abs/2611.07256) | arXiv 2026 (Nov 5 preprint) | 按 Head 将 QK Tiles 分为 Skip/4-bit/8-bit、校准 Precision/Quality，再以 Fused Prefill 和 Packed KV Decode 执行。作者在 A100 测 Attention/Generation；**近似输出，所报最多 2.65× 对 BF16 的 Generation 加速不是 vLLM Online Goodput**。[Code](https://github.com/HanzhiZhang-Ulrica/TriAttention)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding](https://arxiv.org/abs/2611.09722) | arXiv 2026 (preprint, Nov 6) | 通过 **Affine Folding** 将 INT2/INT4 KV Dequant Scale/Offset 移出逐元素 Tensor Core Operand 重建，配合 CuTe DSL、H100 WGMMA 与 B200 TCGEN05 Pipeline。作者在 **H100/B200** 评测并集成 **SGLang/Qwen3-8B，100K input/1K output，95%/99% Prefix-hit**：Peak Aggregate Throughput 对 OSCAR INT2/FlashInfer BF16 提升随配置变化；INT2 Quantization 有误差，Affine Folding 仅保持相同量化定义下数值等价。**REAL_GPU / APPROXIMATE_QUANTIZATION / AUTHOR_REPORTED / NOT_REPRODUCED**。[Code](https://github.com/FutureMLS-Lab/FOSCAR)。（KEEP_STRICT） |
-| 2026 | [Step-dLLM: Adaptive Step-aware Sparse Attention for Efficient Diffusion LLM Inference](https://arxiv.org/abs/2611.01320) | arXiv 2026 (preprint; author notes NeurIPS 2026 acceptance) | 针对 dLLM Denoising Step 的 Attention Mask 相邻步稳定性，仅在 Anchor Step 更新 Block-sparse Mask，联合 Head-adaptive Budget 和 **Fused IO-aware Triton Kernel**；在 LLaDA-1.5/Dream-7B 不重训条件下，作者报告 **LLaDA-1.5 8K/256 Steps/90% Sparse** 对 Dense FlashAttention **2.78× End-to-end 推理**，但这是近似 Sparse/质量-时延折中，**不是 AR vLLM Serve Goodput**。**DIFFUSION_ONLY / APPROXIMATE_QUALITY / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### GEMM & Low-Bit Kernels (12)
 
