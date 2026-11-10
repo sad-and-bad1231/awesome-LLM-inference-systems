@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
 | [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-14) | 14 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
-| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-6) | 6 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
+| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-7) | 7 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-9) | 9 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-4) | 4 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **51** | |
+| **Total** | **52** | |
 
-## Papers (51)
+## Papers (52)
 
 ### Weight-Only & Rotation (12)
 
@@ -64,7 +64,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [BiLoCo: Binary Low-Rank Corrections for Post-Training Quantization](https://arxiv.org/abs/2610.32243) | arXiv 2026 (preprint; submitted Oct 23) | 以 Binary Sign 低秩残差纠正 FP4 PTQ 的量化误差：CUDA Core Add/Sub 与 Tensor Core FP4 GEMM 在单 Kernel Epilogue 并行，替代 SVDQuant 的高精度低秩乘法。作者在 B300 4B–72B LLM 与 Rank≤512、B1 报告相对纯 FP4 Kernel **额外延迟≤11%**（B≤8/Rank128 ≤20%），在匹配 Memory Budget 的 SVDQuant 质量相近或更好。**QUANTIZED_MODEL / KERNEL_OVERHEAD_NOT_FULL_SERVING_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [ResServe: Accurate and Efficient FP4 LLM Inference with Residue Compensation](https://arxiv.org/abs/2611.08713) | arXiv 2026 (Nov 5 preprint) | 用 **FP4 Base + FP4 Residue** 的 M-Ext GEMM 及 **ResAttn** 在 On-chip 恢复部分量化误差，Prefill 则按层选择补偿比例；基于 **vLLM0.26/FlashInfer/TensorRT Model Optimizer、NVIDIA B200、Qwen3-8B/32B 8K Input+256 Decode** 报告低负载 HTTP TTFT/TPOT/E2E 和编程质量。**相对同格式 W4A4，ResServe 仍有最高约3.4% E2E 开销；相对 W4A8 可快 22.4–53.3%；不等于原 BF16 输出等价**。作者报告所有实验局限于所测 B200/模型/格式。[Source](https://arxiv.org/html/2611.08713v1)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / SAME_FORMAT_OVERHEAD / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Mixed Precision & Bit Allocation (6)
+### Mixed Precision & Bit Allocation (7)
 
 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。
 
@@ -76,6 +76,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [Context-Aware Precision Scheduling for Small Language Models](https://arxiv.org/abs/2610.15640) | arXiv 2026 (preprint; Oct 11) | 以实测 Tensor Precision Cost 与上下文长度/KV 负担校准混合权重精度策略，修改 llama.cpp 在不丢弃 Session KV 的前提下切换已预置的多精度 Weight Bank；笔记本 GPU 上相对 Byte-aware Policy 报告 16K 情况更低 KL、长 Context Deadline 更稳定。**EXTRA_WEIGHT_BANK_MEMORY（作者约 2.072GiB） / MODEL_QUALITY_TRADEOFF / SLM_EDGE_ONLY**，不代表 910B2 通用 Prefill/Decode 加速。（KEEP_ADJACENT；EXECUTED_RUNTIME；NOT_REPRODUCED） |
 | 2026 | [The Price of Precision: A Calibrated Cost Model for Mixed-Precision LLM Serving](https://arxiv.org/abs/2610.15629) | arXiv 2026 (preprint; submitted Oct 11) | 不再以平均 Bitwidth/Weight Bytes 代理 Latency，而是校准 Hardware/Stack 的 **Compute、Weight-load 与 KV-access** 主瓶颈，按 Prefill/Decode、Batch/Context 工作点预测执行成本，并结合 Per-tensor Accuracy Sensitivity 用 DP 选精度方案；作者在三类硬件比较预测/分配方法。**COST_MODEL_AND_ALLOCATOR / MODEL_QUANTIZATION_CHANGES_QUALITY / HARDWARE_CALIBRATION_REQUIRED / NO_UNIVERSAL_SPEEDUP**；不同于只按 Byte Budget 分位宽。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [StrataFlux: Memory-Hierarchy-Native Low-Bit LLM Inference](https://arxiv.org/abs/2611.08363) | arXiv 2026 (Nov 5 preprint) | **GPU-resident 2/3-bit Base Weights/KV + Host RAM/SSD 的选择性 Refinement Residual Bitstream**，将低精度 Decode 与按 Token/Block 传输的误差修正异步重叠，联合 Runtime Calibration 与 Cache Tiering。作者在 **RTX5090** 对 **Llama3.1-8B** 报 2-bit Weight-only WikiText2 PPL **9.46→8.40** 且原 Base 95.4% Tokens/s；在 **Qwen3-8B AIME avg@8** 的 Weight+KV 2-bit 设置报告 Accuracy **11.0→47.1%**。另 **128K PG-19 Teacher-forced 最后256 Token** 的 Llama3.1-8B 3-bit Weight/2-bit KV 下报告 PPL10.80、102 tok/s、GPU7.3GB，对比 vLLM AWQ4/FP8 KV 的 PPL11.03、106.8tok/s、14.3GB。**三个结果来自不同配置，不能拼成同一 Quality/Throughput/Memory 三赢；额外 CPU RAM/SSD 不是零总内存，128K 不是完整 Online Serving，质量仍非原 BF16 等价**。**REAL_GPU / SOURCE_PDF_METHODS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Elastic Precision: Software-Hardware Co-Design of a Mixed-Precision Architecture for Long-Context LLM Inference](https://arxiv.org/abs/2611.00915) | arXiv 2026 | **Coffee** 对每个 GEMM 子数组依据 **两侧输入统计及 Error Proxy** 选混合精度，软硬协同 Nested Storage/Adaptive Array，并按 Attention 重要度压缩 KV Read。作者 **SystemVerilog/Synopsys + ASAP7 1GHz 合成**与 **vLLM0.31 四×B200** 参考测量联合模型：对重实现的 PLENA **模型预测**最高吞吐 **2.55×**，对 B200 **模拟/校准推演**最高 **4.96×**；**不是制造 Coffee 芯片实测，跨系统带宽/乘法器归一化和质量预算须保留**。**KEEP_PREPRINT_EXPLORE / SYNTHESIS_PLUS_PERF_SIM / NOT_REAL_COFFEE_CHIP / NOT_REPRODUCED**。 |
 
 ### KV Cache Quantization (9)
 
