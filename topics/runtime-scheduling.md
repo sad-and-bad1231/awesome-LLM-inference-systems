@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Batching, Queues & SLOs](#batching-queues--slos-46) | 46 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-21) | 21 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-23) | 23 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-30) | 30 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **156** | |
+| **Total** | **158** | |
 
-## Papers (156)
+## Papers (158)
 
 ### Batching, Queues & SLOs (46)
 
@@ -102,7 +102,7 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM SIGOPS ATC 2026 (**author final version v3, Nov 6; publisher DOI linked on arXiv, proceedings page not independently resolved**) | **Prefill MoE Gate Activation Signature → Decode Expert-locality-aware Routing**，利用 **Balanced K-means + Locality-band Least-loaded Worker** 兼顾已激活 Expert 的 HBM Weight Reuse 与负载；按 KV Block 保存 Signature 以在 Prefix Cache Hit 时保持正确预估。作者使用 **vLLM、Qwen3-30B-A3B/GPT-OSS-120B/Gemma4-26B-A4B，最多40 GPU，12种任务与14K多语种 WildChat**，对 Round-robin 等负载策略报告 Median TPOT：任务流量降低 **8.6–14.5%**、多语种降低 **5.4–9.8%**（跨请求率平均），峰值 **17.8%**；**TTFT 基本不变，不改变原始模型输出、Expert 选择或 Token Route，收益来自请求组合下 Weight Traffic 减少；部分结果使用作者所测 GPU 和 Load Mix，不是通用 Ascend 收益**。[Artifact](https://doi.org/10.5281/zenodo.23310788)。**REAL_MULTIGPU / SOURCE_UPDATED_V3 / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [DolphinRouting: Cluster-Level Binary Routing for Disaggregated LLM Inference Serving](https://arxiv.org/abs/2610.40292) | arXiv 2026 (preprint; Oct 29) | 在固定 Prefill/Decode 资源分配下，以 Input Length、P/D Cache-adjusted Length 和 Output Length 聚类，离线按 E2E SLO 学习每簇本地 Prefill / 远端 Prefill **Binary Routing**，在线仅需 Feature+Lookup；作者在真实 PD Cluster 的 Mixed Workload 和真实数据对比 **NVIDIA Dynamo** 报告 P90 TTFT −5.7%–7.9%、P90 TPOT −2.6%–10.1%。**REAL_CLUSTER / FIXED_PD_RESOURCES / NO_UNIVERSAL_SLO_GAIN / NOT_REPRODUCED**；无需发明跨集群吞吐结论。（KEEP_STRICT） |
 
-### P/D Allocation & Autoscaling (21)
+### P/D Allocation & Autoscaling (23)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
@@ -129,6 +129,8 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [FluidPD: In-Place Elasticity for SLO-Aware Prefill-Decode Disaggregated LLM Serving](https://arxiv.org/abs/2610.06917) | arXiv 2026-10 (preprint) | **FluidToken** 临时将 Prefill Tokens 卸给 Decode Worker 的闲余算力；**FluidRole** 对持续偏压执行不重载权重的 P/D Worker 原位角色切换。作者 SGLang v0.5.4、8×A100、Azure-derived 负载对照静态/其他配置报告最高 **+94.6 percentage points SLO attainment**（特定压力场景、非普遍提升）。未核验公开源代码和数据，未在 vLLM-Ascend 复现。(KEEP_STRICT; REAL_GPU_AUTHOR_REPORTED; ARTIFACT_UNVERIFIED) |
 | 2026 | [OServe: Accelerating LLM Serving via Spatial-Temporal Workload Orchestration](https://proceedings.mlr.press/v306/jiang26k.html) | ICML 2026 | 针对 Request 空间异质性和时间变化，协同决策 Heterogeneous Model Deployment、Workload-aware Scheduling 与在线部署切换；作者真实 Trace 结果平均 1.5× / 最高 2×。**AUTHOR_REPORTED / RECONFIGURATION_COST / PUBLIC_CODE_NOT_VERIFIED**。 |
 | 2026 | [PhOSv1: Efficient Scaling of Model Sleeping on a Single Server for Autoscaling with GPU-Context Deduplication](https://arxiv.org/abs/2610.39999) | arXiv 2026 (preprint; submitted Oct 29) | 用中心 Daemon/API Remoting 对长期 Sleep 的 vLLM Instances 共享 CUDA Context/Kernel Binary；作者 **10 Qwen、10min 稀疏 Poisson Trace、Vanilla 6GiB Sleep Budget** 上 Mean E2E TTFT 146.82→19.09s。**长尾多模型 Autoscaling 而非稳态 Decode Speed**；HPCC 2026 Accepted List 可查，正式出版/Ascend 实现尚未验证。（KEEP_STRICT; CUDA_SPECIFIC; LONG_TAIL; NOT_REPRODUCED） |
+| 2026 | [Analytical Power-Aware Provisioning for Prefill-Decode Disaggregated AI Inference](https://arxiv.org/abs/2609.24639) | arXiv 2026 | 用 **Joint Input/Output Length Distribution、KV Reservation、Queueing/Compute Limits** 定义 P/D 实例组合的 Serving Capacity，再用 Throughput-dependent Power 模型求 **Capacity–Power Pareto Frontier**；是用于选择 Provision 的解析法，而非基于真实部署的自动扩缩容策略。**仅对作者校准 Hardware/Workload 假设有效，不可当作测得的整机省电比例或线上 SLO 保证**。**KEEP_PREPRINT_EXPLORE / ANALYTICAL_MODEL / NOT_REPRODUCED**。 |
+| 2026 | [Analytical Provisioning for Attention-FFN Disaggregated LLM Serving under Stochastic Workloads](https://arxiv.org/abs/2601.21351) | arXiv 2026 | 对 **r Attention→1 FFN AFD Bundle** 推导 Renewal-reward Token Load 统计量与 **Gaussian Straggler Barrier** 修正，给出 Attention/Communication/FFN Bottleneck 的分段最优 Provisioning；作者在 Trace-calibrated AFD Simulator 报 Ratio 预测与模拟最优 **误差在10%内**。**未证明真实 AFD 集群里同精度或吞吐提升，分析模型和到达过程的边界需要再校验**。**KEEP_PREPRINT_EXPLORE / MATHEMATICAL_MODEL_PLUS_TRACE_SIM / NOT_REPRODUCED**。 |
 
 ### Preemption & Multi-Tenancy (30)
 
