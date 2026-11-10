@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Draft Models & Candidate Generation](#draft-models--candidate-generation-20) | 20 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
+| [Draft Models & Candidate Generation](#draft-models--candidate-generation-21) | 21 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-22) | 22 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-11) | 11 | Candidate Tree、并行候选和 Target Verification 效率。 |
 | [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-17) | 17 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-17) | 17 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **87** | |
+| **Total** | **88** | |
 
-## Papers (87)
+## Papers (88)
 
-### Draft Models & Candidate Generation (20)
+### Draft Models & Candidate Generation (21)
 
 Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 
@@ -49,6 +49,7 @@ Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。
 | 2026 | [Domino: Decoupling Causal Modeling from Autoregressive Drafting in Speculative Decoding](https://aclanthology.org/2026.emnlp-main.1015/) | EMNLP 2026 Main (ACL Anthology, October) | 用一次并行 Draft Backbone 生成整段初始概率，再以 Lightweight Domino Head 注入 Prefix-dependent Causal Correction，替代高成本 AR Draft；训练采用 Base-anchored Curriculum，使 Parallel Backbone 与 Causal Head 对齐。作者 Qwen3 对照在 **Transformers 端到端最高 5.49×**、**SGLang Serving Throughput 最高 5.8×**（不同 Backend/Metric）。**TRAINED_DRAFTER / BASELINE_AND_SAMPLING_EQUIVALENCE_CONTRACT / AUTHOR_ARTIFACT_NOT_RUN / NOT_REPRODUCED**；非可直接替换的通用 Kernel。（KEEP_STRICT） |
 | 2026 | [ChainFlow: Few-Step Latent Flow Matching for Speculative Decoding](https://arxiv.org/abs/2611.08669) | arXiv 2026 (Nov 5 preprint) | 使用 Target Hidden-state 条件化的压缩潜变量 Flow Drafter 和 Token Feedback/Tree Drafting，用 1–2 步代替逐 Token Draft；**需要训练 Drafter**。作者在 **B300、vLLM 0.31.0、Qwen3.5、Greedy Batch1** 对比 EAGLE-3/DFlash，另测试语言适配和部分并发。**TRAINED_DRAFTER / EXACT_TARGET_VERIFICATION / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Give the Drafter a Second Chance to Guess: Parallel Reconsideration for Speculative Decoding](https://arxiv.org/abs/2611.05724) | arXiv 2026 (preprint, Nov 3) | 用 Drafter 自身不确定性驱动 **并行额外 Forward Reconsideration**，训练 Self-query/Mixed-cache Head；保持 Target Verification 不变、输出 Sampling Contract，融合到 Draft Tree。作者相对 **EAGLE-3.1** 在 Llama3.1/Gemma3/Qwen3、Greedy/Nonzero Temperature 多题型测 Acceptance +5.3–10.2%、Wall-clock Speedup +3.5–9.2%，另测 Batch1–16。**需要训练 Draft，不是原模型无损新 Kernel；没有证明线上 SLO Goodput**。**TRAINED_DRAFTER / REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Weights That Stay: On-Chip Megakernels for Serial Heads in Speculative Decoding](https://arxiv.org/abs/2611.00506) | arXiv 2026 (Oct 31 submitted; Nov listing) | 保持 Markov/DSpark/Recurrent Speculative Drafter 的 **Vocabulary Projection Shards 常驻 On-chip SM**，Persistent Megakernel 内串行 Draft Walk 并 GPU 端 Sampling/State Advance，避免重复读取 Head Weights 和 Host Launch。作者在 **H100 SXM80GB (SGLang integrated Qwen3-4B/8B)、B200 (Head-only)**，3,030 Prompts/9 Datasets、固定 Concurrency 与同版本 SGLang Baseline 实测 **4B E2E Throughput 最高 +12.3%，8B +8.6%**；**Head-level DSpark up to 11.6× 不等于 Serving 11.6×，只适用带 Serial Head 的特定 Parallel Drafter**。**REAL_GPU_E2E / DRAFTER_SPECIFIC / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Training-Free & Self-Speculation (22)
 
