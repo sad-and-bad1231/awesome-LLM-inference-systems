@@ -1,6 +1,6 @@
 # PR #80 pre-merge editorial audit — November 10, 2026
 
-**Target:** [PR #80](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/80), branch `curation/november-2026-systems-sweep-1109` based on `main@6bcdd81`; 852 → 897 canonical rows, 8 technical categories, 44 tracks, 45 net additions. **Status: DRAFT / NO MERGE APPROVAL.** Source-level review and CI are **not a substitute** for independent GPU/NPU replication or a second scientific reviewer.
+**Target:** [PR #80](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/80), branch `curation/november-2026-systems-sweep-1109` based on `main@6bcdd81`; 852 → 898 canonical rows, 8 technical categories, 44 tracks, 46 net additions. **Status: DRAFT / NO MERGE APPROVAL.** Source-level review and CI are **not a substitute** for independent GPU/NPU replication or a second scientific reviewer.
 
 ## 1. Audit scope, controls and primary evidence
 
@@ -67,3 +67,12 @@ These sources supply a useful beginning for **source audit**, but a browseable r
 ### Nov 10 hard-gate follow-up (supersedes earlier provisional row treatment)
 
 **Disposition: MobiInfer → HOLD_G0_DATE_CONFLICT, Runtime -1, canonical 898 → 897.** Its authors, ID and runtime work remain discoverable from [arXiv](https://arxiv.org/abs/2611.08496) and the dated [third-pass source receipt](NOVEMBER_2026_THIRD_PASS_20261109.md). The conflicting first-submission provenance should be clarified with arXiv/author rather than guessed. This is an editorial source-admission decision, not a claim that the experiments are false. The draft PR now contains **45 net new papers**, not 46. **No merge approval**.
+
+
+## November 10 editorial policy revision — preprint discovery vs. mature systems references (latest decision)
+
+**Supersedes the above temporary MobiInfer HOLD and 897-count snapshots.** The owner clarified a two-speed philosophy: aggressively detect **arXiv frontier mechanisms** while using accepted **systems-conference publications** as methodological exemplars. **G0 identity, inference relevance, concrete falsifiable mechanism and attribution remain hard requirements**, but G3/G4 evidence is **claim-relative and maturity-relative**. Author-reported pilot, microbenchmark, trace, transparent simulation or formal analysis can support **KEEP_PREPRINT_EXPLORE**; substantial scoped measurements support **KEEP_PREPRINT_EVIDENCED**; full balanced studies support **KEEP_REFERENCE**. Standalone storytelling with no inspectable technical support is **HOLD_STORY_ONLY**, not a canonically verified speedup. See [CURATION](../CURATION.md#two-speed-publication-review-arxiv-discovery-vs-conference-references) and [STRICT_REVIEW](../STRICT_REVIEW.md#different-evidence-thresholds-identical-honesty-floor).
+
+**Re-check of MobiInfer:** [arXiv abstract and v1 history](https://arxiv.org/abs/2611.08496) and [full manuscript](https://arxiv.org/html/2611.08496v1) show stable ID/title/authors and full MNN/AndroidWorld/real-device methodology. The encoded arXiv ID implies Nov 2026 but full text and submission page display **11 Aug 2026**: unresolved **timestamp** metadata, **not an absent/nonexistent paper**. It was originally removed during strict policy enforcement, then **re-admitted as KEEP_PREPRINT_EVIDENCED** after the source check, with an explicit **G0_DATE_NOTE** in the canonical Runtime row. Do **not claim November-first-submission novelty**. The 2.4× task latency and limited task-quality delta are **author-reported**, not independently run. **Runtime +1; canonical 897 → 898; PR net +46.**
+
+**What this policy revision does not imply:** zero-evidence architecture proposals do not become measured research; a strong preprint does not suddenly get conference-level methodology certification; no public artifact/code or local GPU/NPU reproduction is required to discover a genuinely falsifiable early mechanism. The earlier dates/hold outcomes in this file are preserved as an audit trail and **superseded by this latest decision**. PR stays Draft pending editorial review.
