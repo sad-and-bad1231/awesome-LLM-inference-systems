@@ -16,12 +16,12 @@
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-28) | 28 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
 | [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-23) | 23 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **136** | |
+| **Total** | **137** | |
 
-## Papers (136)
+## Papers (137)
 
 ### Parallelism & Scale-Up (28)
 
@@ -97,7 +97,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 | 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
 
-### KV Transfer & Communication (25)
+### KV Transfer & Communication (26)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
@@ -128,6 +128,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://doi.org/10.1145/3789240.3829159) | SIGCOMM 2026 | 让远端 KV 不只 Storage→Prefill，还可 Storage→Decode→Prefill，借 Decode 侧闲置 Storage NIC 与 GPU 间 RDMA；全局 Scheduler 分配两条 I/O 路径。[SIGCOMM 正式摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告 DeepSeek 参与的生产 Agent Trace / 自有系统 E2E：Offline 吞吐最多 1.87×，Online SLO 吞吐均值 1.96×，均为作者报告。**CUSTOM_ENGINE / NETWORK_TOPOLOGY_DEPENDENT / NOT_VLLM_PORT**。 |
 | 2026 | [Deploying RDMA for Large-Scale Inference and Training Workloads (ByteExpress)](https://arxiv.org/abs/2610.12815) | arXiv 2026 (ByteDance production report; preprint) | 生产参数服务器推理/训练中的 RDMA Layer：跨应用/传输缓冲区协同、Zero-copy、QP Multiplexing、Receive-credit、Software Send Window 与 RPC Recovery。生产推理 Parameter Fetch Mean/P99 相对 Kernel TCP 分别低 35.7%/43.7%（作者报告）；**并非** vLLM P/D KV Transfer 或 Decode Collective 的直接 E2E 证据，作为分布式推理通信基础设施相邻准入。（KEEP_ADJACENT；NOT_REPRODUCED） |
+| 2026 | [flash-comm: Self-Synchronizing Collective Communication for LLM Decoding](https://arxiv.org/abs/2611.06634) | arXiv 2026 (Nov 4 preprint) | 消除 Decode Collective 中独立 Cross-GPU Barrier，借助 **Per-block Readiness Evidence + Cost-guided Encoding + Deterministic Reduction Ordering** 维护 Data Dependence 与 Graph Buffer Reuse；与 **SGLang Custom AR v2/NCCL Symmetric AllReduce** 比较。作者在 **2/4/8×H100/H200/B300 CUDA Graph、1KB–16MB** 实测，8×B300 相对 AR v2 的 AllReduce Median Latency **−28.8%**；在 **8×B300、DeepSeek-V4-Flash-0731、TP Decode、Concurrency≥16** 报 **端到端 TPOT −1.7–6.8%**（AllReduce 本占 Decode 11.4%，上限受 Amdahl 约束）。**READINESS_CORRECTNESS / REAL_MULTIGPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### Fleet Scaling & Reliability (28)
 
