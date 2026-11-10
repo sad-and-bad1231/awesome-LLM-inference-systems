@@ -19,10 +19,10 @@
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-15) | 15 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **117** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-16) | 16 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **118** | |
 
-## Papers (117)
+## Papers (118)
 
 ### Attention & Sparse Kernels (32)
 
@@ -162,7 +162,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (15)
+### Kernel Automation & Tools (16)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -185,3 +185,4 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [God Does Not Play Dice: Enforcing Batch Invariance in Agentic Kernel Generation](https://arxiv.org/abs/2610.36623) | arXiv 2026 (preprint; submitted Oct 27) | 在 GPU Kernel Agent 的优化 Loop 引入 Batch Invariance（同一请求随 Batch 伙伴变化仍 Bitwise Consistent）Contract-guided 静态依赖检查和多 Batch 动态执行验证；作者在 83 个适用的已发布 Kernel 中发现 19 个违例，三 Agent Framework 实验中 BI Pass Rate 67.6%→91.9%，保留原几何平均 Kernel Speedup 的 91.8%。**KERNEL_CORRECTNESS_GATE / NON_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Learning to Formulate: Agentic Hardware-Software Co-Design of AI Infrastructure through Progressive Optimization and Verification (Formulaic)](https://arxiv.org/abs/2610.39380) | arXiv 2026 (preprint; Oct 29) | Formulaic 由 Agent 生成带约束的 **Template + Cost Model**，Solver 选择 Kernel/Hardware 配置，逐步执行数值检查与部分形式化证明。论文 **NVIDIA GB10** 在 Qwen3-8B 完整层上相对 SGLang 0.5.9 几何平均 **1.075×**，另报告 **整模型 Serving**：Dense P2048/P4096 TTFT 分别改善 **5.72%/4.73%**、P512 **回退 5.82%**，Dense 单客户端吞吐 +7.70%；MoE Prefill 有正向结果，但 **MoE Decode 未通过 40 层完整输出/状态检查，未用于 Serving**。Ventus Qwen2.5-0.5B 硬软联合设计 **0.428 vs 0.934 周期比是模拟**；Proof Reuse 2.51× 只指 Checking。**REAL_GPU_SERVING_SCOPED / NEGATIVE_RESULT_RECORDED / PARTIAL_PROOF / SEPARATE_SIMULATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [ForgeKernel: Self-Evolving Kernels Catching and Surpassing Experts and Agents](https://arxiv.org/abs/2611.04998) | arXiv 2026 (preprint, Nov 3) | Architecture Agent 规划可执行 Kernel 里程碑，Coding Agent 实现，**Profiler/Disassembly→机制知识库→sealed reference→新一轮架构重评**；与 KDA、CAKE、JustGoal 比较。作者 **H100/B200 + Ascend 910C CANN-Bench** 真实公开测试集报告实机 Operator 收益与最佳提交；**跨轮机制复用不等于 Agent 自身 RSI，作者最佳选取和搜索预算影响可比性，非 Serving E2E**。**REAL_GPU_NPU / AGENT_KERNEL / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Warpline: Binary-Level Tracing and Unified Evidence for Agentic GPU Kernel Optimization](https://arxiv.org/abs/2611.04331) | arXiv 2026 (preprint, Nov 3) | **Binary/SASS Instrumentation → Pipeline/Barrier Timeline → Queryable Evidence for Agent**，支持 Triton/CuTe/CUDA Kernel，减少源级 Tracer 改动优化对象本身的问题。作者在 **B200 sm100、38 Kernels、10 SOL-ExecBench 问题、相同 6×60min/问题 Budget** 报 **1.2% Median Tracing Overhead、99.9% Median Instruction Preservation**；Agent 从 Starting Kernels 获得 **7.69× GM Speedup**，Bare 6.94×、KDA 6.13×。**这三个值均相对各自 Starting Kernels，不是 Warpline 相对 KDA 提速 7.69×；Agent Model/Reviewer 调用数也不等，比较依赖 Budget 定义；非 Serving E2E，CUDA/SASS 工具链不直接移植 Ascend**。**REAL_GPU / SOURCE_HTML_METHODS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
