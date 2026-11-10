@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
 | [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-14) | 14 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
-| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-6) | 6 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
+| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-5) | 5 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-9) | 9 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-4) | 4 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **51** | |
+| **Total** | **50** | |
 
-## Papers (51)
+## Papers (50)
 
 ### Weight-Only & Rotation (12)
 
@@ -64,7 +64,7 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [BiLoCo: Binary Low-Rank Corrections for Post-Training Quantization](https://arxiv.org/abs/2610.32243) | arXiv 2026 (preprint; submitted Oct 23) | 以 Binary Sign 低秩残差纠正 FP4 PTQ 的量化误差：CUDA Core Add/Sub 与 Tensor Core FP4 GEMM 在单 Kernel Epilogue 并行，替代 SVDQuant 的高精度低秩乘法。作者在 B300 4B–72B LLM 与 Rank≤512、B1 报告相对纯 FP4 Kernel **额外延迟≤11%**（B≤8/Rank128 ≤20%），在匹配 Memory Budget 的 SVDQuant 质量相近或更好。**QUANTIZED_MODEL / KERNEL_OVERHEAD_NOT_FULL_SERVING_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [ResServe: Accurate and Efficient FP4 LLM Inference with Residue Compensation](https://arxiv.org/abs/2611.08713) | arXiv 2026 (Nov 5 preprint) | 用 **FP4 Base + FP4 Residue** 的 M-Ext GEMM 及 **ResAttn** 在 On-chip 恢复部分量化误差，Prefill 则按层选择补偿比例；基于 **vLLM0.26/FlashInfer/TensorRT Model Optimizer、NVIDIA B200、Qwen3-8B/32B 8K Input+256 Decode** 报告低负载 HTTP TTFT/TPOT/E2E 和编程质量。**相对同格式 W4A4，ResServe 仍有最高约3.4% E2E 开销；相对 W4A8 可快 22.4–53.3%；不等于原 BF16 输出等价**。作者报告所有实验局限于所测 B200/模型/格式。[Source](https://arxiv.org/html/2611.08713v1)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / SAME_FORMAT_OVERHEAD / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Mixed Precision & Bit Allocation (6)
+### Mixed Precision & Bit Allocation (5)
 
 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。
 
@@ -75,7 +75,6 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization](https://arxiv.org/abs/2607.16184) | arXiv 2026 (preprint) | 根据在线 KV 容量压力调节 MoE Expert Weights 的精度，将模型质量、显存与 Batch 吞吐联合优化；真实 MoE Serving 工作负载报告 GPU 内存与端到端性能。 **复审证据：**[arXiv](https://arxiv.org/abs/2607.16184)：KV Pressure 驱动动态 Expert Weight Quantization；作者报告 FP16-equivalent Accuracy 条件下最多 72% Memory Saving / 1.94× Throughput。MODEL_CHANGED/QUALITY_TRADEOFF。 （KEEP_SOURCE_VERIFIED; AUTHOR_REPORTED; NOT_INDEPENDENTLY_REPRODUCED） |
 | 2026 | [Context-Aware Precision Scheduling for Small Language Models](https://arxiv.org/abs/2610.15640) | arXiv 2026 (preprint; Oct 11) | 以实测 Tensor Precision Cost 与上下文长度/KV 负担校准混合权重精度策略，修改 llama.cpp 在不丢弃 Session KV 的前提下切换已预置的多精度 Weight Bank；笔记本 GPU 上相对 Byte-aware Policy 报告 16K 情况更低 KL、长 Context Deadline 更稳定。**EXTRA_WEIGHT_BANK_MEMORY（作者约 2.072GiB） / MODEL_QUALITY_TRADEOFF / SLM_EDGE_ONLY**，不代表 910B2 通用 Prefill/Decode 加速。（KEEP_ADJACENT；EXECUTED_RUNTIME；NOT_REPRODUCED） |
 | 2026 | [The Price of Precision: A Calibrated Cost Model for Mixed-Precision LLM Serving](https://arxiv.org/abs/2610.15629) | arXiv 2026 (preprint; submitted Oct 11) | 不再以平均 Bitwidth/Weight Bytes 代理 Latency，而是校准 Hardware/Stack 的 **Compute、Weight-load 与 KV-access** 主瓶颈，按 Prefill/Decode、Batch/Context 工作点预测执行成本，并结合 Per-tensor Accuracy Sensitivity 用 DP 选精度方案；作者在三类硬件比较预测/分配方法。**COST_MODEL_AND_ALLOCATOR / MODEL_QUANTIZATION_CHANGES_QUALITY / HARDWARE_CALIBRATION_REQUIRED / NO_UNIVERSAL_SPEEDUP**；不同于只按 Byte Budget 分位宽。（KEEP_STRICT；NOT_REPRODUCED） |
-| 2026 | [MatMoE: Matryoshka Mixture-of-Experts with Dynamic Mixed-Precision Quantization for Efficient Inference](https://arxiv.org/abs/2611.01704) | arXiv 2026 (preprint, Nov 1) | **Matryoshka Expert PTQ + Floor-and-Compensation Quantization + Route-score-aware Dynamic Bit Allocation** 在受限显存/动态时延预算下改变 Expert 精度；作者在 **llama.cpp、Raspberry Pi5、Jetson AGX Orin、RTX4090、3 个 MoE Models** 测真实端侧推理，报告相对 llama.cpp 最高设备特定 3.7×；**近似 Quant 改变质量，静态/动态 Precision 基线须区分，非大型集群 MoE EP**。**REAL_EDGE_CPU_GPU / APPROXIMATE_QUALITY / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### KV Cache Quantization (9)
 
