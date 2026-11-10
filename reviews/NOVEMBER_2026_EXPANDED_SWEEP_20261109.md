@@ -77,6 +77,18 @@ The [official Monday November 9 cs.DC new list](https://arxiv.org/list/cs.DC/new
 6. **Agentic kernel engineering:** ForgeKernel's multi-session mechanism-memory + actual Ascend results is strong new evidence; distinguish **operator best-of-budget** from code-agent generalization, hidden correctness and inference E2E.
 7. **Autonomous inference engine evolution:** ServerBench (earlier batch) evaluates entire serving implementations; ForgeKernel improves kernel search process and SpecPilot modifies speculative paths. This is **not proof of self-modifying optimizer or recursive self-improvement**.
 
+## Further November 2–5 **first-party** inference engineering, after the paper sweep
+
+These are **engineering source notes**, not new canonical academic papers or new OSS entries.
+
+| Original upstream | Mechanism and exact attribution | Source-level claim/limit |
+|---|---|---|
+| [LMSYS/SGLang HiCache × CP/PP/Speculation/P-D](https://www.lmsys.org/blog/2026-11-02-hicache-distributed-serving) (Nov 2) | **CP logical page owner map**, owner-shard gather overlapped by alternating 2-layer buffers, **PP ACK-queue consensus** for same restored prefix length, **draft state restore and missing-only P/D KV transfer** | Real GB300/GLM-5.2-NVFP4 deployment comparison, **~24.5K requests per arm** with similar cache budget. **L1 Hit 42.83→83.31%**, GPU+host hit ~93%, mean prefill queue 14.64→6.42s. **Mean queue and forward samples are from different request populations: do not add them as TTFT**. A separate Iflytek Astron case has **different** baseline/traffic |
+| [Buoyant Kinference](https://vllm.ai/blog/2026-11-04-introducing-kinference) (Nov 4) | **Kubernetes control plane above vLLM engine:** tenant policies, rate limiting, KV/cache-aware routing, queue prediction, optional provider fallback; upstream owner is **Buoyant**, not vLLM core | Author's shared-prefix/multi-turn traffic reports **7.4×/3.5× SLO-qualified Goodput vs vanilla Kubernetes routing**, not tokens/sec from a faster CUDA kernel. User workloads/routing baseline/quality need independent assessment |
+| [NVIDIA per-byte memory co-design](https://developer.nvidia.com/blog/five-ways-nvidia-co-design-maximizes-the-value-of-every-byte-in-the-ai-factory/) (Nov 5) | NVFP4 weight+KV; wide EP/TensorRT-LLM; **Dynamo/NIXL KV Routing/Tiering**; Vera CPU tool-idle KV staging over NVLink-C2C; **CMX BlueField-4 STX + DOCA Memos** for pod-wide shared context storage | **Vendor architecture and benchmark reporting**, not an external controlled GPU study. NVFP4 quality may differ; CMX **up to 5×** against selected traditional storage and Vera Rubin per-watt scaling cannot be treated as portable Ascend gains. Some announced tiers are not verified running artifacts |
+
+**Source placement:** stable [SGLang/vLLM/community navigation](../communities/README.md) and [NVIDIA](../organizations/NVIDIA.md) have concise dated annotations. Do not turn first-party blog prose into a second unverified list of independent system papers.
+
 ## Immediate experimental/engineering priorities
 
 - For Ascend: ForgeKernel on **910C** is not tested on the pinned **910B2/CANN 9.1**; inspect compiler/shape/oracle compatibility. FlashOffloading's 910C/PD pathway remains a separate priority.
