@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-31) | 31 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-33) | 33 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-20) | 20 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-14) | 14 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **115** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-15) | 15 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **118** | |
 
-## Papers (115)
+## Papers (118)
 
-### Attention & Sparse Kernels (31)
+### Attention & Sparse Kernels (33)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
@@ -61,6 +61,8 @@ Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 | 2026 | [FlashPrefill V2: Block-Sparse Prefill Attention for Long-Context LLM Serving](https://arxiv.org/abs/2608.19758) | arXiv 2026 (preprint) | 从 FlashPrefill 原型推进到可执行 Hopper SM90 Sparse Prefill Backend：Mean Correction、PackGQA、Warp Specialization、BF16/FP8、Paged KV 与 SGLang Continuous Batching。作者 H20 长上下文算子加速不等于全链路 Goodput；**APPROXIMATE_ATTENTION / CUDA_SM90_ONLY**。[Code](https://github.com/qhfan/FlashPrefillv2)。 |
 | 2026 | [Reorienting the Vector Axis: Restructuring FlashAttention for Long-Vector Processors](https://arxiv.org/abs/2610.29489) | arXiv 2026 (preprint; Oct 22 announcement) | 将 FA score/output Tile 转置以沿 Query 轴向量化，Softmax 系数移至 Scalar Register；真实 RISC-V 长向量 CPU 上完整 Attention Kernel 周期改善 1.84–2.08×（作者报告），不是 GPU 或 vLLM E2E。精确算法未改，但未独立验证数值误差。（KEEP_STRICT；REAL_SILICON；NOT_REPRODUCED） |
 | 2026 | [TriAttention: Unified Sparse Mixed-Precision Attention for Long-Context LLM Inference](https://arxiv.org/abs/2611.07256) | arXiv 2026 (Nov 5 preprint) | 按 Head 将 QK Tiles 分为 Skip/4-bit/8-bit、校准 Precision/Quality，再以 Fused Prefill 和 Packed KV Decode 执行。作者在 A100 测 Attention/Generation；**近似输出，所报最多 2.65× 对 BF16 的 Generation 加速不是 vLLM Online Goodput**。[Code](https://github.com/HanzhiZhang-Ulrica/TriAttention)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [FOSCAR: Accelerating Decode Attention over 2- and 4-Bit KV Caches through Affine Folding](https://arxiv.org/abs/2611.09722) | arXiv 2026 (preprint, Nov 6) | 通过 **Affine Folding** 将 INT2/INT4 KV Dequant Scale/Offset 移出逐元素 Tensor Core Operand 重建，配合 CuTe DSL、H100 WGMMA 与 B200 TCGEN05 Pipeline。作者在 **H100/B200** 评测并集成 **SGLang/Qwen3-8B，100K input/1K output，95%/99% Prefix-hit**：Peak Aggregate Throughput 对 OSCAR INT2/FlashInfer BF16 提升随配置变化；INT2 Quantization 有误差，Affine Folding 仅保持相同量化定义下数值等价。**REAL_GPU / APPROXIMATE_QUANTIZATION / AUTHOR_REPORTED / NOT_REPRODUCED**。[Code](https://github.com/FutureMLS-Lab/FOSCAR)。（KEEP_STRICT） |
+| 2026 | [Step-dLLM: Adaptive Step-aware Sparse Attention for Efficient Diffusion LLM Inference](https://arxiv.org/abs/2611.01320) | arXiv 2026 (preprint; author notes NeurIPS 2026 acceptance) | 针对 dLLM Denoising Step 的 Attention Mask 相邻步稳定性，仅在 Anchor Step 更新 Block-sparse Mask，联合 Head-adaptive Budget 和 **Fused IO-aware Triton Kernel**；在 LLaDA-1.5/Dream-7B 不重训条件下，作者报告 **LLaDA-1.5 8K/256 Steps/90% Sparse** 对 Dense FlashAttention **2.78× End-to-end 推理**，但这是近似 Sparse/质量-时延折中，**不是 AR vLLM Serve Goodput**。**DIFFUSION_ONLY / APPROXIMATE_QUALITY / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
 ### GEMM & Low-Bit Kernels (12)
 
@@ -161,7 +163,7 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (14)
+### Kernel Automation & Tools (15)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
@@ -183,3 +185,4 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [CANNBot-CAKE: Collaborative Agentic Kernel Evolution for Ascend NPU](https://arxiv.org/abs/2610.31034) | arXiv 2026 (preprint; Oct 22) | 面向 Ascend CANN 的 Generation/Evolution、Multi-DSL 路由、经审阅 Knowledge Book；在 Ascend 950PR 的 53 个 CANN-Bench Operator，标准测试 1060/1060、隐藏测试 4167/4240，作者报告均值 1.334× 相对基线。**不是** NVIDIA CAKE，亦不等于 Ascend 910B2 或真实 vLLM Serving 提速。（KEEP_ADJACENT；BENCHMARK_ONLY；NOT_REPRODUCED） |
 | 2026 | [God Does Not Play Dice: Enforcing Batch Invariance in Agentic Kernel Generation](https://arxiv.org/abs/2610.36623) | arXiv 2026 (preprint; submitted Oct 27) | 在 GPU Kernel Agent 的优化 Loop 引入 Batch Invariance（同一请求随 Batch 伙伴变化仍 Bitwise Consistent）Contract-guided 静态依赖检查和多 Batch 动态执行验证；作者在 83 个适用的已发布 Kernel 中发现 19 个违例，三 Agent Framework 实验中 BI Pass Rate 67.6%→91.9%，保留原几何平均 Kernel Speedup 的 91.8%。**KERNEL_CORRECTNESS_GATE / NON_SERVING_GOODPUT / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Learning to Formulate: Agentic Hardware-Software Co-Design of AI Infrastructure through Progressive Optimization and Verification (Formulaic)](https://arxiv.org/abs/2610.39380) | arXiv 2026 (preprint; Oct 29) | Formulaic 由 Agent 生成带约束的 **Template + Cost Model**，Solver 选择 Kernel/Hardware 配置，逐步执行数值检查与部分形式化证明。论文 **NVIDIA GB10** 在 Qwen3-8B 完整层上相对 SGLang 0.5.9 几何平均 **1.075×**，另报告 **整模型 Serving**：Dense P2048/P4096 TTFT 分别改善 **5.72%/4.73%**、P512 **回退 5.82%**，Dense 单客户端吞吐 +7.70%；MoE Prefill 有正向结果，但 **MoE Decode 未通过 40 层完整输出/状态检查，未用于 Serving**。Ventus Qwen2.5-0.5B 硬软联合设计 **0.428 vs 0.934 周期比是模拟**；Proof Reuse 2.51× 只指 Checking。**REAL_GPU_SERVING_SCOPED / NEGATIVE_RESULT_RECORDED / PARTIAL_PROOF / SEPARATE_SIMULATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [ForgeKernel: Self-Evolving Kernels Catching and Surpassing Experts and Agents](https://arxiv.org/abs/2611.04998) | arXiv 2026 (preprint, Nov 3) | Architecture Agent 规划可执行 Kernel 里程碑，Coding Agent 实现，**Profiler/Disassembly→机制知识库→sealed reference→新一轮架构重评**；与 KDA、CAKE、JustGoal 比较。作者 **H100/B200 + Ascend 910C CANN-Bench** 真实公开测试集报告实机 Operator 收益与最佳提交；**跨轮机制复用不等于 Agent 自身 RSI，作者最佳选取和搜索预算影响可比性，非 Serving E2E**。**REAL_GPU_NPU / AGENT_KERNEL / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
