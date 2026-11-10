@@ -1,16 +1,16 @@
 # Awesome LLM Inference Systems
 
-**876 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 9 expanded source sweep; **no independent GPU/NPU reproduction is implied**.
+**882 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 9 expanded source sweep; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
-**Current review status (2026-11-09):** the [November 9 systems/arXiv source sweep](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) added ten source-reviewed preprints across seven technical classes (**852 → 862**), followed by [14 expanded source-admitted papers](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) (**862 → 876**), with disputed papers and unconfirmed model releases held in a dated audit ledger. The [November 6 source re-review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) resolved two historical aliases; **NovaServe / Select-N remains HOLD_IDENTITY**. No author GPU/NPU performance result was independently reproduced here.
+**Current review status (2026-11-09):** the [November 9 systems/arXiv source sweep](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) added ten source-reviewed preprints across seven technical classes (**852 → 862**), followed by [20 expanded source-admitted papers](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) (**862 → 882**), with disputed papers and unconfirmed model releases held in a dated audit ledger. The [November 6 source re-review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) resolved two historical aliases; **NovaServe / Select-N remains HOLD_IDENTITY**. No author GPU/NPU performance result was independently reproduced here.
 
 **What “source-curated” means:** editorial selection based on public sources, **not** a claim that every current row has passed an independently documented full G0–G5 audit, that all papers are reproducible, or that reported speedups were replicated. Publisher identity, model/quality changes, hardware and workload constraints remain paper-specific.
 
 **Start here:** [8 topic mechanisms](topics/README.md) · [30 foundations below](#foundational-and-influential-papers) · [Organizations](organizations/README.md) · [Research labs & OSS](communities/README.md) · [7 Frontiers](frontiers/README.md) · [G0–G5 review rules](STRICT_REVIEW.md) · [Review receipts & outstanding HOLDs](reviews/README.md).
 
-**Historical receipts:** [November 9 expanded search (862 → 876)](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) · [November 9 first pass (852 → 862)](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) · [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
+**Historical receipts:** [November 9 expanded search (862 → 882)](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) · [November 9 first pass (852 → 862)](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) · [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
 
 ## Explore
 
@@ -18,7 +18,7 @@ A selective, engineering-first map of LLM inference: **kernels/compilers, KV mem
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 876 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 882 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
