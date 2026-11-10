@@ -14,17 +14,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-19) | 19 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-20) | 20 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-26) | 26 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-17) | 17 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **94** | |
+| **Total** | **95** | |
 
-## Papers (94)
+## Papers (95)
 
-### Serving Benchmarks & Workloads (19)
+### Serving Benchmarks & Workloads (20)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
@@ -49,6 +49,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [ServerBench: How can your coding agents design specialized LLM serving systems?](https://arxiv.org/abs/2611.06841) | arXiv 2026 (Nov 4 preprint) | 让 Coding Agent 修改真实 LLM Server，以 **Frozen Code、Hidden Correctness/Checkpoint Verification、AgentX Stateful Closed-loop Replay、Latency-qualified GPU-$** 评价引擎。作者 **11 Agents×3 L40 Model Deployments** 对 vLLM 0.28/SGLang 0.5.19；**不是生产 Open-loop Goodput 或 Agent RSI**。[Project](https://infini-ai-lab.github.io/Server-Bench/)；**REAL_GPU / NOT_REPRODUCED**。（KEEP_STRICT） [Author harness/code snapshot](https://github.com/Infini-AI-Lab/Server-Bench/tree/b80a3fb21ff9037bedbde78536a5b918f100c6cc)（serving_tasks/evaluation/agentx-harness；**未运行独立审查**）. |
 | 2026 | [A Controlled Experimental Evaluation of Configuration and Cache Architecture in LLM Serving Engines](https://arxiv.org/abs/2611.05991) | arXiv 2026 (Nov 4 preprint) | **Control Confounding between KV Cache Granularity, Chunked Prefill, Request Ordering and Queue Stability**：固定 Seed 的 Multi-agent Graph Arrival/Prefix Share，记录 Engine 实际 Resolved Flags，比较 Default 与仅匹配 Chunk Size。作者 **GKE Kubernetes1.35、单 L4 24GB、vLLM0.6.3/SGLang0.4.1、4/8/16K Context、Gamma Bursty Agent DAG** 显示默认下 TTFT 差可达64×，仅把 vLLM Chunk Budget 设为同 SGLang 的 2048 可消除最高容量差的78%和部分时延差，剩余等吞吐 Tail Ratio 2.4–6.4×。**旧引擎版本、单小 GPU、人工合成 DAG/Tool Timings 和 Kubernetes Spot Re-provisioning，非 2026 新版 vLLM/SGLang 绝对性能结论**。[Artifact](https://arxiv.org/abs/2611.05991)。**REAL_GPU / CONTROLLED_CAUSAL_ABLATION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [VLALagBench: Understanding When and Why VLA Inference Latency Matters](https://arxiv.org/abs/2611.03103) | arXiv 2026 | 刻画 **VLA Inference Latency → Robotic Task Success** 的因果接口，按 Moving-target Speed、同步/异步 Action Execution、Policy 测 Delivery-to-Action Deadline，并拟合 SLO→Task Accuracy Model。作者报告某些移动目标上 **增加100ms 推理延迟可使 Success Rate 近乎减半**，校准后跨不同 Policy 的 Task-success Prediction RMSE **5.7–7.8%**；**这不是新的 Token Kernel 或机器人端到端吞吐加速，作为 Embodied Serving Deadline Benchmark 的邻接实验信号**。**KEEP_PREPRINT_EXPLORE / REAL_OR_SIM_ROBOT_TASK_BENCH / KEEP_ADJACENT / NOT_REPRODUCED**。 |
+| 2026 | [InferenceBench: A Benchmark for Open-Ended LLM Inference Optimization by AI Agents](https://arxiv.org/abs/2607.20468) | arXiv 2026 | 要求 Agent 在 **2小时/单 H100 Budget** 下交付 **OpenAI-Compatible Server**，分别优化 Prefill、Decode、Concurrency 以及综合 Latency/Throughput；不是仅调单 Kernel。作者在 **15 Agent Configurations** 对 Naive PyTorch Baseline 报最高 **8.08×**、默认 vLLM **4.05×**，却通常不及同预算简单 Hyperparameter Search（最多 **11.53×**），展示 Agent Candidate Diversity/实验决策不足。**数字来自不同 Baseline/任务，不是逐次同条件互相比值；后续 Leaderboard 不等于最初固定实验**。**KEEP_PREPRINT_EVIDENCED / REAL_H100_AGENT_SYSTEM_BENCH / NOT_REPRODUCED**。 |
 
 ### Performance & Efficiency Studies (26)
 
