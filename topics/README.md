@@ -1,10 +1,10 @@
 # Papers by systems mechanism
 
-**Current canonical index (2026-11-06): 852 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 6 G0/G3–G5 follow-up](../reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) corrected source/evidence boundaries without changing the count.
+**Current canonical index (2026-11-11): 853 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. The [November 6 G0/G3–G5 follow-up](../reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) corrected source/evidence boundaries without changing the count.
 
 **Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
-Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
+**November 11 addition:** [Baidu/DCore controlled speculative-decoding study](benchmarking-analysis.md#performance--efficiency-studies-25) admitted as one author-reported, publicly reproducible-artifact *preprint* after [G0–G5 case review](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) (**852 → 853**). No GPU test was performed here.\n\nEach paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
 [← Home](../README.md) · [Research labs](../communities/README.md) · [Strict G0–G5 review](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
@@ -17,8 +17,8 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 75 | 4 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 149 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 135 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 84 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **852** | **44** | |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 85 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **853** | **44** | |
 
 ## Classification boundaries
 
