@@ -118,6 +118,12 @@ The **scientific lesson** is conditional gate design and repeated re-profiling. 
 
 **Decision:** **KEEP_STRICT** under [Benchmarking & Systems Analysis → Performance & Efficiency Studies](../topics/benchmarking-analysis.md) as a methodologically controlled comparison with executable DCore exemplar, rather than adding the same work a second time under Decoding Acceleration. **AUTHOR_REPORTED / MODEL_CHANGED / REQUIRES_TRAINED_DRAFTER / PUBLIC_ARTIFACT / NOT_REPRODUCED**. No global 'fastest drafter' assertion. Dataset/task selection, 26 checkpoints, target sampling policy, batch/concurrency and hardware are all comparability conditions.
 
+### DCore metric and reproducibility traps (inspected upstream evaluation guide)
+
+The [authors' evaluation guide](https://github.com/ernie-research/DCore/blob/main/docs/evaluation.md) explicitly separates `tokens_per_second` (request-level at concurrency=1) from `extra.wall_toks_per_s` (aggregate wall-clock across replicas); **do not interchange these denominators**. `accept_length` counts committed tokens **including** the bonus token. In the published setting, eight H800 instances with `--dp-size 8 --concurrencies 1` mean **eight global concurrent requests**, not one; the target-only baseline and DCore must use the same per-replica concurrency and sampled target/draft temperatures.
+
+The docs warn that (i) a small eight-prompt / 128-token smoke run is not the paper's full benchmark; (ii) paper-style TPS for sampled targets uses the **mean of three repeats**, while some formatting utilities choose the **fastest**; (iii) a freshly collected target-only reference need not equal the paper's shared reference; and (iv) resuming an old `--run-dir` fails to detect every parameter change. The full reported runs use a **2048-token cap**, bf16, FlashInfer, CUDA graphs and a pinned SGLang fork rather than merely a package version. These are substantive reproducibility limitations, not footnotes.
+
 ## 6. Why other candidates are not added as canonical LLM-inference rows here
 
 | Candidate | Decision | Reason / next evidence needed |
