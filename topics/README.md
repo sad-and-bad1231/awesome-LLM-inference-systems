@@ -4,7 +4,9 @@
 
 **Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
-**November 11 addition:** [Baidu/DCore controlled speculative-decoding study](benchmarking-analysis.md#performance--efficiency-studies-25) admitted as one author-reported, publicly reproducible-artifact *preprint* after [G0–G5 case review](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) (**852 → 853**). No GPU test was performed here.\n\nEach paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
+**November 11 addition:** [Baidu/DCore controlled speculative-decoding study](benchmarking-analysis.md#performance--efficiency-studies-25) admitted as one author-reported, publicly reproducible-artifact *preprint* after [G0–G5 case review](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) (**852 → 853**). No GPU test was performed here.
+
+Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
 [← Home](../README.md) · [Research labs](../communities/README.md) · [Strict G0–G5 review](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
