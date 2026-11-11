@@ -91,6 +91,14 @@ Source: [ERNIE 5.5 Flash Base architecture and training system](https://ernie.ba
 
 **ERNIE Evolve's key negative signals:** general-purpose communication **regressed 14%** in one P800 test; a MoE communication flag alone was noise-level; already-optimized GPU communication near NVLink latency floor and kernel gaps at 2–4% did **not** justify further focus. The project does release [public benchmark solutions/logs](https://github.com/ernie-research/ERNIE-Evolve-Results), but **not** full production-inference replay artifacts. This is evidence for hypothesis-driven engineering, not proof of recursive improvement of the underlying model.
 
+## 4.6. Pinned FastDeploy ↔ vLLM ↔ SGLang execution comparison (closeout)
+
+**[Read the final source-level contract comparison](../reviews/BAIDU_NATIVE_EXECUTION_CLOSEOUT_20261111.md)** before assuming that similar public feature names imply equivalent runtime behavior. At frozen SHAs: FastDeploy `d923caf`, vLLM `0fc695f`, SGLang `23a45fd` and the associated vLLM-Ascend plugin `5cb98ca` (plugin native call-chain **not** audited here).
+
+The verified, useful distinction: FastDeploy's Go Router performs **instance/pair selection** (with distinct cache-aware and load policies), `resource_manager_v1` performs **engine request, token, block and preemption** decisions, and `CacheTransferManager` handles **data movement**. vLLM V1's `num_computed_tokens` scheduler, SGLang's RadixCache/Disaggregation queues and vLLM KVConnector API represent different boundaries; this is a **mechanism comparison, not a benchmark or superiority claim**. Note especially the separate router-prefix estimate vs engine-owned physical KV, prefill/decode block reservation and unvalidated activation of V1 in any particular commercial configuration.
+
+**Closeout decision:** evidence from 2019 ERNIE through ERNIE 5.5, FastDeploy and Evolve has been mapped to original sources; the DCore paper has one G0–G5 admission; remaining candidate/model/kernel lines retain bounded labels. **No more NPU work justified by this audit alone.**
+
 ## 5. Suggested reading and replication path
 
 1. **Historical understanding:** ERNIE (2019) → ERNIE 2.0 (AAAI 2020) → ERNIE 3.0/Titan; study the ideas, **do not** place training-only NLP papers into inference topics.
@@ -101,4 +109,4 @@ Source: [ERNIE 5.5 Flash Base architecture and training system](https://ernie.ba
 
 **Open questions:** (a) How much HCA saves in *total* KV memory once local windows, MLA state and indexers are included? (b) Which FastDeploy policies and kernels remain useful under real dynamic serving SLOs? (c) Can ERNIE Evolve's gains survive held-out models/request shapes/equal accelerator-hour budgets? (d) Which mechanisms are truly native to Kunlunxin, rather than generic CUDA kernels or imported third-party libraries?
 
-**Editorial status (2026-11-11, two audits):** organization profile plus independent mechanism/code audit; **one** controlled DCore preprint admitted to Benchmarking & Systems Analysis (**852 → 853 corpus entries**), **no** new frontier count and **no** benchmark reproduced. [First source audit](../reviews/BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) is a dated 852-entry snapshot; [second G0–G5 mechanism audit](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) supersedes that intake count.
+**Editorial status (2026-11-11, completed source audit + pinned source-level closeout):** organization profile plus independent mechanism/code audit; **one** controlled DCore preprint admitted to Benchmarking & Systems Analysis (**852 → 853 corpus entries**), **no** new frontier count and **no** benchmark reproduced. [First source audit](../reviews/BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) is a dated 852-entry snapshot; [second G0–G5 mechanism audit](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) supersedes that intake count; [source comparison closeout](../reviews/BAIDU_NATIVE_EXECUTION_CLOSEOUT_20261111.md) adds **no further canonical entry**.
