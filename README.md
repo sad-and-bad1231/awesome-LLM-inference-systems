@@ -1,6 +1,6 @@
 # Awesome LLM Inference Systems
 
-**853 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 5 scope review; **no independent GPU/NPU reproduction is implied**.
+**853 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 11 DCore source admission; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
