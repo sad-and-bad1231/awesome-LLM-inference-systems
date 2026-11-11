@@ -43,7 +43,7 @@ Fair versions, identical model/tokenizer/checkpoint, context distribution, outpu
 
 **REAL_GPU/NPU/CPU/FPGA** (specific board), **RTL_EMU**, **PERF_SIM**, **TRACE_SIM**, **ANALYTIC_MODEL**, **AUTHOR_ONLY_CLAIM**; apply more than one label if needed, and attribute exactly what was physically tested. Likewise: **LOSSLESS_OUTPUT**, **APPROXIMATE_QUALITY_CHECKED**, **REQUIRES_FINETUNING**, **MODEL_CHANGED**. This prevents simulator, distillation or expert re-routing effects being advertised as drop-in speedups.
 
-**Latest focused evidence correction (2026-11-06):** [11 primary-source G5/G4 cases](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) were examined at first-party source/evaluation-section level, with explicit negative results, scope limits and reproduction gates. The review **does not** change the canonical 852 count or certify any author benchmark as independently reproduced. The November 5 75-row ledger remains a historical triage.
+**Latest focused evidence correction (2026-11-06):** [11 primary-source G5/G4 cases](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) were examined at first-party source/evaluation-section level, with explicit negative results, scope limits and reproduction gates. That November 6 review **did not** change the then-current canonical 852 count or certify any author benchmark as independently reproduced. The November 11 DCore admission subsequently raised the total to **853**. The November 5 75-row ledger remains a historical triage.
 
 ## Known provenance/identity hazards to resolve early
 
