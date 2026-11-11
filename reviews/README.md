@@ -8,6 +8,7 @@
 
 | Receipt | What it establishes | What it does **not** establish |
 |---|---|---|
+| [November 11 Baidu native-execution source closeout](BAIDU_NATIVE_EXECUTION_CLOSEOUT_20261111.md) | Frozen SHA comparison across FastDeploy router/scheduler/KV handoff, vLLM V1 KV Connector, SGLang RadixCache/P-D queues; project exit decision | Not a feature-parity, vLLM-Ascend backend, or GPU/NPU performance test; **853 papers unchanged** |
 | [November 11 Baidu mechanism/code deep audit](BAIDU_MECHANISM_CODE_AUDIT_20261111.md) | First-principles HCA/MLA/MoE/ECHO cost boundaries, native FastDeploy router/scheduler/KV code pointers, ERNIE Evolve negative experiments and DCore reproducibility receipt | Not a kernel/serving reproduction, and not a claim of Baidu invention of every adopted model mechanism |
 | [November 11 Baidu/Paddle primary-source audit](BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) | Rebuilds ERNIE research-to-inference lineage, FastDeploy/FlashMask, 5.5 architecture and ERNIE Evolve frontier source; records strict KEEP_ORG vs HOLD_TOPIC boundaries | No new canonical paper, independent GPU/NPU benchmark, Looped Transformer attribution or verified RSI |
 | [November 6 G0/G3–G5 primary-source review](G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) | Eleven previously flagged value/evidence cases; Formulaic, ReadKV and TokenSim metric/negative-result corrections; RAGBoost→ContextPilot alias, DefensiveKV ≠ CriticalKV | Neither independent execution nor resolution of NovaServe/Select-N |
