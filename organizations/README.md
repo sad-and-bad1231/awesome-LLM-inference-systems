@@ -24,7 +24,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | Seed-OSS · ByteTransformer · ByteIR |
-| [Baidu / Paddle](Baidu.md) | **ERNIE 2019→5.5 research lineage** · **HCA/MLA/Latent MoE/ECHO** · FastDeploy P/D + KV/EP · **FlashMask-4** · **ERNIE Evolve (inference-engine optimization)** |
+| [Baidu / Paddle](Baidu.md) | **ERNIE 2019→5.5 research lineage** · **HCA/MLA/Latent MoE/ECHO** · FastDeploy P/D + KV/EP · **FlashMask-4** · **ERNIE Evolve (inference-engine optimization)** · **DCore (controlled speculation evaluation)** |
 | [Meituan / LongCat](Meituan.md) | **[CODE]** SGLang-FluentLLM · P/D KV transfer · sparse MoE/LSA · W4A4 / numerical consistency |
 | [Xiaohongshu / Rednote](Xiaohongshu.md) | **[CODE + PREPRINT]** HYPIC hybrid-position-independent cache · Relax training/rollout |
 | [Ant Group](Ant-Group.md) | **[CODE + COMMUNITY]** Humming quantized dense/MoE JIT kernels with vLLM |

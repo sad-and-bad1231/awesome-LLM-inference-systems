@@ -1,10 +1,10 @@
 # Awesome LLM Inference Systems
 
-**852 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 5 scope review; **no independent GPU/NPU reproduction is implied**.
+**853 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 11 DCore source admission; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
-**Current review status (2026-11-06):** the [latest G0/G3–G5 primary-source review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) revisited **11 evidence/value cases** and resolved two historical paper-identity issues (RAGBoost → ContextPilot alias; DefensiveKV ≠ CriticalKV). **NovaServe / Select-N remains HOLD_IDENTITY**; historical fast-admission records still require case-by-case verification. This review added **zero** canonical entries. The [November 5 scope review](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) removed two non-core video-generation studies; the current total is **852**, not the earlier **854**.
+**Current review status (2026-11-11):** the [latest G0/G3–G5 primary-source review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) revisited **11 evidence/value cases** and resolved two historical paper-identity issues (RAGBoost → ContextPilot alias; DefensiveKV ≠ CriticalKV). **NovaServe / Select-N remains HOLD_IDENTITY**; historical fast-admission records still require case-by-case verification. That November 6 review added **zero** canonical entries; [the November 11 Baidu mechanism audit](reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) subsequently admitted **one** controlled speculative-decoding preprint with public evaluation artifacts (852 → 853). The [November 5 scope review](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) removed two non-core video-generation studies; the current total is **852**, not the earlier **854**.
 
 **What “source-curated” means:** editorial selection based on public sources, **not** a claim that every current row has passed an independently documented full G0–G5 audit, that all papers are reproducible, or that reported speedups were replicated. Publisher identity, model/quality changes, hardware and workload constraints remain paper-specific.
 
@@ -18,7 +18,7 @@ A selective, engineering-first map of LLM inference: **kernels/compilers, KV mem
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 852 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 853 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
