@@ -51,6 +51,13 @@ The Qwen team's publicly released model families and inference-related model arc
 | **xMaaS / Model-as-a-Service in the Wild** (ATC 2026) | Production cluster/application/model-level LLM inference trace; online and offline jobs, heterogeneous GPUs and P/D imbalance. | [Official dataset](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas); already canonical in [Distributed Serving](../topics/distributed-serving.md). |
 | **Heterogeneity at Hyperscale** (OSDI 2026) | General AI-cluster resource scheduling and heterogeneity, not an LLM request scheduler. | [Paper](https://www.usenix.org/conference/osdi26/presentation/li-suyi) · [GPU cluster trace](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2026); already canonical. |
 
+### Production observability and MoE execution
+
+- **[StriaTrace (OSDI 2026)](https://www.usenix.org/conference/osdi26/presentation/wu-haonan)**: production LLM inference tracing/diagnosis using synchronization-point and critical-path tracing, anomaly-triggered detail, a dynamic regression roofline and correlation diagnosis. Already in the canonical [Benchmarking & Systems Analysis](../topics/benchmarking-analysis.md) table.
+- **[EPIC / Balancing and Beyond (SIGCOMM 2026)](https://doi.org/10.1145/3789240.3829201)**: Alibaba Cloud's communication-centric Expert Parallelism system; balances expert compute and per-NIC traffic, then applies topology-adaptive transport and fine-grained overlap. **New strict-review candidate**, not yet a canonical paper row.
+- **Chorus (ATC 2026)**: HKUST/Nokia/Alibaba co-authored GPU–CPU cooperative decode serving; **accepted-paper candidate**, full mechanism review pending.
+- **CacheFS (ATC 2026)**: Zhejiang University/Alibaba co-authored peer-to-peer LLM weight caching/distribution; **accepted-paper candidate**, distinguish weight caching from KV caching.
+
 ### PAI managed inference: InferX / FlashKV
 
 - [InferX](https://www.alibabacloud.com/help/en/pai/inferx-overview) is documented as an enterprise inference platform with intelligent routing, cache-aware scheduling, P/D orchestration, model warm-up and global scheduling.
