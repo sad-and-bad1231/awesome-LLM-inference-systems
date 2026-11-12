@@ -4,19 +4,21 @@ Anthropic publishes **model-family tradeoffs and serving API behavior**, but com
 
 [← Organizations](../README.md#organizations)
 
-## Official Claude model-family / API catalog (2026-10-24)
+## Official Claude model-family / API catalog (updated 2026-11-09)
 
 The [Claude Platform model overview](https://platform.claude.com/docs/en/models/overview) is the authority for active models, platform-specific IDs, retirement schedules and caching/effort specifications.
 
 | Model line | Current named model / status | Primary source |
 |---|---|---|
-| Claude Fable | **Fable 5.1**, current demanding-reasoning/long-agent tier; older Fable 5 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
+| Claude Fable | **Fable 5.2**, public Nov 9 model; older Fable 5.1 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
 | Claude Opus | **Opus 5.5**, current long-horizon reasoning tier; previous Opus 5/4.8/4.7/4.6 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
 | Claude Sonnet | **Sonnet 5.5**, current speed/intelligence compromise; previous Sonnet 5/4.x historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
 | Claude Haiku | **Haiku 5.5**, current low-latency tier; earlier Haiku 4.5/3 historical | [Claude official model table](https://platform.claude.com/docs/en/models/overview) |
-| Claude Mythos | Mythos 5/5.1 **restricted availability**, not a universal public-serving model | [Official Claude model documentation](https://platform.claude.com/docs/en/models/overview) |
+| Claude Mythos | **Mythos 5.2**, restricted access; same underlying model as Fable 5.2, older Mythos 5/5.1 historical | [Official Claude model documentation](https://platform.claude.com/docs/en/models/overview) |
 
 **Systems evidence rule:** context, pricing, caching, Batch, reasoning effort and latency expose a model's **client-visible execution contract** only. Claude scheduler, attention kernels and cluster topology remain undocumented; no inference-system claims from API menus.
+
+**November 9 vendor-source update.** [Anthropic Fable/Mythos 5.2](https://www.anthropic.com/claude-fable-and-mythos-5-2) reports output generation **up to 30% faster** than 5.1 and optional **up to 2.5× fast mode** with different API pricing. These figures are **provider-reported**, not controlled same-model/same-hardware TTFT or Goodput; the deployment kernel/scheduler/KV implementation is not public. Check [official model docs](https://platform.claude.com/docs/en/models/overview) for current endpoint IDs.
 
 ## Models and observable inference characteristics
 
