@@ -45,7 +45,7 @@ No canonical topic paper was added or removed; the paper inventory remains uncha
 
 ### RSI evidence boundary
 
-- The [Hy4-preview release](https://www.tencent.com/tencent-releases-and-opensources-tencent-hy4-preview/) describes an early model-assisted loop over training/data/evaluation and low-level operators. Tencent reports 31.8% end-to-end inference throughput improvement from operator-fusion and communication optimization across different context lengths and concurrency. This is a **vendor-reported** claim; no public reproducible code/trace/config bundle was inspected to independently verify it.
+- The [Hy4-preview release](https://www.tencent.com/tencent-releases-and-open-sources-tencent-hy4-preview/) describes an early model-assisted loop over training/data/evaluation and low-level operators. Tencent reports 31.8% end-to-end inference throughput improvement from operator-fusion and communication optimization across different context lengths and concurrency. This is a **vendor-reported** claim; no public reproducible code/trace/config bundle was inspected to independently verify it.
 - The [Hy4 final release](https://www.tencent.com/tencent-launches-hy4-joining-the-ranks-of-the-worlds-leading-open-source-ai-models/) separately describes Hyra 2.0 optimizing pre-training infrastructure for smaller models sharing the architecture, alongside HyCell and HyPDE. This is a training/research-infrastructure claim, not the same inference-engine RSI claim.
 
 ## Editorial changes
