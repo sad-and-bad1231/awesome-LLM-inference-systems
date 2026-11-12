@@ -16,7 +16,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 |---|---|
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
 | [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
-| [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen hybrid models · **RTP-LLM + PAI BladeLLM** · Tair KVCache / FlashKV · EPIC / production serving research · MNN |
+| [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
