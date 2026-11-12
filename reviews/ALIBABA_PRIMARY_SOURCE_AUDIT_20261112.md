@@ -157,8 +157,13 @@ MNN should be mapped as a distinct **edge/device inference** line; do not treat 
 
 ## 9. Hardware and full-stack cloud roadmap
 
-- [T-Head Zhenwu V900](https://home.alibabagroup.com/en-US/document-2041268239081668608) was announced at Apsara 2026 with FP8/FP4 support, 216 GB memory and 1,200 GB/s inter-chip bandwidth; the announcement targets Q1 2027 mass production. This is a **roadmap/product announcement**, not an independently verified performance comparison or a public runtime stack.
-- Qwen4 is reported **in training**; Qwen3.8-Flash-Next is the public architecture preview. Track actual model card, weights, framework support and hardware compatibility only when released.
+The September 2026 Apsara announcement describes Alibaba's strategy as chips → AI-native cloud → models → agent-native cloud/context. Treat it as a roadmap/product map, not evidence that all components have public source or independent performance results.
+
+- **T-Head compute:** [Zhenwu V900](https://home.alibabagroup.com/en-US/document-2041268239081668608) was announced with FP8/FP4 support, 216 GB memory and 1,200 GB/s inter-chip bandwidth; the announcement targets Q1 2027 commercial release. The supernode combines V900, ICN switch, Panmai SmartNIC and Zhenyue SSD controller. Yitian 720/730 CPUs are roadmap items for 2027. These are first-party hardware roadmap claims, not independently verified benchmarks or a public runtime stack.
+- **AI Native Cloud:** [PAI](https://www.alibabacloud.com/product/machine-learning) is the model training/inference platform; the roadmap also names next-generation [CPFS](https://www.alibabacloud.com/product/cpfs) and HPN 8.0 Pro as storage/networking substrate.
+- **Agent Native Cloud:** [AgentCore](https://www.alibabacloud.com/help/en/agentcore/agentcore-product-overview) covers agent build/run/governance; [Agent Security Center](https://www.alibabacloud.com/help/en/asc/product-overview/what-is-the-agent-security-center) covers lifecycle security and compliance.
+- **Context Engine:** Agent Context and [OpenLake](https://www.alibabacloud.com/en/press-room/alibaba-unveils-roadmap-on-full-stack-ai-strategy?_p_lc=1) are described as enterprise context/memory and multimodal data-lake services. The announcement reports token/cost reductions, but those remain company-reported product claims.
+- **RSI signal:** Alibaba reports Qwen3.8-Max completed 33 iterative optimization cycles and improved its Artificial Analysis score from 40 to 45. This is a **model-development feedback loop** reported by the company; it is not evidence of recursive self-improvement inside an inference engine.
 
 ## 10. What is already in our canonical paper pool
 
