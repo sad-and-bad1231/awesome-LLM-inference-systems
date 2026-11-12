@@ -1,6 +1,6 @@
 # Organizations
 
-Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-09**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
+Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-12**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
 
 [← Home](../README.md) · [Research labs & open source](../communities/README.md)
 
@@ -14,8 +14,8 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 
 | Organization | Public work |
 |---|---|
-| [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
-| [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
+| [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 · DeepInfer production E/P/D + 3FS KV design · FlashMLA/DeepSelect · DeepEP/DeepGEMM Ascend backends · TileKernels/DeepJIT (950/CANN 9.2) |
+| [Tencent](Tencent.md) | **Hy4 final vs Preview** · WorkBuddy model/product co-design · AngelSlim/AngelSpec · KsanaLLM · Hy4-preview RSI signal |
 | [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
