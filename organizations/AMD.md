@@ -21,4 +21,6 @@
 | [ATOM](https://github.com/ROCm/ATOM) | AMD's AITER-based model inference runtime, including piecewise compile, P/D separation, TP/DP/EP and two-batch compute/communication overlap. | **AMD ROCm stack**; feature compatibility and metrics must use a pinned Instinct GPU and release. |
 | [MORI](https://github.com/ROCm/mori) | Composable MORI-EP expert dispatch, MORI-IO P/D KV RDMA transfer, MORI-SHMEM and collective communication/IR integration. | Distinguish transfer/collective microbenchmarks from end-to-end Goodput, and RDMA vs fallback transport. |
 
+**November 6 first-party inference planning signal:** [ROCm InferaSim](https://rocm.blogs.amd.com/software-tools-optimization/inferasim/README.html) ([preprint](https://arxiv.org/abs/2611.04032)) uses measured MI355X kernel/engine anchors, transfer laws and Discrete-event Simulation to project Model/Batch/P-D/Precision/SLO choices. AMD reports **11 anchors, 9.1 GPU-hours** versus **226 measured configurations, 204 GPU-hours**. **Predicted throughput is not an observed deployment throughput**; validation error, hardware topology and version scope matter. Indexed once under [Benchmarking/Simulation](../topics/benchmarking-analysis.md).
+
 **Source status:** two public AMD-owned runtime/transport repositories. These are not NVIDIA NIXL/DeepEP drop-in equivalents on any accelerator without validation.
