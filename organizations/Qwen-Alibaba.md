@@ -4,7 +4,7 @@ The Qwen team's publicly released model families and inference-related model arc
 
 [← Organizations](README.md) · [← Home](../README.md)
 
-## Official model-family coverage (2026-10-24)
+## Official model-family coverage (2026-11-12)
 
 **Authoritative catalog:** [Alibaba Cloud Model Studio models](https://help.aliyun.com/zh/model-studio/web-search) enumerates service families and versions; [Qwen repositories](https://github.com/QwenLM) are first-party code/weights. **Family vs API model ID vs open checkpoint** must be distinguished.
 
@@ -40,6 +40,39 @@ The Qwen team's publicly released model families and inference-related model arc
 |---|---|---|
 | [RTP-LLM](https://github.com/alibaba/rtp-llm) | Alibaba's production-derived LLM engine with C++ scheduler/dynamic batching, KV-cache management/quantization, multi-LoRA, distributed TP and P/D separation. The maintainers describe use across Taobao, Tmall, Xianyu, Cainiao, Amap, Ele.me, AliExpress and Lazada. | **Alibaba inference team**, not the exclusive work of Qwen model designers. Runtime code acknowledges FasterTransformer, TensorRT-LLM and vLLM influences. Any internal-production usage statement is first-party, not independent audit. |
 | [RTP-LLM technical README](https://github.com/alibaba/rtp-llm/blob/main/README_cn.md) | Documents system-prompt/context prefix caching, speculative decoding and weight-only INT8/INT4; optimization is across engine scheduling and kernels. | Features and performance vary by exact commit and hardware; do not infer compatibility with all current Qwen checkpoints or Ascend. |
+
+### Production workload, routing and cache infrastructure
+
+| Work | System boundary | Source / evidence |
+|---|---|---|
+| **LMetric / Simple Is Better** (OSDI 2026) | Instance-level request routing: combines cache-aware recomputation cost and current batch load. | [USENIX paper](https://www.usenix.org/conference/osdi26/presentation/zhang-dingyan) · coauthored with SJTU; canonical entry already in [Runtime & Scheduling](../topics/runtime-scheduling.md). |
+| **ServeGen** (NSDI 2026) | Online workload characterization and realistic request generation from Alibaba Cloud Model Studio production traffic. | [Paper](https://www.usenix.org/conference/nsdi26/presentation/xiang-servegen) · [official traces/code](https://github.com/alibaba/ServeGen); already canonical in [Benchmarking](../topics/benchmarking-analysis.md). |
+| **ACDC / Batched in Back** (SOSP 2026) | Offline batch inference, a separate workload and scheduling problem from online TTFT/TPOT serving. | [Paper](https://doi.org/10.1145/3830418.3843877) · [offline trace](https://github.com/alibaba/ServeGen/tree/main/data/offline); already canonical in [Runtime & Scheduling](../topics/runtime-scheduling.md). |
+| **xMaaS / Model-as-a-Service in the Wild** (ATC 2026) | Production cluster/application/model-level LLM inference trace; online and offline jobs, heterogeneous GPUs and P/D imbalance. | [Official dataset](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-v2026-maas); already canonical in [Distributed Serving](../topics/distributed-serving.md). |
+| **Heterogeneity at Hyperscale** (OSDI 2026) | General AI-cluster resource scheduling and heterogeneity, not an LLM request scheduler. | [Paper](https://www.usenix.org/conference/osdi26/presentation/li-suyi) · [GPU cluster trace](https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2026); already canonical. |
+
+### PAI managed inference: InferX / FlashKV
+
+- [InferX](https://www.alibabacloud.com/help/en/pai/inferx-overview) is documented as an enterprise inference platform with intelligent routing, cache-aware scheduling, P/D orchestration, model warm-up and global scheduling.
+- [FlashKV](https://www.alibabacloud.com/help/en/pai/inferx-kv-cache) is documented as a distributed multi-tier KV cache service (memory/disk/remote storage) for cross-instance prefix reuse.
+
+**Evidence boundary:** these are first-party product documents. This profile has not identified public source for the full InferX router or FlashKV implementation; do not attribute a specific algorithm, internal data structure or independently measured speedup without further evidence. FlashKV is a KV service, not a complete inference engine.
+
+### Edge inference and device-cloud lineage
+
+- [Walle (OSDI 2022)](https://www.usenix.org/conference/osdi22/presentation/lv) is the production device-cloud collaborative ML system whose compute container is based on MNN; its paper describes operator decomposition and semi-automatic backend search.
+- [MNN](https://github.com/alibaba/MNN) is a cross-platform device/edge inference runtime; its current line includes MNN-LLM and the [MNN-Pocket-0.3B report](https://arxiv.org/abs/2611.12311). The MNN README reports 350 tok/s on iPhone 18 Pro, while the report states up to 466 tok/s on iPad Pro M5: distinct device results, not a head-to-head comparison.
+
+### Supporting training/compiler stack
+
+- [PAI-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch): Megatron-Core based LLM/VLM pretraining, SFT, RL and checkpoint conversion.
+- [ChatLearn](https://github.com/alibaba/ChatLearn): distributed LLM alignment/RL orchestration; supports vLLM/SGLang as rollout engines.
+- [EasyDist](https://github.com/alibaba/easydist): automated parallelization and SPMD rules for PyTorch/JAX.
+- [BladeDISC](https://github.com/alibaba/BladeDISC): historical PAI-Blade dynamic-shape ML compiler; important compiler lineage, but not the current RTP-LLM serving runtime.
+
+**Qwen4 status:** Alibaba's September 2026 Apsara announcement says Qwen4 is in training. [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) is explicitly an early architecture preview, not the released Qwen4 model. No final Qwen4 architecture or deployment support should be inferred.
+
+**Surface-audit receipt:** [Alibaba primary-source audit (2026-11-12)](../reviews/ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) records the broader research map, paper-pool crosswalk, product-only boundaries and next deep-audit gates.
 
 ### RTP-LLM paper lineage — performance vs. evolution (2026)
 
