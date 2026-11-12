@@ -16,7 +16,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 |---|---|
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
 | [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
-| [Alibaba / Qwen](Qwen-Alibaba.md) | Qwen3.5–3.8 · **RTP-LLM production serving engine** · Gated DeltaNet / QSA · MNN |
+| [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
@@ -24,7 +24,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | Seed-OSS · ByteTransformer · ByteIR |
-| [Baidu / Paddle](Baidu.md) | FastDeploy · PaddleNLP |
+| [Baidu / Paddle](Baidu.md) | **ERNIE 2019→5.5 research lineage** · **HCA/MLA/Latent MoE/ECHO** · FastDeploy P/D + KV/EP · **FlashMask-4** · **ERNIE Evolve (inference-engine optimization)** · **DCore (controlled speculation evaluation)** |
 | [Meituan / LongCat](Meituan.md) | **[CODE]** SGLang-FluentLLM · P/D KV transfer · sparse MoE/LSA · W4A4 / numerical consistency |
 | [Xiaohongshu / Rednote](Xiaohongshu.md) | **[CODE + PREPRINT]** HYPIC hybrid-position-independent cache · Relax training/rollout |
 | [Ant Group](Ant-Group.md) | **[CODE + COMMUNITY]** Humming quantized dense/MoE JIT kernels with vLLM |
@@ -73,6 +73,6 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 
 ## Historical source notes and model release reconciliation
 
-The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved **verbatim** in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-09). New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
+The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved **verbatim** in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-09); the [Baidu primary-source audit](../reviews/BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) and [Alibaba primary-source audit](../reviews/ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) document the recent company maps. New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
 
 **Editorial boundary.** Organization pages represent verifiable first-party releases or research directly attributable to a team. Coauthored work belongs in topical paper lists unless an institution explicitly presents its own system. An API feature is not proof of an undisclosed serving implementation.
