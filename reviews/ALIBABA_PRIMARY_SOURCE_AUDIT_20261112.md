@@ -72,6 +72,11 @@ These works form a coherent research line: **measure production workload → gen
 
 **Do not conflate the datasets:** ServeGen online traces, ACDC offline task traces, xMaaS LLM-cluster traces and ASI heterogeneous GPU-cluster traces describe different units and time scales. They are complementary, not interchangeable benchmarks.
 
+### Additional direct systems work: observability and MoE communication
+
+- **StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference** — OSDI 2026 (Operational Systems). Production-oriented low-overhead tracing uses key synchronization points, critical paths and anomaly-triggered detail; combines a dynamic regression roofline model with correlation-based diagnosis. The authors report 97.8% lower tracing overhead than alternatives and hundreds of diagnosed anomalies across 19 root causes. This is highly relevant to performance profiling and incident diagnosis; it is **already in our canonical Benchmarking & Systems Analysis pool**, so do not duplicate it. [Official OSDI paper](https://www.usenix.org/conference/osdi26/presentation/wu-haonan).
+- **Balancing and Beyond: Communication-Centric Optimizations in Expert Parallelism (EPIC)** — SIGCOMM 2026, Alibaba Cloud. Directly addresses production MoE EP: compute-only EPLB leaves NIC/topology imbalance; EPIC progressively balances expert load and per-NIC traffic, performs intra-host expert migration, chooses topology-adaptive transport and overlaps communication at expert granularity. The official program describes production EP inference; the paper is a strong **new candidate for strict admission and code/artifact review**, not yet added to the canonical list. [Official SIGCOMM program](https://conferences.sigcomm.org/sigcomm/2026/program/papers/) · [DOI](https://doi.org/10.1145/3789240.3829201).
+
 ### New ATC 2026 collaboration signals — candidate review, not admission
 
 - **Chorus: GPU–CPU Cooperative LLM Serving for Length-Skewed Decode** — HKUST/Nokia/Alibaba co-authorship; [ATC accepted-paper record](https://atc.sigops.org/2026/accepted.html). Worth reading for CPU–GPU cooperation under decode-length skew. Full mechanism and artifact audit remains pending.
@@ -120,7 +125,7 @@ No duplicates should be added for the following already-indexed works:
 - [RTP-LLM (May 2026 report)](../topics/distributed-serving.md) — Distributed & Disaggregated Serving.
 - [Heterogeneity at Hyperscale](../topics/distributed-serving.md) and [Model-as-a-Service in the Wild](../topics/distributed-serving.md) — cluster/production workload analysis.
 
-**No canonical topic count change in this surface pass.** MNN-Pocket is a new technical report to assess under the strict paper rules; Chorus and CacheFS need full-text/artifact review; the October RTP report is a same-engine follow-up, not an automatic second entry.
+**No canonical topic count change in this surface pass.** StriaTrace is already canonical; EPIC is a new high-priority SIGCOMM candidate; MNN-Pocket is a new technical report to assess under strict rules; Chorus and CacheFS need full-text/artifact review; the October RTP report is a same-engine follow-up, not an automatic second entry.
 
 ## 10. Next deep-dive priorities
 
@@ -128,7 +133,8 @@ No duplicates should be added for the following already-indexed works:
 2. **PAI routing + FlashKV:** establish the real control/data path, cache key and ownership semantics, eviction/persistence, transfer protocol, failure handling and routing consistency. Public docs alone are insufficient.
 3. **Qwen3.8-Flash-Next execution contract:** GDN recurrent state + QSA sparse attention + MTP + N-gram host offload. Trace actual runtime support and correctness rather than treating it as ordinary dense/MoE attention.
 4. **Production workload research:** connect ServeGen, ACDC and xMaaS traces to our benchmark/workload methodology; keep online, offline and cluster traces separate.
-5. **MNN edge runtime:** separate track only if on-device/heterogeneous inference is a deliberate objective.
+5. **MoE EPIC and StriaTrace:** inspect EPIC's actual expert-placement/communication code and topology assumptions; compare StriaTrace's observability model with our profiler/measurement map. These are direct contributions to MoE execution and inference diagnosis.
+6. **MNN edge runtime:** separate track only if on-device/heterogeneous inference is a deliberate objective.
 
 **Ascend compatibility warning:** the current vLLM-Ascend Qwen3.8-Flash-Next guide names A2/A3/950DT deployment paths; it does not establish compatibility with our pinned 910B2/CANN 9.1 baseline. Do not infer support from the model being open-weight. [Current guide](https://docs.vllm.ai/projects/ascend/en/main/tutorials/models/Qwen3.8-Flash-Next.html).
 
