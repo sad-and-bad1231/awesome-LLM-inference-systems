@@ -15,14 +15,14 @@
 | Direction | Papers | What to work on |
 |---|---:|---|
 | [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-20) | 20 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-26) | 26 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-27) | 27 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-17) | 17 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **95** | |
+| **Total** | **96** | |
 
-## Papers (95)
+## Papers (96)
 
 ### Serving Benchmarks & Workloads (20)
 
@@ -51,7 +51,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [VLALagBench: Understanding When and Why VLA Inference Latency Matters](https://arxiv.org/abs/2611.03103) | arXiv 2026 | 刻画 **VLA Inference Latency → Robotic Task Success** 的因果接口，按 Moving-target Speed、同步/异步 Action Execution、Policy 测 Delivery-to-Action Deadline，并拟合 SLO→Task Accuracy Model。作者报告某些移动目标上 **增加100ms 推理延迟可使 Success Rate 近乎减半**，校准后跨不同 Policy 的 Task-success Prediction RMSE **5.7–7.8%**；**这不是新的 Token Kernel 或机器人端到端吞吐加速，作为 Embodied Serving Deadline Benchmark 的邻接实验信号**。**KEEP_PREPRINT_EXPLORE / REAL_OR_SIM_ROBOT_TASK_BENCH / KEEP_ADJACENT / NOT_REPRODUCED**。 |
 | 2026 | [InferenceBench: A Benchmark for Open-Ended LLM Inference Optimization by AI Agents](https://arxiv.org/abs/2607.20468) | arXiv 2026 | 要求 Agent 在 **2小时/单 H100 Budget** 下交付 **OpenAI-Compatible Server**，分别优化 Prefill、Decode、Concurrency 以及综合 Latency/Throughput；不是仅调单 Kernel。作者在 **15 Agent Configurations** 对 Naive PyTorch Baseline 报最高 **8.08×**、默认 vLLM **4.05×**，却通常不及同预算简单 Hyperparameter Search（最多 **11.53×**），展示 Agent Candidate Diversity/实验决策不足。**数字来自不同 Baseline/任务，不是逐次同条件互相比值；后续 Leaderboard 不等于最初固定实验**。**KEEP_PREPRINT_EVIDENCED / REAL_H100_AGENT_SYSTEM_BENCH / NOT_REPRODUCED**。 |
 
-### Performance & Efficiency Studies (26)
+### Performance & Efficiency Studies (27)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
@@ -81,6 +81,7 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [LLM-PowerTrace: A Dataset of Time-Resolved GPU Power Traces for AI Compute](https://arxiv.org/abs/2610.38315) | arXiv 2026 (preprint; submitted Oct 28) | 发布带 Workload Metadata 的**每 GPU 100ms Power Time Series**，覆盖推理 Concurrency、GPU Clock、KV/Weight Quantization、Prompt/Output Length、Arrival Pattern，也有 Fine-tuning 控制矩阵，并定义 Grid-facing Ramp/Peak 指标及外推模型。**REAL_GPU_POWER_SAMPLING / INFERENCE_AND_TRAINING_MIXED / SAMPLING_RESOLUTION_100MS / AUTHOR_DATASET_NOT_INDEPENDENTLY_REPLAYED**；不是新的 Serving 加速算法。（KEEP_STRICT；MEASUREMENT_DATASET） |
 | 2026 | [The Language–Energy Divide: Measuring Energy Costs of Multilingual LLM Inference](https://aclanthology.org/2026.emnlp-main.2113/) | EMNLP 2026 Main (October; ACL Anthology) | 使用 **ML.Energy** 测量跨语言、模型、硬件、任务的真实推理能耗，分解 Tokens Per Request 与 Per-token Energy 两项因素，避免仅按 English Prompt 或单位 Token 推断全球部署成本；作者报告跨语言 Per-output-token Energy 最高相差 8.3×、固定请求集合 Total Energy 最高相差 179×，低资源语言的准确率还存在劣势。**OBSERVATIONAL_TASK_DISTRIBUTION / NOT_FAIRLY_IDENTICAL_TOKEN_COUNT / DOES_NOT_PROVE_CAUSAL_HARDWARE_EFFECT / NOT_NEW_SERVING_ALGORITHM**；为性能/能耗测量方法准入，非推理加速论文。（KEEP_STRICT；AUTHOR_REPORTED；NOT_REPRODUCED） |
 | 2026 | [Understanding the Energy Cost of Quantized Agents on Shared GPUs](https://arxiv.org/abs/2610.41672) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 将量化的 **fixed-call energy** 与真实 Agent 的 **energy per verified task completion** 分开测量，并联合 GPU Cache Capacity/Admission Limit 分析：A100 40/80GB、Devstral/Qwen3.5-9B、Coding/Data Analysis；W4A16 在固定 Replay 下较 W8A8 省 10–25% 能量，但特定 4-Agent Live 负载每成功任务能耗上升 49%。**仅为测试配置下的作者实测，不是量化普遍无效或性能优化结果**。（KEEP_STRICT; REAL_GPU; TASK_OUTCOME_VERIFIED; NOT_REPRODUCED） |
+| 2026 | [When Does Better Acceptance Pay? A Controlled Study of Speculative Decoding](https://arxiv.org/abs/2610.24993) | arXiv 2026 (preprint; v3 Oct 25) | **Controlled speculative-decoding cost study + DCore artifact**: remeasures released drafters and retrains 6 recipes under matched target-generated data, SGLang runtime and evaluation; covers Qwen3-4B/8B, 10 datasets, 3 sampling-temperature pairs, budgets 8/16 and concurrency. Demonstrates why **acceptance length need not predict actual TPS**; DCore combines selected low-cost draft components. [Public training/evaluation code and 26 checkpoints](https://github.com/ernie-research/DCore); authors used H800; **not independently reproduced** and not a universal best drafter. Full [G0–G5 receipt](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md). (KEEP_STRICT; PREPRINT; REAL_GPU_AUTHOR_REPORTED; PUBLIC_ARTIFACT; TRAINED_DRAFTER; CONTROLLED_EVAL) |
 | 2026 | [The GPU Needs an Operating System](https://arxiv.org/abs/2611.08720) | arXiv 2026 (Nov 5 preprint; systems position paper with prototype) | 通过 **Real Decode SM/Memory Headroom Profiling、Static GPU Partition Co-run 与 Single-resident-kernel Serving Prototype** 论证 Token-step 内调度的空间；作者 **RTX PRO6000 Blackwell/AMD MI300X、Kimi K2 Single-GPU Share Proxy、Llama3.1-8B Resident Kernel** 实测，普通 FP8 GEMM Backfill 仅回收约 0.09 GPU（前台 +4.7% Step），手工可共享背景 0.23 GPU（+5.1%），Prototype 仅**一个模型/特定工作负载**。**GPU OS/通用 Compiler 方案尚未实现，不能将预测的 OS 能力或 Kernel Microbench 当成多租户线上 Goodput**。**REAL_GPU_PARTIAL_PROTOTYPE / NON_GENERALIZABLE / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [Where Is VLA Inference Time Spent? Bottlenecks and Optimization Interactions Across GPUs](https://arxiv.org/abs/2611.06710) | arXiv 2026 (preprint, Nov 4) | 对 **OpenVLA/OpenVLA-OFT/LLaVA-VLA/CogACT/π0.5/GR00T/SmolVLA** 七个 VLA 在 **H100/A10G/RTX4090/Jetson Thor** 测 CUDA Graph、Compile、FlashAttention、Pruning、Step Reduction、Quantization 和 Batching 的 Stage Latency/Kernel Launch/Profiler，提出硬件与执行模式相关的 **VLA-Triage**。实例：OpenVLA-OFT 在 H100 上 50% Visual Token Pruning 相对 **Unfused Attention 节省21.4%**，但相对 **FlashAttention2 仅6.9%**，反映 Comparator Inflation；**这是受控实机 VLA Stage Benchmark、Action Queue Deadline Replay，不是实际机器人任务成功率，也不是单一优化技术泛化到所有 GPU**。**REAL_GPU / ADJACENT_VLA_SYSTEMS / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 
