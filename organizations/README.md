@@ -1,6 +1,6 @@
 # Organizations
 
-Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-05**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
+Source-linked maps of **first-party model families plus inference infrastructure**. Model-family crosswalks were first checked on **2026-10-24** and selectively updated through **2026-11-09**; it covers named releases and relevant modalities rather than only 1–2 selected flagships. This is **not** a byte-for-byte mirror of ever-changing API snapshot IDs, thousands of checkpoint quantizations, or other vendors' hosted models. Read the linked provider catalog when exact live endpoints matter.
 
 [← Home](../README.md) · [Research labs & open source](../communities/README.md)
 
@@ -20,7 +20,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
-| [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · K3 / K3.1 Pro · KDA / Gated MLA · AttnRes |
+| [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · **K3.1 Pro open weights (Nov 4)** · KDA + indexed Sparse MLA · AttnRes |
 | [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | Seed-OSS · ByteTransformer · ByteIR |
@@ -39,11 +39,11 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | Organization | Primary focus |
 |---|---|
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
-| [Google](Google.md) | **TorchTPU vLLM/SGLang** · llm-d P/D topology · Ragged Paged Attention · AlphaEvolve |
+| [Google](Google.md) | **TorchTPU vLLM/SGLang** · **TPU Sync / Agent Compute Engine (Nov 9)** · **XLA Serving Engine (Nov 5)** · llm-d / Ragged Paged Attention · AlphaEvolve |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
-| [AMD](AMD.md) | ROCm · AITER · **ATOM** engine · **MORI** EP/KV communication |
+| [AMD](AMD.md) | ROCm · AITER · **ATOM** engine · **MORI** EP/KV communication · **InferaSim** |
 | [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
-| [Anthropic](Anthropic.md) | Claude serving-visible API behavior; no inferred internals |
+| [Anthropic](Anthropic.md) | **Fable/Mythos 5.2 (Nov 9)** public API behavior; no inferred internals |
 | [Meta](Meta.md) | Llama · **KernelEvolve optimization agent** · TP/CP/EP systems · ExecuTorch / xFormers |
 | [AWS](AWS.md) | Neuron · DJL Serving · Bedrock |
 | [Apple](Apple.md) | MLX · local/on-device inference |
@@ -69,8 +69,10 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [IBM](IBM.md) | **[COMMUNITY + ARCHIVE]** llm-d collaboration · historical archived vLLM Spyre plugin |
 | [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoVLLM launcher · service worker/replica scaling · model lifecycle |
 
+**November 9 primary-source checkpoint:** [model and inference-stack reconciliation](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) verified K3.1 Pro public weights and sparse-serving mechanics, Fable/Mythos 5.2 API status, AMD InferaSim; **Qwen4, DeepSeek V4.1 Pro and Astra 6.2 remain unverified** and out of live release tables.
+
 ## Historical source notes and model release reconciliation
 
-The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-05); the [Alibaba primary-source audit](../reviews/ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) records the new 2026-11-12 research map. New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
+The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved **verbatim** in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-09); the [Baidu primary-source audit](../reviews/BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) and [Alibaba primary-source audit](../reviews/ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) document the recent company maps. New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
 
 **Editorial boundary.** Organization pages represent verifiable first-party releases or research directly attributable to a team. Coauthored work belongs in topical paper lists unless an institution explicitly presents its own system. An API feature is not proof of an undisclosed serving implementation.

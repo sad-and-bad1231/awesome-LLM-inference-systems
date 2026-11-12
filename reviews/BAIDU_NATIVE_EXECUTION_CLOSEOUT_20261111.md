@@ -44,7 +44,7 @@ For the frozen Ascend environment, select **one** native vLLM-Ascend path first 
 
 - **Organization profile:** [Baidu](../organizations/Baidu.md) — historical NLP contributions, ERNIE architecture, Paddle/FastDeploy, PLAS, FlashMask, XPU and ERNIE Evolve.
 - **Detailed evidence:** [mechanism audit](BAIDU_MECHANISM_CODE_AUDIT_20261111.md), with original paper boundaries, negative experiments and G0–G5 rationale.
-- **One canonical paper added:** [DCore controlled speculative evaluation](../topics/benchmarking-analysis.md#performance--efficiency-studies-25), labeled preprint/author-reported/artifact-inspected, **not reproduced**.
+- **One canonical paper added:** [DCore controlled speculative evaluation](../topics/benchmarking-analysis.md#performance--efficiency-studies-27), labeled preprint/author-reported/artifact-inspected, **not reproduced**.
 - **Frontier crossreference:** [Autonomous inference-engine evolution](../frontiers/README.md), with explicit difference between evolving executable engine code and self-improving an optimization agent.
 - **This closeout:** source comparison at four frozen SHAs, **no new paper count**, no hardware/benchmark claim.
 

@@ -31,7 +31,6 @@
 - Alibaba's [September 2026 roadmap](https://www.alibabagroup.com/en-US/document-2041268239081668608) also names Qwen4.5 and Qwen5 as future generations, with a stated scale ambition up to 5–10T parameters. Treat this as a roadmap, not a released architecture or available checkpoint.
 - [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder), [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL) and [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni) matter because long coding sessions and streaming multimodal inputs create different serving workloads from ordinary text chat.
 - Historical context: [M6](https://arxiv.org/abs/2103.00823) and [OFA](https://proceedings.mlr.press/v162/wang22al.html) are earlier DAMO multimodal/pretraining work; useful lineage, but not today's online inference runtime.
-- Historical context: [M6](https://arxiv.org/abs/2103.00823) and [OFA](https://proceedings.mlr.press/v162/wang22al.html) are earlier DAMO multimodal/pretraining work; useful lineage, but not today's online inference runtime.
 
 **Read:** model repository → model card / technical report → the actual runtime implementation supporting that architecture. A model release is not, by itself, a serving-system contribution.
 
@@ -116,6 +115,8 @@ The AAAI prefetch paper is already in our canonical [KV Cache & Context Memory](
 - **[Agent Context / Context Engine](https://www.alibabagroup.com/en-US/document-2041268239081668608)** — enterprise context and long-term memory service in Alibaba Cloud's 2026 full-stack roadmap.
 
 ## 7. Edge, training, RL and developer ecosystem
+
+**Qwen4 release watch (Nov 9):** A verified first-party Qwen4 general-availability/weight-card release has **not been established**. The publicly inspectable [Qwen3.8-Flash-Next experimental architecture](https://github.com/QwenLM/Qwen3.8-Flash-Next) provides a **Gated DeltaNet + QSA indexer/offload** inference signal, but does not license a claim of published Qwen4 final weights, model IDs or compatibility. Recheck source identities on a real Qwen4 announcement.
 
 - **[MNN](https://github.com/alibaba/MNN) / [MNN-LLM](https://github.com/alibaba/MNN/tree/master/transformers):** cross-platform inference runtime for mobile, PC and IoT. [Walle (OSDI 2022)](https://www.usenix.org/conference/osdi22/presentation/lv) is the earlier device-cloud collaborative ML system built around MNN.
 - **[MNN-Pocket-0.3B](https://arxiv.org/abs/2611.12311):** Nov 2026 mobile-native model/runtime co-design; 32K context and INT4 package. Keep its phone throughput separate from cloud-serving measurements.

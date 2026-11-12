@@ -35,4 +35,18 @@ NVIDIA's **first-party inference software stack**, from serving engines and clus
 | **Transformer Engine** | Low-precision Transformer execution primitives. | [GitHub](https://github.com/NVIDIA/TransformerEngine) |
 | **NCCL / NVSHMEM** | Multi-GPU collective communication and GPU-initiated communication substrates. | [NCCL](https://github.com/NVIDIA/nccl) · [NVSHMEM](https://github.com/NVIDIA/nvshmem) |
 
+## November 5, 2026: co-designed agent KV memory hierarchy
+
+NVIDIA's [first-party technical source](https://developer.nvidia.com/blog/five-ways-nvidia-co-design-maximizes-the-value-of-every-byte-in-the-ai-factory/) is a **vendor performance/architecture report**, not a new peer-reviewed systems paper or independent reproduction. Five distinct levers must not be counted as five separate benchmark results:
+
+| Stack mechanism | What is exposed | Evidence and deployment boundary |
+|---|---|---|
+| **NVFP4 weight and KV** | Reduce low-bit model and KV memory footprints to allocate more HBM to concurrent sessions | NVFP4 KV is **approximate** and some DeepSeek-V4-Pro quality scores change; NVIDIA's peak ratios depend on model and comparison precision, not universal BF16-equivalent execution |
+| **Wide-EP + TensorRT-LLM** | Spread MoE Expert weight storage and execution across devices for greater cache headroom and arithmetic intensity | Cost/throughput depends on expert distribution and collective topology; not a new NVIDIA ownership claim for the model |
+| **Dynamo + NIXL KV tiering** | KV-aware routing, P/D transfer and multi-level KV cache runner | Distinguish global KV placement and transport from attention-kernel timing or a production cluster Goodput guarantee |
+| **Vera CPU / NVLink-C2C idle-agent KV** | Fast CPU-side Tool execution shortens idle intervals; move session KV out of HBM into large coherent CPU memory while tools are running | This is a **Vera/Rubin-specific hardware/runtime co-design**; not demonstrated as an Ascend NPU result |
+| **CMX G3.5 context storage** | BlueField-4 STX + Spectrum-X + DOCA Memos + Dynamo/NIXL pool NVMe KV across nodes | NVIDIA reports **up to 5×** token output/power-efficiency gains **against traditional storage on selected workloads**. Pod-level design/announcement is not proof that generic NVMe or all engines deliver 5× |
+
+**Systems interpretation:** the new frontier is **session state lifecycle and data placement spanning tools, GPU, host and pod storage**, not “larger HBM automatically means faster decoding.” Inspect published code/release versions of Dynamo/NIXL/DOCA Memos separately before claiming a reproducible implementation.
+
 **Boundary.** First-party software and documentation only. Research coauthored with Stanford, UW, CMU and other labs is not automatically classified as NVIDIA work. Software feature and hardware support claims depend on the linked repository version.

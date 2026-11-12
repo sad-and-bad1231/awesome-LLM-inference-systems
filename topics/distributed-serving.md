@@ -14,16 +14,16 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Parallelism & Scale-Up](#parallelism--scale-up-28) | 28 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
-| [Disaggregated Compute Stages](#disaggregated-compute-stages-32) | 32 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-25) | 25 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
-| [Fleet Scaling & Reliability](#fleet-scaling--reliability-28) | 28 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-22) | 22 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **135** | |
+| [Parallelism & Scale-Up](#parallelism--scale-up-29) | 29 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
+| [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
+| [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [Fleet Scaling & Reliability](#fleet-scaling--reliability-29) | 29 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-26) | 26 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **143** | |
 
-## Papers (135)
+## Papers (143)
 
-### Parallelism & Scale-Up (28)
+### Parallelism & Scale-Up (29)
 
 TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 
@@ -57,8 +57,9 @@ TP/PP/EP/CP、超节点/机架拓扑与扩展效率。
 | 2026 | [SPLASH: Switching Parallel Layouts of Attention with Seamless Handoff for LLM Serving](https://arxiv.org/abs/2609.37626) | arXiv 2026-09 (preprint) | **Runtime Attention Layout Switching (TP/DP/CP/DOP)**：将 Attention Weight Sharding 与 KV Request Ownership 解耦，提出 Decoupled Ownership Parallelism，以后台 State Transfer 与 Batch-boundary Handoff 迁移当前正在执行的请求；决策由当前 Prompt/Concurrency/Memory Pressure 驱动。作者在 **B200+GLM-5.3** 报告相对固定 Layout 的 **E2E Throughput 1.3–1.73×**，中位切换额外成本小于当前 Step 0.51%，**H200+DeepSeek-V3.2/DCU+GLM-Flash** 用于验证不同布局的适用区间；公开 [SGLang Fork](https://github.com/ict-agent/SPLASH-sglang)。需要提前 Capture 多 Layout Graph 且切换需短暂内存余量；该数字**不是 Ascend vLLM0.23 的可移植收益**。(KEEP_STRICT; REAL_ACCELERATOR_AUTHOR_REPORTED; PUBLIC_ARTIFACT; GRAPH_MEMORY_OVERHEAD) |
 | 2026 | [FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications](https://arxiv.org/abs/2607.18171) | arXiv 2026 (preprint; CMU InfiniAI Lab; [code](https://github.com/Infini-AI-Lab/FlashRT)) | 将用户的单 GPU Multimodal Reference 转成 Chain-of-program IR，经依赖与持久 State Scope 检查后，由 Agent 探索跨 GPU Stage Placement、Disaggregation、Streaming 和 Intra-model Parallelism；在 NVIDIA B200/AMD MI355X 实测，多任务**相对于各自 Reference** 作者报告最高约 70× Latency Reduction、3.6× Throughput；AMD MI355X Qwen3-Omni Text-to-audio 相对所测 vLLM-Omni Response Latency -65%。**HETEROGENEOUS_MULTIMODAL_WORKLOAD / NOT_GENERAL_LLM_SPEEDUP / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [ConfluxServe: Reconciling Resource Utilization and Parallelism Efficiency across Prefill and Decode in LLM Serving](https://arxiv.org/abs/2610.37810) | arXiv 2026 (preprint; submitted Oct 27) | Operator-level XP 在 Linear 层 P/D Co-batch、Attention 层 Prefill SP/Decode Local，配合 KV Handoff 和 SLO Control；作者 **4/8×H100、3 模型、生产 Trace Replay** 对 Chunked Prefill/DistServe/LoongServe/MuxWise 及增强 Scheduler 报告 Full Scheduler **1.26–1.52× Goodput**。仅评估单 XP Instance，没有 Global Routing 效果；vLLM0.15.1/SGLang0.5.9 基线，未移植 Ascend。（KEEP_STRICT; REAL_GPU_E2E; NO_AUTHOR_REPRO） |
+| 2026 | [Workload-Static Optical Circuit Switching For Scalable LLM Inference Decode](https://arxiv.org/abs/2611.05104) | arXiv 2026 | 根据固定 Model/TP-EP Topology 在部署时提前配置 **OCS Optical Circuit**，让 Decode Collectives 可使用 Spare Accelerator Ports 减少 Phases；以 Topology-aware Scheduling 对比 Oversubscribed Packet Switch。作者使用 **GXNET Flit-level/Analytic Models（硬件量测校准）** 投影 576 Accelerators/5T MoE/5M Context，报 **交互性最高+65% / 能效+119%**；**大型 OCS 系统是建模推演，不是 576 GPU 上实测线上 TPOT，也没有制造光交换机对照**。**KEEP_PREPRINT_EXPLORE / NETWORK_SIM_CALIBRATED / NOT_REPRODUCED**。 |
 
-### Disaggregated Compute Stages (32)
+### Disaggregated Compute Stages (33)
 
 P/D、Attention–FFN 与多阶段资源解耦。
 
@@ -96,8 +97,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TriInfer: Hybrid EPD Disaggregation for Efficient Multimodal Large Language Model Inference](https://openreview.net/forum?id=nNovi8fvGN) | MLSys 2026 | TriInfer 在多模态 serving 中把 encode、prefill、decode 作为可组合阶段，按 profile 选择 E/P/D/EP/ED 实例角色 |
 | 2026 | [vLLM-Omni: Fully Disaggregated Serving for Any-to-Any Multimodal Models](https://arxiv.org/abs/2602.02204) | arXiv 2026 (technical report) | 将 Any-to-Any 多模态模型划分为可复用的 Stage Graph，按阶段独立调度 LLM/Diffusion Engine、GPU Batching 和跨组件数据传输；公开 vLLM-Omni Runtime，并报告 Job Completion Time 对照。 |
 | 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
+| 2026 | [vLLM-Omni Technical Report: A Unified Serving Runtime for Omni-Modality Generation](https://arxiv.org/abs/2610.09307) | arXiv 2026 | 把 **Text/Audio/Image/Video/Action** 推理表示为 Stage Graph，统一的 Request Orchestrator 负责 Admission/Stage Replicas/Streaming Demux，Connector 转移大量 Payload，覆盖 TTS、Full-duplex、World Model 与 Robot Session API。**vLLM-Omni Team Technical Report** 提供架构与 H100/H200 Nightly CI、Qwen3-Omni 多阶段测试；**不同阶段 Model/Task 的执行语义不等于一条 vLLM Autoregressive Decode，也不能把组件稳定性当成已经实现所有 World-model 生产优化**。[Official runtime](https://github.com/vllm-project/vllm-omni)。**KEEP_PREPRINT_EVIDENCED / OPEN_SOURCE_ENGINE_TECH_REPORT / NOT_REPRODUCED**。 |
 
-### KV Transfer & Communication (25)
+### KV Transfer & Communication (26)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
@@ -128,8 +130,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Full-Pipeline Inference Optimization for MiMo-V2.5 Series: Pushing Hybrid SWA Efficiency to the Limit](https://arxiv.org/abs/2607.13095) | arXiv 2026 (preprint) | 小米MiMo-V2.5生产推理系统：用SWA感知前缀缓存树与逐层预取实现严格O(W)的SWA KV存储，GCache以RDMA分布式缓存承载KV并按KV亲和性路由请求，覆盖Hybrid SWA+MoE+多模态全链路。 （arXiv 技术报告；厂家 MiMo 模型与自研全链路强绑定，真实工业方案但缺独立公开模型/负载对照。） |
 | 2026 | [DualPath: Accelerating Agentic LLM Inference by Harvesting Disaggregated KV-Cache Storage I/O](https://doi.org/10.1145/3789240.3829159) | SIGCOMM 2026 | 让远端 KV 不只 Storage→Prefill，还可 Storage→Decode→Prefill，借 Decode 侧闲置 Storage NIC 与 GPU 间 RDMA；全局 Scheduler 分配两条 I/O 路径。[SIGCOMM 正式摘要](https://conferences.sigcomm.org/sigcomm/2026/program/papers/)报告 DeepSeek 参与的生产 Agent Trace / 自有系统 E2E：Offline 吞吐最多 1.87×，Online SLO 吞吐均值 1.96×，均为作者报告。**CUSTOM_ENGINE / NETWORK_TOPOLOGY_DEPENDENT / NOT_VLLM_PORT**。 |
 | 2026 | [Deploying RDMA for Large-Scale Inference and Training Workloads (ByteExpress)](https://arxiv.org/abs/2610.12815) | arXiv 2026 (ByteDance production report; preprint) | 生产参数服务器推理/训练中的 RDMA Layer：跨应用/传输缓冲区协同、Zero-copy、QP Multiplexing、Receive-credit、Software Send Window 与 RPC Recovery。生产推理 Parameter Fetch Mean/P99 相对 Kernel TCP 分别低 35.7%/43.7%（作者报告）；**并非** vLLM P/D KV Transfer 或 Decode Collective 的直接 E2E 证据，作为分布式推理通信基础设施相邻准入。（KEEP_ADJACENT；NOT_REPRODUCED） |
+| 2026 | [flash-comm: Self-Synchronizing Collective Communication for LLM Decoding](https://arxiv.org/abs/2611.06634) | arXiv 2026 (Nov 4 preprint) | 消除 Decode Collective 中独立 Cross-GPU Barrier，借助 **Per-block Readiness Evidence + Cost-guided Encoding + Deterministic Reduction Ordering** 维护 Data Dependence 与 Graph Buffer Reuse；与 **SGLang Custom AR v2/NCCL Symmetric AllReduce** 比较。作者在 **2/4/8×H100/H200/B300 CUDA Graph、1KB–16MB** 实测，8×B300 相对 AR v2 的 AllReduce Median Latency **−28.8%**；在 **8×B300、DeepSeek-V4-Flash-0731、TP Decode、Concurrency≥16** 报 **端到端 TPOT −1.7–6.8%**（AllReduce 本占 Decode 11.4%，上限受 Amdahl 约束）。**READINESS_CORRECTNESS / REAL_MULTIGPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Fleet Scaling & Reliability (28)
+### Fleet Scaling & Reliability (29)
 
 实例编排、弹性扩容、故障恢复及 Live Migration。
 
@@ -163,8 +166,9 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [Janus: Multi-LLM Serving at Production Scale](https://github.com/Janus2026/Janus) | SOSP 2026 (author artifact; camera-ready pending) | Service–Engine 双层控制闭环、Gaussian-process Capacity/SLO Oracle、双时间尺度调度与 GPU-to-GPU Model Fork；作者 768 设备、62 Apps、45.6M 请求生产负载报告 24% Device-hour 节省且 SLO 达标。**PRODUCTION_AUTHORED / INDEPENDENT_REPRO_NOT_ATTEMPTED**。 |
 | 2026 | [Resuming Vision-Language Inference across Onboard Interruptions (OrbitWeaver)](https://arxiv.org/abs/2610.29183) | arXiv 2026 (preprint; Oct 22 announcement) | OrbitWeaver 按 **VLM Vision/Prefill/Decode 的不同 State Lifetime**选择 Checkpoint Boundary，按 Layer×Token Chunk 的依赖关系调度断电后恢复并 Overlap Weight/KV I/O；作者在卫星载荷硬件及在轨 Telemetry Trace 回放中报告相对对照**最多 4.07× 请求完成时间收益、SSD 写入最多减 3.56×**。论文另声称在 **两颗 LEO 卫星上进行 72 小时实际部署**：这是 **AUTHOR_DEPLOYMENT_CLAIM，非本库独立验证或可复制的云端 LLM Serving 结果**。**INTERRUPT_DRIVEN_EDGE / PHASE_AWARE_RECOVERY / ARTIFACT_NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [TensorHub: Scalable and Elastic Weight Transfer for LLM RL Training](https://arxiv.org/abs/2604.09107) | SOSP 2026 (preprint Apr; UW–ByteDance Seed) | TensorHub（SOSP 2026）为 **LLM RL Trainer→Rollout Inference Workers** 的版本化权重传输设计 Reference-Oriented Storage（ROS）：不复制权重作存储，而是定位已在 GPU 中的 Replica，再做 Topology-aware RDMA、跨 Rank 同版本事务和故障恢复。作者报告真实 RL 场景 **GPU Stall 最高降低 6.7×、弹性 Rollout Weight Update 最高加速 4.8×、跨 DC Stall 最高降低 19×**，并称 ByteDance 生产部署；**三者属不同设置，不是在线请求 TPS/TTFT**。**TRAINING_ROLLOUT_CONTROL_PLANE / WEIGHT_SYNC_NOT_KV_TRANSFER / AUTHOR_DEPLOYMENT_CLAIM / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [Surviving Partial Rank Failures in Wide Expert-Parallel MoE Inference](https://arxiv.org/abs/2605.10670) | arXiv 2026 | **EEP：EP Rank Membership 变成可变 Runtime State**，故障时修复 Peer Reachability、Expert Coverage、CUDA Graph Routing Metadata，尽量不使健康 Rank 全量 Recapture；接入 SGLang MoE Serving。作者报告稳态相对固定 DeepEP 开销 ≤**4.4%**，单 Rank 故障 **11s Recovery +8s Reintegration**，52s 内恢复至约95%故障前吞吐；Full Restart Baseline 不可用 **348s**。**只对作者测试 Fault Pattern/Rank/IB 体系成立，故障恢复指标不能当成稳态 TPS 提升**。**KEEP_PREPRINT_EVIDENCED / REAL_CLUSTER_FAILURE / NOT_REPRODUCED**。 |
 
-### Heterogeneous & Edge Serving (22)
+### Heterogeneous & Edge Serving (26)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
@@ -194,3 +198,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 
 *Paper links, venue, and mechanism notes are preserved from the prior curation. Inline HOLD/KEEP labels are review notes, not G0–G5 acceptance verdicts. Reported speedups are not independently reproduced.*
 | 2026 | [Shared Context, Separate Engines: Streaming Vision–Language Inference on Edge SoCs](https://arxiv.org/abs/2610.35309) | arXiv 2026 (preprint; Oct 27 announcement) | 将跨 CPU/GPU/NPU 的 Versioned Context 与后端 KV 分离，让多路 Streaming VLM Frame Ingest 与 Answer Concurrent，按 State-aware Dispatch 选择 Engine；Apple M4 Max、RK3588、QCS6490 实机，RK3588 双流对最强单引擎 +19.6% Throughput。VLM-only、平台依赖，非文本 LLM Server Pool。（KEEP_STRICT；REAL_EDGE_SOC；NOT_REPRODUCED） |
+| 2026 | [UMLoad: Fast On-Demand Model Loading on Unified Memory Architecture](https://arxiv.org/abs/2611.04253) | arXiv 2026 (submitted Nov 3; v2 revised Nov 4) | **Reclaim File-backed Weight Pages to GPU Ownership + CPU On-demand Reconstruction** 保留 Copy Independence，配合 **Huge-page VA Mapping Recovery + GPU-assisted Zeroing/CPU Pipeline**，去除 UMA 中冗余 Weight Copy/Allocation 延迟。作者在 **Intel/AMD/NVIDIA UMA，llama.cpp/PyTorch/vLLM 六模型** 实测相对 Vanilla Loading 时间平均减少 **36.6–71.9%**，相比 Pipelined Loader 减少19.9–62.7%；其 **Model-routing TTFT** (包含 Cold-load) 减少51.3–59.3%。**不加速模型已驻留时的普通 Decode，NVIDIA 需加载阶段标记及部分框架改动，非离散 Ascend 910B2 Zero-copy 实现；未独立复现**。**REAL_UMA_DEVICE / AUTHOR_REPORTED / SOURCE_HTML_METHODS / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [UniExit: A Unified Latency-Aware Early-Exit Runtime for Heterogeneous Edge AI](https://arxiv.org/abs/2611.09159) | arXiv 2026 (Nov 6 preprint; SenSys 2027 acceptance **author-claimed**) | 将 CNN Blocks 与 Transformer Layers 抽象成 **Stage-wise Deadline-aware Early Exit**，利用实时 CPU/GPU/EMC Frequency/Utilization、轻量 MLP Latency Predictor、**128-entry/约3KB Prediction Cache** 与 DVFS Trend Fallback 选择是否执行下一个 Exit Module；作者在 **Jetson Xavier NX/Orin Nano（8GB UMA）和 RTX5880 Edge–Cloud、16-layer LLaMA3.2-1B/64 token WikiText103、CNN/Map/Audio Co-run** 对 **LayerSkip、SpecEE、Layer-wise EE、Pantheon、HaX-CoNN** 测 TPOT Deadline Satisfaction Rate、Same-input Full-depth Token Agreement 与能耗。在压力下作者显示 DSR 维持高位，且跳过中间无用 Head 可对相同 Exit-depth 提供约 **2× 更快的局部推理进度**；**这是小模型 Token-level Exit / Accuracy–Deadline Tradeoff，输出允许不同于 Full-depth，未验证常规 Qwen/VLLM 大模型 Serving Goodput，也不是独立 NPU 优化。作者的“≥95% DSR”跨 CNN/LM 和多个测试设置，不是统一生产 SLO**。**REAL_EDGE_GPU / APPROXIMATE_EARLY_EXIT / SOURCE_HTML_G3 / NOT_REPRODUCED**。（KEEP_ADJACENT） |
+| 2026 | [HELIX: HEterogeneous LLM Inference with FleXible and Fine-Grained Partitioning](https://arxiv.org/abs/2611.06513) | arXiv 2026 | 在 **vLLM Piecewise Compile** 后用 **Latency/Memory/Device Capability Cost-profiled DP** 搜索 Operator-level 异构 Stage Partition 与跨设备 Dispatch，区别于固定 Attention/FFN 分离。作者使用 **H100/B200 Profiled GPU Kernels、DRAM-PIM AttAcc Simulator、3D-CIM Modeled Accelerator** 以及 Offline HELIX-vLLM 证明分区与执行逻辑，报告相对 A/F Split 的 Multi-query Decode 最多约 **3–3.5×**；**包含模拟/模型假设加速器，不得当成真实 H100+B200+PIM 已部署 Cluster 的线上 Goodput**。**KEEP_PREPRINT_EXPLORE / REAL_GPU_PROFILE_PLUS_SIM_ACCELERATOR / NOT_REPRODUCED**。 |
+| 2026 | [Accelerating LLM Decoding with In-DRAM Parallelism](https://arxiv.org/abs/2611.02401) | arXiv 2026 | **PUD** 将相邻 Projection 通过 Residual+Correction Algebra 重写，打包短 QKV/MLP GeMV 占满 DRAM Subarray Columns，并用 SIMD/MIMD 的 Mapping 改善 In-DRAM 并行度。作者用 **Ramulator2.0/DDR4-2400/4-bit Mixed** 和 Quality Budget 模拟 **Llama/Mistral/Qwen/Gemma 十模型、B1 Decode 128/1024 Context**，报相对 PUD Baseline **最多 1.41×**，相对 Processor-model **2.45×**；**无真实 PUD 硅片、Prefill/LM Head/Sampling 被排除，host Sparsity 为建模假设，不是整机物理 E2E**。**KEEP_PREPRINT_EXPLORE / ARCHITECTURE_SIM / QUALITY_APPROX / NOT_REPRODUCED**。 |

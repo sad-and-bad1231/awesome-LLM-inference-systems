@@ -12,6 +12,15 @@ The later research-lab sections index source-producing teams and collaborations,
 
 [Jump to research labs](#research-labs-and-source-linked-systems-signals) · [Company profiles](../organizations/README.md) · [Paper mechanisms](../topics/README.md)
 
+## November 2–4 execution-layer engineering updates (not new bibliography entries)
+
+| First-party project update | Concrete implementation contract / source | Evidence scope |
+|---|---|---|
+| **[SGLang HiCache × CP/PP/MTP/P-D](https://www.lmsys.org/blog/2026-11-02-hicache-distributed-serving)** (LMSYS, Nov 2) | CP-sharded logical KV pages use arithmetic owner/rank layout, overlapping per-layer gathers, **PP rank-consensus ACK queues** to keep common cache length despite asynchronous tier restoration, separate Draft state restoration for speculation, unified compatible-cache layout and P/D missing-only transfer | **Real GB300 production traffic comparison** (GLM-5.2-NVFP4, TP4/CP4, two Prefill Engines ×4 GPUs each; ~24.5K requests per arm, matched ~960GB host KV budget). Published **L1 hit 42.83%→83.31%, total GPU+host hit near 93%, mean Prefill queue 14.64→6.42s**. The two queue/forward means are measured from different request cohorts and **must not be summed into a measured TTFT**. Official separate Iflytek Astron GLM CodePlan case reports hit ~30%→95% and median TTFT under 3s, **different deployment and baseline** |
+| **[Kinference (Buoyant)](https://vllm.ai/blog/2026-11-04-introducing-kinference)** (Nov 4) | Open-source **Kubernetes inference policy/control plane above vLLM**, token admission/rate limits, per-tenant cost and SLO, queue-aware and KV-aware routing, explicit provider fallback and reject rules; underlying token engine remains vLLM | Buoyant's own shared-prefix / multi-turn benchmarks claim **7.4× / ~3.5×** SLO-qualified Goodput vs standard Kubernetes service routing in their workload setup; this is **vendor-reported, workload/cache-dependent**, not a kernel or a generic 7.4× throughput multiplier. This paragraph is a source pointer, **not an independently audited new 77th source-repository row** |
+
+The 76-repository inventory below retains its stable grouping; these are **dated updates to existing SGLang/vLLM infrastructure ecosystems** and require per-commit support checks before local execution.
+
 ## Open-source systems — grouped by execution boundary
 
 **76 unique source repos**, grouped by their primary role. The tag **community** means shared contributors, not company ownership. Direct links point to project upstreams; a GitHub repository is evidence of code, **not** proof of measured speedup, production use, or a fully supported accelerator.
