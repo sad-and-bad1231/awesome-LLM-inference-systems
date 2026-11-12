@@ -1,21 +1,24 @@
 # Alibaba / Qwen — primary-source surface audit (2026-11-12)
 
-**Status: SURFACE_MAP_COMPLETE / DEEP_CODE_AUDIT_PENDING / NO_NEW_PAPER_ADMISSION.**
+**Status: MAIN_WORKS_SURFACE_MAP_COMPLETE / PRIMARY_LINKS_MAPPED / NO_NEW_PAPER_ADMISSION.**
 
-This is the first-pass map of Alibaba Group's earlier work before the next Qwen generation. It follows the evidence discipline used in the Baidu audit, but does **not** pretend that reading project descriptions is equivalent to tracing implementation or reproducing performance. The current canonical paper inventory remains **853**; this receipt adds no paper rows.
+This is a broad surface map of Alibaba Group's major public AI-system work, with emphasis on 2026 releases and recent systems papers. It follows the evidence discipline used in the Baidu audit, but does **not** pretend that reading project descriptions is equivalent to tracing implementation or reproducing performance. The current canonical paper inventory remains **853**; this receipt adds no paper rows.
 
 ## 1. Executive map: Alibaba is not just Qwen
 
-There are six distinct technical layers worth keeping separate:
+There are nine distinct technical layers worth keeping separate:
 
-1. **Foundation-model research — DAMO Academy → Qwen/Tongyi:** M6/OFA as earlier multimodal-pretraining lineage; Qwen 1/2/2.5/3 and the Qwen3.5–3.8 hybrid/MoE evolution; reasoning, coding and omni-modal variants.
-2. **Production online inference engine — RTP-LLM:** a public Alibaba-owned C++ inference engine, with production-serving claims and two 2026 technical reports.
-3. **Serving policy and production evidence — Alibaba Cloud PAI / xMaaS:** LMetric request routing, ServeGen online workload generation, ACDC offline inference, xMaaS production traces and large-cluster scheduling research.
-4. **Managed inference platform — InferX / FlashKV:** documented router, cache-aware scheduling, shared multi-tier KV and model warm-up. These are **product/documentation evidence**, not public engine source.
-5. **On-device inference — MNN / MNN-LLM:** long-running mobile/edge runtime, rooted in Walle (OSDI'22), now supporting local multimodal LLMs and MNN-Pocket.
-6. **Training/compiler/hardware support — PAI-Megatron-Patch, ChatLearn, EasyDist, BladeDISC, T-Head:** important surrounding infrastructure, but not interchangeable with an online LLM serving engine.
+1. **Foundation models — Qwen/Tongyi:** Qwen3.5–3.8 hybrid/MoE and omni-modal families, Qwen3.8-Flash-Next architecture preview, Qwen4-Max preview, and Qwen-AgentWorld.
+2. **Production inference engines — RTP-LLM and BladeLLM:** RTP-LLM is a public Alibaba-owned C++ engine; BladeLLM is a separate PAI engine documented through product/report sources, with no public engine repository identified.
+3. **Serving/KV infrastructure — PAI, InferX, FlashKV and Tair KVCache:** managed routing and shared cache services alongside an open-source KV metadata manager/simulator.
+4. **Production systems research:** LMetric, ServeGen, ACDC, xMaaS, StriaTrace, EPIC, asynchronous KV prefetch and ATC work on agent tool access.
+5. **Agent frameworks and harnesses:** AgentScope 2.0 / Java, Qwen-Agent, Spring AI Alibaba, GUI-Owl/Mobile-Agent/ToolCUA, AgentCore and Agent Context.
+6. **Agentic RL and training:** PAI-Megatron-Patch, ChatLearn, ROLL/RollArt, ROCK, ROME/ALE and ModelScope ms-swift.
+7. **Compiler/kernel and parallelization support:** BladeDISC, EasyDist, AAAI KV prefetch and MoE communication work.
+8. **Edge inference — MNN:** MNN-LLM, MNN-Pocket and Walle.
+9. **Compute/cloud substrate:** T-Head Zhenwu/Yitian roadmap, PAI, CPFS, HPN, Agentic Cloud and Context Engine.
 
-**First-pass conclusion:** the highest-value Alibaba inference research is the combination of **RTP-LLM + PAI/xMaaS production serving research + Qwen's changing model execution contracts**. MNN is a separate edge-inference lineage. Training/compiler and silicon should be retained as supporting layers, not allowed to dilute the inference focus.
+**First-pass conclusion:** Alibaba is a broad full-stack AI organization. For LLM systems, the strongest public signals span **Qwen's evolving execution contract, RTP-LLM/BladeLLM, KV/serving infrastructure, production systems research, and the emerging agent harness/RL stack**. Hardware and cloud products are important context, but product-roadmap claims are not public runtime evidence.
 
 ## 2. Model and architecture lineage
 
@@ -35,9 +38,11 @@ These projects establish that Alibaba's model lineage did not begin with Qwen; h
 | **Qwen3-Coder / Coder-Next** | Coding-agent workload, long context and executable environment interaction; relevant to long-lived sessions, tool-use bursts and prefix reuse. | [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) · [Coder-Next report](https://arxiv.org/abs/2603.00729) |
 | **Qwen2.5-Omni → Qwen3-Omni** | End-to-end text/image/audio/video input and streamed text/speech output; Thinker–Talker and codec-token generation introduce stage and streaming-latency contracts beyond text-only decode. | [Qwen2.5-Omni report](https://arxiv.org/abs/2503.20215) · [Qwen3-Omni report](https://arxiv.org/abs/2509.17765) |
 | **Qwen3-Next → Qwen3.5/3.6/3.7/3.8** | Hybrid recurrent Gated DeltaNet (GDN) plus attention, sparse MoE, MTP and changing state/cache requirements. This is a major change in the model execution contract, not merely a larger checkpoint. | [Qwen3.8 official repository](https://github.com/QwenLM/Qwen3.8) |
+| **Qwen-AgentWorld-35B-A3B** (Jun 2026) | Language world model that simulates MCP, Search, Terminal, SWE, Android, Web and OS environments; AgentWorldBench supplies paired observations from real environments. | [Official repo](https://github.com/QwenLM/Qwen-AgentWorld) · [technical report](https://arxiv.org/abs/2606.24597) |
+| **Qwen4-Max-Preview** (Nov 11, 2026) | Current flagship API preview: 1M context, image/video understanding, deep reasoning and tool calling. Token Plan only, scheduled to retire after Nov 25; this is not a full open-weight Qwen4 family release. | [Official Model Studio documentation](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview) |
 | **Qwen3.8-Flash-Next** (Aug 2026) | An explicit early preview of the architecture intended for Qwen4: GDN + Qwen Sparse Attention (QSA), micro-block indexer, four-branch Gated Residual, N-gram embedding and MTP. Main model 125B + 51B embedding parameters, 6B active/token per the model card. Host-side embedding offload/prefetch is particularly relevant to memory hierarchy. | [official repository and technical report](https://github.com/QwenLM/Qwen3.8-Flash-Next) · [first-party design explanation](https://www.alibabacloud.com/blog/qwen3-8-flash-next-a-new-architecture-towardsultimate-cost-efficiency_603501) |
 
-**Qwen4 boundary:** Alibaba's September 25, 2026 Apsara announcement says Qwen4 is **in training**. Qwen3.8-Flash-Next is explicitly an architecture preview, **not Qwen4 itself**. Do not invent Qwen4's final architecture, checkpoint, launch date or runtime support. Track it as a forward watch item. [First-party announcement](https://home.alibabagroup.com/en-US/document-2041268239081668608).
+**Qwen4 boundary:** Qwen4-Max-Preview became available on Nov 11, 2026 through Model Studio Token Plan, with a documented preview window ending Nov 25. It supports 1M context, image/video understanding, deep reasoning and tool calling. This is an **API preview**, not a public weight release or proof that all Qwen4 variants have shipped. The September Apsara announcement said Qwen4 was in training; Qwen3.8-Flash-Next remains the open architecture preview. [Qwen4-Max-Preview docs](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview) · [Apsara roadmap](https://www.alibabagroup.com/en-US/document-2041268239081668608).
 
 **RSI boundary:** the same Apsara announcement reports Qwen3.8-Max iterative improvement and a chip-design/EDA experiment. These are company-reported model/agent feedback-loop claims; they do **not** demonstrate recursive self-improvement of an inference engine. Keep this separate from the existing autonomous-engine-evolution frontier.
 
@@ -86,7 +91,7 @@ The official ATC accepted-paper list confirms all three papers below as **full a
 - **CacheFS: Peer-to-Peer Cooperative Caching for LLM Weight Distribution at Cloud Scale** — Zhejiang University / Alibaba Group. Focuses on **model-weight distribution**, not KV-cache reuse. [Official accepted list](https://atc.sigops.org/2026/accepted.html).
 - **Axon: Asynchronous Global KV-Aware Scheduling Across Distributed Instances for Agentic Workloads** — University of Macau / Alibaba Group. A full ATC paper on distributed, asynchronous KV-aware scheduling; the poster listing is not its only publication status. [Official accepted list](https://atc.sigops.org/2026/accepted.html) · [lab publication page](https://cds-macau.github.io/publication/conference-paper/axon/).
 
-**Adjacent agent infrastructure:** [Scaling LLM Agent Tool Access: The MCP Gateway](https://atc.sigops.org/2026/accepted.html) is also an ATC 2026 accepted Alibaba Cloud-led paper. It belongs to the agent tool-access/control layer, not the core model execution engine.
+**Adjacent agent infrastructure:** [Scaling LLM Agent Tool Access: The MCP Gateway](https://atc.sigops.org/2026/accepted.html) is an ATC 2026 accepted Alibaba Cloud-led paper. It addresses scalable tool-access infrastructure for agents; it belongs to the agent tool-access/control layer, not the core model execution engine.
 
 ## 5. Alibaba inference engines and KV infrastructure
 
@@ -128,16 +133,34 @@ MNN should be mapped as a distinct **edge/device inference** line; do not treat 
 | [PAI-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch) | Megatron-Core based LLM/VLM pretraining, SFT, RL and checkpoint conversion. | Training/finetuning infrastructure, not online serving. |
 | [ChatLearn](https://github.com/alibaba/ChatLearn) | Distributed LLM alignment/RL orchestration with Megatron/FSDP training and vLLM/SGLang rollout. | RL control/dataflow layer; vLLM/SGLang remain the inference engines. |
 | [ROLL](https://github.com/alibaba/ROLL) | Large-scale LLM RL library with multi-role resource scheduling and Megatron/SGLang/vLLM integration. | Training and rollout system, not a general-purpose serving runtime. |
+| **RollArt (OSDI 2026)** | Disaggregated multi-task agentic RL across compute-optimized GPUs, bandwidth-optimized GPUs, CPU environments and serverless reward evaluation; authors report 1.31–2.05× training-time reduction and a 3,000+ GPU Alibaba deployment. | Systems paper on RL training, not online inference serving. [Paper](https://www.usenix.org/conference/osdi26/presentation/gao) |
+| **ALE / ROME** | [Let It Flow: Agentic Crafting on Rock and Roll](https://arxiv.org/abs/2512.24873) describes ROLL post-training, ROCK environment management, iFlow CLI and the ROME agentic model trained on interaction trajectories. | Technical report/ecosystem overview; distinct from the OSDI RollArt systems paper. |
 | [ROCK](https://github.com/alibaba/ROCK) | Sandbox/environment management for agentic RL. | Agent environment infrastructure, not model inference. |
 | [EasyDist](https://github.com/alibaba/easydist) | Automated parallelization across PyTorch/JAX and operator-level SPMD rules. | Parallelization infrastructure, not a complete serving engine. |
 | [BladeDISC](https://github.com/alibaba/BladeDISC) | MLIR-based dynamic-shape compiler for TensorFlow/PyTorch, part of PAI-Blade. | Compiler lineage; not the current Qwen serving engine. |
 
-## 8. Hardware and future watch
+## 8. Agent frameworks, agent models and enterprise harness
+
+| Work | Main role | Evidence / boundary |
+|---|---|---|
+| [AgentScope 2.0](https://github.com/agentscope-ai/agentscope) | Tongyi Lab's open-source Agent Framework evolving into a general-purpose **Agent Harness** for long-horizon enterprise tasks; the Nov 11 article emphasizes task progression, context/state, tool execution and sandboxed actions. | [First-party positioning article](https://www.alibabacloud.com/blog/from-agent-framework-to-agent-harness-a-new-positioning-for-the-open-source-agentscope-project_603759) · [README](https://github.com/agentscope-ai/agentscope). AgentScope Runtime capabilities are being integrated into 2.0; do not list the old runtime repository as a separate current stack. |
+| [AgentScope Java 2.0](https://github.com/agentscope-ai/agentscope-java) | Java framework for distributed enterprise agents, with event stream, permission controls, workspace/sandbox, multi-agent orchestration and distributed deployment. | Separate Java implementation in the AgentScope ecosystem. |
+| [Qwen-Agent](https://github.com/QwenLM/Qwen-Agent) | Tool use, planning, memory, RAG and example agent applications; also provides the [DeepPlanning benchmark](https://qwenlm.github.io/Qwen-Agent/en/benchmarks/deepplanning/). | Agent application framework/backend for Qwen Chat, not an inference engine. |
+| [Qwen-AgentWorld](https://github.com/QwenLM/Qwen-AgentWorld) | 35B-A3B language world model for simulating seven agent interaction domains; [AgentWorldBench](https://huggingface.co/datasets/Qwen/AgentWorldBench) evaluates simulation against real environment observations. | Model + benchmark for agent training/evaluation, not production runtime. [Report](https://arxiv.org/abs/2606.24597). |
+| [Mobile-Agent / GUI-Owl 1.5](https://github.com/X-PLUG/MobileAgent) | Tongyi Lab's cross-platform GUI model/agent line for desktop, mobile and browser automation. | [GUI-Owl 1.5 report](https://arxiv.org/abs/2602.16855); [UI-S1](https://arxiv.org/abs/2509.11543) accepted ACL 2026 main. |
+| [ToolCUA](https://github.com/X-PLUG/ToolCUA) | GUI/tool path orchestration: trajectory-aware tool synthesis, tool-call calibration and online Agentic RL. | May 2026 project release; [paper](https://arxiv.org/abs/2605.12481). Agent/application research, not a general serving engine. |
+| [Spring AI Alibaba](https://github.com/alibaba/spring-ai-alibaba) | Java agent framework and graph runtime with workflow orchestration, context engineering, HITL, MCP/A2A and visual Admin platform. | Alibaba-owned developer framework; application/runtime layer, not LLM inference engine. |
+| [AgentCore](https://www.alibabacloud.com/help/en/agentcore/agentcore-product-overview) / [Agent Security Center](https://www.alibabacloud.com/help/en/asc/product-overview/what-is-the-agent-security-center) | Managed agent build/run/governance, observability, security and compliance. | Product/documentation evidence; no inference-engine source claim. |
+| [Agent Context / Context Engine](https://www.alibabagroup.com/en-US/document-2041268239081668608) | Enterprise context and long-term memory service, part of the 2026 Agentic Cloud roadmap. | Product roadmap/documentation, not a public memory-engine implementation audit. |
+
+**Interpretation:** these projects cover different layers—agent model, world simulator, application framework, harness, tool-access infrastructure and managed enterprise control plane. They should not be collapsed into a single Alibaba "agent framework".
+
+## 9. Hardware and full-stack cloud roadmap
 
 - [T-Head Zhenwu V900](https://home.alibabagroup.com/en-US/document-2041268239081668608) was announced at Apsara 2026 with FP8/FP4 support, 216 GB memory and 1,200 GB/s inter-chip bandwidth; the announcement targets Q1 2027 mass production. This is a **roadmap/product announcement**, not an independently verified performance comparison or a public runtime stack.
 - Qwen4 is reported **in training**; Qwen3.8-Flash-Next is the public architecture preview. Track actual model card, weights, framework support and hardware compatibility only when released.
 
-## 9. What is already in our canonical paper pool
+## 10. What is already in our canonical paper pool
 
 No duplicates should be added for the following already-indexed works:
 
@@ -149,15 +172,14 @@ No duplicates should be added for the following already-indexed works:
 
 **No canonical topic count change in this surface pass.** StriaTrace and the AAAI KV-prefetch paper are already canonical. EPIC, Chorus, CacheFS and Axon are accepted papers awaiting strict source/method/artifact review; MNN-Pocket is a technical report to assess under strict rules. The October RTP report is a same-engine follow-up, not an automatic second entry.
 
-## 10. Next deep-dive priorities
+## 11. Coverage boundaries and optional follow-up
 
-1. **RTP-LLM source audit:** freeze a commit; trace frontend → scheduler → request state → KV → P/D → kernel/backend dispatch.
-2. **Tair KVCache:** inspect KVCM metadata/data-plane contracts, connector lifecycle, tier migration, eviction/GC and HiSim's simulation assumptions; compare with the separate FlashKV product docs.
-3. **BladeLLM:** collect first-party documentation and technical-report evidence; keep internal implementation unknown unless source becomes public.
-4. **EPIC + ATC systems:** inspect expert placement/communication and the Chorus, CacheFS and Axon full papers/artifacts before any canonical admission.
-5. **Qwen3.8-Flash-Next:** map GDN recurrent state + QSA sparse attention + MTP + N-gram host offload to actual runtime support and correctness.
-6. **Production workloads:** connect ServeGen, ACDC and xMaaS to our benchmark methodology; keep online, offline and cluster traces separate.
-7. **MNN edge runtime:** separate track only if on-device/heterogeneous inference becomes a deliberate objective.
+- **RTP-LLM** is public and source-addressable; this map does not claim a code-path audit.
+- **BladeLLM, InferX, FlashKV, AgentCore and Agent Context** are currently mapped from first-party product documentation and technical reports; their internal implementation should remain unknown unless public source is available.
+- **AgentScope, Qwen-Agent, Mobile-Agent, ToolCUA, ROLL, ROCK and Qwen-AgentWorld** are project-level entry points. This map is not a code review or reproduction of their benchmark claims.
+- **Qwen4-Max-Preview** is an official time-limited API preview, not an open-weight release. Qwen4 family-wide weights and final architecture should be recorded only when official artifacts appear.
+- **Zhenwu V900 / Yitian / Agentic Cloud** are hardware and platform roadmap signals; product claims are not independent hardware benchmarks.
+- **No canonical paper rows were added in this pass.** The purpose was to complete the organization-level main-work map, not to bypass the repository's paper admission gates.
 
 **Ascend compatibility warning:** the current vLLM-Ascend Qwen3.8-Flash-Next guide names A2/A3/950DT deployment paths; it does not establish compatibility with our pinned 910B2/CANN 9.1 baseline. Do not infer support from the model being open-weight. [Current guide](https://docs.vllm.ai/projects/ascend/en/main/tutorials/models/Qwen3.8-Flash-Next.html).
 
