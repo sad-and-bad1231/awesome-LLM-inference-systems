@@ -77,21 +77,40 @@ These works form a coherent research line: **measure production workload → gen
 - **StriaTrace: Efficient Tracing and Diagnosis for Online LLM Inference** — OSDI 2026 (Operational Systems). Production-oriented low-overhead tracing uses key synchronization points, critical paths and anomaly-triggered detail; combines a dynamic regression roofline model with correlation-based diagnosis. The authors report 97.8% lower tracing overhead than alternatives and hundreds of diagnosed anomalies across 19 root causes. This is highly relevant to performance profiling and incident diagnosis; it is **already in our canonical Benchmarking & Systems Analysis pool**, so do not duplicate it. [Official OSDI paper](https://www.usenix.org/conference/osdi26/presentation/wu-haonan).
 - **Balancing and Beyond: Communication-Centric Optimizations in Expert Parallelism (EPIC)** — SIGCOMM 2026, Alibaba Cloud. Directly addresses production MoE EP: compute-only EPLB leaves NIC/topology imbalance; EPIC progressively balances expert load and per-NIC traffic, performs intra-host expert migration, chooses topology-adaptive transport and overlaps communication at expert granularity. The official program describes production EP inference; the paper is a strong **new candidate for strict admission and code/artifact review**, not yet added to the canonical list. [Official SIGCOMM program](https://conferences.sigcomm.org/sigcomm/2026/program/papers/) · [DOI](https://doi.org/10.1145/3789240.3829201).
 
-### New ATC 2026 collaboration signals — candidate review, not admission
+### ATC 2026 accepted papers — collaborations; strict admission pending
 
-- **Chorus: GPU–CPU Cooperative LLM Serving for Length-Skewed Decode** — HKUST/Nokia/Alibaba co-authorship; [ATC accepted-paper record](https://atc.sigops.org/2026/accepted.html). Worth reading for CPU–GPU cooperation under decode-length skew. Full mechanism and artifact audit remains pending.
-- **CacheFS: Peer-to-Peer Cooperative Caching for LLM Weight Distribution at Cloud Scale** — Zhejiang University/Alibaba co-authorship; [ATC accepted-paper record](https://atc.sigops.org/2026/accepted.html), [artifact status](https://sysartifacts.github.io/atc2026/results). Relevant to weight distribution/model loading, but not a KV cache paper.
-- **Axon: Asynchronous Global KV-Aware Scheduling Across Distributed Instances for Agentic Workloads** — University of Macau/Alibaba co-authorship; appears in the [ATC poster listing](https://atc.sigops.org/2026/poster.html). Track as a collaboration signal; verify its exact publication/artifact status before treating it as a full paper admission.
+The official ATC accepted-paper list confirms all three papers below as **full accepted papers**, not merely poster signals. Their co-authorship must remain explicit; acceptance does not automatically satisfy our canonical G0–G5 admission rules.
 
-These are not exclusively Alibaba-owned projects. The conference's accepted/poster status and author affiliations should remain explicit.
+- **Chorus: GPU–CPU Cooperative LLM Serving for Length-Skewed Decode** — HKUST / Nokia Bell Labs / Alibaba Group. Studies CPU–GPU cooperation under decode-length skew. [Official accepted list](https://atc.sigops.org/2026/accepted.html).
+- **CacheFS: Peer-to-Peer Cooperative Caching for LLM Weight Distribution at Cloud Scale** — Zhejiang University / Alibaba Group. Focuses on **model-weight distribution**, not KV-cache reuse. [Official accepted list](https://atc.sigops.org/2026/accepted.html).
+- **Axon: Asynchronous Global KV-Aware Scheduling Across Distributed Instances for Agentic Workloads** — University of Macau / Alibaba Group. A full ATC paper on distributed, asynchronous KV-aware scheduling; the poster listing is not its only publication status. [Official accepted list](https://atc.sigops.org/2026/accepted.html) · [lab publication page](https://cds-macau.github.io/publication/conference-paper/axon/).
 
-## 5. Alibaba Cloud PAI: InferX and FlashKV
+**Adjacent agent infrastructure:** [Scaling LLM Agent Tool Access: The MCP Gateway](https://atc.sigops.org/2026/accepted.html) is also an ATC 2026 accepted Alibaba Cloud-led paper. It belongs to the agent tool-access/control layer, not the core model execution engine.
 
-- [InferX overview](https://www.alibabacloud.com/help/en/pai/inferx-overview) describes an enterprise inference platform with intelligent routing, P/D orchestration, token-level rate limiting, cache-aware scheduling, model warm-up and global scheduling.
-- [FlashKV documentation](https://www.alibabacloud.com/help/en/pai/inferx-kv-cache) describes a distributed KV cache service with memory/disk/remote-storage tiers and cross-instance prefix reuse.
-- [InferX configuration center](https://www.alibabacloud.com/help/en/pai/inferx-config-center) documents session affinity → prefix cache → load balancing routing priorities, plus traffic splitting, mirroring and P/D-specific scheduling.
+## 5. Alibaba inference engines and KV infrastructure
 
-**Evidence classification: PRODUCT/DOCUMENTATION ONLY in this pass.** No public source for the full InferX scheduler or FlashKV implementation was identified here. The product docs establish externally documented behavior and operational configuration, not the internal algorithms, implementation correctness or independently measured speedups. FlashKV is a **KV service**, not a complete inference engine.
+### BladeLLM — PAI's in-house inference engine
+
+- [PAI acceleration overview](https://www.alibabacloud.com/help/en/pai/ai-acceleration-1/) lists BladeLLM as its LLM inference engine; [PAI deployment guide](https://www.alibabacloud.com/help/en/pai/deploy-an-llm/) describes model-specific optimization, quantization, batching and GPU-memory management.
+- The [Qwen2.5-1M technical report](https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen2.5-1M/Qwen2_5_1M_Technical_Report.pdf) says its API services are powered by BladeLLM and describes long-sequence prefill/decode optimization through kernels, pipeline parallelism and scheduling.
+- **Evidence boundary:** this pass found product documentation and model-report references, but no public BladeLLM engine repository. Do not infer its internal implementation from product descriptions. BladeLLM is a **separate PAI engine**, not another name for RTP-LLM.
+
+### PAI-EAS / InferX / FlashKV — managed deployment and cache services
+
+- [PAI-EAS LLM deployment](https://www.alibabacloud.com/help/en/pai/deploy-an-llm/) is the model deployment/service layer and can expose vLLM, SGLang or BladeLLM.
+- [InferX overview](https://www.alibabacloud.com/help/en/pai/inferx-overview) documents routing, P/D orchestration, token-level rate limiting, cache-aware scheduling and model warm-up.
+- [FlashKV documentation](https://www.alibabacloud.com/help/en/pai/inferx-kv-cache) (updated Nov 2, 2026) describes a cluster-wide KV cache service with memory/disk/remote-storage tiers and cross-replica prefix reuse. The document explicitly says FlashKV is used alongside an inference engine and does not provide inference by itself.
+
+**Evidence classification:** first-party product/documentation evidence. No public source for the full InferX scheduler or FlashKV implementation was identified here.
+
+### Tair KVCache — open-source global cache management and simulation
+
+- [Official repository](https://github.com/alibaba/tair-kvcache) releases **Tair KVCache Manager (KVCM)** and **Tair KVCache HiSim**.
+- KVCM separates the **metadata plane** (cache lookup, location, state and capacity) from the **data plane** (engine-side KV payload transfer directly to storage). Its documented mechanisms include prefix/sliding-window/hybrid-attention matching, two-phase writes, pluggable storage backends, DRAM/SSD tiering, quota/watermark eviction, asynchronous GC and migration.
+- The README documents connectors for vLLM, SGLang, RTP-LLM and TRT-LLM. See the [module architecture guide](https://github.com/alibaba/tair-kvcache/blob/main/docs/design/module_architecture.md).
+- HiSim is a CPU-based inference simulator that replays workload traces to estimate TTFT, TPOT and throughput. The current README's concrete support claim is narrow (SGLang 0.5.6.post2 + Qwen3 Dense + H20, with author-reported prediction error below 5%); do not generalize this to arbitrary models/engines/hardware.
+
+**Do not conflate Tair and FlashKV:** Tair KVCache is a public codebase with KVCM/HiSim; FlashKV is documented as a PAI managed service. The reviewed sources do not establish that they share the same implementation.
 
 ## 6. Edge inference: MNN and Walle
 
@@ -101,14 +120,16 @@ These are not exclusively Alibaba-owned projects. The conference's accepted/post
 
 MNN should be mapped as a distinct **edge/device inference** line; do not treat its phone throughput as a cloud-serving baseline.
 
-## 7. Training and compiler ecosystem — supporting layer
+## 7. Training and agent-RL ecosystem — supporting layer
 
 | Project | What it does | Boundary |
 |---|---|---|
-| [PAI-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch) | Megatron-Core based large-scale LLM/VLM pretraining, SFT, RL and checkpoint conversion; tracks Qwen3/Next/Omni and other model families. | Primarily **training/finetuning infrastructure**, not online serving. |
-| [ChatLearn](https://github.com/alibaba/ChatLearn) | Distributed LLM alignment/RL orchestration; integrates Megatron/FSDP training with vLLM/SGLang rollout engines. | RL training/control plane; vLLM/SGLang remain the serving/rollout engines. |
-| [EasyDist](https://github.com/alibaba/easydist) | Automated parallelization across PyTorch/JAX and operator-level SPMD rules. | Training/inference parallelization infrastructure; not a full serving runtime. |
-| [BladeDISC](https://github.com/alibaba/BladeDISC) | MLIR-based dynamic-shape compiler for TensorFlow/PyTorch, part of PAI-Blade. | Important compiler lineage, but the visible major release history is older (2023); do not call it the current Qwen serving engine. |
+| [PAI-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch) | Megatron-Core based LLM/VLM pretraining, SFT, RL and checkpoint conversion. | Training/finetuning infrastructure, not online serving. |
+| [ChatLearn](https://github.com/alibaba/ChatLearn) | Distributed LLM alignment/RL orchestration with Megatron/FSDP training and vLLM/SGLang rollout. | RL control/dataflow layer; vLLM/SGLang remain the inference engines. |
+| [ROLL](https://github.com/alibaba/ROLL) | Large-scale LLM RL library with multi-role resource scheduling and Megatron/SGLang/vLLM integration. | Training and rollout system, not a general-purpose serving runtime. |
+| [ROCK](https://github.com/alibaba/ROCK) | Sandbox/environment management for agentic RL. | Agent environment infrastructure, not model inference. |
+| [EasyDist](https://github.com/alibaba/easydist) | Automated parallelization across PyTorch/JAX and operator-level SPMD rules. | Parallelization infrastructure, not a complete serving engine. |
+| [BladeDISC](https://github.com/alibaba/BladeDISC) | MLIR-based dynamic-shape compiler for TensorFlow/PyTorch, part of PAI-Blade. | Compiler lineage; not the current Qwen serving engine. |
 
 ## 8. Hardware and future watch
 
@@ -125,16 +146,17 @@ No duplicates should be added for the following already-indexed works:
 - [RTP-LLM (May 2026 report)](../topics/distributed-serving.md) — Distributed & Disaggregated Serving.
 - [Heterogeneity at Hyperscale](../topics/distributed-serving.md) and [Model-as-a-Service in the Wild](../topics/distributed-serving.md) — cluster/production workload analysis.
 
-**No canonical topic count change in this surface pass.** StriaTrace is already canonical; EPIC is a new high-priority SIGCOMM candidate; MNN-Pocket is a new technical report to assess under strict rules; Chorus and CacheFS need full-text/artifact review; the October RTP report is a same-engine follow-up, not an automatic second entry.
+**No canonical topic count change in this surface pass.** StriaTrace and the AAAI KV-prefetch paper are already canonical. EPIC, Chorus, CacheFS and Axon are accepted papers awaiting strict source/method/artifact review; MNN-Pocket is a technical report to assess under strict rules. The October RTP report is a same-engine follow-up, not an automatic second entry.
 
 ## 10. Next deep-dive priorities
 
-1. **RTP-LLM source audit:** freeze a commit; map frontend/router → scheduler → request state → KV allocator/cache → P/D handoff → backend/kernel dispatch. Compare only equivalent boundaries against pinned vLLM and SGLang.
-2. **PAI routing + FlashKV:** establish the real control/data path, cache key and ownership semantics, eviction/persistence, transfer protocol, failure handling and routing consistency. Public docs alone are insufficient.
-3. **Qwen3.8-Flash-Next execution contract:** GDN recurrent state + QSA sparse attention + MTP + N-gram host offload. Trace actual runtime support and correctness rather than treating it as ordinary dense/MoE attention.
-4. **Production workload research:** connect ServeGen, ACDC and xMaaS traces to our benchmark/workload methodology; keep online, offline and cluster traces separate.
-5. **MoE EPIC and StriaTrace:** inspect EPIC's actual expert-placement/communication code and topology assumptions; compare StriaTrace's observability model with our profiler/measurement map. These are direct contributions to MoE execution and inference diagnosis.
-6. **MNN edge runtime:** separate track only if on-device/heterogeneous inference is a deliberate objective.
+1. **RTP-LLM source audit:** freeze a commit; trace frontend → scheduler → request state → KV → P/D → kernel/backend dispatch.
+2. **Tair KVCache:** inspect KVCM metadata/data-plane contracts, connector lifecycle, tier migration, eviction/GC and HiSim's simulation assumptions; compare with the separate FlashKV product docs.
+3. **BladeLLM:** collect first-party documentation and technical-report evidence; keep internal implementation unknown unless source becomes public.
+4. **EPIC + ATC systems:** inspect expert placement/communication and the Chorus, CacheFS and Axon full papers/artifacts before any canonical admission.
+5. **Qwen3.8-Flash-Next:** map GDN recurrent state + QSA sparse attention + MTP + N-gram host offload to actual runtime support and correctness.
+6. **Production workloads:** connect ServeGen, ACDC and xMaaS to our benchmark methodology; keep online, offline and cluster traces separate.
+7. **MNN edge runtime:** separate track only if on-device/heterogeneous inference becomes a deliberate objective.
 
 **Ascend compatibility warning:** the current vLLM-Ascend Qwen3.8-Flash-Next guide names A2/A3/950DT deployment paths; it does not establish compatibility with our pinned 910B2/CANN 9.1 baseline. Do not infer support from the model being open-weight. [Current guide](https://docs.vllm.ai/projects/ascend/en/main/tutorials/models/Qwen3.8-Flash-Next.html).
 
