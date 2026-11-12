@@ -4,7 +4,7 @@
 
 [← Home](../README.md) · [Serving systems](../topics/serving-systems.md)
 
-## Official model-family crosswalk (updated 2026-11-04)
+## Official model-family crosswalk (updated 2026-11-12)
 
 **First-party catalog:** [DeepSeek official research/releases](https://www.deepseek.com/en/news/) and [API changelog](https://api-docs.deepseek.com/updates/). Model weights, API aliases and experimental releases are not interchangeable.
 
@@ -18,7 +18,7 @@
 | DeepSeek-V4-Flash-Vision-Exp | August 2026 experimental visual model; now **retired** from API, alias maps to V4.1 Flash | [API changelog](https://api-docs.deepseek.com/updates/) |
 | DeepSeek-V4.1-Flash / V4.1-Flash-1017 | 552B causal encoder–decoder asymmetric MoE (8B active input / 16B output), native vision and lower KV footprint. **1017 is the Oct 17 model revision**, not a distinct V4.1 architecture or new inference engine. `deepseek-flash` API alias points to the updated model; **1017 open weights** are available. | [Sep 10 architecture announcement](https://www.deepseek.com/en/news/deepseek-v4-1-flash/) · [Oct 17 API revision](https://api-docs.deepseek.com/updates/) · [official 1017 weights](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) |
 
-**DeepSeek V4.1 Pro watch (Nov 9):** “coming soon” remains an unverified roadmap claim, **not** a confirmed Pro weight/API/kernel release in this audit. Existing V4-Pro / V4.1-Flash and [DeepInfer](https://github.com/deepseek-ai/DeepInfer) are different published artifacts; do not infer future Pro performance or architecture from Flash. Verify via [official news](https://www.deepseek.com/en/news/) and [API updates](https://api-docs.deepseek.com/updates/) before changing status.
+**DeepSeek V4.1 Pro watch (checked 2026-11-12):** no first-party V4.1-Pro model card, weight release or API route is confirmed in the checked [official news](https://www.deepseek.com/en/news/) and [API changelog](https://api-docs.deepseek.com/updates/). The changelog confirms that `deepseek-flash` serves V4.1-Flash-1017, while the older `deepseek-v4-pro` service remains a separate V4 Pro endpoint. **V4 Pro is not V4.1 Pro**; do not infer a future Pro architecture from Flash.
 
 **Systems map:** model dataflow → [DeepInfer](https://github.com/deepseek-ai/DeepInfer) (public offline path) → [TileKernels](https://github.com/deepseek-ai/TileKernels) / independently maintained [TileLang](https://github.com/tile-ai/tilelang) → [FlashMLA](https://github.com/deepseek-ai/FlashMLA), [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM), [DeepEP](https://github.com/deepseek-ai/DeepEP). Do not infer that commercial API models, open-weight checkpoints and open-sourced runtime features have identical deployment scope.
 
@@ -36,16 +36,22 @@
 
 | Work | Type | Technical role | Official source |
 |---|---|---|---|
-| **FlashMLA** | CUDA / Ascend Attention kernels | MLA/DSA-oriented prefill and decode execution, sparse attention and fusion. **Version compatibility is significant**: the 2026-09-30 release removes old Hopper/model-format support. | [Repository and compatibility notice](https://github.com/deepseek-ai/FlashMLA) |
-| **DeepGEMM** | JIT GPU kernel library | FP8/FP4/BF16 GEMM, fused MoE operations and scoring primitives. | [Repository](https://github.com/deepseek-ai/DeepGEMM) |
-| **DeepGEMM-Ascend** | NPU kernel backend | Ascend-native matrix and MoE primitives with a DeepGEMM-compatible interface; confirm version/device support before replication. | [Repository](https://github.com/deepseek-ai/DeepGEMM-Ascend) |
-| **DeepEP** | GPU/NPU communication library | Low-latency and high-throughput expert-parallel All-to-All dispatch/combine and inference-specialized communication. | [Repository](https://github.com/deepseek-ai/DeepEP) |
-| **DeepSelect** | TopK / Sampling kernels | Fast TopK selection for DSA indexers and sampling; CUDA and Ascend implementations. | [Repository](https://github.com/deepseek-ai/DeepSelect) |
-| **DeepJIT** | Runtime kernel compilation | JIT tooling used by the DeepGEMM/DeepEP execution stack; an implementation component rather than a separate research publication. | [Repository](https://github.com/deepseek-ai/DeepJIT) |
-| **TileKernels** | Official TileLang kernel library | Real deployed MoE routing, FP8/FP4 conversion, Engram/mHC and transform kernels; the project states internal training/inference use. Public Ascend path currently targets Ascend 950 / CANN 9.2+, **not confirmed for 910B2**. | [Repository](https://github.com/deepseek-ai/TileKernels) |
-| **DeepInfer** (2026) | Open-source inference engine | Production-derived model/runtime/communication integration: ADP/CP, MoE EP/EPLB, DSpark, bounded SWA replay, asynchronous scheduling, and optimized kernels. **Public drop is offline inference for V4.1-Flash, not a complete production online serving stack**; full KV service, P/D disaggregation and DP replica balancing are not included. NVIDIA SM100 and Ascend 950 / CANN 9.2 paths are documented. | [Official repository](https://github.com/deepseek-ai/DeepInfer) · [Deployment Q&A](https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md) |
+| **FlashMLA** | CUDA / Ascend attention kernels | Current code targets V4.1 sparse prefill and FP8/FP4 KV-cache decoding. The Ascend sparse kernels target **Ascend 950 / CANN 9.2.0+**. The 2026-09-30 release removes Hopper and earlier V3/V3.2/V4.0 model-format support and changes the FP8/FP4 KV layout; pin a compatible commit for older models. | [Repository and compatibility notice](https://github.com/deepseek-ai/FlashMLA) |
+| **DeepGEMM** | CUDA kernel library | FP8/FP4/BF16 GEMM, fused MoE operations and scoring primitives; GPU implementation. | [Repository](https://github.com/deepseek-ai/DeepGEMM) |
+| **DeepGEMM-Ascend** | Ascend kernel backend | DeepGEMM-API-compatible BF16/FP8/FP4 GEMM, MQA indexer logits and MegaMoE. The public release is validated on **Ascend 950/950DT with CANN 9.20**; no 910B2 validation is documented. | [Repository](https://github.com/deepseek-ai/DeepGEMM-Ascend) |
+| **DeepEP** | CUDA expert-parallel communication | GPU All-to-All dispatch/combine for MoE training and inference. The Ascend implementation is a separate backend, not implied by this CUDA repository. | [Repository](https://github.com/deepseek-ai/DeepEP) |
+| **DeepEP-Ascend** | Ascend communication backend | MoE EP dispatch/combine All-to-All, FP8 dispatch and deferred epilogues; uses Ascend C with HCCL/HCOMM, UBMEM and URMA. Public validation is **Ascend 950DT / CANN 9.2.0 / PoC HDK**; several collectives and expert-load-balancing paths remain work in progress, and other Ascend generations are not established. | [Repository](https://github.com/deepseek-ai/DeepEP-Ascend) |
+| **DeepJIT** | Runtime JIT toolchain | Header-only C++20 runtime shared by CUDA and Ascend extensions: compile, cache, load and launch kernels; supports local/distributed cache. DeepGEMM-Ascend and DeepEP-Ascend cite it as their JIT layer. | [Repository](https://github.com/deepseek-ai/DeepJIT) |
+| **TileKernels** | Official TileLang kernel library | MoE routing, Engram, quantization and mHC kernels used in DeepSeek's internal training/inference workloads. Public Ascend backend targets **Ascend 950 / CANN 9.2.0+**, not 910B2/CANN 9.1. | [Repository](https://github.com/deepseek-ai/TileKernels) |
+| **DeepInfer** (2026) | Open-source inference engine | Production-derived V4.1-Flash offline runtime: Attention DP/balanced CP, MoE EP+EPLB, DSpark confidence-scheduled verification, bounded SWA replay, asynchronous scheduling and optimized kernels. **The public release is not a complete online service**: its README lists the KV-cache system, VE/P/D disaggregation and DP-replica load balancing as not included. Targets NVIDIA SM100 and Ascend 950 / CANN 9.2. | [Official repository](https://github.com/deepseek-ai/DeepInfer) · [Deployment Q&A](https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md) |
 | **deepseek-recipe** | API-to-token I/O | Rust/Python request/response conversion, model-specific prompt encoding, multimodal preprocessing and streaming parsing; **does not itself perform inference or transport**. | [Repository](https://github.com/deepseek-ai/deepseek-recipe) |
 | **DeepSeek-V3 inference demo** | Reference inference implementation | Exposes model architecture/configuration and checkpoint-conversion workflow; **not** a production serving runtime. | [Official repository](https://github.com/deepseek-ai/DeepSeek-V3/tree/main/inference) |
+
+## Production serving architecture — what is and is not open-sourced
+
+DeepSeek's [V4.1-Flash deployment Q&A](https://github.com/deepseek-ai/DeepInfer/blob/main/doc/inference_deployment_qa.md) describes the production design behind the public runtime: **Vision Encoder / Prefill / Decode disaggregation**, separate load balancers for each stage plus Expert Parallel, and a dedicated **3FS-backed KV-cache storage** tier. Its example configuration uses smaller Prefill groups (EP2–8 / DP2–8) and Wide-EP Decode groups (EP64–128 / DP64–128); these are deployment-specific recommendations, not universal defaults. Agent traffic uses a 72-hour cache TTL and chatbot traffic up to 7 days in the disclosed configuration.
+
+The Q&A explicitly says KV-cache management and load-balancing code remain tightly coupled to internal infrastructure and are **not fully open-sourced**. Treat the production architecture description as an engineering disclosure, not as code present in DeepInfer. In particular, do not describe the public offline release as a complete P/D serving stack.
 
 ## Compiler ecosystem — correct ownership
 
@@ -57,6 +63,6 @@
 
 ## Reading order
 
-**V2 MLA → V3 MoE/MTP → V3.2 DSA → V4.1 asymmetric architecture → DeepInfer runtime/scheduling → TileKernels/TileLang + FlashMLA/DeepGEMM/DeepEP → supported Ascend backend.** This traces the path from algorithmic state representation to device kernels and inter-GPU communication.
+**V2 MLA → V3 MoE/MTP → V3.2 DSA → V4.1 asymmetric architecture → DeepInfer + production E/P/D/KV design → FlashMLA/DeepSelect → DeepGEMM/DeepEP → Ascend backends (950/CANN 9.2) → TileKernels/TileLang + DeepJIT.** This traces the path from model state representation to kernels, communication and serving topology.
 
 **Scope boundary.** This is not an exhaustive index of DeepSeek model checkpoints, releases, OCR/RL work or community forks. A formal research paper, an official technical report and an open-source implementation are distinct evidence types. Features and supported models evolve rapidly; follow each repository's version notes before interpreting the code.
