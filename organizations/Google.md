@@ -42,6 +42,22 @@ A source-scoped map of Google's **inference kernels, TPU-native serving stacks, 
 | **MaxText** | Open JAX/TPU LLM implementation with generation/inference paths; also a training framework. | [GitHub](https://github.com/google/maxtext) |
 | **Gemma.cpp** | Lightweight C++ inference for Gemma on resource-constrained devices. | [GitHub](https://github.com/google/gemma.cpp) |
 
+## November 5–9, 2026: TPU system + state/inference execution (first-party verified)
+
+**Source:** [Google Nov 9 TPU 8tx / 8i Max and serving software release](https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/) and [Google Nov 5 XLA Serving Engine open-source launch](https://opensource.googleblog.com/2026/11/supercharging-xla-inference-xla-serving-engine.html). These are **vendor-origin claims**, not independently reproduced. Distinguish released code, announcements and deployment assertions.
+
+| First-party work | Exposed inference mechanism | Claim/evidence boundary |
+|---|---|---|
+| **TPU 8i Max** (Nov 9 system announcement) | Two TPU 8i dies per package; Google states 2× compute, SRAM and HBM bandwidth versus an 8i; targets context-intensive inference and rack compute density | **Hardware/system configuration, not a new Transformer attention algorithm.** No controlled vLLM/SGLang TPOT/Goodput measurement in this inventory |
+| **TPU 8tx** (Nov 9) | 8t-derived secure/confidential model/agent execution with AMD EPYC host and low-latency Boardfly interconnect | Security + topology design, not a published GPU/NPU kernel. Vendor claims up to 2× latency improvement vs 8t under proprietary context; workload not independently controlled |
+| **TPU Sync model-state layer** (Nov 9 announcement) | Unifies TPU HBM, host DRAM, shared storage and fabric for **KV tiering, P/D cache transfer and RL weight synchronization** | Google says open-sourcing; **a versioned public implementation/artifact was not verified here**. Vendor's reported **TTFT/KV-transfer reductions up to >90%** are *not* independently validated, nor a portable Ascend implementation |
+| **Agent Compute Engine** (Nov 9 announcement) | Auto-suspends idle agent sessions and moves their working state off accelerators during Tool-call/user wait; addresses long-lived session KV residency and cluster waste | **Vendor-described software mechanism**; no source commit/algorithmic scheduler or controlled SLO/p95 efficiency experiment established here |
+| **TPU Agent Suite (preview)** (Nov 9) | Coding-tool integrations for TPU onboarding, bottleneck diagnosis, natural-language-driven kernel autotuning | **Preview implementation claim**, not an independently evaluated Kernel Agent or proof of agent recursive self-improvement |
+| **Cloud Pathways / GKE dynamic slicing** (Nov 9) | Google DeepMind Pathways multihost orchestration and optical slicing/resharding can alter cluster scheduling and recovery | Managed infrastructure and vendor-reported start/recovery wins, not direct LLM token throughput comparisons |
+| **XLA Serving Engine (XSE)** (Nov 5; [open repository](https://github.com/openxla/xla-serving)) | **StableHLO export → serialized SavedModel → C++/PJRT runtime**, Python-free execution and pluggable deployment | Google's **2–5× throughput vs optimized Python** comes from **short one-shot, mostly non-LLM tasks**. Official limitation says autoregressive long-context LLM should use **vLLM/SGLang**, rather than treating XSE as their replacement |
+
+**Technical priority:** For token-serving research, TPU Sync's **state hierarchy and P/D transfer** plus Agent Compute Engine's **tool-idle residency contract** are more directly transferable concepts than generic chip marketing. Distinguish **documented public code** (XSE) from **announced software without independently verified code** (TPU Sync and Agent Compute Engine).
+
 ## Distributed serving topology: Google contributors to llm-d
 
 | Engineering source | Executed contribution | Attribution / validation limit |
