@@ -1,16 +1,16 @@
 # Awesome LLM Inference Systems
 
-**853 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 11 DCore source admission; **no independent GPU/NPU reproduction is implied**.
+**930 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 12 PR #80 + Baidu/DCore reconciliation; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
-**Current review status (2026-11-11):** the [latest G0/G3–G5 primary-source review](reviews/G5_G4_PRIMARY_SOURCE_REVIEW_20261106.md) revisited **11 evidence/value cases** and resolved two historical paper-identity issues (RAGBoost → ContextPilot alias; DefensiveKV ≠ CriticalKV). **NovaServe / Select-N remains HOLD_IDENTITY**; historical fast-admission records still require case-by-case verification. That November 6 review added **zero** canonical entries; [the November 11 Baidu mechanism audit](reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) subsequently admitted **one** controlled speculative-decoding preprint with public evaluation artifacts (852 → 853). The [November 5 scope review](reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) removed two non-core video-generation studies; the current total is **852**, not the earlier **854**.
+**Current review status (2026-11-12):** The Nov 9–10 intake in [PR #80](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/80) contributes **77 source-curated papers** from the shared 852-paper baseline (**852 → 929**). The separate [November 11 Baidu/DCore source audit](reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) admitted one distinct preprint from that same baseline; DCore is absent from PR #80's topic branch, so the reconciled union is **930**. The 31 historical HOLD/frontier re-admissions use graded `EXPLORE / EVIDENCED / REFERENCE` labels; they are not retroactively described as conference-grade or independently reproduced. MobiInfer's Aug 11 vs arXiv 2611 date conflict remains disclosed and is **not** asserted as a November first submission. No author GPU/NPU performance result was independently reproduced.
 
 **What “source-curated” means:** editorial selection based on public sources, **not** a claim that every current row has passed an independently documented full G0–G5 audit, that all papers are reproducible, or that reported speedups were replicated. Publisher identity, model/quality changes, hardware and workload constraints remain paper-specific.
 
 **Start here:** [8 topic mechanisms](topics/README.md) · [30 foundations below](#foundational-and-influential-papers) · [Organizations](organizations/README.md) · [Research labs & OSS](communities/README.md) · [7 Frontiers](frontiers/README.md) · [G0–G5 review rules](STRICT_REVIEW.md) · [Review receipts & outstanding HOLDs](reviews/README.md).
 
-**Historical receipts:** [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
+**Historical receipts:** [November 10 arXiv frontier/backlog recovery (898 → 929)](reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md) · [November 9 third pass + Nov 10 preprint recalibration (879 → 898)](reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) · [November 9 expanded search (862 → 879)](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) · [November 9 first pass (852 → 862)](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) · [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
 
 ## Explore
 
@@ -18,7 +18,7 @@ A selective, engineering-first map of LLM inference: **kernels/compilers, KV mem
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 853 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 930 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
