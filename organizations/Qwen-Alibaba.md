@@ -23,6 +23,7 @@
 - [Qwen3-Next / Qwen3.5–3.8](https://github.com/QwenLM/Qwen3.8) develops a hybrid **Gated DeltaNet (GDN) recurrent state + attention** architecture. This creates two different state-management paths: recurrent state and conventional attention KV.
 - [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) is the most useful current architecture preview: **GDN + Qwen Sparse Attention (QSA)**, Gated Residual, N-gram Embedding and asynchronous host-memory prefetch. It is explicitly a preview of the architecture direction for Qwen4, **not the Qwen4 release itself**.
 - [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder), [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL) and [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni) matter because long coding sessions and streaming multimodal inputs create different serving workloads from ordinary text chat.
+- Historical context: [M6](https://arxiv.org/abs/2103.00823) and [OFA](https://proceedings.mlr.press/v162/wang22al.html) are earlier DAMO multimodal/pretraining work; useful lineage, but not today's online inference runtime.
 
 **Read:** model repository → model card / technical report → the actual runtime implementation supporting that architecture. A model release is not, by itself, a serving-system contribution.
 
