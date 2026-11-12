@@ -14,7 +14,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 
 | Organization | Public work |
 |---|---|
-| [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 · DeepInfer production E/P/D + 3FS KV design · DeepEP/DeepGEMM/FlashMLA · Ascend 950 kernels / DeepJIT |
+| [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 · DeepInfer production E/P/D + 3FS KV design · FlashMLA/DeepSelect · DeepEP/DeepGEMM Ascend backends · TileKernels/DeepJIT (950/CANN 9.2) |
 | [Tencent](Tencent.md) | **Hy4 final vs Preview** · WorkBuddy model/product co-design · AngelSlim/AngelSpec · KsanaLLM · Hy4-preview RSI signal |
 | [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
