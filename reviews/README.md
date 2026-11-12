@@ -2,12 +2,13 @@
 
 [← Home](../README.md) · [Current canonical topics](../topics/README.md) · [G0–G5 rules](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
-**Current state — 2026-11-11 (Baidu source + mechanism audits; one strict paper admission):** **853** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
+**Current state — 2026-11-12 (Baidu closeout + Alibaba surface audit; one strict paper admission in the prior pass):** **853** canonical topic entries across **8 mechanisms / 44 directions**. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
 
 ## Read these first: latest evidence and quality corrections
 
 | Receipt | What it establishes | What it does **not** establish |
 |---|---|---|
+| [November 12 Alibaba primary-source surface audit](ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) | Maps M6/OFA → Qwen, RTP-LLM, PAI InferX/FlashKV, LMetric/ServeGen/ACDC/xMaaS, MNN/Walle and supporting training/compiler stack; records next source-audit gates | No new canonical paper admission, no RTP-LLM code-path audit, no PAI internal source, no independent benchmark; **853 papers unchanged** |
 | [November 11 Baidu native-execution source closeout](BAIDU_NATIVE_EXECUTION_CLOSEOUT_20261111.md) | Frozen SHA comparison across FastDeploy router/scheduler/KV handoff, vLLM V1 KV Connector, SGLang RadixCache/P-D queues; project exit decision | Not a feature-parity, vLLM-Ascend backend, or GPU/NPU performance test; **853 papers unchanged** |
 | [November 11 Baidu mechanism/code deep audit](BAIDU_MECHANISM_CODE_AUDIT_20261111.md) | First-principles HCA/MLA/MoE/ECHO cost boundaries, native FastDeploy router/scheduler/KV code pointers, ERNIE Evolve negative experiments and DCore reproducibility receipt | Not a kernel/serving reproduction, and not a claim of Baidu invention of every adopted model mechanism |
 | [November 11 Baidu/Paddle primary-source audit](BAIDU_PRIMARY_SOURCE_AUDIT_20261111.md) | Rebuilds ERNIE research-to-inference lineage, FastDeploy/FlashMask, 5.5 architecture and ERNIE Evolve frontier source; records strict KEEP_ORG vs HOLD_TOPIC boundaries | No new canonical paper, independent GPU/NPU benchmark, Looped Transformer attribution or verified RSI |
