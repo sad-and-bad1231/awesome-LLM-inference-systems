@@ -16,7 +16,7 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 |---|---|
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 revision · asymmetric causal encoder–decoder · DeepInfer · TileKernels / TileLang · DeepEP |
 | [Tencent](Tencent.md) | **Hy4 final (Nov 4)** vs Hy4-preview artifacts · Gated DSA / IndexCache · MoE / MTP |
-| [Alibaba / Qwen](Qwen-Alibaba.md) | Qwen3.5–3.8 · **RTP-LLM production serving engine** · Gated DeltaNet / QSA · MNN |
+| [Alibaba / Qwen](Qwen-Alibaba.md) | Qwen3.5–3.8 / Qwen4 preview · **RTP-LLM** · PAI InferX / FlashKV · LMetric / ServeGen / ACDC / xMaaS · MNN edge inference |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | M3 / M3.1-Flash · sparse attention · QAT · DSpark |
@@ -71,6 +71,6 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 
 ## Historical source notes and model release reconciliation
 
-The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved **verbatim** in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-05). New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
+The live directory above is the stable **49-profile navigation** (19 China / 30 US), not a model-release feed. Dated company additions, version crosswalks, source corrections, first-party launch receipts and old catalog reconciliation have been preserved in [Organizations source chronology](SOURCE_CHRONOLOGY.md) (2026-10-24 through 2026-11-05); the [Alibaba primary-source audit](../reviews/ALIBABA_PRIMARY_SOURCE_AUDIT_20261112.md) records the new 2026-11-12 research map. New product/API/model names should be verified against original vendor sources before being described as current. The [November 5 source audit](../reviews/ORG_LAB_OSS_SWEEP_20261105.md) records inclusion boundaries.
 
 **Editorial boundary.** Organization pages represent verifiable first-party releases or research directly attributable to a team. Coauthored work belongs in topical paper lists unless an institution explicitly presents its own system. An API feature is not proof of an undisclosed serving implementation.
