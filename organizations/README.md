@@ -19,11 +19,11 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
 | [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
-| [MiniMax](MiniMax.md) | **M3.1 Flash + MSA/DSpark** · **H3 / H3-Image open weights** · **Music 3.0 Hybrid-LM** · Speech 2.8 · public-vs-hosted inference boundary |
+| [MiniMax](MiniMax.md) | **M3/M3.1 LLM + MSA/DSpark** · **H3/H3-Image video and image** · Speech/Music · **Forge / MaxProof / Agent Team** · MiniMax Code/Hailuo/Audio · public inference boundary |
 | [Moonshot AI / Kimi](Moonshot-Kimi.md) | Mooncake · **K3.1 Pro open weights (Nov 4)** · KDA + indexed Sparse MLA · AttnRes |
 | [Zhipu AI / GLM](Zhipu-GLM.md) | GLM-5.3 / 5.3-Flash · DSA · multimodal execution |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
-| [ByteDance / Seed](ByteDance.md) | **Seed2.1 / Seedream 5.5 / Seedance 2.5 / SeedRealtime** · **Triton-distributed / FLUX–COMET** · ByteIR · **Volcano ServingKit** · Charon |
+| [ByteDance / Seed](ByteDance.md) | **Seed2.1 + Seedance/Seedream/SeedRealtime** · **MegaScale-Omni / VeOmni / Charon** · **Triton-distributed / FLUX–COMET / ByteIR** · **Doubao / Jimeng / CapCut** · Volcano Ark/ServingKit |
 | [Baidu / Paddle](Baidu.md) | **ERNIE 2019→5.5 research lineage** · **HCA/MLA/Latent MoE/ECHO** · FastDeploy P/D + KV/EP · **FlashMask-4** · **ERNIE Evolve (inference-engine optimization)** · **DCore (controlled speculation evaluation)** |
 | [Meituan / LongCat](Meituan.md) | **[CODE]** SGLang-FluentLLM · P/D KV transfer · sparse MoE/LSA · W4A4 / numerical consistency |
 | [Xiaohongshu / Rednote](Xiaohongshu.md) | **[CODE + PREPRINT]** HYPIC hybrid-position-independent cache · Relax training/rollout |
