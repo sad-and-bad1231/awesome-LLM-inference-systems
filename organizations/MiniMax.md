@@ -1,33 +1,47 @@
 # MiniMax
 
-MiniMax's published long-context attention and model architectures, with their serving implications.
+**Multimodal foundation models → inference-shaped architecture → generation/serving deployment.** MiniMax's distinctive public evidence is not just a text model: M-series sparse-MoE LLMs, H-series audio/video/image generation, streaming speech and long-form music produce different execution problems. Public model weights, model cards, provider APIs, and reusable serving implementations are **different levels of evidence**.
 
-[← Organizations](README.md) · [← Home](../README.md)
+[← Organizations](README.md) · [← Home](../README.md) · [2026-11-13 source audit](../reviews/MINIMAX_BYTEDANCE_PRIMARY_SOURCE_AUDIT_20261113.md)
 
-## Official model-family crosswalk (2026-10-24)
+## 1. Current model map (checked 2026-11-13)
 
-**Catalog authority:** [MiniMax model navigation](https://www.minimax.io/) and [developer model/pricing catalog](https://platform.minimax.io/subscribe/token-plan). The website's **five currently featured families** are not the same denominator as historical models or API model IDs.
+**Catalog authorities:** [MiniMax website](https://www.minimax.io/), [research/release chronology](https://www.minimax.io/blog), [official GitHub](https://github.com/MiniMax-AI), [model weights](https://huggingface.co/MiniMaxAI) and [API documentation](https://platform.minimax.io/docs/). The homepage's featured cards are **not** an exhaustive historical catalog, and API service tiers do not constitute new neural architectures.
 
-| Official model family | Serving classification / scope | Source |
+| Line / public identity | Why it matters to AI and execution | First-party evidence |
 |---|---|---|
-| MiniMax-M3.1-Flash | Current promoted flagship, model+runtime co-design, sparse attention / QAT / DSpark | [Official October launch](https://www.minimax.io/blog/minimax-m31f) |
-| MiniMax-M3 | Current featured LLM, open model; MSA indexed/sparse execution | [Official repo](https://github.com/MiniMax-AI/MiniMax-M3) |
-| MiniMax-M2.7 / M2.7-highspeed | Still documented on developer platform, with highspeed as service tier, not an independently published attention primitive | [Official developer plan](https://platform.minimax.io/subscribe/token-plan) |
-| MiniMax-M2.5 | Older but still exposed in website/model navigation; separate model family from M3 | [Official model navigation](https://www.minimax.io/) |
-| MiniMax-M2 / M2.1 / MiniMax-01 | Historical text/long-context architectures; retain for architecture lineage, not current SOTA inference claims | [M2 code](https://github.com/MiniMax-AI/MiniMax-M2) · [01 code](https://github.com/MiniMax-AI/MiniMax-01) |
-| MiniMax H3 | Current featured **video/omni generation** model: not autoregressive text LLM serving | [Official model navigation](https://www.minimax.io/) |
-| MiniMax Speech 2.8 (HD / Turbo) | Current featured TTS generation, different streaming and decoder workload | [Official API pricing](https://platform.minimax.io/subscribe/token-plan?tab=api-enterprise) |
-| MiniMax Music 3.0 | Current featured music/audio generation; not text-LLM Kernel benchmark | [Official release listing](https://www.minimax.io/blog) |
+| **M3.1-Flash (2026-10-19)** | Native text/image/video **input → text output**; 428B total / 23B active MoE, up to 1M context. All-attention-layer MSA, QAT for expert/attention paths and DSpark draft head make sparse attention + quantized kernels + speculative verification the main serving questions. | [Launch](https://www.minimax.io/blog/minimax-m31f) · [model card/weights](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) |
+| **M3 (2026-06-01)** | Native multimodal understanding and 1M-context MiniMax Sparse Attention (MSA); indexed block-sparse KV access changes memory traffic, kernel layout and prefill/decode characteristics. | [Research post](https://www.minimax.io/blog/minimax-m3) · [code/deployment links](https://github.com/MiniMax-AI/MiniMax-M3) · [MSA paper](https://arxiv.org/abs/2606.13392) |
+| M2.7 / M2.5 / M2 / M2.1 / MiniMax-01 | LLM/agent development and long-context architectural lineage. Keep older families visible without treating all hosted speed tiers as new architectures. | [Research chronology](https://www.minimax.io/blog) · [M2](https://github.com/MiniMax-AI/MiniMax-M2) · [01](https://github.com/MiniMax-AI/MiniMax-01) |
+| **H3 (2026-07/08; open weights)** | General-purpose **video + stereo audio generation** conditioned on text, image, audio and video. H3-Context-IR → H3-Base → H3-Regenerate-2K forms a multi-stage workload, not token-by-token LLM decoding. | [Technical overview](https://www.minimax.io/blog/minimax-h3) · [official repository](https://github.com/MiniMax-AI/MiniMax-H3) · [open release](https://www.minimax.io/news/minimax-h3-open-source) |
+| **H3-Image (2026-11-11; open weights)** | Text/image-reference generation and editing, up to 16 references and advertised 4K output; reducing sampling steps and deployment optimization matter for **image-generation latency**, not LLM TPOT. | [Launch/technical notes](https://www.minimax.io/blog/minimax-h3-image) · [weights](https://huggingface.co/MiniMaxAI/MiniMax-H3-Image) |
+| Hailuo 01 / 02 / 2.3 | Earlier image-to-video/text-to-video model family and product lineage; not interchangeable with H3's unified multimodal design. | [H3 architectural retrospective](https://www.minimax.io/blog/minimax-h3) · [Hailuo 02 release context](https://www.minimax.io/news/hailuo-02-is-now-integrated-into-envatos-videogen) |
+| **Speech 2.8 HD / Turbo** | Speech synthesis, expressive speech tags and voice cloning; streaming/first-audio latency and real-time factor belong to a different SLO family from LLM tokens. HD/Turbo are service variants unless separately documented as architectures. | [Official release](https://www.minimax.io/news/minimax-speech-28) · [API docs](https://platform.minimax.io/docs/) |
+| **Music 3.0 (2026-08-13; open weights)** | Up to five-minute generation with **global–local Hybrid-LM**, 8-layer RVQ and flow-matching/Flow-VAE synthesis. Structural-token prediction, acoustic-token expansion and waveform synthesis have different stage costs. | [Technical release](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) |
+| MiniMax Code / Hailuo AI / MiniMax Audio / Talkie / Open Platform | Useful workload/product provenance, **not** evidence of a publicly released internal router, scheduler, transport or GPU/NPU kernel. | [Company product map](https://www.minimax.io/about) · [API docs](https://platform.minimax.io/docs/) |
 
-**Coverage:** 5 prominent website family links (M3.1 Flash, M3, H3, Speech 2.8, Music 3.0); M2.5/M2.7 remain on other first-party navigation/API pages. Do not count highspeed/HD/Turbo as independently novel architectures.
+## 2. Inference mechanisms worth reading
 
-## Selected first-party architecture and execution sources
-
-| Public work | Inference relevance | Primary source |
+| Mechanism | Inspectable technical anchor | Engineering interpretation / boundary |
 |---|---|---|
-| **MiniMax-01** | Model family with efficient long-context attention design; primarily a model architecture / technical report. | [Official source](https://github.com/MiniMax-AI/MiniMax-01) |
-| **MiniMax-M2** | MoE-style model and deployment guidance for coding and agentic workloads, not a standalone serving framework. | [Official source](https://github.com/MiniMax-AI/MiniMax-M2) |
-| **MiniMax-M3** (2026) | MoE with MiniMax Sparse Attention (MSA): lightning-indexer/block-sparse attention introduces a separate index-state and indexed-attention kernel path. This is **model architecture**, not a reusable scheduler. | [Official repository](https://github.com/MiniMax-AI/MiniMax-M3) · [MSA preprint](https://arxiv.org/abs/2606.13392) |
-| **MiniMax-M3.1-Flash** (2026-10) | 428B MoE / 23B activated; native multimodal, up to 1M context. Replaces the former first-three full-attention layers with sparse attention; combines attention/expert quantization-aware training and **DSpark** speculative draft head. Architecture/weights and deployment recipes are public; vendor online TPS/cost claims are **not independently reproduced or cross-model matched**. | [Official model card](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) · [Official release](https://www.minimax.io/blog/minimax-m31f) |
+| **MSA: sparse KV indexing and gather** | [M3 post](https://www.minimax.io/blog/minimax-m3) · [paper](https://arxiv.org/abs/2606.13392) | The reported **KV-outer-gather-Q** operator reorganizes work around selected KV blocks to reuse their loads and aggregate hitting queries. At 1M context MiniMax reports 9× prefill / 15× decode versus M2; these are **author comparisons with changed model architectures**, not isolated, independent kernel gains. |
+| **M3.1 Flash: quantization + speculation** | [Model card](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash) | QAT covers experts and attention; DSpark replaces the older EAGLE-like MTP path and exposes a draft head. Availability of a draft head alone does not prove a particular serving framework's **acceptance rate, end-to-end throughput, or Ascend compatibility**. |
+| **H3: compressed latents and staging** | [H3 code/architecture](https://github.com/MiniMax-AI/MiniMax-H3) | H3 VisualVAE uses temporal/spatial compression, the 33B dense Omni Transformer jointly predicts video/audio latents, and regeneration expands output quality. Official repo notes that ~13B parameters in AdaLN branches can be precomputed/cached for inference-only deployment. Benchmark each stage and quality cost independently. |
+| **H3 release boundary** | [H3 README](https://github.com/MiniMax-AI/MiniMax-H3) | The **H3-Context-IR hosted preprocessing/orchestration** is not open-sourced. The initial public H3 inference path uses **full attention**; native sparse-attention implementation is promised separately. Do not attribute its unreleased fast path to local self-hosting. |
+| **H3-Image: high-resolution generation** | [Nov 11 release](https://www.minimax.io/blog/minimax-h3-image) | Company-reported under-10-second 4096×4096 generation and inference improvements span sampling, post-training and deployment. Without a matched hardware/quality/workload setup these claims are **not transferable** to a generic diffusion runtime. |
+| **Music 3.0: heterogeneous sequence + synthesis** | [Music technical post](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) | Published design uses an 8B global LM, 0.6B local LM, 2.4B flow-matching model and 123M Flow-VAE. Interesting cross-stage scheduling and memory traffic; do not equate a 5-minute audio output with a 5-minute latency bound. |
 
-**Evidence boundary:** M3.1-Flash is a model / kernel workload contract, not proof that DSpark or its sparse-attention backend is available on Ascend 910B2 or in the user's pinned vLLM pair. Model speedups reported by the vendor are not independent serving measurements.
+## 3. Public deployment and what is *not* published
+
+- **Model/runtime compatibility:** [M3 deployment recipes](https://github.com/MiniMax-AI/MiniMax-M3) refer to **SGLang, vLLM, Transformers and KTransformers**; [H3 local deployment](https://github.com/MiniMax-AI/MiniMax-H3) links to **SGLang, vLLM, diffusers and ComfyUI**. These are project integrations, not proof MiniMax operates those exact OSS binaries in production.
+- **Hosted service:** [MiniMax API](https://platform.minimax.io/docs/) supplies externally visible contracts and priority/speed tiers. Public materials inspected do **not** establish a complete, reusable MiniMax-owned production LLM scheduler, P/D disaggregation implementation, proprietary GPU kernels, or Ascend 910B2 backend.
+- **Scope:** M3/M3.1 have autoregressive *text output*; H3/H3-Image are generative media pipelines; Speech/Music use speech/acoustic output paths. Compare **TTFT/TPOT/throughput** only for text generation, **time-to-first-audio/RTF** for speech, and **wall time vs resolution/duration/quality** for image/video/music.
+- **Adjacent signal:** [M3 release's kernel-optimization agent example](https://www.minimax.io/blog/minimax-m3) is a **company-reported agent experiment**, not a released autonomously self-improving inference engine or independently reproduced result.
+
+## 4. Recommended reading path and open questions
+
+1. [MSA paper](https://arxiv.org/abs/2606.13392) → [M3 model](https://github.com/MiniMax-AI/MiniMax-M3) → [M3.1 model card](https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash): separate sparse-index cost, selected-KV memory traffic, quantization, and speculative decode acceptance.
+2. [H3 code](https://github.com/MiniMax-AI/MiniMax-H3) → [H3 research](https://www.minimax.io/blog/minimax-h3) → [H3-Image release](https://www.minimax.io/blog/minimax-h3-image): distinguish public full-attention base inference from hosted Context-IR, and profile VAE/Transformer/regeneration independently.
+3. [Music 3.0](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) and [Speech 2.8](https://www.minimax.io/news/minimax-speech-28): ask how heterogeneous streaming stages meet output quality and interaction latency.
+
+**Evidence policy:** Release date and model identity are first-party checked as of **2026-11-13**. Public weights ≠ full hosted pipeline; an author's throughput/latency claim ≠ independent reproduction. No new canonical topic paper is admitted by this organization update.
