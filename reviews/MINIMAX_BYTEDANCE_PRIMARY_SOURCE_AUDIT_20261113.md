@@ -47,3 +47,13 @@ MiniMax's [open-weight H3 architecture repository](https://github.com/MiniMax-AI
 ## Change receipt
 
 Updated [MiniMax](../organizations/MiniMax.md), [ByteDance](../organizations/ByteDance.md) and [organization index](../organizations/README.md). Added this dated audit to the [review index](README.md). No modifications to canonical paper files or paper counts, no unsupported benchmark replication.
+
+## November 13 follow-up — company-blueprint alignment
+
+The first pass covered model lines, select execution details and evidence boundaries. A follow-up compared the current [Baidu](../organizations/Baidu.md), [Alibaba](../organizations/Qwen-Alibaba.md) and [Tencent](../organizations/Tencent.md) profiles and corrected the **reading hierarchy**: technology map first, then key model families, representative research, inference/AI infrastructure and product ecosystem. No kernel audit, paper intake or new benchmark was performed.
+
+- **MiniMax:** Added first-party [Forge agent RL](https://www.minimax.io/blog/forge-scalable-agent-rl-en-1779896141), [MaxProof](https://www.minimax.io/blog/minimax-maxproof-math-proof-evolution), [Agent Team](https://www.minimax.io/blog/minimax-agent-team-long-running-1779893953) and [company product coverage](https://www.minimax.io/about) alongside M3/M3.1, H3/H3-Image, Speech and Music. These works are separate **training/reasoning/agent-runtime** tracks, not proof of a released low-level inference engine.
+- **ByteDance:** Added [Seed's research directory](https://seed.bytedance.com/en/research), [MegaScale-Omni and other AI Infra research](https://seed.bytedance.com/en/research), [VeOmni](https://github.com/ByteDance-Seed/VeOmni), [ByteDance's official product portfolio](https://www.bytedance.com/products-services) and a company-to-cloud view including Doubao, creative tools and Volcano/BytePlus. Company products reveal application categories, **not** proprietary deployment topology or system ownership.
+- **Editorial:** Shortened granular execution notes within the live pages, leaving original research/model/repository links and the evidence boundaries available. Navigation and reading order now match the broader organizational treatment of recent Baidu/Alibaba/Tencent updates.
+
+**No additional canonical paper rows; total remains 930.** The December-facing release watch and deeper kernel-level investigations are out of scope for this company-blueprint closeout.
