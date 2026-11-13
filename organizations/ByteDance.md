@@ -1,30 +1,55 @@
-# ByteDance
+# ByteDance / Seed / Volcano Engine
 
-ByteDance/Seed open research releases and low-level Transformer execution, rather than the undisclosed internals of commercial services.
+**Foundation-model research (Seed) → multimodal product workloads → low-level compute/communication stack → cloud serving control plane.** ByteDance has distinct publicly inspectable organizations and artifacts; Seed models, the broader ByteDance compiler/kernel repositories, and Volcano Engine's managed inference offerings must not be silently described as a single open-source production engine.
 
-[← Organizations](README.md) · [← Home](../README.md)
+[← Organizations](README.md) · [← Home](../README.md) · [2026-11-13 source audit](../reviews/MINIMAX_BYTEDANCE_PRIMARY_SOURCE_AUDIT_20261113.md)
 
-## Official Seed model portfolio crosswalk (2026-10-24)
+## 1. Model research map (checked 2026-11-13)
 
-[Seed's official model portfolio](https://seed.bytedance.com/zh/seed_model_portfolio) is the completeness source; [current featured models](https://seed.bytedance.com/zh/models) distinguish model research from text-LLM serving. Volcengine Ark has additional dated API snapshots.
+**First-party authorities:** [Seed model portfolio](https://seed.bytedance.com/en/models), [Seed blog](https://seed.bytedance.com/en/research), [Seed publications](https://seed.bytedance.com/en/public_papers), [Seed GitHub](https://github.com/ByteDance-Seed), [Volcano Ark catalog](https://docs.volcengine.com/docs/ark/model-list?lang=zh). Product labels and Ark endpoint snapshot IDs are not independently new architectures.
 
-| Official family | Modality / inference relevance | Primary source |
+| Model / lineage | Workload, architectural relevance and status | First-party sources |
 |---|---|---|
-| Seed2.1 (Pro / Turbo / Lite service variants) | Agent/Coding-oriented foundation generation, distinct model tiers and API resource profiles | [Seed model portfolio](https://seed.bytedance.com/zh/models) · [Ark model list](https://docs.volcengine.com/docs/ark/model-list?lang=zh) |
-| Seed2.0 / Seed1.8 / Seed1.6 / Seed1.5 / Seed1.5-VL | Full publicly listed historical foundation-family lineage, including multimodal VL | [Official Seed portfolio](https://seed.bytedance.com/zh/seed_model_portfolio) |
-| Seed Diffusion Preview | **Diffusion language modeling**, materially different iterative decoding workload | [Official Seed portfolio](https://seed.bytedance.com/zh/seed_model_portfolio) |
-| Seedance 2.5 / Seedream 5.0 Pro | Current video/image generative family; media diffusion, **not** autoregressive text serving | [Official current models](https://seed.bytedance.com/zh/models) |
-| SeedRealtime / Seed Audio 1.0 | Full-duplex audio-video streaming and audio generation; real-time multimodal serving | [Official current models](https://seed.bytedance.com/zh/models) |
-| Seed GR-3 / Seed GR-RL | Embodied/VLA and robotics-related methods (GR-RL is an RL framework, **not** a standalone inference model) | [Official Seed portfolio](https://seed.bytedance.com/zh/models) |
-| Protenix | AI-for-science protein foundation model, beyond current text inference mainline | [Official Seed portfolio](https://seed.bytedance.com/zh/models) |
-| Doubao-Seed-Evolving / Seed-Code / Seed-Translation | Ark-hosted service families; model-routing/endpoint labels should not be promoted to distinct new architectures without technical reports | [Volcengine model catalog](https://docs.volcengine.com/docs/ark/model-list?lang=zh) |
+| **Seed2.1 Pro / Turbo** | Current agent/coding foundation model family with different service/resource profiles; do not infer unpublished MoE routing, KV-cache layout or kernel optimizations from product naming alone. | [Seed current models](https://seed.bytedance.com/en/models) |
+| Seed2.0 Pro / Lite / Mini; earlier Seed1.8 / 1.6 / 1.5 | Foundation and multimodal development lineage. Seed2.0 Lite is described as omni-modal **understanding**, not an audio/video generation engine. Seed1.5-VL has a public vision-language research repository. | [Seed2.0](https://seed.bytedance.com/en/seed2) · [Seed1.5-VL](https://github.com/ByteDance-Seed/Seed1.5-VL) · [portfolio](https://seed.bytedance.com/zh/seed_model_portfolio) |
+| **Seedance 2.5 (2026-07-31)** | Unified audio-video generation line, supporting 30-second single-pass outputs, reference conditioning and editing. It is a **media generation workload**, distinct from autoregressive text decode. | [Release](https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5) · [model page](https://seed.bytedance.com/zh/seedance2_5) |
+| **Seedream 5.5 (2026-11-09)** | Current image generation/editing: native RGBA output, region preservation and multi-round editing; the 100-edit demonstration is a **quality/workflow result**, not an inference speedup. Seedream 5.0 Pro is the preceding release. | [Nov 9 source](https://seed.bytedance.com/en/blog/more-realistic-images-more-stable-editing-across-100-rounds-introducing-seedream-5-5) · [5.5 page](https://seed.bytedance.com/en/seedream5_5) |
+| **SeedRealtime (2026-08-05)** | Native audio-visual **full-duplex** understanding/response: simultaneous continuous perception, turn-taking, proactive interaction and latency-sensitive audio-visual streaming. The critical path is not a conventional single text-request TTFT. | [Seed technical announcement](https://seed.bytedance.com/en/blog/seedrealtime-audio-visual-full-duplex-llm-released-toward-omni-modal-natural-interaction) · [model page](https://seed.bytedance.com/en/seedrealtime) |
+| **Seed Audio 1.0 (2026-07)** | Audio/voice/ambience generation; composition and synthesis introduce non-text token and acoustic-output stages. | [Seed blog index](https://seed.bytedance.com/en/research) · [model portfolio](https://seed.bytedance.com/en/models) |
+| Seed Diffusion Preview / Seed-OSS-36B | Diffusion-based **language-model** research versus open long-context autoregressive foundation model: different decode dependency graphs and speculative parallelism opportunities. | [Seed historical portfolio](https://seed.bytedance.com/zh/seed_model_portfolio) · [Seed-OSS weights](https://huggingface.co/ByteDance-Seed/Seed-OSS-36B-Instruct) |
+| **BAGEL / Depth Anything 3 / Seed3D 2.0** | Open multimodal generation/vision/3D research helps map visual and spatial compute workloads; not automatically LLM-serving runtime releases. | [BAGEL code](https://github.com/ByteDance-Seed/Bagel) · [Depth Anything 3](https://github.com/ByteDance-Seed/Depth-Anything-3) · [Seed research](https://seed.bytedance.com/en/research) |
+| Seed GR-3 / GR-RL; Protenix | Robotics VLA/embodied methods and AI-for-science. GR-RL is an RL **framework**, not a separately deployed language-model serving architecture. | [Seed model portfolio](https://seed.bytedance.com/en/models) |
 
-**Scope:** the official portfolio includes model families across GenMedia, Robotics and AI4Science; they appear here for completeness, but only execution-relevant work warrants a canonical LLM-inference paper admission.
+**Model-to-system questions:** autoregressive LLM attention/KV versus diffusion denoising/latent VAE; high-resolution image/video generation; audio/video synchronization; continuous, interruptible real-time full duplex. Presence in Seed's model menu alone does not establish a published inference implementation.
 
-## Selected first-party architecture and execution sources
+## 2. Public compute, communication and systems work
 
-| Public work | Inference relevance | Primary source |
+| Artifact | Mechanism / research contribution | Actual scope and implementation boundary |
 |---|---|---|
-| **Seed-OSS** | Official long-context model family with GQA and a controllable reasoning budget; model capability, **not** a new serving system. | [Official source](https://github.com/ByteDance-Seed/seed-oss) |
-| **ByteTransformer** | Transformer inference optimization and operator implementation; historical engineering reference. | [Official source](https://github.com/bytedance/ByteTransformer) |
-| **ByteIR** | ML compiler infrastructure and intermediate representation; included as compiler substrate, not necessarily an online serving stack. | [Official source](https://github.com/bytedance/ByteIR) |
+| **[Triton-distributed](https://github.com/ByteDance-Seed/Triton-distributed)** · [paper](https://arxiv.org/abs/2504.19442) | Programmable **compute–communication overlap**: distributed GEMM, AllGather/ReduceScatter, distributed Flash-Decode, EP dispatch/combine, FlashComm chunked buffers, FP8 traffic, cross-node paths. | Open-source compiler/kernel framework with NVIDIA and AMD main paths; project README says **Triton 3.7 main has no Ascend plugin build**. For its older Ascend RDMA code use **triton-v3.4**; **no 910B2/CANN 9.1 validation implied**. |
+| **[FLUX / COMET](https://github.com/bytedance/flux)** · [MLSys 2025 publication](https://seed.bytedance.com/en/public_papers/comet-fine-grained-computation-communication-overlapping-for-mixture-of-experts) | Fuses communication and GEMM and reschedules fine-grained MoE dependencies to overlap EP traffic with compute. A strong case of operator-level **data dependency + scheduling** co-design. | Public CUDA/C++ kernels and ML systems paper; its most prominent production claim concerns **large-scale MoE training**. GPU-hour savings and paper speedups are author-reported, not verified gains for an arbitrary online Serving workload. |
+| **[TileLink](https://arxiv.org/abs/2503.20313)** | Tile-centric primitives for generating compute/communication-overlapped kernels; conceptual foundation alongside Triton-distributed. | Research compiler/system artifact, not proof of optimized deployment on all backends. |
+| **[ByteIR](https://github.com/bytedance/byteir)** | MLIR / StableHLO lowering, generic graph/loop/tensor optimization and the ByRE compiler–runtime interface. | **Compilation substrate**, not a released vLLM-equivalent token scheduler or turnkey production LLM service. |
+| **[ByteTransformer](https://github.com/bytedance/ByteTransformer)** · [paper](https://arxiv.org/abs/2210.03052) | Padding-free variable-length Transformer operators on NVIDIA GPUs. | **BERT encoder inference** only in its public repository; a historical systems antecedent, **not** a modern autoregressive decoder engine. |
+| **[Charon simulator](https://arxiv.org/abs/2605.17164)** | Fine-grained simulation of training **and inference** to explore model, parallelism, hardware and deployment choices. | Simulation plus reported deployment case; distinguish simulator prediction from measured production throughput. |
+| **[UltraMem](https://arxiv.org/abs/2411.12364)** · [Seed note](https://seed.bytedance.com/en/blog/seed-research-%E5%85%A8%E6%96%B0%E8%B6%85%E7%A8%80%E7%96%8F%E6%9E%B6%E6%9E%84-%E6%8E%A8%E7%90%86%E6%88%90%E6%9C%AC%E8%BE%83-moe-%E6%9C%80%E9%AB%98%E5%8F%AF%E9%99%8D-83) | Ultra-sparse memory network motivated by low-batch parameter memory traffic and activated compute. | **Model architecture** with inference-cost experiments; not interchangeable with the MoE dispatch/combine runtime or proof of a universal 83% inference cost reduction. |
+| **[ByteExpress / production RDMA](https://arxiv.org/abs/2610.12815)** | RDMA-aware allocation, zero-copy, QP multiplexing, receive credits, send windows and RPC-assisted recovery for data-center-scale inference/training. | **Parameter-server recommendation/search/advertising inference**, not demonstrated LLM KV-cache transfer or MoE EP on Ascend. Transfer the transport engineering lessons, not the production workload's measured gains. |
+| **[MegaScale-Omni](https://seed.bytedance.com/en/research)** · [VeOmni](https://github.com/ByteDance-Seed/VeOmni) | Large-scale multimodal **training** system and model-centric distributed recipes. | Useful for heterogeneous multimodal workload management, but no claim of public inference-serving engine functionality. |
+
+## 3. Commercial serving surface: Volcano Engine is a separate evidence layer
+
+**[ServingKit official documentation](https://docs.volcengine.com/docs/vke/servingkit-overview?lang=zh)** explicitly describes a GPU-cluster inference suite built around **container orchestration, AI gateway, observability and distributed caching**; it documents integration with **vLLM, SGLang and Dynamo**, **P/D disaggregation**, model distribution (Oniond), and a KV-cache service on **Elastic Instant Cache (EIC)**. It also exposes ComfyUI/Openvefuser pathways for image/video diffusion workloads.
+
+- **What is established:** an official product/deployment contract with identifiable scheduler-adjacent, cache, orchestration and observability responsibilities. It links *text serving* and *generative media deployment* under one platform surface.
+- **What is not established:** the proprietary internals of Seed/Doubao's production engine, exact KV connector implementation, a public end-to-end ByteDance-native inference engine, or identical implementations across Volcano Engine and first-party Seed products.
+- **Reported performance:** the documentation includes vendor results for selected DeepSeek-R1/text and video scenarios. Treat these as **vendor-reported, workload-dependent**, not reproducible SGLang/vLLM benchmarks and not directly comparable to Ascend NPU performance.
+
+[Volcano Ark API model list](https://docs.volcengine.com/docs/ark/model-list?lang=zh) is the source for live endpoint/version compatibility; [ServingKit](https://docs.volcengine.com/docs/vke/servingkit-overview?lang=zh) is the separate system/deployment source.
+
+## 4. Recommended technical reading route
+
+1. **Communication-first:** [COMET/FLUX](https://github.com/bytedance/flux) → [Triton-distributed](https://github.com/ByteDance-Seed/Triton-distributed) → [TileLink](https://arxiv.org/abs/2503.20313): compare overlap granularity, kernel scheduling, buffer lifetimes, EP load imbalance and **Ascend branch/version limits**.
+2. **Serving systems:** [ServingKit](https://docs.volcengine.com/docs/vke/servingkit-overview?lang=zh) → [Charon](https://arxiv.org/abs/2605.17164) → [ByteExpress](https://arxiv.org/abs/2610.12815): separate control plane, modeled performance, communication transport and **recommender-vs-LLM** workload boundaries.
+3. **Omni-modal workload:** [SeedRealtime](https://seed.bytedance.com/en/seedrealtime) → [Seedance 2.5](https://seed.bytedance.com/zh/seedance2_5) → [Seedream 5.5](https://seed.bytedance.com/en/seedream5_5): reason about admission, synchronization, interruption, staged execution and quality/latency objectives **before** assuming text-token serving metrics apply.
+
+**Editorial boundary:** These organization sources are not new canonical papers. A publicly released codebase is distinct from hosted service internals; 2025 training speedups, ByteExpress's parameter-server results and vendor video-generation claims are not evidence of a faster user-pinned vLLM-Ascend inference path. No unverified cross-hardware benchmark or new paper count is asserted.
