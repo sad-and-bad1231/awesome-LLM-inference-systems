@@ -57,3 +57,9 @@ The first pass covered model lines, select execution details and evidence bounda
 - **Editorial:** Shortened granular execution notes within the live pages, leaving original research/model/repository links and the evidence boundaries available. Navigation and reading order now match the broader organizational treatment of recent Baidu/Alibaba/Tencent updates.
 
 **No additional canonical paper rows; total remains 930.** Future release watches and deeper kernel-level investigations are out of scope for this company-blueprint closeout.
+
+## November 13 completeness correction — main-work gaps recovered
+
+A post-merge comparison against the current [MiniMax research archive](https://www.minimax.io/blog) and [Seed official publications](https://seed.bytedance.com/en/public_papers) revealed omissions at the **company blueprint level** despite passing Markdown checks. This follow-up restores **MiniMax-M1** (hybrid Lightning Attention, reasoning and CISPO RL; [official repository](https://github.com/MiniMax-AI/MiniMax-M1)), adds first-party pointers to MiniMax's [SynLogic and visual RL publications](https://github.com/MiniMax-AI/MiniMax-AI.github.io), and records ByteDance Seed's **HarnessDev / S³Gym / Aspire / Chain-of-Experience** research line. Product map now distinguishes China/global **Doubao/Dola, Feishu/Lark** and Douyin/TikTok distribution using [ByteDance's company catalog](https://www.bytedance.com/products-services).
+
+This is an **editorial main-work completeness repair**, not a new paper-admission decision, deep code study or independent measurement. Source list and scope boundaries remain intact; the 930-paper canonical count remains unchanged.
