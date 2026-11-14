@@ -2,12 +2,13 @@
 
 [← Home](../README.md) · [Current canonical topics](../topics/README.md) · [G0–G5 rules](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
-**Current state — 2026-11-14 (Decoding Acceleration intake after Nov 12 checkpoint):** **938** canonical topic entries across **8 mechanisms / 44 directions**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline; the separate DCore paper in the Baidu audit adds one distinct entry. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
+**Current state — 2026-11-14 (Decoding Acceleration intake after Nov 12 checkpoint):** **944** canonical topic entries across **8 mechanisms / 44 directions**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline; the separate DCore paper in the Baidu audit adds one distinct entry. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory.
 
 ## Read these first: latest evidence and quality corrections
 
 | Receipt | What it establishes | What it does **not** establish |
 |---|---|---|
+| [November 14 inference RSI, Kernel and lab source sweep](NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md) | Six nonduplicate primary-source admissions (EAT, KOPE, MegaOps, SubGPU, agent coordination and static-graph NPU KV); SGLang megakernel/Trainium posts | No model-parameter RSI proof, no 32-B200 silicon proof, no Ascend or independent E2E reproduction |
 | [November 14 decoding frontier + recent arXiv source sweep](NOVEMBER_2026_DECODING_SWEEP_20261114.md) | Eight nonduplicate Decoding papers (91 → 99): ForeSpark, DForkTree, D3Tree, HybridSpec, Twig, REAL Loss, Phrase-Level, Olifant | No Ascend reproduction; EAGLE-4 official manuscript and the block-drafter information-floor paper remain editorial WATCH/context, not duplicated catalog rows |
 | [November 13 Kimi + Zhipu primary-source audit](KIMI_ZHIPU_PRIMARY_SOURCE_AUDIT_20261113.md) | Kimi full model/research tree and Mooncake/MoonEP/FlashKDA/Checkpoint Engine; THUDM–GLM lineage, Cog/GLM multimodal, slime/IndexCache, native Chinese-chip EPD and Infra Agent | Company blueprint only; no new canonical paper, no verification of internal runtime or vendor speedups |
 | [November 13 MiniMax + ByteDance primary-source audit](MINIMAX_BYTEDANCE_PRIMARY_SOURCE_AUDIT_20261113.md) | M3.1 MSA/DSpark and H3 public-vs-hosted boundary; H3-Image/Music; Seed multimodal families; Triton-distributed/FLUX–COMET; Volcano ServingKit and RDMA workload distinctions | Organization map only; no new canonical topic admission, no independent NPU/GPU performance replication or Ascend 910B2 compatibility assertion |
