@@ -1,10 +1,12 @@
 # Awesome LLM Inference Systems
 
-**938 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 12 PR #80 + Baidu/DCore reconciliation; **no independent GPU/NPU reproduction is implied**.
+**944 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 12 PR #80 + Baidu/DCore reconciliation; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
 
 **Current review status (2026-11-14):** The Nov 9–10 intake in [PR #80](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/80) contributes **77 source-curated papers** from the shared 852-paper baseline (**852 → 929**). The separate [November 11 Baidu/DCore source audit](reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) admitted one distinct preprint from that same baseline; DCore is absent from PR #80's topic branch, so the reconciled union is **930**. The 31 historical HOLD/frontier re-admissions use graded `EXPLORE / EVIDENCED / REFERENCE` labels; they are not retroactively described as conference-grade or independently reproduced. MobiInfer's Aug 11 vs arXiv 2611 date conflict remains disclosed and is **not** asserted as a November first submission. No author GPU/NPU performance result was independently reproduced.
+
+**Inference RSI / kernel / lab update (Nov 14):** [Six source-audited, nonduplicated additions](reviews/NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md) (Kernel +4, KV +1, Agent Runtime +1) raise **938 → 944**. [Evolving Agent Teams](https://arxiv.org/abs/2610.36848) is October-origin, with matched-budget vs extended-budget FlashInfer comparisons explicitly separated; latest [MegaOps](https://arxiv.org/abs/2611.16248), [SubGPU](https://arxiv.org/abs/2611.14904), and [SGLang native Trainium](https://www.lmsys.org/blog/2026-11-12-sglang-neuron-v0.1.0) are not evidence of a 910B2 port or independent performance reproduction.
 
 **Decoding update (Nov 14):** [Eight new mechanism-reviewed papers](reviews/NOVEMBER_2026_DECODING_SWEEP_20261114.md) added to the canonical [Decoding Acceleration](topics/decoding-acceleration.md) list (91 → 99); 930 → 938 overall. These are author-source admissions, not reproduced speedups.
 
@@ -20,7 +22,7 @@ A selective, engineering-first map of LLM inference: **kernels/compilers, KV mem
 |---|---|
 | [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
 | [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 930 current canonical topic entries and a concise admission history. |
+| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 944 current canonical topic entries and a concise admission history. |
 | [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
 | [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
 | [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
