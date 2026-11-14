@@ -14,10 +14,10 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Draft Models & Candidate Generation](#draft-models--candidate-generation-21) | 23 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
-| [Training-Free & Self-Speculation](#training-free--self-speculation-22) | 23 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
-| [Tree & Parallel Verification](#tree--parallel-verification-12) | 15 | Candidate Tree、并行候选和 Target Verification 效率。 |
-| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-18) | 20 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
+| [Draft Models & Candidate Generation](#draft-models--candidate-generation-23) | 23 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
+| [Training-Free & Self-Speculation](#training-free--self-speculation-23) | 23 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
+| [Tree & Parallel Verification](#tree--parallel-verification-15) | 15 | Candidate Tree、并行候选和 Target Verification 效率。 |
+| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-20) | 20 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-18) | 18 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
 | **Total** | **99** | |
 
