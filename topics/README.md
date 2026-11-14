@@ -1,10 +1,12 @@
 # Papers by systems mechanism
 
-**Current canonical index (2026-11-12): 930 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline (852 → 929); the separate DCore admission adds one distinct entry, giving a reconciled total of **930**. DCore is absent from PR #80's topic branch.
+**Current canonical index (2026-11-14): 938 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline (852 → 929); the separate DCore admission adds one distinct entry, giving a reconciled total of **930**. DCore is absent from PR #80's topic branch.
 
 **Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) → [Nov 9 expanded pass (879)](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) → [Nov 9 third pass + Nov 10 preprint recalibration (898)](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) → [Nov 10 frontier + backlog re-audit (929)](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
 **November 11 addition:** [Baidu/DCore controlled speculative-decoding study](benchmarking-analysis.md#performance--efficiency-studies-27) admitted as one author-reported, publicly reproducible-artifact *preprint* after [G0–G5 case review](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) (**852 → 853**). No GPU test was performed here.
+
+**November 14 decoding-only intake:** [eight source-reviewed additions and explicit WATCHs](../reviews/NOVEMBER_2026_DECODING_SWEEP_20261114.md) extend Decoding 91 → 99 and the corpus 930 → 938. Earlier numbers are historical.
 
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
@@ -14,13 +16,13 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 |---|---:|---:|---|
 | [Kernels & Compilers](kernels-compilers.md) | 123 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
 | [KV Cache & Context Memory](kv-cache-memory.md) | 179 | 6 | Reuse, eviction, compression, offloading and distributed KV state. |
-| [Decoding Acceleration](decoding-acceleration.md) | 91 | 5 | Speculative, blockwise and parallel generation |
+| [Decoding Acceleration](decoding-acceleration.md) | 99 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 52 | 6 | Low-bit representation with executable system gains |
 | [MoE & Sparse Execution](moe-sparse-execution.md) | 88 | 4 | Expert movement, conditional computation and sparse attention |
 | [Runtime & Scheduling](runtime-scheduling.md) | 158 | 6 | Batching, routing, SLO, fairness and request-level control |
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 143 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 96 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **930** | **44** | |
+| **Total** | **938** | **44** | |
 
 ## Classification boundaries
 
