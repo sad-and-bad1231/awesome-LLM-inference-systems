@@ -17,12 +17,12 @@
 | [Prefix & Session Reuse](#prefix--session-reuse-47) | 47 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-56) | 56 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-32) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-33) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-18) | 18 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **179** | |
+| **Total** | **180** | |
 
-## Papers (179)
+## Papers (180)
 
 ### Prefix & Session Reuse (47)
 
@@ -166,7 +166,7 @@
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 | 2026 | [Seer: Efficient KV Cache Management for LLM Acceleration via Mitigating Semantic Search Inefficiency](https://aclanthology.org/2026.emnlp-main.1852/) | EMNLP 2026 Main ([code](https://github.com/Acaciasama/Seer)) | Semantic-space KV Centroid（离线训练）对 Token Importance 做粗粒度近似，再以 Product Quantization+Asymmetric Distance LUT 降低实际 Sparse Retrieval 访存/Index Cost；作者报告理论 Attention Bandwidth 可降 40×、**32K Context Attention 最高 5.57×、相同测试中 E2E 最高 2×** 对照 Full Attention。**OFFLINE_TRAINED_CENTROIDS / APPROXIMATE_RETRIEVAL / THEORY_BANDWIDTH_NOT_MEASURED_TRAFFIC / NOT_REPRODUCED**，不能把 40× 当 E2E。（KEEP_STRICT） |
 
-### Offloading & Tiered Storage (32)
+### Offloading & Tiered Storage (33)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
@@ -204,6 +204,7 @@ HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 | 2026 | [FlatCake: A Flat KVCache Storage Architecture for LLM Serving](https://arxiv.org/abs/2610.38355) | arXiv 2026 (preprint; submitted Oct 28) | DRAM 与 SSD 统一 Flat KV 地址空间，按 Session-contiguous Layer-major 直接写入、经 GPUDirect Storage 读取到有界 HBM Window，规避 Mooncake Host Staging 及 SSD Read Amplification；作者 **8×B200、SGLang0.5.19、同等 1TiB DRAM+4TiB SSD Budget** 上 Claude Code Trace 峰值 Mean TTFT 12.24→7.57s、Throughput 61.6K→98.3K tok/s，另有 A100/Mooncake-GDS 对照。**SSD-heavy/GDS 依赖，非单卡 Ascend KV Cache 直接收益**。（KEEP_STRICT; REAL_GPU_E2E; NOT_REPRODUCED） |
 | 2026 | [HiState: Hierarchical Prefix Cache Management for Hybrid LLM Serving in Agentic Workloads](https://arxiv.org/abs/2610.41508) | arXiv 2026 (preprint; Oct 30 submission, Nov 2 listing) | 在 Hybrid Attention/Recurrent LLM 的 Agent 回溯上下文中，将历史 recurrent checkpoints 分级驻留 SSD，优先让可复用 KV 留在快速存储；自适应 checkpoint interval + unified eviction 避免 checkpoint 膨胀。基于 vLLM/Qwen3.5-9B/H100 与两组 Coding-Agent Trace Replay，对比 vLLM-Marconi/SGLang-HiCache 的 p99 TTFT；**真实硬件、Trace Replay、作者报告、未独立复现；暂无核实公开代码**。（KEEP_STRICT; REAL_GPU_TRACE_REPLAY; NOT_REPRODUCED） |
 | 2026 | [FlashOffloading: Low-Latency KV Cache Offloading for Long-Context LLM Serving](https://arxiv.org/abs/2611.07542) | arXiv 2026 (Nov 5 preprint) | Layerwise Prefill DRAM Offload + Decode Rolling HBM Hot Cache 和 CopySFA Kernel 内 H2D/Attention Overlap；作者在 **32 Ascend 910C（64 dies）、GLM-5.2/MTP3、vLLM-Ascend PD 集群** 报告 Prefill/Decode 吞吐最高 1.38×/1.91×，Decode 受 30ms TPOT 限制。**910C 实机不等于 910B2 兼容；AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
+| 2026 | [Recompute or Restore? Host-Tier KV for Multi-Model Agent Workflows on a Static-Graph NPU Serving Stack](https://arxiv.org/abs/2611.15126) | arXiv 2026 (Nov 11 preprint) | 用 **Rebellions ATOM+ / vllm-rbln 0.10.2（不是 Ascend）** 公共 KV Copy 接口建立同步 Host-DRAM Tier，并冻结 Scheduler-aware Event Model，定量判断 Agent Prefix 重新 Prefill 与 Host Restore 的临界条件。双模型 Planner/Executor 工作流中两组过载条件 SLO 达标率 **22.8→100% / 9.4→99.8%**；常规负载 Fork **P99 反而增 16–18%**。更接近 **有边界的 KV 系统实测与预测模型** 而非原创新型异步 Tiering，**不直接迁移到 910B2**。**REAL_NON_ASCEND_NPU / AUTHOR_REPORTED**。（KEEP_PREPRINT_EXPLORE） |
 
 ### Distributed KV Sharing & Transfer (18)
 

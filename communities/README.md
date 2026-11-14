@@ -1,6 +1,6 @@
 # Research labs & open-source communities
 
-An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-05:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
+An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-14:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
 
 [← Home](../README.md) · [Companies](../organizations/README.md)
 
@@ -11,6 +11,16 @@ Choose a project by the **execution boundary** you want to understand: token-ste
 The later research-lab sections index source-producing teams and collaborations, **not 22 additional canonical papers or 22 verified independent laboratories**. Inclusion requires a concrete inference-systems paper, upstream artifact, maintainer contribution or first-party technical report. Company and university credit must be checked per project; dated discovery notes are not claims of active maintenance or reproduced performance.
 
 [Jump to research labs](#research-labs-and-source-linked-systems-signals) · [Company profiles](../organizations/README.md) · [Paper mechanisms](../topics/README.md)
+
+## November 11–12 first-party runtime and lab updates (not new bibliography entries)
+
+| First-party signal | What was shown | Boundary |
+|---|---|---|
+| [LMSYS Muse Spark Open megakernel](https://www.lmsys.org/blog/2026-11-05-muse-spark-open-ultrafast) (article Nov 11) | Model-specific attention+MoE layer megakernel and speculation on **8×GB300**; author reports **single-request decode 517→1,109 tok/s** | URL slug says Nov 5 but article dates Nov 11; single-request, model-specific, not generally achieved batch Goodput or Ascend support |
+| [SGLang-Neuron v0.1.0](https://www.lmsys.org/blog/2026-11-12-sglang-neuron-v0.1.0) (Nov 12) | SGLang/RadixArk × AWS Annapurna Labs **Trainium NKI decoder-step megakernel**, async engine, NIXL/EFA P/D and host KV reuse | Public-preview **Trainium** backend, not an Ascend kernel implementation or benchmark parity claim |
+| [SGLang Consortium launch](https://www.lmsys.org/blog/2026-11-12-sglang-consortium) (Nov 12) | Multi-vendor engineering collaboration and public inference runtime roadmap | Institutional/maintainer source; no independent performance numbers or additional canonical paper |
+
+[Nov 14 RSI/kernel and laboratory evidence review](../reviews/NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md). The 76-item source-repo inventory below is unchanged.
 
 ## November 2–4 execution-layer engineering updates (not new bibliography entries)
 
@@ -172,7 +182,7 @@ This is a **navigation crosswalk, not a second paper bibliography or institution
 
 | Research group | Inference-system focus | Representative verified source and its status |
 |---|---|---|
-| [UC Berkeley Sky](https://sky.cs.berkeley.edu/publications/) | Cloud inference, edge MoE and distributed serving | [CommBench](https://arxiv.org/abs/2608.04450) and [FreeToken](https://arxiv.org/abs/2608.16157) — **TOPIC**, already indexed; collaboration does not imply exclusive lab ownership |
+| [UC Berkeley Sky](https://sky.cs.berkeley.edu/publications/) | Cloud inference, edge MoE and distributed serving | [CommBench](https://arxiv.org/abs/2608.04450) and [FreeToken](https://arxiv.org/abs/2608.16157) — existing **TOPIC**. Oct 27 [Evolving Agent Teams](https://arxiv.org/abs/2610.36848) now also **TOPIC** ([author code](https://github.com/caoshiyi/EAT)); Berkeley coauthorship does not imply exclusive lab ownership |
 | [LMSYS / SGLang](https://lmsys.org/) | Runtime, speculative decoding, serving infrastructure | [SGLang project](https://github.com/sgl-project/sglang) — **ENGINEERING**; separately cite published papers where applicable |
 | [Stanford Hazy](https://hazyresearch.stanford.edu/) | IO-aware attention and generation mechanisms | [NCM](https://arxiv.org/abs/2610.14162) — **TOPIC / ADJACENT**; different trained model/tokenizer, not an existing-LLM kernel speedup |
 | [MIT HAN Lab](https://hanlab.mit.edu/) | Quantization, efficient kernels, edge/video/robot inference | [Quant VideoGen](https://proceedings.mlr.press/v306/xi26f.html) — **TOPIC / ICML 2026 / ADJACENT**; [VLASH](https://arxiv.org/abs/2512.01031) — **TOPIC / VLA-ADJACENT**, lab-listed IROS |
