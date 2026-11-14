@@ -19,10 +19,10 @@
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-23) | 23 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-30) | 30 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **158** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-31) | 30 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **159** | |
 
-## Papers (158)
+## Papers (159)
 
 ### Batching, Queues & SLOs (46)
 
@@ -187,7 +187,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (30)
+### Agent & Workflow Serving (31)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
@@ -225,3 +225,4 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Serving Agentic Robot Fleets: Workload Characterization, KV-Cache Thrashing, and Admission Control](https://arxiv.org/abs/2611.01404) | arXiv 2026 (Nov 1 preprint) | **Robot Action Chunk Hard Deadline + Long-lived Brain Prefix Working Set** 的双资源约束。作者记录 **80 LIBERO-PRO Episodes / 1,862 Brain Turns / 1,582 VLA Inference Chunks**，在 **H800、π0.5/VLA、Qwen3.6-27B-vLLM TP4** Profile/Trace Replay，0.25s Chunk Deadline 下单 VLA GPU 仅测得1 Robot 满足≤1% Starvation，1.0s 可至少32；持续 Brain Replay 从20→32 Robots 时完成请求约2.4→0.6req/s，静态 Active-episode Cap 可恢复 Episode Throughput。**Deadline Capacity 是零网络 RTT 的虚拟 Robot Replay，部分 Brain Calls 用 TTFT+固定 Decode 间隔估算，非端到端 Physical Robot Success/现场部署；重点是 KV Thrashing Admission**。**REAL_GPU_PLUS_TRACE_REPLAY / ADJACENT_EMBODIED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [When Cache Pressure Becomes a Trap: Metastability in Agent Serving](https://arxiv.org/abs/2611.02543) | arXiv 2026 (Nov 2 preprint) | **Basin:** LLM Agent 会话突发流量使 **Session Population→KV Working Set→Prefix Miss→Recompute→Longer Session Lifetime** 形成负反馈陷阱；Basin 使用 **按会话固定优先级/最大 Context 工作集预测与 Admission Budget/Idle Decode GPU Memory Lending/Shedding** 破坏持续恶化循环，集成 SGLang+NIXL 的 P/D 转移与 Mamba State。作者在 **4×H200 1P3D / 2×H100 NVL 1P1D，Qwen3.6-35B-A3B FP8，Terminal-Bench 与 SWE-bench Pro Agent Trace** 对 HiCache、Continuum、ThunderAgent、CONCUR、Crossflow 做真实硬件对照：H200 1P3D **到达时序优先+当前 Context 准入原型** 对 Continuum **1.20–1.70× Session Goodput**、HiCache **2.35–3.59×**；**基于预测的大小感知优先级、36 部署条件扫描和 2P6D 主结果是模型校准后的 Simulation，非全套硬件实现；H100 Decode-first 场景原型不占据明显吞吐优势**。与 [Inside the Trap](../topics/benchmarking-analysis.md) 不同，Basin 是 admission+memory lending 的系统实现，后者为独立作者的 FIFO Renewal-law 分析。**REAL_GPU_PLUS_SIM / AUTHOR_REPORTED / SOURCE_HTML_G3 / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [MobiInfer: Accelerating On-Device GUI Agents with Workload-Aware Inference](https://arxiv.org/abs/2611.08496) | arXiv 2026 preprint (**G0_DATE_NOTE: author/source page reports '11 Aug 2026' while 2611.* ID encodes Nov; exact initial month/day unresolved, not counted as proven November first submission**) | 面向结构化 Mobile GUI Agent，将 **Prompt Canonicalization/Prefix KV Reuse + Phase-specific LM Head Vocabulary + Schema-guided n-gram Speculation** 联合到 On-device MNN Runtime；对动作标签/坐标保护 Target-only Decode。作者在 **OnePlus13/OPPO Find X8/Redmi K50、MAI-UI-2B/GELab-Zero-4B、AndroidWorld(116 templates)/111 RealWorld Tasks、INT8 GPTQ** 与相同 MNN Baseline 比较，RealWorld 总体 E2E **118.32→50.83s (2.33×)**；**Vocabulary Pruning 与 Prompt Reordering 改变策略输出，原版 MNN 逐步一致率降至98.1%（组合），必须以 Task Success/Action Quality 检查；非云端 Token Serving Goodput**。**REAL_PHONE / QUALITY_CONTRACT / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_PREPRINT_EVIDENCED; REAL_PHONE, QUALITY_CHECKED, NOT_REPRODUCED） |
+| 2026 | [Reducing Batch Makespan for LLM Agent Workloads through Inference-Environment Coordination](https://arxiv.org/abs/2611.16661) | arXiv 2026 (Nov 12 preprint) | 将 **Hybrid-model KV/Recurrent-state Memory Allocation、Trajectory-aware Routing/Cache Reuse 与 Environment Capacity-aware Chain-Advancing Action Scheduling** 联合优化，以整个 Agent Batch Makespan 而非单 Request TPOT 为目标。作者在 Ling-3.0/3.1-Flash、BFCL/SWE-bench Multilingual/WideSearch/MCP-Atlas 的 Live + Controlled Replay 报告 **10.4–65.0% Makespan Reduction**；涉及 Agent 环境调度与模型开发 Rollout，非直接 vLLM 线上一般化吞吐收益。**REAL_INFERENCE + ENVIRONMENT_SCHEDULING / AUTHOR_REPORTED**。（KEEP_PREPRINT_EVIDENCED） |
