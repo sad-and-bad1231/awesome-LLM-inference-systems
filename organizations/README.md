@@ -17,10 +17,10 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 · DeepInfer production E/P/D + 3FS KV design · FlashMLA/DeepSelect · DeepEP/DeepGEMM Ascend backends · TileKernels/DeepJIT (950/CANN 9.2) |
 | [Tencent](Tencent.md) | **Hy4-flash (hybrid + DFly2) / Hy4 final vs Preview** · WorkBuddy model/product co-design · AngelSlim/AngelSpec · KsanaLLM · Hy4-preview RSI signal |
 | [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **Qwen4-Max (Nov 16) · RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
-| [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
+| [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community **vLLM-Ascend v0.32.0rc1 (Nov 10; CANN 9.2.1)** |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | **MiniMax-01/M1/M3/M3.1 + MSA/DSpark** · **H3/H3-Image video and image** · Speech/Music · **Forge / MaxProof / Agent Team** · MiniMax Code/Hailuo/Audio · public inference boundary |
-| [Moonshot AI / Kimi](Moonshot-Kimi.md) | **k1.5→K3.1 Pro** · MoBA/KDA/AttnRes · **Kimi-VL/Audio/Prover** · **Mooncake/MoonEP/FlashKDA/Checkpoint Engine** · Kimi Code |
+| [Moonshot AI / Kimi](Moonshot-Kimi.md) | **k1.5→K3.1 Pro** · MoBA/KDA/AttnRes · **Kimi-VL/Audio/Prover** · **Mooncake/MoonEP/FlashKDA/Checkpoint Engine** · Kimi Code · **Hosted Agents (Nov 5)** |
 | [Zhipu AI / GLM](Zhipu-GLM.md) | **THUDM GLM→5.3/5.3-Flash** · **CogVideo/GLM-Image/ASR** · AutoGLM/ZCode · **slime/IndexCache** · **GLM-5.3-Flash EPD / Infra Agent** |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | **Seed2.1 + Seedance/Seedream/SeedRealtime** · **Agent HarnessDev/Aspire** · **MegaScale-Omni / VeOmni / Charon** · **Triton-distributed / FLUX–COMET / ByteIR** · **Doubao / Jimeng / CapCut** · Volcano Ark/ServingKit |
