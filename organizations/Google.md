@@ -4,13 +4,13 @@ A source-scoped map of Google's **inference kernels, TPU-native serving stacks, 
 
 [← Organizations](../README.md#organizations)
 
-## Official Gemini and Gemma model portfolio (2026-10-24)
+## Official Gemini and Gemma model portfolio (verified through 2026-11-20)
 
 **Authorities:** [Gemini API complete model catalog](https://ai.google.dev/gemini-api/docs/models), [Gemma releases](https://ai.google.dev/gemma/docs/releases), [Gemma 4 model card](https://ai.google.dev/gemma/docs/core/model_card_4). This distinguishes **closed Gemini API IDs** from **downloadable Gemma weights**.
 
 | Publicly listed family | Sub-models and inference implications | Official source |
 |---|---|---|
-| Gemini 4 | Gemini **4 Argon**, next flagship API family | [Gemini API catalog](https://ai.google.dev/gemini-api/docs/models) |
+| Gemini 4 | **Argon** (October origin), **Carbon** (Nov 10 broadly available), **Hydrogen** (Nov 12 agent-focused throughput), **Neon** (Nov 18 frontier iteration). These are differentiated closed-model API tiers; names are chemical elements, not disclosed TPU microarchitectures. | [Official API registry](https://ai.google.dev/gemini-api/docs/models) · [Carbon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/) · [Hydrogen](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/) · [Neon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) |
 | Gemini 3 | 3.8 Flash; 3.6 Flash; 3.5 Flash-Lite; 3.1 Flash-Lite and older Pro/Flash preview entries | [Gemini API catalog](https://ai.google.dev/gemini-api/docs/models) |
 | Gemini Live / speech | 3.8 Live, 3.8 Live Extended Thinking, 3.5 Live Translate, 3.8 Flash/Flash-Lite TTS, 3.5 Transcribe | [Gemini API catalog](https://ai.google.dev/gemini-api/docs/models) |
 | Gemini 2.5 | 2.5 Pro, Flash, Flash-Lite and audio versions (generation lineage; not new 2026 releases) | [Gemini API catalog](https://ai.google.dev/gemini-api/docs/models) |
@@ -19,6 +19,12 @@ A source-scoped map of Google's **inference kernels, TPU-native serving stacks, 
 | Other Gemma specializations | Gemma 3/3n, EmbeddingGemma 2, FunctionGemma, TranslateGemma, MedGemma, ShieldGemma | [Gemma release history](https://ai.google.dev/gemma/docs/releases) |
 
 **Full API ID scope:** the provider catalog also lists preview, retired, embedding, media and agent-specific endpoints. Use the linked official model catalog for the full and changeable *exact ID* inventory; individual service IDs are not standalone systems papers.
+
+### November 2026 model-release chronology and inference boundary
+
+- **Argon** originated before November; **Carbon** was announced in late October and made broadly available for paying API users on **November 10**. Do not date the architecture announcement as its API general availability. [Google release](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/) · [official model card](https://deepmind.google/models/model-cards/gemini-4-carbon/).
+- **Hydrogen** followed on **November 12** with lower-cost, interactive Agent/Code use cases. **Neon** followed on **November 18**, emphasizing top-tier reasoning and professional workloads. Differentiated model tiers shift workload distribution and spend; vendor-reported model quality, output tokens, API response time or price are not a validated internal TPU scheduler improvement. [Hydrogen](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/) · [Neon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) · [Neon model card](https://deepmind.google/models/model-cards/gemini-4-neon/).
+- **Inference source hierarchy:** prefer [TorchTPU/vLLM-TorchTPU](https://github.com/vllm-project/vllm-torchtpu), TPU Pallas/RaggedPagedAttention and [XLA Serving Engine](https://opensource.googleblog.com/2026/11/supercharging-xla-inference-xla-serving-engine.html) for inspectable execution evidence. Do not assign unpublished Gemini architecture, model parameter count or production-serving source code on the basis of API model branding.
 
 ## Foundational techniques and models
 
