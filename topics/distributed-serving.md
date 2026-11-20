@@ -16,12 +16,12 @@
 |---|---:|---|
 | [Parallelism & Scale-Up](#parallelism--scale-up-29) | 29 | TP/PP/EP/CP、超节点/机架拓扑与扩展效率。 |
 | [Disaggregated Compute Stages](#disaggregated-compute-stages-33) | 33 | P/D、Attention–FFN 与多阶段资源解耦。 |
-| [KV Transfer & Communication](#kv-transfer--communication-26) | 26 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
+| [KV Transfer & Communication](#kv-transfer--communication-27) | 27 | 通信链路、Collectives、KV 转发和远端 Memory Fabric。 |
 | [Fleet Scaling & Reliability](#fleet-scaling--reliability-29) | 29 | 实例编排、弹性扩容、故障恢复及 Live Migration。 |
-| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-26) | 26 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
-| **Total** | **143** | |
+| [Heterogeneous & Edge Serving](#heterogeneous--edge-serving-27) | 27 | 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。 |
+| **Total** | **145** | |
 
-## Papers (143)
+## Papers (145)
 
 ### Parallelism & Scale-Up (29)
 
@@ -99,12 +99,13 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [M*: A Modular, Extensible, Serving System for Multimodal Models](https://arxiv.org/abs/2606.12688) | arXiv 2026 (preprint) | Walk Graph 将 Omni/VLA/World Model 的 Encoder–LM–Diffusion/Codec 组件及按请求变化的路径表示为 Dataflow Traversal，运行时按组件 Placement/Batch/Loop；[作者开源](https://github.com/mstar-project/mstar) 和[完整基线](https://m-star.org/)覆盖 BAGEL、Qwen3-Omni、Orpheus、V-JEPA2，2×H200 Qwen3-Omni TTS 吞吐相对 vLLM-Omni 最多 ~2.7×，与 SGLang-Omni / 模型原生也有对比；**各模型硬件与 Batch 不同，12.5× 世界模型单独口径，非普遍加速**。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; COMPOSITE_MULTIMODAL; AUTHOR_REPORTED） |
 | 2026 | [vLLM-Omni Technical Report: A Unified Serving Runtime for Omni-Modality Generation](https://arxiv.org/abs/2610.09307) | arXiv 2026 | 把 **Text/Audio/Image/Video/Action** 推理表示为 Stage Graph，统一的 Request Orchestrator 负责 Admission/Stage Replicas/Streaming Demux，Connector 转移大量 Payload，覆盖 TTS、Full-duplex、World Model 与 Robot Session API。**vLLM-Omni Team Technical Report** 提供架构与 H100/H200 Nightly CI、Qwen3-Omni 多阶段测试；**不同阶段 Model/Task 的执行语义不等于一条 vLLM Autoregressive Decode，也不能把组件稳定性当成已经实现所有 World-model 生产优化**。[Official runtime](https://github.com/vllm-project/vllm-omni)。**KEEP_PREPRINT_EVIDENCED / OPEN_SOURCE_ENGINE_TECH_REPORT / NOT_REPRODUCED**。 |
 
-### KV Transfer & Communication (26)
+### KV Transfer & Communication (27)
 
 通信链路、Collectives、KV 转发和远端 Memory Fabric。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [XM-Sparse: High-Throughput Sparse-Attention LLM Serving over Scale-up Memory Pools](https://arxiv.org/abs/2611.22280) | arXiv 2026 (preprint) | 面向 Sparse Attention 全 KV 驻留问题，将冷 KV 和 Index 移入 Scale-up Memory Pool、结合选择性 Tile Pull 与异步 Prefetch；SGLang 评估部分采用**模拟/仿真池化内存**，与 PCIe HiSparse 差异较大，同平台无调度版本比较更应关注。（KEEP_PREPRINT_EXPLORE; MEMORY_EMULATION; AUTHOR_REPORTED） |
 | 2026 | [When the KV Cache Is Slower Than the GPU: Scaling Remote KV Tiers for Context-Parallel Prefill](https://arxiv.org/abs/2610.21500) | arXiv 2026 (technical report) | 在 **GLM-5.3 FP8 / 8×B300 PCP8** 中发现 Valkey 远程 KV 命中 0.88s 反而慢于重算 0.31s；用带宽盈亏平衡+固定命中开销解释 TTFT/P99 崩溃，再用 **rank-sharded MLA KV、独立 Valkey 实例、异步加载与客户端竞态修复**消除瓶颈。作者真实生产 Trace replay P99 83.32→0.67s、单独 Sharding Prefill +14%；另含上游 Kernel 修改才 +34%。[LMCache PR #5545](https://github.com/LMCache/LMCache/pull/5545) 等截至 10-25 **尚未全合并**，不可称已部署/独立复现。（KEEP_STRICT; REAL_GPU; PARTIAL_UPSTREAM; AUTHOR_REPORTED） |
 | 2026 | [SplitZip: Ultra Fast Lossless KV Compression for Disaggregated LLM Serving](https://arxiv.org/abs/2605.01708) | NeurIPS 2026 (author-verified; proceedings pending) | P/D KV 传输：BF16 指数 Top-16 定长编码 + Sparse Escape，**bitwise lossless**；作者报告 H200 Codec 613.3/2181.8 GB/s 压/解码、TTFT 最高 1.30×、Request Throughput 1.23×。公开 [Triton Codec/Oracle](https://github.com/Intelligent-Microsystems-Lab/SplitZip)，但 SGLang/Mooncake E2E 集成**未公开**；未在 Ascend 复现。（KEEP_STRICT; LOSSLESS_OUTPUT; REAL_GPU; PUBLIC_CODEC_ONLY; AUTHOR_REPORTED） |
 | 2024 | [Infinite-LLM: Efficient LLM Service for Long Context with DistAttention and Distributed KVCache](https://arxiv.org/abs/2401.02669) | arXiv 2024 (preprint) | DistAttention 与弹性分布式 KV Pool 分离 Attention 计算/状态驻留，在多 GPU 间扩展 Long-context Serving。 |
@@ -168,12 +169,13 @@ P/D、Attention–FFN 与多阶段资源解耦。
 | 2026 | [TensorHub: Scalable and Elastic Weight Transfer for LLM RL Training](https://arxiv.org/abs/2604.09107) | SOSP 2026 (preprint Apr; UW–ByteDance Seed) | TensorHub（SOSP 2026）为 **LLM RL Trainer→Rollout Inference Workers** 的版本化权重传输设计 Reference-Oriented Storage（ROS）：不复制权重作存储，而是定位已在 GPU 中的 Replica，再做 Topology-aware RDMA、跨 Rank 同版本事务和故障恢复。作者报告真实 RL 场景 **GPU Stall 最高降低 6.7×、弹性 Rollout Weight Update 最高加速 4.8×、跨 DC Stall 最高降低 19×**，并称 ByteDance 生产部署；**三者属不同设置，不是在线请求 TPS/TTFT**。**TRAINING_ROLLOUT_CONTROL_PLANE / WEIGHT_SYNC_NOT_KV_TRANSFER / AUTHOR_DEPLOYMENT_CLAIM / NOT_REPRODUCED**。（KEEP_ADJACENT） |
 | 2026 | [Surviving Partial Rank Failures in Wide Expert-Parallel MoE Inference](https://arxiv.org/abs/2605.10670) | arXiv 2026 | **EEP：EP Rank Membership 变成可变 Runtime State**，故障时修复 Peer Reachability、Expert Coverage、CUDA Graph Routing Metadata，尽量不使健康 Rank 全量 Recapture；接入 SGLang MoE Serving。作者报告稳态相对固定 DeepEP 开销 ≤**4.4%**，单 Rank 故障 **11s Recovery +8s Reintegration**，52s 内恢复至约95%故障前吞吐；Full Restart Baseline 不可用 **348s**。**只对作者测试 Fault Pattern/Rank/IB 体系成立，故障恢复指标不能当成稳态 TPS 提升**。**KEEP_PREPRINT_EVIDENCED / REAL_CLUSTER_FAILURE / NOT_REPRODUCED**。 |
 
-### Heterogeneous & Edge Serving (26)
+### Heterogeneous & Edge Serving (27)
 
 多种 GPU/NPU、CPU-GPU、边缘及跨设备推理。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [HyCoInfer: Cloud-Edge Collaborative Inference for Large Language Models on Heterogeneous GPU-FPGA Architectures](https://arxiv.org/abs/2611.22086) | arXiv 2026 (preprint) | 云端 V100 承担 Prefill、边缘 FPGA 优化 Decode 并按带宽自适应分配与 KV 搬运；作者 2×V100 + U280 FPGA 真实设备和限带宽测试报告特定设置相对 Cloud-only vLLM 的 Goodput 增益。设备/网络基线特化，**非国产 Ascend NPU 执行证明**。（KEEP_PREPRINT_EVIDENCED; REAL_HETEROGENEOUS_HARDWARE） |
 | 2026 | [ExecuTorch - A Unified PyTorch Solution to Run ML Models On-Device](https://proceedings.mlsys.org/paper_files/paper/2026/hash/236f915dd02af4f11927f67330b21d4b-Abstract-Conference.html) | MLSys 2026 | 面向端侧多 SoC 的 PyTorch-native Runtime、可插拔 Backend 与量化部署；官方项目含 LLM APIs/Benchmark，但论文范围涵盖广泛 Edge AI，并非在线请求抢占或云端 LLM Goodput 优化。**EDGE_BACKEND / GENERIC_AI_RUNTIME / NOT_VLLM_SCHEDULER**。（KEEP_ADJACENT） |
 | 2026 | [HAWK: Heterogeneity-Aware KV Cache Transfer for Efficient GPU-NPU Phase-Disaggregated LLM Inference](https://arxiv.org/abs/2610.29873) | arXiv 2026 (preprint) | GPU Prefill → NPU Decode 的 P/D KV 传输中，构造跨设备 RDMA 和 **目标 NPU Layout-aware DMA buffers**，避免到达后 Tensor 转置/Channel Fragmentation。作者在真实 **NVIDIA A100 + Tenstorrent p150a** 和 vLLM/Mooncake 系统测得同 SLO 下相对 GPU-only 性能差距 7.88%、能效最高 1.26×/成本效率 1.72×。**不是 Ascend NPU 实测**，无可验证公开作者代码，性能为论文报告。（KEEP_STRICT; REAL_GPU_OTHER_NPU; G4_NO_PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2024 | [HeteGen: Efficient Heterogeneous Parallel Inference for Large Language Models on Resource-Constrained Devices](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5431dca75a8d2abc1fb51e89e8324f10-Abstract-Conference.html) | MLSys 2024 | 针对 GPU/CPU 异构设备规划推理执行与参数转移，实现受限资源大模型部署。 |
