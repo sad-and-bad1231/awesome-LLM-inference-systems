@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Prefix & Session Reuse](#prefix--session-reuse-47) | 47 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
-| [Eviction, Compression & Quantization](#eviction-compression--quantization-56) | 56 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
+| [Prefix & Session Reuse](#prefix--session-reuse-48) | 48 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
+| [Eviction, Compression & Quantization](#eviction-compression--quantization-58) | 58 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
 | [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
-| [Offloading & Tiered Storage](#offloading--tiered-storage-33) | 32 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
+| [Offloading & Tiered Storage](#offloading--tiered-storage-35) | 35 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-18) | 18 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **180** | |
+| **Total** | **185** | |
 
-## Papers (180)
+## Papers (185)
 
-### Prefix & Session Reuse (47)
+### Prefix & Session Reuse (48)
 
 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [KaleidoKV: Rearranging Evidence for Efficient KV Cache Reuse in Offline RAG Inference](https://arxiv.org/abs/2611.19253) | arXiv 2026 (preprint) | 在已知离线 RAG Batch 中联合重排证据顺序、使用 Prefix Trie 增量规划并按依赖 Admission，减少相同文档的 Prefill 重算；作者四工作负载×四模型报最强对照约 1.24–1.75× 吞吐（含规划时间）。只适用于可重排证据且语义等价的离线 RAG。（KEEP_PREPRINT_EVIDENCED; REAL_ENGINE; AUTHOR_REPORTED） |
 | 2024 | [Cost-Efficient Large Language Model Serving for Multi-turn Conversations with CachedAttention](https://www.usenix.org/conference/atc24/presentation/gao-bin-cost) | USENIX ATC 2024 | CachedAttention 以跨会话分层 KV 持久化、逐层异步预取和 Scheduler-aware Eviction 降低多轮 Prefill 重算。（KEEP_FOUNDATIONAL） |
 | 2024 | [Prompt Cache: Modular Attention Reuse for Low-Latency Inference](https://proceedings.mlsys.org/paper_files/paper/2024/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2024 | 通过显式 Prompt Module 与位置约束实现跨请求 Attention State 复用，降低重复前缀处理。（KEEP_FOUNDATIONAL） |
 | 2025 | [Accelerating LLM Serving for Multi-turn Dialogues with Efficient Resource Management](https://doi.org/10.1145/3676641.3716245) | ASPLOS 2025 | FlashGen 面向多轮会话在 GPU/CPU/SSD 三层保留与搬运 KV Cache，并重排请求降低跨轮 Prefill 重计算。 |
@@ -78,12 +79,14 @@
 | 2026 | [MORTIS: Compiler-Guided KV-Cache Management for LLM Agent Programs](https://arxiv.org/abs/2611.08638) | arXiv 2026 (Nov 5 preprint, cs.OS) | **Jac/byLLM Typed LLM Call Program** 的静态数据流/变量生命周期分析产出 Agent Descriptor + Workflow Automaton；跨 Call-site **Re-layout Prompt Components** 暴露 Prefix Share，再以 **PLANNED / UNCLASSIFIED / TRANSIENT / RETIRED Cache Bands** 和 Arrival-time 预测执行 Retain/Evict/Prefetch。作者在 **SGLang0.5.10.post1、1×A40、Qwen3-32B-AWQ、GPU15GB + CPU25GB KV Pool** 的 HoVer/HumanEval/BFCL/FinanceBench 四种 Agent、混合负载中对 SGLang/CacheScout/Continuum/KVFlow/Static Adapter 报 **geomean JCT 1.45×、Prompt-token Throughput 1.49×**。**仅适用于可由 Typed Call 编译并允许语义安全 Prompt 重排的 Agent 程序，部分低负载收益来自 Layout 非 Eviction，不能推广到任意 API Agent Prompt**。**REAL_GPU / PROGRAM_SEMANTICS_CONTRACT / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [CacheWeave: Learning to Recompute for Efficient Position-Independent KV Caching](https://arxiv.org/abs/2611.01735) | arXiv 2026 | **PIC Backbone Adaptation → Oracle-trained Block Selector → GPU Resident Selection/Partial Recompute**，通过 Shared+Private KV Blocks 避免独立 Chunk 计算造成不可恢复的跨 Chunk Attention Loss。作者在 **Qwen3-4B/32B、Gemma4-12B、HotpotQA/MuSiQue/2Wiki 与 Agent 任务** 报相对 CacheBlend/ProphetKV 质量优势、32-token Block TTFT 改善，峰值 SLO Goodput 最高 **7.8×**；**必须训练/适配 Backbone 和 Selector，5% Recompute Budget 下仍相对 Full Prefill 有 Quality Loss，非原权重直接 Drop-in 或 Lossless Cache**。**KEEP_PREPRINT_EVIDENCED / REAL_SERVING_AUTHOR_REPORTED / QUALITY_CHANGED / NOT_REPRODUCED**。 |
 
-### Eviction, Compression & Quantization (56)
+### Eviction, Compression & Quantization (58)
 
 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [RoCoKV: Accelerating LLM Inference Serving through Uncertainty and Redundancy Aware KV Cache Compression](https://arxiv.org/abs/2611.25433) | arXiv 2026 (preprint) | 面向长推理 Chain 中不确定性与重复 Token 联合选择 KV 保留项，并将压缩流程融合进 vLLM/Paged KV 解码路径；作者在所测 R1 Distill 配置中报告吞吐增益并有精度检查。**压缩有近似语义风险，不等于无损原始 KV 复用**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; APPROXIMATE_KV） |
+| 2026 | [Memory-Efficient Speculative Decoding with Quantized Draft KV Cache](https://arxiv.org/abs/2611.20565) | arXiv 2026 (preprint) | 仅量化 Draft KV 而保持 Target Verifier BF16，使用 K Per-Channel / V Per-Token 的 K4V4；作者六组模型对报告 Draft KV -66.20%、总 Draft+Target KV -23.95%，平均接受率 57.93%→57.14%。**未证明相同 Serving Engine 的 E2E TPS 提升**。（KEEP_PREPRINT_EXPLORE; MEMORY_EXPERIMENT; NOT_E2E） |
 | 2023 | [H2O: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models](https://proceedings.neurips.cc/paper_files/paper/2023/hash/6ceefa7b15572587b78ecfcebb2827f8-Abstract-Conference.html) | NeurIPS 2023 | 基于注意力重尾分布识别 Heavy-Hitter KV，并与 Recent Token 构建高效保留策略。（KEEP_FOUNDATIONAL） |
 | 2024 | [ArkVale: Efficient Generative LLM Inference with Recallable Key-Value Eviction](https://proceedings.neurips.cc/paper_files/paper/2024/hash/cd4b49379efac6e84186a3ffce108c37-Abstract-Conference.html) | NeurIPS 2024 | 把 KV 驱逐做成可召回的两级结构：由注意力分数与近期性共同决定哪些 KV 常驻显存，被换出的部分以低精度副本留在低成本存储，需要时按需重建，从而在长上下文生成中同时压住显存占用与重算开销。 |
 | 2024 | [Efficient Streaming Language Models with Attention Sinks](https://openreview.net/forum?id=NG7sS51zVF) | ICLR 2024 | Attention Sinks + 滑动窗口缓存使长流式生成无需反复重计算完整上下文。（KEEP_FOUNDATIONAL） |
@@ -166,12 +169,14 @@
 | 2026 | [UlaCache: Unified Logical Addressing for Sparse LLM Serving](https://arxiv.org/abs/2610.29820) | arXiv 2026 (preprint; Oct 22 announcement) | 统一 GPU/CPU KV 逻辑地址与 DP/TP Sparse Access，保留本地选中 KV 并用并行 PB-LRU 管理跨请求 GPU 池；作者在等 CPU/GPU 内存预算 + Speculative Decoding 下报告 H200/B300 TP Decode 峰值 1.70×/2.51×。只适用于论文 Sparse Attention+拓扑配置。（KEEP_STRICT；REAL_GPU；NOT_REPRODUCED） |
 | 2026 | [Seer: Efficient KV Cache Management for LLM Acceleration via Mitigating Semantic Search Inefficiency](https://aclanthology.org/2026.emnlp-main.1852/) | EMNLP 2026 Main ([code](https://github.com/Acaciasama/Seer)) | Semantic-space KV Centroid（离线训练）对 Token Importance 做粗粒度近似，再以 Product Quantization+Asymmetric Distance LUT 降低实际 Sparse Retrieval 访存/Index Cost；作者报告理论 Attention Bandwidth 可降 40×、**32K Context Attention 最高 5.57×、相同测试中 E2E 最高 2×** 对照 Full Attention。**OFFLINE_TRAINED_CENTROIDS / APPROXIMATE_RETRIEVAL / THEORY_BANDWIDTH_NOT_MEASURED_TRAFFIC / NOT_REPRODUCED**，不能把 40× 当 E2E。（KEEP_STRICT） |
 
-### Offloading & Tiered Storage (33)
+### Offloading & Tiered Storage (35)
 
 HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [TideCache: Efficient Hybrid LLM Serving with Transparent Cache Management and Layer-Wise Streaming](https://arxiv.org/abs/2611.26619) | arXiv 2026 (preprint) | 为混合 Global Attention/Bounded Recurrent Layer 统一管理 GPU/Host Cache Pool，分层流式恢复已共享 Prefix 并与 Decode Pipeline 重叠；作者 SGLang/GB300 GH200 场景报告优于 HiCache 的部分 TTFT/TPOT 指标。**混合模型、统一内存硬件与测试负载依赖性强**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; AUTHOR_REPORTED） |
+| 2026 | [TripleKV: Predict, Prefetch, Protect -- KV Cache Management for AI Agents](https://arxiv.org/abs/2611.25112) | arXiv 2026 (preprint) | 依据 Agent Tool 回返时间预测 SSD→Host KV 预取，并保护高再用价值 Cache，降低 Agent 重入后的阻塞 SSD 读取；作者 vLLM 分层 SSD/Host/Device 测试报告 P95 TTFT 最高 -49%。需对比错误预测与预取占带宽的代价。（KEEP_PREPRINT_EVIDENCED; REAL_ENGINE; AUTHOR_REPORTED） |
 | 2026 | [Range: Decoupling KV-Cache Reuse Granularity from Storage Work](https://arxiv.org/abs/2610.21241) | arXiv 2026 (preprint) | SSD KV 读取中采用 **Byte Stripes + Physical Lease + Batched GPU Transfer Bank**，使读取开销由物理 Bytes/Batch 决定、而非逻辑 KV Object 数；在 vLLM+LMCache、固定 6GiB 和对象数扩大 32× 下，作者报告 TTFT 1.79–1.80s，而 tuned LMCache 2.12–3.01s，**相同 Bytes 控制变量实验**。无可核实公开 Artifact，CPU/GPU/SSD 栈版本对现代部署外推需再审。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; G4_NO_PUBLIC_CODE） |
 | 2024 | [InfiniGen: Efficient Generative Inference of Large Language Models with Dynamic KV Cache Management](https://www.usenix.org/conference/osdi24/presentation/lee) | OSDI 2024 | 预测关键 KV 项并按需预取，避免长上下文 Offloading 的全量回传。（KEEP_FOUNDATIONAL） |
 | 2025 | [AdaptCache: KV Cache Native Storage Hierarchy for Low-Delay and High-Quality Language Model Serving](https://www.microsoft.com/en-us/research/publication/adaptcache-kv-cache-native-storage-hierarchy-for-low-delay-and-high-quality-language-model-serving/) | SOSP BigMem Workshop 2025 | 以每条 KV Entry 的有损压缩算法、压缩率和 DRAM/SSD 分层放置联合优化缓存 Load Delay 与生成质量；三类任务报告固定质量下延迟改善，明确仅为 Workshop。 |
