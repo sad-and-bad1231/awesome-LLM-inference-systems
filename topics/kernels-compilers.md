@@ -14,22 +14,24 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-32) | 32 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-34) | 34 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
-| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-24) | 22 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
-| [Communication, Memory & I/O](#communication-memory--io-18) | 18 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-21) | 19 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **127** | |
+| [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-24) | 24 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
+| [Communication, Memory & I/O](#communication-memory--io-19) | 19 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
+| [Kernel Automation & Tools](#kernel-automation--tools-24) | 24 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **133** | |
 
-## Papers (127)
+## Papers (133)
 
-### Attention & Sparse Kernels (32)
+### Attention & Sparse Kernels (34)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [AscMLA: Unlocking FP4 Efficiency for Long-Context MLA Decoding through Asymmetric Scaling](https://arxiv.org/abs/2611.26106) | arXiv 2026 (preprint) | 通过针对共享 MLA Latent K/V 的非对称 FP4 Scale 与 Scale Data Pipeline 避免额外反量化或双份编码；作者 GPU Kernel 测试报告相对 FP8 KV 占用 -38.2%、相对 TensorRT-LLM FP8 MLA Kernel 几何平均 1.35×。仅 MLA Kernel、质量与平台特定；**非 Ascend 适配、非 E2E Serving**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; AUTHOR_REPORTED） |
+| 2026 | [DTS: Delta-Based Tile Scoring for Efficient Long-Context Sparse Attention](https://arxiv.org/abs/2611.25938) | arXiv 2026 (preprint) | 用相邻 Query 的变化量增量更新 Block-Sparse Tile Scoring，而非每步重算全量重要性；作者 H100 128K 报告打分耗时相对 XAttention 降 38%，四卡 512K Prefill 相对 FA2 密集对照约 3.3×，任务质量需与近似稀疏度联评。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; APPROXIMATE_ATTENTION; AUTHOR_REPORTED） |
 | 2026 | [CompactAttention: Accelerating Chunked Prefill with Block-Union KV Selection](https://arxiv.org/abs/2605.16839) | NeurIPS 2026 Spotlight (author-verified; proceedings pending) | Chunked Prefill 中将 2D Sparse Mask 转为 GQA-aware KV Block Union/Table，直接读取 Paged KV、避免显式复制；作者在 Llama-3.1-8B/RULER 128K 报告 **Attention Kernel 最高 2.72×**、近似质量，**非端到端 Serving Speedup**。公开 [代码与基准](https://github.com/jiwonsong-dev/CompactAttention)；Ascend 未复现。（KEEP_STRICT; REAL_GPU; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
 | 2024 | [FlashDecoding++: Faster Large Language Model Inference with Asynchronization, Flat GEMM Optimization, and Heuristics](https://proceedings.mlsys.org/paper_files/paper/2024/hash/5321b1dabcd2be188d796c21b733e8c7-Abstract-Conference.html) | MLSys 2024 | 解码 Softmax 的异步化、Flat GEMM 专项优化与形状感知 Dataflow；跨 NVIDIA/AMD 的 Operator + Engine 评测。 |
 | 2024 | [Hydragen: High-Throughput LLM Inference with Shared Prefixes](https://arxiv.org/abs/2402.05099) | arXiv 2024 (preprint) | 将共享 Prefix 与独有 Suffix 的 Exact Attention 分解执行，把重复 Query 合并为高效矩阵计算并支持 Tree Prefix。 |
@@ -140,12 +142,13 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [MegaOps: A Kernel Overlapping Framework with PyTorch-like Modularity and Megakernel Performance](https://arxiv.org/abs/2611.16248) | arXiv 2026 (Nov 12 preprint) | **Kernel-per-operator 保留模块化、Tile-level producer/consumer synchronization 消除全 Kernel Barrier**：独立 CUDA Streams 重叠可复用 Triton/cuBLAS/cuDNN。作者在 Llama3/Qwen3、H100/A100/L40 和多 GPU 上报告相对最强比较基线 **Decode Throughput 1.09–1.10×、Prefill 0.98–1.10×**；部分 Prefill 回退，非全层 Megakernel 或 Ascend 已验证实现。**REAL_GPU / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_PREPRINT_EVIDENCED） |
 | 2026 | [SubGPU Pipelining: Intra-GPU Fine-Grained Spatial Parallelism for LLM Inference](https://arxiv.org/abs/2611.14904) | arXiv 2026 (Nov 11 preprint) | 把 Decode Operator DAG 划分为有序 Stage，在不相交 SM Pool 内以 Microbatch 流水实现细粒度空间并行。**32×B200 / GPT-OSS-120B** 的最多 **2.2× per-user Throughput 为模型仿真**，**不是 32 卡实测**；实测用 **单 B200 模拟 32 卡执行**、选定 B2048 配置，36 层 Iteration Time −10.33%、DRAM 吞吐利用率 71.8→83.6% Peak。**MODEL_SIM + SINGLE_GPU_SILICON_EMULATION / AUTHOR_REPORTED**。（KEEP_PREPRINT_EXPLORE） |
 
-### Communication, Memory & I/O (18)
+### Communication, Memory & I/O (19)
 
 数据搬运、跨卡通信、设备内存层级和异构执行。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [A Fast, Programmable GPU-to-CPU Invocation Layer for GPU-Initiated Communication (KIWI)](https://arxiv.org/abs/2611.23848) | arXiv 2026 (preprint) | 将 GPU 发起的通信请求交给轻量 CPU Host Proxy，重新评价 GPU 直控 NIC 与 Reverse Offload 的成本；KIWI-EP 在 AMD MoE 场景减低 Dispatch/Combine 延迟，作者报告 vLLM TPOT 最高 -29%。GPU/CPU/NIC 拓扑相关，不能直接迁移为 Ascend HCCL 收益。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; AUTHOR_REPORTED） |
 | 2026 | [uGDS: A User-Space Development Kit for High-Performance GPU Direct Storage](https://arxiv.org/abs/2610.30868) | arXiv 2026 (technical report) | CPU 用户态 NVMe Submission/Completion + PCIe P2P DMA，避开每次 I/O Kernel 控制路径；分离 Sync/Batch 队列，兼容 NVIDIA CUDA/AMD ROCm。真实 A100+Samsung 990 PRO、Qwen3-0.6B/vLLM0.20.1/LMCache0.5.1.dev35 SSD-only replay，作者报告 **TTFT 中位数最高 -62.7%、Serving Goodput 2.63×**（特定小 I/O 条件）。公开 [实现](https://github.com/ScaleX-IO/uGDS)，[LMCache Adapter PR #4420 已合并](https://github.com/LMCache/LMCache/pull/4420)；对独占裸 NVMe 的风险与 910B2 不可移植性作限制。（KEEP_STRICT; REAL_GPU; E2E_AUTHOR_ONLY; PUBLIC_UPSTREAM_CODE） |
 | 2025 | [Fast On-device LLM Inference with NPUs](https://doi.org/10.1145/3669940.3707239) | ASPLOS 2025 | llm.npu 将模型子图映射到手机 NPU/CPU/GPU 并流水化执行，处理 NPU 不支持算子及动态 LLM Decode。 |
 | 2025 | [MAS-ATTENTION: MEMORY-AWARE STREAM PROCESSING FOR ATTENTION ACCELERATION ON RESOURCE-CONSTRAINED EDGE DEVICES](https://proceedings.mlsys.org/paper_files/paper/2025/hash/d3cf1559a8795eb1ed2b3ad52409ac7d-Abstract-Conference.html) | MLSys 2025 | 协调边缘加速器的向量与矩阵执行流水，以多级 Tiling 和缓存覆盖减少片上空间开销；含真实 NPU 验证。 |
@@ -166,12 +169,15 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (21)
+### Kernel Automation & Tools (24)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Together Compiler: Continual Compilation for AI Inference](https://arxiv.org/abs/2611.14681) | arXiv 2026 (preprint) | TKCC 将**持久引擎/热更新**、分层低成本测量和 Agent Search 合成持续优化闭环，超越离线单 Kernel Autotuning；作者报告部分模型/配置相对强 Engine 最高 2.6× TPS，实验吞吐加速与 Token Throughput 分开。**Engine Evolution ≠ Optimizer 权重层 RSI**。（KEEP_PREPRINT_EVIDENCED; E2E_AUTHOR_REPORTED; RSI_ADJACENT） |
+| 2026 | [EngineAgent: Agentizing On-Device LLM Inference Engines with Inference Stack Hierarchy Awareness and Hardware Abilities](https://arxiv.org/abs/2611.14356) | arXiv 2026 (preprint) | 事先构建 Engine Stack 依赖索引与设备构建/执行能力，再让 Builder/Auditor 对模型转换、Graph、Kernel、Backend 联合修复；论文报告 12 项异构端侧适配任务，成功率 75% 对比普通 Agent 33.3%。测的是适配成功率，**不是 Serving TPS**。（KEEP_PREPRINT_EVIDENCED; REAL_DEVICE; AGENT_ENGINEERING） |
+| 2026 | [CompoundingKernel: Self-Improving from Zero to First](https://arxiv.org/abs/2611.19230) | arXiv 2026 (preprint) | 在模型外维护已通过 Correctness 的 Kernel 及父子谱系，让并行 Search Agent 复用成功经验；作者报告 B200 SOL-ExecBench 的 235 个正确 Kernel、209 个公开板题目对参考实现 4.40×。分数来自特定 Benchmark 与搜索预算，**不是 Agent 自身权重递归改进或 E2E LLM Serving**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; BENCHMARK_SCOPE） |
 | 2025 | [KPerfIR: Towards a Open and Compiler-centric Ecosystem for GPU Kernel Performance Tooling on Modern AI Workloads](https://www.usenix.org/conference/osdi25/presentation/guan) | OSDI 2025 | 在 Triton 编译流程插入可编程 Profiling Pass，把微架构流水事件与源级 IR 关联，作者报告约 8.2% 测量开销、2% 相对误差；为通用 Kernel Profiling **工具**，不是 LLM 推理优化器，作为可迁移性能分析基础保留（KEEP_ADJACENT）。 |
 | 2026 | [AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0f8426558905746fc38da5e335700aec-Abstract-Conference.html) | MLSys 2026 | 针对 Trainium NKI Kernel 的迭代优化与慢/快 Kernel 经验记忆，作者提供 [AccelOpt](https://github.com/zhang677/AccelOpt) 和 LLM-derived NKIBench，在 Trainium 1/2 实机测量 % peak；属于专用 Agentic Kernel Optimization 而非在线 Serving 性能。 |
 | 2026 | [K-Search: LLM Kernel Generation via Co-Evolving Intrinsic World Model](https://arxiv.org/abs/2602.19128) | arXiv 2026 (preprint) | 用与搜索共同演化的世界模型替代静态启发式，把高层算法规划与低层程序实例化显式解耦，使 LLM 在非单调优化路径上不丢弃暂不完善的中间实现，FlashInfer 的 GQA/MLA/MoE Kernel 平均提升 2.10 倍、MoE 最高 14.3 倍。 |
