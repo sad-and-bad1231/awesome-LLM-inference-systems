@@ -8,7 +8,7 @@
 
 | Layer | Main work | What to understand |
 |---|---|---|
-| **Models** | [Qwen3.5–3.8](https://github.com/QwenLM/Qwen3.8) · [Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) · [Qwen4-Max Preview](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview) | Hybrid GDN/attention, QSA, MoE, multimodal and long-context execution contracts. |
+| **Models** | [Qwen3.5–3.8](https://github.com/QwenLM/Qwen3.8) · [Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) · [Qwen4-Max (Nov 16)](https://qwen.ai/blog/qwen4-max) · [earlier Preview](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview) | Hybrid GDN/attention, QSA, MoE, multimodal and long-context execution contracts. |
 | **Inference engines** | [RTP-LLM](https://github.com/alibaba/rtp-llm) · **BladeLLM** ([PAI docs](https://www.alibabacloud.com/help/en/pai/deploy-an-llm/)) | Two distinct Alibaba engines; only RTP-LLM has a public engine repository. |
 | **Serving / KV** | [InferX](https://www.alibabacloud.com/help/en/pai/inferx-overview) · [FlashKV](https://www.alibabacloud.com/help/en/pai/inferx-kv-cache) · [Tair KVCache](https://github.com/alibaba/tair-kvcache) | Routing, shared multi-tier KV, global metadata management and trace simulation. |
 | **Systems research** | [LMetric](https://www.usenix.org/conference/osdi26/presentation/zhang-dingyan) · [ServeGen](https://github.com/alibaba/ServeGen) · [EPIC](https://doi.org/10.1145/3789240.3829201) · [RollArt](https://www.usenix.org/conference/osdi26/presentation/gao) · [MCP Gateway](https://atc.sigops.org/2026/accepted.html) | Request routing, production workloads, MoE communication, agentic RL and tool-access infrastructure. |
@@ -18,7 +18,7 @@
 | **Edge inference** | [MNN](https://github.com/alibaba/MNN) · [MNN-Pocket](https://arxiv.org/abs/2611.12311) · [Walle](https://www.usenix.org/conference/osdi22/presentation/lv) | Cross-platform on-device LLM inference and device-cloud execution. |
 | **Chip / cloud substrate** | [Zhenwu V900 and AI roadmap](https://www.alibabagroup.com/en-US/document-2041268239081668608) · [Agentic Cloud](https://www.alibabacloud.com/blog/603589) | AI accelerator, supernode/network/storage, AI-native and agent-native cloud services. |
 
-**Fast orientation:** Alibaba's public work spans the full stack, not only Qwen. Keep the open-source engine RTP-LLM separate from PAI's BladeLLM; distinguish the Tair codebase from the FlashKV managed service; and separate online inference research from agent harnesses, RL training, edge runtimes and cloud products. The newest additions worth noticing are Qwen4-Max Preview, AgentScope 2.0, GUI-Owl/ToolCUA, RollArt and the 2026 Agentic Cloud roadmap.
+**Fast orientation:** Alibaba's public work spans the full stack, not only Qwen. Keep the open-source engine RTP-LLM separate from PAI's BladeLLM; distinguish the Tair codebase from the FlashKV managed service; and separate online inference research from agent harnesses, RL training, edge runtimes and cloud products. The newest additions worth noticing are Qwen4-Max official release, AgentScope 2.0, GUI-Owl/ToolCUA, RollArt and the 2026 Agentic Cloud roadmap.
 
 ## 2. Qwen: model architecture that changes execution
 
@@ -27,6 +27,7 @@
 - [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) is the most useful current architecture preview: **GDN + Qwen Sparse Attention (QSA)**, Gated Residual, N-gram Embedding and asynchronous host-memory prefetch. It is explicitly a preview of the architecture direction for Qwen4, **not the Qwen4 release itself**.
 - [Qwen3.8-Max and Qwen3.8-Omni](https://github.com/QwenLM/Qwen3.8) extend the current flagship and multimodal families; the [Model Studio catalog](https://www.alibabacloud.com/help/en/model-studio/models) is the current API-family inventory.
 - **[Qwen-AgentWorld-35B-A3B](https://github.com/QwenLM/Qwen-AgentWorld)** (June 2026) is a language world model for simulating agent environments across MCP, Search, Terminal, SWE, Android, Web and OS; [AgentWorldBench](https://huggingface.co/datasets/Qwen/AgentWorldBench) provides paired real-environment observations. This is agent training/evaluation infrastructure, not a serving engine.
+- **[Qwen4-Max (official release, Nov 16, 2026)](https://qwen.ai/blog/qwen4-max):** The Qwen Team reports a **2.4T-parameter backbone, 71B activated/token plus 328B N-gram embedding parameters**, 1M context and native visual support. This is an API/model architecture milestone, not a public Qwen4-Max open-weight or published RTP-LLM/BladeLLM kernel benchmark. The company reports task-level token-efficiency and API cost improvements, which must **not** be equated with isolated serving-engine throughput. Qwen4-Max-Preview is a preceding November 11 API stage, not a separate paper.
 - **Qwen4-Max-Preview (Nov 11, 2026)** is now available through Model Studio Token Plan: 1M context, image/video understanding, deep reasoning and tool calling. It is a time-limited preview (Nov 11–25), not an open-weight family release; the other Qwen4 variants and final architecture remain separate release questions. [Official model documentation](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview).
 - Alibaba's [September 2026 roadmap](https://www.alibabagroup.com/en-US/document-2041268239081668608) also names Qwen4.5 and Qwen5 as future generations, with a stated scale ambition up to 5–10T parameters. Treat this as a roadmap, not a released architecture or available checkpoint.
 - [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder), [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL) and [Qwen3-Omni](https://github.com/QwenLM/Qwen3-Omni) matter because long coding sessions and streaming multimodal inputs create different serving workloads from ordinary text chat.
@@ -142,7 +143,7 @@ The same announcement reports Qwen3.8-Max iterative optimization experiments (33
 
 ## 9. Suggested overview order
 
-1. **Model and architecture:** [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) and the [Qwen4-Max preview docs](https://www.alibabacloud.com/help/en/model-studio/qwen4-max-preview).
+1. **Model and architecture:** [Qwen3.8-Flash-Next](https://github.com/QwenLM/Qwen3.8-Flash-Next) and the [Nov 16 Qwen4-Max release](https://qwen.ai/blog/qwen4-max).
 2. **Inference and serving:** RTP-LLM, BladeLLM, InferX, FlashKV and Tair KVCache.
 3. **Production systems research:** LMetric, ServeGen, ACDC, xMaaS, EPIC and StriaTrace.
 4. **Agent stack:** AgentScope 2.0, Qwen-Agent, GUI-Owl/ToolCUA and AgentCore.
