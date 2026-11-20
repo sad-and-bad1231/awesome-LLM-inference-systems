@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Batching, Queues & SLOs](#batching-queues--slos-46) | 46 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
-| [Routing & Load Balancing](#routing--load-balancing-18) | 18 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
-| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-23) | 23 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
+| [Batching, Queues & SLOs](#batching-queues--slos-47) | 47 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
+| [Routing & Load Balancing](#routing--load-balancing-19) | 19 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
+| [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-24) | 24 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
 | [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
-| [Agent & Workflow Serving](#agent--workflow-serving-31) | 30 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **159** | |
+| [Agent & Workflow Serving](#agent--workflow-serving-32) | 32 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
+| **Total** | **163** | |
 
-## Papers (159)
+## Papers (163)
 
-### Batching, Queues & SLOs (46)
+### Batching, Queues & SLOs (47)
 
 Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [VelServe: Taming Decode Jitters in LLM Inference with Tail-Calibrated Scheduling](https://arxiv.org/abs/2611.18392) | arXiv 2026 (preprint) | 根据实测 Decode Iteration 尾部延迟预留 Prefill Budget 余量，并配合短 Prompt 优先与 Disaggregated Admission 节流，目标是消除罕见 TBT 超时而非优化平均 Step；作者在多模型报告相对强 Baseline 的 SLO Goodput 提升。**P99 与平均吞吐须分别评价**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; AUTHOR_REPORTED） |
 | 2026 | [Pacing Branch Parallelism in LLM Serving (PACE/TAPER)](https://arxiv.org/abs/2605.06914) | NeurIPS 2026 (author-verified; proceedings title) | 同一请求多个并行 Branch 与其他请求共 Batch 时，按 **Branch Externality / SLO Slack** 每 Decode Step 动态 Admit，避免 Eager/固定 Cap 拖慢其他请求；作者 Qwen3-32B **Goodput 1.77×/1.48× vs IRP-Off/Eager**、>95% SLO 达标（作者报告）。公开 [SGLang Fork、校准脚本、正确性测试](https://github.com/Swapnil-Gandhi/PACE)。**G0 alias：会议题名为 Pacing；arXiv/代码题名 Regulating（同作者同机制）**，不重复收录；未复现 NPU。（KEEP_STRICT; REAL_GPU; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2021 | [TurboTransformers: An Efficient GPU Serving System for Transformer Models](https://doi.org/10.1145/3437801.3441578) | PPoPP 2021 | 早期 Transformer Serving 系统：可变长输入的 Smart Batching、动态规划批调度、GPU Softmax/LayerNorm 与内存分配器；Tencent 有开源实现及 BERT 在线部署，属于现代自回归 Serving 前驱，非 2026 LLM 评测。 |
 | 2024 | [Andes: Defining and Enhancing Quality-of-Experience in LLM-Based Text Streaming Services](https://arxiv.org/abs/2404.16283) | arXiv 2024 (preprint) | 为 Text Streaming 定义面向用户的 QoE，并以 Token-level Preemption 和到达流量感知调度协调首 Token 与平滑输出。 |
@@ -77,12 +78,13 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [Not All Loops Cost the Same: Phase-Dependent Depth for Serving Looped Transformers](https://arxiv.org/abs/2611.07211) | arXiv 2026 (Nov 4 preprint) | **LoopDuet:** 对 Looped Transformer 分离 Prefill 深度 P 与 Decode 深度 S，并在 Loop 边界 **Gather 活跃 Query 形成紧凑 Batch、共享 KV**；Queue-age Controller 按 TTFT 积压降低 P，保留首次生成 Token 的全深度计算。作者 **A100-SXM4-80GB、vLLM 0.14.1、Huginn/OLMo、HotpotQA 与两条 OLMo Arrival Trace**；Huginn 在相同 Accuracy 条件下相对最快 Uniform-depth **吞吐 +19%**，OLMo 同一 1s TTFT 达标率下准确率 +0.92–1.35 EM points。**训练免除但 Prefill 计算近似、质量须逐任务核对；REAL_GPU / QUALITY_CHANGING_EXECUTION / AUTHOR_REPORTED / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [Fairway: Load-Aware KV Cache Reuse for LLM Prefill Scheduling](https://arxiv.org/abs/2611.02082) | arXiv 2026 (Nov 1 preprint) | **KV-reuse Fast Lane + Aging Fair Lane + Per-step Stride-like Work Charge**：在空队列优先 Cache Hit，在请求排队和超载时限制未命中长请求被挤占；在 **vLLM0.16.0、单 A6000 48GB、Llama3.1-8B、P/D 分离的 Prefill-only Node、每 Request 仅1 Token** 上测 **SEC/MuSiQue/Mooncake 11 Traffic Scenarios**，与 FCFS/LPM/k-LPM/RAGCache/PEEK/Preble 共用同样的 Cache Eviction；作者最高报 **p99 TTFT 8.6× 更低**，Transient Spike 中维持 FCFS 级 Tail 同时 Median 约0.82s。**仅 Prefill TTFT 不代表完整 Decode E2E；w=4/Patience=3/1s 在 SEC 开发 Trace 上调参后冻结，不能称完全 Zero-tuning；先前 HOLD_G3 通过全文实验查验解除**。**REAL_GPU / SOURCE_HTML_G3 / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Routing & Load Balancing (18)
+### Routing & Load Balancing (19)
 
 副本选择、Cache-aware Dispatch 和负载平衡。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Cap-and-Track: Optimizing LLM Inference Request Dispatch Across Shifting Capacity](https://arxiv.org/abs/2611.24891) | arXiv 2026 (preprint) | Meta 工作：让后端以快速拒绝表达真实容量上限，前端带 Durable Priority Queue 的 Dispatcher 只依靠拒绝反馈自适应调整派发速率，规避输出长度不可预测时的固定 Admission 配额；有生产同流量 A/B，严格限定为部署配置收益。（KEEP_PREPRINT_EVIDENCED; PRODUCTION_AB; AUTHOR_REPORTED） |
 | 2026 | [TokenRouter: Efficient Serving System for Token-Level LLM Routing](https://arxiv.org/abs/2610.12242) | NeurIPS 2026 (author-verified; proceedings pending) | 跨不同 LLM 的 Token-level Routing 采用 **Request-centric API + 异步 Model Subserver + Delayed Batching**，避免同步 Step 和频繁 Admission Stall。作者在 Qwen3-0.6B/32B 与 AIME、SWE-smith 等报告 2.01–64.15× Decode Throughput，相对于现有跨模型路由服务，**倍数受比较实现与并发强烈影响**；公开 [可启动 Server/评测脚本](https://github.com/thu-nics/TokenRouter)，CUDA MPS，未独立复现。（KEEP_STRICT; REAL_GPU_AUTHOR_ONLY; PUBLIC_CODE; AUTHOR_REPORTED） |
 | 2026 | [Tackling the Data-Parallel Load Balancing Bottleneck in LLM Serving: Practical Online Routing at Scale (BalanceRoute)](https://arxiv.org/abs/2605.06113) | NeurIPS 2026 (author-verified; proceedings pending) | DP Decode 同步屏障与 Sticky KV 限制请求迁移；BR-0 用非对称 Admission F-score，BR-H 增加预测窗口；**论文作者报告在 144 NPU 集群与生产/Azure Trace 上的吞吐收益**。公开 [代码](https://github.com/b010001y/BalanceRoute) 目前只有 CPU Simulator 与合成基准，真实 NPU Serving 集成/Trace **未开放**；禁止把模拟吞吐写成实测。（KEEP_STRICT; REAL_NPU_AUTHOR_ONLY; PARTIAL_CODE; REPRO_NOT_ATTEMPTED） |
 | 2025 | [Preble: Efficient Distributed Prompt Scheduling for LLM Serving](https://proceedings.iclr.cc/paper_files/paper/2025/hash/5bc342f48de8264779952fac378f96dc-Abstract-Conference.html) | ICLR 2025 | 在分布式请求调度中联合 KV 复用收益与负载均衡，复用重复 Prompt。 |
@@ -102,12 +104,13 @@ Continuous Batching、Chunked Prefill、请求优先级和 SLO。
 | 2026 | [ELDR: Expert-Locality-Aware Decode Routing for PD-Disaggregated MoE Serving](https://arxiv.org/abs/2607.00466) | ACM SIGOPS ATC 2026 (**author final version v3, Nov 6; publisher DOI linked on arXiv, proceedings page not independently resolved**) | **Prefill MoE Gate Activation Signature → Decode Expert-locality-aware Routing**，利用 **Balanced K-means + Locality-band Least-loaded Worker** 兼顾已激活 Expert 的 HBM Weight Reuse 与负载；按 KV Block 保存 Signature 以在 Prefix Cache Hit 时保持正确预估。作者使用 **vLLM、Qwen3-30B-A3B/GPT-OSS-120B/Gemma4-26B-A4B，最多40 GPU，12种任务与14K多语种 WildChat**，对 Round-robin 等负载策略报告 Median TPOT：任务流量降低 **8.6–14.5%**、多语种降低 **5.4–9.8%**（跨请求率平均），峰值 **17.8%**；**TTFT 基本不变，不改变原始模型输出、Expert 选择或 Token Route，收益来自请求组合下 Weight Traffic 减少；部分结果使用作者所测 GPU 和 Load Mix，不是通用 Ascend 收益**。[Artifact](https://doi.org/10.5281/zenodo.23310788)。**REAL_MULTIGPU / SOURCE_UPDATED_V3 / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [DolphinRouting: Cluster-Level Binary Routing for Disaggregated LLM Inference Serving](https://arxiv.org/abs/2610.40292) | arXiv 2026 (preprint; Oct 29) | 在固定 Prefill/Decode 资源分配下，以 Input Length、P/D Cache-adjusted Length 和 Output Length 聚类，离线按 E2E SLO 学习每簇本地 Prefill / 远端 Prefill **Binary Routing**，在线仅需 Feature+Lookup；作者在真实 PD Cluster 的 Mixed Workload 和真实数据对比 **NVIDIA Dynamo** 报告 P90 TTFT −5.7%–7.9%、P90 TPOT −2.6%–10.1%。**REAL_CLUSTER / FIXED_PD_RESOURCES / NO_UNIVERSAL_SLO_GAIN / NOT_REPRODUCED**；无需发明跨集群吞吐结论。（KEEP_STRICT） |
 
-### P/D Allocation & Autoscaling (23)
+### P/D Allocation & Autoscaling (24)
 
 Prefill/Decode 资源分配、扩缩容与容量规划。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Evolving Infra: Agent-Adaptive LLM Serving at Scale](https://arxiv.org/abs/2611.12304) | arXiv 2026 (preprint) | 将动态 P/D 计算角色与 KV Cache 驻留解耦，让节点快速切换 Prefill/Decode，Agent-aware KV 管理器与在线 Planner 同时决策；作者在最多 256 GB300 上对比 Dynamo，报告特定 Agent 工作负载平均延迟最高 4.1×、P95 TTFT 最高 14× 优势；**不是 Agent 自动修改引擎代码**。（KEEP_PREPRINT_EVIDENCED; REAL_CLUSTER; AUTHOR_REPORTED） |
 | 2024 | [ExeGPT: Constraint-Aware Resource Scheduling for LLM Inference](https://arxiv.org/abs/2404.07947) | ASPLOS 2024 | 将推理资源配置与约束条件共同纳入调度，比较部署配置的延迟与吞吐。 |
 | 2025 | [A House United Within Itself: SLO-Awareness for On-Premises Containerized ML Inference Clusters via Faro](https://doi.org/10.1145/3689031.3696071) | EuroSys 2025 | Faro 面向资源受限的 On-prem 多模型推理集群，以负载变化和 SLO 进行 Autoscaling/资源分配；属于通用 ML Inference 服务调度基础，不宣称专用 LLM Decode 收益。 |
 | 2025 | [MaverIQ: Fingerprint-Guided Extrapolation and Fragmentation-Aware Layering for Intent-Based LLM Serving](https://doi.org/10.1145/3712285.3759867) | SC 2025 | 以轻量 Model Fingerprint 和配置性能解析模型外推真实 LLM 延迟，并采用不均匀 Layer Placement 利用碎片 GPU 容量；TensorRT-LLM 代码及真实集群模型和负载测量。 |
@@ -187,12 +190,13 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Rethinking DVFS for Mobile LLMs: Unified Energy-Aware Scheduling with CORE](https://proceedings.mlsys.org/paper_files/paper/2026/hash/136b9a13861308c8948cd308ccd02658-Abstract-Conference.html) | MLSys 2026 | 联合优化移动端 CPU/GPU/内存 DVFS 策略，覆盖 Prefill 和 Decode 的端到端时延与能耗。 |
 | 2026 | [Beyond Utilization: Energy-Conscious GPU Sharing for Inference Serving (EnerTune)](https://doi.org/10.1145/3830418.3843913) | SOSP 2026 | 用预测 GPU Slice、频率、Batch 及共驻功率的解析模型减少 Profiling，再按 SLO 做 Energy-aware Bin Packing；作者 A100 真实评测报告能耗 1.4–2.3× 降低（场景受限）。**PYTORCH_SHARING / NOT_NATIVE_VLLM / ENERGY_MEASUREMENT_SCOPE**；[Artifact](https://github.com/UT-SysML/EnerTune)。 |
 
-### Agent & Workflow Serving (31)
+### Agent & Workflow Serving (32)
 
 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Aggron: Aggressive Compression of Agentic KV Caches during Head-of-Line Stalls in the Request Queue](https://arxiv.org/abs/2611.26435) | arXiv 2026 (preprint) | 把等待队首的空窗用于 Agent Context 压缩/总结，减少长会话接下来的 KV 占用而不在执行关键路径上引入长时间 Summarization；作者报告高负载 Agent Program P99 下降和吞吐改善。须检查摘要对 Agent 成功率与额外模型计算的影响。（KEEP_PREPRINT_EVIDENCED; REAL_ENGINE; MODEL_CONTEXT_CHANGED） |
 | 2024 | [Parrot: Efficient Serving of LLM-based Applications with Semantic Variable](https://www.usenix.org/conference/osdi24/presentation/lin-chaofan) | OSDI 2024 | 以 Semantic Variable 暴露请求间数据依赖，支持 Agentic Workflow 级任务排程和 Prefix 复用。 |
 | 2025 | [AI Metropolis: Scaling Large Language Model-based Multi-Agent Simulation with Out-of-order Execution](https://proceedings.mlsys.org/paper_files/paper/2025/hash/4f31327e046913c7238d5b671f5d820e-Abstract-Conference.html) | MLSys 2025 | 跟踪多 Agent 的真实依赖并乱序触发 LLM 请求，消除全局同步引起的虚假依赖与低利用率。 |
 | 2025 | [DyOrc: Efficient Serving of Dynamic Machine Learning Workflows](https://doi.org/10.1145/3772052.3772218) | SoCC 2025 | 对动态 LLM Agent/多模态执行 DAG 做依赖感知 Speculative Scheduling、跨工作流 Batching 和预加载；在 128 张 A800 的真实集群对照 Ray Serve/Triton。 |
