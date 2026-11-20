@@ -119,3 +119,19 @@ The counts below use the **unit named in the source**: homepage featured model l
 **Strict reading rule:** owning an API model is not owning its inference framework; owning a kernel repo is not proof of production adoption. A product/model-family entry is **not** a new canonical paper and does not change the current [topic bibliography inventory](../topics/README.md). New model generations must be cross-checked against the official model menu *and* the release/retirement log. A provider's total downloadable checkpoint count is not feasible to freeze as a manually maintained Markdown list; the authoritative site is linked instead.
 
 **Editorial boundary.** Organization pages represent verifiable first-party releases or research directly attributable to a team. Coauthored work belongs in the topical paper lists unless the institution is explicitly presenting its own system. An API feature is not proof of an undisclosed serving implementation.
+
+
+## November 20, 2026 — first-party release and execution corrections
+
+| Organization | Verified update | Identity/engineering boundary |
+|---|---|---|
+| Tencent | [Hy4-flash public repository](https://github.com/Tencent-Hunyuan/Hy4-flash): 220B/12B active rounded, hybrid sparse/SWA, LatentMoE, Engram, DFly2 | Distinct from Hy4 final (Nov 4) and Hy4-preview (Aug); no 910B2 benchmark |
+| Alibaba/Qwen | [Qwen4-Max official Nov 16 release](https://qwen.ai/blog/qwen4-max): 2.4T backbone, 71B active plus N-gram embeddings | API vs actual open weights; task-token efficiency ≠ hardware TPS |
+| OpenAI | [GPT-6.2 Astra/Sol Nov 17](https://openai.com/index/introducing-gpt-6-2-astra-sol/) | Private backend; API model families not kernel source code |
+| Google | [Carbon Nov 10 generally available](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/), [Hydrogen Nov 12](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/), [Neon Nov 18](https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/) | Argon prior October; differentiated API tiers do not reveal internal TPU serving details |
+| DeepSeek | [Nov 13 tool API changelog](https://api-docs.deepseek.com/updates/) and [Sept alias announcement](https://www.deepseek.com/news/deepseek-v4-1-flash/) | `deepseek-v4-pro` alias redirected to V4.1 Flash since Sept 14; V4.1 Pro remains unverified |
+| Meta | [Cap-and-Track Nov 18](https://arxiv.org/abs/2611.24891) | Production dispatch A/B; canonical paper only once under Runtime |
+| AWS / SGLang | [SGLang-Neuron Nov 12](https://aws.amazon.com/blogs/machine-learning/deploy-frontier-ai-models-on-aws-trainium-with-sglang-neuron/) | Trainium preview; not an Ascend backend |
+| AMD / vLLM | [FlyDSL MonoKernels Nov 18](https://vllm.ai/blog/2026-11-18-flydsl-monokernels) | Community AMD Instinct implementation, selected decode workload, not 910B2 |
+
+No full-stack backend properties are inferred from closed model API releases. Other companies remain indexed through the previous source audits; absence of a new row does not establish that no work occurred.
