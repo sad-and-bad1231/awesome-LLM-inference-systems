@@ -17,11 +17,11 @@
 | [Draft Models & Candidate Generation](#draft-models--candidate-generation-23) | 23 | Draft/Target 组合、MTP、候选生成与相关多模态 Speculation。 |
 | [Training-Free & Self-Speculation](#training-free--self-speculation-23) | 23 | N-gram/检索/自投机与模型自身的低成本草稿路径。 |
 | [Tree & Parallel Verification](#tree--parallel-verification-15) | 15 | Candidate Tree、并行候选和 Target Verification 效率。 |
-| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-20) | 20 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
+| [Adaptive Speculation in Serving](#adaptive-speculation-in-serving-21) | 21 | 动态 Draft 长度、启停决策及异构/分布式部署。 |
 | [Diffusion & Non-AR Generation](#diffusion--non-ar-generation-18) | 18 | 非自回归/扩散解码、并行提交和相邻视觉生成执行。 |
-| **Total** | **99** | |
+| **Total** | **100** | |
 
-## Papers (99)
+## Papers (100)
 
 ### Draft Models & Candidate Generation (23)
 
@@ -105,12 +105,13 @@ Candidate Tree、并行候选和 Target Verification 效率。
 | 2026 | [D3Tree: Learning to Prune Block-Diffusion Draft Trees for Efficient Verification](https://arxiv.org/abs/2611.11371) | arXiv 2026 (Nov 8 preprint) | 用训练出的轻量 **Node-survival Head** 为验证树剪枝，并让 Batch-wide Node Budget 对齐 Target GEMM Tile；轻载保留宽树、重载按预期收益分配 Verification Capacity。作者在 6 个 VLM Verifiers、17 个 Text/Multimodal Tasks、72 个 Load Cells 中 70 个最快；需要专用 Head/Target Tree Path，**非通用纯 Runtime 开关**。**KEEP_PREPRINT_EVIDENCED / TRAINED_HEAD / MULTIMODAL_SERVING / NOT_REPRODUCED**。 |
 | 2026 | [Twig: Parallel and Memory-Efficient Tree Speculative Decoding for Hybrid-Attention LLMs](https://arxiv.org/abs/2608.01651) | arXiv 2026 (Aug 3 v1; Nov 5 v2; HPCA 2027 accepted per author notice) | 在含 Recurrent Linear Attention 的 Hybrid LM 中对 Tree 状态递归作 **Factorization**，GPU 并行验证所有节点、只重建 Accepted State，免去每节点完整状态 Snapshot；集成 SGLang 与跨请求验证预算。作者报告 Tree-Verify Kernel 3.4–7.7×、Offline Decode vs AR 最高 4.72×、Online Agent TPOT 改善，**不可把 Kernel 比率当线上加速**。**KEEP_PREPRINT_EVIDENCED / HYBRID_MODEL_ONLY / STATE_RECONSTRUCTION / NOT_REPRODUCED**。 |
 
-### Adaptive Speculation in Serving (20)
+### Adaptive Speculation in Serving (21)
 
 动态 Draft 长度、启停决策及异构/分布式部署。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [SpecSearch: Towards Hardware-Aware Efficient Speculative Decoding](https://arxiv.org/abs/2611.22296) | arXiv 2026 (preprint) | 结合硬件/Workload Profiling 与 Token Acceptance 预测，在线选择 Draft 方法、Draft 长度及精度，解决 SpecDec 在高并发或短输出时变成负优化的问题；作者跨 RTX5090/H100/L40/MI300X 报告不同校准条件下的吞吐收益。**适配参数选择，不代表新 Draft Model**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; HARDWARE_AWARE） |
 | 2025 | [AdaSpec: Adaptive Speculative Decoding for Fast, SLO-Aware Large Language Model Serving](https://github.com/cerebellumking/AdaSpec) | SoCC 2025 | 在线感知请求负载与设备环境，动态改变 Draft/Verify 策略，在多 SLO 工作负载下控制投机成本。 |
 | 2025 | [Dovetail: A CPU/GPU Heterogeneous Speculative Decoding for LLM inference](https://aclanthology.org/2025.emnlp-main.879/) | EMNLP 2025 | 在消费级异构设备上将 Draft 部署 GPU、Target Verification 放于 CPU，设计减小验证通信粒度的无损投机解码；真实设备 13B 推理，旧账本误记 EMNLP 2026。 |
 | 2025 | [Mirror Speculative Decoding: Breaking the Serial Barrier in LLM Inference](https://arxiv.org/abs/2510.13161) | arXiv 2025 (preprint) | 在 GPU/NPU 异构并行执行 Draft 早退路径与 Target 后缀，并用多 Token Speculative Streaming 打破串行 Draft 路径；作者用 14B–66B 模型端到端实测。 |
