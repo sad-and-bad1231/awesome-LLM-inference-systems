@@ -4,13 +4,13 @@ Only **publicly documented inference-relevant model designs, execution tooling a
 
 [← Organizations](../README.md#organizations)
 
-## Official model-family / API listing (2026-10-24)
+## Official model-family / API listing (checked 2026-11-20)
 
 **Authority:** [OpenAI API model catalog](https://developers.openai.com/api/docs/models/all). These are **published product/model interfaces**, not a public specification of internal training, attention architecture or serving engines.
 
 | Family | Named first-party models / inference relevance | Source |
 |---|---|---|
-| GPT-6 | **GPT-6 Astra; GPT-6.1 Sol; GPT-6 Sol; GPT-6 Luna** with distinct cost/effort/concurrency tiers | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
+| GPT-6 | **GPT-6.2 Astra** (frontier, complex projects) and **GPT-6.2 Sol** (efficient general work), official Nov 17 API models; older **GPT-6 Astra / GPT-6.1 Sol / GPT-6 Sol / GPT-6 Luna** remain historical/live by endpoint. API cost/effort tiers do not expose internal kernel/scheduler implementation. | [Nov 17 official announcement](https://openai.com/index/introducing-gpt-6-2-astra-sol/) · [API changelog](https://developers.openai.com/api/docs/changelog) · [models](https://developers.openai.com/api/docs/models/all) |
 | GPT-5.x | GPT-5.6 Sol / Terra / Luna and GPT-5.5, GPT-5.4, GPT-5.2 legacy families, including dated snapshots and coding-focused variants | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
 | gpt-oss | **gpt-oss-120b; gpt-oss-20b** open-weight MoE; code/backends and checkpoint-level evidence distinct from closed GPT-6 internals | [Official model repository](https://github.com/openai/gpt-oss) |
 | GPT-Image | GPT-Image-2.5 Sunburst, GPT-Image-2.5 Flare, GPT-Image-2; image generation is outside autoregressive text serving | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
@@ -18,6 +18,10 @@ Only **publicly documented inference-relevant model designs, execution tooling a
 | Embeddings and specialized | text-embedding-3-large/small, GPT-5.6 Cyber, GPT-Rosalind and task-specific models | [Official model catalog](https://developers.openai.com/api/docs/models/all) |
 
 **Coverage limit:** the API supports many exact dated model strings and deprecations; the canonical model page is the complete live **endpoint registry**. Do not present consumer marketing names, alias IDs, publicly downloaded checkpoints or unpublished internal serving stacks as equivalent.
+
+### November 17, 2026 — GPT-6.2 Astra and Sol
+
+[OpenAI's first-party release](https://openai.com/index/introducing-gpt-6-2-astra-sol/) and [API changelog](https://developers.openai.com/api/docs/changelog) distinguish **Astra** for harder professional/reasoning tasks from **Sol** for lower-cost everyday coding/agents. The release describes higher task success with fewer generated output tokens, computer use and product integration; **it does not publish attention blocks, KV format, speculative drafter, scheduler, compute platform or production token-level cost model**. Separate client-visible throughput/pricing behavior from causal improvements in an undisclosed serving engine. Existing public [gpt-oss](https://github.com/openai/gpt-oss) and [Triton](https://github.com/triton-lang/triton) are distinct open projects, not reverse-engineered GPT-6.2 internals.
 
 ## Models and execution
 
