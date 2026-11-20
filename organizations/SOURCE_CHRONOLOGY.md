@@ -133,5 +133,7 @@ The counts below use the **unit named in the source**: homepage featured model l
 | Meta | [Cap-and-Track Nov 18](https://arxiv.org/abs/2611.24891) | Production dispatch A/B; canonical paper only once under Runtime |
 | AWS / SGLang | [SGLang-Neuron Nov 12](https://aws.amazon.com/blogs/machine-learning/deploy-frontier-ai-models-on-aws-trainium-with-sglang-neuron/) | Trainium preview; not an Ascend backend |
 | AMD / vLLM | [FlyDSL MonoKernels Nov 18](https://vllm.ai/blog/2026-11-18-flydsl-monokernels) | Community AMD Instinct implementation, selected decode workload, not 910B2 |
+| Huawei / vLLM-Ascend community | [v0.32.0rc1 Nov 10](https://docs.vllm.ai/projects/ascend/zh-cn/v0.32.0rc/user_guide/release_notes.html) | **Release candidate**, vLLM 0.32 + CANN 9.2.1, not stable and not automatically compatible with frozen 910B2/CANN9.1 paths |
+| Moonshot Kimi | [Hosted Agents Nov 5](https://www.kimi.com/news/kimi-hosted-agents) | Managed Agent harness, sessions/tool security; **not** independent published KV/kernel runtime, Inference Hook restricted enterprise |
 
 No full-stack backend properties are inferred from closed model API releases. Other companies remain indexed through the previous source audits; absence of a new row does not establish that no work occurred.
