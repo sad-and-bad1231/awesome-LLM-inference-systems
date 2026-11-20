@@ -137,3 +137,5 @@ The counts below use the **unit named in the source**: homepage featured model l
 | Moonshot Kimi | [Hosted Agents Nov 5](https://www.kimi.com/news/kimi-hosted-agents) | Managed Agent harness, sessions/tool security; **not** independent published KV/kernel runtime, Inference Hook restricted enterprise |
 
 No full-stack backend properties are inferred from closed model API releases. Other companies remain indexed through the previous source audits; absence of a new row does not establish that no work occurred.
+
+**November 16 Together AI execution retrospective:** [Road to Together Compiler](https://www.together.ai/blog/road-to-together-compiler) reports that CUDA Graphs+PDL can approach megakernel performance on a tightly bounded Llama 1B test, with agent-guided multi-kernel execution offering a more maintainable broader optimization path; **not** a universal rejection of megakernels. **NVIDIA November runtime migration:** [TensorRT-LLM 1.4](https://nvidia.github.io/TensorRT-LLM/release-notes) deprecates KV Manager V1/C++ transceiver while KV Manager V2 + NIXL becomes the default; limited feature exceptions remain.
