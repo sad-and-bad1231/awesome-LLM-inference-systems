@@ -14,22 +14,24 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-20) | 20 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-22) | 22 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
 | [Performance & Efficiency Studies](#performance--efficiency-studies-27) | 27 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-17) | 17 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **96** | |
+| **Total** | **98** | |
 
-## Papers (96)
+## Papers (98)
 
-### Serving Benchmarks & Workloads (20)
+### Serving Benchmarks & Workloads (22)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads](https://arxiv.org/abs/2611.25905) | arXiv 2026 (preprint) | 提供 Agent Trace Capture→Replay→容量预估→部署前 Validation 流程，并以 vLLM 与 llm-d/多轮工具场景检验合成 Workload 失真；作者报告真实 Agent 并发度显著低于纯请求回放预测。**Benchmark 工程方法，不是新 Scheduler 加速算法**。（KEEP_PREPRINT_EVIDENCED; TRACE_REPLAY; REAL_ENGINE） |
+| 2026 | [Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes](https://arxiv.org/abs/2611.26480) | arXiv 2026 (preprint) | 对 AWS Bedrock AgentCore 会话占用与模型等待时间做 Trace/环境保留分析；提出及时关闭与会话多路复用反事实，后者的 64:1 共享收益来自**Simulation**，不能宣称生产环境已部署且可安全复用 Sandboxes。（KEEP_PREPRINT_EXPLORE; TRACE_SIM; NOT_REAL_DEPLOYMENT） |
 | 2024 | [LLM-Inference-Bench: Inference Benchmarking of Large Language Models on AI Accelerators](https://ieeexplore.ieee.org/document/10820566) | SC24-W workshop 2024 | 提供硬件加速器推理吞吐和延迟评测方法；明确为 Workshop 而不是 SC 主会论文。 |
 | 2024 | [The Importance of Workload Choice in Evaluating LLM Inference Systems](https://doi.org/10.1145/3642970.3655823) | EuroMLSys workshop 2024 | 系统比较输入/输出长度、请求到达过程等 Benchmark 设计对推理系统排名和判断的影响。 |
 | 2025 | [BurstGPT: A Real-World Workload Dataset to Optimize LLM Serving Systems](https://doi.org/10.1145/3711896.3737413) | KDD 2025 | 基于云端 LLM 请求日志发布 Bursty Traffic/长度/失败 Trace，并在真实负载特征下评估 Serving 调度与缓存设计。 |
