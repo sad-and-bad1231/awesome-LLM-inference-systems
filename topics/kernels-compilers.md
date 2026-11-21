@@ -14,22 +14,24 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-34) | 34 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-36) | 34 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-24) | 24 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-19) | 19 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-24) | 24 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
-| **Total** | **133** | |
+| [Kernel Automation & Tools](#kernel-automation--tools-26) | 24 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| **Total** | **137** | |
 
-## Papers (133)
+## Papers (137)
 
-### Attention & Sparse Kernels (34)
+### Attention & Sparse Kernels (36)
 
 Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [LightningMoBA: Accelerating Mixture of Block Attention for Long-Context LLMs](https://arxiv.org/abs/2611.26268) | arXiv 2026 (Nov preprint) | 融合稀疏 Block Routing、KV-centric Tile Ownership 和 GPU Kernel Pipeline；作者长上下文真实 GPU 与 FlashMoBA 对照报告 Kernel 约 1.20–1.60×，须保持 Sparse Quality/Route Budget；不是在线 Serving Goodput。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
+| 2026 | [AttentionIndex: Efficient Index Selection for Sparse Attention Inference](https://arxiv.org/abs/2611.02508) | arXiv 2026 (Nov preprint) | NVIDIA 作者针对百万上下文 Sparse Attention 的 Index Search 本身做因果索引/选择优化，真实 GPU 报告 Indexer/Prefill 效率与 Recall；Sparse Approximation、质量和模型范围独立核查。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [AscMLA: Unlocking FP4 Efficiency for Long-Context MLA Decoding through Asymmetric Scaling](https://arxiv.org/abs/2611.26106) | arXiv 2026 (preprint) | 通过针对共享 MLA Latent K/V 的非对称 FP4 Scale 与 Scale Data Pipeline 避免额外反量化或双份编码；作者 GPU Kernel 测试报告相对 FP8 KV 占用 -38.2%、相对 TensorRT-LLM FP8 MLA Kernel 几何平均 1.35×。仅 MLA Kernel、质量与平台特定；**非 Ascend 适配、非 E2E Serving**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; AUTHOR_REPORTED） |
 | 2026 | [DTS: Delta-Based Tile Scoring for Efficient Long-Context Sparse Attention](https://arxiv.org/abs/2611.25938) | arXiv 2026 (preprint) | 用相邻 Query 的变化量增量更新 Block-Sparse Tile Scoring，而非每步重算全量重要性；作者 H100 128K 报告打分耗时相对 XAttention 降 38%，四卡 512K Prefill 相对 FA2 密集对照约 3.3×，任务质量需与近似稀疏度联评。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; APPROXIMATE_ATTENTION; AUTHOR_REPORTED） |
 | 2026 | [CompactAttention: Accelerating Chunked Prefill with Block-Union KV Selection](https://arxiv.org/abs/2605.16839) | NeurIPS 2026 Spotlight (author-verified; proceedings pending) | Chunked Prefill 中将 2D Sparse Mask 转为 GQA-aware KV Block Union/Table，直接读取 Paged KV、避免显式复制；作者在 Llama-3.1-8B/RULER 128K 报告 **Attention Kernel 最高 2.72×**、近似质量，**非端到端 Serving Speedup**。公开 [代码与基准](https://github.com/jiwonsong-dev/CompactAttention)；Ascend 未复现。（KEEP_STRICT; REAL_GPU; APPROXIMATE_QUALITY_CHECKED; PUBLIC_CODE） |
@@ -169,12 +171,14 @@ Triton/TileLang 等编程模型、IR、Layout 与代码生成。
 | 2026 | [mKernel: Fast Multi-GPU, Multi-Node Fused Kernels](https://arxiv.org/abs/2609.13585) | arXiv 2026 (preprint; Sep) | 将 Tensor/Sequence/Expert Parallel 通信和计算在 Tile 级融合；Persistent Kernel 动态调整计算/通信 SM 配比，以 RDMA Verbs+Host Proxy 实现跨节点传输。在两组 16×H200 集群实测 GEMM+AllReduce 最高 1.72×、Ring Attention 最高 1.88×（相对论文基线），不是全栈 LLM Serving 收益；[作者代码](https://github.com/uccl-project/mKernel)。（KEEP_STRICT；NOT_REPRODUCED） |
 | 2026 | [ReplaySSM: Cache SSM Inputs, Not State](https://arxiv.org/abs/2610.13778) | arXiv 2026 (preprint; Oct 9; [vLLM fork/code](https://github.com/Johnny-Liou/ReplaySSM)) | 以周期性 Recurrent-state Checkpoint + 最近 SSM Inputs Buffer 取代每步完整写回；Gated DeltaNet/Mamba-2 以 Output-only Verification 与 Buffer-pointer Rollback 消除 Speculation 中间 State Materialization，并分离计算/状态精度。作者在四种 Hybrid Model、B256 报告标准 Decode 1.20–1.47×；两种 120B 模型 Spec Throughput 约 1.8× vLLM 原生。**HYBRID_SSM_ONLY / BASELINE_AND_PRECISION_SCOPED / NOT_ASCEND_PORT**。（KEEP_STRICT；AUTHOR_CODE；NOT_REPRODUCED） |
 
-### Kernel Automation & Tools (24)
+### Kernel Automation & Tools (26)
 
 自动搜索/调优、Profiling、Correctness 和诊断。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Dissecting an Unexplored SASS Control-Code Field: Barrier Exemption and Programmable Warp Priority](https://arxiv.org/abs/2611.24437) | arXiv 2026 (Nov preprint) | 从原生 SASS Control Code 实现 Barrier Exemption / Warp Priority 和后编译 Binary Optimizer；六款 GPU Kernel 最高 31.9%，llama.cpp/vLLM 端到端最高 3.6%；CUDA CUBIN 专属、非 CANN 迁移证据。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
+| 2026 | [Ask, Don't Equip: Question-Driven Coding Agents for Deep Kernel Optimization (KernelSeek)](https://arxiv.org/abs/2611.03517) | arXiv 2026 (Nov preprint) | Minimal Correctness Harness + 问题导向 Agent 引导，Hopper/Blackwell FlashAttention Forward 各 182 场景通过、作者几何平均 FA3/FA4 1.16×/1.46×；存在 162 条人工消息和 11.5K Agent Tool Calls，不是完全自主 RSI 或 Serving TPS。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [Together Compiler: Continual Compilation for AI Inference](https://arxiv.org/abs/2611.14681) | arXiv 2026 (preprint) | TKCC 将**持久引擎/热更新**、分层低成本测量和 Agent Search 合成持续优化闭环，超越离线单 Kernel Autotuning；作者报告部分模型/配置相对强 Engine 最高 2.6× TPS，实验吞吐加速与 Token Throughput 分开。**Engine Evolution ≠ Optimizer 权重层 RSI**。（KEEP_PREPRINT_EVIDENCED; E2E_AUTHOR_REPORTED; RSI_ADJACENT） |
 | 2026 | [EngineAgent: Agentizing On-Device LLM Inference Engines with Inference Stack Hierarchy Awareness and Hardware Abilities](https://arxiv.org/abs/2611.14356) | arXiv 2026 (preprint) | 事先构建 Engine Stack 依赖索引与设备构建/执行能力，再让 Builder/Auditor 对模型转换、Graph、Kernel、Backend 联合修复；论文报告 12 项异构端侧适配任务，成功率 75% 对比普通 Agent 33.3%。测的是适配成功率，**不是 Serving TPS**。（KEEP_PREPRINT_EVIDENCED; REAL_DEVICE; AGENT_ENGINEERING） |
 | 2026 | [CompoundingKernel: Self-Improving from Zero to First](https://arxiv.org/abs/2611.19230) | arXiv 2026 (preprint) | 在模型外维护已通过 Correctness 的 Kernel 及父子谱系，让并行 Search Agent 复用成功经验；作者报告 B200 SOL-ExecBench 的 235 个正确 Kernel、209 个公开板题目对参考实现 4.40×。分数来自特定 Benchmark 与搜索预算，**不是 Agent 自身权重递归改进或 E2E LLM Serving**。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; BENCHMARK_SCOPE） |

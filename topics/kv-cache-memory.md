@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Prefix & Session Reuse](#prefix--session-reuse-48) | 48 | 跨请求 Prefix、RAG Chunk 和多轮会话如何复用已算 KV。 |
 | [Eviction, Compression & Quantization](#eviction-compression--quantization-58) | 58 | 用筛选、淘汰、低比特和压缩节省 KV 容量；同时验证精度。 |
-| [Sparse KV Retrieval](#sparse-kv-retrieval-18) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
+| [Sparse KV Retrieval](#sparse-kv-retrieval-19) | 18 | 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。 |
 | [Offloading & Tiered Storage](#offloading--tiered-storage-35) | 35 | HBM/CPU/SSD 层级缓存、Prefetch 和数据搬运。 |
 | [Distributed KV Sharing & Transfer](#distributed-kv-sharing--transfer-18) | 18 | 跨实例共享、P/D 传输和 KV 状态池。 |
 | [Paging & Cache Allocation](#paging--cache-allocation-8) | 8 | KV Block 布局、分页、分配、压实和生命周期。 |
-| **Total** | **185** | |
+| **Total** | **186** | |
 
-## Papers (185)
+## Papers (186)
 
 ### Prefix & Session Reuse (48)
 
@@ -144,12 +144,13 @@
 | 2026 | [LowRAM: Low-Rank Keys and Amortised Values for Composable KV Cache Compression at Test-Time](https://arxiv.org/abs/2611.07025) | arXiv 2026 | 识别 Attention Head 中 **V 可从 K 预测**的相关性，用 Test-time Per-head Predictor+稀疏 Residual 保留 Value，组合 **Cross-layer Low-rank Key** 和按需 Reconstruct。作者报告 **4× KV Compression** 下可最高 **5× Peak Decode Throughput**，与 Quant/Eviction 组合最高 26.9×（质量非无损）；**Test-time Fitting/Meta Init 带额外 Prefill 成本，结果依赖模型/长序列，不能把 Peak Throughput 当任意 SLO Goodput**。**KEEP_PREPRINT_EXPLORE / MODEL_ADAPTATION / QUALITY_SCOPED / NOT_REPRODUCED**。 |
 | 2026 | [MomentKV: Closing the Directional Gap in KV Cache Eviction for Long-Context Inference](https://arxiv.org/abs/2606.01563) | arXiv 2026 | 从 **Evicted KV 的 Mean/Key–Value Covariance** 修正 Evicted Set 对 Attention Output 的方向影响：非仅 Attention Mass 最小化，而在缓存预算内控制 Missing-value Direction Error。作者在 **Llama3.1-8B/Qwen3-4B、LongBench/RULER** 报多个 Budget 的质量改进；**Output Correction 为一阶近似，尚非已验证 vLLM Page Lifecycle/Serving Goodput，也不能宣称精确输出**。**KEEP_PREPRINT_EXPLORE / QUALITY_MODEL / NO_E2E_SERVING / NOT_REPRODUCED**。 |
 
-### Sparse KV Retrieval (18)
+### Sparse KV Retrieval (19)
 
 按 Query/Indexer 只取需要的历史 KV，关注检索/索引成本。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Twindex: Tiered Index Caching for Sparse Attention Inference](https://arxiv.org/abs/2611.25078) | arXiv 2026 (Nov preprint) | 将稀疏 Attention Index Cache 视为独立 HBM 驻留瓶颈，Index State 压缩+CPU Host Tiering/Prefetch；真实 GPU 长上下文多模型测量，需对照 KV-only Offload、检索精度和模型输出质量。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [Sparse Attention as a Range Searching Problem: Towards an Inference-Efficient Index for KV Cache (Louver)](https://arxiv.org/abs/2605.06763) | NeurIPS 2026 (author-verified; proceedings pending) | 将逐步变化的 KV Attention Threshold 选择转为半空间 Range Search，借助可更新索引保证 **超过指定 score 阈值的 Key 无漏召回**，并通过 CPU/GPU Kernel 查询；**不等于与 Dense Attention 输出逐位相同**。作者在 RTX 5090、Threadripper 上报告真实 Attention Latency/LongBench/RULER，公开 [Index、CUDA Kernel、CPU Offload、复现实验](https://github.com/UIC-InDeXLab/Louver)。索引额外元数据/选择阈值成本需算入，非现成 vLLM-Ascend E2E。（KEEP_STRICT; REAL_GPU_CPU; THRESHOLD_RECALL_ONLY; PUBLIC_CODE） |
 | 2024 | [ALISA: Accelerating Large Language Model Inference via Sparsity-Aware KV Caching](https://dl.acm.org/doi/10.1109/ISCA59077.2024.00077) | ISCA 2024 | 把注意力稀疏性与 KV 缓存分配联动：按层与 token 的动态稀疏度预测结果分配缓存预算，只保留真正会被激活的 KV，并做稀疏感知的加载与调度，在长上下文下同时降低显存压力与被浪费的带宽。 |
 | 2024 | [PQCache: Product Quantization-based KVCache for Long Context LLM Inference](https://arxiv.org/abs/2407.12820) | arXiv 2024 (preprint) | 把 KV cache 的存与取当作嵌入检索问题：预填充阶段对每层每头的 key 做乘积量化，解码时用 PQ 码与质心近似定位重要的前序 token 再取回对应 KV 参与注意力，并用重叠与缓存设计摊薄额外算力与通信；InfiniteBench 得分较现有方法提升 4.60%。 |

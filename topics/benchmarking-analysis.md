@@ -14,22 +14,23 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-22) | 22 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
-| [Performance & Efficiency Studies](#performance--efficiency-studies-27) | 27 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
+| [Serving Benchmarks & Workloads](#serving-benchmarks--workloads-23) | 22 | Benchmark 定义、真实 Trace、Agent/多模态负载。 |
+| [Performance & Efficiency Studies](#performance--efficiency-studies-28) | 27 | 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。 |
 | [Profiling & Diagnosis](#profiling--diagnosis-7) | 7 | 性能分析器、Tracing、可观测性和异常定位。 |
 | [Models & Simulators](#models--simulators-17) | 17 | 性能建模、容量估计、仿真和边界分析。 |
 | [Correctness & Reliability](#correctness--reliability-15) | 15 | 输出一致性、运行时 Bug、可靠性及数值语义检查。 |
 | [Kernel Benchmarks](#kernel-benchmarks-10) | 10 | 单算子评测与自动生成 Kernel 的 Correctness/Speed 验收。 |
-| **Total** | **98** | |
+| **Total** | **100** | |
 
-## Papers (98)
+## Papers (100)
 
-### Serving Benchmarks & Workloads (22)
+### Serving Benchmarks & Workloads (23)
 
 Benchmark 定义、真实 Trace、Agent/多模态负载。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [RSIBench-Infra: Can Agents Optimize Their Own Training and Inference Infrastructure at Production Scale?](https://arxiv.org/abs/2611.24395) | arXiv 2026 (Nov preprint) | 20 个真实训练+推理 Infra 任务（GPU/Ascend NPU，最多 32 加速器），Agent 可交 OCI Layer 并在独立正确性/质量门槛下量 E2E；作者 66.2% Task Results >1.1× 统计混合 Training 和 Inference，非全推理 TPS 或模型权重 RSI。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [Validation-driven Deployment of LLM Inference Platforms for Agentic Workloads](https://arxiv.org/abs/2611.25905) | arXiv 2026 (preprint) | 提供 Agent Trace Capture→Replay→容量预估→部署前 Validation 流程，并以 vLLM 与 llm-d/多轮工具场景检验合成 Workload 失真；作者报告真实 Agent 并发度显著低于纯请求回放预测。**Benchmark 工程方法，不是新 Scheduler 加速算法**。（KEEP_PREPRINT_EVIDENCED; TRACE_REPLAY; REAL_ENGINE） |
 | 2026 | [Held While Waiting: What LLM Agent Sessions Reserve on Serverless and Agent Runtimes](https://arxiv.org/abs/2611.26480) | arXiv 2026 (preprint) | 对 AWS Bedrock AgentCore 会话占用与模型等待时间做 Trace/环境保留分析；提出及时关闭与会话多路复用反事实，后者的 64:1 共享收益来自**Simulation**，不能宣称生产环境已部署且可安全复用 Sandboxes。（KEEP_PREPRINT_EXPLORE; TRACE_SIM; NOT_REAL_DEPLOYMENT） |
 | 2024 | [LLM-Inference-Bench: Inference Benchmarking of Large Language Models on AI Accelerators](https://ieeexplore.ieee.org/document/10820566) | SC24-W workshop 2024 | 提供硬件加速器推理吞吐和延迟评测方法；明确为 Workshop 而不是 SC 主会论文。 |
@@ -53,12 +54,13 @@ Benchmark 定义、真实 Trace、Agent/多模态负载。
 | 2026 | [VLALagBench: Understanding When and Why VLA Inference Latency Matters](https://arxiv.org/abs/2611.03103) | arXiv 2026 | 刻画 **VLA Inference Latency → Robotic Task Success** 的因果接口，按 Moving-target Speed、同步/异步 Action Execution、Policy 测 Delivery-to-Action Deadline，并拟合 SLO→Task Accuracy Model。作者报告某些移动目标上 **增加100ms 推理延迟可使 Success Rate 近乎减半**，校准后跨不同 Policy 的 Task-success Prediction RMSE **5.7–7.8%**；**这不是新的 Token Kernel 或机器人端到端吞吐加速，作为 Embodied Serving Deadline Benchmark 的邻接实验信号**。**KEEP_PREPRINT_EXPLORE / REAL_OR_SIM_ROBOT_TASK_BENCH / KEEP_ADJACENT / NOT_REPRODUCED**。 |
 | 2026 | [InferenceBench: A Benchmark for Open-Ended LLM Inference Optimization by AI Agents](https://arxiv.org/abs/2607.20468) | arXiv 2026 | 要求 Agent 在 **2小时/单 H100 Budget** 下交付 **OpenAI-Compatible Server**，分别优化 Prefill、Decode、Concurrency 以及综合 Latency/Throughput；不是仅调单 Kernel。作者在 **15 Agent Configurations** 对 Naive PyTorch Baseline 报最高 **8.08×**、默认 vLLM **4.05×**，却通常不及同预算简单 Hyperparameter Search（最多 **11.53×**），展示 Agent Candidate Diversity/实验决策不足。**数字来自不同 Baseline/任务，不是逐次同条件互相比值；后续 Leaderboard 不等于最初固定实验**。**KEEP_PREPRINT_EVIDENCED / REAL_H100_AGENT_SYSTEM_BENCH / NOT_REPRODUCED**。 |
 
-### Performance & Efficiency Studies (27)
+### Performance & Efficiency Studies (28)
 
 端到端吞吐、尾延迟、能耗以及优化技术的独立评估。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Benchmarking LLM Inference on Desktop-Scale NVIDIA Grace Blackwell Clusters](https://arxiv.org/abs/2611.20289) | arXiv 2026 (Nov preprint) | 17 Checkpoints，vLLM 单/双 DGX Spark，TP2/PP2/Replica 并发 1–64，每配置三独立启动与置信区间、能效；TP2 峰值吞吐中位 1.59×、PP2 1.39×，设备和 TCP/Host-stage 传输特定。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [Scaling Up Large Language Models Serving Systems for Semantic Job Search](https://proceedings.mlsys.org/paper_files/paper/2026/hash/0a4c7cdfc0a4eb1b13bb84a9b6220c37-Abstract-Conference.html) | MLSys 2026 | LinkedIn 生产语义搜索的端到端 **Model–Workload–GPU Serving Co-optimization** 案例：作者报告 SLM Pruning 缩小约 **40%**、输入 Context Compression 超过 **10×**，组合服务优化在所测生产路径提升约 **10× Throughput**、维持质量要求。**MODEL_AND_INPUT_CHANGED / PRODUCTION_CASE_STUDY / CANNOT_ATTRIBUTE_10X_TO_SCHEDULER_OR_KERNEL / AUTHOR_REPORTED**。不应被归为 P/D Autoscaling 算法。（KEEP_ADJACENT） |
 | 2025 | [Rethinking Key-Value Cache Compression Techniques for Large Language Model Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/26289c647c6828e862e271ca3c490486-Abstract-Conference.html) | MLSys 2025 | 系统审视 KV Compression 的真实 GPU 服务端加速与任务质量，识别弱 Baseline 和不可信收益。 |
 | 2026 | [Beyond FLOPs: Benchmarking Real Inference Acceleration of LLM Pruning under a GEMM-Centric Taxonomy](https://arxiv.org/abs/2606.09080) | arXiv 2026 (preprint) | 以 GEMM 维度为核心重组 LLM 剪枝设计空间，统一比较结构化与非结构化剪枝族在真实内核与硬件上取得的端到端加速，而非理论 FLOPs 收益。 |

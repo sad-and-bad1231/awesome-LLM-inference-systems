@@ -17,12 +17,12 @@
 | [Batching, Queues & SLOs](#batching-queues--slos-47) | 47 | Continuous Batching、Chunked Prefill、请求优先级和 SLO。 |
 | [Routing & Load Balancing](#routing--load-balancing-19) | 19 | 副本选择、Cache-aware Dispatch 和负载平衡。 |
 | [P/D Allocation & Autoscaling](#pd-allocation--autoscaling-24) | 24 | Prefill/Decode 资源分配、扩缩容与容量规划。 |
-| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-30) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
+| [Preemption & Multi-Tenancy](#preemption--multi-tenancy-31) | 30 | 抢占、Fairness、模型/LoRA 驻留和资源竞争。 |
 | [Power & Energy Efficiency](#power--energy-efficiency-11) | 11 | 频率、热设计、功耗和 SLO 下的能效优化。 |
 | [Agent & Workflow Serving](#agent--workflow-serving-32) | 32 | 多轮 Session、RAG/Tool DAG、Agent 调度和跨阶段协同。 |
-| **Total** | **163** | |
+| **Total** | **164** | |
 
-## Papers (163)
+## Papers (164)
 
 ### Batching, Queues & SLOs (47)
 
@@ -135,12 +135,13 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 | 2026 | [Analytical Power-Aware Provisioning for Prefill-Decode Disaggregated AI Inference](https://arxiv.org/abs/2609.24639) | arXiv 2026 | 用 **Joint Input/Output Length Distribution、KV Reservation、Queueing/Compute Limits** 定义 P/D 实例组合的 Serving Capacity，再用 Throughput-dependent Power 模型求 **Capacity–Power Pareto Frontier**；是用于选择 Provision 的解析法，而非基于真实部署的自动扩缩容策略。**仅对作者校准 Hardware/Workload 假设有效，不可当作测得的整机省电比例或线上 SLO 保证**。**KEEP_PREPRINT_EXPLORE / ANALYTICAL_MODEL / NOT_REPRODUCED**。 |
 | 2026 | [Analytical Provisioning for Attention-FFN Disaggregated LLM Serving under Stochastic Workloads](https://arxiv.org/abs/2601.21351) | arXiv 2026 | 对 **r Attention→1 FFN AFD Bundle** 推导 Renewal-reward Token Load 统计量与 **Gaussian Straggler Barrier** 修正，给出 Attention/Communication/FFN Bottleneck 的分段最优 Provisioning；作者在 Trace-calibrated AFD Simulator 报 Ratio 预测与模拟最优 **误差在10%内**。**未证明真实 AFD 集群里同精度或吞吐提升，分析模型和到达过程的边界需要再校验**。**KEEP_PREPRINT_EXPLORE / MATHEMATICAL_MODEL_PLUS_TRACE_SIM / NOT_REPRODUCED**。 |
 
-### Preemption & Multi-Tenancy (30)
+### Preemption & Multi-Tenancy (31)
 
 抢占、Fairness、模型/LoRA 驻留和资源竞争。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Berth: Protecting LLM Inference SLOs in Shared GPU Environments](https://arxiv.org/abs/2611.25091) | arXiv 2026 (Nov preprint) | User-space GPU 调度控制保护前台 vLLM SLO 并运行 Best-effort Work，A100 混合租户/MLPerf 对照；依赖 CUDA 驱动语义、具体 SLO 和资源干扰，不是原生 Ascend 证据。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2024 | [dLoRA: Dynamically Orchestrating Requests and Adapters for LoRA LLM Serving](https://www.usenix.org/conference/osdi24/presentation/wu-bingyang) | OSDI 2024 | Credit-based LoRA Batching 与 Adapter/Request 协同迁移，提高多租户低秩适配器 Serving 效率。 |
 | 2024 | [Fairness in Serving Large Language Models](https://www.usenix.org/conference/osdi24/presentation/sheng) | OSDI 2024 | Virtual Token Counter 把 Prefill/Decode 的 Token Cost 计入公平服务定义和连续批处理调度。 |
 | 2024 | [MuxServe: Flexible Spatial-Temporal Multiplexing for Multiple LLM Serving](https://proceedings.mlr.press/v235/duan24a.html) | ICML 2024 | 按模型热度联合空间/时间复用显存与计算，区分 Prefill/Decode 的资源需求。 |
