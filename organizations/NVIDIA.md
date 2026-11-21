@@ -35,6 +35,10 @@ NVIDIA's **first-party inference software stack**, from serving engines and clus
 | **Transformer Engine** | Low-precision Transformer execution primitives. | [GitHub](https://github.com/NVIDIA/TransformerEngine) |
 | **NCCL / NVSHMEM** | Multi-GPU collective communication and GPU-initiated communication substrates. | [NCCL](https://github.com/NVIDIA/nccl) · [NVSHMEM](https://github.com/NVIDIA/nvshmem) |
 
+## November 2026: TensorRT-LLM 1.4 runtime migration
+
+[Official TensorRT-LLM 1.4 release notes](https://nvidia.github.io/TensorRT-LLM/release-notes) state that **KV Cache Manager V2** and the **Python/NIXL Cache Transceiver** are the preferred paths; V1 KV Manager and legacy C++ transceiver are deprecated with a migration window. Important exceptions (including sleep mode and some experimental cache modes) still depend on V1. TRTLLM-Gen BF16/quantized MoE execution consolidates native kernels and removes earlier FlashInfer TRTLLM-Gen wrappers in certain backends. **This is a software compatibility/serving state transfer engineering milestone, not standalone proof of better throughput.** Check exact engine version and backend flags before comparing to vLLM/Ascend.
+
 ## November 5, 2026: co-designed agent KV memory hierarchy
 
 NVIDIA's [first-party technical source](https://developer.nvidia.com/blog/five-ways-nvidia-co-design-maximizes-the-value-of-every-byte-in-the-ai-factory/) is a **vendor performance/architecture report**, not a new peer-reviewed systems paper or independent reproduction. Five distinct levers must not be counted as five separate benchmark results:

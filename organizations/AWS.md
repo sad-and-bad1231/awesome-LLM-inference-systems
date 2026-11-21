@@ -20,6 +20,7 @@ Selected **cloud inference services and AWS-owned deployment/accelerator softwar
 
 | Project / service | Role | Official source |
 |---|---|---|
+| **SGLang-Neuron (2026-11-12 public preview)** | [SGLang–AWS Trainium native integration](https://aws.amazon.com/blogs/machine-learning/deploy-frontier-ai-models-on-aws-trainium-with-sglang-neuron/) supports model serving and RL rollout with TorchNeuron/Neuron Kernel Interface. Device-specific layer megakernel and execution lowering are useful native NPU references; code/preview scope must be checked per model. **Not Ascend CANN or universal SGLang compatibility.** | [AWS first-party engineering note](https://aws.amazon.com/blogs/machine-learning/deploy-frontier-ai-models-on-aws-trainium-with-sglang-neuron/) · [LMSYS release](https://www.lmsys.org/blog/2026-11-12-sglang-neuron-v0.1.0) |
 | **AWS Neuron** | Compile/runtime software stack for Inferentia and Trainium accelerators, including LLM inference. | [Developer documentation](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/) |
 | **NeuronX Distributed** | Model parallel and distributed execution utilities for Neuron devices; also supports training. | [GitHub](https://github.com/aws-neuron/neuronx-distributed) |
 | **DJL Serving** | Java-based deep-learning model server with LLM deployment/inference examples; not exclusively AWS hardware. | [GitHub](https://github.com/deepjavalibrary/djl-serving) |

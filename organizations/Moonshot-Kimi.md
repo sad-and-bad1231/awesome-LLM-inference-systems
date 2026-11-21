@@ -18,6 +18,10 @@
 
 **Fast orientation:** Moonshot's distinguishing systems contribution is not only an advanced model architecture: **Mooncake + MoonEP + FlashKDA + Checkpoint Engine** expose useful interfaces across state residency, distributed experts, low-level operators and training/rollout coordination. The company also maintains a broad open research portfolio. See the [official Moonshot project directory](https://github.com/MoonshotAI/.github/blob/main/profile/README.md).
 
+## November 5, 2026 — Hosted Agents is an application-execution contract
+
+[**Kimi Hosted Agents**](https://www.kimi.com/news/kimi-hosted-agents) publishes a managed, continuously running **Agent Harness** with dedicated execution sandboxes, session/context lifecycle management, tool access, permission/audit controls and optional [Kimi Inference Hook](https://www.kimi.com/news/kimi-hosted-agents) for pre-inference enterprise safety checks. The Hook was announced as **restricted to verified enterprise users**, not general public runtime code. This is a useful **Agent-native serving demand signal** (long-lived sessions, agent/tool suspension/resume and security-side blocking), **not** a new Mooncake KV-eviction algorithm, a benchmarked Kimi model decoder, or a released low-level SGLang/vLLM replacement.
+
 ## 2. Model lineage and current service names
 
 | Model family / identity | Main contribution | Source |

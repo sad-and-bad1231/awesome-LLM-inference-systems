@@ -14,20 +14,21 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Expert Routing & Communication](#expert-routing--communication-19) | 19 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
+| [Expert Routing & Communication](#expert-routing--communication-20) | 20 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-16) | 16 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-26) | 26 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **88** | |
+| **Total** | **89** | |
 
-## Papers (88)
+## Papers (89)
 
-### Expert Routing & Communication (19)
+### Expert Routing & Communication (20)
 
 Token Dispatch、Expert Parallel 和计算通信重叠。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Communicate the Change: Efficient Expert Parallelism via Activation Compression (EchoMoE)](https://arxiv.org/abs/2611.22215) | arXiv 2026 (preprint) | MoE EP 的 Dispatch/Combine 通过周期更新 Residual Reference，仅同步传递低精度压缩 Delta；作者报告跨 Expert 通信量 -58%、吞吐 +22.6%。**需要轻量 Fine-tuning（模型改变）**，不能与同权重无损通信优化直接等价。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; MODEL_CHANGED） |
 | 2022 | [DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale](https://proceedings.mlr.press/v162/rajbhandari22a.html) | ICML 2022 | MoE Expert 并行与通信/分层策略协同，覆盖生产规模推理和训练系统。（KEEP_FOUNDATIONAL） |
 | 2023 | [Tutel: Adaptive Mixture-of-Experts at Scale](https://proceedings.mlsys.org/paper_files/paper/2023/hash/5616d34cf8ff73942cfd5aa922842556-Abstract-mlsys2023.html) | MLSys 2023 | 自适应 MoE Parallelism 与 All-to-All 通信路径，作为推理和训练的共享执行基础设施。（KEEP_FOUNDATIONAL） |
 | 2025 | [COMET: Fine-grained Computation-communication Overlapping for Mixture-of-Experts](https://proceedings.mlsys.org/paper_files/paper/2025/hash/e27ea0cd50b798ff8942caf9203f0992-Abstract-Conference.html) | MLSys 2025 | 细粒度 MoE 任务调度与通信/计算重叠，含生产环境执行证据。 |

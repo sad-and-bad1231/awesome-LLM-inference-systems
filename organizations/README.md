@@ -15,12 +15,12 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | Organization | Public work |
 |---|---|
 | [DeepSeek](DeepSeek.md) | V4.1-Flash-1017 · DeepInfer production E/P/D + 3FS KV design · FlashMLA/DeepSelect · DeepEP/DeepGEMM Ascend backends · TileKernels/DeepJIT (950/CANN 9.2) |
-| [Tencent](Tencent.md) | **Hy4 final vs Preview** · WorkBuddy model/product co-design · AngelSlim/AngelSpec · KsanaLLM · Hy4-preview RSI signal |
-| [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
-| [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community vLLM-Ascend |
+| [Tencent](Tencent.md) | **Hy4-flash (hybrid + DFly2) / Hy4 final vs Preview** · WorkBuddy model/product co-design · AngelSlim/AngelSpec · KsanaLLM · Hy4-preview RSI signal |
+| [Alibaba Group / Qwen](Qwen-Alibaba.md) | Qwen4 preview / Qwen-AgentWorld · **Qwen4-Max (Nov 16) · RTP-LLM + BladeLLM** · Tair / FlashKV · AgentScope / GUI-Owl / AgentCore · RollArt / EPIC · MNN · Zhenwu V900 |
+| [Huawei / Ascend](Huawei.md) | CANN · **TorchNPU** backend · MindIE · community **vLLM-Ascend v0.32.0rc1 (Nov 10; CANN 9.2.1)** |
 | [StepFun](StepFun.md) | **Step 5 Preview open weights** · Gated SWA / Sparse GQA · Step3 MFA + Attention–FFN Disaggregation |
 | [MiniMax](MiniMax.md) | **MiniMax-01/M1/M3/M3.1 + MSA/DSpark** · **H3/H3-Image video and image** · Speech/Music · **Forge / MaxProof / Agent Team** · MiniMax Code/Hailuo/Audio · public inference boundary |
-| [Moonshot AI / Kimi](Moonshot-Kimi.md) | **k1.5→K3.1 Pro** · MoBA/KDA/AttnRes · **Kimi-VL/Audio/Prover** · **Mooncake/MoonEP/FlashKDA/Checkpoint Engine** · Kimi Code |
+| [Moonshot AI / Kimi](Moonshot-Kimi.md) | **k1.5→K3.1 Pro** · MoBA/KDA/AttnRes · **Kimi-VL/Audio/Prover** · **Mooncake/MoonEP/FlashKDA/Checkpoint Engine** · Kimi Code · **Hosted Agents (Nov 5)** |
 | [Zhipu AI / GLM](Zhipu-GLM.md) | **THUDM GLM→5.3/5.3-Flash** · **CogVideo/GLM-Image/ASR** · AutoGLM/ZCode · **slime/IndexCache** · **GLM-5.3-Flash EPD / Infra Agent** |
 | [Xiaomi / MiMo](Xiaomi.md) | MiMo hybrid attention + MTP |
 | [ByteDance / Seed](ByteDance.md) | **Seed2.1 + Seedance/Seedream/SeedRealtime** · **Agent HarnessDev/Aspire** · **MegaScale-Omni / VeOmni / Charon** · **Triton-distributed / FLUX–COMET / ByteIR** · **Doubao / Jimeng / CapCut** · Volcano Ark/ServingKit |
@@ -39,13 +39,13 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | Organization | Primary focus |
 |---|---|
 | [NVIDIA](NVIDIA.md) | TensorRT-LLM · Dynamo · NIXL · GPU kernels |
-| [Google](Google.md) | **TorchTPU vLLM/SGLang** · **TPU Sync / Agent Compute Engine (Nov 9)** · **XLA Serving Engine (Nov 5)** · llm-d / Ragged Paged Attention · AlphaEvolve |
+| [Google](Google.md) | **Gemini 4 Carbon/Hydrogen/Neon · TorchTPU vLLM/SGLang** · **TPU Sync / Agent Compute Engine (Nov 9)** · **XLA Serving Engine (Nov 5)** · llm-d / Ragged Paged Attention · AlphaEvolve |
 | [Microsoft](Microsoft.md) | DeepSpeed · Splitwise · vAttention · ONNX Runtime |
-| [AMD](AMD.md) | ROCm · AITER · **ATOM** engine · **MORI** EP/KV communication · **InferaSim** |
-| [OpenAI](OpenAI.md) | gpt-oss · Triton · token/runtime formats |
+| [AMD](AMD.md) | ROCm · AITER · **vLLM FlyDSL MonoKernels** · **ATOM** engine · **MORI** EP/KV communication · **InferaSim** |
+| [OpenAI](OpenAI.md) | **GPT-6.2 Astra/Sol** · gpt-oss · Triton · token/runtime formats |
 | [Anthropic](Anthropic.md) | **Fable/Mythos 5.2 (Nov 9)** public API behavior; no inferred internals |
-| [Meta](Meta.md) | Llama · **KernelEvolve optimization agent** · TP/CP/EP systems · ExecuTorch / xFormers |
-| [AWS](AWS.md) | Neuron · DJL Serving · Bedrock |
+| [Meta](Meta.md) | **Cap-and-Track** · Llama · **KernelEvolve optimization agent** · TP/CP/EP systems · ExecuTorch / xFormers |
+| [AWS](AWS.md) | **SGLang-Neuron (Nov 12)** · Neuron · DJL Serving · Bedrock |
 | [Apple](Apple.md) | MLX · local/on-device inference |
 | [Intel](Intel.md) | OpenVINO · GenAI inference |
 | [Together AI](Together-AI.md) | **Together Compiler** · persistent-engine agent optimization · polymorphic serving |
@@ -70,6 +70,8 @@ These **49 China/US profiles** are an engineering-source map, **not** a company 
 | [BentoML](BentoML.md) | **[DEPLOYMENT CODE]** BentoVLLM launcher · service worker/replica scaling · model lifecycle |
 
 **November 9 primary-source checkpoint:** [model and inference-stack reconciliation](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) verified K3.1 Pro public weights and sparse-serving mechanics, Fable/Mythos 5.2 API status, AMD InferaSim; **Qwen4, DeepSeek V4.1 Pro and Astra 6.2 remain unverified** and out of live release tables.
+
+**November 20 first-party checkpoint:** [November 20 arXiv and industry audit](../reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md). Prioritize release chronology, verified open weights vs hosted endpoints, and GPU/TPU/NPU **public code paths** rather than treating private model tiers as evidence of unpublished kernel optimizations. Specific improvements: Tencent Hy4-flash, Alibaba Qwen4-Max final, OpenAI GPT-6.2, Google Gemini 4 Carbon/Hydrogen/Neon, Meta Cap-and-Track, AWS SGLang-Neuron, AMD-side vLLM MonoKernels and DeepSeek's November 13 tool API. Remaining profiles retain earlier source-audit dates unless a verifiable material change is found.
 
 ## Historical source notes and model release reconciliation
 

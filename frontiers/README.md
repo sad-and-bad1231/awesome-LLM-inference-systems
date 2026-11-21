@@ -1,6 +1,6 @@
 # Emerging inference research frontiers
 
-**Seven selective bets on *new inference execution or optimization-lifecycle problems*, not seven more ways to subdivide LLM serving.** Updated **2026-11-14** (all seven frontiers reassessed on Nov 9; Baidu ERNIE Evolve industry evidence added Nov 11; no extra category). The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
+**Seven selective bets on *new inference execution or optimization-lifecycle problems*, not seven more ways to subdivide LLM serving.** Updated **2026-11-20** (all seven frontiers reassessed on Nov 9; Baidu ERNIE Evolve industry evidence added Nov 11; no extra category). The [eight practical topic areas](../topics/README.md) and their **44 engineering tracks** remain the one canonical bibliography. This page only connects *new workload contracts* to original research and shipping infrastructure; it admits **zero** additional paper rows.
 
 [← Home](../README.md) · [Papers by mechanism](../topics/README.md) · [Historical October 2026 signals](2026-10-frontier-scan.md)
 
@@ -13,6 +13,8 @@ A direction earns a place here when **all three** hold:
 3. **An unsettled systems question:** there is a meaningful unresolved scheduling, memory, correctness, communication, throughput, latency **or optimization-budget** question, and a way to test it with real workloads.
 
 **Not frontiers by themselves:** KV caching/offloading/sharing, sparse/hybrid/MLA attention, ordinary MoE/parallelism, P/D disaggregation, quantization, heterogeneous CUDA/ROCm/Ascend porting, and generic semantic response caching. These are **important active engineering tracks** in the topic pages, not new fields. Particularly, *response reuse* is not equivalent to exact *KV reuse*.
+
+**November 20 source bridge:** Full-engine optimization now has a formal author manuscript in [Together Compiler](https://arxiv.org/abs/2611.14681): persistent hot-swappable runtime + mixed-fidelity evaluator + agent hill-climbing. [EngineAgent](https://arxiv.org/abs/2611.14356) demonstrates cross-layer on-device model enablement; [CompoundingKernel](https://arxiv.org/abs/2611.19230) explores correctness-checked Kernel lineage memory and expensive parallel search. Separately, [Evolving Infra](https://arxiv.org/abs/2611.12304) adapts **P/D and KV placement to agent traffic**, [TideCache](https://arxiv.org/abs/2611.26619) manages hybrid-model states, and [Held While Waiting](https://arxiv.org/abs/2611.26480) exposes a session-sandbox occupancy contract. These are **not six new frontier categories** or evidence of recursive optimizer-weight updates; see [Nov 20 receipt](../reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) and individual canonical topic homes.
 
 ## Seven active frontiers — one anchor each
 
@@ -109,4 +111,4 @@ The anchors are a **starter reading path, not new canonical admission**. An ICML
 
 **Maintain only 5–7 active frontiers.** To promote an item, document its *new workload/execution contract or system-optimization lifecycle*, a primary **preprint or mature systems paper with inspectable support**, the nearest credible prior baseline or counterexample, and a decisive unresolved bottleneck. Public stack and real hardware strengthen evidence but **do not gate an emerging 2027-oriented research direction**; do not present speculation as validated runtime acceleration. To demote: if vLLM/SGLang/Omni/Dynamo/llm-d ship it as routine infrastructure and newer papers simply improve its policy or kernel, put it back in its existing engineering track. Do **not** add categories or papers here automatically.
 
-*Research judgement updated 2026-11-14. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
+*Research judgement updated 2026-11-20. All acceleration numbers remain author-reported; no independent reproduction is implied. The [historical scan](2026-10-frontier-scan.md) is an archived signal log, not the current active frontier list.*
