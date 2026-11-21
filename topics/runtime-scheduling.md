@@ -141,7 +141,7 @@ Prefill/Decode 资源分配、扩缩容与容量规划。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2026 | [Berth: Protecting LLM Inference SLOs in Shared GPU Environments](https://arxiv.org/abs/2611.25091) | arXiv 2026 (Nov preprint) | User-space GPU 调度控制保护前台 vLLM SLO 并运行 Best-effort Work，A100 混合租户/MLPerf 对照；依赖 CUDA 驱动语义、具体 SLO 和资源干扰，不是原生 Ascend 证据。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
+| 2026 | [Berth: SLO-Preserving GPU Sharing Without New Preemption](https://arxiv.org/abs/2611.25091) | arXiv 2026 (Nov preprint) | User-space GPU 调度控制保护前台 vLLM SLO 并运行 Best-effort Work，A100 混合租户/MLPerf 对照；依赖 CUDA 驱动语义、具体 SLO 和资源干扰，不是原生 Ascend 证据。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2024 | [dLoRA: Dynamically Orchestrating Requests and Adapters for LoRA LLM Serving](https://www.usenix.org/conference/osdi24/presentation/wu-bingyang) | OSDI 2024 | Credit-based LoRA Batching 与 Adapter/Request 协同迁移，提高多租户低秩适配器 Serving 效率。 |
 | 2024 | [Fairness in Serving Large Language Models](https://www.usenix.org/conference/osdi24/presentation/sheng) | OSDI 2024 | Virtual Token Counter 把 Prefill/Decode 的 Token Cost 计入公平服务定义和连续批处理调度。 |
 | 2024 | [MuxServe: Flexible Spatial-Temporal Multiplexing for Multiple LLM Serving](https://proceedings.mlr.press/v235/duan24a.html) | ICML 2024 | 按模型热度联合空间/时间复用显存与计算，区分 Prefill/Decode 的资源需求。 |
