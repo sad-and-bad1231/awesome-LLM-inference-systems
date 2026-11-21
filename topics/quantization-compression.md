@@ -16,13 +16,13 @@
 |---|---:|---|
 | [Weight-Only & Rotation](#weight-only--rotation-12) | 12 | GPTQ/AWQ、Codebook 与旋转变换后的权重量化。 |
 | [Weight-Activation & Hardware Formats](#weight-activation--hardware-formats-14) | 14 | W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。 |
-| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-7) | 7 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
+| [Mixed Precision & Bit Allocation](#mixed-precision--bit-allocation-8) | 7 | 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。 |
 | [KV Cache Quantization](#kv-cache-quantization-9) | 9 | KV 独立低比特表示和解量化执行；不重复收录到 KV 主类。 |
 | [Recurrent State Quantization](#recurrent-state-quantization-4) | 4 | 线性 Attention/递推模型的持久状态量化，关注误差累积、状态访存与 Serving 内存。 |
 | [Lossless & Delta Compression](#lossless--delta-compression-6) | 6 | 无损熵编码、权重流式解压与多模型 Delta。 |
-| **Total** | **52** | |
+| **Total** | **53** | |
 
-## Papers (52)
+## Papers (53)
 
 ### Weight-Only & Rotation (12)
 
@@ -64,12 +64,13 @@ W/A 量化、Outlier、FP8/FP4/MX 等格式与硬件映射。
 | 2026 | [BiLoCo: Binary Low-Rank Corrections for Post-Training Quantization](https://arxiv.org/abs/2610.32243) | arXiv 2026 (preprint; submitted Oct 23) | 以 Binary Sign 低秩残差纠正 FP4 PTQ 的量化误差：CUDA Core Add/Sub 与 Tensor Core FP4 GEMM 在单 Kernel Epilogue 并行，替代 SVDQuant 的高精度低秩乘法。作者在 B300 4B–72B LLM 与 Rank≤512、B1 报告相对纯 FP4 Kernel **额外延迟≤11%**（B≤8/Rank128 ≤20%），在匹配 Memory Budget 的 SVDQuant 质量相近或更好。**QUANTIZED_MODEL / KERNEL_OVERHEAD_NOT_FULL_SERVING_GAIN / NOT_REPRODUCED**。（KEEP_STRICT） |
 | 2026 | [ResServe: Accurate and Efficient FP4 LLM Inference with Residue Compensation](https://arxiv.org/abs/2611.08713) | arXiv 2026 (Nov 5 preprint) | 用 **FP4 Base + FP4 Residue** 的 M-Ext GEMM 及 **ResAttn** 在 On-chip 恢复部分量化误差，Prefill 则按层选择补偿比例；基于 **vLLM0.26/FlashInfer/TensorRT Model Optimizer、NVIDIA B200、Qwen3-8B/32B 8K Input+256 Decode** 报告低负载 HTTP TTFT/TPOT/E2E 和编程质量。**相对同格式 W4A4，ResServe 仍有最高约3.4% E2E 开销；相对 W4A8 可快 22.4–53.3%；不等于原 BF16 输出等价**。作者报告所有实验局限于所测 B200/模型/格式。[Source](https://arxiv.org/html/2611.08713v1)。**REAL_GPU / APPROXIMATE_QUALITY_CHECKED / SAME_FORMAT_OVERHEAD / NOT_REPRODUCED**。（KEEP_STRICT） |
 
-### Mixed Precision & Bit Allocation (7)
+### Mixed Precision & Bit Allocation (8)
 
 不同 Layer/Channel/专家分配 Bitwidth 与误差预算。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [Kameleo: In-Situ Activation-Precision Selection for Bit-Serial LLM Accelerators](https://arxiv.org/abs/2611.25971) | arXiv 2026 (Nov preprint) | 利用 Bit-serial PE 部分和近似质量信号在线选择 GEMM Activation Precision；四 LLM/七数据集在约 1% PPL Budget 下作者模拟 MXU Prefill Cycles 减少 2.11–2.34×、合成面积 +3.7%；无真实芯片端到端 Serving。（KEEP_PREPRINT_EXPLORE; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [ADAngel: Accelerating Arbitrary-Precision Quantized LLMs with Adaptive Computing Mapping](https://www.usenix.org/conference/osdi26/presentation/liu-yao) | OSDI 2026 | 面向不对称精度 GEMM 构建 DPR 计算族和轻量 Runtime Dispatch，依据形状与位宽选择 Kernel。 |
 | 2026 | [MixLLM: LLM Quantization with Global Mixed-precision between Output-features and Highly-efficient System Design](https://proceedings.mlsys.org/paper_files/paper/2026/hash/a66caa1703fe34705a4368c3014c1966-Abstract-Conference.html) | MLSys 2026 | 跨层按输出特征重要性分配量化位宽，设计反量化与 GEMM 重叠流水。 |
 | 2026 | [PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization](https://arxiv.org/abs/2607.16184) | arXiv 2026 (preprint) | 根据在线 KV 容量压力调节 MoE Expert Weights 的精度，将模型质量、显存与 Batch 吞吐联合优化；真实 MoE Serving 工作负载报告 GPU 内存与端到端性能。 **复审证据：**[arXiv](https://arxiv.org/abs/2607.16184)：KV Pressure 驱动动态 Expert Weight Quantization；作者报告 FP16-equivalent Accuracy 条件下最多 72% Memory Saving / 1.94× Throughput。MODEL_CHANGED/QUALITY_TRADEOFF。 （KEEP_SOURCE_VERIFIED; AUTHOR_REPORTED; NOT_INDEPENDENTLY_REPRODUCED） |

@@ -49,6 +49,8 @@
 
 **Ascend-related note:** [Triton-distributed](https://github.com/ByteDance-Seed/Triton-distributed) documents historical Ascend/RDMA support in the **Triton v3.4** line; its **v3.7 main** does **not** have the Ascend plugin build integrated. Do not infer CANN 9.1 / Ascend 910B2 compatibility.
 
+**November 21 first-party manuscript addition (research, not a deployed product claim):** [Twindex](https://arxiv.org/abs/2611.25078) addresses tiered Sparse Attention Index Cache residency on actual long-context GPU workloads. [RSIBench-Infra](https://arxiv.org/abs/2611.24395) (ByteDance Seed/Tsinghua AIR authors) evaluates Agent optimization of **20 training+inference infrastructure tasks** with GPU/Ascend targets and quality-gated OCI-layer submissions. Neither establishes deployment in Doubao/Volcano or a working 910B2 optimization. Full [source review](../reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md).
+
 ## 4. Serving and AI products — ecosystem map, not undocumented internals
 
 | Surface | Product / platform | Scope |

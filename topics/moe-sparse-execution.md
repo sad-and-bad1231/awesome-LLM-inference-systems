@@ -14,20 +14,22 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Expert Routing & Communication](#expert-routing--communication-20) | 20 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
+| [Expert Routing & Communication](#expert-routing--communication-22) | 20 | Token Dispatch、Expert Parallel 和计算通信重叠。 |
 | [Placement, Balance & MoE Serving](#placement-balance--moe-serving-16) | 16 | 专家放置/复制/动态负载均衡与 MoE 服务容量。 |
 | [Expert Offload & Heterogeneous Execution](#expert-offload--heterogeneous-execution-26) | 26 | 权重驻留、CPU/NPU/GPU Offload、Prefetch 与异构执行。 |
 | [Sparse Attention & Conditional Compute](#sparse-attention--conditional-compute-27) | 27 | 稀疏 Attention、FFN/Neuron 剪枝及选择性计算。 |
-| **Total** | **89** | |
+| **Total** | **91** | |
 
-## Papers (89)
+## Papers (91)
 
-### Expert Routing & Communication (20)
+### Expert Routing & Communication (22)
 
 Token Dispatch、Expert Parallel 和计算通信重叠。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
+| 2026 | [OverlapAdvisor: Modeling and Adapting Computation-Communication Overlap for Distributed MoE Serving](https://arxiv.org/abs/2611.11857) | arXiv 2026 (Nov preprint) | 以性能预测器选择 MoE EP Dispatch/Combine Granularity/Overlap；作者 SGLang/vLLM E2E 相对 MegaMoE/UniEP/DeepEP 平均 +1.78%/+4.57%/+9.97%，特定最大 +31.72%，不能合并为普适收益。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
+| 2026 | [Fuse-All MoE Inference Kernel with Load Balancing on TPUs](https://arxiv.org/abs/2611.17857) | arXiv 2026 (Nov preprint) | TPU Pallas MoE EP Fusion、Direct-write DMA 与负载均衡；作者 TPU EP8TP2 Kernel 对 Fused EP16 延迟最高 -21.3%，加上其他 Serving Stack 优化后 E2E 对 Megablox EP16 +12–34.5%；不可将整栈收益归因单 Kernel。（KEEP_PREPRINT_EVIDENCED; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2026 | [Communicate the Change: Efficient Expert Parallelism via Activation Compression (EchoMoE)](https://arxiv.org/abs/2611.22215) | arXiv 2026 (preprint) | MoE EP 的 Dispatch/Combine 通过周期更新 Residual Reference，仅同步传递低精度压缩 Delta；作者报告跨 Expert 通信量 -58%、吞吐 +22.6%。**需要轻量 Fine-tuning（模型改变）**，不能与同权重无损通信优化直接等价。（KEEP_PREPRINT_EVIDENCED; REAL_GPU; MODEL_CHANGED） |
 | 2022 | [DeepSpeed-MoE: Advancing Mixture-of-Experts Inference and Training to Power Next-Generation AI Scale](https://proceedings.mlr.press/v162/rajbhandari22a.html) | ICML 2022 | MoE Expert 并行与通信/分层策略协同，覆盖生产规模推理和训练系统。（KEEP_FOUNDATIONAL） |
 | 2023 | [Tutel: Adaptive Mixture-of-Experts at Scale](https://proceedings.mlsys.org/paper_files/paper/2023/hash/5616d34cf8ff73942cfd5aa922842556-Abstract-mlsys2023.html) | MLSys 2023 | 自适应 MoE Parallelism 与 All-to-All 通信路径，作为推理和训练的共享执行基础设施。（KEEP_FOUNDATIONAL） |

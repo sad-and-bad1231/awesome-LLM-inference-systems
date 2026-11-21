@@ -29,6 +29,16 @@ A credible arXiv preprint **does not need** top-conference acceptance, end-to-en
 - **Conferences:** scan authoritative proceedings/accepted lists when published; use a slower deep-reading cycle for **REFERENCE** examples of research problem formulation, strong experimental design, and convergence. **Do not invent future 2027 acceptances or delay arXiv admission until decisions.**
 - **Progression:** source discovery → mechanism check → evidence-grade label → optional artifact/reproduction → later venue/final-version update. Upgrade the existing one-home row; keep provisional claims clearly marked. Negative/pilot studies remain valuable when falsifiable; speculative marketing without an inspectable anchor stays WATCH/HOLD.
 
+## Flexible high-recall discovery and verification (2026-11-21)
+
+A selectively curated bibliography needs high recall at **discovery**, without an overly rigid keyword quota or a second paper database. The [November 21 audit](reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md) demonstrates concrete omissions recovered by independent source-first scanning.
+
+- **Independent source axes:** read arXiv official `new/recent` and time/version windows for cs.DC/cs.PF/cs.OS/cs.AR, plus targeted cs.LG/cs.CL/cs.SE/cs.AI; also conferences, original lab sites, primary engineering blogs, GitHub releases/PRs/Issues. X, paper digests, HF Daily Papers, Reddit or tech press are **discovery leads**, not scientific evidence.
+- **Mechanism and version reverse-diff:** compare candidates by ID/title/DOI with all eight canonical tables and dated HOLDs; inspect original author manuscripts and code/benchmarks. Search related work, hardware/DSL/operator APIs, author and lab, not just `LLM inference` or `serving`.
+- **Adaptive exploration:** use searches/research judgement freely, prioritize uncovered source classes and recurring missed terms, allow new frontiers and counterexamples when falsifiable. Neither paper count nor conference prestige is a fixed admission quota.
+- **Small evidence receipt:** state real source windows, methods that recovered omissions, admitted versus HOLD identities and relevant hardware/quality/simulation caveats. Record exact query counts only if actually logged; do not claim unmeasured recall or installed daily automation.
+- **R0/R1 separation:** rapidly screen novelty/identity; admit EXPLORE for bounded falsifiable experiments, upgrade EVIDENCED/REFERENCE when original method and comparators warrant it. First-party vendor announcements remain author-reported and don't imply local device reproduction.
+
 ## Goal
 
 Maintain an approachable, **selectively edited Awesome bibliography**, not a paper database, monitoring platform, knowledge graph, ranking site or per-paper note repository. `README.md` is the editorial entrance; each topic or organization Markdown page is a directly maintained, human-reviewed list. No machine-generated parallel catalog. Updates should remain small and attributable to primary sources.
