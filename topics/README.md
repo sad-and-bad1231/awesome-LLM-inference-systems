@@ -1,6 +1,6 @@
 # Papers by systems mechanism
 
-**Current canonical index (2026-11-20): 965 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline (852 → 929); the separate DCore admission adds one distinct entry, giving a reconciled total of **930**. DCore is absent from PR #80's topic branch.
+**Current canonical index (2026-11-21): 977 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline (852 → 929); the separate DCore admission adds one distinct entry, giving a reconciled total of **930**. DCore is absent from PR #80's topic branch.
 
 **Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) → [Nov 9 expanded pass (879)](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) → [Nov 9 third pass + Nov 10 preprint recalibration (898)](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) → [Nov 10 frontier + backlog re-audit (929)](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
 
@@ -12,21 +12,23 @@
 
 **November 20 incremental sweep:** [21 primary-source-reviewed additions](../reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) to existing 44 engineering directions, **944 → 965** (Kernel +6, KV +5, Decoding +1, MoE +1, Runtime +4, Distributed +2, Benchmark +2; Quantization +0). No experimental speedup independently reproduced.
 
+**November 21 independent resweep:** [12 new source-reviewed papers + all 90 existing November arXiv IDs](../reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md), **965 → 977**. Historic totals are checkpoints, not duplicate counts.
+
 Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
 
 [← Home](../README.md) · [Research labs](../communities/README.md) · [Strict G0–G5 review](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 133 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
-| [KV Cache & Context Memory](kv-cache-memory.md) | 185 | 6 | Reuse, eviction, compression, offloading and distributed KV state. |
+| [Kernels & Compilers](kernels-compilers.md) | 137 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [KV Cache & Context Memory](kv-cache-memory.md) | 186 | 6 | Reuse, eviction, compression, offloading and distributed KV state. |
 | [Decoding Acceleration](decoding-acceleration.md) | 100 | 5 | Speculative, blockwise and parallel generation |
-| [Quantization & Compression](quantization-compression.md) | 52 | 6 | Low-bit representation with executable system gains |
-| [MoE & Sparse Execution](moe-sparse-execution.md) | 89 | 4 | Expert movement, conditional computation and sparse attention |
-| [Runtime & Scheduling](runtime-scheduling.md) | 163 | 6 | Batching, routing, SLO, fairness and request-level control |
-| [Distributed & Disaggregated Serving](distributed-serving.md) | 145 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
-| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 98 | 6 | Validated models, traces, benchmarks and production diagnosis |
-| **Total** | **965** | **44** | |
+| [Quantization & Compression](quantization-compression.md) | 53 | 6 | Low-bit representation with executable system gains |
+| [MoE & Sparse Execution](moe-sparse-execution.md) | 91 | 4 | Expert movement, conditional computation and sparse attention |
+| [Runtime & Scheduling](runtime-scheduling.md) | 164 | 6 | Batching, routing, SLO, fairness and request-level control |
+| [Distributed & Disaggregated Serving](distributed-serving.md) | 146 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
+| [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 100 | 6 | Validated models, traces, benchmarks and production diagnosis |
+| **Total** | **977** | **44** | |
 
 ## Classification boundaries
 

@@ -1,8 +1,10 @@
 # Awesome LLM Inference Systems
 
-**965 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 20 primary-source intake; **no independent GPU/NPU reproduction is implied**.
+**977 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 21 high-recall source resweep; **no independent GPU/NPU reproduction is implied**.
 
 A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
+
+**November 21 independent high-recall recheck:** [12 additional source-checked, nonduplicate November papers and the complete previous 90-paper November-ID inventory](reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md) (**965 → 977**, 10 EVIDENCED / 2 EXPLORE). Effective search gains: independent arXiv category-to-catalog diff, cs.LG/hardware crossing, secondary digest → original paper, and engine-owned first-party release audit. Key additions: Twindex, KernelSeek, RSIBench-Infra, OverlapAdvisor, LightningMoBA, Berth, GDN Live Migration, AttentionIndex, Kameleo, TPU Fuse-All, SASS Control Code and DGX Spark study. **No original hardware reproduction; frontiers and 44 tracks unchanged.**
 
 **November 20 source-checked update:** [21 nonduplicate inference papers](reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) added to the existing eight canonical homes (**944 → 965**; no extra frontiers/directions). Highlights include [Together Compiler](https://arxiv.org/abs/2611.14681), [EngineAgent](https://arxiv.org/abs/2611.14356), [CompoundingKernel](https://arxiv.org/abs/2611.19230), [Evolving Infra](https://arxiv.org/abs/2611.12304), [TideCache](https://arxiv.org/abs/2611.26619), [TripleKV](https://arxiv.org/abs/2611.25112) and [SpecSearch](https://arxiv.org/abs/2611.22296). Grade separation: 18 EVIDENCED, 3 EXPLORE; all results are author-reported and not independently reproduced. New first-party [Hy4-flash](organizations/Tencent.md), [Qwen4-Max](organizations/Qwen-Alibaba.md), [Gemini 4 Carbon/Hydrogen/Neon](organizations/Google.md) and [GPT-6.2 Astra/Sol](organizations/OpenAI.md) are indexed under companies rather than miscounted as papers.
 
