@@ -139,7 +139,7 @@ P/D、Attention–FFN 与多阶段资源解耦。
 
 | Year | Paper | Venue | Distinct mechanism |
 |---|---|---|---|
-| 2026 | [Live Migration of Gated DeltaNet Inference State](https://arxiv.org/abs/2611.26153) | arXiv 2026 (Nov preprint) | 针对 Recurrent GDN State 迁移分析复制、日志追赶和一致性预算；真实 RTX GPU 验证主要限纯 GDN，并采用受控带宽与 Hybrid Pilot；非已部署混合 MoE/全量 PD 迁移系统。（KEEP_PREPRINT_EXPLORE; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
+| 2026 | [Live Migration of Gated DeltaNet Requests: Exact Catch-Up and the Cost of Log Backlog](https://arxiv.org/abs/2611.26153) | arXiv 2026 (Nov preprint) | 针对 Recurrent GDN State 迁移分析复制、日志追赶和一致性预算；真实 RTX GPU 验证主要限纯 GDN，并采用受控带宽与 Hybrid Pilot；非已部署混合 MoE/全量 PD 迁移系统。（KEEP_PREPRINT_EXPLORE; PRIMARY_MANUSCRIPT_CHECKED; AUTHOR_REPORTED; NOT_REPRODUCED） |
 | 2024 | [DéjàVu: KV-cache Streaming for Fast, Fault-tolerant Generative LLM Serving](https://proceedings.mlr.press/v235/strati24a.html) | ICML 2024 | DéjàVuLib 实现跨 GPU 的 KV 流式传输，同时支持 Prompt/Token Disaggregation、Microbatch Swapping 与状态复制容错。 |
 | 2024 | [ServerlessLLM: Low-Latency Serverless Inference for Large Language Models](https://www.usenix.org/conference/osdi24/presentation/fu) | OSDI 2024 | 多层 Checkpoint Loading、位置感知调度与推理迁移协同减少冷启动。 |
 | 2024 | [SpotServe: Serving Generative Large Language Models on Preemptible Instances](https://arxiv.org/abs/2311.15566) | ASPLOS 2024 | 针对 Spot 抢占实施动态重并行、低成本实例迁移和有状态恢复。 |
