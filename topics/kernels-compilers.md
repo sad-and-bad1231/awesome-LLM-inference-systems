@@ -4,7 +4,9 @@
 
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [FlashInfer kernels](https://github.com/flashinfer-ai/flashinfer) · [vLLM kernel integration](https://docs.vllm.ai/en/latest/design/attention_backends/) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+**Engineering reading map:** [Attention & Kernel Fusion](attention-fusion-map.md) — model semantics, upstream implementation paths, and a question-oriented cross-index of the attention and fusion sections.
+
+**Engineering references:** [FlashInfer kernels](https://github.com/flashinfer-ai/flashinfer) · [vLLM attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [vLLM fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
 
 **Foundational context.** [FlashAttention (2022), FlashAttention-2/3, and FlashInfer](../README.md#foundational-and-influential-papers) are historical/reference anchors on the homepage, **not duplicate canonical rows** here.
 
@@ -14,15 +16,17 @@
 
 | Direction | Papers | What to work on |
 |---|---:|---|
-| [Attention & Sparse Kernels](#attention--sparse-kernels-36) | 34 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
+| [Attention & Sparse Kernels](#attention--sparse-kernels-36) | 36 | Attention、长上下文与 Sparse Kernel 的吞吐、带宽和正确性。 |
 | [GEMM & Low-Bit Kernels](#gemm--low-bit-kernels-12) | 12 | 矩阵计算、量化 GEMM 和硬件原生低比特执行。 |
 | [Kernel DSL & Compilers](#kernel-dsl--compilers-20) | 20 | Triton/TileLang 等编程模型、IR、Layout 与代码生成。 |
 | [Fusion, Pipelines & Megakernels](#fusion-pipelines--megakernels-24) | 24 | 减少 Launch/中间物化，优化跨算子流水与动态执行。 |
 | [Communication, Memory & I/O](#communication-memory--io-19) | 19 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
-| [Kernel Automation & Tools](#kernel-automation--tools-26) | 24 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
+| [Kernel Automation & Tools](#kernel-automation--tools-26) | 26 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **137** | |
 
 ## Papers (137)
+
+Performance and quality figures below are author-reported unless a linked review explicitly documents an independent reproduction. Use the mechanism descriptions to choose papers; detailed admission provenance remains in [review records](../reviews/README.md).
 
 ### Attention & Sparse Kernels (36)
 
