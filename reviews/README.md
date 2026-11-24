@@ -2,7 +2,7 @@
 
 [← Home](../README.md) · [Current canonical topics](../topics/README.md) · [G0–G5 rules](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
 
-**Current state — 2026-11-21 (independent high-recall arXiv/engine resweep):** **977** canonical topic entries across **8 mechanisms / 44 directions**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline; the separate DCore paper in the Baidu audit adds one distinct entry. Dated receipts are **historical decisions**, not extra papers or a parallel bibliography. A source-audited KEEP is **not** a reproduced GPU/NPU performance result. The [eight topic tables](../topics/README.md) are the only live inventory. The [Nov 20 receipt](NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) records **21** distinct 11/09–11/19 additions (944→965), evidence grades and model/engine release scopes.
+Historical source receipts record editorial decisions, evidence limits and unresolved work. The [technical topic index](../topics/README.md) is the current inventory. Dated counts and judgments below describe their original review checkpoints, not the current structure or release state.
 
 ## Read these first: latest evidence and quality corrections
 
@@ -37,6 +37,8 @@
 - **Reproducibility:** even a verified venue, author repository and experimental table do not mean that matched model/version/hardware/correctness and SLO performance were independently reproduced. `AUTHOR_REPORTED`, `TRACE_SIM`, `PERF_SIM`, `MODEL_CHANGED` and `KEEP_ADJACENT` are not success badges.
 
 ## Historical intake and organization sources
+
+- [Serving cohort migration record](archive/SERVING_COHORT_MIGRATION.md) — former standalone topic, retired after reclassification.
 
 | Evidence family | Dated records |
 |---|---|

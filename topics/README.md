@@ -4,7 +4,7 @@
 
 Eight technical topics connect principles, upstream implementations, engineering developments, industry practice and research literature. Each publication has one primary home; cross-links are encouraged.
 
-The research inventory contains **977 source-curated papers across 44 engineering directions**, plus 30 historical foundations and four topic-specific surveys relocated from the homepage. Counts of older review batches are historical.
+The research inventory contains **977 source-curated papers across 44 engineering directions**, plus 30 historical foundations and 4 topic-specific surveys relocated from the homepage. Counts of older review batches are historical.
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|

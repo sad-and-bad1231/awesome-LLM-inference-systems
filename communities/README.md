@@ -14,36 +14,7 @@ The later research-lab sections index source-producing teams and collaborations,
 
 ## Attention and fusion engineering paths
 
-Use the [Attention & Kernel Fusion reading map](../topics/attention-fusion-map.md#2-first-party-implementation-paths) for direct upstream documentation, native kernel projects, recent PRs and research cross-links. Key entry points:
-
-| Community | Upstream path | Role |
-|---|---|---|
-| vLLM | [Attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [Fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) | Compatibility and dispatch; compile-time fusion. |
-| vLLM-Ascend / CANN | [Ascend attention](https://github.com/vllm-project/vllm-ascend/tree/main/vllm_ascend/attention) · [FA3](https://docs.vllm.ai/projects/ascend/en/main/user_guide/feature_guide/flash_attention.html) · [CANN operator source](https://gitcode.com/cann/ops-transformer/tree/master/attention/sparse_flash_attention) | Native implementation and integration; version-specific device support. |
-| SGLang | [Low-Latency Mode](https://www.lmsys.org/blog/2026-10-18-sglang-low-latency-mode/) · [NVIDIA Mega](https://github.com/sgl-project/sgl-nvidia-mega) · [AMD Mono](https://github.com/sgl-project/sgl-amd-mono) | Experimental model-specific decode/verify plugins, with standard-path fallback. |
-| Recurrent attention | [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [FLA-NPU](https://github.com/flashserve/flash-linear-attention-npu) | Linear/recurrent and hybrid-model kernels; distinct hardware backends. |
-| Baidu / SGLang | [ERNIE 5.5 Flash low-latency case](https://www.lmsys.org/blog/2026-11-23-ernie55-flash-low-latency) · [HALOps](https://github.com/PaddlePaddle/HALOps) | Model dataflow, GEMM, fusion, PDL and communication; simulated speculative acceptance in headline result. |
-
-These are linked engineering paths, not additions to the existing 76-row repository inventory or canonical paper count.
-
-## November 11–12 first-party runtime and lab updates (not new bibliography entries)
-
-| First-party signal | What was shown | Boundary |
-|---|---|---|
-| [LMSYS Muse Spark Open megakernel](https://www.lmsys.org/blog/2026-11-05-muse-spark-open-ultrafast) (article Nov 11) | Model-specific attention+MoE layer megakernel and speculation on **8×GB300**; author reports **single-request decode 517→1,109 tok/s** | URL slug says Nov 5 but article dates Nov 11; single-request, model-specific, not generally achieved batch Goodput or Ascend support |
-| [SGLang-Neuron v0.1.0](https://www.lmsys.org/blog/2026-11-12-sglang-neuron-v0.1.0) (Nov 12) | SGLang/RadixArk × AWS Annapurna Labs **Trainium NKI decoder-step megakernel**, async engine, NIXL/EFA P/D and host KV reuse | Public-preview **Trainium** backend, not an Ascend kernel implementation or benchmark parity claim |
-| [SGLang Consortium launch](https://www.lmsys.org/blog/2026-11-12-sglang-consortium) (Nov 12) | Multi-vendor engineering collaboration and public inference runtime roadmap | Institutional/maintainer source; no independent performance numbers or additional canonical paper |
-
-[Nov 14 RSI/kernel and laboratory evidence review](../reviews/NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md). The 76-item source-repo inventory below is unchanged.
-
-## November 2–4 execution-layer engineering updates (not new bibliography entries)
-
-| First-party project update | Concrete implementation contract / source | Evidence scope |
-|---|---|---|
-| **[SGLang HiCache × CP/PP/MTP/P-D](https://www.lmsys.org/blog/2026-11-02-hicache-distributed-serving)** (LMSYS, Nov 2) | CP-sharded logical KV pages use arithmetic owner/rank layout, overlapping per-layer gathers, **PP rank-consensus ACK queues** to keep common cache length despite asynchronous tier restoration, separate Draft state restoration for speculation, unified compatible-cache layout and P/D missing-only transfer | **Real GB300 production traffic comparison** (GLM-5.2-NVFP4, TP4/CP4, two Prefill Engines ×4 GPUs each; ~24.5K requests per arm, matched ~960GB host KV budget). Published **L1 hit 42.83%→83.31%, total GPU+host hit near 93%, mean Prefill queue 14.64→6.42s**. The two queue/forward means are measured from different request cohorts and **must not be summed into a measured TTFT**. Official separate Iflytek Astron GLM CodePlan case reports hit ~30%→95% and median TTFT under 3s, **different deployment and baseline** |
-| **[Kinference (Buoyant)](https://vllm.ai/blog/2026-11-04-introducing-kinference)** (Nov 4) | Open-source **Kubernetes inference policy/control plane above vLLM**, token admission/rate limits, per-tenant cost and SLO, queue-aware and KV-aware routing, explicit provider fallback and reject rules; underlying token engine remains vLLM | Buoyant's own shared-prefix / multi-turn benchmarks claim **7.4× / ~3.5×** SLO-qualified Goodput vs standard Kubernetes service routing in their workload setup; this is **vendor-reported, workload/cache-dependent**, not a kernel or a generic 7.4× throughput multiplier. This paragraph is a source pointer, **not an independently audited new 77th source-repository row** |
-
-The 76-repository inventory below retains its stable grouping; these are **dated updates to existing SGLang/vLLM infrastructure ecosystems** and require per-commit support checks before local execution.
+Read [Kernels & Compilers](../topics/kernels-compilers.md) and the [Attention & Kernel Fusion engineering map](../topics/attention-fusion-map.md) for current upstream implementation paths, PRs and engineering cases. Historical runtime/lab updates are retained in the [previous community snapshot](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/blob/21dbb9c17bc402ccd84b791d2804020d9794e3ed/communities/README.md) and [review receipts](../reviews/README.md).
 
 ## Open-source systems — grouped by execution boundary
 
@@ -248,7 +219,7 @@ These are **12 additional source nodes** (university labs, named collaborations 
 
 **New projects by boundary:** [LightLLM](https://github.com/ModelTC/LightLLM)/[Chitu](https://github.com/thu-pacman/chitu) for whole engines; [MORI](https://github.com/ROCm/mori) and [kvcached](https://github.com/ovg-project/kvcached) for communication/memory; [SpecForge](https://github.com/sgl-project/SpecForge) and [Speculators](https://github.com/vllm-project/speculators) for deployable speculative decoding; [sgl-kernel-npu](https://github.com/sgl-project/sgl-kernel-npu) and [torch-npu](https://github.com/Ascend/pytorch) for Ascend-specific low-level execution. **Repository existence ≠ speedup reproduction.**
 
-**Status vocabulary:** **TOPIC** = indexed paper in one of eight topic tables; **FOUNDATION** = intentionally on the homepage; **ENGINEERING/BLOG** = software or first-party technical post; **DISCOVERY/REFERENCE** = useful source, no automatic admission; **REVIEW/HOLD** = insufficient source/evaluation/fit. Sub-labels such as *ADJACENT* or *PREPRINT* state scope and publication status, not reproduction.
+**Status vocabulary:** **TOPIC** = indexed paper in one of eight topic tables; **FOUNDATION** = historical anchor in its technical topic; **ENGINEERING/BLOG** = software or first-party technical post; **DISCOVERY/REFERENCE** = useful source, no automatic admission; **REVIEW/HOLD** = insufficient source/evaluation/fit. Sub-labels such as *ADJACENT* or *PREPRINT* state scope and publication status, not reproduction.
 
 Previous dated per-lab work lists and their explanations: [archived Oct 25/30 signals](../reviews/archive/LAB_SIGNALS_20261030.md). The [Oct 30 G0–G5 review](../reviews/ARXIV_LAB_SWEEP_20261030.md) owns individual KEEP/HOLD decisions. Update the canonical **paper row**, not a second paper inventory here.
 

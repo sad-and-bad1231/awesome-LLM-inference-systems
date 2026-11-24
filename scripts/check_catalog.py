@@ -143,10 +143,15 @@ def check(root):
         if len(where) > 1:
             issues.append(f"duplicate first-source identity: {uid} ({', '.join(where)})")
 
-    if n_found != 30:
-        issues.append(f"expected 30 relocated foundation rows, got {n_found}")
-    if n_topic_surveys != 4 or len(global_surveys) != 4:
-        issues.append(f"expected 4 topic and 4 global surveys, got {n_topic_surveys}/{len(global_surveys)}")
+    declared_found = re.search(r"plus (\d+) historical foundations", topic_index)
+    declared_surveys = re.search(r"and (\d+) topic-specific surveys", topic_index)
+    declared_global = re.search(r"\*\*(\d+) global surveys\*\*", home)
+    if not declared_found or int(declared_found.group(1)) != n_found:
+        issues.append(f"topic index foundation count != {n_found}")
+    if not declared_surveys or int(declared_surveys.group(1)) != n_topic_surveys:
+        issues.append(f"topic index survey count != {n_topic_surveys}")
+    if not declared_global or int(declared_global.group(1)) != len(global_surveys):
+        issues.append(f"homepage survey count != {len(global_surveys)}")
     org = docs["organizations/README.md"]
     cn = sum(x.startswith("| [") for x in section(org, "## China", "## United States").splitlines())
     us = sum(x.startswith("| [") for x in section(org, "## United States", "## Historical source notes").splitlines())

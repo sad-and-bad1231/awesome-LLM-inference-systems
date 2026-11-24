@@ -1,10 +1,10 @@
 # Curation policy
 
-**Current policy (last reconciled 2026-11-10).** This file contains enduring selection and attribution rules; see [STRICT_REVIEW.md](STRICT_REVIEW.md) for operational G0–G5 gates, [topics/README.md](topics/README.md) for live counts and [archived historical intake waves](reviews/archive/CURATION_HISTORY_20261030.md) for dated acceptance/rejection accounting. Counts in archives describe past checkpoints only.
+Enduring rules for technical topics, publication admission and first-party engineering evidence. See [STRICT_REVIEW.md](STRICT_REVIEW.md) for G0–G5 gates, [topics/README.md](topics/README.md) for the current inventory and [review receipts](reviews/README.md) for historical decisions.
 
 ## Canonical bibliography invariant
 
-The eight topic tables are the **one canonical bibliography**. Admissions may use **KEEP_PREPRINT_EXPLORE**, **KEEP_PREPRINT_EVIDENCED**, **KEEP_STRICT / KEEP_REFERENCE**, **KEEP_FOUNDATIONAL**, or a narrowly justified **KEEP_ADJACENT**. All accepted papers must have a reliable primary-paper identity, a distinct *inference execution/system* idea, and an honest evidence/proof boundary. **Acceptance means editorial reading/research value, not independently reproduced performance.**
+The eight technical topics are the **one canonical bibliography**, including their local foundations and specialized surveys. Broad field-level surveys alone belong on the homepage. Admissions may use **KEEP_PREPRINT_EXPLORE**, **KEEP_PREPRINT_EVIDENCED**, **KEEP_STRICT / KEEP_REFERENCE**, **KEEP_FOUNDATIONAL**, or a narrowly justified **KEEP_ADJACENT**. All accepted papers must have a reliable primary-paper identity, a distinct *inference execution/system* idea, and an honest evidence/proof boundary. **Acceptance means editorial reading/research value, not independently reproduced performance.**
 
 A credible arXiv preprint **does not need** top-conference acceptance, end-to-end Serving Goodput, public code, an Ascend port, or local reproduction to enter the bibliography. However, a paper with merely a grand architecture diagram, ungrounded headline speedup, generic agent prompt, or no falsifiable mechanism stays **HOLD_STORY_ONLY** (or Frontier WATCH) until a meaningful technical check is available. Keep genuinely unresolved paper identities / aliases in **HOLD_IDENTITY**; a **non-material date/venue discrepancy** can be annotated rather than automatically disqualifying a stable arXiv ID + title + author + full text. Never invent the date.
 
@@ -41,7 +41,7 @@ A selectively curated bibliography needs high recall at **discovery**, without a
 
 ## Goal
 
-Maintain an approachable, **selectively edited Awesome bibliography**, not a paper database, monitoring platform, knowledge graph, ranking site or per-paper note repository. `README.md` is the editorial entrance; each topic or organization Markdown page is a directly maintained, human-reviewed list. No machine-generated parallel catalog. Updates should remain small and attributable to primary sources.
+Maintain an approachable, selectively edited technical knowledge map: principles, upstream code, significant engineering changes, industry practice and research literature. Markdown remains the source of truth; no parallel generated catalog.
 
 ## Admission gate
 
@@ -71,7 +71,7 @@ A paper or survey is accepted when all baseline requirements are satisfied:
 
 ## Rebuild provenance
 
-Started 2026-10-08 from the user-supplied `papers.jsonl` (1,003 entries). First pass is selective identity-and-abstract-level screening, **not a complete reading of all papers or verification of each experimental claim**. The original 19-paper seed contained 18 entries from the upload and the missing FlashAttention paper. This follow-up adds 11 further historical/engineering papers and 6 complementary surveys. The initial 19-paper reset was merged into `main` in PR #7. Earlier data and automation can still be recovered from Git history. Later curation waves are independently checked and committed via reviewable changes; the original import and past scripts remain recoverable from Git history.
+Historical intake and the original selection boundaries are recorded in [review receipts](reviews/README.md) and [archived curation history](reviews/archive/CURATION_HISTORY_20261030.md).
 
 ## Change discipline
 
@@ -92,7 +92,7 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 python3 scripts/check_catalog.py
 ```
 
-The lightweight GitHub Actions check runs the **same commands** on relevant PRs. This is **not a publication pipeline**, crawler, generated bibliography, or automatic scientific reviewer. The script compares declared topic/subgroup totals, first-paper URL identities (including arXiv/DOI/OpenReview forms), foundation and organization/OSS index counts, and internal Markdown targets/anchors. Counts live in the visible Markdown indexes; no independent machine-managed catalog is introduced.
+The lightweight GitHub Actions check runs the **same commands** on relevant PRs. This is **not a publication pipeline**, crawler, generated bibliography, or automatic scientific reviewer. The script compares declared topic/subgroup totals, first-paper URL identities (including arXiv/DOI/OpenReview forms), topic-local foundation and survey identities, and organization/OSS index counts, and internal Markdown targets/anchors. Counts live in the visible Markdown indexes; no independent machine-managed catalog is introduced.
 
 **Limitations:** identity aliases that mix DOI/arXiv/publisher pages can evade exact URL matching; Markdown link extraction is a practical linter rather than a full CommonMark parser; live external URL availability, publication claims, model correctness and reported speedups require manual primary-source review. Never use a passing structural check as evidence that G0–G5 scientific gates passed. When a legitimate source changes the catalog count, update the visible index and the paper row together; do not weaken the checker just to pass CI.
 
@@ -102,11 +102,11 @@ Require a distinct systems lens (Serving architecture, hardware/compilers, KV ca
 
 ## Historical prerequisites
 
-Only a small set of pre-LLM papers belongs here, when its mechanism directly grounds modern inference (Transformer, blockwise verification, MQA). Label background architectures/algorithms separately from evaluated modern serving systems.
+Each topic may retain a small set of pre-LLM foundations, when its mechanism directly grounds modern inference (Transformer, blockwise verification, MQA). Label background architectures/algorithms separately from evaluated modern serving systems.
 
 ## Topic and organization pages
 
-A **topic page** is a deliberately bounded, reproducible bibliography: one problem family, primary publication links, explicit year and publication state (formal venue for published work; an explicit arXiv-preprint label otherwise), and a short *distinct mechanism* for each paper. Do not re-list established anchor entries from the home page to inflate coverage; link back instead. Paper counts are descriptive, never targets that override admission quality. When only an official conference program is available, label that weaker link provenance.
+A **topic page** organizes one technical problem family: overview and principles, engineering directions, upstream code/docs, important PRs/RFCs/releases, industry practice, and research literature. Foundations and focused surveys live in the topic, not the homepage. Published work and preprints retain primary sources and distinct mechanism descriptions. Cross-link related work rather than duplicating full entries. Expand or split pages only when useful to readers.
 
 An **organization page** is a *small map of publicly documented work owned or clearly led by that organization*: model architecture with inference consequences, first-party software and technical reports, and public serving interfaces. Label the evidence type; never present an API feature as proof of an undisclosed implementation. **Do not catalog multi-institution collaborations merely because an organization coauthored a paper; place those in the topic bibliography instead.** Ownership of an open-source ecosystem component should be described precisely, without erasing external contributors. Prefer official repositories, publisher pages, and organization documentation. Verify version compatibility; do not exhaustively enumerate checkpoints, marketing releases, benchmarks or company news.
 
@@ -116,11 +116,11 @@ These are reader-facing Markdown pages, not a second structured database. Resist
 
 New primary paper admissions use **one** of: Kernels & Compilers; KV Cache & Context Memory; Decoding Acceleration; Quantization & Compression; MoE & Sparse Execution; Runtime & Scheduling; Distributed & Disaggregated Serving; Benchmarking & Systems Analysis. The classification follows the **decisive reusable mechanism** and its system boundary. Long-context, Agentic, Reasoning, Multimodal, GPU/NPU, model family and organization are workload/hardware contexts, **not top-level paper buckets**.
 
-A publication may have multiple mechanisms, but each paper has only **one canonical full entry**. A short cross-reference to the home page's historical foundations is allowed. The legacy 50-entry Serving cohort was reviewed in the October 2026 migration: 49 assigned a canonical mechanism class, 1 (SkyServe) held out on LLM-specific scope grounds; the prior list is available from Git history. Reclassification does not independently reproduce measured results. The original user-provided JSONL and third-party awesome lists are discovery aids, not proof of admission. Publisher/formal conference pages determine formal publication status; arXiv/author pages determine preprint identity and version. For new entries, prefer a short technical mechanism rather than unverified benchmark speedup numbers.
+A publication may have multiple mechanisms, but each paper has only **one canonical full entry**. Cross-reference foundations at their technical home. The legacy 50-entry Serving cohort was reviewed in the October 2026 migration: 49 assigned a canonical mechanism class, 1 (SkyServe) held out on LLM-specific scope grounds; the prior list is available from Git history. Reclassification does not independently reproduce measured results. The original user-provided JSONL and third-party awesome lists are discovery aids, not proof of admission. Publisher/formal conference pages determine formal publication status; arXiv/author pages determine preprint identity and version. For new entries, prefer a short technical mechanism rather than unverified benchmark speedup numbers.
 
 ## Emerging frontiers: selective adjacent-inference exception (2026-10-12)
 
-The eight canonical classes remain classified by **decisive systems mechanism**. The [frontier reading map](frontiers/README.md) is a cross-index, never a second paper database or quota. Start with one foundation/measurement anchor per field and admit only exceptional follow-ons; venue rank, novelty language and large-scale paper discovery alone do not qualify.
+The eight canonical classes remain classified by **decisive systems mechanism**. The [frontier reading map](frontiers/README.md) tracks unsettled execution and optimization contracts, never a second paper database or quota. Kernel agents are an established Kernel Automation & Tools direction; agent-native execution and whole-engine evolution retain distinct frontier homes. Start with one foundation/measurement anchor per field and admit only exceptional follow-ons; venue rank, novelty language and large-scale paper discovery alone do not qualify.
 
 For the emerging World Model / Interactive Video / VLA boundary, admit an **explicitly labeled adjacent foundation-model inference** work only when it exposes a reusable inference-time bottleneck or mechanism (e.g. long-lived state, temporal cache, streaming execution, heterogeneous VLM/action pipelines) **and** reports credible measured real-device execution or end-to-end inference. Training-only improvements, video-quality-only innovations, generic robotics datasets, and unmeasured speedup projections remain excluded. The foundational KernelBench general-ML evaluation paper is a **narrow landmark exception**, not permission to add generic DNN benchmarks or GPU optimization papers without clear relevance to future inference-kernel engineering.
 
@@ -128,7 +128,7 @@ For agent-generated kernels, require real compiled/executed kernels and distingu
 
 ## Bibliographic quality control (2026-10-08)
 
-For every new row, verify the primary-paper identity and the appropriate publication state. For an **arXiv preprint**, check its stable ID, title, authors, version and accessible full text; label it explicitly as a preprint and use the arXiv source. For **formally published work**, verify the final title, venue/track and paper-specific publisher/DOI/proceedings page; use publication-specific URLs where available. The source note must distinguish preprints, workshops, corporate reports and peer-reviewed papers. Mark unresolved links or identity conflicts for later editorial work rather than upgrading their status. Canonical full rows must not duplicate between topic pages, migrated cohorts or the historical Foundation showcase.
+For every new row, verify the primary-paper identity and the appropriate publication state. For an **arXiv preprint**, check its stable ID, title, authors, version and accessible full text; label it explicitly as a preprint and use the arXiv source. For **formally published work**, verify the final title, venue/track and paper-specific publisher/DOI/proceedings page; use publication-specific URLs where available. The source note must distinguish preprints, workshops, corporate reports and peer-reviewed papers. Mark unresolved links or identity conflicts for later editorial work rather than upgrading their status. Canonical full rows must not duplicate between topic pages, migrated cohorts or topic-local foundations and surveys.
 
 ## Expansion and limits (October 2026)
 

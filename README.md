@@ -6,7 +6,7 @@ A curated, engineering-first map of LLM inference systems: principles, research 
 
 ## Surveys — start here
 
-Broad reading maps for LLM inference and serving. Specialized surveys are part of their technical topics.
+**4 global surveys** covering LLM inference and serving. Specialized surveys are part of their technical topics.
 
 | Lens | Survey | Publication | Scope |
 |---|---|---|---|
