@@ -1,16 +1,30 @@
 # Benchmarking & Systems Analysis
 
-**Start with the engineering bottleneck, then pick papers.** 要评估推理系统：缺负载、可靠测量、性能定位、预测模型、正确性检查，还是 Kernel Benchmark？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM bench](https://docs.vllm.ai/en/latest/cli/bench/) · [SGLang benchmark guide](https://docs.sglang.io/docs/developer_guide/bench_serving) · [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/).
+## Overview & principles
 
-**Foundational context.** [Serving systems](serving-systems.md) holds the workload-focused execution studies; [Orca, Sarathi-Serve, DistServe, Splitwise and Mooncake](../README.md#foundational-and-influential-papers) are homepage serving foundations, **not duplicate canonical rows** here.
+Systems analysis connects workload, hardware, execution traces and observable latency/throughput/quality. Separate microbenchmarks, production traces, simulation and end-to-end serving; identify what is actually on the critical path.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM bench](https://docs.vllm.ai/en/latest/cli/bench/) · [SGLang benchmark guide](https://docs.sglang.io/docs/developer_guide/bench_serving) · [MLPerf Inference](https://mlcommons.org/benchmarks/inference-datacenter/).
+
+## Industry practice & engineering developments
+
+Follow the benchmark guides above and the [research community directory](../communities/README.md) for methodology, workloads, profiling and real-system evidence. Use the [review rules](../STRICT_REVIEW.md) when comparing claims.
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [Efficiently Scaling Transformer Inference](https://proceedings.mlsys.org/paper_files/paper/2023/hash/c4be71ab8d24cdfb45e3d06dbfca2780-Abstract-mlsys2023.html) | MLSys 2023 | Google Research | 解析性能模型指导 TPU 模型并行、MQA 和延迟/吞吐权衡。 |
+
+**Related foundations:** [runtime scheduling](runtime-scheduling.md#foundations) and [distributed serving](distributed-serving.md#foundations).
 
 ## Research directions (6)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

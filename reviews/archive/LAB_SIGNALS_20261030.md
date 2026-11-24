@@ -17,7 +17,7 @@ Complete item-level paper decisions, caveats and reproduction states: [October 3
 
 ## Historical group-originated inference signals (checked 2026-10-25)
 
-This is a **discovery map**, not another canonical paper list or an institutional ranking. **TOPIC** means the *paper itself* has a primary row in [the eight selective categories](../../topics/README.md); **FOUNDATION** means the paper is intentionally on the [homepage](../../README.md#foundational-and-influential-papers); **REVIEW** means a publisher/author group lists a relevant source but the selective-catalog evidence gate has not been passed; **ENGINEERING** means an upstream software change or project, not necessarily a new peer-reviewed paper. A missing topic row **does not automatically justify admission**.
+This is a **discovery map**, not another canonical paper list or an institutional ranking. **TOPIC** means the *paper itself* has a primary row in [the eight selective categories](../../topics/README.md); **FOUNDATION** means the paper is intentionally on the [homepage](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/blob/21dbb9c17bc402ccd84b791d2804020d9794e3ed/README.md#foundational-and-influential-papers); **REVIEW** means a publisher/author group lists a relevant source but the selective-catalog evidence gate has not been passed; **ENGINEERING** means an upstream software change or project, not necessarily a new peer-reviewed paper. A missing topic row **does not automatically justify admission**.
 
 | Group / primary research source | Recent representative work | Repository crosswalk and what to check |
 |---|---|---|

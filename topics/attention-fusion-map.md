@@ -2,7 +2,7 @@
 
 [← Topics](README.md) · [Kernel papers](kernels-compilers.md) · [Communities](../communities/README.md)
 
-**Start with a model and a serving step, not with a kernel name.** This cross-index connects the existing bibliography to upstream implementations and recent engineering changes. It is a reading map, not a ninth canonical mechanism or a survey taxonomy. Source snapshot: 2026-11-24.
+**Start with a model and a serving step, not with a kernel name.** This cross-index connects the existing bibliography to upstream implementations and recent engineering changes. A subtopic reading path within Kernels & Compilers. Source snapshot: 2026-11-24.
 
 ## 1. Separate the execution layers
 
@@ -29,7 +29,7 @@ Treat semantic approximation, arithmetic precision and physical execution as sep
 | Recurrent kernels | [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [FLA-NPU](https://github.com/flashserve/flash-linear-attention-npu) | Chunked prefill, recurrent decode, state layout and fusion; FLA-NPU is Tianjin University-led, with GDN and KDA kernels. |
 | Other native kernels | [FlashAttention NPU](https://github.com/MinghuasLab/flash-attention-npu) · [SGL Kernel NPU](https://github.com/sgl-project/sgl-kernel-npu) · [AITER](https://github.com/ROCm/aiter) · [HALOps](https://github.com/PaddlePaddle/HALOps) | Distinguish independent projects, engine-owned kernels and vendor libraries; CUDA/ROCm/Ascend implementations are not interchangeable. |
 
-For kernel programming, see the [DSL/compiler and automation sections](kernels-compilers.md) and [agentic kernel frontier](../frontiers/README.md). Company-level paths: [DeepSeek](../organizations/DeepSeek.md), [Huawei](../organizations/Huawei.md), [Moonshot](../organizations/Moonshot-Kimi.md), [Baidu](../organizations/Baidu.md), [AMD](../organizations/AMD.md).
+For kernel programming, see the [DSL/compiler and automation sections](kernels-compilers.md) and [kernel agents](kernels-compilers.md#kernel-agents-goal-only-vs-kda-vs-compiler-agent-co-design). Company-level paths: [DeepSeek](../organizations/DeepSeek.md), [Huawei](../organizations/Huawei.md), [Moonshot](../organizations/Moonshot-Kimi.md), [Baidu](../organizations/Baidu.md), [AMD](../organizations/AMD.md).
 
 ## 3. Read existing papers by technical question
 
@@ -47,7 +47,7 @@ These names point into existing canonical sections; they do not create new bibli
 | Composable attention programming | FlexAttention, Flashlight, SAS |
 | Adjacent sparse matrix kernels (not token-selective attention) | GeneralSparse, SpInfer |
 
-[Full paper records and sources](kernels-compilers.md#attention--sparse-kernels-36). Start with foundational FA/FA2/FA3 and FlashInfer on the [homepage](../README.md#foundational-and-influential-papers). GeneralSparse and SpInfer concern SpMM/weight or matrix sparsity; their current placement is an adjacency issue, not evidence of a new attention algorithm. Defer canonical migration until the broader kernel catalog is reviewed.
+[Full paper records and sources](kernels-compilers.md#attention--sparse-kernels-36). Start with foundational FA/FA2/FA3 and FlashInfer in the [Kernel foundations](kernels-compilers.md#foundations). GeneralSparse and SpInfer concern SpMM/weight or matrix sparsity; their current placement is an adjacency issue, not evidence of a new attention algorithm. Defer canonical migration until the broader kernel catalog is reviewed.
 
 ### Fusion and execution-boundary reading paths
 

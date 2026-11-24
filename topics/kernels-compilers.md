@@ -1,18 +1,52 @@
 # Kernels & Compilers
 
-**Start with the engineering bottleneck, then pick papers.** 要优化一次真实推理执行，你会先改 Attention、GEMM、编译器、跨算子流水、数据搬运，还是自动调优？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering reading map:** [Attention & Kernel Fusion](attention-fusion-map.md) — model semantics, upstream implementation paths, and a question-oriented cross-index of the attention and fusion sections.
+## Overview & principles
 
-**Engineering references:** [FlashInfer kernels](https://github.com/flashinfer-ai/flashinfer) · [vLLM attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [vLLM fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+Physical execution determines how much of an algorithm's theoretical compute and memory traffic is realized on an accelerator. Separate model semantics, tensor layouts, tiling, on-chip residency, pipeline dependencies and launch/dispatch overhead. Attention, GEMM, fusion and compiler scheduling trade data movement against parallelism and resource occupancy.
 
-**Foundational context.** [FlashAttention (2022), FlashAttention-2/3, and FlashInfer](../README.md#foundational-and-influential-papers) are historical/reference anchors on the homepage, **not duplicate canonical rows** here.
+## Open-source ecosystem
+
+**Upstream references:** [FlashInfer kernels](https://github.com/flashinfer-ai/flashinfer) · [vLLM attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [vLLM fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+
+## Industry practice & engineering developments
+
+Read the [Attention & Kernel Fusion engineering map](attention-fusion-map.md) for native implementations, model-to-kernel dispatch, recent PRs and industry examples. For kernel agents, compare goal-only search, specialized harnesses, compiler feedback and reusable profile evidence under matched budgets.
+
+### Kernel agents: goal-only vs. KDA vs. compiler-agent co-design
+
+The research question is the marginal value of agent-specific engineering under controlled compute/model budgets. Kernel-only optimization belongs here; cross-layer, engine-level evolution is tracked in [Frontiers](../frontiers/README.md).
+
+| Approach | First-party source / implementation | Mechanism | Valid comparison boundary |
+|---|---|---|---|
+| **Goal-only (JustGoal)** | [arXiv:2610.36434](https://arxiv.org/abs/2610.36434) · [released B200 kernels](https://github.com/OpenBMB/JustGoal) | General coding agent receives goals and constraints but constructs its own optimizer/evaluator; no prebuilt domain-specific harness | On B200, reported wins versus open-source kernel libraries on 8/10 operators; in a **same-model, single-shape** Fable 5.1 comparison, KDA-0.5 reaches 0.95× of JustGoal. This is not a claim that JustGoal wins across full-shape operator workloads. |
+| **KDA / Kernel Design Agents** | [NVIDIA KDA case study](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/) · [source](https://github.com/NVlabs/kda/tree/260927-kda-for-kda) | Specialized tool/harness, persistent knowledge and correctness feedback; can pair with several Kernel DSLs including CAKE | Reported 2.96× vs FlashKDA on **B300** Kimi Delta Attention; not directly comparable with B200 JustGoal or to full vLLM throughput. KDA reports verifier-overfit candidates it explicitly rejected. |
+| **ForgeKernel (OpenBMB; 2026-11 preprint)** | [paper](https://arxiv.org/abs/2611.04998) · [released system/kernels](https://github.com/OpenBMB/ForgeKernel) | Profile hardware behavior of a strong reference, generate an architecture-first curriculum, inherit accepted kernels and probe-grounded knowledge across optimization generations | Real CUDA and Ascend **kernel benchmark** evidence only; compare identical operator/shape/precision/budget with JustGoal/KDA, preserve public vs hidden tests. Repeated kernel artifact improvement ≠ recursive foundation-model improvement. |
+| **CAKE (NVIDIA/CMU)** | [arXiv:2608.12629](https://arxiv.org/abs/2608.12629) | Co-design of Agent + typed schedule IR + compiler diagnostics and reusable verifier | Author reports B200 Flash-KMeans and Kimi Delta Attention kernel / serving validation; token budgets, task coverage and availability of the core compiler differ from JustGoal. |
+| **CANNBot-CAKE (Ascend; distinct project)** | [arXiv:2610.31034](https://arxiv.org/abs/2610.31034) | CANN-specific multi-DSL generation/evolution with curated knowledge | Reports CANN-Bench hidden correctness on **Ascend 950PR**; not NVIDIA CAKE, not verified on 910B2 and not online vLLM Goodput. |
+
+**Identity resolved (2026-11-04):** [ForgeKernel](https://github.com/OpenBMB/ForgeKernel) has a first-party repository and a distinct **2026-11-03 preprint**, [arXiv:2611.04998](https://arxiv.org/abs/2611.04998). Its key mechanism is a hardware-measured, architecture-first kernel curriculum: accepted generated kernels become the next reference and probe-grounded knowledge persists across runs. **Do not conflate** it with [JustGoal](https://github.com/OpenBMB/JustGoal) (goal-only baseline) or [Kernel Forge](https://arxiv.org/abs/2607.24762) (different paper). The authors report results on NVIDIA Hopper/Blackwell and Ascend 910C/950-series **operator benchmarks**, not vLLM/SGLang end-to-end speedups nor an LLM recursively modifying its own weights. This comparison is a reading path; canonical paper admission follows G0–G5.
+
+**New benchmark obligation:** add same-model and same-token-budget A/B, hidden distribution and output-equivalence tests, **single shape vs full operator**, compilation/search cost, and engine-level throughput/latency with composed winners. [FastKernels](https://fastkernels.github.io/) highlights that individually faster kernels can fail or regress after composition. A leaderboard score alone is not validated production inference speedup.
+
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [Attention Is All You Need](https://papers.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html) | NeurIPS 2017 | Google Brain | Transformer self-attention；LLM 架构前提（不是现代 Serving 论文）。 |
+| [Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150) | arXiv 2019 | Google Research | Multi-Query Attention (MQA) 共享 KV heads，降低增量解码访存带宽。 |
+| [FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://papers.neurips.cc/paper_files/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html) | NeurIPS 2022 | Stanford · University at Buffalo | IO-aware exact attention / tiling；从内存访问出发重构 Attention Kernel。 |
+| [GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints](https://aclanthology.org/2023.emnlp-main.298/) | EMNLP 2023 | Google Research | Grouped-Query Attention；在 MHA 与 MQA 之间平衡 KV 带宽和模型质量。 |
+| [FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning](https://proceedings.iclr.cc/paper_files/paper/2024/hash/98ed250b203d1ac6b24bbcf263e3d4a7-Abstract-Conference.html) | ICLR 2024 | Princeton · Stanford | 优化块/warp 工作划分与非矩阵 FLOPs，提升 GPU Attention 效率。 |
+| [FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision](https://proceedings.neurips.cc/paper_files/paper/2024/hash/7ede97c3e082c6df10a8d6103a2eebd2-Abstract-Conference.html) | NeurIPS 2024 | Colfax Research · NVIDIA · Meta · Princeton | Hopper 上的异步流水、Warp Specialization 与 FP8 Attention。 |
+| [FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/dbf02b21d77409a2db30e56866a8ab3a-Abstract-Conference.html) | MLSys 2025 | University of Washington · NVIDIA · CMU | 可组合 KV 格式、JIT 模板与负载均衡的 Serving Attention Engine。 |
+| [NanoFlow: Towards Optimal Large Language Model Serving Throughput](https://www.usenix.org/conference/osdi25/presentation/zhu-kan) | OSDI 2025 | University of Washington · collaborators | Operation-level Nano-batching，重叠设备上的 Compute/Memory/Network。 |
 
 ## Research directions (6)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

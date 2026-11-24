@@ -1,16 +1,24 @@
 # MoE & Sparse Execution
 
-**Start with the engineering bottleneck, then pick papers.** 要优化 MoE：路由/通信、专家放置与负载均衡、专家权重驻留/卸载，还是利用 Attention/FFN 稀疏性？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM expert parallelism](https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/) · [DeepEP](https://github.com/deepseek-ai/DeepEP) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+## Overview & principles
 
-**Foundational context.** See also: [SGLang structured runtime (2024) and QServe quantization](../README.md#foundational-and-influential-papers) for adjacent mechanisms.
+Conditional computation reduces active arithmetic but introduces irregular token/expert placement, routing and communication. Distinguish sparse model semantics from the physical implementation of grouped GEMM, token dispatch and sparse attention.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM expert parallelism](https://docs.vllm.ai/en/latest/api/vllm/distributed/eplb/) · [DeepEP](https://github.com/deepseek-ai/DeepEP) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+
+## Industry practice & engineering developments
+
+Use [DeepSeek](../organizations/DeepSeek.md) and [Moonshot](../organizations/Moonshot-Kimi.md) to trace expert parallelism, token dispatch, grouped kernels and architecture-specific sparse execution.
+
+**Related foundations:** [QServe](quantization-compression.md#foundations), [SGLang](runtime-scheduling.md#foundations), and [attention architectures](kernels-compilers.md#foundations).
 
 ## Research directions (4)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

@@ -1,16 +1,37 @@
 # Distributed & Disaggregated Serving
 
-**Start with the engineering bottleneck, then pick papers.** 要部署更大/更快的多卡 LLM 服务：选择并行方案、计算分离、KV/通信链路、Fleet 可靠性，还是异构机器协同？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM disaggregated prefill](https://docs.vllm.ai/en/stable/features/disagg_prefill/) · [llm-d](https://llm-d.ai/docs) · [DeepEP](https://github.com/deepseek-ai/DeepEP).
+## Overview & principles
 
-**Foundational context.** See also: [DistServe and Splitwise (2024), FlexGen (2023)](../README.md#foundational-and-influential-papers).
+Distributed inference changes physical placement of computation and state. TP/PP/EP/CP, disaggregation, KV transfer and topology interact with communication, load imbalance and failure recovery; evaluate goodput and cost, not just aggregate throughput.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM disaggregated prefill](https://docs.vllm.ai/en/stable/features/disagg_prefill/) · [llm-d](https://llm-d.ai/docs) · [DeepEP](https://github.com/deepseek-ai/DeepEP).
+
+## Industry practice & engineering developments
+
+Use [DeepSeek](../organizations/DeepSeek.md), [Moonshot](../organizations/Moonshot-Kimi.md), [ByteDance](../organizations/ByteDance.md) and [NVIDIA](../organizations/NVIDIA.md) for communication, disaggregated execution and production topology.
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [DeepSpeed Inference: Enabling Efficient Inference of Transformer Models at Unprecedented Scale](https://sc22.supercomputing.org/proceedings/tech_paper/tech_paper_pages/pap307.html) | SC 2022 | Microsoft | 多 GPU 与 CPU/NVMe 异构推理，体现跨设备资源系统设计。 |
+| [FlexGen: High-Throughput Generative Inference of Large Language Models with a Single GPU](https://proceedings.mlr.press/v202/sheng23a.html) | ICML 2023 | Stanford · UC Berkeley · ETH Zürich | 异构内存卸载与调度优化，展示资源受限场景的系统权衡。 |
+| [DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/zhong-yinmin) | OSDI 2024 | Peking University · UC San Diego · StepFun | P/D 分离、SLO-aware 配置与 Goodput 导向的服务部署。 |
+| [Splitwise: Efficient Generative LLM Inference Using Phase Splitting](https://www.microsoft.com/en-us/research/publication/splitwise-efficient-generative-llm-inference-using-phase-splitting/) | ISCA 2024 | Microsoft Research · University of Washington | 依据 Prefill/Decode 计算特征划分资源与机器；关注成本、功耗和传输。 |
+
+## Surveys
+
+| Lens | Survey | Publication | Scope |
+|---|---|---|---|
+| Distributed collectives | [Collective Communication for Distributed LLM Systems: Planning, Runtime Adaptation, and Computation Coordination](https://doi.org/10.1109/MNET.2026.3724863) | IEEE Network 2026 (Early Access) | 覆盖分布式训练与推理的 Collective Communication，按通信规划、Runtime 自适应及算通协同组织研究；包含训练，不等同于 Serving-only Survey。 |
 
 ## Research directions (5)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

@@ -1,16 +1,35 @@
 # Runtime & Scheduling
 
-**Start with the engineering bottleneck, then pick papers.** 要改 vLLM 服务调度：选 Batch/队列、路由、P/D 资源分配、多租户隔离、能耗，还是 Agent 工作流？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM tuning](https://docs.vllm.ai/en/latest/configuration/optimization/) · [llm-d router](https://llm-d.ai/docs/architecture/router) · [NVIDIA Dynamo planner](https://docs.dynamo.nvidia.com/dynamo/knowledge-base/modular-components/planner/overview.md).
+## Overview & principles
 
-**Foundational context.** [Orca (2022), AlpaServe (2023), Sarathi-Serve, DistServe, Splitwise, Llumnix (2024), Mooncake, NanoFlow (2025), FastServe, Prism, Strata (2026)](../README.md#foundational-and-influential-papers) are historical/reference anchors on the homepage, **not duplicate canonical rows** here.
+Serving runtime maps requests and their changing state onto token iterations. Continuous batching, prefill/decode interference, routing, preemption and SLO policies trade throughput, latency and fairness under arrival patterns.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM tuning](https://docs.vllm.ai/en/latest/configuration/optimization/) · [llm-d router](https://llm-d.ai/docs/architecture/router) · [NVIDIA Dynamo planner](https://docs.dynamo.nvidia.com/dynamo/knowledge-base/modular-components/planner/overview.md).
+
+## Industry practice & engineering developments
+
+Use [Baidu](../organizations/Baidu.md), [Alibaba](../organizations/Qwen-Alibaba.md) and the [runtime community directory](../communities/README.md) to trace native scheduling, routing and resource control. Agent-program-level contracts are tracked in [Frontiers](../frontiers/README.md).
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/conference/osdi22/presentation/yu) | OSDI 2022 | Seoul National University · FriendliAI | Iteration-level scheduling 与 selective batching，确立自回归 serving 的调度抽象。 |
+| [AlpaServe: Statistical Multiplexing with Model Parallelism for Deep Learning Serving](https://www.usenix.org/conference/osdi23/presentation/li-zhouhan) | OSDI 2023 | UC Berkeley · Peking University · collaborators | 利用 Model Parallelism 改善多模型负载下的统计复用与 SLO。 |
+| [Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve](https://www.usenix.org/conference/osdi24/presentation/agrawal) | OSDI 2024 | Georgia Tech · Microsoft Research | Chunked Prefill 与 stall-free scheduling，重新平衡 TTFT、TPOT 和吞吐。 |
+| [Llumnix: Dynamic Scheduling for Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/sun-biao) | OSDI 2024 | Alibaba Group | 请求与 KV 状态的 live migration，实现跨实例动态重调度。 |
+| [SGLang: Efficient Execution of Structured Language Model Programs](https://proceedings.neurips.cc/paper_files/paper/2024/hash/724be4472168f31ba1c9ac630f15dec8-Abstract-Conference.html) | NeurIPS 2024 | Stanford · UC Berkeley · collaborators | 将结构化程序执行、RadixAttention 和高效输出解码纳入统一 Runtime。 |
+| [SLoRA: Scalable Serving of Thousands of LoRA Adapters](https://proceedings.mlsys.org/paper_files/paper/2024/hash/906419cd502575b617cc489a1a696a67-Abstract-Conference.html) | MLSys 2024 | UC Berkeley · Stanford · SJTU | Unified Paging 统一管理 Adapter/KV，配合异构 Batching 与 Kernel。 |
+| [Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning](https://www.usenix.org/conference/osdi26/presentation/yu-shan) | OSDI 2026 | UCLA · UC Berkeley · Harvard · collaborators | GPU Memory Ballooning 统一多模型空间/时间共享，有生产部署证据。 |
+| [FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang) | NSDI 2026 | Peking University · collaborators | 迭代级可抢占调度与状态卸载，将抢占机制用于 LLM Serving。 |
 
 ## Research directions (6)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

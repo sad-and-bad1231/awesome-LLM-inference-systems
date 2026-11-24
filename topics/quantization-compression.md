@@ -1,16 +1,28 @@
 # Quantization & Compression
 
-**Start with the engineering bottleneck, then pick papers.** 要降低权重、激活或 KV 的存储与算力成本：先选 Weight-only、W/A 量化、Mixed Precision、KV 低比特，还是无损压缩？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM quantization](https://docs.vllm.ai/en/stable/features/quantization/) · [NVIDIA Model Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [SGLang quantized KV](https://docs.sglang.io/docs/advanced_features/quantized_kv_cache).
+## Overview & principles
 
-**Foundational context.** See also: [QServe (2025)](../README.md#foundational-and-influential-papers); rows that anchor a sub-direction of this taxonomy carry an inline `KEEP_FOUNDATIONAL` tag.
+Quantization reduces representation and transfer cost, but gains depend on hardware formats, dequantization, numerical error, and the availability of executable low-bit kernels. Separate weight, activation, KV and recurrent-state precision.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM quantization](https://docs.vllm.ai/en/stable/features/quantization/) · [NVIDIA Model Optimizer](https://github.com/NVIDIA/Model-Optimizer) · [SGLang quantized KV](https://docs.sglang.io/docs/advanced_features/quantized_kv_cache).
+
+## Industry practice & engineering developments
+
+Use [NVIDIA](../organizations/NVIDIA.md), [DeepSeek](../organizations/DeepSeek.md) and [Huawei](../organizations/Huawei.md) to connect numerical formats with deployed accelerator and kernel support.
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/fbe2b2f74a2ece8070d8fb073717bda6-Abstract-Conference.html) | MLSys 2025 | MIT Han Lab · collaborators | 量化算法与 GPU 执行内核协同设计，避免低比特推理的反量化开销。 |
 
 ## Research directions (6)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

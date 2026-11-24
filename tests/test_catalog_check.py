@@ -33,6 +33,11 @@ class CatalogIdentityTests(unittest.TestCase):
         self.assertEqual(first_source_id(abstract), "arxiv:2611.00967")
         self.assertEqual(first_source_id(abstract), first_source_id(pdf))
 
+    def test_foundation_and_topic_identity(self):
+        foundation = "| [Paper](https://arxiv.org/abs/2611.00967) | arXiv | Lab | Mechanism |"
+        canonical = "| 2026 | [Paper](https://arxiv.org/pdf/2611.00967v2.pdf) | Preprint | Mechanism |"
+        self.assertEqual(first_source_id(foundation), first_source_id(canonical))
+
     def test_doi_identity(self):
         row = "| 2026 | [Paper](https://doi.org/10.1145/123.456) | Venue | ..."
         self.assertEqual(first_source_id(row), "doi:10.1145/123.456")
