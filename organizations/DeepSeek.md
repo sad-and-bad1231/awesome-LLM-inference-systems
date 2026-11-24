@@ -2,7 +2,7 @@
 
 **Model architecture ↔ inference kernel ↔ expert communication.** The focus is on how DeepSeek's public work changes *inference computation, KV state, sparsity, MoE dispatch and deployment*. Model-quality and RL results appear only as context; they are not misrepresented as serving-system papers.
 
-[← Home](../README.md) · [Serving systems](../topics/serving-systems.md)
+[← Home](../README.md) · [Distributed Serving](../topics/distributed-serving.md)
 
 ## Official model-family crosswalk (updated 2026-11-12)
 

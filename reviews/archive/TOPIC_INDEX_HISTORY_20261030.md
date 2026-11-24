@@ -65,7 +65,7 @@ Eight research topics, now organized as **44 practical engineering directions**:
 | **Canonical topic entries** | **745** |
 | Legacy paper held out: general-purpose AI model serving | 1 |
 
-The [Serving migration record](../../topics/serving-systems.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](../../README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
+The [Serving migration record](SERVING_COHORT_MIGRATION.md) explains the holdout and bibliographic corrections. Existing 30 [foundational papers](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/blob/21dbb9c17bc402ccd84b791d2804020d9794e3ed/README.md#foundational-and-influential-papers) remain a separate editorial reading path on the homepage, rather than being duplicated as full rows in topic pages. The homepage has eight selected surveys, including one new distributed-collectives survey.
 
 **Quality boundary.** Publisher/proceedings identity and proposed mechanisms have been cross-checked; independent reproduction of speedups is not claimed. Workshop articles are labeled as such. No automatic bulk import from the historical JSONL or upstream paper lists; per-paper experimental validity is an ongoing editorial review responsibility.
 
