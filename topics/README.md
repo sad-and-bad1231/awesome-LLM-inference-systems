@@ -30,6 +30,8 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 100 | 6 | Validated models, traces, benchmarks and production diagnosis |
 | **Total** | **977** | **44** | |
 
+**Technical reading map:** [Attention & Kernel Fusion](attention-fusion-map.md) connects the existing attention, fusion, sparse execution, state, precision and distributed papers to first-party implementation paths. It does not add a canonical mechanism or duplicate paper entries.
+
 ## Classification boundaries
 
 The **primary engineering mechanism** determines the one canonical home; workload labels (Agent, multimodal, reasoning, long-context), accelerator vendor, venue, and application domain are cross-cutting attributes rather than extra categories. For borderline studies, use the main technical contribution, not keyword frequency:

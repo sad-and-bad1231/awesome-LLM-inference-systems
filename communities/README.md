@@ -1,6 +1,6 @@
 # Research labs & open-source communities
 
-An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-14:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
+An engineering-first **source map** of inference open-source communities, maintainers and research labs. **Updated 2026-11-24:** entries are grouped by execution boundary, not GitHub popularity. A runtime is not a laboratory; collaborative projects are not exclusively company-owned. This is navigation, **not an additional canonical paper bibliography**, and no benchmark is independently reproduced here.
 
 [← Home](../README.md) · [Companies](../organizations/README.md)
 
@@ -11,6 +11,20 @@ Choose a project by the **execution boundary** you want to understand: token-ste
 The later research-lab sections index source-producing teams and collaborations, **not 22 additional canonical papers or 22 verified independent laboratories**. Inclusion requires a concrete inference-systems paper, upstream artifact, maintainer contribution or first-party technical report. Company and university credit must be checked per project; dated discovery notes are not claims of active maintenance or reproduced performance.
 
 [Jump to research labs](#research-labs-and-source-linked-systems-signals) · [Company profiles](../organizations/README.md) · [Paper mechanisms](../topics/README.md)
+
+## Attention and fusion engineering paths
+
+Use the [Attention & Kernel Fusion reading map](../topics/attention-fusion-map.md#2-first-party-implementation-paths) for direct upstream documentation, native kernel projects, recent PRs and research cross-links. Key entry points:
+
+| Community | Upstream path | Role |
+|---|---|---|
+| vLLM | [Attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [Fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) | Compatibility and dispatch; compile-time fusion. |
+| vLLM-Ascend / CANN | [Ascend attention](https://github.com/vllm-project/vllm-ascend/tree/main/vllm_ascend/attention) · [FA3](https://docs.vllm.ai/projects/ascend/en/main/user_guide/feature_guide/flash_attention.html) · [CANN operator source](https://gitcode.com/cann/ops-transformer/tree/master/attention/sparse_flash_attention) | Native implementation and integration; version-specific device support. |
+| SGLang | [Low-Latency Mode](https://www.lmsys.org/blog/2026-10-18-sglang-low-latency-mode/) · [NVIDIA Mega](https://github.com/sgl-project/sgl-nvidia-mega) · [AMD Mono](https://github.com/sgl-project/sgl-amd-mono) | Experimental model-specific decode/verify plugins, with standard-path fallback. |
+| Recurrent attention | [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [FLA-NPU](https://github.com/flashserve/flash-linear-attention-npu) | Linear/recurrent and hybrid-model kernels; distinct hardware backends. |
+| Baidu / SGLang | [ERNIE 5.5 Flash low-latency case](https://www.lmsys.org/blog/2026-11-23-ernie55-flash-low-latency) · [HALOps](https://github.com/PaddlePaddle/HALOps) | Model dataflow, GEMM, fusion, PDL and communication; simulated speculative acceptance in headline result. |
+
+These are linked engineering paths, not additions to the existing 76-row repository inventory or canonical paper count.
 
 ## November 11–12 first-party runtime and lab updates (not new bibliography entries)
 
