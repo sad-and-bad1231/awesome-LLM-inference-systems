@@ -99,6 +99,14 @@ The verified, useful distinction: FastDeploy's Go Router performs **instance/pai
 
 **Closeout decision:** evidence from 2019 ERNIE through ERNIE 5.5, FastDeploy and Evolve has been mapped to original sources; the DCore paper has one G0–G5 admission; remaining candidate/model/kernel lines retain bounded labels. **No more NPU work justified by this audit alone.**
 
+## November 23 — ERNIE 5.5 Flash low-latency execution and HALOps
+
+[Baidu ERNIE and SGLang engineering report](https://www.lmsys.org/blog/2026-11-23-ernie55-flash-low-latency) · [HALOps source](https://github.com/PaddlePaddle/HALOps) · [SGLang integration PR #52603](https://github.com/sgl-project/sglang/pull/52603).
+
+The public implementation targets NVIDIA SM100 and uses low-latency small-M GEMM, TP, PDL/multi-stream overlap, compute-communication fusion, One-Pass mHC and MegaLLMoE. For HCA attention, the authors restructure compressor/SWA/attention dependencies so that compression work need not unnecessarily block attention. This is a model-specific execution/dataflow example, not merely a larger fused kernel. HALOps is an ERNIE-team operator library, separate from FlashMask and FastDeploy.
+
+**Measurement contract:** four SM100 GPUs, attention TP4 and MoE TP4, batch 1, 56,320 input / 1,024 output tokens. The reported 1,074 tok/s corresponds to 5.12 ms per step at **simulated mean DSpark acceptance length 5.5**; the approximately 1,310 tok/s variant uses simulated 7.2. Neither is a natural-acceptance throughput claim. The authors report ERNIE Evolve assisted the optimization; this alone does not demonstrate autonomous agent RSI. See [Attention & Kernel Fusion](../topics/attention-fusion-map.md) for the related technical reading path.
+
 ## 5. Suggested reading and replication path
 
 1. **Historical understanding:** ERNIE (2019) → ERNIE 2.0 (AAAI 2020) → ERNIE 3.0/Titan; study the ideas, **do not** place training-only NLP papers into inference topics.
