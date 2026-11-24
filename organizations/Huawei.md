@@ -26,3 +26,14 @@ Huawei Cloud's [Pangu official product portfolio](https://www.huaweicloud.com/pr
 | **Ascend ModelZoo** | Ascend-supported model examples and engineering references, some including inference paths. | [Official source](https://github.com/Ascend/ModelZoo-PyTorch) |
 | **vLLM Ascend** | Community-maintained hardware plugin for the vLLM ecosystem; collaboration, **not** a Huawei-exclusive project. | [Official source](https://github.com/vllm-project/vllm-ascend) |
 | **TileLang Ascend backend** (external ecosystem) | TileAI's public kernel compiler added **Ascend 950** support in Sept 2026, exposing GEMM/Attention examples; **not a Huawei-owned repository**, nor a demonstrated Ascend 910B2/CANN 9.1.0 deployment. Included as an important NPU programming direction. | [Maintainer's repository](https://github.com/tile-ai/tilelang) · [DeepSeek TileKernels hardware requirements](https://github.com/deepseek-ai/TileKernels) |
+
+## Native attention and fusion source paths
+
+| Layer | Source and purpose |
+|---|---|
+| CANN operator library | [ops-transformer](https://gitcode.com/cann/ops-transformer) · [Sparse Flash Attention source](https://gitcode.com/cann/ops-transformer/tree/master/attention/sparse_flash_attention) · [CATLASS templates](https://gitcode.com/cann/catlass/tree/master). Inspect host tiling, device code and matching release tags. |
+| Engine integration | [vLLM-Ascend attention](https://github.com/vllm-project/vllm-ascend/tree/main/vllm_ascend/attention) · [custom ops](https://github.com/vllm-project/vllm-ascend/tree/main/csrc) · [additional config](https://docs.vllm.ai/projects/ascend/en/main/user_guide/configuration/additional_config.html). MLAPO is MLA preprocessing fusion; native operators and engine policies are distinct. |
+| External NPU projects | [FlashAttention NPU](https://github.com/MinghuasLab/flash-attention-npu) builds on CATLASS; [FLA-NPU](https://github.com/flashserve/flash-linear-attention-npu) is Tianjin University-led and includes GDN/KDA. Neither is a Huawei-owned repository. |
+| Engine feature | [Ascend FA3](https://docs.vllm.ai/projects/ascend/en/main/user_guide/feature_guide/flash_attention.html) addresses training/inference consistency; do not assume that it replaces FIA on every workload or that current main supports older CANN/device combinations. |
+
+A concrete cross-repository example: [vLLM-Ascend #22235](https://github.com/vllm-project/vllm-ascend/pull/22235) connects CANN MsaIndexScore's block-Top-K fusion to MiniMax-M3 on A5. For other implementation and paper paths, see [Attention & Kernel Fusion](../topics/attention-fusion-map.md).
