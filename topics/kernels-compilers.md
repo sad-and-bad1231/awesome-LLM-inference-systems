@@ -4,32 +4,54 @@
 
 ## Overview & principles
 
-Physical execution determines how much of an algorithm's theoretical compute and memory traffic is realized on an accelerator. Separate model semantics, tensor layouts, tiling, on-chip residency, pipeline dependencies and launch/dispatch overhead. Attention, GEMM, fusion and compiler scheduling trade data movement against parallelism and resource occupancy.
+A model describes *what* to calculate; a kernel decides *how* the accelerator calculates it. A good implementation keeps useful work on the device's compute units while moving as little data as possible. A serving engine also has to decide which implementation fits the current batch, model, cache layout and hardware.
+
+Consider one decoder layer: Q/K/V projection → attention → output projection → FFN/MoE. GEMMs use matrix units; normalization, softmax, activation and routing use other execution resources. Data passes through device memory and faster but smaller on-chip storage. Performance is often lost at these boundaries, not just in the arithmetic.
+
+| Principle | Intuition |
+|---|---|
+| **Compute vs. memory** | GEMM with many token rows can reuse weights; small-batch decode often reads many weights for little work. A roofline bound is max(compute work / peak compute, data movement / bandwidth), before launch, dependencies and other costs. |
+| **Tiling & pipeline** | Split tensors into pieces that fit on-chip, reuse them and overlap the next copy with current computation. GPU shared memory/registers and Ascend L1/L0/UB have different capacities and execution rules. |
+| **Attention** | FlashAttention tiles Q/K/V and maintains online softmax statistics, avoiding writing the full score matrix to device memory. MQA/GQA/MLA change KV representation or sharing; sparse attention changes visible tokens; GDN/KDA instead update recurrent state. These are different axes. |
+| **Fusion & overlap** | Combine operations when this eliminates an intermediate write/read, repeated work or scheduling delay. Graph replay reduces host launch overhead; it does not itself eliminate memory traffic. Fine-grained overlap can keep separate kernels. Larger fusion is not automatically faster. |
+| **Compiler & DSL** | A tile-level description exposes data layout, work partition and synchronization. A compiler maps it to hardware; a library supplies tuned kernels; an engine supplies the real workload and dispatch conditions. |
+
+Start with the actual prefill/decode/verify shape and state layout, then profile the bottleneck. Optimize the critical path rather than maximizing isolated TFLOPS. See [attention and fusion execution paths](attention-fusion-map.md) for the detailed engineering map.
 
 ## Open-source ecosystem
 
-**Upstream references:** [FlashInfer kernels](https://github.com/flashinfer-ai/flashinfer) · [vLLM attention backends](https://docs.vllm.ai/en/latest/design/attention_backends/) · [vLLM fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM).
+Five primary source layers, organized by what each owns. Read the detailed [source comparison](attention-fusion-map.md#2-first-party-implementation-paths) for actual backend classes, native operators, fusion mechanisms and configuration gates.
+
+| Ecosystem | Start here | Why read it |
+|---|---|---|
+| **vLLM** | [Attention backend matrix](https://docs.vllm.ai/en/latest/design/attention_backends/) · [Fusion passes](https://docs.vllm.ai/en/latest/design/fusions/) | General backend contract and compatibility selection; compile-time graph rewrites and GPU kernel libraries. |
+| **vLLM-Ascend** | [Attention source](https://github.com/vllm-project/vllm-ascend/tree/main/vllm_ascend/attention) · [Graph mode](https://docs.vllm.ai/projects/ascend/en/main/user_guide/feature_guide/graph_mode.html) | NPU integration, FIA/MLA/SFA, recurrent kernels, native custom ops, ACLGraph and graph fusion. |
+| **SGLang** | [Backend guide](https://github.com/sgl-project/sglang/blob/72c9f47614978e7e5d031636bef734d46f10c249/docs/docs/advanced_features/attention_backend.mdx) · [SGL Kernel NPU](https://github.com/sgl-project/sgl-kernel-npu) · [Low-Latency Mode](https://www.lmsys.org/blog/2026-10-18-sglang-low-latency-mode/) | Phase-specific backend choices, reusable operator libraries, model-specific fused execution plugins. |
+| **DeepInfer / DeepSeek** | [DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [FlashMLA](https://github.com/deepseek-ai/FlashMLA) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | Model-specialized execution and kernel/engine co-design; directly inspect sparse attention, quantized GEMM, EP and fused preparation. |
+| **CANN / Ascend** | [Ascend C guide](https://asc.gitcode.com/guide/) · [ops-transformer](https://gitcode.com/cann/ops-transformer) · [graph-autofusion](https://gitcode.com/cann/graph-autofusion) | Device operator implementation, compiler/runtime substrate, source/binary fusion and native programming tools. |
+
+Shared libraries and programming systems: [FlashAttention](https://github.com/Dao-AILab/flash-attention) · [FlashInfer](https://github.com/flashinfer-ai/flashinfer) · [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [Triton](https://github.com/triton-lang/triton) · [TileLang](https://github.com/tile-ai/tilelang) · [CATLASS](https://gitcode.com/cann/catlass). Their roles and hardware boundaries are mapped in the engineering page.
 
 ## Industry practice & engineering developments
 
-Read the [Attention & Kernel Fusion engineering map](attention-fusion-map.md) for native implementations, model-to-kernel dispatch, recent PRs and industry examples. For kernel agents, compare goal-only search, specialized harnesses, compiler feedback and reusable profile evidence under matched budgets.
+Follow mechanisms across layers, not release headlines: [five-ecosystem source map](attention-fusion-map.md#2-first-party-implementation-paths) · [PR and issue cases](attention-fusion-map.md#4-recent-prs-as-mechanism-probes-nov-1824). Particularly useful examples are Ascend MsaIndexScore + TopK (vendor operator → plugin), DeepInfer fused attention preparation (model → library), and SGLang NVIDIA Mega / AMD Mono (model → specialized step runner). The [DeepSeek](../organizations/DeepSeek.md), [Huawei](../organizations/Huawei.md), [Moonshot](../organizations/Moonshot-Kimi.md), [Baidu](../organizations/Baidu.md), [NVIDIA](../organizations/NVIDIA.md) and [AMD](../organizations/AMD.md) profiles retain broader organizational context.
 
 ### Kernel agents: goal-only vs. KDA vs. compiler-agent co-design
 
-The research question is the marginal value of agent-specific engineering under controlled compute/model budgets. Kernel-only optimization belongs here; cross-layer, engine-level evolution is tracked in [Frontiers](../frontiers/README.md).
+Automated kernel engineering is an optimization loop: define the operator and workload, choose a reference, generate a candidate, compile, test, measure and revise. The open question is what additional structure improves the search under the same model, hardware and budget.
 
-| Approach | First-party source / implementation | Mechanism | Valid comparison boundary |
-|---|---|---|---|
-| **Goal-only (JustGoal)** | [arXiv:2610.36434](https://arxiv.org/abs/2610.36434) · [released B200 kernels](https://github.com/OpenBMB/JustGoal) | General coding agent receives goals and constraints but constructs its own optimizer/evaluator; no prebuilt domain-specific harness | On B200, reported wins versus open-source kernel libraries on 8/10 operators; in a **same-model, single-shape** Fable 5.1 comparison, KDA-0.5 reaches 0.95× of JustGoal. This is not a claim that JustGoal wins across full-shape operator workloads. |
-| **KDA / Kernel Design Agents** | [NVIDIA KDA case study](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/) · [source](https://github.com/NVlabs/kda/tree/260927-kda-for-kda) | Specialized tool/harness, persistent knowledge and correctness feedback; can pair with several Kernel DSLs including CAKE | Reported 2.96× vs FlashKDA on **B300** Kimi Delta Attention; not directly comparable with B200 JustGoal or to full vLLM throughput. KDA reports verifier-overfit candidates it explicitly rejected. |
-| **ForgeKernel (OpenBMB; 2026-11 preprint)** | [paper](https://arxiv.org/abs/2611.04998) · [released system/kernels](https://github.com/OpenBMB/ForgeKernel) | Profile hardware behavior of a strong reference, generate an architecture-first curriculum, inherit accepted kernels and probe-grounded knowledge across optimization generations | Real CUDA and Ascend **kernel benchmark** evidence only; compare identical operator/shape/precision/budget with JustGoal/KDA, preserve public vs hidden tests. Repeated kernel artifact improvement ≠ recursive foundation-model improvement. |
-| **CAKE (NVIDIA/CMU)** | [arXiv:2608.12629](https://arxiv.org/abs/2608.12629) | Co-design of Agent + typed schedule IR + compiler diagnostics and reusable verifier | Author reports B200 Flash-KMeans and Kimi Delta Attention kernel / serving validation; token budgets, task coverage and availability of the core compiler differ from JustGoal. |
-| **CANNBot-CAKE (Ascend; distinct project)** | [arXiv:2610.31034](https://arxiv.org/abs/2610.31034) | CANN-specific multi-DSL generation/evolution with curated knowledge | Reports CANN-Bench hidden correctness on **Ascend 950PR**; not NVIDIA CAKE, not verified on 910B2 and not online vLLM Goodput. |
+| Approach | Read first | What it adds |
+|---|---|---|
+| Goal-only | [JustGoal](https://arxiv.org/abs/2610.36434) · [released kernels](https://github.com/OpenBMB/JustGoal) | Baseline: general agent constructs its own process from the goal. |
+| Domain-specific tools | [NVIDIA KDA](https://nvlabs.github.io/kda/blog/2026-09-27-kda-for-kda/) · [code](https://github.com/NVlabs/kda/tree/260927-kda-for-kda) | Kernel-aware tools, hardware knowledge, profiling and verification. |
+| Compiler-agent co-design | [CAKE](https://arxiv.org/abs/2608.12629) | Typed schedule IR and compiler feedback make transformations and constraints explicit. |
+| Architecture-first evolution | [ForgeKernel](https://github.com/OpenBMB/ForgeKernel) · [V1 design](https://github.com/OpenBMB/ForgeKernel/blob/b2c8ae8510e02c28576808910a6b8827721ab7dc/docs/design/v1-launch.md) · [harness guard](https://github.com/OpenBMB/ForgeKernel/blob/b2c8ae8510e02c28576808910a6b8827721ab7dc/src/forgekernel/loop/harness_guard.py) | Architecture agent establishes milestones from reference profiling; coding agent implements; accepted kernels and probe-backed hardware knowledge carry into later runs. |
+| Native Ascend agents | [CANNBot](https://gitcode.com/cann/cannbot) · [skills](https://gitcode.com/cann/cannbot-skills) · [CANNBot-DSL](https://cannbot-dsl.gitcode.com/) · [CANNBot-CAKE paper](https://arxiv.org/abs/2610.31034) | Separate agent orchestration, knowledge/skills, target DSL and evaluation. CANNBot-CAKE is distinct from NVIDIA CAKE. |
+| Search and reusable experience | [KernelBand](https://proceedings.mlr.press/v306/ran26b.html) · [KernelSeek](https://arxiv.org/abs/2611.03517) · [CompoundingKernel](https://arxiv.org/abs/2611.19230) · [KOPE](https://arxiv.org/abs/2608.25570) | Bandit pruning, question-guided minimal harness, accepted-kernel lineage, and experience-graph memory respectively. |
 
-**Identity resolved (2026-11-04):** [ForgeKernel](https://github.com/OpenBMB/ForgeKernel) has a first-party repository and a distinct **2026-11-03 preprint**, [arXiv:2611.04998](https://arxiv.org/abs/2611.04998). Its key mechanism is a hardware-measured, architecture-first kernel curriculum: accepted generated kernels become the next reference and probe-grounded knowledge persists across runs. **Do not conflate** it with [JustGoal](https://github.com/OpenBMB/JustGoal) (goal-only baseline) or [Kernel Forge](https://arxiv.org/abs/2607.24762) (different paper). The authors report results on NVIDIA Hopper/Blackwell and Ascend 910C/950-series **operator benchmarks**, not vLLM/SGLang end-to-end speedups nor an LLM recursively modifying its own weights. This comparison is a reading path; canonical paper admission follows G0–G5.
+**ForgeKernel code lesson.** A task card defines reference, shapes, numerical judge and budget. The run separates the architecture/teacher loop from candidate implementation; the default harness guard reverts evaluator-path edits and overlays the card's evaluation files on remote jobs. This is a useful correctness design, not proof that all possible reward hacking is prevented. The public V1 quickstart explicitly targets CUDA/CuTe DSL on Hopper/Blackwell; published Ascend benchmark submissions do not establish the same harness is runnable on every NPU. ForgeKernel, JustGoal and Kernel Forge are different projects.
 
-**New benchmark obligation:** add same-model and same-token-budget A/B, hidden distribution and output-equivalence tests, **single shape vs full operator**, compilation/search cost, and engine-level throughput/latency with composed winners. [FastKernels](https://fastkernels.github.io/) highlights that individually faster kernels can fail or regress after composition. A leaderboard score alone is not validated production inference speedup.
-
+**How to evaluate.** Compare against a strong library and a goal-only agent at matched search budget; hold out shapes and inputs, freeze the oracle, report compile/search cost and inspect generated code. A faster isolated operator may regress when composed into an engine ([FastKernels](https://fastkernels.github.io/)). Compare the detailed evidence in [Kernel Automation & Tools](#kernel-automation--tools-26). Whole-engine evolution is a separate [Frontier](../frontiers/README.md), not a second name for kernel tuning.
 
 ## Foundations
 
@@ -46,7 +68,7 @@ The research question is the marginal value of agent-specific engineering under 
 
 ## Research directions (6)
 
-Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
+Six directions organize the full bibliography; use the short reading routes below before scanning the paper tables.
 
 | Direction | Papers | What to work on |
 |---|---:|---|
@@ -57,6 +79,22 @@ Engineering directions organize the research literature by primary mechanism; re
 | [Communication, Memory & I/O](#communication-memory--io-19) | 19 | 数据搬运、跨卡通信、设备内存层级和异构执行。 |
 | [Kernel Automation & Tools](#kernel-automation--tools-26) | 26 | 自动搜索/调优、Profiling、Correctness 和诊断。 |
 | **Total** | **137** | |
+
+## Research literature — core reading routes
+
+The most useful papers explain an execution principle or offer an inspectable implementation. The full bibliography below is retained for discovery; these routes prioritize a small number of works already present in the catalog.
+
+| Route | Read in order | What to learn |
+|---|---|---|
+| **Exact attention** | [Foundations](#foundations): FlashAttention → FA2 → FA3 → [FA4 and LeanAttention](#attention--sparse-kernels-36) → FlashInfer | I/O-aware tiling and online softmax; sequence/work partition, async execution and hardware asymmetry; serving-specific decode and metadata. |
+| **Attention variants** | [Foundations](#foundations): MQA/GQA → [Attention & Sparse Kernels](#attention--sparse-kernels-36): FlashDecoding++, Hydragen, FlexAttention, IndexCache, POD-Attention | Sharing, split/reduction, prefix reuse, programmable masking and mixed P/D overlap. Architecture background: [DeepSeek-V2 MLA](https://arxiv.org/abs/2405.04434), [GDN](https://arxiv.org/abs/2412.06464), [Kimi Linear / KDA](https://arxiv.org/abs/2510.26692); see [recurrent implementations](attention-fusion-map.md#shared-libraries-and-programming-models). |
+| **GEMM / low precision** | [MARLIN, LiquidGEMM, CodeGEMM](#gemm--low-bit-kernels-12) → DeepGEMM / CATLASS source | Small-M memory traffic, weight packing, dequantization and matrix-unit utilization; distinguish peak arithmetic from achieved layer latency. |
+| **DSL / compiler** | [TVM → Ansor → TensorIR → ThunderKittens → TileLang](#kernel-dsl--compilers-20) | Tensorization, scheduling/search, tile abstractions and compiler-managed layout/pipelines. Implement one GEMM/attention kernel from the examples before comparing frameworks. |
+| **Fusion / megakernels** | [Foundations](#foundations): NanoFlow → [LightSeq, MPK, XY-Serve, FlashFuser, MegaOps, SubGPU](#fusion-pipelines--megakernels-24) | Operation-level overlap, persistent execution, dynamic-shape handling and finer dependency scheduling. Not every method needs one launch or one persistent kernel. |
+| **Communication / memory** | [TileLink, ParallelKittens, mKernel, DeltaLog](#communication-memory--io-19) | Tile-level compute/communication overlap, inter-device synchronization and recurrent-state materialization. |
+| **Kernel agents** | [JustGoal → KDA → CAKE → ForgeKernel; CANNBot-CAKE / KOPE](#kernel-automation--tools-26) | Compare agent scaffolding, IR constraints, profiler-backed evidence, reuse and benchmark integrity rather than leaderboard rank. |
+
+Architecture background and engineering artifacts above are reading references, not additional catalog rows. [Attention & Fusion](attention-fusion-map.md#3-read-existing-papers-by-technical-question) provides the more granular attention/fusion cross-index.
 
 ## Papers (137)
 

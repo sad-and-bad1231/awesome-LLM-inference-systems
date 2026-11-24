@@ -8,7 +8,7 @@ The research inventory contains **977 source-curated papers across 44 engineerin
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
-| [Kernels & Compilers](kernels-compilers.md) | 137 | 6 | Attention kernels, GEMM, compilers and hardware mappings |
+| [Kernels & Compilers](kernels-compilers.md) | 137 | 6 | Attention, GEMM, fusion, DSLs, kernel agents and upstream implementations |
 | [KV Cache & Context Memory](kv-cache-memory.md) | 186 | 6 | Reuse, eviction, compression, offloading and distributed KV state. |
 | [Decoding Acceleration](decoding-acceleration.md) | 100 | 5 | Speculative, blockwise and parallel generation |
 | [Quantization & Compression](quantization-compression.md) | 53 | 6 | Low-bit representation with executable system gains |
