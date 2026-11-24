@@ -1,22 +1,10 @@
-# Papers by systems mechanism
+# Technical Topics
 
-**Current canonical index (2026-11-21): 977 source-curated papers · 8 mechanisms · 44 engineering directions.** Each entry has one primary home; **source admission is not independent reproduction or exhaustive G0–G5 certification**. PR #80 contributes 77 source-curated entries from the shared 852-paper baseline (852 → 929); the separate DCore admission adds one distinct entry, giving a reconciled total of **930**. DCore is absent from PR #80's topic branch.
+[← Home](../README.md) · [Frontiers](../frontiers/README.md) · [Organizations](../organizations/README.md) · [Communities](../communities/README.md)
 
-**Inventory history:** [October 31 close (851)](../reviews/OCTOBER_2026_FOLLOWUP_SWEEP_20261031.md) → [November 2 intake (854)](../reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) → [November 5 adjacent-scope cleanup (852)](../reviews/ADJACENT_FULL_SCOPE_REVIEW_20261105.md) → [November 9 intake (862)](../reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) → [Nov 9 expanded pass (879)](../reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) → [Nov 9 third pass + Nov 10 preprint recalibration (898)](../reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) → [Nov 10 frontier + backlog re-audit (929)](../reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md). Original sources of the two removed video-only works remain in the scope review and [Frontier context](../frontiers/README.md). Older snapshots are not live totals; see [review index](../reviews/README.md).
+Eight technical topics connect principles, upstream implementations, engineering developments, industry practice and research literature. Each publication has one primary home; cross-links are encouraged.
 
-**November 11 addition:** [Baidu/DCore controlled speculative-decoding study](benchmarking-analysis.md#performance--efficiency-studies-28) admitted as one author-reported, publicly reproducible-artifact *preprint* after [G0–G5 case review](../reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) (**852 → 853**). No GPU test was performed here.
-
-**November 14 decoding-only intake:** [eight source-reviewed additions and explicit WATCHs](../reviews/NOVEMBER_2026_DECODING_SWEEP_20261114.md) extend Decoding 91 → 99 and the corpus 930 → 938. Earlier numbers are historical.
-
-**November 14 inference RSI/kernel + lab intake:** [six primary-source-scoped additions](../reviews/NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md) bring **938 → 944** (Kernel 123→127; KV 179→180; Runtime 158→159; Decoding remains 99); no duplicate of the eight decoding rows or seven frontiers.
-
-**November 20 incremental sweep:** [21 primary-source-reviewed additions](../reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) to existing 44 engineering directions, **944 → 965** (Kernel +6, KV +5, Decoding +1, MoE +1, Runtime +4, Distributed +2, Benchmark +2; Quantization +0). No experimental speedup independently reproduced.
-
-**November 21 independent resweep:** [12 new source-reviewed papers + all 90 existing November arXiv IDs](../reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md), **965 → 977**. Historic totals are checkpoints, not duplicate counts.
-
-Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long-context and reasoning are evaluation contexts—not additional top-level bins. [Frontiers](../frontiers/README.md) is a reading cross-index and never a second canonical paper list.
-
-[← Home](../README.md) · [Research labs](../communities/README.md) · [Strict G0–G5 review](../STRICT_REVIEW.md) · [Curation policy](../CURATION.md)
+The research inventory contains **977 source-curated papers across 44 engineering directions**, plus 30 historical foundations and four topic-specific surveys relocated from the homepage. Counts of older review batches are historical.
 
 | Mechanism | Canonical entries | Sub-groups | Scope |
 |---|---:|---:|---|
@@ -29,8 +17,6 @@ Each paper has **one primary mechanism home**. Hardware, Agent, multimodal, long
 | [Distributed & Disaggregated Serving](distributed-serving.md) | 146 | 5 | Parallelism, multi-node orchestration, memory/compute disaggregation |
 | [Benchmarking & Systems Analysis](benchmarking-analysis.md) | 100 | 6 | Validated models, traces, benchmarks and production diagnosis |
 | **Total** | **977** | **44** | |
-
-**Technical reading map:** [Attention & Kernel Fusion](attention-fusion-map.md) connects the existing attention, fusion, sparse execution, state, precision and distributed papers to first-party implementation paths. It does not add a canonical mechanism or duplicate paper entries.
 
 ## Classification boundaries
 
@@ -48,8 +34,6 @@ Hybrid systems may span multiple rows; keep **one full paper entry** under the d
 
 ## How to use this index
 
-- **Read:** follow the closest *engineering bottleneck* into a sub-group; prioritize a clearly stated mechanism, actual model/hardware/workload and real versus simulated execution.
-- **Evaluate:** treat every reported performance/accuracy figure as **author-reported** unless an explicit reproduction receipt says otherwise. Distinguish kernel-only results from end-to-end serving, quality-changing work from exact execution, and trace replay from production measurement.
-- **Contribute:** check title/arXiv-ID/DOI aliases across all eight pages, verify the publisher identity, and submit a small source-backed change with a G0–G5 receipt. HOLD candidates stay in dated `reviews/` notes, not canonical tables.
+Start with the bottleneck and execution model, then follow upstream code and representative literature. Treat benchmark results as author-reported unless reproduced explicitly. Submit changes under the [curation policy](../CURATION.md) and [review rules](../STRICT_REVIEW.md).
 
-**History and provenance:** [Archived topic-index chronology](../reviews/archive/TOPIC_INDEX_HISTORY_20261030.md) preserves the prior 2026 admission accounting, including provisional intake and later removal waves. Recent per-candidate sources: [Oct 30 arXiv/labs](../reviews/ARXIV_LAB_SWEEP_20261030.md), [Oct 8–21 backfill](../reviews/ARXIV_OCT08_21_INTATTENTION_20261029.md), [Oct 22–29](../reviews/WEEKLY_ARXIV_MAINLINE_20261029.md). Historical totals are not current catalog counts.
+[Review receipts and historical inventory](../reviews/README.md).

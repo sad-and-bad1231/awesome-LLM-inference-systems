@@ -1,16 +1,31 @@
 # Decoding Acceleration
 
-**Start with the engineering bottleneck, then pick papers.** 要减少每个生成 Token 的延迟：改 Draft、免训练投机、并行验证、在线适配，还是改成扩散/非自回归执行？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [SGLang speculative decoding](https://docs.sglang.io/docs/advanced_features/speculative_decoding) · [TensorRT-LLM speculative sampling](https://nvidia.github.io/TensorRT-LLM/advanced/speculative-decoding.html) · [vLLM speculative decoding](https://docs.vllm.ai/en/latest/features/spec_decode/).
+## Overview & principles
 
-**Foundational context.** See also: [Blockwise Parallel Decoding (2018), Speculative Decoding (2023), Medusa (2024), SpecInfer (2024)](../README.md#foundational-and-influential-papers); rows here that originate a sub-direction of this taxonomy carry an inline `KEEP_FOUNDATIONAL` tag.
+Autoregressive decoding has a sequential token dependency and often small per-step batches. Speculation amortizes target verification over candidate tokens; acceptance, draft cost, verification parallelism and state rollback determine realized gain. Non-AR methods change the generation contract rather than simply accelerating the same loop.
+
+## Open-source ecosystem
+
+**Upstream references:** [SGLang speculative decoding](https://docs.sglang.io/docs/advanced_features/speculative_decoding) · [TensorRT-LLM speculative sampling](https://nvidia.github.io/TensorRT-LLM/advanced/speculative-decoding.html) · [vLLM speculative decoding](https://docs.vllm.ai/en/latest/features/spec_decode/).
+
+## Industry practice & engineering developments
+
+Read [DeepSeek](../organizations/DeepSeek.md), [MiniMax](../organizations/MiniMax.md) and [Tencent](../organizations/Tencent.md) for model-native MTP, draft paths and engine integration. Track implementation changes in the upstream speculative-decoding code, especially verification and hybrid state handling.
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [Blockwise Parallel Decoding for Deep Autoregressive Models](https://papers.nips.cc/paper/8212-blockwise-parallel-decoding-for-deep-autoregressive-models) | NeurIPS 2018 | Google Brain | 候选块并行预测、验证最长正确前缀；投机/并行解码前驱。 |
+| [Fast Inference from Transformers via Speculative Decoding](https://proceedings.mlr.press/v202/leviathan23a.html) | ICML 2023 | Google Research | Draft–Verify 和保留目标分布的采样规则；现代 Speculative Decoding 基础。 |
+| [Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://proceedings.mlr.press/v235/cai24b.html) | ICML 2024 | Princeton · Together AI · UIUC · collaborators | 多解码头与 Tree-based Verification，拓展推测解码设计空间。 |
+| [SpecInfer: Accelerating Large Language Model Serving with Tree-based Speculative Inference and Verification](https://doi.org/10.1145/3620666.3651335) | ASPLOS 2024 | CMU · Tsinghua · Stanford · collaborators | Token-tree parallel verification 集成到分布式和 Offloading Serving。 |
 
 ## Research directions (5)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

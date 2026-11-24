@@ -1,16 +1,39 @@
 # KV Cache & Context Memory
 
-**Start with the engineering bottleneck, then pick papers.** 要改 vLLM/SGLang 的 KV Cache：提升命中率、降低每 Token 占用、做稀疏读取、溢出到外存、跨实例共享，还是改善 Block 管理？
-
 [← Topics](README.md) · [← Home](../README.md)
 
-**Engineering references:** [vLLM KV offloading](https://docs.vllm.ai/en/stable/features/kv_offloading_usage/) · [SGLang HiCache](https://docs.sglang.io/docs/advanced_features/hicache_design) · [MooncakeStoreConnector](https://docs.vllm.ai/en/stable/features/mooncake_store_connector_usage/).
+## Overview & principles
 
-**Foundational context.** See also: [PagedAttention/vLLM (2023), Mooncake (2025), Strata (2026)](../README.md#foundational-and-influential-papers); rows here that originate a sub-direction of this taxonomy carry an inline `KEEP_FOUNDATIONAL` tag.
+Autoregressive inference repeatedly reads previous context. KV allocation, residency, reuse, compression, retrieval and transfer change memory capacity and bandwidth, but exact prefix reuse is distinct from approximation and response caching. Measure TTFT, TPOT, cache hit/reuse and eviction costs together.
+
+## Open-source ecosystem
+
+**Upstream references:** [vLLM KV offloading](https://docs.vllm.ai/en/stable/features/kv_offloading_usage/) · [SGLang HiCache](https://docs.sglang.io/docs/advanced_features/hicache_design) · [MooncakeStoreConnector](https://docs.vllm.ai/en/stable/features/mooncake_store_connector_usage/).
+
+## Industry practice & engineering developments
+
+Follow [Mooncake](../organizations/Moonshot-Kimi.md), [DeepSeek](../organizations/DeepSeek.md) and [Alibaba](../organizations/Qwen-Alibaba.md) for production state placement and storage; compare the actual cache manager/connector contracts in the linked engines.
+
+## Foundations
+
+| Paper | Venue | Representative affiliations | Why it matters |
+|---|---|---|---|
+| [Efficient Memory Management for Large Language Model Serving with PagedAttention](https://doi.org/10.1145/3600006.3613165) | SOSP 2023 | UC Berkeley · Stanford · UC San Diego | Paged KV Cache 与 vLLM；突破动态 KV 内存碎片和请求间复用。 |
+| [Mooncake: Trading More Storage for Less Computation — A KVCache-centric Architecture for Serving LLM Chatbot](https://www.usenix.org/conference/fast25/presentation/qin) | FAST 2025 | Moonshot AI · Tsinghua University | 生产 KV Cache 共享与分离式存储，构建长上下文 Serving 数据路径。 |
+| [vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention](https://doi.org/10.1145/3669940.3707256) | ASPLOS 2025 | Microsoft Research · IISc | CUDA 虚拟内存实现 KV 虚拟连续、物理按需分配；PagedAttention 的替代。 |
+| [Strata: Hierarchical Context Caching for Long Context Language Model Serving](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang) | OSDI 2026 | Stanford · NVIDIA · collaborators | 分层 KV Cache I/O 与 cache-aware scheduling，针对缓存加载瓶颈。 |
+
+## Surveys
+
+| Lens | Survey | Publication | Scope |
+|---|---|---|---|
+| Long-context CAP trade-offs | [The CAP Principle for LLM Serving: A Survey of Long-Context Large Language Model Serving](https://arxiv.org/abs/2405.11299) | arXiv 2024 (survey preprint) | Context/Accuracy/Performance 三目标及长上下文 Serving 的用户感知权衡；CAP 是研究分类与设计启发式，不是形式化不可能性定理。 |
+| KV: token / model / systems | [A Survey on Large Language Model Acceleration based on KV Cache Management](https://openreview.net/forum?id=z3JZzu9EA3) | TMLR 2025 | HKUST/PolyU/HUST 等；比较 KV 选择、压缩、量化及系统管理；包含算法层。 |
+| KV: system behavior | [Towards Efficient Large Language Model Serving: A Survey on System-Aware KV Cache Optimization](https://aclanthology.org/2026.findings-acl.1916/) | ACL Findings 2026 | 墨尔本大学/HUST；Temporal/Spatial/Structural 维度分析 Serving-time KV；排除重训型方法。 |
 
 ## Research directions (6)
 
-这些是可直接立项/实现/Benchmark 的**方向**，不是严密的学术分类。论文按主要优化对象只出现一次；不同方向的论文也可以互为 Related Work。
+Engineering directions organize the research literature by primary mechanism; related work may cross topic boundaries.
 
 | Direction | Papers | What to work on |
 |---|---:|---|

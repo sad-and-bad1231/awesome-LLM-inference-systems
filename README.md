@@ -1,148 +1,51 @@
 # Awesome LLM Inference Systems
 
-**977 source-curated papers · 8 systems mechanisms · 44 engineering directions** — current canonical inventory after the November 21 high-recall source resweep; **no independent GPU/NPU reproduction is implied**.
+A curated, engineering-first map of LLM inference systems: principles, research literature, upstream implementations, industrial systems and emerging execution paradigms.
 
-A selective, engineering-first map of LLM inference: **kernels/compilers, KV memory, decoding, quantization, MoE, runtime scheduling, distributed execution and system measurement**.
-
-**November 21 independent high-recall recheck:** [12 additional source-checked, nonduplicate November papers and the complete previous 90-paper November-ID inventory](reviews/NOVEMBER_2026_HIGH_RECALL_RESWEEP_20261121.md) (**965 → 977**, 10 EVIDENCED / 2 EXPLORE). Effective search gains: independent arXiv category-to-catalog diff, cs.LG/hardware crossing, secondary digest → original paper, and engine-owned first-party release audit. Key additions: Twindex, KernelSeek, RSIBench-Infra, OverlapAdvisor, LightningMoBA, Berth, GDN Live Migration, AttentionIndex, Kameleo, TPU Fuse-All, SASS Control Code and DGX Spark study. **No original hardware reproduction; frontiers and 44 tracks unchanged.**
-
-**November 20 final-model correction found in independent November 21 scan:** [Tencent Hy4](https://github.com/Tencent-Hunyuan/Hy4) weights (instruct/FP8/base), full model architecture, 3.3B DFly2 / KV+Index Share and SGLang/vLLM recipes are **public** as of the new official source check; previous November 4 'weights to follow' is historical. [First-party model-source reconciliation](organizations/Tencent.md).
-
-**November 20 source-checked update:** [21 nonduplicate inference papers](reviews/NOVEMBER_2026_INFERENCE_SYSTEMS_REFRESH_20261120.md) added to the existing eight canonical homes (**944 → 965**; no extra frontiers/directions). Highlights include [Together Compiler](https://arxiv.org/abs/2611.14681), [EngineAgent](https://arxiv.org/abs/2611.14356), [CompoundingKernel](https://arxiv.org/abs/2611.19230), [Evolving Infra](https://arxiv.org/abs/2611.12304), [TideCache](https://arxiv.org/abs/2611.26619), [TripleKV](https://arxiv.org/abs/2611.25112) and [SpecSearch](https://arxiv.org/abs/2611.22296). Grade separation: 18 EVIDENCED, 3 EXPLORE; all results are author-reported and not independently reproduced. New first-party [Hy4-flash](organizations/Tencent.md), [Qwen4-Max](organizations/Qwen-Alibaba.md), [Gemini 4 Carbon/Hydrogen/Neon](organizations/Google.md) and [GPT-6.2 Astra/Sol](organizations/OpenAI.md) are indexed under companies rather than miscounted as papers.
-
-**Historical integration status (2026-11-14):** The Nov 9–10 intake in [PR #80](https://github.com/sad-and-bad1231/awesome-LLM-inference-systems/pull/80) contributes **77 source-curated papers** from the shared 852-paper baseline (**852 → 929**). The separate [November 11 Baidu/DCore source audit](reviews/BAIDU_MECHANISM_CODE_AUDIT_20261111.md) admitted one distinct preprint from that same baseline; DCore is absent from PR #80's topic branch, so the reconciled union is **930**. The 31 historical HOLD/frontier re-admissions use graded `EXPLORE / EVIDENCED / REFERENCE` labels; they are not retroactively described as conference-grade or independently reproduced. MobiInfer's Aug 11 vs arXiv 2611 date conflict remains disclosed and is **not** asserted as a November first submission. No author GPU/NPU performance result was independently reproduced.
-
-**Earlier inference RSI / kernel / lab update (Nov 14):** [Six source-audited, nonduplicated additions](reviews/NOVEMBER_2026_INFER_RSI_KERNEL_LABS_20261114.md) (Kernel +4, KV +1, Agent Runtime +1) raise **938 → 944**. [Evolving Agent Teams](https://arxiv.org/abs/2610.36848) is October-origin, with matched-budget vs extended-budget FlashInfer comparisons explicitly separated; latest [MegaOps](https://arxiv.org/abs/2611.16248), [SubGPU](https://arxiv.org/abs/2611.14904), and [SGLang native Trainium](https://www.lmsys.org/blog/2026-11-12-sglang-neuron-v0.1.0) are not evidence of a 910B2 port or independent performance reproduction.
-
-**Decoding update (Nov 14):** [Eight new mechanism-reviewed papers](reviews/NOVEMBER_2026_DECODING_SWEEP_20261114.md) added to the canonical [Decoding Acceleration](topics/decoding-acceleration.md) list (91 → 99); 930 → 938 overall. These are author-source admissions, not reproduced speedups.
-
-**What “source-curated” means:** editorial selection based on public sources, **not** a claim that every current row has passed an independently documented full G0–G5 audit, that all papers are reproducible, or that reported speedups were replicated. Publisher identity, model/quality changes, hardware and workload constraints remain paper-specific.
-
-**Start here:** [8 topic mechanisms](topics/README.md) · [30 foundations below](#foundational-and-influential-papers) · [Organizations](organizations/README.md) · [Research labs & OSS](communities/README.md) · [7 Frontiers](frontiers/README.md) · [G0–G5 review rules](STRICT_REVIEW.md) · [Review receipts & outstanding HOLDs](reviews/README.md).
-
-**Historical receipts:** [November 10 arXiv frontier/backlog recovery (898 → 929)](reviews/ARXIV_FRONTIER_BACKLOG_REAUDIT_20261110.md) · [November 9 third pass + Nov 10 preprint recalibration (879 → 898)](reviews/NOVEMBER_2026_THIRD_PASS_20261109.md) · [November 9 expanded search (862 → 879)](reviews/NOVEMBER_2026_EXPANDED_SWEEP_20261109.md) · [November 9 first pass (852 → 862)](reviews/NOVEMBER_2026_SYSTEMS_SWEEP_20261109.md) · [November 2 arXiv intake (851 → 854)](reviews/NOVEMBER_2026_ARXIV_FIRST_PASS_20261102.md) · [October monthly close](reviews/OCTOBER_2026_MONTHLY_SWEEP_20261031.md) · [archived numerical checkpoints](reviews/archive/STATUS_SNAPSHOTS_20261030.md). Dates and totals in older receipts describe **historical states**, not the current index.
-
-## Explore
-
-| Collection | What to expect |
-|---|---|
-| [Surveys](#surveys--start-here) | Eight complementary reading maps, clearly separating peer-reviewed publications from preprints. |
-| [Foundational and influential papers](#foundational-and-influential-papers) | Thirty selected milestones, from historical prerequisites to modern inference systems. |
-| [Papers by mechanism](topics/README.md) | Eight practical topic areas in 44 engineering tracks, 977 current canonical topic entries and a concise admission history. |
-| [Attention & kernel fusion](topics/attention-fusion-map.md) | Cross-topic reading path from model semantics to upstream kernels, compiler/runtime integration and recent PRs. |
-| [Strict review protocol](STRICT_REVIEW.md) | G0–G5 hard gates, evidence/provenance labels, source-indexed review workflow and removal criteria. |
-| [Emerging research frontiers](frontiers/README.md) | Seven selective inference execution and optimization-lifecycle problems; existing mechanism categories remain canonical. |
-| [Serving Systems review](topics/serving-systems.md) | Migration decisions for the former 50-paper Serving shortlist; no duplicate records. |
-| [Organizations](#organizations) | Selected first-party model and infrastructure work: China and the United States. |
-| [Research labs & open source](communities/README.md) | **76 nonduplicate source-linked repositories across five execution boundaries**; university labs and cross-institution research sources, with explicit ownership and archival status. |
-
-**One primary home per paper.** The homepage keeps historic foundations and surveys; technical additions live under [eight topic categories](topics/README.md). The former 50-paper Serving cohort has been reviewed: 49 were moved to their technical home, and 1 general AI-serving work was held out under the stricter LLM-specific boundary.
-
-**Editorial standard:** select inspectable, distinctive inference-systems mechanisms backed by primary publications or implementations. The original 1,003-candidate intake, subsequent KEEP/HOLD/REMOVE decisions and numerical corrections are documented in [Curation policy](CURATION.md), [G0–G5 protocol](STRICT_REVIEW.md), [review receipts](reviews/) and [archived chronology](reviews/archive/CURATION_HISTORY_20261030.md). **Use the topic index for live counts; dated review totals are historical checkpoints.**
-
-The [research frontiers](frontiers/README.md) now highlight **seven selective inference execution or optimization-lifecycle problems**: agent-native serving, real-time omni-modal serving, diffusion-language-model serving, interactive world models, embodied/VLA action loops, agentic kernel engineering, and **autonomous inference-engine evolution (RSI-adjacent)**. The new frontier follows [SEIS](https://arxiv.org/abs/2610.04646) and industry evidence for agent-led engine optimization, **without equating a better engine with recursive agent self-improvement**. **KV hierarchy, sparse/hybrid attention and routine heterogeneous deployment are established engineering tracks—not frontiers.** Reasoning-budget scheduling and rollout/online-serving convergence remain evidence-gated watches. Canonical papers stay exclusively in their primary topic categories.
-
-## Organizations
-
-Source-backed maps of model architecture **and independently useful inference infrastructure** (kernels, backend compilers, KV/communication, deployment and autonomous optimization). The November 4–5 sweeps broaden [organizations](organizations/README.md), [76 open-source execution projects](communities/README.md) and [research/maintainer source nodes](communities/README.md), with an [November 4 audit](reviews/ORG_LAB_OSS_SWEEP_20261104.md) and [November 5 incremental audit](reviews/ORG_LAB_OSS_SWEEP_20261105.md). Regional grouping is navigation, not a quality ranking. Community contributions and archived projects retain explicit status labels.
-
-[**Companies — China & US**](organizations/README.md) · [**Research labs & open-source communities**](communities/README.md)
+**977 source-curated papers** across eight technical topics, with 30 historical foundations and dedicated surveys in their topic homes. Selection indicates reading and research value, not independent performance reproduction.
 
 ## Surveys — start here
 
-Only complementary surveys with useful systems synthesis are retained. **Preprints are explicitly marked.**
+Broad reading maps for LLM inference and serving. Specialized surveys are part of their technical topics.
 
-| Lens | Survey | Publication | Why it matters / scope boundary |
+| Lens | Survey | Publication | Scope |
 |---|---|---|---|
 | Serving: algorithms → systems | [Towards Efficient Generative Large Language Model Serving: A Survey from Algorithms to Systems](https://arxiv.org/abs/2312.15234) | arXiv 2023; revised 2025 | CMU/Purdue 等团队，研究解码算法到部署体系结构的完整 Serving 脉络；不覆盖所有 2026 工作。 |
-| Long-context CAP trade-offs | [The CAP Principle for LLM Serving: A Survey of Long-Context Large Language Model Serving](https://arxiv.org/abs/2405.11299) | arXiv 2024 (survey preprint) | Context/Accuracy/Performance 三目标及长上下文 Serving 的用户感知权衡；CAP 是研究分类与设计启发式，不是形式化不可能性定理。 |
 | Hardware / full-stack | [Full Stack Optimization of Transformer Inference: a Survey](https://arxiv.org/abs/2302.14017) | arXiv 2023 | UC Berkeley 团队；算子分析、Mapping、专用加速器与 Gemmini 案例；不限于 LLM Serving。 |
 | Resource efficiency | [Resource-efficient Algorithms and Systems of Foundation Models: A Survey](https://doi.org/10.1145/3706418) | ACM Computing Surveys 2025 | PKU/BUPT；覆盖跨计算、存储和部署的优化；包含训练、ViT 和 Diffusion。 |
 | Inference architecture | [A Survey of LLM Inference Systems](https://arxiv.org/abs/2506.21901) | arXiv 2025 (preprint) | 清华团队；从 Kernel、Batching、KV 到多副本、P/D 分离和 Serverless；未标为已审稿。 |
-| KV: token / model / systems | [A Survey on Large Language Model Acceleration based on KV Cache Management](https://openreview.net/forum?id=z3JZzu9EA3) | TMLR 2025 | HKUST/PolyU/HUST 等；比较 KV 选择、压缩、量化及系统管理；包含算法层。 |
-| Distributed collectives | [Collective Communication for Distributed LLM Systems: Planning, Runtime Adaptation, and Computation Coordination](https://doi.org/10.1109/MNET.2026.3724863) | IEEE Network 2026 (Early Access) | 覆盖分布式训练与推理的 Collective Communication，按通信规划、Runtime 自适应及算通协同组织研究；包含训练，不等同于 Serving-only Survey。 |
-| KV: system behavior | [Towards Efficient Large Language Model Serving: A Survey on System-Aware KV Cache Optimization](https://aclanthology.org/2026.findings-acl.1916/) | ACL Findings 2026 | 墨尔本大学/HUST；Temporal/Spatial/Structural 维度分析 Serving-time KV；排除重训型方法。 |
 
-**Reading path:** *Inference systems* → *KV system behavior* → *KV algorithm+system taxonomy*. Consult the *full-stack* survey for hardware/kernel/compiler context.
+## Technical Topics
 
-## Foundational and influential papers
+| Topic | Focus |
+|---|---|
+| [Kernels & Compilers](topics/kernels-compilers.md) | Attention, GEMM, fusion, compilers and kernel agents |
+| [KV Cache & Context Memory](topics/kv-cache-memory.md) | KV allocation, reuse, compression, offload and transfer |
+| [Decoding Acceleration](topics/decoding-acceleration.md) | Speculative decoding, parallel verification and non-AR generation |
+| [Quantization & Compression](topics/quantization-compression.md) | Weight, activation, KV and state precision |
+| [MoE & Sparse Execution](topics/moe-sparse-execution.md) | Expert routing, placement and conditional computation |
+| [Runtime & Scheduling](topics/runtime-scheduling.md) | Batching, routing, SLOs and runtime control |
+| [Distributed & Disaggregated Serving](topics/distributed-serving.md) | Parallelism, disaggregation, communication and fleet execution |
+| [Benchmarking & Systems Analysis](topics/benchmarking-analysis.md) | Workloads, performance models, profiling and correctness |
 
-**Why these 30:** this is a selective lineage, not a top-30 ranking or complete historical bibliography. The set covers (1) Transformer and efficient decoding prerequisites, (2) attention I/O and kernel execution, (3) iteration-level scheduling, KV memory and speculative decoding, and (4) disaggregation, resource control and production-oriented serving. Each entry should explain a distinct mechanism worth recognizing before studying newer variants. Selection reflects historical influence and engineering leverage, not an endorsement of current performance or an assertion that every subfield has equal representation. For contemporary alternatives, use the [eight topic lists](topics/README.md).
+[Complete topic index](topics/README.md)
 
-**2017–2019 papers are historical prerequisites**, not evidence of modern LLM Serving performance. Later selections have distinct system mechanisms or deployment value.
+## Curation Policy
 
-### 2017
+[Curation policy](CURATION.md) · [G0–G5 review protocol](STRICT_REVIEW.md) · [Review receipts](reviews/README.md). Prefer original papers, inspectable code and specific technical mechanisms. Preprints, published results and first-party engineering reports remain explicitly distinguished.
 
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Attention Is All You Need](https://papers.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html) | NeurIPS 2017 | Google Brain | Transformer self-attention；LLM 架构前提（不是现代 Serving 论文）。 |
+## Emerging Frontiers
 
-### 2018
+[Frontiers](frontiers/README.md) tracks new execution or optimization contracts: agent-native inference, autonomous inference-engine evolution, diffusion-language-model serving and real-time multimodal / interactive inference. Concrete mechanisms are cross-linked to their topic homes.
 
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Blockwise Parallel Decoding for Deep Autoregressive Models](https://papers.nips.cc/paper/8212-blockwise-parallel-decoding-for-deep-autoregressive-models) | NeurIPS 2018 | Google Brain | 候选块并行预测、验证最长正确前缀；投机/并行解码前驱。 |
+## Organizations
 
-### 2019
+[China & United States](organizations/README.md) — first-party model architectures, inference infrastructure, hardware and production engineering.
 
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150) | arXiv 2019 | Google Research | Multi-Query Attention (MQA) 共享 KV heads，降低增量解码访存带宽。 |
+## Research Labs & Open-Source Communities
 
-### 2022
-
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/conference/osdi22/presentation/yu) | OSDI 2022 | Seoul National University · FriendliAI | Iteration-level scheduling 与 selective batching，确立自回归 serving 的调度抽象。 |
-| [FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://papers.neurips.cc/paper_files/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html) | NeurIPS 2022 | Stanford · University at Buffalo | IO-aware exact attention / tiling；从内存访问出发重构 Attention Kernel。 |
-| [DeepSpeed Inference: Enabling Efficient Inference of Transformer Models at Unprecedented Scale](https://sc22.supercomputing.org/proceedings/tech_paper/tech_paper_pages/pap307.html) | SC 2022 | Microsoft | 多 GPU 与 CPU/NVMe 异构推理，体现跨设备资源系统设计。 |
-
-### 2023
-
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Efficient Memory Management for Large Language Model Serving with PagedAttention](https://doi.org/10.1145/3600006.3613165) | SOSP 2023 | UC Berkeley · Stanford · UC San Diego | Paged KV Cache 与 vLLM；突破动态 KV 内存碎片和请求间复用。 |
-| [FlexGen: High-Throughput Generative Inference of Large Language Models with a Single GPU](https://proceedings.mlr.press/v202/sheng23a.html) | ICML 2023 | Stanford · UC Berkeley · ETH Zürich | 异构内存卸载与调度优化，展示资源受限场景的系统权衡。 |
-| [AlpaServe: Statistical Multiplexing with Model Parallelism for Deep Learning Serving](https://www.usenix.org/conference/osdi23/presentation/li-zhouhan) | OSDI 2023 | UC Berkeley · Peking University · collaborators | 利用 Model Parallelism 改善多模型负载下的统计复用与 SLO。 |
-| [Efficiently Scaling Transformer Inference](https://proceedings.mlsys.org/paper_files/paper/2023/hash/c4be71ab8d24cdfb45e3d06dbfca2780-Abstract-mlsys2023.html) | MLSys 2023 | Google Research | 解析性能模型指导 TPU 模型并行、MQA 和延迟/吞吐权衡。 |
-| [Fast Inference from Transformers via Speculative Decoding](https://proceedings.mlr.press/v202/leviathan23a.html) | ICML 2023 | Google Research | Draft–Verify 和保留目标分布的采样规则；现代 Speculative Decoding 基础。 |
-| [GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints](https://aclanthology.org/2023.emnlp-main.298/) | EMNLP 2023 | Google Research | Grouped-Query Attention；在 MHA 与 MQA 之间平衡 KV 带宽和模型质量。 |
-
-### 2024
-
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve](https://www.usenix.org/conference/osdi24/presentation/agrawal) | OSDI 2024 | Georgia Tech · Microsoft Research | Chunked Prefill 与 stall-free scheduling，重新平衡 TTFT、TPOT 和吞吐。 |
-| [DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/zhong-yinmin) | OSDI 2024 | Peking University · UC San Diego · StepFun | P/D 分离、SLO-aware 配置与 Goodput 导向的服务部署。 |
-| [Splitwise: Efficient Generative LLM Inference Using Phase Splitting](https://www.microsoft.com/en-us/research/publication/splitwise-efficient-generative-llm-inference-using-phase-splitting/) | ISCA 2024 | Microsoft Research · University of Washington | 依据 Prefill/Decode 计算特征划分资源与机器；关注成本、功耗和传输。 |
-| [Llumnix: Dynamic Scheduling for Large Language Model Serving](https://www.usenix.org/conference/osdi24/presentation/sun-biao) | OSDI 2024 | Alibaba Group | 请求与 KV 状态的 live migration，实现跨实例动态重调度。 |
-| [SGLang: Efficient Execution of Structured Language Model Programs](https://proceedings.neurips.cc/paper_files/paper/2024/hash/724be4472168f31ba1c9ac630f15dec8-Abstract-Conference.html) | NeurIPS 2024 | Stanford · UC Berkeley · collaborators | 将结构化程序执行、RadixAttention 和高效输出解码纳入统一 Runtime。 |
-| [Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads](https://proceedings.mlr.press/v235/cai24b.html) | ICML 2024 | Princeton · Together AI · UIUC · collaborators | 多解码头与 Tree-based Verification，拓展推测解码设计空间。 |
-| [FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning](https://proceedings.iclr.cc/paper_files/paper/2024/hash/98ed250b203d1ac6b24bbcf263e3d4a7-Abstract-Conference.html) | ICLR 2024 | Princeton · Stanford | 优化块/warp 工作划分与非矩阵 FLOPs，提升 GPU Attention 效率。 |
-| [SLoRA: Scalable Serving of Thousands of LoRA Adapters](https://proceedings.mlsys.org/paper_files/paper/2024/hash/906419cd502575b617cc489a1a696a67-Abstract-Conference.html) | MLSys 2024 | UC Berkeley · Stanford · SJTU | Unified Paging 统一管理 Adapter/KV，配合异构 Batching 与 Kernel。 |
-| [SpecInfer: Accelerating Large Language Model Serving with Tree-based Speculative Inference and Verification](https://doi.org/10.1145/3620666.3651335) | ASPLOS 2024 | CMU · Tsinghua · Stanford · collaborators | Token-tree parallel verification 集成到分布式和 Offloading Serving。 |
-| [FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision](https://proceedings.neurips.cc/paper_files/paper/2024/hash/7ede97c3e082c6df10a8d6103a2eebd2-Abstract-Conference.html) | NeurIPS 2024 | Colfax Research · NVIDIA · Meta · Princeton | Hopper 上的异步流水、Warp Specialization 与 FP8 Attention。 |
-
-### 2025
-
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/dbf02b21d77409a2db30e56866a8ab3a-Abstract-Conference.html) | MLSys 2025 | University of Washington · NVIDIA · CMU | 可组合 KV 格式、JIT 模板与负载均衡的 Serving Attention Engine。 |
-| [NanoFlow: Towards Optimal Large Language Model Serving Throughput](https://www.usenix.org/conference/osdi25/presentation/zhu-kan) | OSDI 2025 | University of Washington · collaborators | Operation-level Nano-batching，重叠设备上的 Compute/Memory/Network。 |
-| [Mooncake: Trading More Storage for Less Computation — A KVCache-centric Architecture for Serving LLM Chatbot](https://www.usenix.org/conference/fast25/presentation/qin) | FAST 2025 | Moonshot AI · Tsinghua University | 生产 KV Cache 共享与分离式存储，构建长上下文 Serving 数据路径。 |
-| [QServe: W4A8KV4 Quantization and System Co-design for Efficient LLM Serving](https://proceedings.mlsys.org/paper_files/paper/2025/hash/fbe2b2f74a2ece8070d8fb073717bda6-Abstract-Conference.html) | MLSys 2025 | MIT Han Lab · collaborators | 量化算法与 GPU 执行内核协同设计，避免低比特推理的反量化开销。 |
-| [vAttention: Dynamic Memory Management for Serving LLMs without PagedAttention](https://doi.org/10.1145/3669940.3707256) | ASPLOS 2025 | Microsoft Research · IISc | CUDA 虚拟内存实现 KV 虚拟连续、物理按需分配；PagedAttention 的替代。 |
-
-### 2026
-
-| Paper | Venue | Representative affiliations* | Why it matters |
-|---|---|---|---|
-| [Strata: Hierarchical Context Caching for Long Context Language Model Serving](https://www.usenix.org/conference/osdi26/presentation/xie-zhiqiang) | OSDI 2026 | Stanford · NVIDIA · collaborators | 分层 KV Cache I/O 与 cache-aware scheduling，针对缓存加载瓶颈。 |
-| [Prism: Cost-Efficient Multi-LLM Serving via GPU Memory Ballooning](https://www.usenix.org/conference/osdi26/presentation/yu-shan) | OSDI 2026 | UCLA · UC Berkeley · Harvard · collaborators | GPU Memory Ballooning 统一多模型空间/时间共享，有生产部署证据。 |
-| [FastServe: Iteration-Level Preemptive Scheduling for Large Language Model Inference](https://www.usenix.org/conference/nsdi26/presentation/wu-bingyang) | NSDI 2026 | Peking University · collaborators | 迭代级可抢占调度与状态卸载，将抢占机制用于 LLM Serving。 |
-
-*Affiliations are representative, not exhaustive; institutional prestige is not the primary admission criterion. Descriptions reflect authors' reported contributions, not independently reproduced benchmarks.
+[Research labs and communities](communities/README.md) — upstream runtimes, compilers, kernel libraries, communication systems and research teams.
 
 ## Contributing
 
-Read [CURATION.md](CURATION.md). Prefer official proceedings/publisher URLs, concrete mechanisms, and small reviewed PRs. No automated conference dumps.
+Follow the [curation policy](CURATION.md), preserve one primary paper identity, and keep links to original sources. Submit focused changes with the offline catalog checks passing.

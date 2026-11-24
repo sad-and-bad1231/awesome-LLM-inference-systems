@@ -81,6 +81,8 @@ def check(root):
     aliases = defaultdict(list)
     total = 0
     n_groups = 0
+    n_found = 0
+    n_topic_surveys = 0
     for name in TOPICS:
         path = f"topics/{name}.md"
         if path not in docs:
@@ -100,7 +102,18 @@ def check(root):
                          r"\.md\) \|\s*(\d+)\s*\|", topic_index, re.M)
         if not item or int(item.group(1)) != len(rows):
             issues.append(f"{path}: topic index count != {len(rows)} rows")
-        for row in rows:
+        if "## Foundations\n" in content:
+            foundations = section(content, "## Foundations\n", "\n## ")
+            foundation_rows = [line for line in foundations.splitlines() if line.startswith("| [")]
+            n_found += len(foundation_rows)
+        else:
+            foundation_rows = []
+        if "## Surveys\n" in content:
+            survey_rows = [line for line in section(content, "## Surveys\n", "\n## ").splitlines() if re.match(r"^\| [^|]+\| \[", line)]
+            n_topic_surveys += len(survey_rows)
+        else:
+            survey_rows = []
+        for row in rows + foundation_rows + survey_rows:
             uid = first_source_id(row)
             if uid:
                 aliases[uid].append(path)
@@ -121,17 +134,22 @@ def check(root):
     if not strict_total or int(strict_total.group(1)) != total:
         issues.append(f"STRICT_REVIEW current corpus count != {total}")
 
+    global_surveys = [line for line in section(home, "## Surveys — start here", "## Technical Topics").splitlines() if re.match(r"^\| [^|]+\| \[", line)]
+    for row in global_surveys:
+        uid = first_source_id(row)
+        if uid:
+            aliases[uid].append("README.md")
     for uid, where in sorted(aliases.items()):
         if len(where) > 1:
             issues.append(f"duplicate first-source identity: {uid} ({', '.join(where)})")
 
-    foundations = section(docs["README.md"], "## Foundational and influential papers", "## Contributing")
-    n_found = sum(x.startswith("| [") for x in foundations.splitlines())
     if n_found != 30:
-        issues.append(f"expected 30 foundation rows, got {n_found}")
+        issues.append(f"expected 30 relocated foundation rows, got {n_found}")
+    if n_topic_surveys != 4 or len(global_surveys) != 4:
+        issues.append(f"expected 4 topic and 4 global surveys, got {n_topic_surveys}/{len(global_surveys)}")
     org = docs["organizations/README.md"]
     cn = sum(x.startswith("| [") for x in section(org, "## China", "## United States").splitlines())
-    us = sum(x.startswith("| [") for x in section(org, "## United States", "## November").splitlines())
+    us = sum(x.startswith("| [") for x in section(org, "## United States", "## Historical source notes").splitlines())
     declared_org = re.search(r"These \*\*(\d+) China/US profiles\*\*", org)
     if not declared_org or int(declared_org.group(1)) != cn + us:
         issues.append(f"organization index declared total != {cn + us}")
