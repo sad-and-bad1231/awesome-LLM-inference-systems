@@ -20,7 +20,7 @@ Start with the actual prefill/decode/verify shape and state layout, then profile
 
 ## Open-source ecosystem
 
-Five primary source layers, organized by what each owns. Read the detailed [source comparison](attention-fusion-map.md#2-first-party-implementation-paths) for actual backend classes, native operators, fusion mechanisms and configuration gates.
+Five primary source layers, organized by what each owns. Use the [engineering source map](attention-fusion-map.md#2-first-party-implementation-paths) for backend classes, native operators, fusion mechanisms, build/test entry points and device compatibility. For native Ascend work, start with [CANN libraries, runtime and profiling](attention-fusion-map.md#cann--ascend-native-ecosystem), [DeepSeek implementation and tests](attention-fusion-map.md#deepinfer-and-deepseeks-kernel-stack), and [independent NPU libraries and DSLs](attention-fusion-map.md#shared-libraries-and-programming-models).
 
 | Ecosystem | Start here | Why read it |
 |---|---|---|
