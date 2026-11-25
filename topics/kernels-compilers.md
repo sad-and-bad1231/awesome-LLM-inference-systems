@@ -16,11 +16,11 @@ Consider one decoder layer: Q/K/V projection → attention → output projection
 | **Fusion & overlap** | Combine operations when this eliminates an intermediate write/read, repeated work or scheduling delay. Graph replay reduces host launch overhead; it does not itself eliminate memory traffic. Fine-grained overlap can keep separate kernels. Larger fusion is not automatically faster. |
 | **Compiler & DSL** | A tile-level description exposes data layout, work partition and synchronization. A compiler maps it to hardware; a library supplies tuned kernels; an engine supplies the real workload and dispatch conditions. |
 
-Start with the actual prefill/decode/verify shape and state layout, then profile the bottleneck. Optimize the critical path rather than maximizing isolated TFLOPS. See [attention and fusion execution paths](attention-fusion-map.md) for the detailed engineering map.
+Start with the actual prefill/decode/verify shape and state layout, then profile the bottleneck. Optimize the critical path rather than maximizing isolated TFLOPS. See [attention and fusion execution paths](attention-fusion-map.md) for the project and mechanism index.
 
 ## Open-source ecosystem
 
-Five primary source layers, organized by what each owns. Use the [engineering source map](attention-fusion-map.md#2-first-party-implementation-paths) for backend classes, native operators, fusion mechanisms, build/test entry points and device compatibility. For native Ascend work, start with [CANN libraries, runtime and profiling](attention-fusion-map.md#cann--ascend-native-ecosystem), [DeepSeek implementation and tests](attention-fusion-map.md#deepinfer-and-deepseeks-kernel-stack), and [independent NPU libraries and DSLs](attention-fusion-map.md#shared-libraries-and-programming-models).
+Use the [cross-platform project index](attention-fusion-map.md#2-first-party-implementation-paths) to discover implementations and follow upstream activity. For Ascend-specific source paths, hardware/version compatibility, tools and experiment methods, enter the [Map's Operators track](https://github.com/sad-and-bad1231/Ascend-Inference-Profile-Map/blob/main/tracks/kernels-compilers.md).
 
 | Ecosystem | Start here | Why read it |
 |---|---|---|
@@ -30,7 +30,7 @@ Five primary source layers, organized by what each owns. Use the [engineering so
 | **DeepInfer / DeepSeek** | [DeepInfer](https://github.com/deepseek-ai/DeepInfer) · [FlashMLA](https://github.com/deepseek-ai/FlashMLA) · [DeepGEMM](https://github.com/deepseek-ai/DeepGEMM) | Model-specialized execution and kernel/engine co-design; directly inspect sparse attention, quantized GEMM, EP and fused preparation. |
 | **CANN / Ascend** | [Ascend C guide](https://asc.gitcode.com/guide/) · [ops-transformer](https://gitcode.com/cann/ops-transformer) · [graph-autofusion](https://gitcode.com/cann/graph-autofusion) | Device operator implementation, compiler/runtime substrate, source/binary fusion and native programming tools. |
 
-Shared libraries and programming systems: [FlashAttention](https://github.com/Dao-AILab/flash-attention) · [FlashInfer](https://github.com/flashinfer-ai/flashinfer) · [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [Triton](https://github.com/triton-lang/triton) · [TileLang](https://github.com/tile-ai/tilelang) · [CATLASS](https://gitcode.com/cann/catlass). Their roles and hardware boundaries are mapped in the engineering page.
+Shared libraries and programming systems: [FlashAttention](https://github.com/Dao-AILab/flash-attention) · [FlashInfer](https://github.com/flashinfer-ai/flashinfer) · [FLA](https://github.com/fla-org/flash-linear-attention) · [FlashKDA](https://github.com/MoonshotAI/FlashKDA) · [Triton](https://github.com/triton-lang/triton) · [TileLang](https://github.com/tile-ai/tilelang) · [CATLASS](https://gitcode.com/cann/catlass). Their roles are summarized in the project index.
 
 ## Industry practice & engineering developments
 
