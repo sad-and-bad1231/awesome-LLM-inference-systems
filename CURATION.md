@@ -2,6 +2,10 @@
 
 Enduring rules for technical topics, publication admission and first-party engineering evidence. See [STRICT_REVIEW.md](STRICT_REVIEW.md) for G0–G5 gates, [topics/README.md](topics/README.md) for the current inventory and [review receipts](reviews/README.md) for historical decisions.
 
+## Repository scope and source ownership
+
+Awesome is the discovery layer: canonical papers, cross-platform upstream projects, organizations, selected PRs/releases and concise mechanism summaries. The [Ascend Inference Profile Map](https://github.com/sad-and-bad1231/Ascend-Inference-Profile-Map) owns reusable Ascend-specific source/compatibility maps, profiler tools, experiment methods and evidence navigation. Individual research repositories own problem-specific implementation, raw experiment artifacts and decisions. Link to the owning layer instead of maintaining duplicate source audits, tutorials, tool manuals or experiment protocols here. A project entry should identify what it does and link to its upstream source; add implementation detail only when needed to distinguish its research value.
+
 ## Canonical bibliography invariant
 
 The eight technical topics are the **one canonical bibliography**, including their local foundations and specialized surveys. Broad field-level surveys alone belong on the homepage. Admissions may use **KEEP_PREPRINT_EXPLORE**, **KEEP_PREPRINT_EVIDENCED**, **KEEP_STRICT / KEEP_REFERENCE**, **KEEP_FOUNDATIONAL**, or a narrowly justified **KEEP_ADJACENT**. All accepted papers must have a reliable primary-paper identity, a distinct *inference execution/system* idea, and an honest evidence/proof boundary. **Acceptance means editorial reading/research value, not independently reproduced performance.**
